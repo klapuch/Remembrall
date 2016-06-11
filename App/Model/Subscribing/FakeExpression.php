@@ -10,7 +10,6 @@ final class FakeExpression implements Expression {
 	}
 
 	public function match(): Part {
-
 	}
 
 	public function __toString() {

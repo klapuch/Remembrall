@@ -5,10 +5,10 @@
  */
 namespace Remembrall\Unit\Subscribing;
 
-use Tester,
-	Tester\Assert;
-use Remembrall\TestCase;
 use Remembrall\Model\Subscribing;
+use Remembrall\TestCase;
+use Tester;
+use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -71,7 +71,10 @@ final class HtmlWebPage extends TestCase\Mockery {
 			->once()
 			->andReturn($response);
 		$dom = (new Subscribing\HtmlWebPage($http))->content();
-		Assert::same('Hello', $dom->getElementsByTagName('p')->item(0)->nodeValue);
+		Assert::same(
+			'Hello',
+			$dom->getElementsByTagName('p')->item(0)->nodeValue
+		);
 	}
 }
 

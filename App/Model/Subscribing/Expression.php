@@ -7,7 +7,7 @@ use Remembrall\Exception;
 interface Expression {
 	/**
 	 * Match found by the expression
-	 * @throws Exception\ExistenceException 
+	 * @throws Exception\ExistenceException
 	 * @return Part
 	 */
 	public function match(): Part;

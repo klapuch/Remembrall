@@ -2,8 +2,8 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Remembrall\Exception;
 use GuzzleHttp;
+use Remembrall\Exception;
 
 final class ExistingWebPage implements Page {
 	private $origin;

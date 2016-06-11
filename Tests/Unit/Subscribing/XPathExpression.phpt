@@ -5,24 +5,30 @@
  */
 namespace Remembrall\Unit\Subscribing;
 
-use Tester,
-	Tester\Assert;
-use Remembrall\TestCase;
 use Remembrall\Model\Subscribing;
+use Remembrall\TestCase;
+use Tester;
+use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
 final class XPathExpression extends Tester\TestCase {
 	public function testValidExpression() {
 		Assert::same(
-			(string)new Subscribing\XPathExpression(new Subscribing\FakePage, '//p'),
+			(string)new Subscribing\XPathExpression(
+				new Subscribing\FakePage,
+				'//p'
+			),
 			'//p'
 		);
 	}
 
 	public function testInvalidExpressionWithoutError() {
 		Assert::same(
-			(string)new Subscribing\XPathExpression(new Subscribing\FakePage, '123'),
+			(string)new Subscribing\XPathExpression(
+				new Subscribing\FakePage,
+				'123'
+			),
 			'123'
 		);
 	}

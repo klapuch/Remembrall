@@ -2,8 +2,8 @@
 namespace Remembrall\Component;
 
 use Nette;
-use Nette\Forms;
 use Nette\Application\UI;
+use Nette\Forms;
 
 abstract class BaseContainer extends Forms\Container {
 	public function __construct() {

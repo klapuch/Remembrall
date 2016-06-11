@@ -2,7 +2,7 @@
 namespace Remembrall\Router;
 
 use Nette\Application\Routers\{
-	RouteList, Route
+	Route, RouteList
 };
 
 class RouterFactory {

@@ -5,10 +5,10 @@
  */
 namespace Remembrall\Unit\Subscribing;
 
-use Tester,
-	Tester\Assert;
-use Remembrall\TestCase;
 use Remembrall\Model\Subscribing;
+use Remembrall\TestCase;
+use Tester;
+use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
