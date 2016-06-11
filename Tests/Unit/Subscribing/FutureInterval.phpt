@@ -20,10 +20,7 @@ final class FutureInterval extends Tester\TestCase {
 		(new Subscribing\FutureInterval(
 			new Subscribing\FakeInterval(
 				new \DateTimeImmutable('2000-01-01 01:01:01'),
-				new Subscribing\FakeInterval(
-					new \DateTimeImmutable('1900-01-01 01:01:01'),
-					new Subscribing\FakeInterval()
-				)
+				new \DateTimeImmutable('1900-01-01 01:01:01')
 			)
 		))->next();
 	}
@@ -35,10 +32,7 @@ final class FutureInterval extends Tester\TestCase {
 		(new Subscribing\FutureInterval(
 			new Subscribing\FakeInterval(
 				new \DateTimeImmutable('2000-01-01 01:01:01'),
-				new Subscribing\FakeInterval(
-					new \DateTimeImmutable('2000-01-01 01:01:01'),
-					new Subscribing\FakeInterval()
-				)
+				new \DateTimeImmutable('2000-01-01 01:01:01')
 			)
 		))->next();
 	}
@@ -47,10 +41,7 @@ final class FutureInterval extends Tester\TestCase {
 		(new Subscribing\FutureInterval(
 			new Subscribing\FakeInterval(
 				new \DateTimeImmutable('2000-01-01 01:01:01'),
-				new Subscribing\FakeInterval(
-					new \DateTimeImmutable('2100-01-01 01:01:01'),
-					new Subscribing\FakeInterval()
-				)
+				new \DateTimeImmutable('2100-01-01 01:01:01')
 			)
 		))->next();
 		Assert::true(true);

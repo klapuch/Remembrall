@@ -9,7 +9,7 @@ final class FakeInterval implements Interval {
 
 	public function __construct(
 		\DateTimeInterface $start = null,
-		Interval $next = null,
+		\DateTimeInterface $next = null,
 		\DateInterval $step = null
 	) {
 		$this->start = $start;
@@ -21,7 +21,7 @@ final class FakeInterval implements Interval {
 		return $this->start;
 	}
 
-	public function next(): Interval {
+	public function next(): \DateTimeInterface {
 		return $this->next;
 	}
 

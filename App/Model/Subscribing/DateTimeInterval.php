@@ -18,11 +18,8 @@ final class DateTimeInterval implements Interval {
 		return $this->start;
 	}
 
-	public function next(): Interval {
-		return new self(
-			$this->start->add($this->step()),
-			$this->step()
-		);
+	public function next(): \DateTimeInterface {
+		return $this->start->add($this->step());
 	}
 
 	public function step(): \DateInterval {

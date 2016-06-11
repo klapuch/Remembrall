@@ -13,9 +13,8 @@ final class FutureInterval implements Interval {
 		return $this->origin->start();
 	}
 
-	public function next(): Interval {
-		$nextInterval = $this->origin->next();
-		if($nextInterval->start() > $this->start())
+	public function next(): \DateTimeInterface {
+		if($this->origin->next() > $this->start())
 			return $this->origin->next();
 		throw new \OutOfRangeException('Interval must points to the future');
 	}

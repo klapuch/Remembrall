@@ -12,9 +12,9 @@ interface Interval {
 	/**
 	 * What is the next in the interval?
 	 * @throws \OutOfRangeException
-	 * @return Interval
+	 * @return \DateTimeInterface
 	 */
-	public function next(): self;
+	public function next(): \DateTimeInterface;
 
 	/**
 	 * How many units have a one step?

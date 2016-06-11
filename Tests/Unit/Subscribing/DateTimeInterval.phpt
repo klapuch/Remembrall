@@ -25,10 +25,7 @@ final class DateTimeInterval extends Tester\TestCase {
 
 	public function testNextStep() {
 		Assert::equal(
-			new Subscribing\DateTimeInterval(
-				new \DateTimeImmutable('2000-01-01 01:05:01'),
-				new \DateInterval('PT4M')
-			),
+			new \DateTimeImmutable('2000-01-01 01:05:01'),
 			(new Subscribing\DateTimeInterval(
 				new \DateTimeImmutable('2000-01-01 01:01:01'),
 				new \DateInterval('PT4M')
