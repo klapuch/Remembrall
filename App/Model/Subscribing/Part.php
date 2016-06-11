@@ -17,4 +17,11 @@ interface Part {
 	 * @return string
 	 */
 	public function content(): string;
+
+	/**
+	 * Is the given part equal to the current part?
+	 * @param Part $part
+	 * @return bool
+	 */
+	public function equals(Part $part): bool;
 }

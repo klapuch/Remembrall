@@ -47,6 +47,48 @@ final class HtmlPart extends Tester\TestCase {
 			))->content()
 		);
 	}
+
+	public function testSameContentButDifferentPage() {
+		Assert::false(
+			(new Subscribing\HtmlPart(
+				new Subscribing\FakePage('google.com'),
+				new \DOMNodeList
+			))->equals(
+				new Subscribing\FakePart(
+					'',
+					new Subscribing\FakePage('seznam.cz')
+				)
+			)
+		);
+	}
+
+	public function testDifferentContentButSamePage() {
+		Assert::false(
+			(new Subscribing\HtmlPart(
+				new Subscribing\FakePage('google.com'),
+				new \DOMNodeList
+			))->equals(
+				new Subscribing\FakePart(
+					'abc',
+					new Subscribing\FakePage('google.com')
+				)
+			)
+		);
+	}
+
+	public function testEquivalentParts() {
+		Assert::true(
+			(new Subscribing\HtmlPart(
+				new Subscribing\FakePage('google.com'),
+				new \DOMNodeList
+			))->equals(
+				new Subscribing\FakePart(
+					'',
+					new Subscribing\FakePage('google.com')
+				)
+			)
+		);
+	}
 }
 
 (new HtmlPart())->run();

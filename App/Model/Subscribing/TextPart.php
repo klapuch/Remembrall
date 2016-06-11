@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Remembrall\Exception;
-
 final class TextPart implements Part {
 	private $origin;
 
@@ -17,5 +15,10 @@ final class TextPart implements Part {
 
 	public function content(): string {
 		return strip_tags($this->origin->content());
+	}
+
+	public function equals(Part $part): bool {
+		return $part->source()->url() === $this->source()->url()
+		&& $part->content() === $this->content();
 	}
 }

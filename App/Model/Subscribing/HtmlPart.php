@@ -25,6 +25,11 @@ final class HtmlPart implements Part {
 		);
 	}
 
+	public function equals(Part $part): bool {
+		return $part->source()->url() === $this->source()->url()
+		&& $part->content() === $this->content();
+	}
+
 	/**
 	 * All tags which includes $node - also the nested ones
 	 * Removes tabs and new lines (CR and LF)

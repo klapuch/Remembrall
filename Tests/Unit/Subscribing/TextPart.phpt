@@ -22,6 +22,54 @@ final class TextPart extends Tester\TestCase {
 			(new Subscribing\TextPart($part))->content()
 		);
 	}
+
+	public function testSameContentButDifferentPage() {
+		Assert::false(
+			(new Subscribing\TextPart(
+				new Subscribing\FakePart(
+					'',
+					new Subscribing\FakePage('google.com')
+				)
+			))->equals(
+				new Subscribing\FakePart(
+					'',
+					new Subscribing\FakePage('seznam.cz')
+				)
+			)
+		);
+	}
+
+	public function testDifferentContentButSamePage() {
+		Assert::false(
+			(new Subscribing\TextPart(
+				new Subscribing\FakePart(
+					'abc',
+					new Subscribing\FakePage('google.com')
+				)
+			))->equals(
+				new Subscribing\FakePart(
+					'',
+					new Subscribing\FakePage('google.com')
+				)
+			)
+		);
+	}
+
+	public function testEquivalentParts() {
+		Assert::true(
+			(new Subscribing\TextPart(
+				new Subscribing\FakePart(
+					'abc',
+					new Subscribing\FakePage('google.com')
+				)
+			))->equals(
+				new Subscribing\FakePart(
+					'abc',
+					new Subscribing\FakePage('google.com')
+				)
+			)
+		);
+	}
 }
 
 (new TextPart())->run();

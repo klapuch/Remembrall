@@ -5,10 +5,16 @@ namespace Remembrall\Model\Subscribing;
 final class FakePart implements Part {
 	private $source;
 	private $content;
+	private $equals;
 
-	public function __construct(string $content = null, Page $source = null) {
+	public function __construct(
+		string $content = null,
+		Page $source = null,
+		bool $equals = false
+	) {
 		$this->source = $source;
 		$this->content = $content;
+		$this->equals = $equals;
 	}
 
 	public function source(): Page {
@@ -17,5 +23,9 @@ final class FakePart implements Part {
 
 	public function content(): string {
 		return $this->content;
+	}
+
+	public function equals(Part $part): bool {
+		return $this->equals;
 	}
 }
