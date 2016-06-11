@@ -1,0 +1,16 @@
+language: php
+
+php:
+  - 7.0
+
+env:
+  - TESTER_PHP_BIN="php-cgi"
+
+before_install:
+  - composer self-update
+
+install:
+  - composer install --no-interaction --prefer-source
+
+script:
+  - ./vendor/bin/tester -p $TESTER_PHP_BIN -o console -s ./Tests/

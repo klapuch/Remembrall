@@ -1,0 +1,11 @@
+services:
+    permission:
+        class: Nette\Security\Permission
+        setup:
+            - addRole(guest)
+            - addRole(member, guest) #member extends guest
+            - addRole(administrator, member) #administrator extends member
+            - addRole(creator)
+
+            - allow(creator)
+            - allow(administrator)
