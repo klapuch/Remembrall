@@ -38,24 +38,18 @@ final class XPathExpression extends Tester\TestCase {
 		$dom->loadHTML('<p>Hi there</p>');
 		$page = new Subscribing\FakePage(null, $dom);
 		$expression = new Subscribing\XPathExpression($page, '//p');
-		$nodes = (new \DOMXPath($dom))->query('//p');
-		Assert::equal(
-			new Subscribing\HtmlPart($page, $nodes),
-			$expression->match()
-		);
+		$match = $expression->match();
+		Assert::same(1, $match->length);
+		Assert::same($match->item(0)->nodeValue, 'Hi there');
+		Assert::same($match->item(0)->nodeName, 'p');
 	}
 
 	public function testEmptyMatchWithoutError() {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>Hi there</p>');
 		$page = new Subscribing\FakePage(null, $dom);
-		$expression = new Subscribing\XPathExpression($page, '//foo');
-		$nodes = (new \DOMXPath($dom))->query('//foo');
-		Assert::same(0, $nodes->length);
-		Assert::equal(
-			new Subscribing\HtmlPart($page, $nodes),
-			$expression->match()
-		);
+		$expression = (new Subscribing\XPathExpression($page, '//foo'))->match();
+		Assert::same(0, $expression->length);
 	}
 }
 

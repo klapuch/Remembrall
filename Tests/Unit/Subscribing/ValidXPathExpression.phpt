@@ -13,14 +13,13 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class ValidXPathExpression extends Tester\TestCase {
 	/**
-	 * @throws \Remembrall\Exception\ExistenceException XPath expression "//foo" does not exist on the "http://www.google.com" page
+	 * @throws \Remembrall\Exception\ExistenceException XPath expression "//foo" does not exist
 	 */
 	public function testEmptyMatchWithError() {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>Hi there!</p>');
 		(new Subscribing\ValidXPathExpression(
-			new Subscribing\FakeExpression('//foo'),
-			new Subscribing\FakePage('http://www.google.com', $dom)
+			new Subscribing\FakeExpression('//foo', new \DOMNodeList())
 		))->match();
 	}
 }

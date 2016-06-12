@@ -25,12 +25,14 @@ final class HtmlPart extends Tester\TestCase {
 			</div>
 			'
 		);
-		$nodes = (new \DOMXPath($dom))->query('//p');
 		Assert::same(
-			'<p>Hi<span>John</span>How are <span>you</span></p><p><span>I am</span>thank<span>you</span></p><p>Blank</p><p>Invalid</p><p></p>',
+			'<p>Hi<span>John</span>How are <span>you</span></p><p><span>I am</span>thank<span>you</span></p><p class="blank">Blank</p><p>Invalid</p><p></p>',
 			(new Subscribing\HtmlPart(
 				new Subscribing\FakePage,
-				$nodes
+				new Subscribing\FakeExpression(
+					'//p',
+					(new \DOMXPath($dom))->query('//p')
+				)
 			))->content()
 		);
 	}
@@ -38,12 +40,14 @@ final class HtmlPart extends Tester\TestCase {
 	public function testEmptyNodes() {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<div><p>Blank</p></div>');
-		$nodes = (new \DOMXPath($dom))->query('//span'); // nodes with 0 length
 		Assert::same(
 			'',
 			(new Subscribing\HtmlPart(
 				new Subscribing\FakePage,
-				$nodes
+				new Subscribing\FakeExpression(
+					'//p',
+					(new \DOMXPath($dom))->query('//span')
+				)
 			))->content()
 		);
 	}
@@ -52,7 +56,7 @@ final class HtmlPart extends Tester\TestCase {
 		Assert::false(
 			(new Subscribing\HtmlPart(
 				new Subscribing\FakePage('google.com'),
-				new \DOMNodeList
+				new Subscribing\FakeExpression()
 			))->equals(
 				new Subscribing\FakePart(
 					'',
@@ -63,13 +67,18 @@ final class HtmlPart extends Tester\TestCase {
 	}
 
 	public function testDifferentContentButSamePage() {
+		$dom = new \DOMDocument();
+		$dom->loadHTML('<p>xxx</p>');
 		Assert::false(
 			(new Subscribing\HtmlPart(
 				new Subscribing\FakePage('google.com'),
-				new \DOMNodeList
+				new Subscribing\FakeExpression(
+					'//p',
+					(new \DOMXPath($dom))->query('//p')
+				)
 			))->equals(
 				new Subscribing\FakePart(
-					'abc',
+					'<p>abc</p>',
 					new Subscribing\FakePage('google.com')
 				)
 			)
@@ -77,13 +86,18 @@ final class HtmlPart extends Tester\TestCase {
 	}
 
 	public function testEquivalentParts() {
+		$dom = new \DOMDocument();
+		$dom->loadHTML('<p>abc</p>');
 		Assert::true(
 			(new Subscribing\HtmlPart(
 				new Subscribing\FakePage('google.com'),
-				new \DOMNodeList
+				new Subscribing\FakeExpression(
+					'//p',
+					(new \DOMXPath($dom))->query('//p')
+				)
 			))->equals(
 				new Subscribing\FakePart(
-					'',
+					'<p>abc</p>',
 					new Subscribing\FakePage('google.com')
 				)
 			)

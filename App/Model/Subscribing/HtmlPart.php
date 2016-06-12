@@ -4,11 +4,11 @@ namespace Remembrall\Model\Subscribing;
 
 final class HtmlPart implements Part {
 	private $page;
-	private $nodes;
+	private $expression;
 
-	public function __construct(Page $page, \DOMNodeList $nodes) {
+	public function __construct(Page $page, Expression $expression) {
 		$this->page = $page;
-		$this->nodes = $nodes;
+		$this->expression = $expression;
 	}
 
 	public function source(): Page {
@@ -17,9 +17,13 @@ final class HtmlPart implements Part {
 
 	public function content(): string {
 		return (string)array_reduce(
-			iterator_to_array($this->nodes),
+			iterator_to_array($this->expression->match()),
 			function($previous, \DOMNode $node) {
-				$previous .= $this->tag($node);
+				$previous .= preg_replace(
+					'~[\t\r\n]+~', // removes tabs and new lines (CR and LF)
+					'',
+					$node->ownerDocument->saveHTML($node)
+				);
 				return $previous;
 			}
 		);
@@ -28,22 +32,5 @@ final class HtmlPart implements Part {
 	public function equals(Part $part): bool {
 		return $part->source()->url() === $this->source()->url()
 		&& $part->content() === $this->content();
-	}
-
-	/**
-	 * All tags which includes $node - also the nested ones
-	 * Removes tabs and new lines (CR and LF)
-	 * @param \DOMNode $node
-	 * @return string
-	 */
-	private function tag(\DOMNode $node): string {
-		$tag = sprintf(
-			'<%1$s>%2$s</%1$s>',
-			$node->nodeName,
-			$node->childNodes && $node->childNodes->length > 0
-				? (new self($this->page, $node->childNodes))->content()
-				: preg_replace('~[\t\r\n]+~', '', $node->nodeValue)
-		);
-		return preg_replace('~<[/]*#text>~', '', $tag);
 	}
 }

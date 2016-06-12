@@ -4,12 +4,18 @@ namespace Remembrall\Model\Subscribing;
 
 final class FakeExpression implements Expression {
 	private $expression;
+	private $match;
 
-	public function __construct(string $expression = null) {
+	public function __construct(
+		string $expression = null,
+		\DOMNodeList $match = null
+	) {
 		$this->expression = $expression;
+		$this->match = $match;
 	}
 
-	public function match(): Part {
+	public function match(): \DOMNodeList {
+		return $this->match;
 	}
 
 	public function __toString() {

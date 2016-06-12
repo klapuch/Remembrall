@@ -6,22 +6,19 @@ use Remembrall\Exception;
 
 final class ValidXPathExpression implements Expression {
 	private $origin;
-	private $page;
 
-	public function __construct(Expression $origin, Page $page) {
+	public function __construct(Expression $origin) {
 		$this->origin = $origin;
-		$this->page = $page;
 	}
 
-	public function match(): Part {
-		$domX = new \DOMXPath($this->page->content());
-		if($domX->query((string)$this)->length > 0)
-			return $this->origin->match();
+	public function match(): \DOMNodeList {
+		$nodes = $this->origin->match();
+		if($nodes->length > 0)
+			return $nodes;
 		throw new Exception\ExistenceException(
 			sprintf(
-				'XPath expression "%s" does not exist on the "%s" page',
-				(string)$this,
-				$this->page->url()
+				'XPath expression "%s" does not exist',
+				(string)$this
 			)
 		);
 	}

@@ -8,9 +8,9 @@ interface Expression {
 	/**
 	 * Match found by the expression
 	 * @throws Exception\ExistenceException
-	 * @return Part
+	 * @return \DOMNodeList
 	 */
-	public function match(): Part;
+	public function match(): \DOMNodeList;
 
 	/**
 	 * Expression itself
