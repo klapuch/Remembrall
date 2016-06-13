@@ -49,11 +49,9 @@ final class ChangedParts extends Tester\TestCase {
 					new Subscribing\FakeExpression('//p')
 				),
 			],
-			(
-			new Subscribing\ChangedParts(
+			(new Subscribing\ChangedParts(
 				new Subscribing\FakeParts($allParts)
-			)
-			)->iterate()
+			))->iterate()
 		);
 	}
 }
