@@ -17,7 +17,8 @@ final class ConstantPart extends Tester\TestCase {
 		Assert::false(
 			(new Subscribing\ConstantPart(
 				new Subscribing\FakePage('google.com'),
-				''
+				'',
+				new Subscribing\FakeExpression
 			))->equals(
 				new Subscribing\FakePart(
 					'',
@@ -31,7 +32,8 @@ final class ConstantPart extends Tester\TestCase {
 		Assert::false(
 			(new Subscribing\ConstantPart(
 				new Subscribing\FakePage('google.com'),
-				'abc'
+				'abc',
+				new Subscribing\FakeExpression
 			))->equals(
 				new Subscribing\FakePart(
 					'',
@@ -45,7 +47,8 @@ final class ConstantPart extends Tester\TestCase {
 		Assert::true(
 			(new Subscribing\ConstantPart(
 				new Subscribing\FakePage('google.com'),
-				'abc'
+				'abc',
+				new Subscribing\FakeExpression
 			))->equals(
 				new Subscribing\FakePart(
 					'abc',
