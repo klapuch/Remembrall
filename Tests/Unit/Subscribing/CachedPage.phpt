@@ -12,46 +12,41 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class ExistingWebPage extends TestCase\Mockery {
-	/**
-	 * @throws \Remembrall\Exception\ExistenceException Web page with the "www.foo.xxx" address does not exist
-	 */
-	public function testNotFoundPage() {
-		/** @var $response \Mockery\Mock */
-		$response = $this->mockery('Psr\Http\Message\MessageInterface');
-		$response->shouldReceive('getStatusCode')
-			->once()
-			->andReturn(404);
-		/** @var $http \Mockery\Mock */
-		$http = $this->mockery('GuzzleHttp\ClientInterface');
-		$http->shouldReceive('request')
-			->with('GET')
-			->once()
-			->andReturn($response);
-		(new Subscribing\ExistingWebPage(
-			new Subscribing\FakePage('www.foo.xxx'),
-			$http
-		))->content();
+final class CachedPage extends TestCase\Mockery {
+	/** @var \Mockery\Mock */
+	private $cache;
+
+	public function setUp() {
+		parent::setUp();
+		$this->cache = $this->mockery('Nette\Caching\IStorage');
 	}
 
-	public function testFoundPage() {
-		/** @var $response \Mockery\Mock */
-		$response = $this->mockery('Psr\Http\Message\MessageInterface');
-		$response->shouldReceive('getStatusCode')
-			->once()
-			->andReturn(200);
-		/** @var $http \Mockery\Mock */
-		$http = $this->mockery('GuzzleHttp\ClientInterface');
-		$http->shouldReceive('request')
-			->with('GET')
-			->once()
-			->andReturn($response);
-		(new Subscribing\ExistingWebPage(
-			new Subscribing\FakePage('http://www.google.com', new \DOMDocument),
-			$http
-		))->content();
-		Assert::true(true);
+	public function testCaching() {
+		$dom = new \DOMDocument;
+		$dom->loadHTML('<p>Paragraph</p>');
+		$url = 'www.google.com';
+		$this->cache->shouldReceive('read')
+			->andReturn($dom)
+			->with('Remembrall\Model\Subscribing\CachedPage::content')
+			->times(4);
+		$this->cache->shouldReceive('read')
+			->andReturn($url)
+			->with('Remembrall\Model\Subscribing\CachedPage::url')
+			->times(4);
+		$page = new Subscribing\CachedPage(
+			new Subscribing\FakePage(
+				$url,
+				$dom
+			),
+			$this->cache
+		);
+
+		Assert::same($dom, $page->content());
+		Assert::same($dom, $page->content());
+
+		Assert::same($url, $page->url());
+		Assert::same($url, $page->url());
 	}
 }
 
-(new ExistingWebPage())->run();
+(new CachedPage())->run();
