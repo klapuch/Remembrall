@@ -21,4 +21,8 @@ final class TextPart implements Part {
 		return $part->source()->url() === $this->source()->url()
 		&& $part->content() === $this->content();
 	}
+
+	public function expression(): Expression {
+		return $this->origin->expression();
+	}
 }

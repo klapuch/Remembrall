@@ -24,4 +24,10 @@ interface Part {
 	 * @return bool
 	 */
 	public function equals(Part $part): bool;
+
+	/**
+	 * Every part can be identified by expression
+	 * @return Expression
+	 */
+	public function expression(): Expression;
 }
