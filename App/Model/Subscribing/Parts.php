@@ -6,13 +6,13 @@ use Remembrall\Exception;
 
 interface Parts {
 	/**
-	 * Add a new part to the parts by the given expression
-	 * @param Expression $expression
+	 * Add a new part to the parts
+	 * @param Part $part
 	 * @param Interval $interval
 	 * @throws Exception\DuplicateException
 	 * @return void
 	 */
-	public function subscribe(Expression $expression, Interval $interval);
+	public function subscribe(Part $part, Interval $interval);
 
 	/**
 	 * Go through all the parts

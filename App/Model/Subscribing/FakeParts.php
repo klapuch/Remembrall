@@ -9,7 +9,7 @@ final class FakeParts implements Parts {
 		$this->parts = $parts;
 	}
 
-	public function subscribe(Expression $expression, Interval $interval) {
+	public function subscribe(Part $part, Interval $interval) {
 
 	}
 

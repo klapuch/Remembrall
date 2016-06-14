@@ -9,8 +9,8 @@ final class ChangedParts implements Parts {
 		$this->origin = $origin;
 	}
 
-	public function subscribe(Expression $expression, Interval $interval) {
-		$this->origin->subscribe($expression, $interval);
+	public function subscribe(Part $part, Interval $interval) {
+		$this->origin->subscribe($part, $interval);
 	}
 
 	public function iterate(): array {
