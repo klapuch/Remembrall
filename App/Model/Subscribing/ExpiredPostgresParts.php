@@ -32,7 +32,7 @@ final class ExpiredPostgresParts implements Parts {
 				visited_at + INTERVAL '`interval` MINUTES' >= NOW()",
 				$this->page->url()
 			),
-			function($previous, array $row) {
+			function($previous, Dibi\Row $row) {
 				$previous[] = new ConstantPart(
 					$this->page,
 					$row['content'],

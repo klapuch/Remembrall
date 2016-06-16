@@ -2,10 +2,10 @@ includes:
     - acl.neon
 parameters:
     database:
-        driver: postgre
+        driver: mysql
         host: 127.0.0.1
-        username: postgres
-        password: postgres
+        username: root
+        password:
         database: remembrall
         lazy: TRUE
 php:

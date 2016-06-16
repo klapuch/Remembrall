@@ -12,5 +12,9 @@ before_install:
 install:
   - composer install --no-interaction --prefer-source
 
+before_script:
+  - mysql -u root -e 'CREATE DATABASE remembrall_test;'
+  - mysql -u root remembrall_test < ./Tests/TestCase/schema.sql
+
 script:
   - ./vendor/bin/tester -p $TESTER_PHP_BIN -o console -s ./Tests/

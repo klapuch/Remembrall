@@ -25,7 +25,7 @@ final class OwnedPostgresParts implements Parts {
 		try {
 			$this->database->query(
 				'INSERT INTO parts
-				(url, expression, content, visited_at, `interval`, user_id) VALUES
+				(url, expression, content, visited_at, `interval`, subscriber_id) VALUES
 				(?, ?, ?, ?, ?, ?)',
 				$this->page->url(),
 				(string)$part->expression(),
@@ -52,11 +52,11 @@ final class OwnedPostgresParts implements Parts {
 			$this->database->fetchAll(
 				'SELECT content, expression
 				FROM parts
-				WHERE url = ? AND user_id = ?',
+				WHERE url = ? AND subscriber_id = ?',
 				$this->page->url(),
 				$this->myself->getId()
 			),
-			function($previous, array $row) {
+			function($previous, Dibi\Row $row) {
 				$previous[] = new ConstantPart(
 					$this->page,
 					$row['content'],
