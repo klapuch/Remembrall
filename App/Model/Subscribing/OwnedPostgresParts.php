@@ -23,18 +23,25 @@ final class OwnedPostgresParts implements Parts {
 
 	public function subscribe(Part $part, Interval $interval) {
 		try {
+			$this->database->begin();
 			$this->database->query(
 				'INSERT INTO parts
-				(url, expression, content, visited_at, `interval`, subscriber_id) VALUES
-				(?, ?, ?, ?, ?, ?)',
+				(page_id, expression, content, `interval`, subscriber_id) VALUES
+				((SELECT ID FROM pages WHERE url = ?), ?, ?, ?, ?)',
 				$this->page->url(),
 				(string)$part->expression(),
 				$part->content(),
-				$interval->start(),
 				$interval->step()->i,
 				$this->myself->getId()
 			);
+			$this->database->query(
+				'INSERT INTO part_visits (part_id, visited_at) VALUES (?, ?)',
+				$this->database->insertId(),
+				new \DateTimeImmutable()
+			);
+			$this->database->commit();
 		} catch(Dibi\UniqueConstraintViolationException $ex) {
+			$this->database->rollback();
 			throw new Exception\DuplicateException(
 				sprintf(
 					'"%s" expression on the "%s" page is already subscribed by you',
@@ -44,14 +51,22 @@ final class OwnedPostgresParts implements Parts {
 				$ex->getCode(),
 				$ex
 			);
+		} catch(Dibi\Exception $ex) {
+			$this->database->rollback();
+			throw new Dibi\Exception(
+				'An error occurred on storage during subscribing a new part',
+				$ex->getCode(),
+				$ex
+			);
 		}
 	}
 
 	public function iterate(): array {
 		return (array)array_reduce(
 			$this->database->fetchAll(
-				'SELECT content, expression
+				'SELECT parts.content, expression
 				FROM parts
+				LEFT JOIN pages ON pages.ID = parts.page_id
 				WHERE url = ? AND subscriber_id = ?',
 				$this->page->url(),
 				$this->myself->getId()

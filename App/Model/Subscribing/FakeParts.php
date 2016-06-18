@@ -5,7 +5,7 @@ namespace Remembrall\Model\Subscribing;
 final class FakeParts implements Parts {
 	private $parts;
 
-	public function __construct(array $parts) {
+	public function __construct(array $parts = []) {
 		$this->parts = $parts;
 	}
 

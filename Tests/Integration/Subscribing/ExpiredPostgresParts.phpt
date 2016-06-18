@@ -5,7 +5,6 @@
  */
 namespace Remembrall\Integration\Subscribing;
 
-use Dibi;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -15,34 +14,44 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class ExpiredPostgresParts extends TestCase\Database {
     public function testIteratingExpiredPartsOnConcretePage() {
-        $this->database->query(
-            'INSERT INTO parts (url, expression, content, visited_at, `interval`, subscriber_id) VALUES
-			("a", "//a", "a", NOW() - INTERVAL 10 MINUTE, 10, 1)'
-        );
-        $this->database->query(
-            'INSERT INTO parts (url, expression, content, visited_at, `interval`, subscriber_id) VALUES
-			("b", "//b", "b", NOW(), 2, 2)'
-        );
-        $this->database->query(
-            'INSERT INTO parts (url, expression, content, visited_at, `interval`, subscriber_id) VALUES
-			("c", "//c", "c", NOW(), 3, 1)'
-        );
-        $this->database->query(
-            'INSERT INTO parts (url, expression, content, visited_at, `interval`, subscriber_id) VALUES
-			("a", "//d", "d", NOW() - INTERVAL 2 DAY, 10, 1)'
-        );
-        $parts = (new Subscribing\OwnedPostgresParts(
-            $this->database,
-            new Subscribing\FakePage('a'),
-            new Security\Identity(1)
+        $parts = (new Subscribing\ExpiredPostgresParts(
+            new Subscribing\FakeParts(),
+			new Subscribing\FakePage('a'),
+			$this->database
         ))->iterate();
-        Assert::same(2, count($parts));
+        Assert::count(2, $parts);
         Assert::same('//a', (string)$parts[0]->expression());
         Assert::same('//d', (string)$parts[1]->expression());
     }
 
     protected function prepareDatabase() {
-        $this->database->query('TRUNCATE parts');
+        $this->database->query('TRUNCATE part_visits');
+		$this->database->query(
+			'INSERT INTO part_visits (part_id, visited_at) VALUES
+			(1, NOW() - INTERVAL 2 DAY), (3, NOW() - INTERVAL 3 MINUTE)'
+		);
+		$this->database->query('TRUNCATE parts');
+		$this->database->query(
+			'INSERT INTO parts (ID, page_id, expression, content, `interval`, subscriber_id) VALUES
+			(1, 1, "//a", "a", 10, 1)'
+		);
+		$this->database->query(
+			'INSERT INTO parts (ID, page_id, expression, content, `interval`, subscriber_id) VALUES
+			(2, 2, "//b", "b", 10, 2)'
+		);
+		$this->database->query(
+			'INSERT INTO parts (ID, page_id, expression, content, `interval`, subscriber_id) VALUES
+			(3, 1, "//c", "c", 10, 1)'
+		);
+		$this->database->query(
+			'INSERT INTO parts (ID, page_id, expression, content, `interval`, subscriber_id) VALUES
+			(4, 1, "//d", "d", 10, 1)'
+		);
+		$this->database->query('TRUNCATE pages');
+		$this->database->query(
+			'INSERT INTO pages (ID, url, content) VALUES
+			(1, "a", "xx"), (2, "b", "zz"), (3, "c", "yy")'
+		);
     }
 }
 
