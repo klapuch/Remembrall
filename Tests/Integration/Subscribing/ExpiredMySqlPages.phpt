@@ -13,7 +13,7 @@ use Nette\Security;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class ExpiredPostgresPages extends TestCase\Database {
+final class ExpiredMySqlPages extends TestCase\Database {
 	public function testIterating() {
 		$this->database->query(
 			'INSERT INTO pages (url, content) VALUES
@@ -27,7 +27,7 @@ final class ExpiredPostgresPages extends TestCase\Database {
 			(2, "2000-01-01 01:00:00"),
 			(3, "2000-01-01 00:50:00")'
 		);
-		$pages = (new Subscribing\ExpiredPostgresPages(
+		$pages = (new Subscribing\ExpiredMySqlPages(
 			new Subscribing\FakePages(),
 			$this->database,
 			new Subscribing\FakeInterval(
@@ -47,4 +47,4 @@ final class ExpiredPostgresPages extends TestCase\Database {
     }
 }
 
-(new ExpiredPostgresPages)->run();
+(new ExpiredMySqlPages)->run();

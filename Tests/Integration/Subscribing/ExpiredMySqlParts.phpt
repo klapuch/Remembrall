@@ -12,9 +12,9 @@ use Nette\Security;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class ExpiredPostgresParts extends TestCase\Database {
+final class ExpiredMySqlParts extends TestCase\Database {
     public function testIteratingExpiredPartsOnConcretePage() {
-        $parts = (new Subscribing\ExpiredPostgresParts(
+        $parts = (new Subscribing\ExpiredMySqlParts(
             new Subscribing\FakeParts(),
 			new Subscribing\FakePage('a'),
 			$this->database
@@ -55,4 +55,4 @@ final class ExpiredPostgresParts extends TestCase\Database {
     }
 }
 
-(new ExpiredPostgresParts)->run();
+(new ExpiredMySqlParts)->run();

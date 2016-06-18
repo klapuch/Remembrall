@@ -13,11 +13,11 @@ use Nette\Security;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class PostgresPages extends TestCase\Database {
+final class MySqlPages extends TestCase\Database {
 	public function testAddingBrandNew() {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>Content</p>');
-		(new Subscribing\PostgresPages($this->database))->add(
+		(new Subscribing\MySqlPages($this->database))->add(
 			new Subscribing\FakePage('www.google.com', $dom)
 		);
 		$pages = $this->database->fetchAll('SELECT url, content FROM pages');
@@ -34,7 +34,7 @@ final class PostgresPages extends TestCase\Database {
 		);
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>The content is rewritten with this</p>');
-		(new Subscribing\PostgresPages($this->database))->add(
+		(new Subscribing\MySqlPages($this->database))->add(
 			new Subscribing\FakePage('www.google.com', $dom)
 		);
 		$pages = $this->database->fetchAll('SELECT url, content FROM pages');
@@ -53,7 +53,7 @@ final class PostgresPages extends TestCase\Database {
 			("www.google.com", "<p>Content</p>"),
 			("www.seznam.cz", "<p>XXX</p>")'
 		);
-		$pages = (new Subscribing\PostgresPages($this->database))->iterate();
+		$pages = (new Subscribing\MySqlPages($this->database))->iterate();
 		Assert::count(2, $pages);
 		Assert::same('www.google.com', $pages[0]->url());
 		Assert::contains('<p>Content</p>', $pages[0]->content()->saveHTML());
@@ -66,4 +66,4 @@ final class PostgresPages extends TestCase\Database {
     }
 }
 
-(new PostgresPages)->run();
+(new MySqlPages)->run();

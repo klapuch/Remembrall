@@ -4,7 +4,7 @@ namespace Remembrall\Model\Subscribing;
 
 use Dibi;
 
-final class ExpiredPostgresPages implements Pages {
+final class ExpiredMySqlPages implements Pages {
 	private $origin;
 	private $database;
 	private $expiration;

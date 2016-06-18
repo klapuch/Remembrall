@@ -4,7 +4,7 @@ namespace Remembrall\Model\Subscribing;
 
 use Dibi;
 
-final class PostgresPages implements Pages {
+final class MySqlPages implements Pages {
 	private $database;
 
 	public function __construct(Dibi\Connection $database) {

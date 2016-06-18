@@ -13,9 +13,9 @@ use Nette\Security;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class OwnedPostgresParts extends TestCase\Database {
+final class OwnedMySqlParts extends TestCase\Database {
     public function testSubscribingBrandNew() {
-        (new Subscribing\OwnedPostgresParts(
+        (new Subscribing\OwnedMySqlParts(
             $this->database,
             new Subscribing\FakePage('www.google.com'),
             new Security\Identity(666)
@@ -50,7 +50,7 @@ final class OwnedPostgresParts extends TestCase\Database {
     }
 
 	public function testSubscribingDuplicationWithRollback() {
-		$parts = new Subscribing\OwnedPostgresParts(
+		$parts = new Subscribing\OwnedMySqlParts(
 			$this->database,
 			new Subscribing\FakePage('www.google.com'),
 			new Security\Identity(666)
@@ -104,7 +104,7 @@ final class OwnedPostgresParts extends TestCase\Database {
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
 			(1, "//d", "d", 4, 1)'
 		);
-		$parts = (new Subscribing\OwnedPostgresParts(
+		$parts = (new Subscribing\OwnedMySqlParts(
 			$this->database,
 			new Subscribing\FakePage('www.google.com'),
 			new Security\Identity(1)
@@ -125,4 +125,4 @@ final class OwnedPostgresParts extends TestCase\Database {
     }
 }
 
-(new OwnedPostgresParts)->run();
+(new OwnedMySqlParts)->run();

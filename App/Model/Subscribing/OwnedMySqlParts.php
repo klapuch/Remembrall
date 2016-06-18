@@ -6,7 +6,7 @@ use Dibi;
 use Nette\Security;
 use Remembrall\Exception;
 
-final class OwnedPostgresParts implements Parts {
+final class OwnedMySqlParts implements Parts {
 	private $database;
 	private $page;
 	private $myself;

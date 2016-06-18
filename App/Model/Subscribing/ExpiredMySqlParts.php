@@ -4,7 +4,7 @@ namespace Remembrall\Model\Subscribing;
 
 use Dibi;
 
-final class ExpiredPostgresParts implements Parts {
+final class ExpiredMySqlParts implements Parts {
 	private $origin;
 	private $page;
 	private $database;
