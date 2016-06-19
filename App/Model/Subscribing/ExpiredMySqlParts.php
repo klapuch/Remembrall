@@ -5,6 +5,9 @@ namespace Remembrall\Model\Subscribing;
 use Dibi;
 use Remembrall\Exception;
 
+/**
+ * Expired parts by the given page
+ */
 final class ExpiredMySqlParts implements Parts {
 	private $origin;
 	private $page;

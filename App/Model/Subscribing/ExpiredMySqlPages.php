@@ -4,6 +4,9 @@ namespace Remembrall\Model\Subscribing;
 
 use Dibi;
 
+/**
+ * Expired pages in the given interval
+ */
 final class ExpiredMySqlPages implements Pages {
 	private $origin;
 	private $database;

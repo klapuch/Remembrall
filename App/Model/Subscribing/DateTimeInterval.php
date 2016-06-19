@@ -2,6 +2,10 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+/**
+ * Interval representing datetime (day, month, year, hours, minutes, seconds)
+ * Can find the next datetime by the given step
+ */
 final class DateTimeInterval implements Interval {
 	private $start;
 	private $step;

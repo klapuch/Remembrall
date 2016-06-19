@@ -4,6 +4,9 @@ namespace Remembrall\Model\Subscribing;
 
 use Remembrall\Exception;
 
+/**
+ * XPath expression must be only valid one
+ */
 final class ValidXPathExpression implements Expression {
 	private $origin;
 

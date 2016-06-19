@@ -5,6 +5,9 @@ namespace Remembrall\Model\Subscribing;
 use GuzzleHttp;
 use Remembrall\Exception;
 
+/**
+ * Page must exists
+ */
 final class ExistingWebPage implements Page {
 	private $origin;
 	private $http;

@@ -4,6 +4,9 @@ namespace Remembrall\Model\Subscribing;
 
 use Dibi;
 
+/**
+ * All pages
+ */
 final class MySqlPages implements Pages {
 	private $database;
 

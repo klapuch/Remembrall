@@ -5,6 +5,9 @@ namespace Remembrall\Model\Subscribing;
 use Dibi;
 use Remembrall\Exception;
 
+/**
+ * All parts in the storage by the given page
+ */
 final class CollectiveMySqlParts implements Parts {
 	private $database;
 	private $page;

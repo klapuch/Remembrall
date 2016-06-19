@@ -6,6 +6,9 @@ use GuzzleHttp;
 use Psr\Http\Message;
 use Remembrall\Exception;
 
+/**
+ * Html page downloaded from the internet
+ */
 final class HtmlWebPage implements Page {
 	private $http;
 

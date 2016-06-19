@@ -2,6 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+/**
+ * Constant part without roundtrips
+ */
 final class ConstantPart implements Part {
 	private $source;
 	private $content;

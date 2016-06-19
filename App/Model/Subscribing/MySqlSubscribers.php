@@ -6,6 +6,9 @@ use Dibi;
 use Remembrall\Exception;
 use Nette\Security;
 
+/**
+ * All subscribers
+ */
 final class MySqlSubscribers implements Subscribers {
 	private $database;
 

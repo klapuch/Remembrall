@@ -2,6 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+/**
+ * Text part without html tags
+ */
 final class TextPart implements Part {
 	private $origin;
 

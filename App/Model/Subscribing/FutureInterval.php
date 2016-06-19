@@ -2,6 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+/**
+ * Only future interval
+ */
 final class FutureInterval implements Interval {
 	private $origin;
 

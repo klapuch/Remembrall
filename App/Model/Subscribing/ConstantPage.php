@@ -2,6 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+/**
+ * Constant page without roundtrips
+ */
 final class ConstantPage implements Page {
 	private $url;
 	private $content;

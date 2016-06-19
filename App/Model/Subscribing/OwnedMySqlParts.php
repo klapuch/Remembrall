@@ -5,6 +5,9 @@ namespace Remembrall\Model\Subscribing;
 use Dibi;
 use Remembrall\Exception;
 
+/**
+ * Parts which are owned by the given subscriber
+ */
 final class OwnedMySqlParts implements Parts {
 	private $database;
 	private $myself;

@@ -2,6 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+/**
+ * Part on the html page
+ */
 final class HtmlPart implements Part {
 	private $page;
 	private $expression;
