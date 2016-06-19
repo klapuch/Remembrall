@@ -54,7 +54,7 @@ final class OwnedMySqlParts implements Parts {
 		} catch(\Exception $ex) {
 			$this->database->rollback();
 			throw new Dibi\Exception(
-				'An error occurred on storage during subscribing a new part',
+				'An error occurred during subscribing a new part',
 				$ex->getCode(),
 				$ex
 			);
