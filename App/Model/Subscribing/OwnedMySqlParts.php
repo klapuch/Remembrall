@@ -7,17 +7,17 @@ use Remembrall\Exception;
 
 final class OwnedMySqlParts implements Parts {
 	private $database;
-	private $page;
 	private $myself;
+	private $origin;
 
 	public function __construct(
 		Dibi\Connection $database,
-		Page $page,
-		Subscriber $myself
+		Subscriber $myself,
+		Parts $origin
 	) {
 		$this->database = $database;
-		$this->page = $page;
 		$this->myself = $myself;
+		$this->origin = $origin;
 	}
 
 	public function subscribe(Part $part, Interval $interval) {
@@ -27,7 +27,7 @@ final class OwnedMySqlParts implements Parts {
 				'INSERT INTO parts
 				(page_id, expression, content, `interval`, subscriber_id) VALUES
 				((SELECT ID FROM pages WHERE url = ?), ?, ?, ?, ?)',
-				$this->page->url(),
+				$part->source()->url(),
 				(string)$part->expression(),
 				$part->content(),
 				$interval->step()->i,
@@ -36,7 +36,7 @@ final class OwnedMySqlParts implements Parts {
 			$this->database->query(
 				'INSERT INTO part_visits (part_id, visited_at) VALUES (?, ?)',
 				$this->database->insertId(),
-				new \DateTimeImmutable()
+				$interval->start()
 			);
 			$this->database->commit();
 		} catch(Dibi\UniqueConstraintViolationException $ex) {
@@ -45,7 +45,7 @@ final class OwnedMySqlParts implements Parts {
 				sprintf(
 					'"%s" expression on the "%s" page is already subscribed by you',
 					(string)$part->expression(),
-					$this->page->url()
+					$part->source()->url()
 				),
 				$ex->getCode(),
 				$ex
@@ -63,33 +63,27 @@ final class OwnedMySqlParts implements Parts {
 	public function replace(Part $old, Part $new) {
 		if(!$this->owned($old))
 			throw new Exception\ExistenceException('You do not own this part');
-		$this->database->query(
-			'UPDATE parts SET content = ?
-			WHERE subscriber_id = ?
-			AND expression = ?
-			AND page_id = (SELECT ID FROM pages WHERE url = ?)',
-			$new->content(),
-			$this->myself->id(),
-			(string)$old->expression(),
-			$this->page->url()
-		);
+		$this->origin->replace($old, $new);
 	}
 
 	public function iterate(): array {
 		return (array)array_reduce(
 			$this->database->fetchAll(
-				'SELECT parts.content, expression
+				'SELECT parts.content AS part_content, expression, url,
+				pages.content AS page_content
 				FROM parts
-				INNER JOIN pages ON pages.ID = parts.page_id
-				WHERE url = ? AND subscriber_id = ?',
-				$this->page->url(),
+				LEFT JOIN pages ON pages.ID = parts.page_id
+				WHERE subscriber_id = ?',
 				$this->myself->id()
 			),
 			function($previous, Dibi\Row $row) {
 				$previous[] = new ConstantPart(
-					$this->page,
-					$row['content'],
-					new XPathExpression($this->page, $row['expression']),
+					new ConstantPage($row['url'], $row['page_content']),
+					$row['part_content'],
+					new XPathExpression(
+						new ConstantPage($row['url'], $row['page_content']),
+						$row['expression']
+					),
 					$this->myself
 				);
 				return $previous;

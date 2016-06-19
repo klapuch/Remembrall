@@ -16,12 +16,12 @@ final class OwnedMySqlParts extends TestCase\Database {
     public function testSubscribingBrandNew() {
         (new Subscribing\OwnedMySqlParts(
             $this->database,
-            new Subscribing\FakePage('www.google.com'),
-            new Subscribing\FakeSubscriber(666)
+            new Subscribing\FakeSubscriber(666),
+			new Subscribing\FakeParts()
         ))->subscribe(
             new Subscribing\FakePart(
                 '<p>Content</p>',
-                null,
+                new Subscribing\FakePage('www.google.com'),
                 false,
                 new Subscribing\FakeExpression('//p')
             ),
@@ -42,22 +42,23 @@ final class OwnedMySqlParts extends TestCase\Database {
 		Assert::same('<p>Content</p>', $part['content']);
 		Assert::same('//p', $part['expression']);
 		Assert::same(158, $part['interval']);
-		$partVisits = $this->database->fetchAll('SELECT part_id FROM part_visits');
+		$partVisits = $this->database->fetchAll('SELECT part_id, visited_at FROM part_visits');
 		Assert::count(1, $partVisits);
 		$partVisit = current($partVisits);
 		Assert::same(1, $partVisit['part_id']);
+		Assert::same('2000-01-01 01:01:01', (string)$partVisit['visited_at']);
     }
 
-	public function testSubscribingDuplicationWithRollback() {
+	public function testSubscribingDuplicateWithRollback() {
 		$parts = new Subscribing\OwnedMySqlParts(
 			$this->database,
-			new Subscribing\FakePage('www.google.com'),
-			new Subscribing\FakeSubscriber(666)
+			new Subscribing\FakeSubscriber(666),
+			new Subscribing\FakeParts()
 		);
 		$parts->subscribe(
 			new Subscribing\FakePart(
 				'<p>Content</p>',
-				null,
+				new Subscribing\FakePage('www.google.com'),
 				false,
 				new Subscribing\FakeExpression('//p')
 			),
@@ -71,7 +72,7 @@ final class OwnedMySqlParts extends TestCase\Database {
 			$parts->subscribe(
 				new Subscribing\FakePart(
 					'<p>Content</p>',
-					null,
+					new Subscribing\FakePage('www.google.com'),
 					false,
 					new Subscribing\FakeExpression('//p')
 				),
@@ -86,7 +87,7 @@ final class OwnedMySqlParts extends TestCase\Database {
 		Assert::count(1, $this->database->fetchAll('SELECT ID FROM part_visits'));
 	}
 
-	public function testIteratingOwnedPartsOnConcretePage() {
+	public function testIteratingOwnedParts() {
 		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
 			(1, "//a", "a", 1, 1)'
@@ -105,12 +106,13 @@ final class OwnedMySqlParts extends TestCase\Database {
 		);
 		$parts = (new Subscribing\OwnedMySqlParts(
 			$this->database,
-			new Subscribing\FakePage('www.google.com'),
-			new Subscribing\FakeSubscriber(1)
+			new Subscribing\FakeSubscriber(1),
+			new Subscribing\FakeParts()
 		))->iterate();
-		Assert::count(2, $parts);
+		Assert::count(3, $parts);
 		Assert::same('//a', (string)$parts[0]->expression());
-		Assert::same('//d', (string)$parts[1]->expression());
+		Assert::same('//c', (string)$parts[1]->expression());
+		Assert::same('//d', (string)$parts[2]->expression());
 	}
 
 	/**
@@ -123,12 +125,12 @@ final class OwnedMySqlParts extends TestCase\Database {
 		);
 		(new Subscribing\OwnedMySqlParts(
 			$this->database,
-            new Subscribing\FakePage('www.google.com'),
-			new Subscribing\FakeSubscriber(666)
+			new Subscribing\FakeSubscriber(666),
+			new Subscribing\FakeParts()
 		))->replace(
 			new Subscribing\FakePart(
 				'c',
-				new Subscribing\FakePage('google.com'),
+				new Subscribing\FakePage('www.google.com'),
 				false, // not owned
 				new Subscribing\FakeExpression('//p')
 			),
@@ -136,15 +138,15 @@ final class OwnedMySqlParts extends TestCase\Database {
 		);
 	}
 
-	public function testReplacingOwnedPart() {
+	public function testReplacingOwnedPartWithoutError() {
 		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
 			(1, "//p", "a", 1, 666)'
 		);
 		(new Subscribing\OwnedMySqlParts(
 			$this->database,
-			new Subscribing\FakePage('www.google.com'),
-			new Subscribing\FakeSubscriber(666)
+			new Subscribing\FakeSubscriber(666),
+			new Subscribing\FakeParts()
 		))->replace(
 			new Subscribing\FakePart(
 				'c',
@@ -159,15 +161,7 @@ final class OwnedMySqlParts extends TestCase\Database {
 				new Subscribing\FakeExpression('//x')
 			)
 		);
-		$parts = $this->database->fetchAll(
-			'SELECT content, subscriber_id, expression, page_id FROM parts'
-		);
-		Assert::count(1, $parts);
-		$part = current($parts);
-		Assert::same('newContent', $part['content']); // changed
-		Assert::same(666, $part['subscriber_id']);  // without change
-		Assert::same('//p', $part['expression']); // without change
-		Assert::same(1, $part['page_id']); // without change
+		Assert::true(true);
 	}
 
     protected function prepareDatabase() {
@@ -177,6 +171,10 @@ final class OwnedMySqlParts extends TestCase\Database {
 		$this->database->query(
 			'INSERT INTO pages (ID, url, content) VALUES
 			(1, "www.google.com", "<p>google</p>")'
+		);
+		$this->database->query(
+			'INSERT INTO pages (ID, url, content) VALUES
+			(2, "www.facedown.cz", "<p>facedown</p>")'
 		);
     }
 }
