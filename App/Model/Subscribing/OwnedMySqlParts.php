@@ -81,7 +81,7 @@ final class OwnedMySqlParts implements Parts {
 			$this->database->fetchAll(
 				'SELECT parts.content, expression
 				FROM parts
-				LEFT JOIN pages ON pages.ID = parts.page_id
+				INNER JOIN pages ON pages.ID = parts.page_id
 				WHERE url = ? AND subscriber_id = ?',
 				$this->page->url(),
 				$this->myself->getId()
