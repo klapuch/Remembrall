@@ -3,7 +3,6 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Dibi;
-use Nette\Security;
 use Remembrall\Exception;
 
 final class OwnedMySqlParts implements Parts {
@@ -14,7 +13,7 @@ final class OwnedMySqlParts implements Parts {
 	public function __construct(
 		Dibi\Connection $database,
 		Page $page,
-		Security\IIdentity $myself
+		Subscriber $myself
 	) {
 		$this->database = $database;
 		$this->page = $page;
@@ -32,7 +31,7 @@ final class OwnedMySqlParts implements Parts {
 				(string)$part->expression(),
 				$part->content(),
 				$interval->step()->i,
-				$this->myself->getId()
+				$this->myself->id()
 			);
 			$this->database->query(
 				'INSERT INTO part_visits (part_id, visited_at) VALUES (?, ?)',
@@ -70,7 +69,7 @@ final class OwnedMySqlParts implements Parts {
 			AND expression = ?
 			AND page_id = (SELECT ID FROM pages WHERE url = ?)',
 			$new->content(),
-			$this->myself->getId(),
+			$this->myself->id(),
 			(string)$old->expression(),
 			$this->page->url()
 		);
@@ -84,13 +83,14 @@ final class OwnedMySqlParts implements Parts {
 				INNER JOIN pages ON pages.ID = parts.page_id
 				WHERE url = ? AND subscriber_id = ?',
 				$this->page->url(),
-				$this->myself->getId()
+				$this->myself->id()
 			),
 			function($previous, Dibi\Row $row) {
 				$previous[] = new ConstantPart(
 					$this->page,
 					$row['content'],
-					new XPathExpression($this->page, $row['expression'])
+					new XPathExpression($this->page, $row['expression']),
+					$this->myself
 				);
 				return $previous;
 			}

@@ -5,10 +5,16 @@ namespace Remembrall\Model\Subscribing;
 final class HtmlPart implements Part {
 	private $page;
 	private $expression;
+	private $owner;
 
-	public function __construct(Page $page, Expression $expression) {
+	public function __construct(
+		Page $page,
+		Expression $expression,
+		Subscriber $owner
+	) {
 		$this->page = $page;
 		$this->expression = $expression;
+		$this->owner = $owner;
 	}
 
 	public function source(): Page {
@@ -36,5 +42,9 @@ final class HtmlPart implements Part {
 
 	public function expression(): Expression {
 		return $this->expression;
+	}
+
+	public function owner(): Subscriber {
+		return $this->owner;
 	}
 }

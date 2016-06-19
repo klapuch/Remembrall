@@ -25,4 +25,8 @@ final class TextPart implements Part {
 	public function expression(): Expression {
 		return $this->origin->expression();
 	}
+
+	public function owner(): Subscriber {
+		return $this->origin->owner();
+	}
 }

@@ -6,15 +6,18 @@ final class ConstantPart implements Part {
 	private $source;
 	private $content;
 	private $expression;
+	private $owner;
 
 	public function __construct(
 		Page $source,
 		string $content,
-		Expression $expression
+		Expression $expression,
+		Subscriber $owner
 	) {
 		$this->source = $source;
 		$this->content = $content;
 		$this->expression = $expression;
+		$this->owner = $owner;
 	}
 
 	public function source(): Page {
@@ -32,5 +35,9 @@ final class ConstantPart implements Part {
 
 	public function expression(): Expression {
 		return $this->expression;
+	}
+
+	public function owner(): Subscriber {
+		return $this->owner;
 	}
 }

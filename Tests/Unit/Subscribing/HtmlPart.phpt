@@ -32,7 +32,8 @@ final class HtmlPart extends Tester\TestCase {
 				new Subscribing\FakeExpression(
 					'//p',
 					(new \DOMXPath($dom))->query('//p')
-				)
+				),
+				new Subscribing\FakeSubscriber()
 			))->content()
 		);
 	}
@@ -47,7 +48,8 @@ final class HtmlPart extends Tester\TestCase {
 				new Subscribing\FakeExpression(
 					'//p',
 					(new \DOMXPath($dom))->query('//span')
-				)
+				),
+				new Subscribing\FakeSubscriber()
 			))->content()
 		);
 	}
@@ -56,7 +58,8 @@ final class HtmlPart extends Tester\TestCase {
 		Assert::false(
 			(new Subscribing\HtmlPart(
 				new Subscribing\FakePage('google.com'),
-				new Subscribing\FakeExpression()
+				new Subscribing\FakeExpression(),
+				new Subscribing\FakeSubscriber()
 			))->equals(
 				new Subscribing\FakePart(
 					'',
@@ -75,7 +78,8 @@ final class HtmlPart extends Tester\TestCase {
 				new Subscribing\FakeExpression(
 					'//p',
 					(new \DOMXPath($dom))->query('//p')
-				)
+				),
+				new Subscribing\FakeSubscriber()
 			))->equals(
 				new Subscribing\FakePart(
 					'<p>abc</p>',
@@ -94,7 +98,8 @@ final class HtmlPart extends Tester\TestCase {
 				new Subscribing\FakeExpression(
 					'//p',
 					(new \DOMXPath($dom))->query('//p')
-				)
+				),
+				new Subscribing\FakeSubscriber()
 			))->equals(
 				new Subscribing\FakePart(
 					'<p>abc</p>',

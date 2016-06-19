@@ -30,4 +30,10 @@ interface Part {
 	 * @return Expression
 	 */
 	public function expression(): Expression;
+
+	/**
+	 * Every part must have reason why it exists - it must belongs to someone
+	 * @return Subscriber
+	 */
+	public function owner(): Subscriber;
 }

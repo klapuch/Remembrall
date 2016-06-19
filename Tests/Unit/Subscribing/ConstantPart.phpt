@@ -18,7 +18,8 @@ final class ConstantPart extends Tester\TestCase {
 			(new Subscribing\ConstantPart(
 				new Subscribing\FakePage('google.com'),
 				'',
-				new Subscribing\FakeExpression
+				new Subscribing\FakeExpression,
+				new Subscribing\FakeSubscriber()
 			))->equals(
 				new Subscribing\FakePart(
 					'',
@@ -33,7 +34,8 @@ final class ConstantPart extends Tester\TestCase {
 			(new Subscribing\ConstantPart(
 				new Subscribing\FakePage('google.com'),
 				'abc',
-				new Subscribing\FakeExpression
+				new Subscribing\FakeExpression,
+				new Subscribing\FakeSubscriber()
 			))->equals(
 				new Subscribing\FakePart(
 					'',
@@ -48,7 +50,8 @@ final class ConstantPart extends Tester\TestCase {
 			(new Subscribing\ConstantPart(
 				new Subscribing\FakePage('google.com'),
 				'abc',
-				new Subscribing\FakeExpression
+				new Subscribing\FakeExpression,
+				new Subscribing\FakeSubscriber()
 			))->equals(
 				new Subscribing\FakePart(
 					'abc',

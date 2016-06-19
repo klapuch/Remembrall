@@ -7,17 +7,20 @@ final class FakePart implements Part {
 	private $content;
 	private $equals;
 	private $expression;
+	private $owner;
 
 	public function __construct(
 		string $content = null,
 		Page $source = null,
 		bool $equals = false,
-		Expression $expression = null
+		Expression $expression = null,
+		Subscriber $owner = null
 	) {
 		$this->source = $source;
 		$this->content = $content;
 		$this->equals = $equals;
 		$this->expression = $expression;
+		$this->owner = $owner;
 	}
 
 	public function source(): Page {
@@ -34,5 +37,9 @@ final class FakePart implements Part {
 
 	public function expression(): Expression {
 		return $this->expression;
+	}
+
+	public function owner(): Subscriber {
+		return $this->owner;
 	}
 }

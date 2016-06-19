@@ -9,7 +9,6 @@ use Dibi;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
-use Nette\Security;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -18,7 +17,7 @@ final class OwnedMySqlParts extends TestCase\Database {
         (new Subscribing\OwnedMySqlParts(
             $this->database,
             new Subscribing\FakePage('www.google.com'),
-            new Security\Identity(666)
+            new Subscribing\FakeSubscriber(666)
         ))->subscribe(
             new Subscribing\FakePart(
                 '<p>Content</p>',
@@ -53,7 +52,7 @@ final class OwnedMySqlParts extends TestCase\Database {
 		$parts = new Subscribing\OwnedMySqlParts(
 			$this->database,
 			new Subscribing\FakePage('www.google.com'),
-			new Security\Identity(666)
+			new Subscribing\FakeSubscriber(666)
 		);
 		$parts->subscribe(
 			new Subscribing\FakePart(
@@ -107,7 +106,7 @@ final class OwnedMySqlParts extends TestCase\Database {
 		$parts = (new Subscribing\OwnedMySqlParts(
 			$this->database,
 			new Subscribing\FakePage('www.google.com'),
-			new Security\Identity(1)
+			new Subscribing\FakeSubscriber(1)
 		))->iterate();
 		Assert::count(2, $parts);
 		Assert::same('//a', (string)$parts[0]->expression());
@@ -125,7 +124,7 @@ final class OwnedMySqlParts extends TestCase\Database {
 		(new Subscribing\OwnedMySqlParts(
 			$this->database,
             new Subscribing\FakePage('www.google.com'),
-            new Security\Identity(666)
+			new Subscribing\FakeSubscriber(666)
 		))->replace(
 			new Subscribing\FakePart(
 				'c',
@@ -145,7 +144,7 @@ final class OwnedMySqlParts extends TestCase\Database {
 		(new Subscribing\OwnedMySqlParts(
 			$this->database,
 			new Subscribing\FakePage('www.google.com'),
-			new Security\Identity(666)
+			new Subscribing\FakeSubscriber(666)
 		))->replace(
 			new Subscribing\FakePart(
 				'c',
