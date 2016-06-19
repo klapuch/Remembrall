@@ -17,7 +17,14 @@ final class CollectiveMySqlParts implements Parts {
 	public function subscribe(Part $part, Interval $interval) {
 		try {
 			$this->database->begin();
-			$firstId = $this->database->fetchSingle( //TODO: LOCK
+			$this->database->query('SET autocommit = 0');
+			$this->database->query(
+				'LOCK TABLES parts WRITE,
+				pages WRITE,
+				subscribers WRITE,
+				part_visits WRITE'
+			);
+			$firstId = $this->database->fetchSingle(
 				'SELECT ID + 1 FROM parts ORDER BY ID DESC LIMIT 1'
 			);
 			$this->database->query(
@@ -30,7 +37,7 @@ final class CollectiveMySqlParts implements Parts {
 				$part->content(),
 				$interval->step()->i
 			);
-			$lastId = $this->database->fetchSingle( //TODO: LOCK
+			$lastId = $this->database->fetchSingle(
 				'SELECT ID FROM parts ORDER BY ID DESC LIMIT 1'
 			);
 			$this->database->query(
@@ -47,6 +54,9 @@ final class CollectiveMySqlParts implements Parts {
 				$ex->getCode(),
 				$ex
 			);
+		} finally {
+			$this->database->query('SET autocommit = 1');
+			$this->database->query('UNLOCK TABLES');
 		}
 	}
 
