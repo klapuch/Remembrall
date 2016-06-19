@@ -2,6 +2,8 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+use Remembrall\Exception;
+
 final class ChangedParts implements Parts {
 	private $origin;
 
@@ -11,6 +13,15 @@ final class ChangedParts implements Parts {
 
 	public function subscribe(Part $part, Interval $interval) {
 		$this->origin->subscribe($part, $interval);
+	}
+
+	public function replace(Part $old, Part $new) {
+		if(!$this->changed($old)) {
+			throw new Exception\ExistenceException(
+				'This part has not changed yet'
+			);
+		}
+		$this->origin->replace($old, $new);
 	}
 
 	public function iterate(): array {
@@ -26,6 +37,20 @@ final class ChangedParts implements Parts {
 						)
 					)
 				);
+			}
+		);
+	}
+
+	/**
+	 * Checks whether the given part is really changed
+	 * @param Part $part
+	 * @return bool
+	 */
+	private function changed(Part $part): bool {
+		return (bool)array_filter(
+			$this->iterate(),
+			function(Part $changedPart) use ($part) {
+				return $part->equals($changedPart);
 			}
 		);
 	}

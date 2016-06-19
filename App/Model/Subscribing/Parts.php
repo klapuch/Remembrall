@@ -15,6 +15,14 @@ interface Parts {
 	public function subscribe(Part $part, Interval $interval);
 
 	/**
+	 * Replace the old part with the new one
+	 * @param Part $old
+	 * @param Part $new
+	 * @return void
+	 */
+	public function replace(Part $old, Part $new);
+
+	/**
 	 * Go through all the parts
 	 * @return Part[]
 	 */

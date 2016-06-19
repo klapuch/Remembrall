@@ -24,7 +24,43 @@ final class ExpiredMySqlParts extends TestCase\Database {
         Assert::same('//d', (string)$parts[1]->expression());
     }
 
-    protected function prepareDatabase() {
+	/**
+	 * @throws \Remembrall\Exception\ExistenceException This part has not expired yet
+	 */
+	public function testReplacingNonExpiredPart() {
+		(new Subscribing\ExpiredMySqlParts(
+			new Subscribing\FakeParts(),
+			new Subscribing\FakePage('a'),
+			$this->database
+		))->replace(
+			new Subscribing\FakePart(
+				'c',
+				new Subscribing\FakePage('google.com'),
+				false, // non-expired
+				new Subscribing\FakeExpression('//p')
+			),
+			new Subscribing\FakePart()
+		);
+	}
+
+	public function testReplacingExpiredPartWithNoError() {
+		(new Subscribing\ExpiredMySqlParts(
+			new Subscribing\FakeParts(),
+			new Subscribing\FakePage('a'),
+			$this->database
+		))->replace(
+			new Subscribing\FakePart(
+				'c',
+				new Subscribing\FakePage('google.com'),
+				true, // expired
+				new Subscribing\FakeExpression('//p')
+			),
+			new Subscribing\FakePart()
+		);
+		Assert::true(true);
+	}
+
+	protected function prepareDatabase() {
         $this->database->query('TRUNCATE part_visits');
 		$this->database->query(
 			'INSERT INTO part_visits (part_id, visited_at) VALUES

@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Dibi;
+use Remembrall\Exception;
 
 final class ExpiredMySqlParts implements Parts {
 	private $origin;
@@ -21,6 +22,15 @@ final class ExpiredMySqlParts implements Parts {
 
 	public function subscribe(Part $part, Interval $interval) {
 		$this->origin->subscribe($part, $interval);
+	}
+
+	public function replace(Part $old, Part $new) {
+		if(!$this->expired($old)) {
+			throw new Exception\ExistenceException(
+				'This part has not expired yet'
+			);
+		}
+		$this->origin->replace($old, $new);
 	}
 
 	public function iterate(): array {
@@ -42,6 +52,20 @@ final class ExpiredMySqlParts implements Parts {
 					new XPathExpression($this->page, $row['expression'])
 				);
 				return $previous;
+			}
+		);
+	}
+
+	/**
+	 * Checks whether the given part is really expired
+	 * @param Part $part
+	 * @return bool
+	 */
+	private function expired(Part $part): bool {
+		return (bool)array_filter(
+			$this->iterate(),
+			function(Part $expiredPart) use ($part) {
+				return $part->equals($expiredPart);
 			}
 		);
 	}

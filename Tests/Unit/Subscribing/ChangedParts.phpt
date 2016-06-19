@@ -54,6 +54,66 @@ final class ChangedParts extends Tester\TestCase {
 			))->iterate()
 		);
 	}
+
+	/**
+	 * @throws \Remembrall\Exception\ExistenceException This part has not changed yet
+	 */
+	public function testReplacingUnchangedPart() {
+		$allParts = [
+			new Subscribing\FakePart(
+				'a',
+				new Subscribing\FakePage('google.com'),
+				false,
+				new Subscribing\FakeExpression('//p')
+			),
+			new Subscribing\FakePart(
+				'c',
+				new Subscribing\FakePage('google.com'),
+				false,
+				new Subscribing\FakeExpression('//p')
+			),
+		];
+		(new Subscribing\ChangedParts(
+			new Subscribing\FakeParts($allParts)
+		))->replace(
+			new Subscribing\FakePart(
+				'c',
+				new Subscribing\FakePage('google.com'),
+				false, // unchanged
+				new Subscribing\FakeExpression('//p')
+			),
+			new Subscribing\FakePart()
+		);
+	}
+
+	public function testReplacingChangedPartWithNoError() {
+		$allParts = [
+			new Subscribing\FakePart(
+				'a',
+				new Subscribing\FakePage('google.com'),
+				false,
+				new Subscribing\FakeExpression('//p')
+			),
+			new Subscribing\FakePart(
+				'c',
+				new Subscribing\FakePage('google.com'),
+				false,
+				new Subscribing\FakeExpression('//p')
+			),
+		];
+		(new Subscribing\ChangedParts(
+			new Subscribing\FakeParts($allParts)
+		))->replace(
+			new Subscribing\FakePart(
+				'c',
+				new Subscribing\FakePage('google.com'),
+				true, // changed
+				new Subscribing\FakeExpression('//p')
+			),
+			new Subscribing\FakePart()
+		);
+		Assert::true(true);
+	}
 }
 
 (new ChangedParts())->run();

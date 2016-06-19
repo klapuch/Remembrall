@@ -114,6 +114,63 @@ final class OwnedMySqlParts extends TestCase\Database {
 		Assert::same('//d', (string)$parts[1]->expression());
 	}
 
+	/**
+	 * @throws \Remembrall\Exception\ExistenceException You do not own this part
+	 */
+	public function testReplacingNotOwnedPart() {
+		$this->database->query(
+			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
+			(1, "//a", "a", 1, 666)'
+		);
+		(new Subscribing\OwnedMySqlParts(
+			$this->database,
+            new Subscribing\FakePage('www.google.com'),
+            new Security\Identity(666)
+		))->replace(
+			new Subscribing\FakePart(
+				'c',
+				new Subscribing\FakePage('google.com'),
+				false, // not owned
+				new Subscribing\FakeExpression('//p')
+			),
+			new Subscribing\FakePart()
+		);
+	}
+
+	public function testReplacingOwnedPart() {
+		$this->database->query(
+			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
+			(1, "//p", "a", 1, 666)'
+		);
+		(new Subscribing\OwnedMySqlParts(
+			$this->database,
+			new Subscribing\FakePage('www.google.com'),
+			new Security\Identity(666)
+		))->replace(
+			new Subscribing\FakePart(
+				'c',
+				new Subscribing\FakePage('www.google.com'),
+				true, // owned
+				new Subscribing\FakeExpression('//p')
+			),
+			new Subscribing\FakePart(
+				'newContent',
+				null,
+				false,
+				new Subscribing\FakeExpression('//x')
+			)
+		);
+		$parts = $this->database->fetchAll(
+			'SELECT content, subscriber_id, expression, page_id FROM parts'
+		);
+		Assert::count(1, $parts);
+		$part = current($parts);
+		Assert::same('newContent', $part['content']); // changed
+		Assert::same(666, $part['subscriber_id']);  // without change
+		Assert::same('//p', $part['expression']); // without change
+		Assert::same(1, $part['page_id']); // without change
+	}
+
     protected function prepareDatabase() {
         $this->database->query('TRUNCATE parts');
         $this->database->query('TRUNCATE part_visits');

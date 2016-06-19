@@ -61,6 +61,21 @@ final class OwnedMySqlParts implements Parts {
 		}
 	}
 
+	public function replace(Part $old, Part $new) {
+		if(!$this->owned($old))
+			throw new Exception\ExistenceException('You do not own this part');
+		$this->database->query(
+			'UPDATE parts SET content = ?
+			WHERE subscriber_id = ?
+			AND expression = ?
+			AND page_id = (SELECT ID FROM pages WHERE url = ?)',
+			$new->content(),
+			$this->myself->getId(),
+			(string)$old->expression(),
+			$this->page->url()
+		);
+	}
+
 	public function iterate(): array {
 		return (array)array_reduce(
 			$this->database->fetchAll(
@@ -78,6 +93,20 @@ final class OwnedMySqlParts implements Parts {
 					new XPathExpression($this->page, $row['expression'])
 				);
 				return $previous;
+			}
+		);
+	}
+
+	/**
+	 * Checks whether the subscriber really owns the given part
+	 * @param Part $part
+	 * @return bool
+	 */
+	private function owned(Part $part): bool {
+		return (bool)array_filter(
+			$this->iterate(),
+			function(Part $ownedPart) use ($part) {
+				return $part->equals($ownedPart);
 			}
 		);
 	}
