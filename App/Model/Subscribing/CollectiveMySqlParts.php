@@ -20,7 +20,6 @@ final class CollectiveMySqlParts implements Parts {
 			$firstId = $this->database->fetchSingle( //TODO: LOCK
 				'SELECT ID + 1 FROM parts ORDER BY ID DESC LIMIT 1'
 			);
-			dump($firstId);
 			$this->database->query(
 				'INSERT INTO parts
 				(page_id, expression, content, `interval`, subscriber_id)
