@@ -43,7 +43,7 @@ final class CollectiveMySqlParts implements Parts {
 		} catch(\Exception $ex) {
 			$this->database->rollback();
 			throw new Dibi\Exception(
-				$ex->getMessage(),
+				'An error occurred during subscribing a new part',
 				$ex->getCode(),
 				$ex
 			);
