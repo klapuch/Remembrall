@@ -18,7 +18,7 @@ final class CollectiveMySqlParts implements Parts {
 		try {
 			$this->database->begin();
 			$firstId = $this->database->fetchSingle( //TODO: LOCK
-				'SELECT CAST(ID AS INTEGER) + 1
+				'SELECT ID + 1
 				FROM parts
 				ORDER BY ID DESC
 				LIMIT 1'
