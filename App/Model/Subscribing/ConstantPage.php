@@ -15,8 +15,8 @@ final class ConstantPage implements Page {
 	}
 
 	public function content(): \DOMDocument {
-		$dom = new \DOMDocument();
-		@$dom->loadHTML($this->content);
+		$dom = new DOM();
+		$dom->loadHTML($this->content);
 		return $dom;
 	}
 

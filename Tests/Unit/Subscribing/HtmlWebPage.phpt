@@ -63,7 +63,7 @@ final class HtmlWebPage extends TestCase\Mockery {
 			->andReturn('text/HTML');
 		$response->shouldReceive('getBody')
 			->once()
-			->andReturn('<html><p>Hello</p></html>');
+			->andReturn('<html><p>Hello Koňíčku</p></html>');
 		/** @var $http \Mockery\Mock */
 		$http = $this->mockery('GuzzleHttp\ClientInterface');
 		$http->shouldReceive('request')
@@ -72,7 +72,7 @@ final class HtmlWebPage extends TestCase\Mockery {
 			->andReturn($response);
 		$dom = (new Subscribing\HtmlWebPage($http))->content();
 		Assert::same(
-			'Hello',
+			'Hello Koňíčku',
 			$dom->getElementsByTagName('p')->item(0)->nodeValue
 		);
 	}

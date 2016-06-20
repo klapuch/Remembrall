@@ -17,11 +17,11 @@ final class HtmlWebPage implements Page {
 	}
 
 	public function content(): \DOMDocument {
-		$dom = new \DOMDocument();
 		$response = $this->http->request('GET');
 		if(!$this->isHTML($response))
 			throw new Exception\ExistenceException('Web page must be HTML');
-		@$dom->loadHTML((string)$response->getBody());
+		$dom = new DOM();
+		$dom->loadHTML((string)$response->getBody());
 		return $dom;
 	}
 
