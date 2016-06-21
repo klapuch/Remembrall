@@ -9,7 +9,7 @@ abstract class BasePage extends Nette\Application\UI\Presenter {
 	use \Nextras\Application\UI\SecuredLinksPresenterTrait;
 
 	public function checkRequirements($element) {
-		if($this->signal === null) {
+		/*if($this->signal === null) {
 			$resource = $this->name;
 			$action = $this->action;
 		} elseif($this->signal && empty($this->signal[0])) {
@@ -31,7 +31,7 @@ abstract class BasePage extends Nette\Application\UI\Presenter {
 				'Login:',
 				['backlink' => $this->storeRequest()]
 			);
-		}
+		}*/
 	}
 
 	public function startup() {

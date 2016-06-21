@@ -19,8 +19,7 @@ final class OwnedMySqlParts extends TestCase\Database {
 			(1, "foo@bar.cz", "secret"), (2, "facedown@facedown.cz", "secret")'
 		);
         (new Subscribing\CollectiveMySqlParts(
-            $this->database,
-			new Subscribing\FakePage('www.google.com')
+            $this->database
         ))->subscribe(
             new Subscribing\FakePart(
                 '<p>Content</p>',
@@ -62,8 +61,7 @@ final class OwnedMySqlParts extends TestCase\Database {
 			(1, "//p", "a", 1, 666)'
 		);
 		(new Subscribing\CollectiveMySqlParts(
-			$this->database,
-			new Subscribing\FakePage()
+			$this->database
 		))->replace(
 			new Subscribing\FakePart(
 				'c',
@@ -91,7 +89,7 @@ final class OwnedMySqlParts extends TestCase\Database {
 		Assert::same(1, $part['page_id']); // without change
 	}
 
-	public function testIteratingForConcretePage() {
+	public function testIteratingOverAllPages() {
 		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
 			(1, "//a", "a", 1, 1)'
@@ -109,12 +107,46 @@ final class OwnedMySqlParts extends TestCase\Database {
 			(1, "//d", "d", 4, 1)'
 		);
 		$parts = (new Subscribing\CollectiveMySqlParts(
-			$this->database,
-			new Subscribing\FakePage('www.google.com')
+			$this->database
 		))->iterate();
-		Assert::count(2, $parts);
+		Assert::count(4, $parts);
 		Assert::same('//a', (string)$parts[0]->expression());
-		Assert::same('//d', (string)$parts[1]->expression());
+		Assert::same('//b', (string)$parts[1]->expression());
+		Assert::same('//c', (string)$parts[2]->expression());
+		Assert::same('//d', (string)$parts[3]->expression());
+	}
+
+	public function testRemovingAllSameParts() {
+		$this->database->query(
+			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
+			(2, "//b", "b", 2, 2)'
+		);
+		$this->database->query(
+			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
+			(2, "//b", "c", 3, 1)'
+		);
+		$this->database->query(
+			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
+			(2, "//d", "c", 3, 1)'
+		);
+		$this->database->query(
+			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
+			(1, "//d", "d", 4, 1)'
+		);
+		(new Subscribing\CollectiveMySqlParts(
+			$this->database
+		))->remove(
+			new Subscribing\FakePart(
+				null,
+				new Subscribing\FakePage('www.facedown.cz'),
+				false,
+				new Subscribing\FakeExpression('//b')
+			)
+		);
+		$parts = $this->database->fetchAll('SELECT ID FROM parts');
+		Assert::count(2, $parts);
+		Assert::same(3, $parts[0]['ID']);
+		Assert::same(4, $parts[1]['ID']);
 	}
 
     protected function prepareDatabase() {

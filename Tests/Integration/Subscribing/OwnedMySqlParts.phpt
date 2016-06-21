@@ -164,6 +164,32 @@ final class OwnedMySqlParts extends TestCase\Database {
 		Assert::true(true);
 	}
 
+	public function testRemovingByOwner() {
+		$this->database->query(
+			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
+			(1, "//b", "b", 2, 2)'
+		);
+		$this->database->query(
+			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
+			(2, "//b", "c", 3, 666)'
+		);
+		(new Subscribing\OwnedMySqlParts(
+			$this->database,
+			new Subscribing\FakeSubscriber(666),
+			new Subscribing\FakeParts()
+		))->remove(
+			new Subscribing\FakePart(
+				null,
+				new Subscribing\FakePage('www.facedown.cz'),
+				false,
+				new Subscribing\FakeExpression('//b')
+			)
+		);
+		$parts = $this->database->fetchAll('SELECT ID FROM parts');
+		Assert::count(1, $parts);
+		Assert::same(1, $parts[0]['ID']);
+	}
+
     protected function prepareDatabase() {
         $this->database->query('TRUNCATE parts');
         $this->database->query('TRUNCATE part_visits');

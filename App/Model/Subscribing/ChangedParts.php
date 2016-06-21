@@ -27,6 +27,10 @@ final class ChangedParts implements Parts {
 		$this->origin->replace($old, $new);
 	}
 
+	public function remove(Part $part) {
+		$this->origin->remove($part);
+	}
+
 	public function iterate(): array {
 		return array_filter(
 			$this->origin->iterate(),

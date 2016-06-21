@@ -13,8 +13,7 @@ class RouterFactory {
 		$router = new RouteList;
 		$router[] = new Route(
 			'<presenter>[/<action>][/<id [0-9]+>]',
-			'Default:default',
-			Route::SECURED
+			'Default:default'
 		);
 		return $router;
 	}

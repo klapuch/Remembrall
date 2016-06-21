@@ -69,6 +69,18 @@ final class OwnedMySqlParts implements Parts {
 		$this->origin->replace($old, $new);
 	}
 
+	public function remove(Part $part) {
+		$this->database->query(
+			'DELETE FROM parts
+			WHERE subscriber_id = ?
+			AND page_id = (SELECT ID FROM pages WHERE url = ?)
+			AND expression = ?',
+			$this->myself->id(),
+			$part->source()->url(),
+			(string)$part->expression()
+		);
+	}
+
 	public function iterate(): array {
 		return (array)array_reduce(
 			$this->database->fetchAll(

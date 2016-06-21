@@ -6,5 +6,5 @@ $configuration->enableDebugger(__DIR__ . '/../Log');
 return $configuration->setDebugMode(true)
 	->setTempDirectory(__DIR__ . '/../Temporary')
 	->addConfig(__DIR__ . '/Configuration/config.neon')
-	->addConfig(__DIR__ . '/Configuration/config.local.neon')
+	->addConfig(__DIR__ . '/Configuration/config.production.neon')
 	->createContainer();

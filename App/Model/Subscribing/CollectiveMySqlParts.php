@@ -10,11 +10,9 @@ use Remembrall\Exception;
  */
 final class CollectiveMySqlParts implements Parts {
 	private $database;
-	private $page;
 
-	public function __construct(Dibi\Connection $database, Page $page) {
+	public function __construct(Dibi\Connection $database) {
 		$this->database = $database;
-		$this->page = $page;
 	}
 
 	public function subscribe(Part $part, Interval $interval) {
@@ -35,7 +33,7 @@ final class CollectiveMySqlParts implements Parts {
 				(page_id, expression, content, `interval`, subscriber_id)
 				SELECT (SELECT ID FROM pages WHERE url = ?), ?, ?, ?, ID
 				FROM subscribers',
-				$this->page->url(),
+				$part->source()->url(),
 				(string)$part->expression(),
 				$part->content(),
 				$interval->step()->i
@@ -76,20 +74,32 @@ final class CollectiveMySqlParts implements Parts {
 		);
 	}
 
+	public function remove(Part $part) {
+		$this->database->query(
+			'DELETE FROM parts
+			WHERE expression = ?
+			AND page_id = (SELECT ID FROM pages WHERE url = ?)',
+			(string)$part->expression(),
+			$part->source()->url()
+		);
+	}
+
 	public function iterate(): array {
 		return (array)array_reduce(
 			$this->database->fetchAll(
-				'SELECT parts.content, expression, parts.subscriber_id
+				'SELECT parts.content AS part_content, url,
+				pages.content AS page_content, expression, subscriber_id
 				FROM parts
-				LEFT JOIN pages ON pages.ID = parts.page_id
-				WHERE url = ?',
-				$this->page->url()
+				LEFT JOIN pages ON pages.ID = parts.page_id'
 			),
 			function($previous, Dibi\Row $row) {
 				$previous[] = new ConstantPart(
-					$this->page,
-					$row['content'],
-					new XPathExpression($this->page, $row['expression']),
+					new ConstantPage($row['url'], $row['page_content']),
+					$row['part_content'],
+					new XPathExpression(
+						new ConstantPage($row['url'], $row['page_content']),
+						$row['expression']
+					),
 					new MySqlSubscriber($row['subscriber_id'], $this->database)
 				);
 				return $previous;

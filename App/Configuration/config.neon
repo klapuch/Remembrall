@@ -16,6 +16,7 @@ php:
     session.name: SESSION
     error_reporting: 1
 application:
+    scanDirs: false
     errorPresenter: Error
     mapping:
         *: Remembrall\*Module\Page\*Page
@@ -42,7 +43,7 @@ services:
     connection:
         class: Dibi\Connection(%database%)
     router: Remembrall\Router\RouterFactory::createRouter
-    - Texy\Texy
+    texy: Texy\Texy
     latte.latteFactory:
         setup:
             - addFilter('texy', [@texy, process])

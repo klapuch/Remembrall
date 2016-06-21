@@ -52,7 +52,7 @@ final class CronPage extends BasePage {
 				}
 			}
 		} catch(\Exception $ex) {
-			(new Tracy\Logger(__DIR__ . '/../Log'))->log(
+			(new Tracy\Logger(__DIR__ . '/../../Log'))->log(
 				$ex,
 				Tracy\Logger::EXCEPTION
 			);

@@ -20,4 +20,8 @@ final class FakeParts implements Parts {
 	public function iterate(): array {
 		return $this->parts;
 	}
+
+	public function remove(Part $part) {
+		
+	}
 }
