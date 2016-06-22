@@ -6,7 +6,7 @@ use Dibi;
 use Remembrall\Exception;
 
 /**
- * Disallow subscribing more than X parts
+ * Disallow subscribing after more than X parts
  */
 final class LimitedMySqlParts implements Parts {
 	const LIMIT = 5;
