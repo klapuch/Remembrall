@@ -4,7 +4,7 @@ namespace Remembrall\Model\Access;
 
 use Dibi;
 
-final class MySqlVerificationCodes implements VerificationCodes {
+final class SecureVerificationCodes implements VerificationCodes {
     private $database;
 
     public function __construct(Dibi\Connection $database) {

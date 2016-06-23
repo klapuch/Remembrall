@@ -4,7 +4,7 @@ namespace Remembrall\Model\Access;
 
 use Dibi;
 
-final class MySqlForgottenPasswords implements ForgottenPasswords {
+final class SecureForgottenPasswords implements ForgottenPasswords {
     private $database;
 
     public function __construct(Dibi\Connection $database) {
