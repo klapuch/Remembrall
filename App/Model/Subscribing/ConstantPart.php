@@ -2,6 +2,8 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+use Remembrall\Model\Access;
+
 /**
  * Constant part without roundtrips
  */
@@ -15,7 +17,7 @@ final class ConstantPart implements Part {
 		Page $source,
 		string $content,
 		Expression $expression,
-		Subscriber $owner
+		Access\Subscriber $owner
 	) {
 		$this->source = $source;
 		$this->content = $content;
@@ -40,7 +42,7 @@ final class ConstantPart implements Part {
 		return $this->expression;
 	}
 
-	public function owner(): Subscriber {
+	public function owner(): Access\Subscriber {
 		return $this->owner;
 	}
 }

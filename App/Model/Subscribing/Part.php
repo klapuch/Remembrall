@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Remembrall\Exception;
+use Remembrall\Model\Access;
 
 interface Part {
 	/**
@@ -33,7 +34,7 @@ interface Part {
 
 	/**
 	 * Every part must have reason why it exists - it must belongs to someone
-	 * @return Subscriber
+	 * @return Access\Subscriber
 	 */
-	public function owner(): Subscriber;
+	public function owner(): Access\Subscriber;
 }

@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace Remembrall\Model\Subscribing;
+namespace Remembrall\Model\Access;
 
 final class FakeSubscriber implements Subscriber {
 	private $id;

@@ -4,6 +4,7 @@ namespace Remembrall\Model\Subscribing;
 
 use Dibi;
 use Remembrall\Exception;
+use Remembrall\Model\Access;
 
 /**
  * Expired parts by the given page
@@ -57,7 +58,7 @@ final class ExpiredMySqlParts implements Parts {
 					$this->page,
 					$row['content'],
 					new XPathExpression($this->page, $row['expression']),
-					new MySqlSubscriber($row['subscriber_id'], $this->database)
+					new Access\MySqlSubscriber($row['subscriber_id'], $this->database)
 				);
 				return $previous;
 			}

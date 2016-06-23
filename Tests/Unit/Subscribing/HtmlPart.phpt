@@ -5,7 +5,9 @@
  */
 namespace Remembrall\Unit\Subscribing;
 
-use Remembrall\Model\Subscribing;
+use Remembrall\Model\{
+	Subscribing, Access
+};
 use Remembrall\TestCase;
 use Tester;
 use Tester\Assert;
@@ -33,7 +35,7 @@ final class HtmlPart extends Tester\TestCase {
 					'//p',
 					(new \DOMXPath($dom))->query('//p')
 				),
-				new Subscribing\FakeSubscriber()
+				new Access\FakeSubscriber()
 			))->content()
 		);
 	}
@@ -49,7 +51,7 @@ final class HtmlPart extends Tester\TestCase {
 					'//p',
 					(new \DOMXPath($dom))->query('//span')
 				),
-				new Subscribing\FakeSubscriber()
+				new Access\FakeSubscriber()
 			))->content()
 		);
 	}
@@ -59,7 +61,7 @@ final class HtmlPart extends Tester\TestCase {
 			(new Subscribing\HtmlPart(
 				new Subscribing\FakePage('google.com'),
 				new Subscribing\FakeExpression(),
-				new Subscribing\FakeSubscriber()
+				new Access\FakeSubscriber()
 			))->equals(
 				new Subscribing\FakePart(
 					'',
@@ -79,7 +81,7 @@ final class HtmlPart extends Tester\TestCase {
 					'//p',
 					(new \DOMXPath($dom))->query('//p')
 				),
-				new Subscribing\FakeSubscriber()
+				new Access\FakeSubscriber()
 			))->equals(
 				new Subscribing\FakePart(
 					'<p>abc</p>',
@@ -99,7 +101,7 @@ final class HtmlPart extends Tester\TestCase {
 					'//p',
 					(new \DOMXPath($dom))->query('//p')
 				),
-				new Subscribing\FakeSubscriber()
+				new Access\FakeSubscriber()
 			))->equals(
 				new Subscribing\FakePart(
 					'<p>abc</p>',

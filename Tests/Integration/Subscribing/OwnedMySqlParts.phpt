@@ -6,7 +6,9 @@
 namespace Remembrall\Integration\Subscribing;
 
 use Dibi;
-use Remembrall\Model\Subscribing;
+use Remembrall\Model\{
+	Subscribing, Access
+};
 use Remembrall\TestCase;
 use Tester\Assert;
 
@@ -16,7 +18,7 @@ final class OwnedMySqlParts extends TestCase\Database {
     public function testSubscribingBrandNew() {
         (new Subscribing\OwnedMySqlParts(
             $this->database,
-            new Subscribing\FakeSubscriber(666),
+            new Access\FakeSubscriber(666),
 			new Subscribing\FakeParts()
         ))->subscribe(
             new Subscribing\FakePart(
@@ -52,7 +54,7 @@ final class OwnedMySqlParts extends TestCase\Database {
 	public function testSubscribingDuplicateWithRollback() {
 		$parts = new Subscribing\OwnedMySqlParts(
 			$this->database,
-			new Subscribing\FakeSubscriber(666),
+			new Access\FakeSubscriber(666),
 			new Subscribing\FakeParts()
 		);
 		$parts->subscribe(
@@ -106,7 +108,7 @@ final class OwnedMySqlParts extends TestCase\Database {
 		);
 		$parts = (new Subscribing\OwnedMySqlParts(
 			$this->database,
-			new Subscribing\FakeSubscriber(1),
+			new Access\FakeSubscriber(1),
 			new Subscribing\FakeParts()
 		))->iterate();
 		Assert::count(3, $parts);
@@ -125,7 +127,7 @@ final class OwnedMySqlParts extends TestCase\Database {
 		);
 		(new Subscribing\OwnedMySqlParts(
 			$this->database,
-			new Subscribing\FakeSubscriber(666),
+			new Access\FakeSubscriber(666),
 			new Subscribing\FakeParts()
 		))->replace(
 			new Subscribing\FakePart(
@@ -145,7 +147,7 @@ final class OwnedMySqlParts extends TestCase\Database {
 		);
 		(new Subscribing\OwnedMySqlParts(
 			$this->database,
-			new Subscribing\FakeSubscriber(666),
+			new Access\FakeSubscriber(666),
 			new Subscribing\FakeParts()
 		))->replace(
 			new Subscribing\FakePart(
@@ -175,7 +177,7 @@ final class OwnedMySqlParts extends TestCase\Database {
 		);
 		(new Subscribing\OwnedMySqlParts(
 			$this->database,
-			new Subscribing\FakeSubscriber(666),
+			new Access\FakeSubscriber(666),
 			new Subscribing\FakeParts()
 		))->remove(
 			new Subscribing\FakePart(

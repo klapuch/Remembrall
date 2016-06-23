@@ -6,7 +6,9 @@
 namespace Remembrall\Integration\Subscribing;
 
 use Dibi;
-use Remembrall\Model\Subscribing;
+use Remembrall\Model\{
+	Subscribing, Access
+};
 use Remembrall\TestCase;
 use Tester\Assert;
 
@@ -68,14 +70,14 @@ final class OwnedMySqlParts extends TestCase\Database {
 				new Subscribing\FakePage('www.google.com'),
 				true, // owned
 				new Subscribing\FakeExpression('//p'),
-				new Subscribing\FakeSubscriber(666)
+				new Access\FakeSubscriber(666)
 			),
 			new Subscribing\FakePart(
 				'newContent',
 				null,
 				false,
 				new Subscribing\FakeExpression('//x'),
-				new Subscribing\FakeSubscriber(888)
+				new Access\FakeSubscriber(888)
 			)
 		);
 		$parts = $this->database->fetchAll(

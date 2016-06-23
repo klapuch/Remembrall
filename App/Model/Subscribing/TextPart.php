@@ -2,6 +2,8 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+use Remembrall\Model\Access;
+
 /**
  * Text part without tags
  */
@@ -29,7 +31,7 @@ final class TextPart implements Part {
 		return $this->origin->expression();
 	}
 
-	public function owner(): Subscriber {
+	public function owner(): Access\Subscriber {
 		return $this->origin->owner();
 	}
 }

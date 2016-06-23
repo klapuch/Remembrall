@@ -2,6 +2,8 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+use Remembrall\Model\Access;
+
 final class FakePart implements Part {
 	private $source;
 	private $content;
@@ -14,7 +16,7 @@ final class FakePart implements Part {
 		Page $source = null,
 		bool $equals = false,
 		Expression $expression = null,
-		Subscriber $owner = null
+		Access\Subscriber $owner = null
 	) {
 		$this->source = $source;
 		$this->content = $content;
@@ -39,7 +41,7 @@ final class FakePart implements Part {
 		return $this->expression;
 	}
 
-	public function owner(): Subscriber {
+	public function owner(): Access\Subscriber {
 		return $this->owner;
 	}
 }

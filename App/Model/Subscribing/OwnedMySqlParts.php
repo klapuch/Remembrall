@@ -4,6 +4,7 @@ namespace Remembrall\Model\Subscribing;
 
 use Dibi;
 use Remembrall\Exception;
+use Remembrall\Model\Access;
 
 /**
  * Parts which are owned by the given subscriber
@@ -15,7 +16,7 @@ final class OwnedMySqlParts implements Parts {
 
 	public function __construct(
 		Dibi\Connection $database,
-		Subscriber $myself,
+		Access\Subscriber $myself,
 		Parts $origin
 	) {
 		$this->database = $database;

@@ -5,7 +5,9 @@
  */
 namespace Remembrall\Unit\Subscribing;
 
-use Remembrall\Model\Subscribing;
+use Remembrall\Model\{
+	Subscribing, Access
+};
 use Remembrall\TestCase;
 use Tester;
 use Tester\Assert;
@@ -20,21 +22,21 @@ final class ChangedParts extends Tester\TestCase {
 				new Subscribing\FakePage('google.com'),
 				false,
 				new Subscribing\FakeExpression('//p'),
-				new Subscribing\FakeSubscriber()
+				new Access\FakeSubscriber()
 			),
 			new Subscribing\FakePart(
 				'b',
 				new Subscribing\FakePage('google.com'),
 				true,
 				new Subscribing\FakeExpression('//p'),
-				new Subscribing\FakeSubscriber()
+				new Access\FakeSubscriber()
 			),
 			new Subscribing\FakePart(
 				'c',
 				new Subscribing\FakePage('google.com'),
 				false,
 				new Subscribing\FakeExpression('//p'),
-				new Subscribing\FakeSubscriber()
+				new Access\FakeSubscriber()
 			),
 		];
 		Assert::equal(
@@ -44,14 +46,14 @@ final class ChangedParts extends Tester\TestCase {
 					new Subscribing\FakePage('google.com'),
 					false,
 					new Subscribing\FakeExpression('//p'),
-					new Subscribing\FakeSubscriber()
+					new Access\FakeSubscriber()
 				),
 				2 => new Subscribing\FakePart(
 					'c',
 					new Subscribing\FakePage('google.com'),
 					false,
 					new Subscribing\FakeExpression('//p'),
-					new Subscribing\FakeSubscriber()
+					new Access\FakeSubscriber()
 				),
 			],
 			(new Subscribing\ChangedParts(
@@ -70,14 +72,14 @@ final class ChangedParts extends Tester\TestCase {
 				new Subscribing\FakePage('google.com'),
 				false,
 				new Subscribing\FakeExpression('//p'),
-				new Subscribing\FakeSubscriber()
+				new Access\FakeSubscriber()
 			),
 			new Subscribing\FakePart(
 				'c',
 				new Subscribing\FakePage('google.com'),
 				false,
 				new Subscribing\FakeExpression('//p'),
-				new Subscribing\FakeSubscriber()
+				new Access\FakeSubscriber()
 			),
 		];
 		(new Subscribing\ChangedParts(
@@ -88,7 +90,7 @@ final class ChangedParts extends Tester\TestCase {
 				new Subscribing\FakePage('google.com'),
 				false, // unchanged
 				new Subscribing\FakeExpression('//p'),
-				new Subscribing\FakeSubscriber()
+				new Access\FakeSubscriber()
 			),
 			new Subscribing\FakePart()
 		);
@@ -101,14 +103,14 @@ final class ChangedParts extends Tester\TestCase {
 				new Subscribing\FakePage('google.com'),
 				false,
 				new Subscribing\FakeExpression('//p'),
-				new Subscribing\FakeSubscriber()
+				new Access\FakeSubscriber()
 			),
 			new Subscribing\FakePart(
 				'c',
 				new Subscribing\FakePage('google.com'),
 				false,
 				new Subscribing\FakeExpression('//p'),
-				new Subscribing\FakeSubscriber()
+				new Access\FakeSubscriber()
 			),
 		];
 		(new Subscribing\ChangedParts(
@@ -119,7 +121,7 @@ final class ChangedParts extends Tester\TestCase {
 				new Subscribing\FakePage('google.com'),
 				true, // changed
 				new Subscribing\FakeExpression('//p'),
-				new Subscribing\FakeSubscriber()
+				new Access\FakeSubscriber()
 			),
 			new Subscribing\FakePart()
 		);

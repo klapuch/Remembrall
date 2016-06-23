@@ -4,6 +4,7 @@ namespace Remembrall\Model\Subscribing;
 
 use Dibi;
 use Remembrall\Exception;
+use Remembrall\Model\Access;
 
 /**
  * Disallow subscribing after more than X parts
@@ -16,7 +17,7 @@ final class LimitedMySqlParts implements Parts {
 
 	public function __construct(
 		Dibi\Connection $database,
-		Subscriber $subscriber,
+		Access\Subscriber $subscriber,
 		Parts $origin
 	) {
 		$this->database = $database;

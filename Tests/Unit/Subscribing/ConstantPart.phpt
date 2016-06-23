@@ -5,7 +5,9 @@
  */
 namespace Remembrall\Unit\Subscribing;
 
-use Remembrall\Model\Subscribing;
+use Remembrall\Model\{
+	Subscribing, Access
+};
 use Remembrall\TestCase;
 use Tester;
 use Tester\Assert;
@@ -19,7 +21,7 @@ final class ConstantPart extends Tester\TestCase {
 				new Subscribing\FakePage('google.com'),
 				'',
 				new Subscribing\FakeExpression,
-				new Subscribing\FakeSubscriber()
+				new Access\FakeSubscriber()
 			))->equals(
 				new Subscribing\FakePart(
 					'',
@@ -35,7 +37,7 @@ final class ConstantPart extends Tester\TestCase {
 				new Subscribing\FakePage('google.com'),
 				'abc',
 				new Subscribing\FakeExpression,
-				new Subscribing\FakeSubscriber()
+				new Access\FakeSubscriber()
 			))->equals(
 				new Subscribing\FakePart(
 					'',
@@ -51,7 +53,7 @@ final class ConstantPart extends Tester\TestCase {
 				new Subscribing\FakePage('google.com'),
 				'abc',
 				new Subscribing\FakeExpression,
-				new Subscribing\FakeSubscriber()
+				new Access\FakeSubscriber()
 			))->equals(
 				new Subscribing\FakePart(
 					'abc',

@@ -4,6 +4,7 @@ namespace Remembrall\Model\Subscribing;
 
 use Dibi;
 use Remembrall\Exception;
+use Remembrall\Model\Access;
 
 /**
  * All parts stored in the database
@@ -100,7 +101,7 @@ final class CollectiveMySqlParts implements Parts {
 						new ConstantPage($row['url'], $row['page_content']),
 						$row['expression']
 					),
-					new MySqlSubscriber($row['subscriber_id'], $this->database)
+					new Access\MySqlSubscriber($row['subscriber_id'], $this->database)
 				);
 				return $previous;
 			}

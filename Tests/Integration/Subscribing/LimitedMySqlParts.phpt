@@ -6,7 +6,9 @@
 namespace Remembrall\Integration\Subscribing;
 
 use Dibi;
-use Remembrall\Model\Subscribing;
+use Remembrall\Model\{
+	Subscribing, Access
+};
 use Remembrall\TestCase;
 use Tester\Assert;
 
@@ -33,7 +35,7 @@ final class LimitedMySqlParts extends TestCase\Database {
 		Assert::noError(function() {
 			(new Subscribing\LimitedMySqlParts(
 				$this->database,
-				new Subscribing\FakeSubscriber(666),
+				new Access\FakeSubscriber(666),
 				new Subscribing\FakeParts()
 			))->subscribe(
 				new Subscribing\FakePart(),
@@ -68,7 +70,7 @@ final class LimitedMySqlParts extends TestCase\Database {
 		);
 		(new Subscribing\LimitedMySqlParts(
 			$this->database,
-			new Subscribing\FakeSubscriber(666),
+			new Access\FakeSubscriber(666),
 			new Subscribing\FakeParts()
 		))->subscribe(
 			new Subscribing\FakePart(),

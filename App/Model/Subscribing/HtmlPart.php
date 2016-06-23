@@ -2,6 +2,8 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+use Remembrall\Model\Access;
+
 /**
  * Part on the html page
  */
@@ -13,7 +15,7 @@ final class HtmlPart implements Part {
 	public function __construct(
 		Page $page,
 		Expression $expression,
-		Subscriber $owner
+		Access\Subscriber $owner
 	) {
 		$this->page = $page;
 		$this->expression = $expression;
@@ -47,7 +49,7 @@ final class HtmlPart implements Part {
 		return $this->expression;
 	}
 
-	public function owner(): Subscriber {
+	public function owner(): Access\Subscriber {
 		return $this->owner;
 	}
 }
