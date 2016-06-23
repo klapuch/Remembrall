@@ -40,7 +40,7 @@ final class HtmlWebPage extends TestCase\Mockery {
 	 */
 	public function testCSSContentWithError() {
 		/** @var $response \Mockery\Mock */
-		$response = $this->mockery('Psr\Http\Message\MessageInterface');
+		$response = $this->mockery('Psr\Http\Message\ResponseInterface');
 		$response->shouldReceive('getHeader')
 			->with('Content-Type')
 			->once()
@@ -56,7 +56,7 @@ final class HtmlWebPage extends TestCase\Mockery {
 
 	public function testCorrectlyParsedHTMLContent() {
 		/** @var $response \Mockery\Mock */
-		$response = $this->mockery('Psr\Http\Message\MessageInterface');
+		$response = $this->mockery('Psr\Http\Message\ResponseInterface');
 		$response->shouldReceive('getHeader')
 			->with('Content-Type')
 			->once()

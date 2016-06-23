@@ -7,7 +7,7 @@ use Psr\Http\Message;
 use Remembrall\Exception;
 
 /**
- * Html page downloaded from the internet
+ * Fresh html page downloaded from the internet
  */
 final class HtmlWebPage implements Page {
 	private $http;
@@ -31,9 +31,10 @@ final class HtmlWebPage implements Page {
 
 	/**
 	 * Checks whether the page is HTML
+	 * @param Message\ResponseInterface $response
 	 * @return bool
 	 */
-	private function isHTML(Message\MessageInterface $response): bool {
+	private function isHTML(Message\ResponseInterface $response): bool {
 		return strcasecmp(
 			$response->getHeader('Content-Type'),
 			'text/html'

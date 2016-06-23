@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 /**
- * Text part without html tags
+ * Text part without tags
  */
 final class TextPart implements Part {
 	private $origin;

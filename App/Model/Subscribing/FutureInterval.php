@@ -3,7 +3,8 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 /**
- * Only future interval
+ * Only interval which points to the future
+ * Past intervals are not allowed
  */
 final class FutureInterval implements Interval {
 	private $origin;

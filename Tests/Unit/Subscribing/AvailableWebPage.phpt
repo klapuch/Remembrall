@@ -12,23 +12,26 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class ExistingWebPage extends TestCase\Mockery {
+final class AvailableWebPage extends TestCase\Mockery {
 	/**
-	 * @throws \Remembrall\Exception\ExistenceException Web page with the "www.foo.xxx" address does not exist
+	 * @throws \Remembrall\Exception\ExistenceException Web page "www.foo.xxx" can not be loaded because of 404 - Not Found
 	 */
 	public function testNotFoundPage() {
 		/** @var $response \Mockery\Mock */
-		$response = $this->mockery('Psr\Http\Message\MessageInterface');
+		$response = $this->mockery('Psr\Http\Message\ResponseInterface');
 		$response->shouldReceive('getStatusCode')
-			->once()
+			->twice()
 			->andReturn(404);
+		$response->shouldReceive('getReasonPhrase')
+			->once()
+			->andReturn('Not Found');
 		/** @var $http \Mockery\Mock */
 		$http = $this->mockery('GuzzleHttp\ClientInterface');
 		$http->shouldReceive('request')
 			->with('GET')
 			->once()
 			->andReturn($response);
-		(new Subscribing\ExistingWebPage(
+		(new Subscribing\AvailableWebPage(
 			new Subscribing\FakePage('www.foo.xxx'),
 			$http
 		))->content();
@@ -36,7 +39,7 @@ final class ExistingWebPage extends TestCase\Mockery {
 
 	public function testFoundPage() {
 		/** @var $response \Mockery\Mock */
-		$response = $this->mockery('Psr\Http\Message\MessageInterface');
+		$response = $this->mockery('Psr\Http\Message\ResponseInterface');
 		$response->shouldReceive('getStatusCode')
 			->once()
 			->andReturn(200);
@@ -46,7 +49,7 @@ final class ExistingWebPage extends TestCase\Mockery {
 			->with('GET')
 			->once()
 			->andReturn($response);
-		(new Subscribing\ExistingWebPage(
+		(new Subscribing\AvailableWebPage(
 			new Subscribing\FakePage('http://www.google.com', new \DOMDocument),
 			$http
 		))->content();
@@ -54,4 +57,4 @@ final class ExistingWebPage extends TestCase\Mockery {
 	}
 }
 
-(new ExistingWebPage())->run();
+(new AvailableWebPage())->run();

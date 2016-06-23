@@ -7,7 +7,7 @@ use Remembrall\Exception;
 use Nette\Security;
 
 /**
- * All subscribers
+ * All subscribers from the database
  */
 final class MySqlSubscribers implements Subscribers {
 	private $database;

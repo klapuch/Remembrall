@@ -6,7 +6,7 @@ use Dibi;
 use Remembrall\Exception;
 
 /**
- * All parts in the storage by the given page
+ * All parts stored in the database
  */
 final class CollectiveMySqlParts implements Parts {
 	private $database;

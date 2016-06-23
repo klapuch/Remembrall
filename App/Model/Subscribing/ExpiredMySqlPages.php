@@ -5,21 +5,21 @@ namespace Remembrall\Model\Subscribing;
 use Dibi;
 
 /**
- * Expired pages in the given interval
+ * Expired pages in range of the given interval
  */
 final class ExpiredMySqlPages implements Pages {
 	private $origin;
 	private $database;
-	private $expiration;
+	private $interval;
 
 	public function __construct(
 		Pages $origin,
 		Dibi\Connection $database,
-		Interval $expiration
+		Interval $interval
 	) {
 		$this->origin = $origin;
 		$this->database = $database;
-		$this->expiration = $expiration;
+		$this->interval = $interval;
 	}
 
 	public function add(Page $page) {
@@ -34,8 +34,8 @@ final class ExpiredMySqlPages implements Pages {
 				LEFT JOIN page_visits ON page_visits.page_id = pages.ID
 				WHERE visited_at IS NULL
 				OR visited_at + INTERVAL ? MINUTE <= ?',
-				$this->expiration->step()->i,
-				$this->expiration->start()
+				$this->interval->step()->i,
+				$this->interval->start()
 			),
 			function($previous, Dibi\Row $row) {
 				$previous[] = new ConstantPage($row['url'], $row['content']);
