@@ -3,9 +3,9 @@
  * @testCase
  * @phpVersion > 7.0.0
  */
-namespace Remembrall\Integration\Subscribing;
+namespace Remembrall\Integration\Access;
 
-use Remembrall\Model\Subscribing;
+use Remembrall\Model\Access;
 use Remembrall\TestCase;
 use Tester\Assert;
 
@@ -15,7 +15,7 @@ final class MySqlSubscriber extends TestCase\Database {
 	public function testId() {
 		Assert::same(
 			666,
-			(new Subscribing\MySqlSubscriber(
+			(new Access\MySqlSubscriber(
 				 666, $this->database
 			))->id()
 		);
@@ -27,7 +27,7 @@ final class MySqlSubscriber extends TestCase\Database {
 		);
 		Assert::same(
 			'foo@bar.cz',
-			(new Subscribing\MySqlSubscriber(
+			(new Access\MySqlSubscriber(
 				666, $this->database
 			))->email()
 		);

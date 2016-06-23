@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace Remembrall\Model\Subscribing;
+namespace Remembrall\Model\Access;
 
 use Dibi;
 use Remembrall\Exception;

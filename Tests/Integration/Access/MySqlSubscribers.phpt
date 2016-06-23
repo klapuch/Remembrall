@@ -3,9 +3,9 @@
  * @testCase
  * @phpVersion > 7.0.0
  */
-namespace Remembrall\Integration\Subscribing;
+namespace Remembrall\Integration\Access;
 
-use Remembrall\Model\Subscribing;
+use Remembrall\Model\Access;
 use Remembrall\TestCase;
 use Tester\Assert;
 
@@ -13,7 +13,7 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class MySqlSubscribers extends TestCase\Database {
 	public function testRegisteringBrandNewSubscriber() {
-		(new Subscribing\MySqlSubscribers(
+		(new Access\MySqlSubscribers(
 			$this->database
 		))->register('foo@bar.cz', 'secret');
 		$subscribers = $this->database->fetchAll(
@@ -32,7 +32,7 @@ final class MySqlSubscribers extends TestCase\Database {
 		);
 		Assert::exception(
 			function() {
-				(new Subscribing\MySqlSubscribers(
+				(new Access\MySqlSubscribers(
 					$this->database
 				))->register('foo@bar.cz', 'secret');
 			},
