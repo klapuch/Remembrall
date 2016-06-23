@@ -8,8 +8,8 @@ use Nette\Security;
 abstract class BasePage extends Nette\Application\UI\Presenter {
 	use \Nextras\Application\UI\SecuredLinksPresenterTrait;
 
-	public function checkRequirements($element) {
-		/*if($this->signal === null) {
+	/*public function checkRequirements($element) {
+		if($this->signal === null) {
 			$resource = $this->name;
 			$action = $this->action;
 		} elseif($this->signal && empty($this->signal[0])) {
@@ -31,10 +31,10 @@ abstract class BasePage extends Nette\Application\UI\Presenter {
 				'Login:',
 				['backlink' => $this->storeRequest()]
 			);
-		}*/
-	}
+		}
+	}*/
 
-	public function startup() {
+	/*public function startup() {
 		if(!$this->user->loggedIn) {
 			if($this->user->logoutReason === Security\IUserStorage::INACTIVITY) {
 				$this->flashMessage(
@@ -48,7 +48,7 @@ abstract class BasePage extends Nette\Application\UI\Presenter {
 			}
 		}
 		parent::startup();
-	}
+	}*/
 
 	public function afterRender() {
 		if($this->isAjax() && $this->hasFlashSession())

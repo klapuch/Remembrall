@@ -16,8 +16,8 @@ php:
     session.name: SESSION
     error_reporting: 1
 application:
-    scanDirs: false
     errorPresenter: Error
+    scanDirs: false
     mapping:
         *: Remembrall\*Module\Page\*Page
 session:
@@ -33,7 +33,7 @@ http:
         X-Frame-Options: DENY
         X-Content-Type-Options: nosniff
         #Strict-Transport-Security: "max-age=31536000; includeSubDomains; preload"
-        X-XSS-Protection: "1; mode=block; report=https://bulletpoint.report-uri.io/r/default/csp/enforce"
+        #X-XSS-Protection: "1; mode=block; report=https://bulletpoint.report-uri.io/r/default/csp/enforce"
         X-Powered-By: ""
 forms:
     messages:

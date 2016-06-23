@@ -1,0 +1,29 @@
+Options -Indexes
+
+RewriteEngine On
+
+#RewriteCond %{HTTPS} !on
+#RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+#RewriteRule ^.*$ https://%{HTTP_HOST}%{REQUEST_URI} [L,QSA,NE]
+
+RewriteRule /\.|^\. - [F]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule !\.(pdf|js|ico|gif|jpg|png|css|rar|zip|tar\.gz|map)$ index.php [L]
+
+#RewriteCond %{HTTP_HOST} !^www\.
+#RewriteRule ^(.*)$ https://www.%{HTTP_HOST}/$1 [R=301,L]
+
+<IfModule mod_expires.c>
+   ExpiresActive on
+   ExpiresDefault "access plus 1 month"
+   ExpiresByType application/javascript "access plus 1 year"
+   ExpiresByType image/x-ico "access plus 1 year"
+   ExpiresByType image/x-icon "access plus 1 year"
+   ExpiresByType image/jpg "access plus 14 days"
+   ExpiresByType image/jpeg "access plus 14 days"
+   ExpiresByType image/gif "access plus 14 days"
+   ExpiresByType image/png "access plus 14 days"
+   ExpiresByType image/svg+xml "access plus 1 year"
+   ExpiresByType text/css "access plus 14 days"
+</IfModule>

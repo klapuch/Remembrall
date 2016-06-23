@@ -5,25 +5,33 @@
     <meta name="robots" content="index, follow">
     <link href="{$basePath}/images/favicon32.png" rel="icon" type="image/png"/>
     <title>{ifset title}{include title|striptags|trim}{/ifset}</title>
-    <meta name="description"
-          content="{ifset description}{include description|striptags|trim|truncate:150}"{/ifset}>
+    <meta name="description" content="{ifset description}{include description|striptags|trim|truncate:150}"{/ifset}>
     <meta name="author" content="Dominik Klapuch"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{$basePath}/css/bootstrap.min.css"
     {ifset styles}{include styles}{/ifset}
 </head>
 <body>
 <div class="container">
-    <div class="row"> {foreach $flashes as $flash}
-            <div class="alert alert-dismissible alert-{$flash->type}"> {$flash->message}</div> {/foreach}
+    <div class="row">
+        {foreach $flashes as $flash}
+            <div class="alert alert-dismissible alert-{$flash->type}">
+                {$flash->message}
+            </div>
+        {/foreach}
     </div>
     {include content}
 </div>
 <div id="footer">
-    <div class="container"><p class="muted credit text-center"><a
-                    href="https://www.github.com/klapuch"
-                    class="no-link" target="_blank"> Created with <span
-                        id="heart">❤</span> </a></p></div>
+    <div class="container">
+        <p class="muted credit text-center">
+            <a href="https://www.github.com/klapuch" class="no-link" target="_blank">
+                Created with <span id="heart">❤</span>
+            </a>
+        </p>
+    </div>
 </div>
+<script src="{$basePath}/js/bootstrap.min.js"></script>
 {ifset scripts}{include scripts}{/ifset}
 </body>
 </html>
