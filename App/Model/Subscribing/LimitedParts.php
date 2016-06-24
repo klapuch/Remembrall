@@ -9,7 +9,7 @@ use Remembrall\Model\Access;
 /**
  * Disallow subscribing after more than X parts
  */
-final class LimitedMySqlParts implements Parts {
+final class LimitedParts implements Parts {
 	const LIMIT = 5;
 	private $database;
 	private $subscriber;

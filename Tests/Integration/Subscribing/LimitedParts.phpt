@@ -14,7 +14,7 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class LimitedMySqlParts extends TestCase\Database {
+final class LimitedParts extends TestCase\Database {
 	public function testSubscribingWithoutLimit() {
 		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
@@ -33,7 +33,7 @@ final class LimitedMySqlParts extends TestCase\Database {
 			(1, "//d", "d", 4, 666)'
 		);
 		Assert::noError(function() {
-			(new Subscribing\LimitedMySqlParts(
+			(new Subscribing\LimitedParts(
 				$this->database,
 				new Access\FakeSubscriber(666),
 				new Subscribing\FakeParts()
@@ -68,7 +68,7 @@ final class LimitedMySqlParts extends TestCase\Database {
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
 			(2, "//d", "d", 4, 666)'
 		);
-		(new Subscribing\LimitedMySqlParts(
+		(new Subscribing\LimitedParts(
 			$this->database,
 			new Access\FakeSubscriber(666),
 			new Subscribing\FakeParts()
@@ -83,4 +83,4 @@ final class LimitedMySqlParts extends TestCase\Database {
     }
 }
 
-(new LimitedMySqlParts)->run();
+(new LimitedParts)->run();

@@ -9,7 +9,7 @@ use Remembrall\Model\Access;
 /**
  * Expired parts by the given page
  */
-final class ExpiredMySqlParts implements Parts {
+final class ExpiredParts implements Parts {
 	private $origin;
 	private $page;
 	private $database;

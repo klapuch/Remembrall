@@ -10,7 +10,7 @@ use GuzzleHttp;
 final class CronPage extends BasePage {
 	public function actionDefault(string $code) {
 		try {
-			$pages = new Subscribing\ExpiredMySqlPages(
+			$pages = new Subscribing\ExpiredPages(
 				new Subscribing\MySqlPages($this->database),
 				$this->database,
 				new Subscribing\FutureInterval(
@@ -33,8 +33,8 @@ final class CronPage extends BasePage {
 					new Storages\MemoryStorage()
 				);
 				$parts = new Subscribing\ChangedParts(
-					new Subscribing\ExpiredMySqlParts(
-						new Subscribing\CollectiveMySqlParts(
+					new Subscribing\ExpiredParts(
+						new Subscribing\CollectiveParts(
 							$this->database,
 							$webPage
 						),

@@ -9,7 +9,7 @@ use Remembrall\Model\Access;
 /**
  * All parts stored in the database
  */
-final class CollectiveMySqlParts implements Parts {
+final class CollectiveParts implements Parts {
 	private $database;
 
 	public function __construct(Dibi\Connection $database) {

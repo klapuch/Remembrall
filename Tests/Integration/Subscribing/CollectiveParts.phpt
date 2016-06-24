@@ -14,13 +14,13 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class OwnedMySqlParts extends TestCase\Database {
+final class CollectiveParts extends TestCase\Database {
     public function testSubscribing() {
 		$this->database->query(
 			'INSERT INTO subscribers (ID, email, `password`) VALUES
 			(1, "foo@bar.cz", "secret"), (2, "facedown@facedown.cz", "secret")'
 		);
-        (new Subscribing\CollectiveMySqlParts(
+        (new Subscribing\CollectiveParts(
             $this->database
         ))->subscribe(
             new Subscribing\FakePart(
@@ -62,7 +62,7 @@ final class OwnedMySqlParts extends TestCase\Database {
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
 			(1, "//p", "a", 1, 666)'
 		);
-		(new Subscribing\CollectiveMySqlParts(
+		(new Subscribing\CollectiveParts(
 			$this->database
 		))->replace(
 			new Subscribing\FakePart(
@@ -108,7 +108,7 @@ final class OwnedMySqlParts extends TestCase\Database {
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
 			(1, "//d", "d", 4, 1)'
 		);
-		$parts = (new Subscribing\CollectiveMySqlParts(
+		$parts = (new Subscribing\CollectiveParts(
 			$this->database
 		))->iterate();
 		Assert::count(4, $parts);
@@ -135,7 +135,7 @@ final class OwnedMySqlParts extends TestCase\Database {
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
 			(1, "//d", "d", 4, 1)'
 		);
-		(new Subscribing\CollectiveMySqlParts(
+		(new Subscribing\CollectiveParts(
 			$this->database
 		))->remove(
 			new Subscribing\FakePart(
@@ -167,4 +167,4 @@ final class OwnedMySqlParts extends TestCase\Database {
     }
 }
 
-(new OwnedMySqlParts)->run();
+(new CollectiveParts)->run();

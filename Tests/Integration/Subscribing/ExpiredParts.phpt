@@ -12,9 +12,9 @@ use Nette\Security;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class ExpiredMySqlParts extends TestCase\Database {
+final class ExpiredParts extends TestCase\Database {
     public function testIteratingExpiredPartsOnConcretePage() {
-        $parts = (new Subscribing\ExpiredMySqlParts(
+        $parts = (new Subscribing\ExpiredParts(
             new Subscribing\FakeParts(),
 			new Subscribing\FakePage('a'),
 			$this->database
@@ -28,7 +28,7 @@ final class ExpiredMySqlParts extends TestCase\Database {
 	 * @throws \Remembrall\Exception\ExistenceException This part has not expired yet
 	 */
 	public function testReplacingNonExpiredPart() {
-		(new Subscribing\ExpiredMySqlParts(
+		(new Subscribing\ExpiredParts(
 			new Subscribing\FakeParts(),
 			new Subscribing\FakePage('a'),
 			$this->database
@@ -44,7 +44,7 @@ final class ExpiredMySqlParts extends TestCase\Database {
 	}
 
 	public function testReplacingExpiredPartWithNoError() {
-		(new Subscribing\ExpiredMySqlParts(
+		(new Subscribing\ExpiredParts(
 			new Subscribing\FakeParts(),
 			new Subscribing\FakePage('a'),
 			$this->database
@@ -91,4 +91,4 @@ final class ExpiredMySqlParts extends TestCase\Database {
     }
 }
 
-(new ExpiredMySqlParts)->run();
+(new ExpiredParts)->run();

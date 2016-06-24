@@ -9,7 +9,7 @@ use Remembrall\Model\Access;
 /**
  * Parts which are owned by the given subscriber
  */
-final class OwnedMySqlParts implements Parts {
+final class OwnedParts implements Parts {
 	private $database;
 	private $myself;
 	private $origin;

@@ -7,7 +7,7 @@ use Dibi;
 /**
  * Expired pages in range of the given interval
  */
-final class ExpiredMySqlPages implements Pages {
+final class ExpiredPages implements Pages {
 	private $origin;
 	private $database;
 	private $interval;

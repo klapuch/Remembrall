@@ -14,9 +14,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class OwnedMySqlParts extends TestCase\Database {
+final class OwnedParts extends TestCase\Database {
     public function testSubscribingBrandNew() {
-        (new Subscribing\OwnedMySqlParts(
+        (new Subscribing\OwnedParts(
             $this->database,
             new Access\FakeSubscriber(666),
 			new Subscribing\FakeParts()
@@ -52,7 +52,7 @@ final class OwnedMySqlParts extends TestCase\Database {
     }
 
 	public function testSubscribingDuplicateWithRollback() {
-		$parts = new Subscribing\OwnedMySqlParts(
+		$parts = new Subscribing\OwnedParts(
 			$this->database,
 			new Access\FakeSubscriber(666),
 			new Subscribing\FakeParts()
@@ -106,7 +106,7 @@ final class OwnedMySqlParts extends TestCase\Database {
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
 			(1, "//d", "d", 4, 1)'
 		);
-		$parts = (new Subscribing\OwnedMySqlParts(
+		$parts = (new Subscribing\OwnedParts(
 			$this->database,
 			new Access\FakeSubscriber(1),
 			new Subscribing\FakeParts()
@@ -125,7 +125,7 @@ final class OwnedMySqlParts extends TestCase\Database {
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
 			(1, "//a", "a", 1, 666)'
 		);
-		(new Subscribing\OwnedMySqlParts(
+		(new Subscribing\OwnedParts(
 			$this->database,
 			new Access\FakeSubscriber(666),
 			new Subscribing\FakeParts()
@@ -145,7 +145,7 @@ final class OwnedMySqlParts extends TestCase\Database {
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
 			(1, "//p", "a", 1, 666)'
 		);
-		(new Subscribing\OwnedMySqlParts(
+		(new Subscribing\OwnedParts(
 			$this->database,
 			new Access\FakeSubscriber(666),
 			new Subscribing\FakeParts()
@@ -175,7 +175,7 @@ final class OwnedMySqlParts extends TestCase\Database {
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
 			(2, "//b", "c", 3, 666)'
 		);
-		(new Subscribing\OwnedMySqlParts(
+		(new Subscribing\OwnedParts(
 			$this->database,
 			new Access\FakeSubscriber(666),
 			new Subscribing\FakeParts()
@@ -207,4 +207,4 @@ final class OwnedMySqlParts extends TestCase\Database {
     }
 }
 
-(new OwnedMySqlParts)->run();
+(new OwnedParts)->run();
