@@ -3,34 +3,30 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use GuzzleHttp;
-use Psr\Http\Message;
 use Remembrall\Exception;
+use Remembrall\Model\Http;
 
 /**
  * Page can not send codes which temporary block access to it
  */
 final class AvailableWebPage implements Page {
 	private $origin;
-	private $http;
+	private $response;
 
-	public function __construct(
-		Page $origin,
-		GuzzleHttp\ClientInterface $http
-	) {
+	public function __construct(Page $origin, Http\Response $response) {
 		$this->origin = $origin;
-		$this->http = $http;
+		$this->response = $response;
 	}
 
 	public function content(): \DOMDocument {
-		$response = $this->http->request('GET');
-		if($this->available($response))
+		$header = $this->response->headers()->header('Status');
+		if($this->available($header))
 			return $this->origin->content();
 		throw new Exception\ExistenceException(
 			sprintf(
-				'Web page "%s" can not be loaded because of %d - %s',
+				'Web page "%s" can not be loaded because of %s',
 				$this->url(),
-				$response->getStatusCode(),
-				$response->getReasonPhrase()
+				$header->value()
 			)
 		);
 	}
@@ -42,10 +38,11 @@ final class AvailableWebPage implements Page {
 	/**
 	 * Checks whether the page is normally accessible
 	 * It means status code under 400
-	 * @param Message\ResponseInterface $response
+	 * Value of the header is in format: DIGIT STRING (200 OK)
+	 * @param Http\Header $header
 	 * @return bool
 	 */
-	private function available(Message\ResponseInterface $response): bool {
-		return $response->getStatusCode() < 400;
+	private function available(Http\Header $header): bool {
+		return filter_var($header->value(), FILTER_SANITIZE_NUMBER_INT) < 400;
 	}
 }

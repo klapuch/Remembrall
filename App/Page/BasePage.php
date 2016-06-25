@@ -6,6 +6,9 @@ use Nette\Http\IResponse;
 use Nette\Security;
 
 abstract class BasePage extends Nette\Application\UI\Presenter {
+	/** @inject @var \Dibi\Connection */
+	public $database;
+
 	use \Nextras\Application\UI\SecuredLinksPresenterTrait;
 
 	/*public function checkRequirements($element) {

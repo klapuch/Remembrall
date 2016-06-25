@@ -12,7 +12,7 @@ CREATE TABLE `pages` (
   `content` text NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `url` (`url`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
 DROP TABLE IF EXISTS `page_visits`;
@@ -21,7 +21,7 @@ CREATE TABLE `page_visits` (
   `page_id` int(11) NOT NULL,
   `visited_at` datetime NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
 DROP TABLE IF EXISTS `parts`;
@@ -44,7 +44,7 @@ CREATE TABLE `part_visits` (
   `part_id` int(11) NOT NULL,
   `visited_at` datetime NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
 DROP TABLE IF EXISTS `subscribers`;
