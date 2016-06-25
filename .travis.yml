@@ -4,7 +4,12 @@ php:
   - 7.0
 
 env:
-  - TESTER_PHP_BIN="php-cgi"
+  - PHP_BIN="php-cgi"
+
+matrix:
+    include:
+        - php: 7.0
+          env: coverage="--coverage ./coverage.xml --coverage-src ./src" PHP_BIN=phpdbg
 
 before_install:
   - composer self-update
@@ -16,5 +21,19 @@ before_script:
   - mysql -u root -e 'CREATE DATABASE remembrall_test;'
   - mysql -u root remembrall_test < ./Tests/TestCase/schema.sql
 
+after_script:
+    - >
+      if [ "$coverage" != "" ]; then
+      wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar
+      && php coveralls.phar --verbose --config Tests/.coveralls.yml
+      || true; fi
+
 script:
-  - ./vendor/bin/tester -p $TESTER_PHP_BIN -o console -s ./Tests/
+  - ./vendor/bin/tester -p $PHP_BIN -o console -s $coverage ./Tests/
+
+after_failure:
+  - for i in $(find Tests -name \*.actual); do echo "--- $i"; cat $i; echo; echo; done
+
+cache:
+    directories:
+      - $HOME/.composer/cache
