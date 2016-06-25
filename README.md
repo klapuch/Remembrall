@@ -1,2 +1,2 @@
 # Remembrall
-[![Build Status](https://travis-ci.org/klapuch/Remembrall.svg?branch=master)](https://travis-ci.org/klapuch/Remembrall)
+[![Build Status](https://travis-ci.org/klapuch/Remembrall.svg?branch=master)](https://travis-ci.org/klapuch/Remembrall) [![Coverage Status](https://coveralls.io/repos/github/klapuch/Remembrall/badge.svg?branch=master)](https://coveralls.io/github/klapuch/Remembrall?branch=master)
