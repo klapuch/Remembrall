@@ -4,12 +4,15 @@ namespace Remembrall\Model\Access;
 
 use Dibi;
 
+/**
+ * Allows to remind just X password in Y hours
+ */
 final class LimitedForgottenPasswords implements ForgottenPasswords {
-	private $origin;
-	private $database;
-	// 3 attempts in last 24 hours
 	const ATTEMPT_LIMIT = 3;
 	const HOUR_LIMIT = 24;
+	// 3 attempts in last 24 hours
+	private $origin;
+	private $database;
 
 	public function __construct(
 		ForgottenPasswords $origin,

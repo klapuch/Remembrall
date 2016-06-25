@@ -3,8 +3,8 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Access;
 
 use Dibi;
-use Remembrall\Exception;
 use Nette\Security;
+use Remembrall\Exception;
 
 /**
  * All subscribers from the database

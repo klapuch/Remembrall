@@ -5,6 +5,9 @@ namespace Remembrall\Model\Access;
 use Dibi;
 use Nette\Security;
 
+/**
+ * Changes password in the database
+ */
 final class MySqlRemindedPassword implements RemindedPassword {
 	private $reminder;
 	private $database;

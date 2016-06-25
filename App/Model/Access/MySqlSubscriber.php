@@ -16,14 +16,14 @@ final class MySqlSubscriber implements Subscriber {
 		$this->database = $database;
 	}
 
-	public function id(): int {
-		return $this->id;
-	}
-
 	public function email(): string {
 		return $this->database->fetchSingle(
 			'SELECT email FROM subscribers WHERE ID = ?',
 			$this->id()
 		);
+	}
+
+	public function id(): int {
+		return $this->id;
 	}
 }

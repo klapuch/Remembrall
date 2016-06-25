@@ -17,7 +17,7 @@ final class DisposableVerificationCode implements VerificationCode {
 		$this->database = $database;
 	}
 
-	public function use(): VerificationCode {
+	public function use () {
 		if($this->used()) {
 			throw new Exception\DuplicateException(
 				'Verification code was already used'
@@ -29,7 +29,6 @@ final class DisposableVerificationCode implements VerificationCode {
 			WHERE code = ?',
 			$this->code
 		);
-		return $this;
 	}
 
 	public function owner(): Subscriber {
@@ -45,11 +44,11 @@ final class DisposableVerificationCode implements VerificationCode {
 	}
 
 	/**
-	 * Is the verification code already used?
+	 * Was the verification code already used?
 	 * @return bool
 	 */
 	private function used(): bool {
-		return (bool)$this->database->fetch(
+		return (bool)$this->database->fetchSingle(
 			'SELECT 1
 			FROM verification_codes
 			WHERE code = ?

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 namespace Remembrall\Model\Access;
-
+//TODO
 use Dibi;
 use Nette\Security;
 
@@ -13,12 +13,12 @@ final class Authenticator implements Security\IAuthenticator {
 	}
 
 	public function authenticate(array $credentials) {
-		list($plainUsername, $plainPassword) = $credentials;
-		list($id, $password, $role, $username) = $this->database->query(
-			'SELECT ID, `password`, role, username
-             FROM users
-             WHERE username = ?',
-			[$plainUsername]
+		list($plainEmail, $plainPassword) = $credentials;
+		list($id, $password, $role, $email) = $this->database->query(
+			'SELECT ID, `password`, role_id
+             FROM subscribers
+             WHERE email = ?',
+			$plainEmail
 		)->fetch(\PDO::FETCH_NUM);
 		if(!$this->exists($id))
 			throw new Security\AuthenticationException('Uživatel neexistuje');
@@ -28,7 +28,7 @@ final class Authenticator implements Security\IAuthenticator {
 			throw new Security\AuthenticationException('Nesprávné heslo');
 		if($this->cipher->deprecated($password))
 			$this->rehash($plainPassword, $id);
-		return new Security\Identity($id, $role, ['username' => $username]);
+		return new Security\Identity($id, $role, ['email' => $email]);
 	}
 
 	private function exists($id): bool {

@@ -5,9 +5,9 @@ namespace Remembrall\Model\Access;
 interface VerificationCode {
 	/**
 	 * Use the verification code
-	 * @return VerificationCode
+	 * @return void
 	 */
-	public function use(): self;
+	public function use ();
 
 	/**
 	 * Who is the owner of this verification code?

@@ -56,5 +56,29 @@ CREATE TABLE `subscribers` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
+DROP TABLE IF EXISTS `forgotten_passwords`;
+CREATE TABLE `forgotten_passwords` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `subscriber_id` int(11) NOT NULL,
+  `reminder` varchar(141) CHARACTER SET latin1 NOT NULL,
+  `reminded_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `used` bit(1) NOT NULL DEFAULT b'0',
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `reminder` (`reminder`),
+  KEY `subscriber_id` (`subscriber_id`)
+) ENGINE=MyIsam DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+
+DROP TABLE IF EXISTS `verification_codes`;
+CREATE TABLE `verification_codes` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `subscriber_id` int(11) NOT NULL,
+  `code` varchar(91) CHARACTER SET latin1 NOT NULL,
+  `used` tinyint(4) NOT NULL DEFAULT '0',
+  `used_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `code` (`code`),
+  UNIQUE KEY `subscriber_id` (`subscriber_id`)
+) ENGINE=MyIsam DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+
 
 -- 2016-06-18 07:55:08
