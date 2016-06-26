@@ -5,7 +5,9 @@
  */
 namespace Remembrall\Integration\Access;
 
-use Remembrall\Model\Access;
+use Remembrall\Model\{
+	Access, Security
+};
 use Remembrall\TestCase;
 use Tester\Assert;
 
@@ -20,11 +22,13 @@ final class MySqlRemindedPassword extends TestCase\Database {
 		);
 		(new Access\MySqlRemindedPassword(
 			'123456',
-			$this->database
+			$this->database,
+			new Security\FakeCipher()
 		))->change('123456789');
-		Assert::truthy(
+		Assert::same(
+			'secret',
 			$this->database->fetchSingle(
-				'SELECT LENGTH(`password`) > LENGTH("123456789")
+				'SELECT `password`
 				FROM subscribers
 				WHERE ID = 1'
 			)

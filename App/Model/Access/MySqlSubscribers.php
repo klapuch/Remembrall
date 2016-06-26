@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Access;
 
 use Dibi;
-use Nette\Security;
+use Remembrall\Model\Security;
 use Remembrall\Exception;
 
 /**
@@ -11,9 +11,14 @@ use Remembrall\Exception;
  */
 final class MySqlSubscribers implements Subscribers {
 	private $database;
+	private $cipher;
 
-	public function __construct(Dibi\Connection $database) {
+	public function __construct(
+		Dibi\Connection $database,
+		Security\Cipher $cipher
+	) {
 		$this->database = $database;
+		$this->cipher = $cipher;
 	}
 
 	public function register(string $email, string $password): Subscriber {
@@ -21,7 +26,7 @@ final class MySqlSubscribers implements Subscribers {
 			$this->database->query(
 				'INSERT INTO subscribers (email, `password`) VALUES (?, ?)',
 				$email,
-				Security\Passwords::hash($password)
+				$this->cipher->encrypt($password)
 			);
 			return new MySqlSubscriber(
 				$this->database->insertId(),

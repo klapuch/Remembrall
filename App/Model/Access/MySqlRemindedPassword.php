@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Access;
 
 use Dibi;
-use Nette\Security;
+use Remembrall\Model\Security;
 
 /**
  * Changes password in the database
@@ -11,10 +11,16 @@ use Nette\Security;
 final class MySqlRemindedPassword implements RemindedPassword {
 	private $reminder;
 	private $database;
+	private $cipher;
 
-	public function __construct(string $reminder, Dibi\Connection $database) {
+	public function __construct(
+		string $reminder,
+		Dibi\Connection $database,
+		Security\Cipher $cipher
+	) {
 		$this->reminder = $reminder;
 		$this->database = $database;
+		$this->cipher = $cipher;
 	}
 
 	public function change(string $password) {
@@ -26,7 +32,7 @@ final class MySqlRemindedPassword implements RemindedPassword {
                 FROM forgotten_passwords
                 WHERE reminder = ?
             )',
-			Security\Passwords::hash($password),
+			$this->cipher->encrypt($password),
 			$this->reminder
 		);
 		$this->database->query(

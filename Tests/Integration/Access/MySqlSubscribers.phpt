@@ -5,7 +5,9 @@
  */
 namespace Remembrall\Integration\Access;
 
-use Remembrall\Model\Access;
+use Remembrall\Model\{
+	Access, Security
+};
 use Remembrall\TestCase;
 use Tester\Assert;
 
@@ -14,15 +16,16 @@ require __DIR__ . '/../../bootstrap.php';
 final class MySqlSubscribers extends TestCase\Database {
 	public function testRegisteringBrandNewSubscriber() {
 		(new Access\MySqlSubscribers(
-			$this->database
-		))->register('foo@bar.cz', 'secret');
+			$this->database,
+			new Security\FakeCipher()
+		))->register('foo@bar.cz', 'passw0rt');
 		$subscribers = $this->database->fetchAll(
 			'SELECT email, `password` FROM subscribers'
 		);
 		Assert::count(1, $subscribers);
 		$subscriber = current($subscribers);
 		Assert::same('foo@bar.cz', $subscriber['email']);
-		Assert::notSame('secret', $subscriber['password']);
+		Assert::same('secret', $subscriber['password']);
 	}
 
 	public function testRegistrationWithDuplicatedEmail() {
@@ -33,8 +36,9 @@ final class MySqlSubscribers extends TestCase\Database {
 		Assert::exception(
 			function() {
 				(new Access\MySqlSubscribers(
-					$this->database
-				))->register('foo@bar.cz', 'secret');
+					$this->database,
+					new Security\FakeCipher()
+				))->register('foo@bar.cz', 'passw0rt');
 			},
 			\Remembrall\Exception\DuplicateException::class,
 			'Email "foo@bar.cz" already exists'
