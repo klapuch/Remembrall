@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Http;
 
 use GuzzleHttp;
+use Psr\Http\Message;
 
 final class WebBrowser implements Browser {
 	private $http;
@@ -12,25 +13,35 @@ final class WebBrowser implements Browser {
 	}
 
 	public function send(Request $request): Response {
-		$requestHeaders = $request->headers();
-		$response = $this->http->request(
-			$requestHeaders->header('method')->value(),
-			$requestHeaders->header('host')->value(),
-			array_reduce(
-				$requestHeaders->iterate(),
-				function($previous, Header $header) {
-					$previous[$header->field()] = $header->value();
-					return $previous;
-				}
+		$headers = $request->headers();
+		return $this->response(
+			$this->http->request(
+				$headers->header('method')->value(),
+				$headers->header('host')->value(),
+				array_reduce(
+					$headers->iterate(),
+					function($previous, Header $header) {
+						$previous[$header->field()] = $header->value();
+						return $previous;
+					}
+				)
 			)
 		);
-		$responseHeaders = $response->getHeaders();
+	}
+
+	/**
+	 * Response given from querying host
+	 * @param Message\MessageInterface $response
+	 * @return Response
+	 */
+	private function response(Message\MessageInterface $response): Response {
+		$headers = $response->getHeaders();
 		return new ConstantResponse(
 			new UniqueHeaders(
 				array_reduce(
-					array_keys($responseHeaders),
-					function($previous, string $field) use($responseHeaders) {
-						$previous[$field] = current($responseHeaders[$field]);
+					array_keys($headers),
+					function($previous, string $field) use ($headers) {
+						$previous[$field] = current($headers[$field]);
 						return $previous;
 					}
 				)
