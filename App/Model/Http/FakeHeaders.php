@@ -6,17 +6,15 @@ use Remembrall\Exception;
 
 final class FakeHeaders implements Headers {
 	private $headers;
-	private $included;
 
-	public function __construct(array $headers = [], bool $included = false) {
+	public function __construct(array $headers = []) {
 		$this->headers = $headers;
-		$this->included = $included;
 	}
 
 	public function iterate(): array {
 		$headers = [];
 		foreach($this->headers as $field => $value)
-			$headers[$field] = new FakeHeader($field, $value, $this->included);
+			$headers[$field] = new FakeHeader($field, $value);
 		return $headers;
 	}
 
@@ -25,6 +23,8 @@ final class FakeHeaders implements Headers {
 	}
 
 	public function included(Header $header): bool {
-		return $this->included;
+		if(isset($this->headers[$header->field()]))
+			return $this->headers[$header->field()] === $header->value();
+		return false;
 	}
 }

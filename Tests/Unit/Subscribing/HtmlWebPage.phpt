@@ -48,7 +48,7 @@ final class HtmlWebPage extends TestCase\Mockery {
 		(new Subscribing\HtmlWebPage(
 			new Http\ConstantRequest(new Http\FakeHeaders()),
 			new Http\ConstantResponse(
-				new Http\FakeHeaders(['Content-Type' => 'text/css'], false), ''
+				new Http\FakeHeaders(['Content-Type' => 'text/css']), ''
 			)
 		))->content();
 	}
@@ -59,7 +59,7 @@ final class HtmlWebPage extends TestCase\Mockery {
 			(new Subscribing\HtmlWebPage(
 				new Http\ConstantRequest(new Http\FakeHeaders()),
 				new Http\ConstantResponse(
-					new Http\FakeHeaders(['Content-Type' => 'text/html'], true),
+					new Http\FakeHeaders(['Content-Type' => 'text/html']),
 					'<html><p>Hello Koňíčku</p></html>'
 				)
 			))->content()->getElementsByTagName('p')->item(0)->nodeValue

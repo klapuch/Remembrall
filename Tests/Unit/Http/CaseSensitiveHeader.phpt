@@ -26,6 +26,21 @@ final class CaseSensitiveHeader extends Tester\TestCase {
 		Assert::false($header->equals(new Http\FakeHeader('server', 'nginx')));
 		Assert::false($header->equals(new Http\FakeHeader('connection', 'keep-alive')));
 	}
+
+	public function testEqualsHeadersWithMultipleValues() {
+		$header = new Http\CaseSensitiveHeader('Content-Type', 'text/html; utf-8');
+		Assert::true($header->equals(new Http\FakeHeader('Content-Type', 'Text/html; Utf-8')));
+		Assert::true($header->equals(new Http\FakeHeader('Content-Type', 'Text/Html')));
+		Assert::true($header->equals(new Http\FakeHeader('Content-Type', 'Utf-8')));
+	}
+
+	public function testDifferentHeadersWithMultipleValues() {
+		$header = new Http\CaseSensitiveHeader('Content-Type', 'text/html; utf-8');
+		Assert::false($header->equals(new Http\FakeHeader('Connection', 'text/html; utf-8')));
+		Assert::false($header->equals(new Http\FakeHeader('Content-Type', 'Text/Html;')));
+		Assert::false($header->equals(new Http\FakeHeader('Content-Type', 'utf-8;')));
+		Assert::false($header->equals(new Http\FakeHeader('Content-Type', 'text/html;utf-8')));
+	}
 }
 
 (new CaseSensitiveHeader())->run();

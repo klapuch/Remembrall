@@ -20,7 +20,14 @@ final class CaseSensitiveHeader implements Header {
 	}
 
 	public function equals(Header $header): bool {
-		return strcasecmp($this->field(), $header->field()) === 0
-		&& strcasecmp($this->value(), $header->value()) === 0;
+		$sameField = strcasecmp($this->field(), $header->field()) === 0;
+		$sameValue = strcasecmp($this->value(), $header->value()) === 0;
+		if(!$sameValue && $sameField && strpos($this->value(), ';')) {
+			foreach(array_map('trim', explode(';', $this->value())) as $value)
+				if(strcasecmp($value, $header->value()) === 0)
+					return true;
+			return false;
+		}
+		return $sameField && $sameValue;
 	}
 }
