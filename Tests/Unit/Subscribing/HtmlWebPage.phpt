@@ -3,9 +3,11 @@
  * @testCase
  * @phpVersion > 7.0.0
  */
-namespace Remembrall\Unit\Subscribing;
+namespace Remembrall\Unit\Http;
 
-use Remembrall\Model\Subscribing;
+use Remembrall\Model\{
+	Http, Subscribing
+};
 use Remembrall\TestCase;
 use Tester;
 use Tester\Assert;
@@ -15,65 +17,52 @@ require __DIR__ . '/../../bootstrap.php';
 final class HtmlWebPage extends TestCase\Mockery {
 	public function testValidUrl() {
 		$url = 'http://www.google.com';
-		/** @var $http \Mockery\Mock */
-		$http = $this->mockery('GuzzleHttp\ClientInterface');
-		$http->shouldReceive('getConfig')
-			->with('base_uri')
-			->once()
-			->andReturn($url);
-		Assert::same($url, (new Subscribing\HtmlWebPage($http))->url());
+		Assert::same(
+			$url,
+			(new Subscribing\HtmlWebPage(
+				new Http\ConstantRequest(
+					new Http\FakeHeaders(['host' => $url])
+				),
+				new Http\ConstantResponse(new Http\FakeHeaders([]), '')
+			))->url()
+		);
 	}
 
 	public function testInvalidUrlWithoutError() {
 		$url = 'fooBar';
-		/** @var $http \Mockery\Mock */
-		$http = $this->mockery('GuzzleHttp\ClientInterface');
-		$http->shouldReceive('getConfig')
-			->with('base_uri')
-			->once()
-			->andReturn($url);
-		Assert::same($url, (new Subscribing\HtmlWebPage($http))->url());
+		Assert::same(
+			$url,
+			(new Subscribing\HtmlWebPage(
+				new Http\ConstantRequest(
+					new Http\FakeHeaders(['host' => $url])
+				),
+				new Http\ConstantResponse(new Http\FakeHeaders(), '')
+			))->url()
+		);
 	}
 
 	/**
 	 * @throws \Remembrall\Exception\ExistenceException Web page must be HTML
 	 */
 	public function testCSSContentWithError() {
-		/** @var $response \Mockery\Mock */
-		$response = $this->mockery('Psr\Http\Message\ResponseInterface');
-		$response->shouldReceive('getHeader')
-			->with('Content-Type')
-			->once()
-			->andReturn('text/css');
-		/** @var $http \Mockery\Mock */
-		$http = $this->mockery('GuzzleHttp\ClientInterface');
-		$http->shouldReceive('request')
-			->with('GET')
-			->once()
-			->andReturn($response);
-		(new Subscribing\HtmlWebPage($http))->content();
+		(new Subscribing\HtmlWebPage(
+			new Http\ConstantRequest(new Http\FakeHeaders()),
+			new Http\ConstantResponse(
+				new Http\FakeHeaders(['Content-Type' => 'text/css'], false), ''
+			)
+		))->content();
 	}
 
 	public function testCorrectlyParsedHTMLContent() {
-		/** @var $response \Mockery\Mock */
-		$response = $this->mockery('Psr\Http\Message\ResponseInterface');
-		$response->shouldReceive('getHeader')
-			->with('Content-Type')
-			->once()
-			->andReturn('text/HTML');
-		$response->shouldReceive('getBody')
-			->once()
-			->andReturn('<html><p>Hello Koňíčku</p></html>');
-		/** @var $http \Mockery\Mock */
-		$http = $this->mockery('GuzzleHttp\ClientInterface');
-		$http->shouldReceive('request')
-			->with('GET')
-			->once()
-			->andReturn($response);
-		$dom = (new Subscribing\HtmlWebPage($http))->content();
 		Assert::same(
 			'Hello Koňíčku',
-			$dom->getElementsByTagName('p')->item(0)->nodeValue
+			(new Subscribing\HtmlWebPage(
+				new Http\ConstantRequest(new Http\FakeHeaders()),
+				new Http\ConstantResponse(
+					new Http\FakeHeaders(['Content-Type' => 'text/html'], true),
+					'<html><p>Hello Koňíčku</p></html>'
+				)
+			))->content()->getElementsByTagName('p')->item(0)->nodeValue
 		);
 	}
 }

@@ -31,4 +31,8 @@ final class CaseSensitiveHeaders implements Headers {
 		}
 		return $header;
 	}
+
+	public function included(Header $header): bool {
+		return $this->origin->included($header);
+	}
 }

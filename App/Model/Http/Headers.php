@@ -17,4 +17,11 @@ interface Headers {
 	 * @return Header
 	 */
 	public function header(string $field): Header;
+
+	/**
+	 * Is the given header included in the headers?
+	 * @param Header $header
+	 * @return bool
+	 */
+	public function included(Header $header): bool;
 }

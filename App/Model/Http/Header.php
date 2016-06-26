@@ -14,4 +14,11 @@ interface Header {
 	 * @return string
 	 */
 	public function value(): string;
+
+	/**
+	 * Is the given header equals to the current one?
+	 * @param Header $header
+	 * @return bool
+	 */
+	public function equals(self $header): bool;
 }

@@ -3,7 +3,7 @@
  * @testCase
  * @phpVersion > 7.0.0
  */
-namespace Remembrall\Integration\Http;
+namespace Remembrall\Unit\Http;
 
 use GuzzleHttp;
 use Remembrall\Model\Http;
@@ -19,8 +19,8 @@ final class UniqueHeaders extends Tester\TestCase {
 		);
 		Assert::equal(
 			[
-				'method' => new Http\ConstantHeader('method', 'get'),
-				'Content-Type' => new Http\ConstantHeader('Content-Type', 'text/html; utf-8'),
+				'method' => new Http\CaseSensitiveHeader('method', 'get'),
+				'Content-Type' => new Http\CaseSensitiveHeader('Content-Type', 'text/html; utf-8'),
 			],
 			$headers->iterate()
 		);
@@ -29,14 +29,14 @@ final class UniqueHeaders extends Tester\TestCase {
 	public function testObjectHeaders() {
 		$headers = new Http\UniqueHeaders(
 			[
-				new Http\ConstantHeader('method', 'post'),
-				new Http\ConstantHeader('Connection', 'close'),
+				new Http\FakeHeader('method', 'post'),
+				new Http\FakeHeader('Connection', 'close'),
 			]
 		);
 		Assert::equal(
 			[
-				'method' => new Http\ConstantHeader('method', 'post'),
-				'Connection' => new Http\ConstantHeader('Connection', 'close'),
+				'method' => new Http\FakeHeader('method', 'post'),
+				'Connection' => new Http\FakeHeader('Connection', 'close'),
 			],
 			$headers->iterate()
 		);
@@ -47,14 +47,14 @@ final class UniqueHeaders extends Tester\TestCase {
 			[
 				'method' => 'post',
 				'Connection' => 'close',
-				new Http\ConstantHeader('Content-Type', 'text/html; utf-8'),
+				new Http\FakeHeader('Content-Type', 'text/html; utf-8'),
 			]
 		);
 		Assert::equal(
 			[
-				'method' => new Http\ConstantHeader('method', 'post'),
-				'Connection' => new Http\ConstantHeader('Connection', 'close'),
-				'Content-Type' => new Http\ConstantHeader('Content-Type', 'text/html; utf-8'),
+				'method' => new Http\CaseSensitiveHeader('method', 'post'),
+				'Connection' => new Http\CaseSensitiveHeader('Connection', 'close'),
+				'Content-Type' => new Http\FakeHeader('Content-Type', 'text/html; utf-8'),
 			],
 			$headers->iterate()
 		);
@@ -66,8 +66,8 @@ final class UniqueHeaders extends Tester\TestCase {
 		);
 		Assert::equal(
 			[
-				'method' => new Http\ConstantHeader('method', 'post'),
-				'Connection' => new Http\ConstantHeader('Connection', 'close'),
+				'method' => new Http\CaseSensitiveHeader('method', 'post'),
+				'Connection' => new Http\CaseSensitiveHeader('Connection', 'close'),
 			],
 			$headers->iterate()
 		);
@@ -81,6 +81,20 @@ final class UniqueHeaders extends Tester\TestCase {
 			['method' => 'get', 'Connection' => 'close']
 		);
 		$headers->header('wtf?');
+	}
+
+	public function testIncludedHeader() {
+		$headers = new Http\UniqueHeaders(
+			['method' => 'get', 'Connection' => 'close']
+		);
+		Assert::true($headers->included(new Http\FakeHeader('method', 'get', true)));
+	}
+
+	public function testNotIncludedHeader() {
+		$headers = new Http\UniqueHeaders(
+			['method' => 'get', 'Connection' => 'close']
+		);
+		Assert::false($headers->included(new Http\FakeHeader('method', 'get', false)));
 	}
 }
 

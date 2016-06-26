@@ -41,7 +41,7 @@ final class WebBrowser extends Tester\TestCase {
 			)
 		)->headers();
 		Assert::equal(
-			new Http\ConstantHeader('Content-Type', 'text/html; charset=utf-8'),
+			new Http\CaseSensitiveHeader('Content-Type', 'text/html; charset=utf-8'),
 			$headers->header('Content-Type')
 		);
 	}

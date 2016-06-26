@@ -19,7 +19,7 @@ final class UniqueHeaders implements Headers {
 					$header = $this->headers[$field];
 					$previous[$header->field()] = $header;
 				} elseif(is_string($this->headers[$field])) {
-					$previous[$field] = new ConstantHeader(
+					$previous[$field] = new CaseSensitiveHeader(
 						$field,
 						$this->headers[$field]
 					);
@@ -35,6 +35,15 @@ final class UniqueHeaders implements Headers {
 			return $headers[$field];
 		throw new Exception\ExistenceException(
 			sprintf('Header "%s" does not exist', $field)
+		);
+	}
+
+	public function included(Header $header): bool {
+		return (bool)array_filter(
+			$this->iterate(),
+			function(Header $includedHeader) use($header) {
+				return $header->equals($includedHeader);
+			}
 		);
 	}
 }

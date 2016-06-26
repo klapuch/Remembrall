@@ -3,7 +3,7 @@
  * @testCase
  * @phpVersion > 7.0.0
  */
-namespace Remembrall\Integration\Http;
+namespace Remembrall\Unit\Http;
 
 use GuzzleHttp;
 use Remembrall\Model\Http;
@@ -28,7 +28,7 @@ final class CaseSensitiveHeaders extends Tester\TestCase {
 			new Http\FakeHeaders(['method' => 'get', 'Connection' => 'close'])
 		);
 		Assert::equal(
-			new Http\ConstantHeader('method', 'get'),
+			new Http\FakeHeader('method', 'get'),
 			$headers->header('mEtHoD')
 		);
 	}
