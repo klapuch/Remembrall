@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Http;
 
-use GuzzleHttp;
-
 final class ConstantResponse implements Response {
 	private $headers;
 	private $content;
