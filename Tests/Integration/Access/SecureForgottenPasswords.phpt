@@ -5,7 +5,9 @@
  */
 namespace Remembrall\Integration\Access;
 
-use Remembrall\Model\Access;
+use Remembrall\Model\{
+	Access, Security
+};
 use Remembrall\TestCase;
 use Tester\Assert;
 
@@ -14,7 +16,8 @@ require __DIR__ . '/../../bootstrap.php';
 final class SecureForgottenPasswords extends TestCase\Database {
 	public function testReminding() {
 		(new Access\SecureForgottenPasswords(
-			$this->database
+			$this->database,
+			new Security\FakeCipher()
 		))->remind('foo@bar.cz');
 		Assert::same(
 			[

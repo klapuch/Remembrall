@@ -3,15 +3,21 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Access;
 
 use Dibi;
+use Remembrall\Model\Security;
 
 /**
  * Works just with secure reminders
  */
 final class SecureForgottenPasswords implements ForgottenPasswords {
 	private $database;
+	private $cipher;
 
-	public function __construct(Dibi\Connection $database) {
+	public function __construct(
+		Dibi\Connection $database,
+		Security\Cipher $cipher
+	) {
 		$this->database = $database;
+		$this->cipher = $cipher;
 	}
 
 	public function remind(string $email): RemindedPassword {
@@ -22,6 +28,10 @@ final class SecureForgottenPasswords implements ForgottenPasswords {
 			$email,
 			$reminder
 		);
-		return new MySqlRemindedPassword($reminder, $this->database);
+		return new MySqlRemindedPassword(
+			$reminder,
+			$this->database,
+			$this->cipher
+		);
 	}
 }
