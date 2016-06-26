@@ -13,11 +13,6 @@ use Tester;
 require __DIR__ . '/../../bootstrap.php';
 
 final class WebBrowser extends Tester\TestCase {
-	protected function setUp() {
-		parent::setUp();
-		Tester\Environment::lock('http', __DIR__ . '/../../Temporary');
-	}
-
 	public function testReturnedContent() {
 		$http = new GuzzleHttp\Client();
 		$content = (new Http\WebBrowser($http))->send(
