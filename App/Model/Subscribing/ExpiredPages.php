@@ -22,8 +22,8 @@ final class ExpiredPages implements Pages {
 		$this->interval = $interval;
 	}
 
-	public function add(Page $page) {
-		$this->origin->add($page);
+	public function add(Page $page): Page {
+		return $this->origin->add($page);
 	}
 
 	public function iterate(): array {

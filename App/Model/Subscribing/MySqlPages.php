@@ -14,13 +14,14 @@ final class MySqlPages implements Pages {
 		$this->database = $database;
 	}
 
-	public function add(Page $page) {
+	public function add(Page $page): Page {
 		$this->database->query(
 			'INSERT INTO pages (url, content) VALUES
 			(?, ?) ON DUPLICATE KEY UPDATE content = VALUES(content)',
 			$page->url(),
 			$page->content()->saveHTML()
 		);
+		return $page;
 	}
 
 	public function iterate(): array {

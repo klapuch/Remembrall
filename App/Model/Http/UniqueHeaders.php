@@ -42,7 +42,7 @@ final class UniqueHeaders implements Headers {
 		return (bool)array_filter(
 			$this->iterate(),
 			function(Header $includedHeader) use($header) {
-				return $header->equals($includedHeader);
+				return $includedHeader->equals($header);
 			}
 		);
 	}

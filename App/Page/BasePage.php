@@ -6,10 +6,15 @@ use Nette\Http\IResponse;
 use Nette\Security;
 
 abstract class BasePage extends Nette\Application\UI\Presenter {
+	use \Nextras\Application\UI\SecuredLinksPresenterTrait;
+
 	/** @inject @var \Dibi\Connection */
 	public $database;
 
-	use \Nextras\Application\UI\SecuredLinksPresenterTrait;
+	public function startup() {
+		parent::startup();
+		$this->user->login(new Security\Identity(1));
+	}
 
 	/*public function checkRequirements($element) {
 		if($this->signal === null) {

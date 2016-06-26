@@ -85,16 +85,22 @@ final class UniqueHeaders extends Tester\TestCase {
 
 	public function testIncludedHeader() {
 		$headers = new Http\UniqueHeaders(
-			['method' => 'get', 'Connection' => 'close']
+			[
+				new Http\FakeHeader('method', 'get', true),
+				new Http\FakeHeader('Connection', 'close', true),
+			]
 		);
-		Assert::true($headers->included(new Http\FakeHeader('method', 'get', true)));
+		Assert::true($headers->included(new Http\FakeHeader('method', 'get')));
 	}
 
 	public function testNotIncludedHeader() {
 		$headers = new Http\UniqueHeaders(
-			['method' => 'get', 'Connection' => 'close']
+			[
+				new Http\FakeHeader('method', 'get', false),
+				new Http\FakeHeader('Connection', 'close', true),
+			]
 		);
-		Assert::false($headers->included(new Http\FakeHeader('method', 'get', false)));
+		Assert::true($headers->included(new Http\FakeHeader('method', 'get')));
 	}
 }
 

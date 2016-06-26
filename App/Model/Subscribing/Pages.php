@@ -6,9 +6,9 @@ interface Pages {
 	/**
 	 * Add a new page to the pages
 	 * @param Page $page
-	 * @return void
+	 * @return Page
 	 */
-	public function add(Page $page);
+	public function add(Page $page): Page;
 
 	/**
 	 * Go through all the pages

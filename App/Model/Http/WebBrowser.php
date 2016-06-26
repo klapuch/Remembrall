@@ -31,11 +31,18 @@ final class WebBrowser implements Browser {
 
 	/**
 	 * Response given from querying host
-	 * @param Message\MessageInterface $response
+	 * @param Message\ResponseInterface $response
 	 * @return Response
 	 */
-	private function response(Message\MessageInterface $response): Response {
+	private function response(Message\ResponseInterface $response): Response {
 		$headers = $response->getHeaders();
+		$additionalHeaders = [
+			'Status' => sprintf(
+				'%d: %s',
+				$response->getStatusCode(),
+				$response->getReasonPhrase()
+			),
+		];
 		return new ConstantResponse(
 			new UniqueHeaders(
 				array_reduce(
@@ -44,7 +51,7 @@ final class WebBrowser implements Browser {
 						$previous[$field] = current($headers[$field]);
 						return $previous;
 					}
-				)
+				) + $additionalHeaders
 			),
 			(string)$response->getBody()
 		);
