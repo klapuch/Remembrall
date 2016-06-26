@@ -21,7 +21,7 @@ final class AvailableWebPage extends TestCase\Mockery {
 	public function testNotFoundPage() {
 		(new Subscribing\AvailableWebPage(
 			new Subscribing\FakePage('www.foo.xxx'),
-			new Http\ConstantResponse(
+			new Http\FakeResponse(
 				new Http\FakeHeaders(['Status' => '404 Not Found']), ''
 			)
 		))->content();
@@ -31,7 +31,7 @@ final class AvailableWebPage extends TestCase\Mockery {
 		Assert::noError(function() {
 			(new Subscribing\AvailableWebPage(
 				new Subscribing\FakePage('www.foo.xxx', new \DOMDocument()),
-				new Http\ConstantResponse(
+				new Http\FakeResponse(
 					new Http\FakeHeaders(['Status' => '200 OK']), ''
 				)
 			))->content();

@@ -14,7 +14,7 @@ final class WebBrowser implements Browser {
 
 	public function send(Request $request): Response {
 		$headers = $request->headers();
-		return $this->response(
+		return new DefaultResponse(
 			$this->http->request(
 				$headers->header('method')->value(),
 				$headers->header('host')->value(),
@@ -26,34 +26,6 @@ final class WebBrowser implements Browser {
 					}
 				)
 			)
-		);
-	}
-
-	/**
-	 * Response given from querying host
-	 * @param Message\ResponseInterface $response
-	 * @return Response
-	 */
-	private function response(Message\ResponseInterface $response): Response {
-		$headers = $response->getHeaders();
-		$additionalHeaders = [
-			'Status' => sprintf(
-				'%d: %s',
-				$response->getStatusCode(),
-				$response->getReasonPhrase()
-			),
-		];
-		return new ConstantResponse(
-			new UniqueHeaders(
-				array_reduce(
-					array_keys($headers),
-					function($previous, string $field) use ($headers) {
-						$previous[$field] = current($headers[$field]);
-						return $previous;
-					}
-				) + $additionalHeaders
-			),
-			(string)$response->getBody()
 		);
 	}
 }

@@ -23,7 +23,7 @@ final class HtmlWebPage extends TestCase\Mockery {
 				new Http\ConstantRequest(
 					new Http\FakeHeaders(['host' => $url])
 				),
-				new Http\ConstantResponse(new Http\FakeHeaders([]), '')
+				new Http\FakeResponse()
 			))->url()
 		);
 	}
@@ -36,7 +36,7 @@ final class HtmlWebPage extends TestCase\Mockery {
 				new Http\ConstantRequest(
 					new Http\FakeHeaders(['host' => $url])
 				),
-				new Http\ConstantResponse(new Http\FakeHeaders(), '')
+				new Http\FakeResponse()
 			))->url()
 		);
 	}
@@ -47,7 +47,7 @@ final class HtmlWebPage extends TestCase\Mockery {
 	public function testCSSContentWithError() {
 		(new Subscribing\HtmlWebPage(
 			new Http\ConstantRequest(new Http\FakeHeaders()),
-			new Http\ConstantResponse(
+			new Http\FakeResponse(
 				new Http\FakeHeaders(['Content-Type' => 'text/css']), ''
 			)
 		))->content();
@@ -58,7 +58,7 @@ final class HtmlWebPage extends TestCase\Mockery {
 			'Hello Koňíčku',
 			(new Subscribing\HtmlWebPage(
 				new Http\ConstantRequest(new Http\FakeHeaders()),
-				new Http\ConstantResponse(
+				new Http\FakeResponse(
 					new Http\FakeHeaders(['Content-Type' => 'text/html']),
 					'<html><p>Hello Koňíčku</p></html>'
 				)

@@ -2,12 +2,12 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Http;
 
-final class ConstantResponse implements Response {
+final class FakeResponse implements Response {
 	private $headers;
 	private $content;
 
-	public function __construct(Headers $headers, string $content) {
-		$this->headers = $headers;
+	public function __construct(Headers $headers = null, string $content = '') {
+	    $this->headers = $headers;
 		$this->content = $content;
 	}
 
