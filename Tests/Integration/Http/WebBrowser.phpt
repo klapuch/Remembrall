@@ -45,6 +45,21 @@ final class WebBrowser extends Tester\TestCase {
 			$headers->header('Content-Type')
 		);
 	}
+
+	public function testReturnedHeadersFromHttps() {
+		$http = new GuzzleHttp\Client();
+		$headers = (new Http\WebBrowser($http))->send(
+			new Http\ConstantRequest(
+				new Http\FakeHeaders(
+					['method' => 'get', 'host' => 'https://nette.org/']
+				)
+			)
+		)->headers();
+		Assert::equal(
+			new Http\CaseSensitiveHeader('Content-Type', 'text/html; charset=utf-8'),
+			$headers->header('Content-Type')
+		);
+	}
 }
 
 (new WebBrowser())->run();
