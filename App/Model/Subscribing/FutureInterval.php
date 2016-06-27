@@ -14,18 +14,20 @@ final class FutureInterval implements Interval {
 	}
 
 	public function start(): \DateTimeInterface {
-		return $this->origin->start();
+		if($this->origin->start() >= new \DateTimeImmutable())
+			return $this->origin->start();
+		throw new \OutOfRangeException('Begin step must points to the future');
 	}
 
 	public function next(): \DateTimeInterface {
 		if($this->origin->next() > $this->start())
 			return $this->origin->next();
-		throw new \OutOfRangeException('Interval must points to the future');
+		throw new \OutOfRangeException('Next step must points to the future');
 	}
 
 	public function step(): \DateInterval {
 		if($this->origin->step()->invert === 0)
 			return $this->origin->step();
-		throw new \OutOfRangeException('Interval must points to the future');
+		throw new \OutOfRangeException('Step must points to the future');
 	}
 }

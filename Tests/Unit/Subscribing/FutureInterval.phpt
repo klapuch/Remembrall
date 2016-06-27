@@ -14,37 +14,39 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class FutureInterval extends Tester\TestCase {
 	/**
-	 * @throws \OutOfRangeException Interval must points to the future
+	 * @throws \OutOfRangeException Next step must points to the future
 	 */
 	public function testNextPointingToPast() {
 		(new Subscribing\FutureInterval(
 			new Subscribing\FakeInterval(
-				new \DateTimeImmutable('2000-01-01 01:01:01'),
+				(new \DateTime())->add(new \DateInterval('P10D')),
 				new \DateTimeImmutable('1900-01-01 01:01:01')
 			)
 		))->next();
 	}
 
 	/**
-	 * @throws \OutOfRangeException Interval must points to the future
+	 * @throws \OutOfRangeException Next step must points to the future
 	 */
 	public function testNextPointingToSameTime() {
+		$future = (new \DateTime())->add(new \DateInterval('P10D'));
 		(new Subscribing\FutureInterval(
 			new Subscribing\FakeInterval(
-				new \DateTimeImmutable('2000-01-01 01:01:01'),
-				new \DateTimeImmutable('2000-01-01 01:01:01')
+				$future,
+				$future
 			)
 		))->next();
 	}
 
 	public function testNextPointingToFuture() {
-		(new Subscribing\FutureInterval(
-			new Subscribing\FakeInterval(
-				new \DateTimeImmutable('2000-01-01 01:01:01'),
-				new \DateTimeImmutable('2100-01-01 01:01:01')
-			)
-		))->next();
-		Assert::true(true);
+		Assert::noError(function() {
+			(new Subscribing\FutureInterval(
+				new Subscribing\FakeInterval(
+					(new \DateTime())->add(new \DateInterval('P5D')),
+					(new \DateTime())->add(new \DateInterval('P10D'))
+				)
+			))->next();
+		});
 	}
 
 	protected function pastSteps() {
@@ -59,7 +61,7 @@ final class FutureInterval extends Tester\TestCase {
 
 	/**
 	 * @dataProvider pastSteps
-	 * @throws \OutOfRangeException Interval must points to the future
+	 * @throws \OutOfRangeException Step must points to the future
 	 */
 	public function testStepPointingToPast(\DateInterval $step, $invert) {
 		$step->invert = $invert;
@@ -69,10 +71,28 @@ final class FutureInterval extends Tester\TestCase {
 	}
 
 	public function testStepPointingToFuture() {
+		Assert::noError(function() {
+			(new Subscribing\FutureInterval(
+				new Subscribing\FakeInterval(null, null, new \DateInterval('PT2M'))
+			))->step();
+		});
+	}
+
+	/**
+	 * @throws \OutOfRangeException Begin step must points to the future
+	 */
+	public function testPastStart() {
 		(new Subscribing\FutureInterval(
-			new Subscribing\FakeInterval(null, null, new \DateInterval('PT2M'))
-		))->step();
-		Assert::true(true);
+			new Subscribing\FakeInterval(new \DateTime('2000-01-01 01:01:01'))
+		))->start();
+	}
+
+	public function testFutureStart() {
+		Assert::noError(function() {
+			(new Subscribing\FutureInterval(
+				new Subscribing\FakeInterval((new \DateTime())->add(new \DateInterval('P10D')))
+			))->start();
+		});
 	}
 }
 
