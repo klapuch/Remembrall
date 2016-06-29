@@ -26,6 +26,21 @@ final class UniqueHeaders extends Tester\TestCase {
 		);
 	}
 
+	public function testConvertedTypesToString() {
+		$headers = new Http\UniqueHeaders(
+			['something' => 1, 'else' => 0, 'http_errors' => false, 'allow_redirect' => true, 'array' => []]
+		);
+		Assert::equal(
+			[
+				'something' => new Http\CaseSensitiveHeader('something', '1'),
+				'else' => new Http\CaseSensitiveHeader('else', '0'),
+				'http_errors' => new Http\CaseSensitiveHeader('http_errors', ''),
+				'allow_redirect' => new Http\CaseSensitiveHeader('allow_redirect', '1'),
+			],
+			$headers->iterate()
+		);
+	}
+
 	public function testObjectHeaders() {
 		$headers = new Http\UniqueHeaders(
 			[

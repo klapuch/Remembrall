@@ -28,7 +28,11 @@ final class PartsPage extends BasePage {
 			$request = new Http\ConstantRequest(
 				new Http\CaseSensitiveHeaders(
 					new Http\UniqueHeaders(
-						['host' => $values['url'], 'method' => 'GET']
+						[
+							'host' => $values['url'],
+							'method' => 'GET',
+							'http_errors' => false,
+						]
 					)
 				)
 			);

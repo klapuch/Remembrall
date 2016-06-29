@@ -18,10 +18,10 @@ final class UniqueHeaders implements Headers {
 				if($this->headers[$field] instanceof Header) {
 					$header = $this->headers[$field];
 					$previous[$header->field()] = $header;
-				} elseif(is_string($this->headers[$field])) {
+				} elseif(is_scalar($this->headers[$field])) {
 					$previous[$field] = new CaseSensitiveHeader(
 						$field,
-						$this->headers[$field]
+						(string)$this->headers[$field]
 					);
 				}
 				return $previous;
