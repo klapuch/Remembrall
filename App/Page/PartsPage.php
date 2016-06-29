@@ -77,7 +77,7 @@ final class PartsPage extends BasePage {
 					)
 				)
 			);
-		} catch(Exception\ExistenceException $ex) {
+		} catch(\Exception $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
 		}
 	}

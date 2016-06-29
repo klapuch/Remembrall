@@ -192,6 +192,8 @@ final class OwnedParts extends TestCase\Database {
 		Assert::same(1, $parts[0]['ID']);
 	}
 
+	
+
     protected function prepareDatabase() {
         $this->database->query('TRUNCATE parts');
         $this->database->query('TRUNCATE part_visits');

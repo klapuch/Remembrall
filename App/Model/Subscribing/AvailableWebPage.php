@@ -7,7 +7,7 @@ use Remembrall\Exception;
 use Remembrall\Model\Http;
 
 /**
- * Page can not send codes which temporary block access to it
+ * The page is always available - no error, no DB maintenance, ..
  */
 final class AvailableWebPage implements Page {
 	private $origin;

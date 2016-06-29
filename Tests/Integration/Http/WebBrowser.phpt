@@ -55,6 +55,20 @@ final class WebBrowser extends Tester\TestCase {
 			$headers->header('Content-Type')
 		);
 	}
+
+	/**
+	 * @throws \Remembrall\Exception\ExistenceException Given URL does not exist
+	 */
+	public function testUnknownUrl() {
+		$http = new GuzzleHttp\Client();
+		(new Http\WebBrowser($http))->send(
+			new Http\ConstantRequest(
+				new Http\FakeHeaders(
+					['method' => 'get', 'host' => 'http://www.čoromoro.xx']
+				)
+			)
+		);
+	}
 }
 
 (new WebBrowser())->run();

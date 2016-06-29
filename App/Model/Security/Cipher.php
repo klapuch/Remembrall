@@ -19,7 +19,7 @@ interface Cipher {
 	public function decrypt(string $plain, string $hash): bool;
 
 	/**
-	 * Is the given hash too old for the given cipher and needs to be changed?
+	 * Is the given hash too old for the cipher and needs to be changed?
 	 * @param string $hash
 	 * @return bool
 	 */

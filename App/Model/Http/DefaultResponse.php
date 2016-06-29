@@ -24,6 +24,10 @@ final class DefaultResponse implements Response {
 		);
 	}
 
+	public function content(): string {
+		return (string)$this->response->getBody();
+	}
+
 	/**
 	 * Additional headers for the current response
 	 * @return array
@@ -37,9 +41,5 @@ final class DefaultResponse implements Response {
 			),
 			'Protocol' => $this->response->getProtocolVersion(),
 		];
-	}
-
-	public function content(): string {
-		return (string)$this->response->getBody();
 	}
 }

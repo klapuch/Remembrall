@@ -49,6 +49,16 @@ final class CollectiveParts implements Parts {
 				range($firstId, $lastId)
 			);
 			$this->database->commit();
+		} catch(\OutOfRangeException $ex) {
+			$this->database->rollback();
+			throw new Exception\ExistenceException(
+				$ex->getMessage(),
+				$ex->getCode(),
+				$ex
+			);
+		} catch(Exception\ExistenceException $ex) {
+			$this->database->rollback();
+			throw $ex;
 		} catch(\Exception $ex) {
 			$this->database->rollback();
 			throw new Dibi\Exception(
