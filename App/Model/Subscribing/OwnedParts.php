@@ -29,12 +29,12 @@ final class OwnedParts implements Parts {
 			$this->database->begin();
 			$this->database->query(
 				'INSERT INTO parts
-				(page_id, expression, content, `interval`, subscriber_id) VALUES
-				((SELECT ID FROM pages WHERE url = ?), ?, ?, ?, ?)',
+				(`interval`, page_id, expression, content, subscriber_id) VALUES
+				(?, (SELECT ID FROM pages WHERE url = ?), ?, ?, ?)',
+				$interval->step()->i,
 				$part->source()->url(),
 				(string)$part->expression(),
 				$part->content(),
-				$interval->step()->i,
 				$this->myself->id()
 			);
 			$this->database->query(

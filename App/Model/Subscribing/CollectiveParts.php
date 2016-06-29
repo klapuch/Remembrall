@@ -31,13 +31,13 @@ final class CollectiveParts implements Parts {
 			);
 			$this->database->query(
 				'INSERT INTO parts
-				(page_id, expression, content, `interval`, subscriber_id)
-				SELECT (SELECT ID FROM pages WHERE url = ?), ?, ?, ?, ID
+				(`interval`, page_id, expression, content, subscriber_id)
+				SELECT ?, (SELECT ID FROM pages WHERE url = ?), ?, ?, ID
 				FROM subscribers',
+				$interval->step()->i,
 				$part->source()->url(),
 				(string)$part->expression(),
-				$part->content(),
-				$interval->step()->i
+				$part->content()
 			);
 			$lastId = $this->database->fetchSingle(
 				'SELECT ID FROM parts ORDER BY ID DESC LIMIT 1'
