@@ -77,7 +77,7 @@ final class PartsPage extends BasePage {
 				new Subscribing\FutureInterval(
 					new Subscribing\DateTimeInterval(
 						new \DateTimeImmutable($values['start']),
-						new \DateInterval(sprintf('PT%dM', $values['interval']))
+						new \DateInterval(sprintf('PT%dM', max(0, $values['interval'])))
 					)
 				)
 			);

@@ -20,6 +20,8 @@ install:
 before_script:
   - mysql -u root -e 'CREATE DATABASE remembrall_test;'
   - mysql -u root remembrall_test < ./Tests/TestCase/schema.sql
+  - mysql -u root -e 'CREATE DATABASE transaction_test;'
+  - mysql -u root transaction_test < ./Tests/TestCase/transaction_test.sql
 
 after_script:
     - >

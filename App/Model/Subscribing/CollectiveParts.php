@@ -4,7 +4,9 @@ namespace Remembrall\Model\Subscribing;
 
 use Dibi;
 use Remembrall\Exception;
-use Remembrall\Model\Access;
+use Remembrall\Model\{
+	Access, Storage
+};
 
 /**
  * All parts stored in the database
@@ -18,53 +20,38 @@ final class CollectiveParts implements Parts {
 
 	public function subscribe(Part $part, Interval $interval) {
 		try {
-			$this->database->begin();
-			$this->database->query('SET autocommit = 0');
-			$this->database->query(
-				'LOCK TABLES parts WRITE,
-				pages WRITE,
-				subscribers WRITE,
-				part_visits WRITE'
-			);
-			$firstId = $this->database->fetchSingle(
-				'SELECT ID + 1 FROM parts ORDER BY ID DESC LIMIT 1'
-			);
-			$this->database->query(
-				'INSERT INTO parts
-				(`interval`, page_id, expression, content, subscriber_id)
-				SELECT ?, (SELECT ID FROM pages WHERE url = ?), ?, ?, ID
-				FROM subscribers',
-				$interval->step()->i,
-				$part->source()->url(),
-				(string)$part->expression(),
-				$part->content()
-			);
-			$lastId = $this->database->fetchSingle(
-				'SELECT ID FROM parts ORDER BY ID DESC LIMIT 1'
-			);
-			$this->database->query(
-				'INSERT INTO part_visits (part_id, visited_at)
-				SELECT ID, ? FROM parts WHERE ID IN %in',
-				$interval->start(),
-				range($firstId, $lastId)
-			);
-			$this->database->commit();
-		} catch(\OutOfRangeException $ex) {
-			$this->database->rollback();
-			throw new Exception\ExistenceException(
-				$ex->getMessage(),
-				$ex->getCode(),
-				$ex
-			);
-		} catch(Exception\ExistenceException $ex) {
-			$this->database->rollback();
-			throw $ex;
-		} catch(\Exception $ex) {
-			$this->database->rollback();
-			throw new Dibi\Exception(
-				'An error occurred during subscribing a new part',
-				$ex->getCode(),
-				$ex
+			(new Storage\Transaction($this->database))->start(
+				function() use ($part, $interval) {
+					$this->database->query('SET autocommit = 0');
+					$this->database->query(
+						'LOCK TABLES parts WRITE,
+						pages WRITE,
+						subscribers WRITE,
+						part_visits WRITE'
+					);
+					$firstId = $this->database->fetchSingle(
+						'SELECT ID + 1 FROM parts ORDER BY ID DESC LIMIT 1'
+					);
+					$this->database->query(
+						'INSERT INTO parts
+						(`interval`, page_id, expression, content, subscriber_id)
+						SELECT ?, (SELECT ID FROM pages WHERE url = ?), ?, ?, ID
+						FROM subscribers',
+						$interval->step()->i,
+						$part->source()->url(),
+						(string)$part->expression(),
+						$part->content()
+					);
+					$lastId = $this->database->fetchSingle(
+						'SELECT ID FROM parts ORDER BY ID DESC LIMIT 1'
+					);
+					$this->database->query(
+						'INSERT INTO part_visits (part_id, visited_at)
+						SELECT ID, ? FROM parts WHERE ID IN %in',
+						$interval->start(),
+						range($firstId, $lastId)
+					);
+				}
 			);
 		} finally {
 			$this->database->query('SET autocommit = 1');
@@ -111,7 +98,10 @@ final class CollectiveParts implements Parts {
 						new ConstantPage($row['url'], $row['page_content']),
 						$row['expression']
 					),
-					new Access\MySqlSubscriber($row['subscriber_id'], $this->database)
+					new Access\MySqlSubscriber(
+						$row['subscriber_id'],
+						$this->database
+					)
 				);
 				return $previous;
 			}

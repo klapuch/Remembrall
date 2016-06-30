@@ -4,7 +4,9 @@ namespace Remembrall\Model\Subscribing;
 
 use Dibi;
 use Remembrall\Exception;
-use Remembrall\Model\Access;
+use Remembrall\Model\{
+	Access, Storage
+};
 
 /**
  * Parts which are owned by the given subscriber
@@ -26,48 +28,32 @@ final class OwnedParts implements Parts {
 
 	public function subscribe(Part $part, Interval $interval) {
 		try {
-			$this->database->begin();
-			$this->database->query(
-				'INSERT INTO parts
-				(`interval`, page_id, expression, content, subscriber_id) VALUES
-				(?, (SELECT ID FROM pages WHERE url = ?), ?, ?, ?)',
-				$interval->step()->i,
-				$part->source()->url(),
-				(string)$part->expression(),
-				$part->content(),
-				$this->myself->id()
+			(new Storage\Transaction($this->database))->start(
+				function() use ($interval, $part) {
+					$this->database->query(
+						'INSERT INTO parts
+						(`interval`, page_id, expression, content, subscriber_id) VALUES
+						(?, (SELECT ID FROM pages WHERE url = ?), ?, ?, ?)',
+						$interval->step()->i,
+						$part->source()->url(),
+						(string)$part->expression(),
+						$part->content(),
+						$this->myself->id()
+					);
+					$this->database->query(
+						'INSERT INTO part_visits (part_id, visited_at) VALUES (?, ?)',
+						$this->database->insertId(),
+						$interval->start()
+					);
+				}
 			);
-			$this->database->query(
-				'INSERT INTO part_visits (part_id, visited_at) VALUES (?, ?)',
-				$this->database->insertId(),
-				$interval->start()
-			);
-			$this->database->commit();
 		} catch(Dibi\UniqueConstraintViolationException $ex) {
-			$this->database->rollback();
 			throw new Exception\DuplicateException(
 				sprintf(
 					'"%s" expression on the "%s" page is already subscribed by you',
 					(string)$part->expression(),
 					$part->source()->url()
 				),
-				$ex->getCode(),
-				$ex
-			);
-		} catch(\OutOfRangeException $ex) {
-			$this->database->rollback();
-			throw new Exception\ExistenceException(
-				$ex->getMessage(),
-				$ex->getCode(),
-				$ex
-			);
-		} catch(Exception\ExistenceException $ex) {
-			$this->database->rollback();
-			throw $ex;
-		} catch(\Exception $ex) {
-			$this->database->rollback();
-			throw new Dibi\Exception(
-				'An error occurred during subscribing a new part',
 				$ex->getCode(),
 				$ex
 			);
