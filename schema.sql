@@ -46,7 +46,7 @@ CREATE TABLE `parts` (
   `page_id` int(11) NOT NULL,
   `expression` varchar(255) CHARACTER SET ascii NOT NULL,
   `content` text COLLATE utf8_general_ci NOT NULL,
-  `interval` int(11) NOT NULL,
+  `interval` varchar(10) CHARACTER SET ascii NOT NULL,
   `subscriber_id` int(11) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `page_id,subscriber_id,expression` (`page_id`,`subscriber_id`,`expression`),

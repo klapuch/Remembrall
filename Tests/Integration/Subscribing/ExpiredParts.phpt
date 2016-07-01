@@ -69,19 +69,19 @@ final class ExpiredParts extends TestCase\Database {
 		$this->database->query('TRUNCATE parts');
 		$this->database->query(
 			'INSERT INTO parts (ID, page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, 1, "//a", "a", 10, 1)'
+			(1, 1, "//a", "a", "PT10M", 1)'
 		);
 		$this->database->query(
 			'INSERT INTO parts (ID, page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, 2, "//b", "b", 10, 2)'
+			(2, 2, "//b", "b", "PT10M", 2)'
 		);
 		$this->database->query(
 			'INSERT INTO parts (ID, page_id, expression, content, `interval`, subscriber_id) VALUES
-			(3, 1, "//c", "c", 10, 1)'
+			(3, 1, "//c", "c", "PT10M", 1)'
 		);
 		$this->database->query(
 			'INSERT INTO parts (ID, page_id, expression, content, `interval`, subscriber_id) VALUES
-			(4, 1, "//d", "d", 10, 1)'
+			(4, 1, "//d", "d", "PT10M", 1)'
 		);
 		$this->database->query('TRUNCATE pages');
 		$this->database->query(

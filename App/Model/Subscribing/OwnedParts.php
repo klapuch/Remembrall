@@ -34,7 +34,7 @@ final class OwnedParts implements Parts {
 						'INSERT INTO parts
 						(`interval`, page_id, expression, content, subscriber_id) VALUES
 						(?, (SELECT ID FROM pages WHERE url = ?), ?, ?, ?)',
-						$interval->step()->i,
+						sprintf('PT%dM', $interval->step()->i),
 						$part->source()->url(),
 						(string)$part->expression(),
 						$part->content(),
@@ -101,7 +101,7 @@ final class OwnedParts implements Parts {
 					$this->myself,
 					new DateTimeInterval(
 						new \DateTimeImmutable((string)$row['visited_at']),
-						new \DateInterval(sprintf('PT%dM', $row['interval']))
+						new \DateInterval($row['interval'])
 					)
 				);
 				return $previous;

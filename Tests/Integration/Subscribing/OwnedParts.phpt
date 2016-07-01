@@ -43,7 +43,7 @@ final class OwnedParts extends TestCase\Database {
 		Assert::same(1, $part['page_id']);
 		Assert::same('<p>Content</p>', $part['content']);
 		Assert::same('//p', $part['expression']);
-		Assert::same(158, $part['interval']);
+		Assert::same('PT158M', $part['interval']);
 		$partVisits = $this->database->fetchAll('SELECT part_id, visited_at FROM part_visits');
 		Assert::count(1, $partVisits);
 		$partVisit = current($partVisits);
@@ -96,19 +96,19 @@ final class OwnedParts extends TestCase\Database {
 		);
 		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, "//a", "a", 1, 1)'
+			(1, "//a", "a", "PT1M", 1)'
 		);
 		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, "//b", "b", 2, 2)'
+			(2, "//b", "b", "PT2M", 2)'
 		);
 		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, "//c", "c", 3, 1)'
+			(2, "//c", "c", "PT3M", 1)'
 		);
 		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, "//d", "d", 4, 1)'
+			(1, "//d", "d", "PT4M", 1)'
 		);
 		$parts = (new Subscribing\OwnedParts(
 			$this->database,
@@ -127,7 +127,7 @@ final class OwnedParts extends TestCase\Database {
 	public function testReplacingNotOwnedPart() {
 		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, "//a", "a", 1, 666)'
+			(1, "//a", "a", "PT1M", 666)'
 		);
 		(new Subscribing\OwnedParts(
 			$this->database,
@@ -151,7 +151,7 @@ final class OwnedParts extends TestCase\Database {
 		);
 		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, "//p", "a", 1, 666)'
+			(1, "//p", "a", "PT1M", 666)'
 		);
 		(new Subscribing\OwnedParts(
 			$this->database,
@@ -177,11 +177,11 @@ final class OwnedParts extends TestCase\Database {
 	public function testRemovingByOwner() {
 		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, "//b", "b", 2, 2)'
+			(1, "//b", "b", "PT2M", 2)'
 		);
 		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, "//b", "c", 3, 666)'
+			(2, "//b", "c", "PT3M", 666)'
 		);
 		(new Subscribing\OwnedParts(
 			$this->database,

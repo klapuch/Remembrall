@@ -44,12 +44,12 @@ final class CollectiveParts extends TestCase\Database {
 		Assert::same(1, $parts[0]['page_id']);
 		Assert::same('<p>Content</p>', $parts[0]['content']);
 		Assert::same('//p', $parts[0]['expression']);
-		Assert::same(15, $parts[0]['interval']);
+		Assert::same('PT15M', $parts[0]['interval']);
 		Assert::same(2, $parts[1]['ID']);
 		Assert::same(1, $parts[1]['page_id']);
 		Assert::same('<p>Content</p>', $parts[1]['content']);
 		Assert::same('//p', $parts[1]['expression']);
-		Assert::same(15, $parts[1]['interval']);
+		Assert::same('PT15M', $parts[1]['interval']);
 		$partVisits = $this->database->fetchAll(
 			'SELECT part_id FROM part_visits'
 		);
@@ -60,7 +60,7 @@ final class CollectiveParts extends TestCase\Database {
 	public function testReplacing() {
 		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, "//p", "a", 1, 666)'
+			(1, "//p", "a", "PT1M", 666)'
 		);
 		(new Subscribing\CollectiveParts(
 			$this->database
@@ -98,19 +98,19 @@ final class CollectiveParts extends TestCase\Database {
 		);
 		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, "//a", "a", 1, 1)'
+			(1, "//a", "a", "PT1M", 1)'
 		);
 		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, "//b", "b", 2, 2)'
+			(2, "//b", "b", "PT2M", 2)'
 		);
 		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, "//c", "c", 3, 1)'
+			(2, "//c", "c", "PT3M", 1)'
 		);
 		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, "//d", "d", 4, 1)'
+			(1, "//d", "d", "PT4M", 1)'
 		);
 		$parts = (new Subscribing\CollectiveParts(
 			$this->database
@@ -125,19 +125,19 @@ final class CollectiveParts extends TestCase\Database {
 	public function testRemovingAllSameParts() {
 		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, "//b", "b", 2, 2)'
+			(2, "//b", "b", "PT2M", 2)'
 		);
 		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, "//b", "c", 3, 1)'
+			(2, "//b", "c", "PT3M", 1)'
 		);
 		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, "//d", "c", 3, 1)'
+			(2, "//d", "c", "PT3M", 1)'
 		);
 		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, "//d", "d", 4, 1)'
+			(1, "//d", "d", "PT4M", 1)'
 		);
 		(new Subscribing\CollectiveParts(
 			$this->database

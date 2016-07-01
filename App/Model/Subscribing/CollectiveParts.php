@@ -37,7 +37,7 @@ final class CollectiveParts implements Parts {
 						(`interval`, page_id, expression, content, subscriber_id)
 						SELECT ?, (SELECT ID FROM pages WHERE url = ?), ?, ?, ID
 						FROM subscribers',
-						$interval->step()->i,
+						sprintf('PT%dM', $interval->step()->i),
 						$part->source()->url(),
 						(string)$part->expression(),
 						$part->content()
@@ -107,7 +107,7 @@ final class CollectiveParts implements Parts {
 					),
 					new DateTimeInterval(
 						new \DateTimeImmutable((string)$row['visited_at']),
-						new \DateInterval(sprintf('PT%dM', $row['interval']))
+						new \DateInterval($row['interval'])
 					)
 				);
 				return $previous;

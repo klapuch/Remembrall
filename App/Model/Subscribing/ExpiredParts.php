@@ -44,13 +44,14 @@ final class ExpiredParts implements Parts {
 	public function iterate(): array {
 		return (array)array_reduce(
 			$this->database->fetchAll(
-				'SELECT parts.content, expression, parts.subscriber_id, visited_at, `interval`
+				'SELECT parts.content, expression, parts.subscriber_id, visited_at,
+ 				`interval`
 				FROM parts
 				INNER JOIN pages ON pages.ID = parts.page_id
 				LEFT JOIN part_visits ON part_visits.part_id = parts.ID
 				WHERE url = ?
 				AND visited_at IS NULL
-				OR visited_at + INTERVAL `interval` MINUTE <= NOW()',
+				OR visited_at + INTERVAL CAST(SUBSTR(`interval`, 3) AS UNSIGNED) MINUTE <= NOW()',
 				[$this->page->url()]
 			),
 			function($previous, Dibi\Row $row) {
@@ -61,7 +62,7 @@ final class ExpiredParts implements Parts {
 					new Access\MySqlSubscriber($row['subscriber_id'], $this->database),
 					new DateTimeInterval(
 						new \DateTimeImmutable((string)$row['visited_at']),
-						new \DateInterval(sprintf('PT%dM', $row['interval']))
+						new \DateInterval($row['interval'])
 					)
 				);
 				return $previous;
