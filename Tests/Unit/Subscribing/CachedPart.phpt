@@ -28,6 +28,7 @@ final class CachedPart extends TestCase\Mockery {
 		$source = new Subscribing\FakePage();
 		$expression = new Subscribing\FakeExpression('//p', null);
 		$owner = new Access\FakeSubscriber(1, 'facedown@email.cz');
+		$visitedAt = new Subscribing\FakeInterval();
 		$this->cache->shouldReceive('read')
 			->andReturn($content)
 			->with('Remembrall\Model\Subscribing\CachedPart::content')
@@ -44,13 +45,18 @@ final class CachedPart extends TestCase\Mockery {
 			->andReturn($owner)
 			->with('Remembrall\Model\Subscribing\CachedPart::owner')
 			->times(4);
+		$this->cache->shouldReceive('read')
+			->andReturn($visitedAt)
+			->with('Remembrall\Model\Subscribing\CachedPart::visitedAt')
+			->times(4);
 		$page = new Subscribing\CachedPart(
 			new Subscribing\FakePart(
 				$content,
 				$source,
 				false,
 				$expression,
-				$owner
+				$owner,
+				$visitedAt
 			),
 			$this->cache
 		);
@@ -66,6 +72,9 @@ final class CachedPart extends TestCase\Mockery {
 
 		Assert::same($owner, $page->owner());
 		Assert::same($owner, $page->owner());
+
+		Assert::same($visitedAt, $page->visitedAt());
+		Assert::same($visitedAt, $page->visitedAt());
 	}
 }
 

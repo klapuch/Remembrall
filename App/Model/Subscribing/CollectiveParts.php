@@ -87,8 +87,10 @@ final class CollectiveParts implements Parts {
 		return (array)array_reduce(
 			$this->database->fetchAll(
 				'SELECT parts.content AS part_content, url,
-				pages.content AS page_content, expression, subscriber_id
+				pages.content AS page_content, expression, subscriber_id,
+				`interval`, visited_at
 				FROM parts
+				INNER JOIN part_visits ON part_visits.part_id = parts.ID 
 				LEFT JOIN pages ON pages.ID = parts.page_id'
 			),
 			function($previous, Dibi\Row $row) {
@@ -102,6 +104,10 @@ final class CollectiveParts implements Parts {
 					new Access\MySqlSubscriber(
 						$row['subscriber_id'],
 						$this->database
+					),
+					new DateTimeInterval(
+						new \DateTimeImmutable((string)$row['visited_at']),
+						new \DateInterval(sprintf('PT%dM', $row['interval']))
 					)
 				);
 				return $previous;

@@ -12,17 +12,20 @@ final class ConstantPart implements Part {
 	private $content;
 	private $expression;
 	private $owner;
+	private $visitedAt;
 
 	public function __construct(
 		Page $source,
 		string $content,
 		Expression $expression,
-		Access\Subscriber $owner
+		Access\Subscriber $owner,
+		Interval $visitedAt
 	) {
 		$this->source = $source;
 		$this->content = $content;
 		$this->expression = $expression;
 		$this->owner = $owner;
+		$this->visitedAt = $visitedAt;
 	}
 
 	public function source(): Page {
@@ -44,5 +47,9 @@ final class ConstantPart implements Part {
 
 	public function owner(): Access\Subscriber {
 		return $this->owner;
+	}
+
+	public function visitedAt(): Interval {
+		return $this->visitedAt;
 	}
 }

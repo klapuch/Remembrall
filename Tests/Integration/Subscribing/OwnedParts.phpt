@@ -91,6 +91,10 @@ final class OwnedParts extends TestCase\Database {
 
 	public function testIteratingOwnedParts() {
 		$this->database->query(
+			'INSERT INTO part_visits (part_id, visited_at) VALUES
+			(1, NOW()), (2, NOW()), (3, NOW()), (4, NOW())'
+		);
+		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
 			(1, "//a", "a", 1, 1)'
 		);
@@ -142,6 +146,10 @@ final class OwnedParts extends TestCase\Database {
 
 	public function testReplacingOwnedPartWithoutError() {
 		$this->database->query(
+			'INSERT INTO part_visits (part_id, visited_at) VALUES
+			(1, NOW()), (2, NOW()), (3, NOW()), (4, NOW())'
+		);
+		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
 			(1, "//p", "a", 1, 666)'
 		);
@@ -192,7 +200,7 @@ final class OwnedParts extends TestCase\Database {
 		Assert::same(1, $parts[0]['ID']);
 	}
 
-	
+
 
     protected function prepareDatabase() {
         $this->database->query('TRUNCATE parts');

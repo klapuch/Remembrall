@@ -37,4 +37,10 @@ interface Part {
 	 * @return Access\Subscriber
 	 */
 	public function owner(): Access\Subscriber;
+
+	/**
+	 * When was the part visited at? What is the next planning visitation?
+	 * @return Interval
+	 */
+	public function visitedAt(): Interval;
 }

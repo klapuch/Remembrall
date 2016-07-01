@@ -83,8 +83,9 @@ final class OwnedParts implements Parts {
 		return (array)array_reduce(
 			$this->database->fetchAll(
 				'SELECT parts.content AS part_content, expression, url,
-				pages.content AS page_content
+				pages.content AS page_content, `interval`, visited_at
 				FROM parts
+				INNER JOIN part_visits ON part_visits.part_id = parts.ID  
 				LEFT JOIN pages ON pages.ID = parts.page_id
 				WHERE subscriber_id = ?',
 				$this->myself->id()
@@ -97,7 +98,11 @@ final class OwnedParts implements Parts {
 						new ConstantPage($row['url'], $row['page_content']),
 						$row['expression']
 					),
-					$this->myself
+					$this->myself,
+					new DateTimeInterval(
+						new \DateTimeImmutable((string)$row['visited_at']),
+						new \DateInterval(sprintf('PT%dM', $row['interval']))
+					)
 				);
 				return $previous;
 			}

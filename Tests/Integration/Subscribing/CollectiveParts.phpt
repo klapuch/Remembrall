@@ -93,6 +93,10 @@ final class CollectiveParts extends TestCase\Database {
 
 	public function testIteratingOverAllPages() {
 		$this->database->query(
+			'INSERT INTO part_visits (part_id, visited_at) VALUES
+			(1, NOW()), (2, NOW()), (3, NOW()), (4, NOW())'
+		);
+		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
 			(1, "//a", "a", 1, 1)'
 		);

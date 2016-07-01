@@ -52,4 +52,15 @@ final class HtmlPart implements Part {
 	public function owner(): Access\Subscriber {
 		return $this->owner;
 	}
+
+	/**
+	 * It is not possible to ensure when was the part visited
+	 * @return Interval
+	 */
+	public function visitedAt(): Interval {
+		return new DateTimeInterval(
+			new \DateTimeImmutable(),
+			new \DateInterval('PT0S')
+		);
+	}
 }

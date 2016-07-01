@@ -37,6 +37,10 @@ final class CachedPart implements Part {
 		return $this->read(__FUNCTION__);
 	}
 
+	public function visitedAt(): Interval {
+		return $this->read(__FUNCTION__);
+	}
+
 	private function read(string $method) {
 		$key = __CLASS__ . '::' . $method;
 		if($this->cache->read($key) === null)

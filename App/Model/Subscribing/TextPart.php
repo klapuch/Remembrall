@@ -34,4 +34,8 @@ final class TextPart implements Part {
 	public function owner(): Access\Subscriber {
 		return $this->origin->owner();
 	}
+
+	public function visitedAt(): Interval {
+		return $this->origin->visitedAt();
+	}
 }

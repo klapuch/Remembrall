@@ -110,6 +110,22 @@ final class HtmlPart extends Tester\TestCase {
 			)
 		);
 	}
+
+	public function testVisitedAtWithoutError() {
+		$dom = new \DOMDocument();
+		$dom->loadHTML('<p>abc</p>');
+		Assert::type(
+			Subscribing\DateTimeInterval::class,
+			(new Subscribing\HtmlPart(
+				new Subscribing\FakePage('google.com'),
+				new Subscribing\FakeExpression(
+					'//p',
+					(new \DOMXPath($dom))->query('//p')
+				),
+				new Access\FakeSubscriber()
+			))->visitedAt()
+		);
+	}
 }
 
 (new HtmlPart())->run();
