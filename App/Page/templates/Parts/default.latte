@@ -2,3 +2,9 @@
 {define title}Parts{/define}
 {define description}Parts{/define}
 {control partForm}
+{ifset $part}
+    <h2>Content of the part which was added:</h2>
+    <p>
+        {$part->content()}
+    </p>
+{/ifset}

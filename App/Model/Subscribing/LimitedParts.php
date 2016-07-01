@@ -25,7 +25,7 @@ final class LimitedParts implements Parts {
 		$this->origin = $origin;
 	}
 
-	public function subscribe(Part $part, Interval $interval) {
+	public function subscribe(Part $part, Interval $interval): Part {
 		if($this->overstepped()) {
 			throw new \OverflowException(
 				sprintf(
@@ -34,7 +34,7 @@ final class LimitedParts implements Parts {
 				)
 			);
 		}
-		$this->origin->subscribe($part, $interval);
+		return $this->origin->subscribe($part, $interval);
 	}
 
 	public function replace(Part $old, Part $new) {

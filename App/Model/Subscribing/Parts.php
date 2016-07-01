@@ -10,9 +10,9 @@ interface Parts {
 	 * @param Part $part
 	 * @param Interval $interval
 	 * @throws Exception\DuplicateException
-	 * @return void
+	 * @return Part which was added
 	 */
-	public function subscribe(Part $part, Interval $interval);
+	public function subscribe(Part $part, Interval $interval): Part;
 
 	/**
 	 * Replace the old part with the new one

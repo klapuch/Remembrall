@@ -9,8 +9,8 @@ final class FakeParts implements Parts {
 		$this->parts = $parts;
 	}
 
-	public function subscribe(Part $part, Interval $interval) {
-
+	public function subscribe(Part $part, Interval $interval): Part {
+		return $part;
 	}
 
 	public function replace(Part $old, Part $new) {

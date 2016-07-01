@@ -26,7 +26,7 @@ final class OwnedParts implements Parts {
 		$this->origin = $origin;
 	}
 
-	public function subscribe(Part $part, Interval $interval) {
+	public function subscribe(Part $part, Interval $interval): Part {
 		try {
 			(new Storage\Transaction($this->database))->start(
 				function() use ($interval, $part) {
@@ -47,6 +47,7 @@ final class OwnedParts implements Parts {
 					);
 				}
 			);
+			return $part;
 		} catch(Dibi\UniqueConstraintViolationException $ex) {
 			throw new Exception\DuplicateException(
 				sprintf(

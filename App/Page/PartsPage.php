@@ -3,6 +3,7 @@ namespace Remembrall\Page;
 
 use GuzzleHttp;
 use Nette\Application\UI\Form;
+use Nette\Caching\Storages;
 use Nette\Utils\ArrayHash;
 use Remembrall\Exception;
 use Remembrall\Model\{
@@ -46,7 +47,7 @@ final class PartsPage extends BasePage {
 					$response
 				)
 			);
-			(new Subscribing\LimitedParts(
+			$addedPart = (new Subscribing\LimitedParts(
 				$this->database,
 				new Access\MySqlSubscriber(
 					$this->user->getId(),
@@ -61,26 +62,31 @@ final class PartsPage extends BasePage {
 					new Subscribing\CollectiveParts($this->database)
 				)
 			))->subscribe(
-				new Subscribing\HtmlPart(
-					$addedPage,
-					new Subscribing\ValidXPathExpression(
-						new Subscribing\XPathExpression(
-							$addedPage,
-							$values['expression']
+				new Subscribing\CachedPart(
+					new Subscribing\HtmlPart(
+						$addedPage,
+						new Subscribing\ValidXPathExpression(
+							new Subscribing\XPathExpression(
+								$addedPage,
+								$values['expression']
+							)
+						),
+						new Access\MySqlSubscriber(
+							$this->user->getId(),
+							$this->database
 						)
-					),
-					new Access\MySqlSubscriber(
-						$this->user->getId(),
-						$this->database
-					)
+					), new Storages\MemoryStorage()
 				),
 				new Subscribing\FutureInterval(
 					new Subscribing\DateTimeInterval(
 						new \DateTimeImmutable($values['start']),
-						new \DateInterval(sprintf('PT%dM', max(0, $values['interval'])))
+						new \DateInterval(
+							sprintf('PT%dM', max(0, $values['interval']))
+						)
 					)
 				)
 			);
+			$this->template->part = $addedPart;
 		} catch(\Exception $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
 		}

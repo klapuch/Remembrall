@@ -18,7 +18,7 @@ final class CollectiveParts implements Parts {
 		$this->database = $database;
 	}
 
-	public function subscribe(Part $part, Interval $interval) {
+	public function subscribe(Part $part, Interval $interval): Part {
 		try {
 			(new Storage\Transaction($this->database))->start(
 				function() use ($part, $interval) {
@@ -53,6 +53,7 @@ final class CollectiveParts implements Parts {
 					);
 				}
 			);
+			return $part;
 		} finally {
 			$this->database->query('SET autocommit = 1');
 			$this->database->query('UNLOCK TABLES');

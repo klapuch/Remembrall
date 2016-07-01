@@ -24,8 +24,8 @@ final class ExpiredParts implements Parts {
 		$this->database = $database;
 	}
 
-	public function subscribe(Part $part, Interval $interval) {
-		$this->origin->subscribe($part, $interval);
+	public function subscribe(Part $part, Interval $interval): Part {
+		return $this->origin->subscribe($part, $interval);
 	}
 
 	public function replace(Part $old, Part $new) {
