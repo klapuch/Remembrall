@@ -7,7 +7,7 @@ use Remembrall\Model\Security;
 use Remembrall\Exception;
 
 /**
- * All subscribers from the database
+ * Collection of subscribers stored in the MySql database
  */
 final class MySqlSubscribers implements Subscribers {
 	private $database;

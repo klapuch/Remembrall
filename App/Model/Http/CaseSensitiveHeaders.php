@@ -4,6 +4,9 @@ namespace Remembrall\Model\Http;
 
 use Remembrall\Exception;
 
+/**
+ * Collection of case sensitive headers
+ */
 final class CaseSensitiveHeaders implements Headers {
 	private $origin;
 

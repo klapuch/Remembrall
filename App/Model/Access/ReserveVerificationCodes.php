@@ -6,8 +6,8 @@ use Dibi;
 use Remembrall\Exception;
 
 /**
- * Is able to GIVE verification code once more
- * Just in case the previous code has been lost
+ * Reserve verification codes which can be given on demand in case the old one has been lost
+ * With the "lost" is meant that the code was not received or occur other issue
  */
 final class ReserveVerificationCodes implements VerificationCodes {
 	private $database;

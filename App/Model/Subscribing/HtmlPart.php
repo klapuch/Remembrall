@@ -5,7 +5,7 @@ namespace Remembrall\Model\Subscribing;
 use Remembrall\Model\Access;
 
 /**
- * Part on the html page
+ * Part on the html page (in the html format)
  */
 final class HtmlPart implements Part {
 	private $page;

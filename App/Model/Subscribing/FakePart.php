@@ -4,6 +4,9 @@ namespace Remembrall\Model\Subscribing;
 
 use Remembrall\Model\Access;
 
+/**
+ * Fake
+ */
 final class FakePart implements Part {
 	private $source;
 	private $content;

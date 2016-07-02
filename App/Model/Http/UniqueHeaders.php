@@ -4,6 +4,9 @@ namespace Remembrall\Model\Http;
 
 use Remembrall\Exception;
 
+/**
+ * Collection of unique headers without duplications
+ */
 final class UniqueHeaders implements Headers {
 	private $headers;
 

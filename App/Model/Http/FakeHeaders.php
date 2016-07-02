@@ -4,6 +4,9 @@ namespace Remembrall\Model\Http;
 
 use Remembrall\Exception;
 
+/**
+ * Fake
+ */
 final class FakeHeaders implements Headers {
 	private $headers;
 

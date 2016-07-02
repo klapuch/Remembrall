@@ -4,6 +4,9 @@ namespace Remembrall\Model\Http;
 
 use Psr\Http\Message;
 
+/**
+ * Default Http response with some additional headers
+ */
 final class DefaultResponse implements Response {
 	private $response;
 

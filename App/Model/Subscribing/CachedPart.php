@@ -6,7 +6,7 @@ use Nette\Caching;
 use Remembrall\Model\Access;
 
 /**
- * Can cache any given part
+ * Cache any given part
  */
 final class CachedPart implements Part {
 	private $origin;

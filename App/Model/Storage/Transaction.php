@@ -4,12 +4,23 @@ namespace Remembrall\Model\Storage;
 
 use Dibi;
 
+/**
+ * Single transaction for Dibi
+ */
 final class Transaction {
 	private $database;
 
 	public function __construct(Dibi\Connection $database) {
 		$this->database = $database;
 	}
+
+	/**
+	 * Start the transaction with proper commit/rollback
+	 * And rethrowing an exception in case error occur
+	 * @param \Closure $callback
+	 * @return mixed
+	 * @throws \Throwable
+	 */
 	public function start(\Closure $callback) {
 		$this->database->begin();
 		try {

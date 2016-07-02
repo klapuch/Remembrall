@@ -7,6 +7,9 @@ use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message;
 use Remembrall\Exception\ExistenceException;
 
+/**
+ * Browser sending a http request and receiving http response
+ */
 final class WebBrowser implements Browser {
 	private $http;
 

@@ -6,7 +6,7 @@ use Dibi;
 use Remembrall\Exception;
 
 /**
- * Verification code may be used just once
+ * Verification code which can be used just once
  */
 final class DisposableVerificationCode implements VerificationCode {
 	private $code;

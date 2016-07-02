@@ -2,6 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Http;
 
+/**
+ * Fake
+ */
 final class FakeHeader implements Header {
 	private $field;
 	private $value;

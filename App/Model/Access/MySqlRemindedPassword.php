@@ -6,7 +6,7 @@ use Dibi;
 use Remembrall\Model\Security;
 
 /**
- * Changes password in the database
+ * Reminded password stored in the MySql database
  */
 final class MySqlRemindedPassword implements RemindedPassword {
 	private $reminder;

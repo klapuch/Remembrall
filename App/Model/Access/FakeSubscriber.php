@@ -2,6 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Access;
 
+/**
+ * Fake
+ */
 final class FakeSubscriber implements Subscriber {
 	private $id;
 	private $email;

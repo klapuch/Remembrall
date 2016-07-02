@@ -2,6 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+/**
+ * Fake
+ */
 final class FakeExpression implements Expression {
 	private $expression;
 	private $match;

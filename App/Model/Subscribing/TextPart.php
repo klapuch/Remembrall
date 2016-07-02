@@ -5,7 +5,7 @@ namespace Remembrall\Model\Subscribing;
 use Remembrall\Model\Access;
 
 /**
- * Text part without tags
+ * Text part without tags or other elements
  */
 final class TextPart implements Part {
 	private $origin;

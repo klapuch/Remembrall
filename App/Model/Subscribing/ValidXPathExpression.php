@@ -6,6 +6,7 @@ use Remembrall\Exception;
 
 /**
  * XPath expression must be only valid
+ * By "valid" is meant that it must produce some nodes
  */
 final class ValidXPathExpression implements Expression {
 	private $origin;

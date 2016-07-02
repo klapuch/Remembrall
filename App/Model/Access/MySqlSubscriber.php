@@ -5,7 +5,7 @@ namespace Remembrall\Model\Access;
 use Dibi;
 
 /**
- * Subscriber
+ * Subscriber in the MySql database
  */
 final class MySqlSubscriber implements Subscriber {
 	private $id;

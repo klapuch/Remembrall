@@ -5,7 +5,7 @@ namespace Remembrall\Model\Subscribing;
 use Nette\Caching;
 
 /**
- * Can cache any given page
+ * Cache any given page
  */
 final class CachedPage implements Page {
 	private $origin;

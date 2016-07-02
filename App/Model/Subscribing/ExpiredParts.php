@@ -7,7 +7,7 @@ use Remembrall\Exception;
 use Remembrall\Model\Access;
 
 /**
- * Expired parts by the given page
+ * Expired parts on the given page
  */
 final class ExpiredParts implements Parts {
 	private $origin;

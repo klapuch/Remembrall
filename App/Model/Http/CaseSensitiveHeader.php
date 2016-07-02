@@ -2,6 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Http;
 
+/**
+ * Case sensitive header where does not depend on upper case or lower case chars
+ */
 final class CaseSensitiveHeader implements Header {
 	private $field;
 	private $value;
