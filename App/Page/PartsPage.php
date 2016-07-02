@@ -75,7 +75,8 @@ final class PartsPage extends BasePage {
 							$this->user->getId(),
 							$this->database
 						)
-					), new Storages\MemoryStorage()
+					),
+					new Storages\MemoryStorage()
 				),
 				new Subscribing\FutureInterval(
 					new Subscribing\DateTimeInterval(

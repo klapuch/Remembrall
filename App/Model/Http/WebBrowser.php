@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Http;
 
 use GuzzleHttp;
-use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message;
 use Remembrall\Exception\ExistenceException;
 
@@ -30,9 +30,9 @@ final class WebBrowser implements Browser {
 					)
 				)
 			);
-		} catch(ConnectException $ex) {
+		} catch(RequestException $ex) {
 			throw new ExistenceException(
-				'Given URL does not exist',
+				'Connection could not be established. Does the URL really exist?',
 				$ex->getCode(),
 				$ex
 			);

@@ -57,7 +57,7 @@ final class WebBrowser extends Tester\TestCase {
 	}
 
 	/**
-	 * @throws \Remembrall\Exception\ExistenceException Given URL does not exist
+	 * @throws \Remembrall\Exception\ExistenceException Connection could not be established. Does the URL really exist?
 	 */
 	public function testUnknownUrl() {
 		$http = new GuzzleHttp\Client();
@@ -65,6 +65,20 @@ final class WebBrowser extends Tester\TestCase {
 			new Http\ConstantRequest(
 				new Http\FakeHeaders(
 					['method' => 'get', 'host' => 'http://www.čoromoro.xx', 'http_errors' => '']
+				)
+			)
+		);
+	}
+
+	/**
+	 * @throws \Remembrall\Exception\ExistenceException Connection could not be established. Does the URL really exist?
+	 */
+	public function testEmptyUrl() {
+		$http = new GuzzleHttp\Client();
+		(new Http\WebBrowser($http))->send(
+			new Http\ConstantRequest(
+				new Http\FakeHeaders(
+					['method' => 'get', 'host' => '', 'http_errors' => '']
 				)
 			)
 		);

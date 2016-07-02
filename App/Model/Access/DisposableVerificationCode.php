@@ -17,7 +17,7 @@ final class DisposableVerificationCode implements VerificationCode {
 		$this->database = $database;
 	}
 
-	public function use () {
+	public function use() {
 		if($this->used()) {
 			throw new Exception\DuplicateException(
 				'Verification code was already used'

@@ -5,7 +5,7 @@ namespace Remembrall\Model\Access;
 use Dibi;
 
 /**
- * Allows to remind just X password in Y hours
+ * Allows to remind just X passwords in Y hours
  */
 final class LimitedForgottenPasswords implements ForgottenPasswords {
 	const ATTEMPT_LIMIT = 3;
