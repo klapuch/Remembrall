@@ -1,20 +1,19 @@
 <?php
 namespace Remembrall\Router;
 
-use Nette\Application\Routers\{
-	Route, RouteList
-};
+use Nette;
+use Nette\Application\Routers\Route;
+use Nette\Application\Routers\RouteList;
 
 class RouterFactory {
+	use Nette\StaticClass;
+
 	/**
-	 * @return \Nette\Application\IRouter
+	 * @return Nette\Application\IRouter
 	 */
 	public static function createRouter() {
 		$router = new RouteList;
-		$router[] = new Route(
-			'<presenter>[/<action>][/<id [0-9]+>]',
-			'Default:default'
-		);
+		$router[] = new Route('<presenter>/<action>[/<id>]', 'Default:default');
 		return $router;
 	}
 }

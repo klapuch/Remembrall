@@ -4,8 +4,8 @@
     <meta charset="UTF-8"/>
     <meta name="robots" content="index, follow">
     <link href="{$basePath}/images/favicon32.png" rel="icon" type="image/png"/>
-    <title>{ifset title}{include title|striptags|trim}{/ifset}</title>
-    <meta name="description" content="{ifset description}{include description|striptags|trim|truncate:150}"{/ifset}>
+    <title>{ifset title}{include title|stripHtml|trim}{/ifset}</title>
+    <meta name="description" content="{ifset description}{include description|stripHtml|trim|truncate:150}"{/ifset}>
     <meta name="author" content="Dominik Klapuch"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="{$basePath}/css/bootstrap.min.css"

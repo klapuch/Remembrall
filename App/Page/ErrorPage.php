@@ -1,11 +1,12 @@
 <?php
-namespace Remembrall\Page;
+namespace App\Presenters;
 
 use Nette;
 use Nette\Application\Responses;
 use Tracy\ILogger;
 
-class ErrorPage extends Nette\Object implements Nette\Application\IPresenter {
+class ErrorPage implements Nette\Application\IPresenter {
+	use Nette\SmartObject;
 	/** @var ILogger */
 	private $logger;
 
@@ -16,8 +17,11 @@ class ErrorPage extends Nette\Object implements Nette\Application\IPresenter {
 	public function run(Nette\Application\Request $request) {
 		$exception = $request->getParameter('exception');
 		if($exception instanceof Nette\Application\BadRequestException) {
+			list($module, , $sep) = Nette\Application\Helpers::splitName(
+				$request->getPresenterName()
+			);
 			return new Responses\ForwardResponse(
-				$request->setPresenterName('Error4xx')
+				$request->setPresenterName($module . $sep . 'Error4xx')
 			);
 		}
 		$this->logger->log($exception, ILogger::EXCEPTION);
