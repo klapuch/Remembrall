@@ -1,11 +1,10 @@
-parameters:
-    database:
-        driver: mysqli
-        host: 127.0.0.1
-        username: root
-        password:
-        database: remembrall
-        lazy: TRUE
+dibi:
+    driver: mysqli
+    host: 127.0.0.1
+    username: root
+    password:
+    database: remembrall
+    lazy: true
 php:
     date.timezone: Europe/Prague
     default_charset: UTF-8
@@ -30,13 +29,13 @@ http:
         X-Frame-Options: DENY
         X-Content-Type-Options: nosniff
         X-Powered-By: ""
+extensions:
+    dibi: Dibi\Bridges\Nette\DibiExtension22
 forms:
     messages:
         FILLED: "Please, fill %label field."
         PROTECTION: "Timeout. Please, make the operation once again."
 services:
-    connection:
-        class: Dibi\Connection(%database%)
     router: Remembrall\Router\RouterFactory::createRouter
     texy: Texy\Texy
     latte.latteFactory:

@@ -1,58 +1,32 @@
 <?php
+declare(strict_types = 1);
 namespace Remembrall\Page;
 
-use GuzzleHttp;
-use Nette\Application\UI\Form;
-use Nette\Caching\Storages;
-use Nette\Utils\ArrayHash;
-use Remembrall\Exception;
+use Remembrall\Component;
 use Remembrall\Model\{
-	Access, Http, Subscribing
+	Access, Subscribing
 };
 
 final class PartsPage extends BasePage {
 	public function createComponentPartForm() {
-		$form = new Form();
-		$form->addText('url', 'URL');
-		$form->addText('expression', 'XPath expression');
-		$form->addText('start', 'Start');
-		$form->addText('interval', 'Interval');
-		$form->addSubmit('act', 'Act');
-		$form->onSuccess[] = function(Form $form, ArrayHash $values) {
-			$this->succeededPartForm($form, $values);
+		$form = new Component\PartForm(
+			$this->user->getIdentity(),
+			$this->database,
+			$this->logger
+		);
+		$form->onSuccess[] = function() {
+			$this->flashMessage(
+				'Part has been successfully subscribed',
+				'success'
+			);
+			$this->redirect('this');
 		};
 		return $form;
 	}
 
-	public function succeededPartForm(Form $form, ArrayHash $values) {
-		try {
-			$request = new Http\ConstantRequest(
-				new Http\CaseSensitiveHeaders(
-					new Http\UniqueHeaders(
-						[
-							'host' => $values['url'],
-							'method' => 'GET',
-							'http_errors' => false,
-						]
-					)
-				)
-			);
-			$response = (new Http\WebBrowser(new GuzzleHttp\Client()))
-				->send($request);
-			$addedPage = (new Subscribing\MySqlPages($this->database))->add(
-				new Subscribing\AvailableWebPage(
-					new Subscribing\HtmlWebPage(
-						$request, $response
-					),
-					$response
-				)
-			);
-			$addedPart = (new Subscribing\LimitedParts(
-				$this->database,
-				new Access\MySqlSubscriber(
-					$this->user->getId(),
-					$this->database
-				),
+	public function createComponentParts() {
+		return new Component\Parts(
+			new Subscribing\LoggedParts(
 				new Subscribing\OwnedParts(
 					$this->database,
 					new Access\MySqlSubscriber(
@@ -60,37 +34,11 @@ final class PartsPage extends BasePage {
 						$this->database
 					),
 					new Subscribing\CollectiveParts($this->database)
-				)
-			))->subscribe(
-				new Subscribing\CachedPart(
-					new Subscribing\HtmlPart(
-						$addedPage,
-						new Subscribing\ValidXPathExpression(
-							new Subscribing\XPathExpression(
-								$addedPage,
-								$values['expression']
-							)
-						),
-						new Access\MySqlSubscriber(
-							$this->user->getId(),
-							$this->database
-						)
-					),
-					new Storages\MemoryStorage()
 				),
-				new Subscribing\FutureInterval(
-					new Subscribing\DateTimeInterval(
-						new \DateTimeImmutable($values['start']),
-						new \DateInterval(
-							sprintf('PT%dM', max(0, $values['interval']))
-						)
-					)
-				)
-			);
-			$this->template->part = $addedPart;
-		} catch(\Exception $ex) {
-			$this->flashMessage($ex->getMessage(), 'danger');
-		}
+				$this->logger
+			),
+			$this->user->getIdentity()
+		);
 	}
 
 	public function renderDefault() {

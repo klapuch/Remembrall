@@ -20,7 +20,7 @@ final class LoggedParts extends TestCase\Mockery {
 		$ex = new \Exception('exceptionMessage');
 		$parts = $this->mockery(Subscribing\Parts::class);
 		$parts->shouldReceive('subscribe')->andThrowExceptions([$ex]);
-		$logger = $this->mockery('Tracy\Logger');
+		$logger = $this->mockery('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
 		(new Subscribing\LoggedParts($parts, $logger))
 			->subscribe(
@@ -31,7 +31,7 @@ final class LoggedParts extends TestCase\Mockery {
 
 	public function testNoExceptionDuringSubscribing() {
 		Assert::noError(function() {
-			$logger = $this->mockery('Tracy\Logger');
+			$logger = $this->mockery('Tracy\ILogger');
 			(new Subscribing\LoggedParts(
 				new Subscribing\FakeParts(), $logger
 			))->subscribe(
@@ -48,7 +48,7 @@ final class LoggedParts extends TestCase\Mockery {
 		$ex = new \Exception('exceptionMessage');
 		$parts = $this->mockery(Subscribing\Parts::class);
 		$parts->shouldReceive('replace')->andThrowExceptions([$ex]);
-		$logger = $this->mockery('Tracy\Logger');
+		$logger = $this->mockery('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
 		(new Subscribing\LoggedParts($parts, $logger))
 			->replace(
@@ -59,7 +59,7 @@ final class LoggedParts extends TestCase\Mockery {
 
 	public function testNoExceptionDuringReplacing() {
 		Assert::noError(function() {
-			$logger = $this->mockery('Tracy\Logger');
+			$logger = $this->mockery('Tracy\ILogger');
 			(new Subscribing\LoggedParts(
 				new Subscribing\FakeParts(), $logger
 			))->replace(
@@ -76,7 +76,7 @@ final class LoggedParts extends TestCase\Mockery {
 		$ex = new \Exception('exceptionMessage');
 		$parts = $this->mockery(Subscribing\Parts::class);
 		$parts->shouldReceive('remove')->andThrowExceptions([$ex]);
-		$logger = $this->mockery('Tracy\Logger');
+		$logger = $this->mockery('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
 		(new Subscribing\LoggedParts($parts, $logger))
 			->remove(
@@ -86,7 +86,7 @@ final class LoggedParts extends TestCase\Mockery {
 
 	public function testNoExceptionDuringRemoving() {
 		Assert::noError(function() {
-			$logger = $this->mockery('Tracy\Logger');
+			$logger = $this->mockery('Tracy\ILogger');
 			(new Subscribing\LoggedParts(
 				new Subscribing\FakeParts(), $logger
 			))->remove(new Subscribing\FakePart());
@@ -100,7 +100,7 @@ final class LoggedParts extends TestCase\Mockery {
 		$ex = new \Exception('exceptionMessage');
 		$parts = $this->mockery(Subscribing\Parts::class);
 		$parts->shouldReceive('iterate')->andThrowExceptions([$ex]);
-		$logger = $this->mockery('Tracy\Logger');
+		$logger = $this->mockery('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
 		(new Subscribing\LoggedParts($parts, $logger))
 			->iterate();
@@ -108,7 +108,7 @@ final class LoggedParts extends TestCase\Mockery {
 
 	public function testNoExceptionDuringIterating() {
 		Assert::noError(function() {
-			$logger = $this->mockery('Tracy\Logger');
+			$logger = $this->mockery('Tracy\ILogger');
 			(new Subscribing\LoggedParts(
 				new Subscribing\FakeParts(), $logger
 			))->iterate();

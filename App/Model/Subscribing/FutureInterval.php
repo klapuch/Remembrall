@@ -16,7 +16,7 @@ final class FutureInterval implements Interval {
 	public function start(): \DateTimeInterface {
 		if($this->origin->start() >= new \DateTimeImmutable())
 			return $this->origin->start();
-		throw new \OutOfRangeException('Begin step must points to the future');
+		throw new \OutOfRangeException('Start interval must points to the future');
 	}
 
 	public function next(): \DateTimeInterface {

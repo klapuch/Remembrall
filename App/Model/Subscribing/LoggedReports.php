@@ -11,7 +11,7 @@ final class LoggedReports implements Reports {
 	private $origin;
 	private $logger;
 
-	public function __construct(Reports $origin, Tracy\Logger $logger) {
+	public function __construct(Reports $origin, Tracy\ILogger $logger) {
 		$this->origin = $origin;
 		$this->logger = $logger;
 	}

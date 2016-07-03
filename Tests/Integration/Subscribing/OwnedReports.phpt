@@ -21,7 +21,7 @@ final class OwnedReports extends TestCase\Database {
 			(1, "//p", "a", "PT1M", 1),
 			(2, "//h1", "b", "PT1M", 1),
 			(1, "//h2", "c", "PT2M", 2),
-			(1, "//h2", "d", "PT2M", 1)'
+			(1, "//h3", "d", "PT2M", 1)'
 		);
 		$this->database->query(
 			'INSERT INTO part_visits (part_id, visited_at) VALUES
@@ -36,11 +36,11 @@ final class OwnedReports extends TestCase\Database {
 			$this->database
 		))->iterate();
 		Assert::count(3, $reports);
-		Assert::same(1, $reports[0]->id());
+		Assert::same('//p', (string)$reports[0]->content()->expression());
 		Assert::same($owner, $reports[0]->recipient());
-		Assert::same(2, $reports[1]->id());
+		Assert::same('//h1', (string)$reports[1]->content()->expression());
 		Assert::same($owner, $reports[1]->recipient());
-		Assert::same(4, $reports[2]->id());
+		Assert::same('//h3', (string)$reports[2]->content()->expression());
 		Assert::same($owner, $reports[2]->recipient());
 	}
 

@@ -11,6 +11,9 @@ abstract class BasePage extends Nette\Application\UI\Presenter {
 	/** @inject @var \Dibi\Connection */
 	public $database;
 
+	/** @inject @var \Tracy\ILogger */
+	public $logger;
+
 	public function startup() {
 		parent::startup();
 		$this->user->login(new Security\Identity(1));

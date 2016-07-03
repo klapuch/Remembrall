@@ -11,7 +11,7 @@ final class LoggedParts implements Parts {
 	private $origin;
 	private $logger;
 
-	public function __construct(Parts $origin, Tracy\Logger $logger) {
+	public function __construct(Parts $origin, Tracy\ILogger $logger) {
 		$this->origin = $origin;
 		$this->logger = $logger;
 	}

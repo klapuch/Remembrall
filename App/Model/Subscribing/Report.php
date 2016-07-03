@@ -5,11 +5,6 @@ namespace Remembrall\Model\Subscribing;
 use Remembrall\Model\Access;
 
 interface Report {
-	/** ID of the report
-	 * @return int
-	 */
-	public function id(): int;
-
 	/**
 	 * The one for whom is the report generated
 	 * @return Access\Subscriber

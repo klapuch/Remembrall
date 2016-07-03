@@ -1,0 +1,28 @@
+{form form class => form-horizontal, role => form}
+    {include 'formErrors.latte' form => $form}
+    <div class="form-group">
+        <div class="col-sm-5">
+            {label url}
+            {input url class => 'form-control'}
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-5">
+            {label expression}
+            {input expression class => 'form-control'}
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-5">
+            {label start}
+            {input start class => 'form-control'}
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-5">
+            {label interval}
+            {input interval class => 'form-control'}
+        </div>
+    </div>
+    {input act class => 'btn btn-success'}
+{/form}

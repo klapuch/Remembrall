@@ -36,7 +36,6 @@ final class OwnedReports implements Reports {
 			),
 			function($previous, Dibi\Row $row) {
 				$previous[] = new ConstantReport(
-					$row['report_id'],
 					$this->owner,
 					new ConstantPart(
 						new ConstantPage(

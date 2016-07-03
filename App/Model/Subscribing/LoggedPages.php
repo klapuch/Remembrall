@@ -11,7 +11,7 @@ final class LoggedPages implements Pages {
 	private $origin;
 	private $logger;
 
-	public function __construct(Pages $origin, Tracy\Logger $logger) {
+	public function __construct(Pages $origin, Tracy\ILogger $logger) {
 		$this->origin = $origin;
 		$this->logger = $logger;
 	}

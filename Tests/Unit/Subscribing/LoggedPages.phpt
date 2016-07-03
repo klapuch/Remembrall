@@ -20,7 +20,7 @@ final class LoggedPages extends TestCase\Mockery {
 		$ex = new \Exception('exceptionMessage');
 		$parts = $this->mockery(Subscribing\Pages::class);
 		$parts->shouldReceive('add')->andThrowExceptions([$ex]);
-		$logger = $this->mockery('Tracy\Logger');
+		$logger = $this->mockery('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
 		(new Subscribing\LoggedPages($parts, $logger))
 			->add(new Subscribing\FakePage());
@@ -28,7 +28,7 @@ final class LoggedPages extends TestCase\Mockery {
 
 	public function testNoExceptionDuringAdding() {
 		Assert::noError(function() {
-			$logger = $this->mockery('Tracy\Logger');
+			$logger = $this->mockery('Tracy\ILogger');
 			(new Subscribing\LoggedPages(
 				new Subscribing\FakePages(), $logger
 			))->add(new Subscribing\FakePage());
@@ -42,14 +42,14 @@ final class LoggedPages extends TestCase\Mockery {
 		$ex = new \Exception('exceptionMessage');
 		$parts = $this->mockery(Subscribing\Pages::class);
 		$parts->shouldReceive('iterate')->andThrowExceptions([$ex]);
-		$logger = $this->mockery('Tracy\Logger');
+		$logger = $this->mockery('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
 		(new Subscribing\LoggedPages($parts, $logger))->iterate();
 	}
 
 	public function testNoExceptionDuringIterating() {
 		Assert::noError(function() {
-			$logger = $this->mockery('Tracy\Logger');
+			$logger = $this->mockery('Tracy\ILogger');
 			(new Subscribing\LoggedPages(
 				new Subscribing\FakePages(), $logger
 			))->iterate();

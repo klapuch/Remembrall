@@ -79,7 +79,7 @@ final class FutureInterval extends Tester\TestCase {
 	}
 
 	/**
-	 * @throws \OutOfRangeException Begin step must points to the future
+	 * @throws \OutOfRangeException Start interval must points to the future
 	 */
 	public function testPastStart() {
 		(new Subscribing\FutureInterval(

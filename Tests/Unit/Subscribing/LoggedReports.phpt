@@ -20,7 +20,7 @@ final class LoggedReports extends TestCase\Mockery {
 		$ex = new \Exception('exceptionMessage');
 		$parts = $this->mockery(Subscribing\Reports::class);
 		$parts->shouldReceive('archive')->andThrowExceptions([$ex]);
-		$logger = $this->mockery('Tracy\Logger');
+		$logger = $this->mockery('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
 		(new Subscribing\LoggedReports($parts, $logger))
 			->archive(new Subscribing\FakePart());
@@ -28,7 +28,7 @@ final class LoggedReports extends TestCase\Mockery {
 
 	public function testNoExceptionDuringArchiving() {
 		Assert::noError(function() {
-			$logger = $this->mockery('Tracy\Logger');
+			$logger = $this->mockery('Tracy\ILogger');
 			(new Subscribing\LoggedReports(
 				new Subscribing\FakeReports(), $logger
 			))->archive(new Subscribing\FakePart());
@@ -42,14 +42,14 @@ final class LoggedReports extends TestCase\Mockery {
 		$ex = new \Exception('exceptionMessage');
 		$parts = $this->mockery(Subscribing\Reports::class);
 		$parts->shouldReceive('iterate')->andThrowExceptions([$ex]);
-		$logger = $this->mockery('Tracy\Logger');
+		$logger = $this->mockery('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
 		(new Subscribing\LoggedReports($parts, $logger))->iterate();
 	}
 
 	public function testNoExceptionDuringIterating() {
 		Assert::noError(function() {
-			$logger = $this->mockery('Tracy\Logger');
+			$logger = $this->mockery('Tracy\ILogger');
 			(new Subscribing\LoggedReports(
 				new Subscribing\FakeReports(), $logger
 			))->iterate();

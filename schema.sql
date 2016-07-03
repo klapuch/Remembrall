@@ -63,7 +63,7 @@ CREATE TABLE `part_visits` (
   `visited_at` datetime NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `part_id` (`part_id`),
-  CONSTRAINT `part_visits_ibfk_1` FOREIGN KEY (`part_id`) REFERENCES `parts` (`ID`)
+  CONSTRAINT `part_visits_ibfk_1` FOREIGN KEY (`part_id`) REFERENCES `parts` (`ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
