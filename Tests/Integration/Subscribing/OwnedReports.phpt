@@ -32,13 +32,16 @@ final class OwnedReports extends TestCase\Database {
 			(1, NOW()), (2, NOW()), (3, NOW()), (4, NOW())'
 		);
 		$reports = (new Subscribing\OwnedReports(
-			new Access\FakeSubscriber(1),
+			$owner = new Access\FakeSubscriber(1),
 			$this->database
 		))->iterate();
 		Assert::count(3, $reports);
 		Assert::same(1, $reports[0]->id());
+		Assert::same($owner, $reports[0]->recipient());
 		Assert::same(2, $reports[1]->id());
+		Assert::same($owner, $reports[1]->recipient());
 		Assert::same(4, $reports[2]->id());
+		Assert::same($owner, $reports[2]->recipient());
 	}
 
 	public function testArchiving() {
