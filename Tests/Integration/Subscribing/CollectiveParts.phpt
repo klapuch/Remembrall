@@ -24,10 +24,10 @@ final class CollectiveParts extends TestCase\Database {
             $this->database
         ))->subscribe(
             new Subscribing\FakePart(
-                '<p>Content</p>',
-                new Subscribing\FakePage('www.google.com'),
-                false,
-                new Subscribing\FakeExpression('//p')
+				new Subscribing\FakePage('www.google.com'),
+				new Subscribing\FakeExpression('//p'),
+				'<p>Content</p>',
+                false
             ),
             new Subscribing\FakeInterval(
                 new \DateTimeImmutable('2000-01-01 01:01:01'),
@@ -66,17 +66,17 @@ final class CollectiveParts extends TestCase\Database {
 			$this->database
 		))->replace(
 			new Subscribing\FakePart(
-				'c',
 				new Subscribing\FakePage('www.google.com'),
-				true, // owned
 				new Subscribing\FakeExpression('//p'),
+				'c',
+				true, // owned
 				new Access\FakeSubscriber(666)
 			),
 			new Subscribing\FakePart(
-				'newContent',
 				null,
-				false,
 				new Subscribing\FakeExpression('//x'),
+				'newContent',
+				false,
 				new Access\FakeSubscriber(888)
 			)
 		);
@@ -143,9 +143,7 @@ final class CollectiveParts extends TestCase\Database {
 			$this->database
 		))->remove(
 			new Subscribing\FakePart(
-				null,
 				new Subscribing\FakePage('www.facedown.cz'),
-				false,
 				new Subscribing\FakeExpression('//b')
 			)
 		);

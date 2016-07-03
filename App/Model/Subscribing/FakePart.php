@@ -16,10 +16,10 @@ final class FakePart implements Part {
 	private $visitedAt;
 
 	public function __construct(
-		string $content = null,
 		Page $source = null,
-		bool $equals = false,
 		Expression $expression = null,
+		string $content = null,
+		bool $equals = false,
 		Access\Subscriber $owner = null,
 		Interval $visitedAt = null
 	) {

@@ -25,7 +25,6 @@ final class ConstantPart extends Tester\TestCase {
 				new Subscribing\FakeInterval()
 			))->equals(
 				new Subscribing\FakePart(
-					'',
 					new Subscribing\FakePage('seznam.cz')
 				)
 			)
@@ -42,8 +41,9 @@ final class ConstantPart extends Tester\TestCase {
 				new Subscribing\FakeInterval()
 			))->equals(
 				new Subscribing\FakePart(
-					'',
-					new Subscribing\FakePage('google.com')
+					new Subscribing\FakePage('google.com'),
+					null,
+					''
 				)
 			)
 		);
@@ -59,8 +59,9 @@ final class ConstantPart extends Tester\TestCase {
 				new Subscribing\FakeInterval()
 			))->equals(
 				new Subscribing\FakePart(
-					'abc',
-					new Subscribing\FakePage('google.com')
+					new Subscribing\FakePage('google.com'),
+					null,
+					'abc'
 				)
 			)
 		);

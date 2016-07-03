@@ -15,6 +15,8 @@ require __DIR__ . '/../../bootstrap.php';
 final class TextPart extends Tester\TestCase {
 	public function testStrippedHTMLTags() {
 		$part = new Subscribing\FakePart(
+			new Subscribing\FakePage('google.com'),
+			null,
 			'<p>Hi <span>there</span></p><div id="x"> Foo</div>'
 		);
 		Assert::same(
@@ -27,13 +29,15 @@ final class TextPart extends Tester\TestCase {
 		Assert::false(
 			(new Subscribing\TextPart(
 				new Subscribing\FakePart(
-					'',
-					new Subscribing\FakePage('google.com')
+					new Subscribing\FakePage('google.com'),
+					null,
+					''
 				)
 			))->equals(
 				new Subscribing\FakePart(
-					'',
-					new Subscribing\FakePage('seznam.cz')
+					new Subscribing\FakePage('seznam.cz'),
+					null,
+					''
 				)
 			)
 		);
@@ -43,13 +47,15 @@ final class TextPart extends Tester\TestCase {
 		Assert::false(
 			(new Subscribing\TextPart(
 				new Subscribing\FakePart(
-					'abc',
-					new Subscribing\FakePage('google.com')
+					new Subscribing\FakePage('google.com'),
+					null,
+					'abc'
 				)
 			))->equals(
 				new Subscribing\FakePart(
-					'',
-					new Subscribing\FakePage('google.com')
+					new Subscribing\FakePage('google.com'),
+					null,
+					''
 				)
 			)
 		);
@@ -59,13 +65,15 @@ final class TextPart extends Tester\TestCase {
 		Assert::true(
 			(new Subscribing\TextPart(
 				new Subscribing\FakePart(
-					'abc',
-					new Subscribing\FakePage('google.com')
+					new Subscribing\FakePage('google.com'),
+					null,
+					'abc'
 				)
 			))->equals(
 				new Subscribing\FakePart(
-					'abc',
-					new Subscribing\FakePage('google.com')
+					new Subscribing\FakePage('google.com'),
+					null,
+					'abc'
 				)
 			)
 		);

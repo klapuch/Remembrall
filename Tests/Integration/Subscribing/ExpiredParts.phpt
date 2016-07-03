@@ -34,10 +34,10 @@ final class ExpiredParts extends TestCase\Database {
 			$this->database
 		))->replace(
 			new Subscribing\FakePart(
-				'c',
 				new Subscribing\FakePage('google.com'),
-				false, // non-expired
-				new Subscribing\FakeExpression('//p')
+				new Subscribing\FakeExpression('//p'),
+				'c',
+				false // non-expired
 			),
 			new Subscribing\FakePart()
 		);
@@ -50,10 +50,10 @@ final class ExpiredParts extends TestCase\Database {
 			$this->database
 		))->replace(
 			new Subscribing\FakePart(
-				'c',
 				new Subscribing\FakePage('google.com'),
-				true, // expired
-				new Subscribing\FakeExpression('//p')
+				new Subscribing\FakeExpression('//p'),
+				'c',
+				true // expired
 			),
 			new Subscribing\FakePart()
 		);

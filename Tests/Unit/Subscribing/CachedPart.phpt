@@ -51,10 +51,10 @@ final class CachedPart extends TestCase\Mockery {
 			->times(4);
 		$page = new Subscribing\CachedPart(
 			new Subscribing\FakePart(
-				$content,
 				$source,
-				false,
 				$expression,
+				$content,
+				false,
 				$owner,
 				$visitedAt
 			),

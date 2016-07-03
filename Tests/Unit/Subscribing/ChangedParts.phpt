@@ -18,41 +18,41 @@ final class ChangedParts extends Tester\TestCase {
 	public function testIterating() {
 		$allParts = [
 			new Subscribing\FakePart(
+				new Subscribing\FakePage('google.com'),
+				new Subscribing\FakeExpression('//p'),
 				'a',
-				new Subscribing\FakePage('google.com'),
 				false,
-				new Subscribing\FakeExpression('//p'),
 				new Access\FakeSubscriber()
 			),
 			new Subscribing\FakePart(
+				new Subscribing\FakePage('google.com'),
+				new Subscribing\FakeExpression('//p'),
 				'b',
-				new Subscribing\FakePage('google.com'),
 				true,
-				new Subscribing\FakeExpression('//p'),
 				new Access\FakeSubscriber()
 			),
 			new Subscribing\FakePart(
-				'c',
 				new Subscribing\FakePage('google.com'),
-				false,
 				new Subscribing\FakeExpression('//p'),
+				'c',
+				false,
 				new Access\FakeSubscriber()
 			),
 		];
 		Assert::equal(
 			[
 				0 => new Subscribing\FakePart(
-					'a',
 					new Subscribing\FakePage('google.com'),
-					false,
 					new Subscribing\FakeExpression('//p'),
+					'a',
+					false,
 					new Access\FakeSubscriber()
 				),
 				2 => new Subscribing\FakePart(
-					'c',
 					new Subscribing\FakePage('google.com'),
-					false,
 					new Subscribing\FakeExpression('//p'),
+					'c',
+					false,
 					new Access\FakeSubscriber()
 				),
 			],
@@ -68,17 +68,17 @@ final class ChangedParts extends Tester\TestCase {
 	public function testReplacingUnchangedPart() {
 		$allParts = [
 			new Subscribing\FakePart(
-				'a',
 				new Subscribing\FakePage('google.com'),
-				false,
 				new Subscribing\FakeExpression('//p'),
+				'a',
+				false,
 				new Access\FakeSubscriber()
 			),
 			new Subscribing\FakePart(
-				'c',
 				new Subscribing\FakePage('google.com'),
-				false,
 				new Subscribing\FakeExpression('//p'),
+				'c',
+				false,
 				new Access\FakeSubscriber()
 			),
 		];
@@ -86,10 +86,10 @@ final class ChangedParts extends Tester\TestCase {
 			new Subscribing\FakeParts($allParts)
 		))->replace(
 			new Subscribing\FakePart(
-				'c',
 				new Subscribing\FakePage('google.com'),
-				false, // unchanged
 				new Subscribing\FakeExpression('//p'),
+				'c',
+				false, // unchanged
 				new Access\FakeSubscriber()
 			),
 			new Subscribing\FakePart()
@@ -99,17 +99,17 @@ final class ChangedParts extends Tester\TestCase {
 	public function testReplacingChangedPartWithNoError() {
 		$allParts = [
 			new Subscribing\FakePart(
-				'a',
 				new Subscribing\FakePage('google.com'),
-				false,
 				new Subscribing\FakeExpression('//p'),
+				'a',
+				false,
 				new Access\FakeSubscriber()
 			),
 			new Subscribing\FakePart(
-				'c',
 				new Subscribing\FakePage('google.com'),
-				false,
 				new Subscribing\FakeExpression('//p'),
+				'c',
+				false,
 				new Access\FakeSubscriber()
 			),
 		];
@@ -117,10 +117,10 @@ final class ChangedParts extends Tester\TestCase {
 			new Subscribing\FakeParts($allParts)
 		))->replace(
 			new Subscribing\FakePart(
-				'c',
 				new Subscribing\FakePage('google.com'),
-				true, // changed
 				new Subscribing\FakeExpression('//p'),
+				'c',
+				true, // changed
 				new Access\FakeSubscriber()
 			),
 			new Subscribing\FakePart()

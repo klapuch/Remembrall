@@ -24,9 +24,7 @@ final class Parts extends SecureControl {
 	public function handleRemove(string $url, string $expression) {
 		$this->parts->remove(
 			new Subscribing\FakePart(
-				'',
 				new Subscribing\FakePage($url),
-				false,
 				new Subscribing\FakeExpression($expression)
 			)
 		);

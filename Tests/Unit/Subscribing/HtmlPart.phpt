@@ -64,8 +64,8 @@ final class HtmlPart extends Tester\TestCase {
 				new Access\FakeSubscriber()
 			))->equals(
 				new Subscribing\FakePart(
-					'',
-					new Subscribing\FakePage('seznam.cz')
+					new Subscribing\FakePage('seznam.cz'),
+					''
 				)
 			)
 		);
@@ -84,8 +84,8 @@ final class HtmlPart extends Tester\TestCase {
 				new Access\FakeSubscriber()
 			))->equals(
 				new Subscribing\FakePart(
-					'<p>abc</p>',
-					new Subscribing\FakePage('google.com')
+					new Subscribing\FakePage('google.com'),
+					'<p>abc</p>'
 				)
 			)
 		);
@@ -104,8 +104,8 @@ final class HtmlPart extends Tester\TestCase {
 				new Access\FakeSubscriber()
 			))->equals(
 				new Subscribing\FakePart(
-					'<p>abc</p>',
-					new Subscribing\FakePage('google.com')
+					new Subscribing\FakePage('google.com'),
+					'<p>abc</p>'
 				)
 			)
 		);

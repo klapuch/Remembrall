@@ -22,10 +22,10 @@ final class OwnedParts extends TestCase\Database {
 			new Subscribing\FakeParts()
         ))->subscribe(
             new Subscribing\FakePart(
-                '<p>Content</p>',
-                new Subscribing\FakePage('www.google.com'),
-                false,
-                new Subscribing\FakeExpression('//p')
+				new Subscribing\FakePage('www.google.com'),
+				new Subscribing\FakeExpression('//p'),
+				'<p>Content</p>',
+                false
             ),
             new Subscribing\FakeInterval(
                 new \DateTimeImmutable('2000-01-01 01:01:01'),
@@ -59,10 +59,10 @@ final class OwnedParts extends TestCase\Database {
 		);
 		$parts->subscribe(
 			new Subscribing\FakePart(
-				'<p>Content</p>',
 				new Subscribing\FakePage('www.google.com'),
-				false,
-				new Subscribing\FakeExpression('//p')
+				new Subscribing\FakeExpression('//p'),
+				'<p>Content</p>',
+				false
 			),
 			new Subscribing\FakeInterval(
 				new \DateTimeImmutable('2000-01-01 01:01:01'),
@@ -73,10 +73,10 @@ final class OwnedParts extends TestCase\Database {
 		Assert::exception(function() use($parts) {
 			$parts->subscribe(
 				new Subscribing\FakePart(
-					'<p>Content</p>',
 					new Subscribing\FakePage('www.google.com'),
-					false,
-					new Subscribing\FakeExpression('//p')
+					new Subscribing\FakeExpression('//p'),
+					'<p>Content</p>',
+					false
 				),
 				new Subscribing\FakeInterval(
 					new \DateTimeImmutable('2000-01-01 01:01:01'),
@@ -135,10 +135,10 @@ final class OwnedParts extends TestCase\Database {
 			new Subscribing\FakeParts()
 		))->replace(
 			new Subscribing\FakePart(
-				'c',
 				new Subscribing\FakePage('www.google.com'),
-				false, // not owned
-				new Subscribing\FakeExpression('//p')
+				new Subscribing\FakeExpression('//p'),
+				'c',
+				false // not owned
 			),
 			new Subscribing\FakePart()
 		);
@@ -159,16 +159,16 @@ final class OwnedParts extends TestCase\Database {
 			new Subscribing\FakeParts()
 		))->replace(
 			new Subscribing\FakePart(
-				'c',
 				new Subscribing\FakePage('www.google.com'),
-				true, // owned
-				new Subscribing\FakeExpression('//p')
+				new Subscribing\FakeExpression('//p'),
+				'c',
+				true // owned
 			),
 			new Subscribing\FakePart(
-				'newContent',
 				null,
-				false,
-				new Subscribing\FakeExpression('//x')
+				new Subscribing\FakeExpression('//x'),
+				'newContent',
+				false
 			)
 		);
 		Assert::true(true);
@@ -189,10 +189,10 @@ final class OwnedParts extends TestCase\Database {
 			new Subscribing\FakeParts()
 		))->remove(
 			new Subscribing\FakePart(
-				null,
 				new Subscribing\FakePage('www.facedown.cz'),
-				false,
-				new Subscribing\FakeExpression('//b')
+				new Subscribing\FakeExpression('//b'),
+				null,
+				false
 			)
 		);
 		$parts = $this->database->fetchAll('SELECT ID FROM parts');

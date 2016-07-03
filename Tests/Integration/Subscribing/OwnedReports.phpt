@@ -54,9 +54,7 @@ final class OwnedReports extends TestCase\Database {
 			$this->database
 		))->archive(
 			new Subscribing\FakePart(
-				null,
 				new Subscribing\FakePage('www.google.com'),
-				false,
 				new Subscribing\FakeExpression('//h1')
 			)
 		);
