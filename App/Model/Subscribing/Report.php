@@ -23,7 +23,7 @@ interface Report {
 	public function content(): Part;
 
 	/**
-	 * DateTime when was the report generated
+	 * DateTime when was the report generated at
 	 * @return \DateTimeImmutable
 	 */
 	public function sentAt(): \DateTimeImmutable;
