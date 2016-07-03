@@ -65,6 +65,7 @@ final class HtmlPart extends Tester\TestCase {
 			))->equals(
 				new Subscribing\FakePart(
 					new Subscribing\FakePage('seznam.cz'),
+					null,
 					''
 				)
 			)
@@ -85,6 +86,7 @@ final class HtmlPart extends Tester\TestCase {
 			))->equals(
 				new Subscribing\FakePart(
 					new Subscribing\FakePage('google.com'),
+					null,
 					'<p>abc</p>'
 				)
 			)
@@ -105,6 +107,7 @@ final class HtmlPart extends Tester\TestCase {
 			))->equals(
 				new Subscribing\FakePart(
 					new Subscribing\FakePage('google.com'),
+					null,
 					'<p>abc</p>'
 				)
 			)
