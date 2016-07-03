@@ -80,5 +80,13 @@ CREATE TABLE `verification_codes` (
   UNIQUE KEY `subscriber_id` (`subscriber_id`)
 ) ENGINE=MyIsam DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
+DROP TABLE IF EXISTS `reports`;
+CREATE TABLE `reports` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `part_id` int(11) NOT NULL,
+  `sent_at` datetime NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=MyIsam DEFAULT COLLATE=utf8_czech_ci;
+
 
 -- 2016-06-18 07:55:08

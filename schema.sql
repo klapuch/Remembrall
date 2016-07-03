@@ -90,5 +90,15 @@ CREATE TABLE `verification_codes` (
   CONSTRAINT `verification_codes_ibfk_1` FOREIGN KEY (`subscriber_id`) REFERENCES `subscribers` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+DROP TABLE IF EXISTS `reports`;
+CREATE TABLE `reports` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `part_id` int(11) NOT NULL,
+  `sent_at` datetime NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `part_id` (`part_id`),
+  CONSTRAINT `reports_ibfk_1` FOREIGN KEY (`part_id`) REFERENCES `parts` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
 
 -- 2016-06-25 14:58:00

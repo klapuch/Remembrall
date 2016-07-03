@@ -15,7 +15,8 @@
     "dibi/dibi": "^3.0",
     "mockery/mockery": "^0.9.5",
     "guzzlehttp/guzzle": "^6.2",
-    "texy/texy": "^2.9.0"
+    "texy/texy": "^2.9.0",
+    "kdyby/monolog": "^1.2"
   },
   "autoload": {
     "psr-4": {
