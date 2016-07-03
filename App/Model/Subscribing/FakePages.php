@@ -6,11 +6,17 @@ namespace Remembrall\Model\Subscribing;
  * Fake
  */
 final class FakePages implements Pages {
-	public function add(Page $page): Page {
+	private $pages;
 
+	public function __construct(array $pages = []) {
+		$this->pages = $pages;
+	}
+
+	public function add(Page $page): Page {
+		return $page;
 	}
 
 	public function iterate(): array {
-
+		return $this->pages;
 	}
 }

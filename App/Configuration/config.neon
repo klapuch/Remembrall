@@ -34,10 +34,6 @@ forms:
     messages:
         FILLED: "Please, fill %label field."
         PROTECTION: "Timeout. Please, make the operation once again."
-extensions:
-    monolog: Kdyby\Monolog\DI\MonologExtension
-monolog:
-    name: remembrall
 services:
     connection:
         class: Dibi\Connection(%database%)

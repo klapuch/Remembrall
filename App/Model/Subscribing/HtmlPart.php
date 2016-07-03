@@ -54,7 +54,7 @@ final class HtmlPart implements Part {
 	}
 
 	/**
-	 * It is not possible to ensure when was the part visited
+	 * Part is visited just now
 	 * @return Interval
 	 */
 	public function visitedAt(): Interval {
