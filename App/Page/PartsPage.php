@@ -37,7 +37,8 @@ final class PartsPage extends BasePage {
 				),
 				$this->logger
 			),
-			$this->user->getIdentity()
+			new Access\MySqlSubscriber($this->user->getId(), $this->database),
+			$this->database
 		);
 	}
 

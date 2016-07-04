@@ -62,7 +62,9 @@ final class CollectiveParts implements Parts {
 
 	public function replace(Part $old, Part $new) {
 		$this->database->query(
-			'UPDATE parts SET content = ?
+			'UPDATE parts
+			INNER JOIN part_visits ON part_visits.part_id = parts.ID
+			SET content = ?, visited_at = NOW()
 			WHERE subscriber_id = ?
 			AND expression = ?
 			AND page_id = (SELECT ID FROM pages WHERE url = ?)',

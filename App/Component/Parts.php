@@ -2,16 +2,27 @@
 declare(strict_types = 1);
 namespace Remembrall\Component;
 
+use Dibi;
+use GuzzleHttp;
+use Nette\Caching\Storages;
 use Nette\Security;
 use Remembrall\Model\{
-	Access, Subscribing
+	Access, Http, Subscribing
 };
 
 final class Parts extends SecureControl {
 	private $parts;
+	private $myself;
+	private $database;
 
-	public function __construct(Subscribing\Parts $parts) {
+	public function __construct(
+		Subscribing\Parts $parts,
+		Access\Subscriber $myself,
+		Dibi\Connection $database
+	) {
 		$this->parts = $parts;
+		$this->myself = $myself;
+		$this->database = $database;
 		parent::__construct();
 	}
 
@@ -33,5 +44,50 @@ final class Parts extends SecureControl {
 			$this->presenter->redirect('this');
 		}
 		$this->redrawControl();
+	}
+
+	public function handleRefresh(string $url, string $expression) {
+		try {
+			$request = new Http\ConstantRequest(
+				new Http\CaseSensitiveHeaders(
+					new Http\UniqueHeaders(
+						[
+							'host' => $url,
+							'method' => 'GET',
+							'http_errors' => false,
+						]
+					)
+				)
+			);
+			$page = new Subscribing\HtmlWebPage(
+				$request,
+				(new Http\WebBrowser(new GuzzleHttp\Client()))->send($request)
+			);
+			(new Subscribing\ExpiredParts(
+				$this->parts, $page, $this->database
+			))->replace(
+				new Subscribing\OwnedPart(
+					$this->database,
+					new Subscribing\FakeExpression($expression),
+					$this->myself,
+					new Subscribing\FakePage($url)
+				),
+				new Subscribing\CachedPart(
+					new Subscribing\HtmlPart(
+						$page,
+						new Subscribing\ValidXPathExpression(
+							new Subscribing\XPathExpression($page, $expression)
+						),
+						$this->myself
+					),
+					new Storages\MemoryStorage()
+				)
+			);
+			$this->presenter->flashMessage('The part has been refreshed', 'success');
+		} catch(\Throwable $ex) {
+			$this->presenter->flashMessage($ex->getMessage(), 'danger');
+		} finally {
+			$this->presenter->redirect('this');
+		}
 	}
 }

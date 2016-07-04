@@ -59,6 +59,10 @@ final class CollectiveParts extends TestCase\Database {
 
 	public function testReplacing() {
 		$this->database->query(
+			'INSERT INTO part_visits (part_id, visited_at) VALUES
+			(1, "2000-01-01 01:01:01")'
+		);
+		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
 			(1, "//p", "a", "PT1M", 666)'
 		);
@@ -81,7 +85,10 @@ final class CollectiveParts extends TestCase\Database {
 			)
 		);
 		$parts = $this->database->fetchAll(
-			'SELECT content, subscriber_id, expression, page_id FROM parts'
+			'SELECT content, subscriber_id, expression, page_id,
+			part_visits.visited_at
+			FROM parts
+			INNER JOIN part_visits ON part_visits.part_id = parts.ID'
 		);
 		Assert::count(1, $parts);
 		$part = current($parts);
@@ -89,6 +96,7 @@ final class CollectiveParts extends TestCase\Database {
 		Assert::same(666, $part['subscriber_id']);  // without change
 		Assert::same('//p', $part['expression']); // without change
 		Assert::same(1, $part['page_id']); // without change
+		Assert::notSame('2000-01-01 01:01:01', (string)$part['visited_at']);
 	}
 
 	public function testIteratingOverAllPages() {
