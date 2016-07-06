@@ -33,17 +33,27 @@ final class Parts extends SecureControl {
 	}
 
 	public function handleRemove(string $url, string $expression) {
-		$this->parts->remove(
-			new Subscribing\FakePart(
-				new Subscribing\FakePage($url),
-				new Subscribing\FakeExpression($expression)
-			)
-		);
-		if(!$this->presenter->isAjax()) {
-			$this->presenter->flashMessage('Part has been deleted', 'success');
+		try {
+			$this->parts->remove(
+				new Subscribing\OwnedPart(
+					$this->database,
+					new Subscribing\FakeExpression($expression),
+					$this->myself,
+					new Subscribing\FakePage($url)
+				)
+			);
+			if(!$this->presenter->isAjax()) {
+				$this->presenter->flashMessage(
+					'Part has been deleted',
+					'success'
+				);
+				$this->presenter->redirect('this');
+			}
+			$this->redrawControl();
+		} catch(\Throwable $ex) {
+			$this->presenter->flashMessage($ex->getMessage(), 'danger');
 			$this->presenter->redirect('this');
 		}
-		$this->redrawControl();
 	}
 
 	public function handleRefresh(string $url, string $expression) {

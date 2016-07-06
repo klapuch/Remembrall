@@ -126,6 +126,9 @@ final class OwnedParts extends TestCase\Database {
 	 */
 	public function testReplacingForeign() {
 		$this->database->query(
+			'INSERT INTO part_visits (part_id, visited_at) VALUES (1, NOW())'
+		);
+		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
 			(1, "//a", "a", "PT1M", 666)'
 		);
@@ -136,9 +139,8 @@ final class OwnedParts extends TestCase\Database {
 		))->replace(
 			new Subscribing\FakePart(
 				new Subscribing\FakePage('www.google.com'),
-				new Subscribing\FakeExpression('//p'),
-				'c',
-				false // not owned
+				new Subscribing\FakeExpression('//a'),
+				'xxx'
 			),
 			new Subscribing\FakePart()
 		);
@@ -161,14 +163,12 @@ final class OwnedParts extends TestCase\Database {
 			new Subscribing\FakePart(
 				new Subscribing\FakePage('www.google.com'),
 				new Subscribing\FakeExpression('//p'),
-				'c',
-				true // owned
+				'a'
 			),
 			new Subscribing\FakePart(
 				null,
 				new Subscribing\FakeExpression('//x'),
-				'newContent',
-				false
+				'newContent'
 			)
 		);
 		Assert::true(true);
@@ -198,8 +198,7 @@ final class OwnedParts extends TestCase\Database {
 			new Subscribing\FakePart(
 				new Subscribing\FakePage('www.facedown.cz'),
 				new Subscribing\FakeExpression('//b'),
-				null,
-				false // not owned
+				'xxx'
 			)
 		);
 	}
@@ -225,8 +224,7 @@ final class OwnedParts extends TestCase\Database {
 			new Subscribing\FakePart(
 				new Subscribing\FakePage('www.facedown.cz'),
 				new Subscribing\FakeExpression('//b'),
-				null,
-				true // owned
+				'c'
 			)
 		);
 		$parts = $this->database->fetchAll('SELECT ID FROM parts');

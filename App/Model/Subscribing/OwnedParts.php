@@ -119,7 +119,7 @@ final class OwnedParts implements Parts {
 		return (bool)array_filter(
 			$this->iterate(),
 			function(Part $ownedPart) use ($part) {
-				return $part->equals($ownedPart);
+				return $ownedPart->equals($part);
 			}
 		);
 	}
