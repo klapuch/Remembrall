@@ -14,9 +14,12 @@ abstract class BasePage extends Nette\Application\UI\Presenter {
 	/** @inject @var \Tracy\ILogger */
 	public $logger;
 
+	/** @inject @var \Remembrall\Model\Access\Subscriber */
+	public $subscriber;
+
 	public function startup() {
 		parent::startup();
-		$this->user->login(new Security\Identity(1));
+		//$this->user->login(new Security\Identity(1));
 	}
 
 	/*public function checkRequirements($element) {

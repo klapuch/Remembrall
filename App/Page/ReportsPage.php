@@ -12,10 +12,7 @@ final class ReportsPage extends BasePage {
 		return new Component\Reports(
 			new Subscribing\LoggedReports(
 				new Subscribing\OwnedReports(
-					new Access\MySqlSubscriber(
-						$this->user->getId(),
-						$this->database
-					),
+					$this->subscriber,
 					$this->database
 				),
 				$this->logger

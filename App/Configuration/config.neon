@@ -41,3 +41,7 @@ services:
     latte.latteFactory:
         setup:
             - addFilter('texy', [@texy, process])
+    - Remembrall\Model\Access\IdentityFactory
+    identity: @Remembrall\Model\Access\IdentityFactory::create()
+    subscriber:
+        class: Remembrall\Model\Access\MySqlSubscriber(@identity::getId())
