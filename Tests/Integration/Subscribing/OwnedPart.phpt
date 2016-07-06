@@ -102,6 +102,18 @@ final class OwnedPart extends TestCase\Database {
 		);
 	}
 
+	public function testContentOnUnknownResult() {
+		Assert::same(
+			'',
+			(new Subscribing\OwnedPart(
+				$this->database,
+				new Subscribing\FakeExpression('this does not exist'),
+				new Access\FakeSubscriber(666),
+				new Subscribing\FakePage('this also does not exist')
+			))->content()
+		);
+	}
+
 	public function testVisitation() {
 		Assert::equal(
 			new Subscribing\DateTimeInterval(

@@ -28,7 +28,7 @@ final class OwnedPart implements Part {
 	}
 
 	public function content(): string {
-		return $this->database->fetchSingle(
+		return (string)$this->database->fetchSingle(
 			'SELECT content
 			FROM parts
 			WHERE subscriber_id = ?

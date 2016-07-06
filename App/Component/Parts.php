@@ -63,9 +63,7 @@ final class Parts extends SecureControl {
 				$request,
 				(new Http\WebBrowser(new GuzzleHttp\Client()))->send($request)
 			);
-			(new Subscribing\ExpiredParts(
-				$this->parts, $page, $this->database
-			))->replace(
+			$this->parts->replace(
 				new Subscribing\OwnedPart(
 					$this->database,
 					new Subscribing\FakeExpression($expression),

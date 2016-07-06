@@ -7,20 +7,17 @@ use Remembrall\Exception;
 use Remembrall\Model\Access;
 
 /**
- * Expired parts on the given page
+ * Expired parts
  */
 final class ExpiredParts implements Parts {
 	private $origin;
-	private $page;
 	private $database;
 
 	public function __construct(
 		Parts $origin,
-		Page $page,
 		Dibi\Connection $database
 	) {
 		$this->origin = $origin;
-		$this->page = $page;
 		$this->database = $database;
 	}
 
@@ -44,20 +41,22 @@ final class ExpiredParts implements Parts {
 	public function iterate(): array {
 		return (array)array_reduce(
 			$this->database->fetchAll(
-				'SELECT parts.content, expression, visited_at, `interval`
+				'SELECT parts.content, expression, visited_at, `interval`,
+				pages.content AS page_content, pages.url 
 				FROM parts
 				INNER JOIN pages ON pages.ID = parts.page_id
 				LEFT JOIN part_visits ON part_visits.part_id = parts.ID
-				WHERE url = ?
-				AND visited_at IS NULL
-				OR visited_at + INTERVAL CAST(SUBSTR(`interval`, 3) AS UNSIGNED) MINUTE <= NOW()',
-				[$this->page->url()]
+				WHERE visited_at IS NULL
+				OR visited_at + INTERVAL CAST(SUBSTR(`interval`, 3) AS UNSIGNED) MINUTE <= NOW()'
 			),
 			function($previous, Dibi\Row $row) {
 				$previous[] = new ConstantPart(
-					$this->page,
+					new ConstantPage($row['url'], $row['page_content']),
 					$row['content'],
-					new XPathExpression($this->page, $row['expression']),
+					new XPathExpression(
+						new ConstantPage($row['url'], $row['page_content']),
+						$row['expression']
+					),
 					new DateTimeInterval(
 						new \DateTimeImmutable((string)$row['visited_at']),
 						new \DateInterval($row['interval'])

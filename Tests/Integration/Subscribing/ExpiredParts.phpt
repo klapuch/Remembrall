@@ -13,10 +13,9 @@ use Nette\Security;
 require __DIR__ . '/../../bootstrap.php';
 
 final class ExpiredParts extends TestCase\Database {
-    public function testIteratingExpiredPartsOnConcretePage() {
+    public function testIteratingExpiredParts() {
         $parts = (new Subscribing\ExpiredParts(
             new Subscribing\FakeParts(),
-			new Subscribing\FakePage('a'),
 			$this->database
         ))->iterate();
         Assert::count(2, $parts);
@@ -30,7 +29,6 @@ final class ExpiredParts extends TestCase\Database {
 	public function testReplacingNonExpiredPart() {
 		(new Subscribing\ExpiredParts(
 			new Subscribing\FakeParts(),
-			new Subscribing\FakePage('a'),
 			$this->database
 		))->replace(
 			new Subscribing\FakePart(
@@ -44,27 +42,29 @@ final class ExpiredParts extends TestCase\Database {
 	}
 
 	public function testReplacingExpiredPartWithNoError() {
-		(new Subscribing\ExpiredParts(
-			new Subscribing\FakeParts(),
-			new Subscribing\FakePage('a'),
-			$this->database
-		))->replace(
-			new Subscribing\FakePart(
-				new Subscribing\FakePage('google.com'),
-				new Subscribing\FakeExpression('//p'),
-				'c',
-				true // expired
-			),
-			new Subscribing\FakePart()
-		);
-		Assert::true(true);
+		Assert::noError(function() {
+			(new Subscribing\ExpiredParts(
+				new Subscribing\FakeParts(),
+				$this->database
+			))->replace(
+				new Subscribing\FakePart(
+					new Subscribing\FakePage('google.com'),
+					new Subscribing\FakeExpression('//p'),
+					'c',
+					true // expired
+				),
+				new Subscribing\FakePart()
+			);
+		});
 	}
 
 	protected function prepareDatabase() {
         $this->database->query('TRUNCATE part_visits');
 		$this->database->query(
 			'INSERT INTO part_visits (part_id, visited_at) VALUES
-			(1, NOW() - INTERVAL 2 DAY), (3, NOW() - INTERVAL 3 MINUTE)'
+			(1, NOW() - INTERVAL 2 DAY),
+			(2, NOW()),
+			(3, NOW() - INTERVAL 3 MINUTE)'
 		);
 		$this->database->query('TRUNCATE parts');
 		$this->database->query(
