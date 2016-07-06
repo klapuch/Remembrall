@@ -13,13 +13,11 @@
 </head>
 <body>
 <div class="container">
-    <div class="row">
-        {foreach $flashes as $flash}
-            <div class="alert alert-dismissible alert-{$flash->type}">
-                {$flash->message}
-            </div>
-        {/foreach}
-    </div>
+    {foreach $flashes as $flash}
+        <div class="alert alert-dismissible alert-{$flash->type}">
+            {$flash->message}
+        </div>
+    {/foreach}
     {include content}
 </div>
 <div id="footer">

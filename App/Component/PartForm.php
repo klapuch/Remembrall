@@ -7,7 +7,6 @@ use GuzzleHttp;
 use Nette\Application\UI;
 use Nette\Caching\Storages;
 use Nette\Forms;
-use Nette\Security;
 use Nette\Utils\ArrayHash;
 use Remembrall\Exception;
 use Remembrall\Model\{
@@ -22,7 +21,7 @@ final class PartForm extends SecureControl {
 	public $onSuccess = [];
 
 	public function __construct(
-		Security\IIdentity $myself,
+		Access\Subscriber $myself,
 		Dibi\Connection $database,
 		Tracy\ILogger $logger
 	) {
@@ -89,21 +88,24 @@ final class PartForm extends SecureControl {
 				)
 			);
 			(new Subscribing\LoggedParts(
-				new Subscribing\LimitedParts(
-					$this->database,
-					new Access\MySqlSubscriber(
-						$this->myself->getId(),
-						$this->database
-					),
-					new Subscribing\OwnedParts(
+				new Subscribing\ReportedParts(
+					new Subscribing\LimitedParts(
 						$this->database,
-						new Access\MySqlSubscriber(
-							$this->myself->getId(),
-							$this->database
+						$this->myself,
+						new Subscribing\OwnedParts(
+							$this->database,
+							$this->myself,
+							new Subscribing\CollectiveParts($this->database)
+						)
+					), 
+					new Subscribing\LoggedReports(
+						new Subscribing\OwnedReports(
+							$this->myself, $this->database
 						),
-						new Subscribing\CollectiveParts($this->database)
+						$this->logger
 					)
-				), $this->logger
+				),
+				$this->logger
 			))->subscribe(
 				new Subscribing\CachedPart(
 					new Subscribing\HtmlPart(
@@ -114,10 +116,7 @@ final class PartForm extends SecureControl {
 								$values['expression']
 							)
 						),
-						new Access\MySqlSubscriber(
-							$this->myself->getId(),
-							$this->database
-						)
+						$this->myself
 					),
 					new Storages\MemoryStorage()
 				),

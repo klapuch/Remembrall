@@ -10,7 +10,10 @@ use Remembrall\Model\{
 final class PartsPage extends BasePage {
 	public function createComponentPartForm() {
 		$form = new Component\PartForm(
-			$this->user->getIdentity(),
+			new Access\MySqlSubscriber(
+				$this->user->getId(),
+				$this->database
+			),
 			$this->database,
 			$this->logger
 		);
@@ -27,13 +30,24 @@ final class PartsPage extends BasePage {
 	public function createComponentParts() {
 		return new Component\Parts(
 			new Subscribing\LoggedParts(
-				new Subscribing\OwnedParts(
-					$this->database,
-					new Access\MySqlSubscriber(
-						$this->user->getId(),
-						$this->database
+				new Subscribing\ReportedParts(
+					new Subscribing\OwnedParts(
+						$this->database,
+						new Access\MySqlSubscriber(
+							$this->user->getId(),
+							$this->database
+						),
+						new Subscribing\CollectiveParts($this->database)
 					),
-					new Subscribing\CollectiveParts($this->database)
+					new Subscribing\LoggedReports(
+						new Subscribing\OwnedReports(
+							new Access\MySqlSubscriber(
+								$this->user->getId(),
+								$this->database
+							), $this->database
+						),
+						$this->logger
+					)
 				),
 				$this->logger
 			),

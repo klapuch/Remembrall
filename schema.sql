@@ -36,7 +36,7 @@ CREATE TABLE `page_visits` (
   `visited_at` datetime NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `page_id` (`page_id`),
-  CONSTRAINT `page_visits_ibfk_1` FOREIGN KEY (`page_id`) REFERENCES `pages` (`ID`)
+  CONSTRAINT `page_visits_ibfk_1` FOREIGN KEY (`page_id`) REFERENCES `pages` (`ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
@@ -97,7 +97,7 @@ CREATE TABLE `reports` (
   `sent_at` datetime NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `part_id` (`part_id`),
-  CONSTRAINT `reports_ibfk_1` FOREIGN KEY (`part_id`) REFERENCES `parts` (`ID`)
+  CONSTRAINT `reports_ibfk_1` FOREIGN KEY (`part_id`) REFERENCES `parts` (`ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
