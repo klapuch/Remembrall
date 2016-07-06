@@ -31,7 +31,10 @@ final class PartsPage extends BasePage {
 					new Subscribing\OwnedParts(
 						$this->database,
 						$this->subscriber,
-						new Subscribing\CollectiveParts($this->database)
+						new Subscribing\CollectiveParts(
+							$this->database,
+							$this->subscriber
+						)
 					),
 					new Subscribing\LoggedReports(
 						new Subscribing\OwnedReports(
