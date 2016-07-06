@@ -5,25 +5,66 @@
     <meta name="robots" content="index, follow">
     <link href="{$basePath}/images/favicon32.png" rel="icon" type="image/png"/>
     <title>{ifset title}{include title|stripHtml|trim}{/ifset}</title>
-    <meta name="description" content="{ifset description}{include description|stripHtml|trim|truncate:150}"{/ifset}>
+    <meta name="description"
+          content="{ifset description}{include description|stripHtml|trim|truncate:150}"{/ifset}>
     <meta name="author" content="Dominik Klapuch"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="{$basePath}/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="{$basePath}/css/bootstrap.min.css">
     {ifset styles}{include styles}{/ifset}
 </head>
 <body>
-<div class="container">
-    {foreach $flashes as $flash}
-        <div class="alert alert-dismissible alert-{$flash->type}">
-            {$flash->message}
+<div id="wrap">
+    <nav class="navbar navbar-default navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed"
+                        data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" n:href="Default:"
+                   title="Remembrall"><strong>Remembrall</strong></a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" title="Administrace" data-toggle="dropdown" role="button" aria-expanded="false">
+                            Parts <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a n:href="Parts:subscription">Subscription</a>
+                            </li>
+                            <li>
+                                <a n:href="Parts:">Owned</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a n:href="Reports:">Reports</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    {/foreach}
-    {include content}
+    </nav>
+    <div class="container">
+        {foreach $flashes as $flash}
+            <div class="alert alert-dismissible alert-{$flash->type}">
+                {$flash->message}
+            </div>
+        {/foreach}
+        {include content}
+    </div>
 </div>
 <div id="footer">
     <div class="container">
         <p class="muted credit text-center">
-            <a href="https://www.github.com/klapuch" class="no-link" target="_blank">
+            <a href="https://www.github.com/klapuch" class="no-link"
+               target="_blank">
                 Created with <span id="heart">❤</span>
             </a>
         </p>
