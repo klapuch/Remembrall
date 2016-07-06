@@ -15,7 +15,7 @@ CREATE TABLE `forgotten_passwords` (
   PRIMARY KEY (`ID`),
   UNIQUE KEY `reminder` (`reminder`),
   KEY `subscriber_id` (`subscriber_id`),
-  CONSTRAINT `forgotten_passwords_ibfk_1` FOREIGN KEY (`subscriber_id`) REFERENCES `subscribers` (`ID`)
+  CONSTRAINT `forgotten_passwords_ibfk_1` FOREIGN KEY (`subscriber_id`) REFERENCES `subscribers` (`ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
@@ -87,7 +87,7 @@ CREATE TABLE `verification_codes` (
   PRIMARY KEY (`ID`),
   UNIQUE KEY `code` (`code`),
   UNIQUE KEY `subscriber_id` (`subscriber_id`),
-  CONSTRAINT `verification_codes_ibfk_1` FOREIGN KEY (`subscriber_id`) REFERENCES `subscribers` (`ID`)
+  CONSTRAINT `verification_codes_ibfk_1` FOREIGN KEY (`subscriber_id`) REFERENCES `subscribers` (`ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 DROP TABLE IF EXISTS `reports`;
