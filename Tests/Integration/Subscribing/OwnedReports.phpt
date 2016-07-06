@@ -36,11 +36,11 @@ final class OwnedReports extends TestCase\Database {
 			$this->database
 		))->iterate();
 		Assert::count(3, $reports);
-		Assert::same('//p', (string)$reports[0]->content()->expression());
+		Assert::same('//h3', (string)$reports[0]->content()->expression());
 		Assert::same($owner, $reports[0]->recipient());
 		Assert::same('//h1', (string)$reports[1]->content()->expression());
 		Assert::same($owner, $reports[1]->recipient());
-		Assert::same('//h3', (string)$reports[2]->content()->expression());
+		Assert::same('//p', (string)$reports[2]->content()->expression());
 		Assert::same($owner, $reports[2]->recipient());
 	}
 

@@ -35,31 +35,37 @@ final class OwnedReports implements Reports {
 				$this->owner->id()
 			),
 			function($previous, Dibi\Row $row) {
-				$previous[] = new ConstantReport(
-					$this->owner,
-					new ConstantPart(
-						new ConstantPage(
-							$row['url'],
-							$row['page_content']
-						),
-						$row['part_content'],
-						new XPathExpression(
+				array_unshift(
+					$previous,
+					new ConstantReport(
+						$this->owner,
+						new ConstantPart(
 							new ConstantPage(
 								$row['url'],
 								$row['page_content']
 							),
-							$row['expression']
+							$row['part_content'],
+							new XPathExpression(
+								new ConstantPage(
+									$row['url'],
+									$row['page_content']
+								),
+								$row['expression']
+							),
+							$this->owner,
+							new DateTimeInterval(
+								new \DateTimeImmutable(
+									(string)$row['visited_at']
+								),
+								new \DateInterval($row['interval'])
+							)
 						),
-						$this->owner,
-						new DateTimeInterval(
-							new \DateTimeImmutable((string)$row['visited_at']),
-							new \DateInterval($row['interval'])
-						)
-					),
-					new \DateTimeImmutable((string)$row['sent_at'])
+						new \DateTimeImmutable((string)$row['sent_at'])
+					)
 				);
 				return $previous;
-			}
+			},
+			[]
 		);
 	}
 
