@@ -31,20 +31,13 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" title="Administrace" data-toggle="dropdown" role="button" aria-expanded="false">
-                            Parts <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li>
-                                <a n:href="Parts:subscription">Subscription</a>
-                            </li>
-                            <li>
-                                <a n:href="Parts:">Owned</a>
-                            </li>
-                        </ul>
+                    <li class="{ifCurrent Parts:}active{/ifCurrent}">
+                        <a n:href="Parts:">Parts</a>
                     </li>
-                    <li>
+                    <li class="{ifCurrent Parts:subscription}active{/ifCurrent}">
+                        <a n:href="Parts:subscription">Subscription</a>
+                    </li>
+                    <li class="{ifCurrent Reports:*}active{/ifCurrent}">
                         <a n:href="Reports:">Reports</a>
                     </li>
                 </ul>
