@@ -9,7 +9,7 @@ use Remembrall\Model\{
 };
 
 /**
- * All parts stored in the database
+ * All parts stored in the database - shared with everyone
  */
 final class CollectiveParts implements Parts {
 	private $database;

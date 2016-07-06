@@ -68,6 +68,8 @@ final class OwnedParts implements Parts {
 	}
 
 	public function remove(Part $part) {
+		if(!$this->owned($part))
+			throw new Exception\ExistenceException('You do not own this part');
 		$this->database->query(
 			'DELETE FROM parts
 			WHERE subscriber_id = ?

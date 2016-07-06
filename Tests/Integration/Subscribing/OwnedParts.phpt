@@ -124,7 +124,7 @@ final class OwnedParts extends TestCase\Database {
 	/**
 	 * @throws \Remembrall\Exception\ExistenceException You do not own this part
 	 */
-	public function testReplacingNotOwnedPart() {
+	public function testReplacingForeign() {
 		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
 			(1, "//a", "a", "PT1M", 666)'
@@ -174,7 +174,14 @@ final class OwnedParts extends TestCase\Database {
 		Assert::true(true);
 	}
 
-	public function testRemovingByOwner() {
+	/**
+	 * @throws \Remembrall\Exception\ExistenceException You do not own this part
+	 */
+	public function testRemovingForeign() {
+		$this->database->query(
+			'INSERT INTO part_visits (part_id, visited_at) VALUES
+			(1, NOW()), (2, NOW())'
+		);
 		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
 			(1, "//b", "b", "PT2M", 2)'
@@ -192,15 +199,40 @@ final class OwnedParts extends TestCase\Database {
 				new Subscribing\FakePage('www.facedown.cz'),
 				new Subscribing\FakeExpression('//b'),
 				null,
-				false
+				false // not owned
+			)
+		);
+	}
+
+	public function testRemovingOwned() {
+		$this->database->query(
+			'INSERT INTO part_visits (part_id, visited_at) VALUES
+			(1, NOW()), (2, NOW())'
+		);
+		$this->database->query(
+			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
+			(1, "//b", "b", "PT2M", 2)'
+		);
+		$this->database->query(
+			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
+			(2, "//b", "c", "PT3M", 666)'
+		);
+		(new Subscribing\OwnedParts(
+			$this->database,
+			new Access\FakeSubscriber(666),
+			new Subscribing\FakeParts()
+		))->remove(
+			new Subscribing\FakePart(
+				new Subscribing\FakePage('www.facedown.cz'),
+				new Subscribing\FakeExpression('//b'),
+				null,
+				true // owned
 			)
 		);
 		$parts = $this->database->fetchAll('SELECT ID FROM parts');
 		Assert::count(1, $parts);
 		Assert::same(1, $parts[0]['ID']);
 	}
-
-
 
     protected function prepareDatabase() {
         $this->database->query('TRUNCATE parts');
