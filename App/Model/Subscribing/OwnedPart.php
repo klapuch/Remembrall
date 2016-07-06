@@ -49,10 +49,6 @@ final class OwnedPart implements Part {
 		return $this->expression;
 	}
 
-	public function owner(): Access\Subscriber {
-		return $this->owner;
-	}
-
 	public function visitedAt(): Interval {
 		$interval = $this->database->fetch(
 			'SELECT `interval`, visited_at

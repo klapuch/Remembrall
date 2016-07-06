@@ -44,8 +44,7 @@ final class ExpiredParts implements Parts {
 	public function iterate(): array {
 		return (array)array_reduce(
 			$this->database->fetchAll(
-				'SELECT parts.content, expression, parts.subscriber_id, visited_at,
- 				`interval`
+				'SELECT parts.content, expression, visited_at, `interval`
 				FROM parts
 				INNER JOIN pages ON pages.ID = parts.page_id
 				LEFT JOIN part_visits ON part_visits.part_id = parts.ID
@@ -59,7 +58,6 @@ final class ExpiredParts implements Parts {
 					$this->page,
 					$row['content'],
 					new XPathExpression($this->page, $row['expression']),
-					new Access\MySqlSubscriber($row['subscriber_id'], $this->database),
 					new DateTimeInterval(
 						new \DateTimeImmutable((string)$row['visited_at']),
 						new \DateInterval($row['interval'])

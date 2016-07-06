@@ -52,7 +52,6 @@ final class OwnedReports implements Reports {
 								),
 								$row['expression']
 							),
-							$this->owner,
 							new DateTimeInterval(
 								new \DateTimeImmutable(
 									(string)$row['visited_at']

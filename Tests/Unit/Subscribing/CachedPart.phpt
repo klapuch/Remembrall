@@ -42,10 +42,6 @@ final class CachedPart extends TestCase\Mockery {
 			->with('Remembrall\Model\Subscribing\CachedPart::expression')
 			->times(4);
 		$this->cache->shouldReceive('read')
-			->andReturn($owner)
-			->with('Remembrall\Model\Subscribing\CachedPart::owner')
-			->times(4);
-		$this->cache->shouldReceive('read')
 			->andReturn($visitedAt)
 			->with('Remembrall\Model\Subscribing\CachedPart::visitedAt')
 			->times(4);
@@ -55,7 +51,6 @@ final class CachedPart extends TestCase\Mockery {
 				$expression,
 				$content,
 				false,
-				$owner,
 				$visitedAt
 			),
 			$this->cache
@@ -69,9 +64,6 @@ final class CachedPart extends TestCase\Mockery {
 
 		Assert::same($expression, $page->expression());
 		Assert::same($expression, $page->expression());
-
-		Assert::same($owner, $page->owner());
-		Assert::same($owner, $page->owner());
 
 		Assert::same($visitedAt, $page->visitedAt());
 		Assert::same($visitedAt, $page->visitedAt());

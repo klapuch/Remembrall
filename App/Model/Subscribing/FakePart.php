@@ -12,7 +12,6 @@ final class FakePart implements Part {
 	private $content;
 	private $equals;
 	private $expression;
-	private $owner;
 	private $visitedAt;
 
 	public function __construct(
@@ -20,14 +19,12 @@ final class FakePart implements Part {
 		Expression $expression = null,
 		string $content = null,
 		bool $equals = false,
-		Access\Subscriber $owner = null,
 		Interval $visitedAt = null
 	) {
 		$this->source = $source;
 		$this->content = $content;
 		$this->equals = $equals;
 		$this->expression = $expression;
-		$this->owner = $owner;
 		$this->visitedAt = $visitedAt;
 	}
 
@@ -45,10 +42,6 @@ final class FakePart implements Part {
 
 	public function expression(): Expression {
 		return $this->expression;
-	}
-
-	public function owner(): Access\Subscriber {
-		return $this->owner;
 	}
 
 	public function visitedAt(): Interval {

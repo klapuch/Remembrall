@@ -98,7 +98,6 @@ final class OwnedParts implements Parts {
 						new ConstantPage($row['url'], $row['page_content']),
 						$row['expression']
 					),
-					$this->myself,
 					new DateTimeInterval(
 						new \DateTimeImmutable((string)$row['visited_at']),
 						new \DateInterval($row['interval'])

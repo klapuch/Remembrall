@@ -41,19 +41,6 @@ final class OwnedPart extends TestCase\Database {
 		);
 	}
 
-	public function testOwner() {
-		$owner = new Access\FakeSubscriber();
-		Assert::same(
-			$owner,
-			(new Subscribing\OwnedPart(
-				$this->database,
-				new Subscribing\FakeExpression(),
-				$owner,
-				new Subscribing\FakePage()
-			))->owner()
-		);
-	}
-
 	public function testSameContentButDifferentPage() {
 		Assert::false(
 			(new Subscribing\OwnedPart(

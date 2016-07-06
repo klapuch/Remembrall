@@ -21,7 +21,8 @@ final class CollectiveParts extends TestCase\Database {
 			(1, "foo@bar.cz", "secret"), (2, "facedown@facedown.cz", "secret")'
 		);
         (new Subscribing\CollectiveParts(
-            $this->database
+            $this->database,
+			new Access\FakeSubscriber()
         ))->subscribe(
             new Subscribing\FakePart(
 				new Subscribing\FakePage('www.google.com'),
@@ -67,21 +68,20 @@ final class CollectiveParts extends TestCase\Database {
 			(1, "//p", "a", "PT1M", 666)'
 		);
 		(new Subscribing\CollectiveParts(
-			$this->database
+			$this->database,
+			new Access\FakeSubscriber(666)
 		))->replace(
 			new Subscribing\FakePart(
 				new Subscribing\FakePage('www.google.com'),
 				new Subscribing\FakeExpression('//p'),
 				'c',
-				true, // owned
-				new Access\FakeSubscriber(666)
+				true // owned
 			),
 			new Subscribing\FakePart(
 				null,
 				new Subscribing\FakeExpression('//x'),
 				'newContent',
-				false,
-				new Access\FakeSubscriber(888)
+				false
 			)
 		);
 		$parts = $this->database->fetchAll(
@@ -93,7 +93,7 @@ final class CollectiveParts extends TestCase\Database {
 		Assert::count(1, $parts);
 		$part = current($parts);
 		Assert::same('newContent', $part['content']); // changed
-		Assert::same(666, $part['subscriber_id']);  // without change
+		Assert::same(666, $part['subscriber_id']); // without change
 		Assert::same('//p', $part['expression']); // without change
 		Assert::same(1, $part['page_id']); // without change
 		Assert::notSame('2000-01-01 01:01:01', (string)$part['visited_at']);
@@ -121,7 +121,8 @@ final class CollectiveParts extends TestCase\Database {
 			(1, "//d", "d", "PT4M", 1)'
 		);
 		$parts = (new Subscribing\CollectiveParts(
-			$this->database
+			$this->database,
+			new Access\FakeSubscriber()
 		))->iterate();
 		Assert::count(4, $parts);
 		Assert::same('//a', (string)$parts[0]->expression());
@@ -148,7 +149,8 @@ final class CollectiveParts extends TestCase\Database {
 			(1, "//d", "d", "PT4M", 1)'
 		);
 		(new Subscribing\CollectiveParts(
-			$this->database
+			$this->database,
+			new Access\FakeSubscriber()
 		))->remove(
 			new Subscribing\FakePart(
 				new Subscribing\FakePage('www.facedown.cz'),

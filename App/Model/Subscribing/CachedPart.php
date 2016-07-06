@@ -33,10 +33,6 @@ final class CachedPart implements Part {
 		return $this->read(__FUNCTION__);
 	}
 
-	public function owner(): Access\Subscriber {
-		return $this->read(__FUNCTION__);
-	}
-
 	public function visitedAt(): Interval {
 		return $this->read(__FUNCTION__);
 	}

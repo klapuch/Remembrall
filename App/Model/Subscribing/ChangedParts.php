@@ -41,8 +41,7 @@ final class ChangedParts implements Parts {
 						new XPathExpression(
 							$part->source(),
 							(string)$part->expression()
-						),
-						$part->owner()
+						)
 					)
 				);
 			}

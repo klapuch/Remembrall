@@ -33,12 +33,6 @@ interface Part {
 	public function expression(): Expression;
 
 	/**
-	 * Every part must have reason why it exists - it must belongs to someone
-	 * @return Access\Subscriber
-	 */
-	public function owner(): Access\Subscriber;
-
-	/**
 	 * When was the part visited at? What is the next planning visitation?
 	 * @return Interval
 	 */

@@ -13,9 +13,14 @@ use Remembrall\Model\{
  */
 final class CollectiveParts implements Parts {
 	private $database;
+	private $myself;
 
-	public function __construct(Dibi\Connection $database) {
+	public function __construct(
+		Dibi\Connection $database,
+		Access\Subscriber $myself
+	) {
 		$this->database = $database;
+		$this->myself = $myself;
 	}
 
 	public function subscribe(Part $part, Interval $interval): Part {
@@ -69,7 +74,7 @@ final class CollectiveParts implements Parts {
 			AND expression = ?
 			AND page_id = (SELECT ID FROM pages WHERE url = ?)',
 			$new->content(),
-			$old->owner()->id(),
+			$this->myself->id(),
 			(string)$old->expression(),
 			$old->source()->url()
 		);
@@ -89,7 +94,7 @@ final class CollectiveParts implements Parts {
 		return (array)array_reduce(
 			$this->database->fetchAll(
 				'SELECT parts.content AS part_content, url,
-				pages.content AS page_content, expression, subscriber_id,
+				pages.content AS page_content, expression,
 				`interval`, visited_at
 				FROM parts
 				INNER JOIN part_visits ON part_visits.part_id = parts.ID 
@@ -102,10 +107,6 @@ final class CollectiveParts implements Parts {
 					new XPathExpression(
 						new ConstantPage($row['url'], $row['page_content']),
 						$row['expression']
-					),
-					new Access\MySqlSubscriber(
-						$row['subscriber_id'],
-						$this->database
 					),
 					new DateTimeInterval(
 						new \DateTimeImmutable((string)$row['visited_at']),
