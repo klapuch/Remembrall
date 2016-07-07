@@ -5,7 +5,7 @@ namespace Remembrall\Model\Subscribing;
 use Remembrall\Exception;
 
 /**
- * Only the changed parts
+ * Only changed parts
  */
 final class ChangedParts implements Parts {
 	private $origin;

@@ -13,10 +13,7 @@ final class ExpiredParts implements Parts {
 	private $origin;
 	private $database;
 
-	public function __construct(
-		Parts $origin,
-		Dibi\Connection $database
-	) {
+	public function __construct(Parts $origin, Dibi\Connection $database) {
 		$this->origin = $origin;
 		$this->database = $database;
 	}
