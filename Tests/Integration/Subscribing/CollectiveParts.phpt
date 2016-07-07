@@ -21,8 +21,7 @@ final class CollectiveParts extends TestCase\Database {
 			(1, "foo@bar.cz", "secret"), (2, "facedown@facedown.cz", "secret")'
 		);
         (new Subscribing\CollectiveParts(
-            $this->database,
-			new Access\FakeSubscriber()
+            $this->database
         ))->subscribe(
             new Subscribing\FakePart(
 				new Subscribing\FakePage('www.google.com'),
@@ -55,7 +54,6 @@ final class CollectiveParts extends TestCase\Database {
 			'SELECT part_id FROM part_visits'
 		);
 		Assert::count(2, $partVisits);
-		//Assert::same(1, $partVisits[0]['part_id']);
     }
 
 	public function testReplacing() {
@@ -67,10 +65,7 @@ final class CollectiveParts extends TestCase\Database {
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
 			(1, "//p", "a", "PT1M", 666)'
 		);
-		(new Subscribing\CollectiveParts(
-			$this->database,
-			new Access\FakeSubscriber(666)
-		))->replace(
+		(new Subscribing\CollectiveParts($this->database))->replace(
 			new Subscribing\FakePart(
 				new Subscribing\FakePage('www.google.com'),
 				new Subscribing\FakeExpression('//p'),
@@ -121,8 +116,7 @@ final class CollectiveParts extends TestCase\Database {
 			(1, "//d", "d", "PT4M", 1)'
 		);
 		$parts = (new Subscribing\CollectiveParts(
-			$this->database,
-			new Access\FakeSubscriber()
+			$this->database
 		))->iterate();
 		Assert::count(4, $parts);
 		Assert::same('//a', (string)$parts[0]->expression());
@@ -149,8 +143,7 @@ final class CollectiveParts extends TestCase\Database {
 			(1, "//d", "d", "PT4M", 1)'
 		);
 		(new Subscribing\CollectiveParts(
-			$this->database,
-			new Access\FakeSubscriber()
+			$this->database
 		))->remove(
 			new Subscribing\FakePart(
 				new Subscribing\FakePage('www.facedown.cz'),

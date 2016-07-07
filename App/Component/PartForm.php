@@ -94,8 +94,7 @@ final class PartForm extends SecureControl {
 						$this->myself,
 						new Subscribing\OwnedParts(
 							$this->database,
-							$this->myself,
-							new Subscribing\CollectiveParts($this->database, $this->myself)
+							$this->myself
 						)
 					), 
 					new Subscribing\LoggedReports(

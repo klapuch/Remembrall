@@ -18,8 +18,7 @@ final class OwnedParts extends TestCase\Database {
     public function testSubscribingBrandNew() {
         (new Subscribing\OwnedParts(
             $this->database,
-            new Access\FakeSubscriber(666),
-			new Subscribing\FakeParts()
+            new Access\FakeSubscriber(666)
         ))->subscribe(
             new Subscribing\FakePart(
 				new Subscribing\FakePage('www.google.com'),
@@ -54,8 +53,7 @@ final class OwnedParts extends TestCase\Database {
 	public function testSubscribingDuplicateWithRollback() {
 		$parts = new Subscribing\OwnedParts(
 			$this->database,
-			new Access\FakeSubscriber(666),
-			new Subscribing\FakeParts()
+			new Access\FakeSubscriber(666)
 		);
 		$parts->subscribe(
 			new Subscribing\FakePart(
@@ -112,8 +110,7 @@ final class OwnedParts extends TestCase\Database {
 		);
 		$parts = (new Subscribing\OwnedParts(
 			$this->database,
-			new Access\FakeSubscriber(1),
-			new Subscribing\FakeParts()
+			new Access\FakeSubscriber(1)
 		))->iterate();
 		Assert::count(3, $parts);
 		Assert::same('//a', (string)$parts[0]->expression());
@@ -134,8 +131,7 @@ final class OwnedParts extends TestCase\Database {
 		);
 		(new Subscribing\OwnedParts(
 			$this->database,
-			new Access\FakeSubscriber(666),
-			new Subscribing\FakeParts()
+			new Access\FakeSubscriber(666)
 		))->replace(
 			new Subscribing\FakePart(
 				new Subscribing\FakePage('www.google.com'),
@@ -153,12 +149,11 @@ final class OwnedParts extends TestCase\Database {
 		);
 		$this->database->query(
 			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, "//p", "a", "PT1M", 666)'
+			(1, "//p", "a", "PT1M", 666), (1, "//p", "a", "PT1M", 10)'
 		);
 		(new Subscribing\OwnedParts(
 			$this->database,
-			new Access\FakeSubscriber(666),
-			new Subscribing\FakeParts()
+			new Access\FakeSubscriber(666)
 		))->replace(
 			new Subscribing\FakePart(
 				new Subscribing\FakePage('www.google.com'),
@@ -167,11 +162,21 @@ final class OwnedParts extends TestCase\Database {
 			),
 			new Subscribing\FakePart(
 				null,
-				new Subscribing\FakeExpression('//x'),
+				null,
 				'newContent'
 			)
 		);
-		Assert::true(true);
+		$parts = $this->database->fetchAll('SELECT * FROM parts');
+		Assert::count(2, $parts);
+		Assert::same('newContent', $parts[0]['content']); // changed
+		Assert::same('//p', $parts[0]['expression']);
+		Assert::same(1, $parts[0]['page_id']);
+		Assert::same(666, $parts[0]['subscriber_id']);
+
+		Assert::same('a', $parts[1]['content']);
+		Assert::same('//p', $parts[1]['expression']);
+		Assert::same(1, $parts[1]['page_id']);
+		Assert::same(10, $parts[1]['subscriber_id']);
 	}
 
 	/**
@@ -192,8 +197,7 @@ final class OwnedParts extends TestCase\Database {
 		);
 		(new Subscribing\OwnedParts(
 			$this->database,
-			new Access\FakeSubscriber(666),
-			new Subscribing\FakeParts()
+			new Access\FakeSubscriber(666)
 		))->remove(
 			new Subscribing\FakePart(
 				new Subscribing\FakePage('www.facedown.cz'),
@@ -218,8 +222,7 @@ final class OwnedParts extends TestCase\Database {
 		);
 		(new Subscribing\OwnedParts(
 			$this->database,
-			new Access\FakeSubscriber(666),
-			new Subscribing\FakeParts()
+			new Access\FakeSubscriber(666)
 		))->remove(
 			new Subscribing\FakePart(
 				new Subscribing\FakePage('www.facedown.cz'),

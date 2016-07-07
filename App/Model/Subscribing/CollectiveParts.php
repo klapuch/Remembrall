@@ -13,14 +13,9 @@ use Remembrall\Model\{
  */
 final class CollectiveParts implements Parts {
 	private $database;
-	private $myself;
 
-	public function __construct(
-		Dibi\Connection $database,
-		Access\Subscriber $myself
-	) {
+	public function __construct(Dibi\Connection $database) {
 		$this->database = $database;
-		$this->myself = $myself;
 	}
 
 	public function subscribe(Part $part, Interval $interval): Part {
@@ -70,11 +65,9 @@ final class CollectiveParts implements Parts {
 			'UPDATE parts
 			INNER JOIN part_visits ON part_visits.part_id = parts.ID
 			SET content = ?, visited_at = NOW()
-			WHERE subscriber_id = ?
-			AND expression = ?
+			WHERE expression = ?
 			AND page_id = (SELECT ID FROM pages WHERE url = ?)',
 			$new->content(),
-			$this->myself->id(),
 			(string)$old->expression(),
 			$old->source()->url()
 		);

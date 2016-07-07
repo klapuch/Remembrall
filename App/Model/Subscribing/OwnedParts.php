@@ -14,16 +14,13 @@ use Remembrall\Model\{
 final class OwnedParts implements Parts {
 	private $database;
 	private $myself;
-	private $origin;
 
 	public function __construct(
 		Dibi\Connection $database,
-		Access\Subscriber $myself,
-		Parts $origin
+		Access\Subscriber $myself
 	) {
 		$this->database = $database;
 		$this->myself = $myself;
-		$this->origin = $origin;
 	}
 
 	public function subscribe(Part $part, Interval $interval): Part {
@@ -64,7 +61,18 @@ final class OwnedParts implements Parts {
 	public function replace(Part $old, Part $new) {
 		if(!$this->owned($old))
 			throw new Exception\ExistenceException('You do not own this part');
-		$this->origin->replace($old, $new);
+		$this->database->query(
+			'UPDATE parts
+			INNER JOIN part_visits ON part_visits.part_id = parts.ID
+			SET content = ?, visited_at = NOW()
+			WHERE subscriber_id = ?
+			AND expression = ?
+			AND page_id = (SELECT ID FROM pages WHERE url = ?)',
+			$new->content(),
+			$this->myself->id(),
+			(string)$old->expression(),
+			$old->source()->url()
+		);
 	}
 
 	public function remove(Part $part) {
