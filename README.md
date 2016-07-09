@@ -1,2 +1,2 @@
 # Remembrall
-[![Build Status](https://travis-ci.org/klapuch/Remembrall.svg?branch=master)](https://travis-ci.org/klapuch/Remembrall) [![Coverage Status](https://coveralls.io/repos/github/klapuch/Remembrall/badge.svg?branch=master)](https://coveralls.io/github/klapuch/Remembrall?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/klapuch/Remembrall/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/klapuch/Remembrall/?branch=master) [![Build Status](https://travis-ci.org/klapuch/Remembrall.svg?branch=master)](https://travis-ci.org/klapuch/Remembrall) [![Coverage Status](https://coveralls.io/repos/github/klapuch/Remembrall/badge.svg?branch=master)](https://coveralls.io/github/klapuch/Remembrall?branch=master)
