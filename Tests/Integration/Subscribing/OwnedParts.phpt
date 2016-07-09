@@ -136,7 +136,8 @@ final class OwnedParts extends TestCase\Database {
 			new Subscribing\FakePart(
 				new Subscribing\FakePage('www.google.com'),
 				new Subscribing\FakeExpression('//a'),
-				'xxx'
+				'xxx',
+				$equals = false
 			),
 			new Subscribing\FakePart()
 		);
@@ -158,7 +159,8 @@ final class OwnedParts extends TestCase\Database {
 			new Subscribing\FakePart(
 				new Subscribing\FakePage('www.google.com'),
 				new Subscribing\FakeExpression('//p'),
-				'a'
+				'a',
+				$equals = true
 			),
 			new Subscribing\FakePart(
 				null,
@@ -202,7 +204,8 @@ final class OwnedParts extends TestCase\Database {
 			new Subscribing\FakePart(
 				new Subscribing\FakePage('www.facedown.cz'),
 				new Subscribing\FakeExpression('//b'),
-				'xxx'
+				'xxx',
+				$equals = false
 			)
 		);
 	}
@@ -227,7 +230,8 @@ final class OwnedParts extends TestCase\Database {
 			new Subscribing\FakePart(
 				new Subscribing\FakePage('www.facedown.cz'),
 				new Subscribing\FakeExpression('//b'),
-				'c'
+				'c',
+				$equals = true
 			)
 		);
 		$parts = $this->database->fetchAll('SELECT ID FROM parts');
