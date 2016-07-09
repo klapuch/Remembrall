@@ -38,8 +38,8 @@ final class OwnedParts implements Parts {
 						$this->myself->id()
 					);
 					$this->database->query(
-						'INSERT INTO part_visits (part_id, visited_at) VALUES (?, ?)',
-						$this->database->insertId(),
+						'INSERT INTO part_visits (part_id, visited_at)
+						VALUES (LAST_INSERT_ID(), ?)',
 						$interval->start()
 					);
 				}
