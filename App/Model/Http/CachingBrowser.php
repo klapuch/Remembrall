@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Http;
 
 use Dibi;
+use Remembrall\Model\Storage;
 
 /**
  * Caching browser
@@ -53,19 +54,39 @@ final class CachingBrowser implements Browser {
 		);
 	}
 
+	/**
+	 * Cache the given response
+	 * @param string $url
+	 * @param Response $response
+	 * @throws \Throwable
+	 * @return void
+	 */
 	private function cache(string $url, Response $response) {
-		$this->database->query(
-			'UPDATE pages SET headers = ? WHERE url = ?',
-			serialize(
-				array_reduce(
-					$response->headers()->iterate(),
-					function($previous, Header $header) {
-						$previous[$header->field()] = $header->value();
-						return $previous;
-					}
-				)
-			),
-			$url
+		(new Storage\Transaction($this->database))->start(
+			function() use ($url, $response) {
+				$this->database->query(
+					'INSERT INTO pages (url, content, headers) VALUES (?, ?, ?)
+					ON DUPLICATE KEY UPDATE
+					content = VALUES(content), headers = VALUES(headers)',
+					$url,
+					$response->content(),
+					serialize(
+						array_reduce(
+							$response->headers()->iterate(),
+							function($previous, Header $header) {
+								$previous[$header->field()] = $header->value();
+								return $previous;
+							}
+						)
+					)
+				);
+				$this->database->query(
+					'INSERT INTO page_visits (page_id, visited_at) VALUES
+					((SELECT ID FROM pages WHERE url = ?), ?)',
+					$url,
+					new \DateTimeImmutable()
+				);
+			}
 		);
 	}
 }

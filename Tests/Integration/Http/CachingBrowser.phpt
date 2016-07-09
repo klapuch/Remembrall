@@ -48,7 +48,7 @@ final class CachingBrowser extends TestCase\Database {
 		);
 		$headers = ['Status' => '200 OK'];
 		$response = new Http\FakeResponse(
-			new Http\FakeHeaders($headers)
+			new Http\FakeHeaders($headers), 'bar'
 		);
 		Assert::equal(
 			$response,
@@ -62,6 +62,12 @@ final class CachingBrowser extends TestCase\Database {
 		$pages = $this->database->fetchAll('SELECT * FROM pages');
 		Assert::count(1, $pages);
 		Assert::same(serialize($headers), $pages[0]['headers']);
+		Assert::same('google.com', $pages[0]['url']);
+		Assert::same('bar', $pages[0]['content']);
+		$visits = $this->database->fetchAll('SELECT * FROM page_visits');
+		Assert::count(2, $visits);
+		Assert::same(1, $visits[0]['page_id']);
+		Assert::same(1, $visits[1]['page_id']);
 	}
 
 	public function testExpiredCachingByOldVisitation() {
@@ -75,7 +81,7 @@ final class CachingBrowser extends TestCase\Database {
 		);
 		$headers = ['Status' => '200 OK'];
 		$response = new Http\FakeResponse(
-			new Http\FakeHeaders($headers)
+			new Http\FakeHeaders($headers), 'bar'
 		);
 		Assert::equal(
 			$response,
@@ -89,6 +95,12 @@ final class CachingBrowser extends TestCase\Database {
 		$pages = $this->database->fetchAll('SELECT * FROM pages');
 		Assert::count(1, $pages);
 		Assert::same(serialize($headers), $pages[0]['headers']);
+		Assert::same('google.com', $pages[0]['url']);
+		Assert::same('bar', $pages[0]['content']);
+		$visits = $this->database->fetchAll('SELECT * FROM page_visits');
+		Assert::count(2, $visits);
+		Assert::same(1, $visits[0]['page_id']);
+		Assert::same(1, $visits[1]['page_id']);
 	}
 
 	protected function prepareDatabase() {
