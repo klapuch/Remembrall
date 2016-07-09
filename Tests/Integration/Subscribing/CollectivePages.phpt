@@ -13,18 +13,21 @@ use Nette\Security;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class MySqlPages extends TestCase\Database {
+final class CollectivePages extends TestCase\Database {
 	public function testAddingBrandNew() {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>Content</p>');
-		(new Subscribing\MySqlPages($this->database))->add(
+		(new Subscribing\CollectivePages($this->database))->add(
 			new Subscribing\FakePage('www.google.com', $dom)
 		);
-		$pages = $this->database->fetchAll('SELECT url, content FROM pages');
+		$pages = $this->database->fetchAll('SELECT * FROM pages');
 		Assert::count(1, $pages);
 		$page = current($pages);
 		Assert::same('www.google.com', $page['url']);
 		Assert::contains('<p>Content</p>', $page['content']);
+		$visits = $this->database->fetchAll('SELECT * FROM page_visits');
+		Assert::count(1, $visits);
+		Assert::same(1, $visits[0]['page_id']);
 	}
 
 	public function testAddingWithRewritingContent() {
@@ -34,7 +37,7 @@ final class MySqlPages extends TestCase\Database {
 		);
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>The content is rewritten with this</p>');
-		(new Subscribing\MySqlPages($this->database))->add(
+		(new Subscribing\CollectivePages($this->database))->add(
 			new Subscribing\FakePage('www.google.com', $dom)
 		);
 		$pages = $this->database->fetchAll('SELECT url, content FROM pages');
@@ -45,6 +48,9 @@ final class MySqlPages extends TestCase\Database {
 			'<p>The content is rewritten with this</p>',
 			$page['content']
 		);
+		$visits = $this->database->fetchAll('SELECT * FROM page_visits');
+		Assert::count(1, $visits);
+		Assert::same(1, $visits[0]['page_id']);
 	}
 
 	public function testIterating() {
@@ -53,7 +59,7 @@ final class MySqlPages extends TestCase\Database {
 			("www.google.com", "<p>Content</p>"),
 			("www.seznam.cz", "<p>XXX</p>")'
 		);
-		$pages = (new Subscribing\MySqlPages($this->database))->iterate();
+		$pages = (new Subscribing\CollectivePages($this->database))->iterate();
 		Assert::count(2, $pages);
 		Assert::same('www.google.com', $pages[0]->url());
 		Assert::contains('<p>Content</p>', $pages[0]->content()->saveHTML());
@@ -66,9 +72,13 @@ final class MySqlPages extends TestCase\Database {
 			'INSERT INTO pages (url, content) VALUES
 			("www.google.com", "<p>Content</p>")'
 		);
+		$this->database->query(
+			'INSERT INTO page_visits (page_id, visited_at) VALUES
+			(1, "2000-01-01 01:01:01")'
+		);
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>google.com new content</p>');
-		(new Subscribing\MySqlPages($this->database))
+		(new Subscribing\CollectivePages($this->database))
 			->replace(
 				new Subscribing\FakePage('www.google.com'),
 				new Subscribing\FakePage('www.whatever.com', $dom)
@@ -77,11 +87,16 @@ final class MySqlPages extends TestCase\Database {
 		Assert::count(1, $pages);
 		Assert::contains('<p>google.com new content</p>', $pages[0]['content']);
 		Assert::same('www.google.com', $pages[0]['url']);
+		$visits = $this->database->fetchAll('SELECT * FROM page_visits');
+		Assert::count(1, $visits);
+		Assert::same(1, $visits[0]['page_id']);
+		Assert::notSame('2000-01-01 01:01:01', $visits[0]['visited_at']);
 	}
 
     protected function prepareDatabase() {
 		$this->database->query('TRUNCATE pages');
+		$this->database->query('TRUNCATE page_visits');
     }
 }
 
-(new MySqlPages)->run();
+(new CollectivePages)->run();

@@ -78,7 +78,7 @@ final class PartForm extends SecureControl {
 				new GuzzleHttp\Client()
 			))->send($request);
 			$addedPage = (new Subscribing\LoggedPages(
-				new Subscribing\MySqlPages($this->database),
+				new Subscribing\CollectivePages($this->database),
 				$this->logger
 			))->add(
 				new Subscribing\AvailableWebPage(
