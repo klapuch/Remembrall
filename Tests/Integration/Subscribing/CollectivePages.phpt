@@ -72,10 +72,6 @@ final class CollectivePages extends TestCase\Database {
 			'INSERT INTO pages (url, content) VALUES
 			("www.google.com", "<p>Content</p>")'
 		);
-		$this->database->query(
-			'INSERT INTO page_visits (page_id, visited_at) VALUES
-			(1, "2000-01-01 01:01:01")'
-		);
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>google.com new content</p>');
 		(new Subscribing\CollectivePages($this->database))
@@ -90,7 +86,6 @@ final class CollectivePages extends TestCase\Database {
 		$visits = $this->database->fetchAll('SELECT * FROM page_visits');
 		Assert::count(1, $visits);
 		Assert::same(1, $visits[0]['page_id']);
-		Assert::notSame('2000-01-01 01:01:01', $visits[0]['visited_at']);
 	}
 
     protected function prepareDatabase() {

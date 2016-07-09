@@ -44,11 +44,10 @@ final class CollectivePages implements Pages {
 					$old->url()
 				);
 				$this->database->query(
-					'UPDATE page_visits
-					SET visited_at = ?
-					WHERE page_id = (SELECT ID FROM pages WHERE url = ?)',
-					new \DateTimeImmutable(),
-					$old->url()
+					'INSERT INTO page_visits (page_id, visited_at) VALUES
+					((SELECT ID FROM pages WHERE url = ?), ?)',
+					$old->url(),
+					new \DateTimeImmutable()
 				);
 			}
 		);
