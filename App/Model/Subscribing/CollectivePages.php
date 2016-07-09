@@ -26,8 +26,8 @@ final class CollectivePages implements Pages {
 				);
 				$this->database->query(
 					'INSERT INTO page_visits (page_id, visited_at) VALUES
-					(?, ?) ON DUPLICATE KEY UPDATE page_id = VALUES(page_id)',
-					$this->database->insertId(),
+					((SELECT ID FROM pages WHERE url = ?), ?)',
+					$page->url(),
 					new \DateTimeImmutable()
 				);
 				return $page;

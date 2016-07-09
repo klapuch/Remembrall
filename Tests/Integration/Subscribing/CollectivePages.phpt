@@ -40,7 +40,7 @@ final class CollectivePages extends TestCase\Database {
 		(new Subscribing\CollectivePages($this->database))->add(
 			new Subscribing\FakePage('www.google.com', $dom)
 		);
-		$pages = $this->database->fetchAll('SELECT url, content FROM pages');
+		$pages = $this->database->fetchAll('SELECT * FROM pages');
 		Assert::count(1, $pages);
 		$page = current($pages);
 		Assert::same('www.google.com', $page['url']);

@@ -12,7 +12,7 @@ CREATE TABLE `pages` (
   `content` text NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `url` (`url`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 DROP TABLE IF EXISTS `page_visits`;
@@ -21,7 +21,7 @@ CREATE TABLE `page_visits` (
   `page_id` int(11) NOT NULL,
   `visited_at` datetime NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 DROP TABLE IF EXISTS `parts`;
@@ -29,13 +29,13 @@ CREATE TABLE `parts` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `page_id` int(11) NOT NULL,
   `expression` varchar(255) CHARACTER SET ascii NOT NULL,
-  `content` text COLLATE utf8_czech_ci NOT NULL,
+  `content` text COLLATE utf8_general_ci NOT NULL,
   `interval` varchar(10) CHARACTER SET ascii NOT NULL,
   `subscriber_id` int(11) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `page_id,subscriber_id,expression` (`page_id`,`subscriber_id`,`expression`),
   KEY `subscriber_id` (`subscriber_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 DROP TABLE IF EXISTS `part_visits`;
@@ -44,17 +44,17 @@ CREATE TABLE `part_visits` (
   `part_id` int(11) NOT NULL,
   `visited_at` datetime NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 DROP TABLE IF EXISTS `subscribers`;
 CREATE TABLE `subscribers` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `email` varchar(255) COLLATE utf8_czech_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8_czech_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8_general_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 DROP TABLE IF EXISTS `forgotten_passwords`;
 CREATE TABLE `forgotten_passwords` (
@@ -66,7 +66,7 @@ CREATE TABLE `forgotten_passwords` (
   PRIMARY KEY (`ID`),
   UNIQUE KEY `reminder` (`reminder`),
   KEY `subscriber_id` (`subscriber_id`)
-) ENGINE=MyIsam DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+) ENGINE=MyIsam DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 DROP TABLE IF EXISTS `verification_codes`;
 CREATE TABLE `verification_codes` (
@@ -78,7 +78,7 @@ CREATE TABLE `verification_codes` (
   PRIMARY KEY (`ID`),
   UNIQUE KEY `code` (`code`),
   UNIQUE KEY `subscriber_id` (`subscriber_id`)
-) ENGINE=MyIsam DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+) ENGINE=MyIsam DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 DROP TABLE IF EXISTS `reports`;
 CREATE TABLE `reports` (
@@ -86,7 +86,7 @@ CREATE TABLE `reports` (
   `part_id` int(11) NOT NULL,
   `sent_at` datetime NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyIsam DEFAULT COLLATE=utf8_czech_ci;
+) ENGINE=MyIsam DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 -- 2016-06-18 07:55:08
