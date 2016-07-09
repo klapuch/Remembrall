@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Http;
 
+use Dibi;
 use GuzzleHttp;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message;

@@ -74,8 +74,9 @@ final class PartForm extends SecureControl {
 					)
 				)
 			);
-			$response = (new Http\WebBrowser(
-				new GuzzleHttp\Client()
+			$response = (new Http\CachingBrowser(
+				new Http\WebBrowser(new GuzzleHttp\Client()),
+				$this->database
 			))->send($request);
 			$addedPage = (new Subscribing\LoggedPages(
 				new Subscribing\CollectivePages($this->database),
