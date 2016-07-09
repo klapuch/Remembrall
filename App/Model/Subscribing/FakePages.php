@@ -19,4 +19,8 @@ final class FakePages implements Pages {
 	public function iterate(): array {
 		return $this->pages;
 	}
+
+	public function replace(Page $old, Page $new) {
+		
+	}
 }

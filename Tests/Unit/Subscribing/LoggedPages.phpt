@@ -55,6 +55,33 @@ final class LoggedPages extends TestCase\Mockery {
 			))->iterate();
 		});
 	}
+
+	/**
+	 * @throws \Exception exceptionMessage
+	 */
+	public function testLoggedExceptionDuringReplacing() {
+		$ex = new \Exception('exceptionMessage');
+		$parts = $this->mockery(Subscribing\Pages::class);
+		$parts->shouldReceive('replace')->andThrowExceptions([$ex]);
+		$logger = $this->mockery('Tracy\ILogger');
+		$logger->shouldReceive('log')->once()->with($ex, 'error');
+		(new Subscribing\LoggedPages($parts, $logger))->replace(
+			new Subscribing\FakePage(),
+			new Subscribing\FakePage()
+		);
+	}
+
+	public function testNoExceptionDuringReplacing() {
+		Assert::noError(function() {
+			$logger = $this->mockery('Tracy\ILogger');
+			(new Subscribing\LoggedPages(
+				new Subscribing\FakePages(), $logger
+			))->replace(
+				new Subscribing\FakePage(),
+				new Subscribing\FakePage()
+			);
+		});
+	}
 }
 
 (new LoggedPages())->run();

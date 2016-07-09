@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+use Remembrall\Exception;
 use Tracy;
 
 /**
@@ -19,6 +20,15 @@ final class LoggedPages implements Pages {
 	public function add(Page $page): Page {
 		try {
 			return $this->origin->add($page);
+		} catch(\Throwable $ex) {
+			$this->logger->log($ex, Tracy\Logger::ERROR);
+			throw $ex;
+		}
+	}
+
+	public function replace(Page $old, Page $new) {
+		try {
+			$this->origin->replace($old, $new);
 		} catch(\Throwable $ex) {
 			$this->logger->log($ex, Tracy\Logger::ERROR);
 			throw $ex;

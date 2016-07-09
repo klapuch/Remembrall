@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Dibi;
+use Remembrall\Exception;
 
 /**
  * Expired pages in range of the given interval
@@ -24,6 +25,10 @@ final class ExpiredPages implements Pages {
 
 	public function add(Page $page): Page {
 		return $this->origin->add($page);
+	}
+
+	public function replace(Page $old, Page $new) {
+		$this->origin->replace($old, $new); //TODO: Should checks expiration
 	}
 
 	public function iterate(): array {

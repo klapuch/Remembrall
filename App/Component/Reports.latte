@@ -3,8 +3,6 @@
     <tr>
         <th><p>#</p></th>
         <th><p>Visit</p></th>
-        <th><p>Last change</p></th>
-        <th><p>Interval</p></th>
         <th><p>Expression</p></th>
         <th><p>Page</p></th>
     </tr>
@@ -13,8 +11,6 @@
     <tr n:foreach="$reports as $report">
         <td><p>{$iterator->counter}</p></td>
         <td><p>{$report->sentAt()|date:'Y-m-d H:i'}</p></td>
-        <td><p>{$report->content()->visitedAt()->start()|date:'Y-m-d H:i'}</p></td>
-        <td><p>{$report->content()->visitedAt()->step()->i}</p></td>
         <td><p>{$report->content()->expression()}</p></td>
         <td><p>{$report->content()->source()->url()}</p></td>
     </tr>

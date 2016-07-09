@@ -24,6 +24,16 @@ final class MySqlPages implements Pages {
 		return $page;
 	}
 
+	public function replace(Page $old, Page $new) {
+		$this->database->query(
+			'UPDATE pages
+			SET content = ?
+			WHERE url = ?',
+			$new->content()->saveHTML(),
+			$old->url()
+		);
+	}
+
 	public function iterate(): array {
 		return array_reduce(
 			$this->database->fetchAll('SELECT url, content FROM pages'),

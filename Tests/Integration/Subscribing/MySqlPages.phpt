@@ -61,6 +61,24 @@ final class MySqlPages extends TestCase\Database {
 		Assert::contains('<p>XXX</p>', $pages[1]->content()->saveHTML());
 	}
 
+	public function testReplacingContentWithoutUrlChange() {
+		$this->database->query(
+			'INSERT INTO pages (url, content) VALUES
+			("www.google.com", "<p>Content</p>")'
+		);
+		$dom = new \DOMDocument();
+		$dom->loadHTML('<p>google.com new content</p>');
+		(new Subscribing\MySqlPages($this->database))
+			->replace(
+				new Subscribing\FakePage('www.google.com'),
+				new Subscribing\FakePage('www.whatever.com', $dom)
+			);
+		$pages = $this->database->fetchAll('SELECT * FROM pages');
+		Assert::count(1, $pages);
+		Assert::contains('<p>google.com new content</p>', $pages[0]['content']);
+		Assert::same('www.google.com', $pages[0]['url']);
+	}
+
     protected function prepareDatabase() {
 		$this->database->query('TRUNCATE pages');
     }
