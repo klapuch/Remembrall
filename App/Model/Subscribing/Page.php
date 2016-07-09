@@ -17,4 +17,11 @@ interface Page {
 	 * @return string
 	 */
 	public function url(): string;
+
+	/**
+	 * Is the given page equals to the current one?
+	 * @param Page $page
+	 * @return bool
+	 */
+	public function equals(self $page): bool;
 }

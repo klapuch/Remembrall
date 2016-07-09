@@ -20,11 +20,11 @@ interface Part {
 	public function content(): string;
 
 	/**
-	 * Is the given part equals to the current part?
+	 * Is the given part equals to the current one?
 	 * @param Part $part
 	 * @return bool
 	 */
-	public function equals(Part $part): bool;
+	public function equals(self $part): bool;
 
 	/**
 	 * Every part can be identified by expression

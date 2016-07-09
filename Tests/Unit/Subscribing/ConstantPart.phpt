@@ -15,22 +15,7 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class ConstantPart extends Tester\TestCase {
-	public function testSameContentButDifferentPage() {
-		Assert::false(
-			(new Subscribing\ConstantPart(
-				new Subscribing\FakePage('google.com'),
-				'',
-				new Subscribing\FakeExpression,
-				new Subscribing\FakeInterval()
-			))->equals(
-				new Subscribing\FakePart(
-					new Subscribing\FakePage('seznam.cz')
-				)
-			)
-		);
-	}
-
-	public function testDifferentContentButSamePage() {
+	public function testDifferentParts() {
 		Assert::false(
 			(new Subscribing\ConstantPart(
 				new Subscribing\FakePage('google.com'),
@@ -39,9 +24,10 @@ final class ConstantPart extends Tester\TestCase {
 				new Subscribing\FakeInterval()
 			))->equals(
 				new Subscribing\FakePart(
-					new Subscribing\FakePage('google.com'),
+					new Subscribing\FakePage(),
 					null,
-					''
+					null,
+					$equals = false
 				)
 			)
 		);
@@ -56,9 +42,10 @@ final class ConstantPart extends Tester\TestCase {
 				new Subscribing\FakeInterval()
 			))->equals(
 				new Subscribing\FakePart(
-					new Subscribing\FakePage('google.com'),
+					new Subscribing\FakePage(),
 					null,
-					'abc'
+					null,
+					$equals = true
 				)
 			)
 		);

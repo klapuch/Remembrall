@@ -16,7 +16,6 @@ interface Pages {
 	 * Replace the old page with the new one
 	 * @param Page $old
 	 * @param Page $new
-	 * @throws Exception\ExistenceException
 	 * @return void
 	 */
 	public function replace(Page $old, Page $new);

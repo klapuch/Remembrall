@@ -8,13 +8,16 @@ namespace Remembrall\Model\Subscribing;
 final class FakePage implements Page {
 	private $url;
 	private $content;
+	private $equals;
 
 	public function __construct(
 		string $url = null,
-		\DOMDocument $content = null
+		\DOMDocument $content = null,
+		$equals = false
 	) {
 		$this->url = $url;
 		$this->content = $content;
+		$this->equals = $equals;
 	}
 
 	public function content(): \DOMDocument {
@@ -23,5 +26,9 @@ final class FakePage implements Page {
 
 	public function url(): string {
 		return $this->url;
+	}
+
+	public function equals(Page $page): bool {
+		return $this->equals;
 	}
 }

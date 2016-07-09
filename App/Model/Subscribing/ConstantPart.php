@@ -34,8 +34,7 @@ final class ConstantPart implements Part {
 	}
 
 	public function equals(Part $part): bool {
-		return $part->source()->url() === $this->source()->url()
-		&& $part->content() === $this->content();
+		return $part->equals($this);
 	}
 
 	public function expression(): Expression {
