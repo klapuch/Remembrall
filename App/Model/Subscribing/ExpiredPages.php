@@ -24,15 +24,18 @@ final class ExpiredPages implements Pages {
 	}
 
 	public function add(Page $page): Page {
-		return $this->origin->add($page);
+		if($this->expired($page))
+			return $this->origin->add($page);
+		return $page;
 	}
 
 	public function replace(Page $old, Page $new) {
-		$this->origin->replace($old, $new); //TODO: Should checks expiration
+		if($this->expired($old))
+			$this->origin->replace($old, $new);
 	}
 
 	public function iterate(): array {
-		return array_reduce(
+		return (array)array_reduce(
 			$this->database->fetchAll(
 				'SELECT url, content
 				FROM pages
@@ -45,6 +48,20 @@ final class ExpiredPages implements Pages {
 			function($previous, Dibi\Row $row) {
 				$previous[] = new ConstantPage($row['url'], $row['content']);
 				return $previous;
+			}
+		);
+	}
+
+	/**
+	 * Checks whether the given page is really expired
+	 * @param Page $page
+	 * @return bool
+	 */
+	private function expired(Page $page): bool {
+		return (bool)array_filter(
+			$this->iterate(),
+			function(Page $expiredPage) use ($page) {
+				return $page->equals($expiredPage);
 			}
 		);
 	}
