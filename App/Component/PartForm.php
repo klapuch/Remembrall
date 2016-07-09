@@ -8,7 +8,6 @@ use Nette\Application\UI;
 use Nette\Caching\Storages;
 use Nette\Forms;
 use Nette\Utils\ArrayHash;
-use Remembrall\Exception;
 use Remembrall\Model\{
 	Access, Http, Subscribing
 };

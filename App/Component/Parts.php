@@ -5,7 +5,6 @@ namespace Remembrall\Component;
 use Dibi;
 use GuzzleHttp;
 use Nette\Caching\Storages;
-use Nette\Security;
 use Remembrall\Model\{
 	Access, Http, Subscribing
 };
