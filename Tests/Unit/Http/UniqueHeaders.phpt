@@ -117,6 +117,19 @@ final class UniqueHeaders extends Tester\TestCase {
 		);
 		Assert::true($headers->included(new Http\FakeHeader('method', 'get')));
 	}
+
+	public function testConversionToArray() {
+		$headers = new Http\UniqueHeaders(
+			[
+				new Http\FakeHeader('method', 'get'),
+				new Http\FakeHeader('Connection', 'close'),
+			]
+		);
+		Assert::same(
+			['method' => 'get', 'Connection' => 'close'],
+			$headers->toArray()
+		);
+	}
 }
 
 (new UniqueHeaders())->run();
