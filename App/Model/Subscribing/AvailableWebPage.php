@@ -35,10 +35,6 @@ final class AvailableWebPage implements Page {
 		return $this->origin->url();
 	}
 
-	public function equals(Page $page): bool {
-		return $this->origin->equals($page);
-	}
-
 	/**
 	 * Checks whether the page is normally accessible
 	 * It means status code under 400

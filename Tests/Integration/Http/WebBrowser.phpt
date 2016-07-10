@@ -6,54 +6,48 @@
 namespace Remembrall\Integration\Http;
 
 use GuzzleHttp;
-use Remembrall\Model\Http;
-use Tester\Assert;
+use Remembrall\Model\{
+	Http, Subscribing
+};
+use Remembrall\TestCase;
 use Tester;
+use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class WebBrowser extends Tester\TestCase {
-	public function testReturnedContent() {
+final class WebBrowser extends TestCase\Database {
+	public function testHttpPage() {
 		$http = new GuzzleHttp\Client();
-		$content = (new Http\WebBrowser($http))->send(
-			new Http\ConstantRequest(
-				new Http\FakeHeaders(
-					['method' => 'get', 'host' => 'http://www.facedown.cz']
-				)
-			)
-		)->content();
-		$dom = Tester\DomQuery::fromHtml($content);
+		$headers = ['method' => 'get', 'host' => 'http://www.facedown.cz'];
+		$page = (new Http\WebBrowser($http, $this->database))->send(
+			new Http\ConstantRequest(new Http\FakeHeaders($headers)));
+		Assert::type(Subscribing\AvailableWebPage::class, $page);
+		$pages = $this->database->fetchAll('SELECT * FROM pages');
+		Assert::count(1, $pages);
+		Assert::same(serialize($headers), $pages[0]['headers']);
+		Assert::same('http://www.facedown.cz', $pages[0]['url']);
+		$dom = Tester\DomQuery::fromHtml($pages[0]['content']);
 		Assert::equal('Facedown', current($dom->find('h1')[0]));
+		$visits = $this->database->fetchAll('SELECT * FROM page_visits');
+		Assert::count(1, $visits);
+		Assert::same(1, $visits[0]['page_id']);
 	}
 
-	public function testReturnedHeadersFromHttp() {
+	public function testHttpsPage() {
 		$http = new GuzzleHttp\Client();
-		$headers = (new Http\WebBrowser($http))->send(
-			new Http\ConstantRequest(
-				new Http\FakeHeaders(
-					['method' => 'get', 'host' => 'http://www.facedown.cz']
-				)
-			)
-		)->headers();
-		Assert::equal(
-			new Http\CaseSensitiveHeader('Content-Type', 'text/html; charset=utf-8'),
-			$headers->header('Content-Type')
-		);
-	}
-
-	public function testReturnedHeadersFromHttps() {
-		$http = new GuzzleHttp\Client();
-		$headers = (new Http\WebBrowser($http))->send(
-			new Http\ConstantRequest(
-				new Http\FakeHeaders(
-					['method' => 'get', 'host' => 'https://nette.org/']
-				)
-			)
-		)->headers();
-		Assert::equal(
-			new Http\CaseSensitiveHeader('Content-Type', 'text/html; charset=utf-8'),
-			$headers->header('Content-Type')
-		);
+		$headers = ['method' => 'get', 'host' => 'https://nette.org/'];
+		$page = (new Http\WebBrowser($http, $this->database))->send(
+			new Http\ConstantRequest(new Http\FakeHeaders($headers)));
+		Assert::type(Subscribing\AvailableWebPage::class, $page);
+		$pages = $this->database->fetchAll('SELECT * FROM pages');
+		Assert::count(1, $pages);
+		Assert::same(serialize($headers), $pages[0]['headers']);
+		Assert::same('https://nette.org/', $pages[0]['url']);
+		$dom = Tester\DomQuery::fromHtml($pages[0]['content']);
+		Assert::equal('Framework', current($dom->find('h1')[0]));
+		$visits = $this->database->fetchAll('SELECT * FROM page_visits');
+		Assert::count(1, $visits);
+		Assert::same(1, $visits[0]['page_id']);
 	}
 
 	/**
@@ -61,13 +55,9 @@ final class WebBrowser extends Tester\TestCase {
 	 */
 	public function testUnknownUrl() {
 		$http = new GuzzleHttp\Client();
-		(new Http\WebBrowser($http))->send(
-			new Http\ConstantRequest(
-				new Http\FakeHeaders(
-					['method' => 'get', 'host' => 'http://www.čoromoro.xx', 'http_errors' => '']
-				)
-			)
-		);
+		$headers = ['method' => 'get', 'host' => 'http://www.čoromoro.xx', 'http_errors' => ''];
+		(new Http\WebBrowser($http, $this->database))->send(
+			new Http\ConstantRequest(new Http\FakeHeaders($headers)));
 	}
 
 	/**
@@ -75,13 +65,14 @@ final class WebBrowser extends Tester\TestCase {
 	 */
 	public function testEmptyUrl() {
 		$http = new GuzzleHttp\Client();
-		(new Http\WebBrowser($http))->send(
-			new Http\ConstantRequest(
-				new Http\FakeHeaders(
-					['method' => 'get', 'host' => '', 'http_errors' => '']
-				)
-			)
-		);
+		$headers = ['method' => 'get', 'host' => 'http://www.čoromoro.xx', 'http_errors' => ''];
+		(new Http\WebBrowser($http, $this->database))->send(
+			new Http\ConstantRequest(new Http\FakeHeaders($headers)));
+	}
+
+	protected function prepareDatabase() {
+		$this->database->query('TRUNCATE pages');
+		$this->database->query('TRUNCATE page_visits');
 	}
 }
 

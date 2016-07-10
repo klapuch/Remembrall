@@ -24,10 +24,6 @@ final class CachedPage implements Page {
 		return $this->read(__FUNCTION__);
 	}
 
-	public function equals(Page $page): bool {
-		return $this->origin->equals($page);
-	}
-
 	private function read(string $method) {
 		$key = __CLASS__ . '::' . $method;
 		if($this->cache->read($key) === null)

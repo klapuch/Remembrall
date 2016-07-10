@@ -5,7 +5,9 @@
  */
 namespace Remembrall\Integration\Http;
 
-use Remembrall\Model\Http;
+use Remembrall\Model\{
+	Http, Subscribing
+};
 use Remembrall\TestCase;
 use Tester;
 use Tester\Assert;
@@ -24,8 +26,8 @@ final class CachingBrowser extends TestCase\Database {
 			'INSERT INTO page_visits (page_id, visited_at) VALUES (1, NOW())'
 		);
 		Assert::equal(
-			new Http\ConstantResponse(
-				new Http\UniqueHeaders($headers),
+			new Subscribing\ConstantPage(
+				'google.com',
 				'foo'
 			),
 			(new Http\CachingBrowser(new Http\FakeBrowser(), $this->database))
@@ -46,28 +48,19 @@ final class CachingBrowser extends TestCase\Database {
 			'INSERT INTO page_visits (page_id, visited_at) VALUES
 			(1, NOW())'
 		);
-		$headers = ['Status' => '200 OK'];
-		$response = new Http\FakeResponse(
-			new Http\FakeHeaders($headers), 'bar'
+		$page = new Subscribing\FakePage(
+			'whatever.com',
+			new \DOMDocument()
 		);
 		Assert::equal(
-			$response,
-			(new Http\CachingBrowser(new Http\FakeBrowser($response), $this->database))
+			$page,
+			(new Http\CachingBrowser(new Http\FakeBrowser($page), $this->database))
 				->send(
 					new Http\ConstantRequest(
 						new Http\FakeHeaders(['host' => 'google.com'])
 					)
 				)
 		);
-		$pages = $this->database->fetchAll('SELECT * FROM pages');
-		Assert::count(1, $pages);
-		Assert::same(serialize($headers), $pages[0]['headers']);
-		Assert::same('google.com', $pages[0]['url']);
-		Assert::same('bar', $pages[0]['content']);
-		$visits = $this->database->fetchAll('SELECT * FROM page_visits');
-		Assert::count(2, $visits);
-		Assert::same(1, $visits[0]['page_id']);
-		Assert::same(1, $visits[1]['page_id']);
 	}
 
 	public function testExpiredCachingByOldVisitation() {
@@ -79,28 +72,19 @@ final class CachingBrowser extends TestCase\Database {
 			'INSERT INTO page_visits (page_id, visited_at) VALUES
 			(1, NOW() - INTERVAL 11 MINUTE)'
 		);
-		$headers = ['Status' => '200 OK'];
-		$response = new Http\FakeResponse(
-			new Http\FakeHeaders($headers), 'bar'
+		$page = new Subscribing\FakePage(
+			'whatever.com',
+			new \DOMDocument()
 		);
 		Assert::equal(
-			$response,
-			(new Http\CachingBrowser(new Http\FakeBrowser($response), $this->database))
+			$page,
+			(new Http\CachingBrowser(new Http\FakeBrowser($page), $this->database))
 				->send(
 					new Http\ConstantRequest(
 						new Http\FakeHeaders(['host' => 'google.com'])
 					)
 				)
 		);
-		$pages = $this->database->fetchAll('SELECT * FROM pages');
-		Assert::count(1, $pages);
-		Assert::same(serialize($headers), $pages[0]['headers']);
-		Assert::same('google.com', $pages[0]['url']);
-		Assert::same('bar', $pages[0]['content']);
-		$visits = $this->database->fetchAll('SELECT * FROM page_visits');
-		Assert::count(2, $visits);
-		Assert::same(1, $visits[0]['page_id']);
-		Assert::same(1, $visits[1]['page_id']);
 	}
 
 	protected function prepareDatabase() {

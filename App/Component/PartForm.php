@@ -74,19 +74,15 @@ final class PartForm extends SecureControl {
 					)
 				)
 			);
-			$response = (new Http\CachingBrowser(
-				new Http\WebBrowser(new GuzzleHttp\Client()),
-				$this->database
-			))->send($request);
-			$addedPage = (new Subscribing\LoggedPages(
-				new Subscribing\CollectivePages($this->database),
+			$page = (new Http\LoggingBrowser(
+				new Http\CachingBrowser(
+					new Http\WebBrowser(
+						new GuzzleHttp\Client(), $this->database
+					),
+					$this->database
+				),
 				$this->logger
-			))->add(
-				new Subscribing\AvailableWebPage(
-					new Subscribing\HtmlWebPage($request, $response),
-					$response
-				)
-			);
+			))->send($request);
 			(new Subscribing\LoggedParts(
 				new Subscribing\ReportedParts(
 					new Subscribing\LimitedParts(
@@ -108,10 +104,10 @@ final class PartForm extends SecureControl {
 			))->subscribe(
 				new Subscribing\CachedPart(
 					new Subscribing\HtmlPart(
-						$addedPage,
+						$page,
 						new Subscribing\ValidXPathExpression(
 							new Subscribing\XPathExpression(
-								$addedPage,
+								$page,
 								$values['expression']
 							)
 						),

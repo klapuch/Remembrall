@@ -32,10 +32,6 @@ final class HtmlWebPage implements Page {
 		return $this->request->headers()->header('host')->value();
 	}
 
-	public function equals(Page $page): bool {
-		return $this->url() === $page->url();
-	}
-
 	/**
 	 * Checks whether the page is HTML
 	 * @return bool

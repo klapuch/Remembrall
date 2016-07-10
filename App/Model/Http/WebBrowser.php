@@ -7,32 +7,62 @@ use GuzzleHttp;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message;
 use Remembrall\Exception\ExistenceException;
+use Remembrall\Model\{
+	Storage, Subscribing
+};
 
 /**
  * Browser sending a http request and receiving http response
  */
 final class WebBrowser implements Browser {
 	private $http;
+	private $database;
 
-	public function __construct(GuzzleHttp\ClientInterface $http) {
+	public function __construct(
+		GuzzleHttp\ClientInterface $http,
+		Dibi\Connection $database
+	) {
 		$this->http = $http;
+		$this->database = $database;
 	}
 
-	public function send(Request $request): Response {
+	public function send(Request $request): Subscribing\Page {
 		try {
-			$headers = $request->headers();
-			return new DefaultResponse(
+			$headers = array_reduce(
+				$request->headers()->iterate(),
+				function($previous, Header $header) {
+					$previous[$header->field()] = $header->value();
+					return $previous;
+				}
+			);
+			$response = new DefaultResponse(
 				$this->http->request(
-					$headers->header('method')->value(),
-					$headers->header('host')->value(),
-					array_reduce(
-						$headers->iterate(),
-						function($previous, Header $header) {
-							$previous[$header->field()] = $header->value();
-							return $previous;
-						}
-					)
+					$headers['method'],
+					$headers['host'],
+					$headers
 				)
+			);
+			(new Storage\Transaction($this->database))->start(
+				function() use ($headers, $response) {
+					$this->database->query(
+						'INSERT INTO pages (url, content, headers) VALUES
+						(?, ?, ?) ON DUPLICATE KEY UPDATE
+						content = VALUES(content), headers = VALUES(headers)',
+						$headers['host'],
+						$response->content(),
+						serialize($headers)
+					);
+					$this->database->query(
+						'INSERT INTO page_visits (page_id, visited_at) VALUES
+						((SELECT ID FROM pages WHERE url = ?), ?)',
+						$headers['host'],
+						new \DateTimeImmutable()
+					);
+				}
+			);
+			return new Subscribing\AvailableWebPage(
+				new Subscribing\HtmlWebPage($request, $response),
+				$response
 			);
 		} catch(RequestException $ex) {
 			throw new ExistenceException(

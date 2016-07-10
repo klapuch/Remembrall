@@ -5,10 +5,12 @@
  */
 namespace Remembrall\Unit\Http;
 
-use Remembrall\Model\Http;
+use Remembrall\Model\{
+	Http, Subscribing
+};
 use Remembrall\TestCase;
-use Tester\Assert;
 use Tester;
+use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -31,7 +33,7 @@ final class LoggingBrowser extends TestCase\Mockery {
 		Assert::noError(function() {
 			$logger = $this->mockery('Tracy\ILogger');
 			(new Http\LoggingBrowser(
-				new Http\FakeBrowser(new Http\FakeResponse()), $logger
+				new Http\FakeBrowser(new Subscribing\FakePage), $logger
 			))->send(new Http\ConstantRequest(new Http\FakeHeaders()));
 		});
 	}

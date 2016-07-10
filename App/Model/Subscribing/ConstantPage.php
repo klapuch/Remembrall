@@ -20,10 +20,6 @@ final class ConstantPage implements Page {
 		return $dom;
 	}
 
-	public function equals(Page $page): bool {
-		return $page->equals($this);
-	}
-
 	public function url(): string {
 		return $this->url;
 	}

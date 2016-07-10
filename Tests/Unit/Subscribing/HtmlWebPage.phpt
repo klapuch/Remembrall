@@ -65,37 +65,6 @@ final class HtmlWebPage extends TestCase\Mockery {
 			))->content()->getElementsByTagName('p')->item(0)->nodeValue
 		);
 	}
-
-	protected function differentPages() {
-		return [
-			['www.google.com', 'www.google.cz'],
-			['www.google.com', 'http://www.google.cz'],
-			['www.google.com', 'www.Google.com'],
-			['https://www.google.com', 'http://www.google.com'],
-		];
-	}
-
-	public function testEquivalentPages() {
-		$url = 'www.google.com';
-		Assert::true(
-			(new Subscribing\HtmlWebPage(
-				new Http\ConstantRequest(new Http\FakeHeaders(['host' => $url])),
-				new Http\FakeResponse()
-			))->equals(new Subscribing\FakePage($url))
-		);
-	}
-
-	/**
-	 * @dataProvider differentPages
-	 */
-	public function testDifferentPages($actual, $difference) {
-		Assert::false(
-			(new Subscribing\HtmlWebPage(
-				new Http\ConstantRequest(new Http\FakeHeaders(['host' => $actual])),
-				new Http\FakeResponse()
-			))->equals(new Subscribing\FakePage($difference))
-		);
-	}
 }
 
 (new HtmlWebPage())->run();

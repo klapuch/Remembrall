@@ -33,14 +33,10 @@ final class CachedPage extends TestCase\Mockery {
 			->andReturn($url)
 			->with('Remembrall\Model\Subscribing\CachedPage::url')
 			->times(4);
-		$this->cache->shouldReceive('read')
-			->with('Remembrall\Model\Subscribing\CachedPage::equals')
-			->never();
 		$page = new Subscribing\CachedPage(
 			new Subscribing\FakePage(
 				$url,
-				$dom,
-				true
+				$dom
 			),
 			$this->cache
 		);
@@ -50,8 +46,6 @@ final class CachedPage extends TestCase\Mockery {
 
 		Assert::same($url, $page->url());
 		Assert::same($url, $page->url());
-
-		Assert::true($page->equals(new Subscribing\FakePage()));
 	}
 }
 

@@ -2,14 +2,16 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Http;
 
-final class FakeBrowser implements Browser {
-	private $response;
+use Remembrall\Model\Subscribing;
 
-	public function __construct(Response $response = null) {
-	    $this->response = $response;
+final class FakeBrowser implements Browser {
+	private $page;
+
+	public function __construct(Subscribing\Page $page = null) {
+	    $this->page = $page;
 	}
 
-	public function send(Request $request): Response {
-		return $this->response;
+	public function send(Request $request): Subscribing\Page {
+		return $this->page;
 	}
 }

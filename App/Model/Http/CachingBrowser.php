@@ -3,7 +3,9 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Http;
 
 use Dibi;
-use Remembrall\Model\Storage;
+use Remembrall\Model\{
+	Storage, Subscribing
+};
 
 /**
  * Caching browser
@@ -19,20 +21,16 @@ final class CachingBrowser implements Browser {
 		$this->database = $database;
 	}
 
-	public function send(Request $request): Response {
+	public function send(Request $request): Subscribing\Page {
 		$url = $request->headers()->header('host')->value();
-		if(!$this->cached($url)) {
-			$response = $this->origin->send($request);
-			$this->cache($url, $response);
-			return $response;
-		}
-		$response = $this->database->fetch(
-			'SELECT content, headers FROM pages WHERE url = ?',
-			$url
-		);
-		return new ConstantResponse(
-			new UniqueHeaders(unserialize($response['headers'])),
-			$response['content']
+		if(!$this->cached($url))
+			return $this->origin->send($request);
+		return new Subscribing\ConstantPage(
+			$url,
+			$this->database->fetchSingle(
+				'SELECT content FROM pages WHERE url = ?',
+				$url
+			)
 		);
 	}
 
@@ -51,42 +49,6 @@ final class CachingBrowser implements Browser {
 			AND visited_at + INTERVAL ? MINUTE >= NOW()',
 			$url,
 			(new \DateInterval(self::EXPIRATION))->i
-		);
-	}
-
-	/**
-	 * Cache the given response
-	 * @param string $url
-	 * @param Response $response
-	 * @throws \Throwable
-	 * @return void
-	 */
-	private function cache(string $url, Response $response) {
-		(new Storage\Transaction($this->database))->start(
-			function() use ($url, $response) {
-				$this->database->query(
-					'INSERT INTO pages (url, content, headers) VALUES (?, ?, ?)
-					ON DUPLICATE KEY UPDATE
-					content = VALUES(content), headers = VALUES(headers)',
-					$url,
-					$response->content(),
-					serialize(
-						array_reduce(
-							$response->headers()->iterate(),
-							function($previous, Header $header) {
-								$previous[$header->field()] = $header->value();
-								return $previous;
-							}
-						)
-					)
-				);
-				$this->database->query(
-					'INSERT INTO page_visits (page_id, visited_at) VALUES
-					((SELECT ID FROM pages WHERE url = ?), ?)',
-					$url,
-					new \DateTimeImmutable()
-				);
-			}
 		);
 	}
 }
