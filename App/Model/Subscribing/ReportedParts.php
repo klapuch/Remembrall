@@ -2,6 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+/**
+ * Stores reports about part changes
+ */
 final class ReportedParts implements Parts {
 	private $origin;
 	private $reports;
