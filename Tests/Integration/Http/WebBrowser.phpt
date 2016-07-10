@@ -24,7 +24,8 @@ final class WebBrowser extends TestCase\Database {
 		Assert::type(Subscribing\AvailableWebPage::class, $page);
 		$pages = $this->database->fetchAll('SELECT * FROM pages');
 		Assert::count(1, $pages);
-		Assert::same(serialize($headers), $pages[0]['headers']);
+		Assert::notSame(serialize($headers), $pages[0]['headers']);
+		Assert::same($headers, array_intersect($headers, unserialize($pages[0]['headers'])));
 		Assert::same('http://www.facedown.cz', $pages[0]['url']);
 		$dom = Tester\DomQuery::fromHtml($pages[0]['content']);
 		Assert::equal('Facedown', current($dom->find('h1')[0]));
@@ -41,7 +42,8 @@ final class WebBrowser extends TestCase\Database {
 		Assert::type(Subscribing\AvailableWebPage::class, $page);
 		$pages = $this->database->fetchAll('SELECT * FROM pages');
 		Assert::count(1, $pages);
-		Assert::same(serialize($headers), $pages[0]['headers']);
+		Assert::notSame(serialize($headers), $pages[0]['headers']);
+		Assert::same($headers, array_intersect($headers, unserialize($pages[0]['headers'])));
 		Assert::same('https://nette.org/', $pages[0]['url']);
 		$dom = Tester\DomQuery::fromHtml($pages[0]['content']);
 		Assert::equal('Framework', current($dom->find('h1')[0]));

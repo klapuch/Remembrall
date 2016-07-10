@@ -49,4 +49,14 @@ final class UniqueHeaders implements Headers {
 			}
 		);
 	}
+
+	public function toArray(): array {
+		return array_reduce(
+			$this->iterate(),
+			function($previous, Header $header) {
+				$previous[$header->field()] = $header->value();
+				return $previous;
+			}
+		);
+	}
 }

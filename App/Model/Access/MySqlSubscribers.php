@@ -38,4 +38,8 @@ final class MySqlSubscribers implements Subscribers {
 			);
 		}
 	}
+
+	public function iterate(): array {
+		throw new \Exception('Not implemented');
+	}
 }

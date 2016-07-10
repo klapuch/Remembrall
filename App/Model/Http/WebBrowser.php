@@ -28,13 +28,7 @@ final class WebBrowser implements Browser {
 
 	public function send(Request $request): Subscribing\Page {
 		try {
-			$headers = array_reduce(
-				$request->headers()->iterate(),
-				function($previous, Header $header) {
-					$previous[$header->field()] = $header->value();
-					return $previous;
-				}
-			);
+			$headers = $request->headers()->toArray();
 			$response = new DefaultResponse(
 				$this->http->request(
 					$headers['method'],
@@ -42,6 +36,7 @@ final class WebBrowser implements Browser {
 					$headers
 				)
 			);
+			$headers += $response->headers()->toArray();
 			(new Storage\Transaction($this->database))->start(
 				function() use ($headers, $response) {
 					$this->database->query(
