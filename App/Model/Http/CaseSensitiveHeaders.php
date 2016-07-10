@@ -38,8 +38,4 @@ final class CaseSensitiveHeaders implements Headers {
 	public function included(Header $header): bool {
 		return $this->origin->included($header);
 	}
-
-	public function toArray(): array {
-		return $this->origin->toArray();
-	}
 }

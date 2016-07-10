@@ -30,8 +30,4 @@ final class FakeHeaders implements Headers {
 			return $this->headers[$header->field()] === $header->value();
 		return false;
 	}
-
-	public function toArray(): array {
-		return $this->headers;
-	}
 }

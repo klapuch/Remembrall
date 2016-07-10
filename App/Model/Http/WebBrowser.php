@@ -28,7 +28,13 @@ final class WebBrowser implements Browser {
 
 	public function send(Request $request): Subscribing\Page {
 		try {
-			$headers = $request->headers()->toArray();
+			$headers = array_reduce(
+				$request->headers()->iterate(),
+				function($previous, Header $header) {
+					$previous[$header->field()] = $header->value();
+					return $previous;
+				}
+			);
 			$response = new DefaultResponse(
 				$this->http->request(
 					$headers['method'],
@@ -36,16 +42,14 @@ final class WebBrowser implements Browser {
 					$headers
 				)
 			);
-			$headers += $response->headers()->toArray();
 			(new Storage\Transaction($this->database))->start(
 				function() use ($headers, $response) {
 					$this->database->query(
-						'INSERT INTO pages (url, content, headers) VALUES
-						(?, ?, ?) ON DUPLICATE KEY UPDATE
-						content = VALUES(content), headers = VALUES(headers)',
+						'INSERT INTO pages (url, content) VALUES
+						(?, ?) ON DUPLICATE KEY UPDATE
+						content = VALUES(content)',
 						$headers['host'],
-						$response->content(),
-						serialize($headers)
+						$response->content()
 					);
 					$this->database->query(
 						'INSERT INTO page_visits (page_id, visited_at) VALUES

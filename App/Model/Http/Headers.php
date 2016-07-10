@@ -25,11 +25,4 @@ interface Headers {
 	 * @return bool
 	 */
 	public function included(Header $header): bool;
-
-	/**
-	 * TODO
-	 * Print all the headers in the specified format
-	 * @return array
-	 */
-	public function toArray(): array;
 }
