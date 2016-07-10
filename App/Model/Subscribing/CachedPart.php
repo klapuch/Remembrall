@@ -3,18 +3,16 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Nette\Caching;
-use Remembrall\Model\Access;
+use Remembrall\Model\{
+	Access, Storage
+};
 
 /**
  * Cache any given part
  */
-final class CachedPart implements Part {
-	private $origin;
-	private $cache;
-
+final class CachedPart extends Storage\Cache implements Part {
 	public function __construct(Part $origin, Caching\IStorage $cache) {
-		$this->origin = $origin;
-		$this->cache = $cache;
+		parent::__construct($origin, $cache);
 	}
 
 	public function source(): Page {
@@ -26,7 +24,7 @@ final class CachedPart implements Part {
 	}
 
 	public function equals(Part $part): bool {
-		return $this->origin->equals($part);
+		return $this->read(__FUNCTION__, $part);
 	}
 
 	public function expression(): Expression {
@@ -35,12 +33,5 @@ final class CachedPart implements Part {
 
 	public function visitedAt(): Interval {
 		return $this->read(__FUNCTION__);
-	}
-
-	private function read(string $method) {
-		$key = __CLASS__ . '::' . $method;
-		if($this->cache->read($key) === null)
-			$this->cache->write($key, $this->origin->$method(), []);
-		return $this->cache->read($key);
 	}
 }
