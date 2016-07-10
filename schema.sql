@@ -24,7 +24,6 @@ CREATE TABLE `pages` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `url` varchar(255) CHARACTER SET ascii NOT NULL,
   `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `headers` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `url` (`url`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;

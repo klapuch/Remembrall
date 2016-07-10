@@ -39,30 +39,6 @@ final class CachingBrowser extends TestCase\Database {
 		);
 	}
 
-	public function testExpiredCachingByEmptyHeaders() {
-		$this->database->query(
-			'INSERT INTO pages (url, content, headers) VALUES
-			("google.com", "foo", "")'
-		);
-		$this->database->query(
-			'INSERT INTO page_visits (page_id, visited_at) VALUES
-			(1, NOW())'
-		);
-		$page = new Subscribing\FakePage(
-			'whatever.com',
-			new \DOMDocument()
-		);
-		Assert::equal(
-			$page,
-			(new Http\CachingBrowser(new Http\FakeBrowser($page), $this->database))
-				->send(
-					new Http\ConstantRequest(
-						new Http\FakeHeaders(['host' => 'google.com'])
-					)
-				)
-		);
-	}
-
 	public function testExpiredCachingByOldVisitation() {
 		$this->database->query(
 			'INSERT INTO pages (url, content, headers) VALUES

@@ -45,7 +45,6 @@ final class CachingBrowser implements Browser {
 			FROM page_visits
 			INNER JOIN pages ON pages.ID = page_visits.page_id
 			WHERE page_id = (SELECT ID FROM pages WHERE url = ?)
-			AND headers != ""
 			AND visited_at + INTERVAL ? MINUTE >= NOW()',
 			$url,
 			(new \DateInterval(self::EXPIRATION))->i
