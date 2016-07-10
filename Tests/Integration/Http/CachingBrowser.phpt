@@ -18,9 +18,8 @@ final class CachingBrowser extends TestCase\Database {
 	public function testCaching() {
 		$headers = ['Status' => '200 OK'];
 		$this->database->query(
-			'INSERT INTO pages (url, content, headers) VALUES
-			("google.com", "foo", ?)',
-			serialize($headers)
+			'INSERT INTO pages (url, content) VALUES
+			("google.com", "foo")'
 		);
 		$this->database->query(
 			'INSERT INTO page_visits (page_id, visited_at) VALUES (1, NOW())'
@@ -41,8 +40,8 @@ final class CachingBrowser extends TestCase\Database {
 
 	public function testExpiredCachingByOldVisitation() {
 		$this->database->query(
-			'INSERT INTO pages (url, content, headers) VALUES
-			("google.com", "foo", "not empty")'
+			'INSERT INTO pages (url, content) VALUES
+			("google.com", "foo")'
 		);
 		$this->database->query(
 			'INSERT INTO page_visits (page_id, visited_at) VALUES
