@@ -63,17 +63,6 @@ final class PartForm extends SecureControl {
 
 	public function formSucceeded(UI\Form $form, ArrayHash $values) {
 		try {
-			$request = new Http\ConstantRequest(
-				new Http\CaseSensitiveHeaders(
-					new Http\UniqueHeaders(
-						[
-							'host' => $values['url'],
-							'method' => 'GET',
-							'http_errors' => false,
-						]
-					)
-				)
-			);
 			$page = (new Http\LoggingBrowser(
 				new Http\CachingBrowser(
 					new Http\WebBrowser(
@@ -82,7 +71,19 @@ final class PartForm extends SecureControl {
 					$this->database
 				),
 				$this->logger
-			))->send($request);
+			))->send(
+				new Http\ConstantRequest(
+					new Http\CaseSensitiveHeaders(
+						new Http\UniqueHeaders(
+							[
+								'host' => $values['url'],
+								'method' => 'GET',
+								'http_errors' => false,
+							]
+						)
+					)
+				)
+			);
 			(new Subscribing\LoggedParts(
 				new Subscribing\ReportedParts(
 					new Subscribing\LimitedParts(

@@ -8,32 +8,42 @@ use Nette\Caching\Storages;
 use Remembrall\Model\{
 	Access, Http, Subscribing
 };
+use Tracy;
 
 final class Parts extends SecureControl {
-	private $parts;
 	private $myself;
 	private $database;
+	private $logger;
 
 	public function __construct(
-		Subscribing\Parts $parts,
 		Access\Subscriber $myself,
-		Dibi\Connection $database
+		Dibi\Connection $database,
+		Tracy\ILogger $logger
 	) {
-		$this->parts = $parts;
 		$this->myself = $myself;
 		$this->database = $database;
+		$this->logger = $logger;
 		parent::__construct();
 	}
 
 	public function render() {
 		$this->template->setFile(__DIR__ . '/Parts.latte');
-		$this->template->parts = $this->parts->iterate();
+		$this->template->parts = (new Subscribing\OwnedParts(
+			$this->database,
+			$this->myself
+		))->iterate();
 		$this->template->render();
 	}
 
 	public function handleRemove(string $url, string $expression) {
 		try {
-			$this->parts->remove(
+			(new Subscribing\LoggedParts(
+				new Subscribing\OwnedParts(
+					$this->database,
+					$this->myself
+				),
+				$this->logger
+			))->remove(
 				new Subscribing\OwnedPart(
 					$this->database,
 					new Subscribing\FakeExpression($expression),
@@ -57,22 +67,44 @@ final class Parts extends SecureControl {
 
 	public function handleRefresh(string $url, string $expression) {
 		try {
-			$request = new Http\ConstantRequest(
-				new Http\CaseSensitiveHeaders(
-					new Http\UniqueHeaders(
-						[
-							'host' => $url,
-							'method' => 'GET',
-							'http_errors' => false,
-						]
+			$page = (new Http\LoggingBrowser(
+				new Http\CachingBrowser(
+					new Http\WebBrowser(
+						new GuzzleHttp\Client(), $this->database
+					),
+					$this->database
+				),
+				$this->logger
+			))->send(
+				new Http\ConstantRequest(
+					new Http\CaseSensitiveHeaders(
+						new Http\UniqueHeaders(
+							[
+								'host' => $url,
+								'method' => 'GET',
+								'http_errors' => false,
+							]
+						)
 					)
 				)
 			);
-			$page = new Subscribing\HtmlWebPage(
-				$request,
-				(new Http\WebBrowser(new GuzzleHttp\Client()))->send($request)
-			);
-			$this->parts->replace(
+			(new Subscribing\LoggedParts(
+				new Subscribing\ReportedParts(
+					new Subscribing\ChangedParts(
+						new Subscribing\OwnedParts(
+							$this->database,
+							$this->myself
+						)
+					),
+					new Subscribing\LoggedReports(
+						new Subscribing\OwnedReports(
+							$this->myself, $this->database
+						),
+						$this->logger
+					)
+				),
+				$this->logger
+			))->replace(
 				new Subscribing\OwnedPart(
 					$this->database,
 					new Subscribing\FakeExpression($expression),
@@ -90,7 +122,10 @@ final class Parts extends SecureControl {
 					new Storages\MemoryStorage()
 				)
 			);
-			$this->presenter->flashMessage('The part has been refreshed', 'success');
+			$this->presenter->flashMessage(
+				'The part has been refreshed',
+				'success'
+			);
 		} catch(\Throwable $ex) {
 			$this->presenter->flashMessage($ex->getMessage(), 'danger');
 		} finally {

@@ -40,7 +40,7 @@ services:
     texy: Texy\Texy
     latte.latteFactory:
         setup:
-            - addFilter('texy', [@texy, process])
+            - addFilter(texy, [@texy, process])
     - Remembrall\Model\Access\IdentityFactory
     identity: @Remembrall\Model\Access\IdentityFactory::create()
     subscriber:

@@ -26,23 +26,9 @@ final class PartsPage extends BasePage {
 
 	public function createComponentParts() {
 		return new Component\Parts(
-			new Subscribing\LoggedParts(
-				new Subscribing\ReportedParts(
-					new Subscribing\OwnedParts(
-						$this->database,
-						$this->subscriber
-					),
-					new Subscribing\LoggedReports(
-						new Subscribing\OwnedReports(
-							$this->subscriber, $this->database
-						),
-						$this->logger
-					)
-				),
-				$this->logger
-			),
 			$this->subscriber,
-			$this->database
+			$this->database,
+			$this->logger
 		);
 	}
 
