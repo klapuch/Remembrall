@@ -16,7 +16,6 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class CachingBrowser extends TestCase\Database {
 	public function testCaching() {
-		$headers = ['Status' => '200 OK'];
 		$this->database->query(
 			'INSERT INTO pages (url, content) VALUES
 			("google.com", "foo")'
