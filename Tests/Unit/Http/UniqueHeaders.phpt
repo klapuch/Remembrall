@@ -123,6 +123,7 @@ final class UniqueHeaders extends Tester\TestCase {
 			[
 				new Http\FakeHeader('method', 'get'),
 				new Http\FakeHeader('Connection', 'close'),
+				new Http\FakeHeader('Connection', 'close'),
 			]
 		);
 		Assert::same(
