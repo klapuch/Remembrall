@@ -18,5 +18,5 @@ interface Subscribers {
 	 * Go through all the subscribers
 	 * @return Subscriber[]
 	 */
-	//public function iterate(): array;
+	public function iterate(): array;
 }
