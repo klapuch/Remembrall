@@ -25,9 +25,9 @@ final class LoggedParts implements Parts {
 		}
 	}
 
-	public function replace(Part $old, Part $new) {
+	public function replace(Part $old, Part $new): Part {
 		try {
-			$this->origin->replace($old, $new);
+			return $this->origin->replace($old, $new);
 		} catch(\Throwable $ex) {
 			$this->logger->log($ex, Tracy\Logger::ERROR);
 			throw $ex;

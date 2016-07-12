@@ -8,7 +8,6 @@ use Tracy;
 use GuzzleHttp;
 
 final class CronPage extends BasePage {
-	public function actionDefault(string $code) {
-
+	public function actionRefresh(string $code) {
 	}
 }

@@ -5,11 +5,17 @@ namespace Remembrall\Model\Access;
 use Remembrall\Exception;
 
 final class FakeSubscribers implements Subscribers {
+	private $subscribers;
+
+	public function __construct(array $subscribers = []) {
+	    $this->subscribers = $subscribers;
+	}
+
 	public function register(string $email, string $password): Subscriber {
 
 	}
 
 	public function iterate(): array {
-		
+		return $this->subscribers;
 	}
 }

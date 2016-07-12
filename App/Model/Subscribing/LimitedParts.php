@@ -37,8 +37,8 @@ final class LimitedParts implements Parts {
 		return $this->origin->subscribe($part, $interval);
 	}
 
-	public function replace(Part $old, Part $new) {
-		$this->origin->replace($old, $new);
+	public function replace(Part $old, Part $new): Part {
+		return $this->origin->replace($old, $new);
 	}
 
 	public function remove(Part $part) {

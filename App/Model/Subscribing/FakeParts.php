@@ -16,8 +16,8 @@ final class FakeParts implements Parts {
 		return $part;
 	}
 
-	public function replace(Part $old, Part $new) {
-		
+	public function replace(Part $old, Part $new): Part {
+		return $new;
 	}
 
 	public function iterate(): array {

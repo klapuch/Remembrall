@@ -20,9 +20,10 @@ final class ReportedParts implements Parts {
 		return $subscribedPart;
 	}
 
-	public function replace(Part $old, Part $new) {
-		$this->origin->replace($old, $new);
+	public function replace(Part $old, Part $new): Part {
+		$replaced = $this->origin->replace($old, $new);
 		$this->reports->archive($new);
+		return $replaced;
 	}
 
 	public function remove(Part $part) {

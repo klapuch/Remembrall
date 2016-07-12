@@ -58,7 +58,7 @@ final class OwnedParts implements Parts {
 		}
 	}
 
-	public function replace(Part $old, Part $new) {
+	public function replace(Part $old, Part $new): Part {
 		if(!$this->owned($old))
 			throw new Exception\ExistenceException('You do not own this part');
 		$this->database->query(
@@ -73,6 +73,7 @@ final class OwnedParts implements Parts {
 			(string)$old->expression(),
 			$old->source()->url()
 		);
+		return $new;
 	}
 
 	public function remove(Part $part) {

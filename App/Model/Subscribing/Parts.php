@@ -19,9 +19,9 @@ interface Parts {
 	 * @param Part $old
 	 * @param Part $new
 	 * @throws Exception\ExistenceException
-	 * @return void
+	 * @return Part
 	 */
-	public function replace(Part $old, Part $new);
+	public function replace(Part $old, Part $new): Part;
 
 	/**
 	 * Remove the given part from the parts

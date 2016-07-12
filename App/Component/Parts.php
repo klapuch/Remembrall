@@ -5,8 +5,9 @@ namespace Remembrall\Component;
 use Dibi;
 use GuzzleHttp;
 use Nette\Caching\Storages;
+use Nette\Mail;
 use Remembrall\Model\{
-	Access, Http, Subscribing
+	Access, Email, Http, Subscribing
 };
 use Tracy;
 
@@ -20,10 +21,10 @@ final class Parts extends SecureControl {
 		Dibi\Connection $database,
 		Tracy\ILogger $logger
 	) {
+		parent::__construct();
 		$this->myself = $myself;
 		$this->database = $database;
 		$this->logger = $logger;
-		parent::__construct();
 	}
 
 	public function render() {
@@ -88,7 +89,7 @@ final class Parts extends SecureControl {
 					)
 				)
 			);
-			(new Subscribing\LoggedParts(
+			$replacedPart = (new Subscribing\LoggedParts(
 				new Subscribing\ReportedParts(
 					new Subscribing\ChangedParts(
 						new Subscribing\OwnedParts(
@@ -116,8 +117,7 @@ final class Parts extends SecureControl {
 						$page,
 						new Subscribing\ValidXPathExpression(
 							new Subscribing\XPathExpression($page, $expression)
-						),
-						$this->myself
+						)
 					),
 					new Storages\MemoryStorage()
 				)

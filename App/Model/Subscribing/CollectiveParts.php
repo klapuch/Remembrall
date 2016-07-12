@@ -60,7 +60,7 @@ final class CollectiveParts implements Parts {
 		}
 	}
 
-	public function replace(Part $old, Part $new) {
+	public function replace(Part $old, Part $new): Part {
 		$this->database->query(
 			'UPDATE parts
 			INNER JOIN part_visits ON part_visits.part_id = parts.ID
@@ -71,6 +71,7 @@ final class CollectiveParts implements Parts {
 			(string)$old->expression(),
 			$old->source()->url()
 		);
+		return $new;
 	}
 
 	public function remove(Part $part) {

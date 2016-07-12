@@ -9,7 +9,7 @@ use Remembrall\Model\{
 };
 
 /**
- * Subscribers who subscribing shared part
+ * Subscribers who subscribing shared (same) part
  */
 final class PartSharedSubscribers implements Subscribers {
 	private $origin;

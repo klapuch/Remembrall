@@ -18,13 +18,13 @@ final class ChangedParts implements Parts {
 		return $this->origin->subscribe($part, $interval);
 	}
 
-	public function replace(Part $old, Part $new) {
+	public function replace(Part $old, Part $new): Part {
 		if(!$this->changed($old)) {
 			throw new Exception\ExistenceException(
 				'This part has not changed yet'
 			);
 		}
-		$this->origin->replace($old, $new);
+		return $this->origin->replace($old, $new);
 	}
 
 	public function remove(Part $part) {
