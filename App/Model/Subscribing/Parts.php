@@ -18,7 +18,7 @@ interface Parts {
 	 * Replace the old part with the new one
 	 * @param Part $old
 	 * @param Part $new
-	 * @throws Exception\ExistenceException
+	 * @throws Exception\NotFoundException
 	 * @return Part
 	 */
 	public function replace(Part $old, Part $new): Part;

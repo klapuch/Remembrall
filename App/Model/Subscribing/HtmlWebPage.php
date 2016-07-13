@@ -22,7 +22,7 @@ final class HtmlWebPage implements Page {
 
 	public function content(): \DOMDocument {
 		if(!$this->isHTML())
-			throw new Exception\ExistenceException('Web page must be HTML');
+			throw new Exception\NotFoundException('Web page must be HTML');
 		$dom = new DOM();
 		$dom->loadHTML($this->response->content());
 		return $dom;

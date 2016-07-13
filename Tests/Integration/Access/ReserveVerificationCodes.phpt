@@ -26,7 +26,7 @@ final class ReserveVerificationCodes extends TestCase\Database {
 	}
 
 	/**
-	 * @throws \Remembrall\Exception\ExistenceException For the given email, there is no valid verification code
+	 * @throws \Remembrall\Exception\NotFoundException For the given email, there is no valid verification code
 	 */
 	public function testRegeneratingForUsedOne() {
 		$this->database->query(

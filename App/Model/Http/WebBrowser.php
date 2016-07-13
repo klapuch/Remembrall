@@ -6,7 +6,7 @@ use Dibi;
 use GuzzleHttp;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message;
-use Remembrall\Exception\ExistenceException;
+use Remembrall\Exception\NotFoundException;
 use Remembrall\Model\{
 	Storage, Subscribing
 };
@@ -64,7 +64,7 @@ final class WebBrowser implements Browser {
 				$response
 			);
 		} catch(RequestException $ex) {
-			throw new ExistenceException(
+			throw new NotFoundException(
 				'Connection could not be established. Does the URL really exist?',
 				$ex->getCode(),
 				$ex

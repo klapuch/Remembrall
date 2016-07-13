@@ -14,7 +14,7 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class CaseSensitiveHeaders extends Tester\TestCase {
 	/**
-	 * @throws \Remembrall\Exception\ExistenceException Header "wtf?" does not exist
+	 * @throws \Remembrall\Exception\NotFoundException Header "wtf?" does not exist
 	 */
 	public function testUnknownHeader() {
 		$headers = new Http\CaseSensitiveHeaders(

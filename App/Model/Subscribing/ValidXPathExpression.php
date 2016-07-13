@@ -19,7 +19,7 @@ final class ValidXPathExpression implements Expression {
 		$nodes = $this->origin->match();
 		if($nodes->length > 0)
 			return $nodes;
-		throw new Exception\ExistenceException(
+		throw new Exception\NotFoundException(
 			sprintf(
 				'XPath expression "%s" does not exist',
 				(string)$this

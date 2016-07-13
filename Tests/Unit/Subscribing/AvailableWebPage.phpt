@@ -16,7 +16,7 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class AvailableWebPage extends TestCase\Mockery {
 	/**
-	 * @throws \Remembrall\Exception\ExistenceException Web page "www.foo.xxx" can not be loaded because of 404 Not Found
+	 * @throws \Remembrall\Exception\NotFoundException Web page "www.foo.xxx" can not be loaded because of 404 Not Found
 	 */
 	public function testNotFoundPage() {
 		(new Subscribing\AvailableWebPage(

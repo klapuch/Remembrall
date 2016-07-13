@@ -42,7 +42,7 @@ final class HtmlWebPage extends TestCase\Mockery {
 	}
 
 	/**
-	 * @throws \Remembrall\Exception\ExistenceException Web page must be HTML
+	 * @throws \Remembrall\Exception\NotFoundException Web page must be HTML
 	 */
 	public function testCSSContentWithError() {
 		(new Subscribing\HtmlWebPage(

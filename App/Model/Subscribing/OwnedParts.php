@@ -60,7 +60,7 @@ final class OwnedParts implements Parts {
 
 	public function replace(Part $old, Part $new): Part {
 		if(!$this->owned($old))
-			throw new Exception\ExistenceException('You do not own this part');
+			throw new Exception\NotFoundException('You do not own this part');
 		$this->database->query(
 			'UPDATE parts
 			INNER JOIN part_visits ON part_visits.part_id = parts.ID
@@ -78,7 +78,7 @@ final class OwnedParts implements Parts {
 
 	public function remove(Part $part) {
 		if(!$this->owned($part))
-			throw new Exception\ExistenceException('You do not own this part');
+			throw new Exception\NotFoundException('You do not own this part');
 		$this->database->query(
 			'DELETE FROM parts
 			WHERE subscriber_id = ?

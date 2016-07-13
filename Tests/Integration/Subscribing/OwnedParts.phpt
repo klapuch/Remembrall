@@ -119,7 +119,7 @@ final class OwnedParts extends TestCase\Database {
 	}
 
 	/**
-	 * @throws \Remembrall\Exception\ExistenceException You do not own this part
+	 * @throws \Remembrall\Exception\NotFoundException You do not own this part
 	 */
 	public function testReplacingForeign() {
 		$this->database->query(
@@ -182,7 +182,7 @@ final class OwnedParts extends TestCase\Database {
 	}
 
 	/**
-	 * @throws \Remembrall\Exception\ExistenceException You do not own this part
+	 * @throws \Remembrall\Exception\NotFoundException You do not own this part
 	 */
 	public function testRemovingForeign() {
 		$this->database->query(

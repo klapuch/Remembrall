@@ -24,7 +24,7 @@ final class ExpiredParts extends TestCase\Database {
     }
 
 	/**
-	 * @throws \Remembrall\Exception\ExistenceException This part has not expired yet
+	 * @throws \Remembrall\Exception\NotFoundException This part has not expired yet
 	 */
 	public function testReplacingNonExpiredPart() {
 		(new Subscribing\ExpiredParts(

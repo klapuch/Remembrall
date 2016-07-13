@@ -9,7 +9,7 @@ interface Browser {
 	/**
 	 * Send the given request and return page
 	 * @param Request $request
-	 * @throws Exception\ExistenceException
+	 * @throws Exception\NotFoundException
 	 * @return Subscribing\Page
 	 */
 	public function send(Request $request): Subscribing\Page;

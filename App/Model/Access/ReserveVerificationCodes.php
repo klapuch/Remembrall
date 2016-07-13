@@ -26,7 +26,7 @@ final class ReserveVerificationCodes implements VerificationCodes {
 		);
 		if($code)
 			return new DisposableVerificationCode($code, $this->database);
-		throw new Exception\ExistenceException(
+		throw new Exception\NotFoundException(
 			'For the given email, there is no valid verification code'
 		);
 	}

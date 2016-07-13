@@ -28,7 +28,7 @@ final class CaseSensitiveHeaders implements Headers {
 			)
 		);
 		if(empty($header)) {
-			throw new Exception\ExistenceException(
+			throw new Exception\NotFoundException(
 				sprintf('Header "%s" does not exist', $field)
 			);
 		}

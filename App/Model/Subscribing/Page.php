@@ -7,7 +7,7 @@ use Remembrall\Exception;
 interface Page {
 	/**
 	 * Content of the page
-	 * @throws Exception\ExistenceException
+	 * @throws Exception\NotFoundException
 	 * @return \DOMDocument
 	 */
 	public function content(): \DOMDocument;

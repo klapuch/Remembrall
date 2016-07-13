@@ -89,7 +89,7 @@ final class UniqueHeaders extends Tester\TestCase {
 	}
 
 	/**
-	 * @throws \Remembrall\Exception\ExistenceException Header "wtf?" does not exist
+	 * @throws \Remembrall\Exception\NotFoundException Header "wtf?" does not exist
 	 */
 	public function testUnknownHeader() {
 		$headers = new Http\UniqueHeaders(

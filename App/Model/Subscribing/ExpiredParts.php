@@ -24,7 +24,7 @@ final class ExpiredParts implements Parts {
 
 	public function replace(Part $old, Part $new): Part {
 		if(!$this->expired($old)) {
-			throw new Exception\ExistenceException(
+			throw new Exception\NotFoundException(
 				'This part has not expired yet'
 			);
 		}

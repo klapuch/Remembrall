@@ -7,7 +7,7 @@ use Remembrall\Exception;
 interface Expression {
 	/**
 	 * Match found by the expression
-	 * @throws Exception\ExistenceException
+	 * @throws Exception\NotFoundException
 	 * @return \DOMNodeList
 	 */
 	public function match(): \DOMNodeList;

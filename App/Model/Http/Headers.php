@@ -14,7 +14,7 @@ interface Headers {
 	/**
 	 * Header by the field
 	 * @param string $field
-	 * @throws Exception\ExistenceException
+	 * @throws Exception\NotFoundException
 	 * @return Header
 	 */
 	public function header(string $field): Header;

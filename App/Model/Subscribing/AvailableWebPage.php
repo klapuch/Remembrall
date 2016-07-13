@@ -22,7 +22,7 @@ final class AvailableWebPage implements Page {
 		$header = $this->response->headers()->header('Status');
 		if($this->available($header))
 			return $this->origin->content();
-		throw new Exception\ExistenceException(
+		throw new Exception\NotFoundException(
 			sprintf(
 				'Web page "%s" can not be loaded because of %s',
 				$this->url(),

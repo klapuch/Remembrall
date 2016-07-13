@@ -36,7 +36,7 @@ final class UniqueHeaders implements Headers {
 		$headers = $this->iterate();
 		if(isset($headers[$field]))
 			return $headers[$field];
-		throw new Exception\ExistenceException(
+		throw new Exception\NotFoundException(
 			sprintf('Header "%s" does not exist', $field)
 		);
 	}

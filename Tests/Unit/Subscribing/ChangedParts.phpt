@@ -58,7 +58,7 @@ final class ChangedParts extends Tester\TestCase {
 	}
 
 	/**
-	 * @throws \Remembrall\Exception\ExistenceException This part has not changed yet
+	 * @throws \Remembrall\Exception\NotFoundException This part has not changed yet
 	 */
 	public function testReplacingUnchangedPart() {
 		$allParts = [

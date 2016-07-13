@@ -14,7 +14,7 @@ interface Part {
 
 	/**
 	 * Content of the part
-	 * @throws Exception\ExistenceException
+	 * @throws Exception\NotFoundException
 	 * @return string
 	 */
 	public function content(): string;

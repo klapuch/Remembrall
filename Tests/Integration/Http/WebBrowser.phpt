@@ -49,7 +49,7 @@ final class WebBrowser extends TestCase\Database {
 	}
 
 	/**
-	 * @throws \Remembrall\Exception\ExistenceException Connection could not be established. Does the URL really exist?
+	 * @throws \Remembrall\Exception\NotFoundException Connection could not be established. Does the URL really exist?
 	 */
 	public function testUnknownUrl() {
 		$http = new GuzzleHttp\Client();
@@ -59,7 +59,7 @@ final class WebBrowser extends TestCase\Database {
 	}
 
 	/**
-	 * @throws \Remembrall\Exception\ExistenceException Connection could not be established. Does the URL really exist?
+	 * @throws \Remembrall\Exception\NotFoundException Connection could not be established. Does the URL really exist?
 	 */
 	public function testEmptyUrl() {
 		$http = new GuzzleHttp\Client();
