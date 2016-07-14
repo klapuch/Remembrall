@@ -32,7 +32,7 @@ final class ExpiredParts extends TestCase\Database {
 			$this->database
 		))->replace(
 			new Subscribing\FakePart(
-				new Subscribing\FakePage('google.com'),
+				new Subscribing\FakePage('www.google.com'),
 				new Subscribing\FakeExpression('//p'),
 				'c',
 				false // non-expired
@@ -48,7 +48,7 @@ final class ExpiredParts extends TestCase\Database {
 				$this->database
 			))->replace(
 				new Subscribing\FakePart(
-					new Subscribing\FakePage('google.com'),
+					new Subscribing\FakePage('www.google.com'),
 					new Subscribing\FakeExpression('//p'),
 					'c',
 					true // expired
@@ -69,19 +69,19 @@ final class ExpiredParts extends TestCase\Database {
 		$this->database->query('TRUNCATE parts');
 		$this->database->query(
 			'INSERT INTO parts (page_url, expression, content) VALUES
-			("a", "//a", "a")'
+			("www.google.com", "//a", "a")'
 		);
 		$this->database->query(
 			'INSERT INTO parts (page_url, expression, content) VALUES
-			("b", "//b", "b")'
+			("www.facedown.cz", "//b", "b")'
 		);
 		$this->database->query(
 			'INSERT INTO parts (page_url, expression, content) VALUES
-			("a", "//c", "c")'
+			("www.google.com", "//c", "c")'
 		);
 		$this->database->query(
 			'INSERT INTO parts (page_url, expression, content) VALUES
-			("b", "//d", "d")'
+			("www.facedown.cz", "//d", "d")'
 		);
 		$this->database->query('TRUNCATE subscribed_parts');
 		$this->database->query(
@@ -91,7 +91,7 @@ final class ExpiredParts extends TestCase\Database {
 		$this->database->query('TRUNCATE pages');
 		$this->database->query(
 			'INSERT INTO pages (url, content) VALUES
-			("a", "xx"), ("b", "zz"), ("c", "yy")'
+			("www.google.com", "google"), ("www.facedown.cz", "facedown"), ("www.foo.cz", "foo")'
 		);
     }
 }

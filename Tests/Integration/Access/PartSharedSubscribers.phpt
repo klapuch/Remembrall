@@ -17,15 +17,15 @@ final class PartSharedSubscribers extends TestCase\Database {
 	public function testIteratingSharedParts() {
 		$this->database->query(
 			'INSERT INTO pages (url, content) VALUES
-			("google.com", "google"), ("seznam.cz", "seznam")'
+			("www.google.com", "google"), ("www.facedown.cz", "seznam")'
 		);
 		$this->database->query(
 			'INSERT INTO subscribers (email) VALUES
-			("a"), ("b"), ("c")'
+			("facedown@gmail.com"), ("facedown@facedown.cz"), ("foo@bar.cz")'
 		);
 		$this->database->query(
 			'INSERT INTO parts (page_url, expression) VALUES
-			("google.com", "//h1"), ("seznam.cz", "//h1")'
+			("www.google.com", "//h1"), ("www.facedown.cz", "//h1")'
 		);
 		$this->database->query(
 			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
@@ -33,13 +33,13 @@ final class PartSharedSubscribers extends TestCase\Database {
 		);
 		Assert::equal(
 			[
-				new Access\ConstantSubscriber(1, 'a'),
-				new Access\ConstantSubscriber(2, 'b'),
+				new Access\ConstantSubscriber(1, 'facedown@gmail.com'),
+				new Access\ConstantSubscriber(2, 'facedown@facedown.cz'),
 			],
 			(new Access\PartSharedSubscribers(
 				new Access\FakeSubscribers(),
 				new Subscribing\FakePart(
-					new Subscribing\FakePage('google.com'),
+					new Subscribing\FakePage('www.google.com'),
 					new Subscribing\FakeExpression('//h1')
 				),
 				$this->database
