@@ -24,8 +24,8 @@ final class PartSharedSubscribers extends TestCase\Database {
 			("a"), ("b"), ("c")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression) VALUES
-			(1, "//h1"), (2, "//h1")'
+			'INSERT INTO parts (page_url, expression) VALUES
+			("google.com", "//h1"), ("seznam.cz", "//h1")'
 		);
 		$this->database->query(
 			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES

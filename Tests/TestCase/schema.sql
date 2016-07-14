@@ -20,18 +20,16 @@ CREATE TABLE `forgotten_passwords` (
 
 DROP TABLE IF EXISTS `pages`;
 CREATE TABLE `pages` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `url` varchar(255) CHARACTER SET ascii NOT NULL,
   `content` text NOT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `url` (`url`)
+  PRIMARY KEY (`url`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
 DROP TABLE IF EXISTS `page_visits`;
 CREATE TABLE `page_visits` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `page_id` int(11) NOT NULL,
+  `page_url` varchar(255) CHARACTER SET ascii NOT NULL,
   `visited_at` datetime NOT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -40,11 +38,11 @@ CREATE TABLE `page_visits` (
 DROP TABLE IF EXISTS `parts`;
 CREATE TABLE `parts` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `page_id` int(11) NOT NULL,
+  `page_url` varchar(255) CHARACTER SET ascii NOT NULL,
   `expression` varchar(255) CHARACTER SET ascii NOT NULL,
   `content` text NOT NULL,
   PRIMARY KEY (`ID`),
-  UNIQUE KEY `page_id,expression` (`page_id`,`expression`)
+  UNIQUE KEY `page_id,expression` (`page_url`,`expression`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -53,15 +51,6 @@ CREATE TABLE `part_visits` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `part_id` int(11) NOT NULL,
   `visited_at` datetime NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
-DROP TABLE IF EXISTS `reports`;
-CREATE TABLE `reports` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `part_id` int(11) NOT NULL,
-  `sent_at` datetime NOT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -100,4 +89,4 @@ CREATE TABLE `verification_codes` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
--- 2016-07-13 18:02:13
+-- 2016-07-14 20:23:23

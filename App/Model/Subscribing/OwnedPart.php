@@ -34,7 +34,7 @@ final class OwnedPart implements Part {
 			INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID
 			WHERE subscriber_id = ?
 			AND expression = ?
-			AND page_id = (SELECT ID FROM pages WHERE url = ?)',
+			AND page_url = ?',
 			$this->owner->id(),
 			(string)$this->expression(),
 			$this->source->url()
@@ -58,7 +58,7 @@ final class OwnedPart implements Part {
 			INNER JOIN part_visits ON part_visits.part_id = parts.ID
 			WHERE subscriber_id = ?
 			AND expression = ?
-			AND page_id = (SELECT ID FROM pages WHERE url = ?)',
+			AND page_url = ?',
 			$this->owner->id(),
 			(string)$this->expression,
 			$this->source()->url()

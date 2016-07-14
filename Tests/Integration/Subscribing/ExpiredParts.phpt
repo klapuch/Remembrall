@@ -68,20 +68,20 @@ final class ExpiredParts extends TestCase\Database {
 		);
 		$this->database->query('TRUNCATE parts');
 		$this->database->query(
-			'INSERT INTO parts (ID, page_id, expression, content) VALUES
-			(1, 1, "//a", "a")'
+			'INSERT INTO parts (page_url, expression, content) VALUES
+			("a", "//a", "a")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (ID, page_id, expression, content) VALUES
-			(2, 2, "//b", "b")'
+			'INSERT INTO parts (page_url, expression, content) VALUES
+			("b", "//b", "b")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (ID, page_id, expression, content) VALUES
-			(3, 1, "//c", "c")'
+			'INSERT INTO parts (page_url, expression, content) VALUES
+			("a", "//c", "c")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (ID, page_id, expression, content) VALUES
-			(4, 1, "//d", "d")'
+			'INSERT INTO parts (page_url, expression, content) VALUES
+			("b", "//d", "d")'
 		);
 		$this->database->query('TRUNCATE subscribed_parts');
 		$this->database->query(
@@ -90,8 +90,8 @@ final class ExpiredParts extends TestCase\Database {
 		);
 		$this->database->query('TRUNCATE pages');
 		$this->database->query(
-			'INSERT INTO pages (ID, url, content) VALUES
-			(1, "a", "xx"), (2, "b", "zz"), (3, "c", "yy")'
+			'INSERT INTO pages (url, content) VALUES
+			("a", "xx"), ("b", "zz"), ("c", "yy")'
 		);
     }
 }

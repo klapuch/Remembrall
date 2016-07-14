@@ -34,7 +34,7 @@ final class OwnedParts implements Parts {
 					$this->database->query(
 						'INSERT INTO subscribed_parts
 						(part_id, subscriber_id, `interval`) VALUES
-						((SELECT ID FROM parts WHERE expression = ? AND page_id = (SELECT ID FROM pages WHERE url = ?)), ?, ?)',
+						((SELECT ID FROM parts WHERE expression = ? AND page_url = ?), ?, ?)',
 						(string)$part->expression(),
 						$part->source()->url(),
 						$this->myself->id(),
@@ -68,7 +68,7 @@ final class OwnedParts implements Parts {
 		$this->database->query(
 			'DELETE FROM subscribed_parts
 			WHERE subscriber_id = ?
-			AND part_id = (SELECT ID FROM parts WHERE expression = ? AND page_id = (SELECT ID FROM pages WHERE url = ?))',
+			AND part_id = (SELECT ID FROM parts WHERE expression = ? AND page_url = ?)',
 			$this->myself->id(),
 			(string)$part->expression(),
 			$part->source()->url()
@@ -83,7 +83,7 @@ final class OwnedParts implements Parts {
 				FROM parts
 				INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID
 				INNER JOIN part_visits ON part_visits.part_id = parts.ID  
-				LEFT JOIN pages ON pages.ID = parts.page_id
+				LEFT JOIN pages ON pages.url = parts.page_url
 				WHERE subscriber_id = ?',
 				$this->myself->id()
 			),

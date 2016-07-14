@@ -21,34 +21,32 @@ CREATE TABLE `forgotten_passwords` (
 
 DROP TABLE IF EXISTS `pages`;
 CREATE TABLE `pages` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `url` varchar(255) CHARACTER SET ascii NOT NULL,
   `content` text NOT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `url` (`url`)
+  PRIMARY KEY (`url`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 DROP TABLE IF EXISTS `page_visits`;
 CREATE TABLE `page_visits` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `page_id` int(11) NOT NULL,
+  `page_url` varchar(255) CHARACTER SET ascii NOT NULL,
   `visited_at` datetime NOT NULL,
   PRIMARY KEY (`ID`),
-  KEY `page_id` (`page_id`),
-  CONSTRAINT `page_visits_ibfk_1` FOREIGN KEY (`page_id`) REFERENCES `pages` (`ID`) ON DELETE CASCADE
+  KEY `page_id` (`page_url`),
+  CONSTRAINT `page_visits_ibfk_1` FOREIGN KEY (`page_url`) REFERENCES `pages` (`url`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 DROP TABLE IF EXISTS `parts`;
 CREATE TABLE `parts` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `page_id` int(11) NOT NULL,
+  `page_url` varchar(255) CHARACTER SET ascii NOT NULL,
   `expression` varchar(255) CHARACTER SET ascii NOT NULL,
   `content` text NOT NULL,
   PRIMARY KEY (`ID`),
-  UNIQUE KEY `page_id,expression` (`page_id`,`expression`),
-  CONSTRAINT `parts_ibfk_1` FOREIGN KEY (`page_id`) REFERENCES `pages` (`ID`)
+  UNIQUE KEY `page_id,expression` (`page_url`,`expression`),
+  CONSTRAINT `parts_ibfk_1` FOREIGN KEY (`page_url`) REFERENCES `pages` (`url`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -63,17 +61,6 @@ CREATE TABLE `part_visits` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-DROP TABLE IF EXISTS `reports`;
-CREATE TABLE `reports` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `part_id` int(11) NOT NULL,
-  `sent_at` datetime NOT NULL,
-  PRIMARY KEY (`ID`),
-  KEY `part_id` (`part_id`),
-  CONSTRAINT `reports_ibfk_1` FOREIGN KEY (`part_id`) REFERENCES `parts` (`ID`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
 DROP TABLE IF EXISTS `subscribed_parts`;
 CREATE TABLE `subscribed_parts` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -83,8 +70,8 @@ CREATE TABLE `subscribed_parts` (
   PRIMARY KEY (`ID`),
   UNIQUE KEY `subscriber_id,part_id` (`subscriber_id`,`part_id`),
   KEY `part_id` (`part_id`),
-  CONSTRAINT `subscribed_parts_ibfk_1` FOREIGN KEY (`subscriber_id`) REFERENCES `subscribers` (`ID`),
-  CONSTRAINT `subscribed_parts_ibfk_2` FOREIGN KEY (`part_id`) REFERENCES `parts` (`ID`)
+  CONSTRAINT `subscribed_parts_ibfk_1` FOREIGN KEY (`subscriber_id`) REFERENCES `subscribers` (`ID`) ON DELETE CASCADE,
+  CONSTRAINT `subscribed_parts_ibfk_2` FOREIGN KEY (`part_id`) REFERENCES `parts` (`ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -112,4 +99,4 @@ CREATE TABLE `verification_codes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- 2016-07-14 19:10:14
+-- 2016-07-14 20:32:16

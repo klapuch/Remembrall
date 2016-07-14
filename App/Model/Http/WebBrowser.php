@@ -52,8 +52,8 @@ final class WebBrowser implements Browser {
 						$response->content()
 					);
 					$this->database->query(
-						'INSERT INTO page_visits (page_id, visited_at) VALUES
-						((SELECT ID FROM pages WHERE url = ?), ?)',
+						'INSERT INTO page_visits (page_url, visited_at) VALUES
+						(?, ?)',
 						$headers['host'],
 						new \DateTimeImmutable()
 					);

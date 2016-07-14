@@ -43,8 +43,8 @@ final class CachingBrowser implements Browser {
 		return (bool)$this->database->fetchSingle(
 			'SELECT 1
 			FROM page_visits
-			INNER JOIN pages ON pages.ID = page_visits.page_id
-			WHERE page_id = (SELECT ID FROM pages WHERE url = ?)
+			INNER JOIN pages ON pages.url = page_visits.page_url
+			WHERE page_url = ?
 			AND visited_at + INTERVAL ? MINUTE >= NOW()',
 			$url,
 			(new \DateInterval(self::EXPIRATION))->i

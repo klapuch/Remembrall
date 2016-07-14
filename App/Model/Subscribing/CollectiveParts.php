@@ -22,8 +22,8 @@ final class CollectiveParts implements Parts {
 			function() use ($part, $interval) {
 				$this->database->query(
 					'INSERT INTO parts
-					(page_id, expression, content) VALUES
-					((SELECT ID FROM pages WHERE url = ?), ?, ?)
+					(page_url, expression, content) VALUES
+					(?, ?, ?)
 					ON DUPLICATE KEY UPDATE content = VALUES(content)',
 					$part->source()->url(),
 					(string)$part->expression(),
@@ -48,7 +48,7 @@ final class CollectiveParts implements Parts {
 			INNER JOIN part_visits ON part_visits.part_id = parts.ID
 			SET content = ?, visited_at = NOW()
 			WHERE expression = ?
-			AND page_id = (SELECT ID FROM pages WHERE url = ?)',
+			AND page_url = ?',
 			$new->content(),
 			(string)$old->expression(),
 			$old->source()->url()
@@ -60,7 +60,7 @@ final class CollectiveParts implements Parts {
 		$this->database->query(
 			'DELETE FROM parts
 			WHERE expression = ?
-			AND page_id = (SELECT ID FROM pages WHERE url = ?)',
+			AND page_url = ?',
 			(string)$part->expression(),
 			$part->source()->url()
 		);
@@ -75,7 +75,7 @@ final class CollectiveParts implements Parts {
 				FROM parts
 				INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID
 				INNER JOIN part_visits ON part_visits.part_id = parts.ID 
-				LEFT JOIN pages ON pages.ID = parts.page_id'
+				LEFT JOIN pages ON pages.url = parts.page_url'
 			),
 			function($previous, Dibi\Row $row) {
 				$previous[] = new ConstantPart(

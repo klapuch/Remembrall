@@ -43,7 +43,7 @@ final class ExpiredParts implements Parts {
 				pages.content AS page_content, url 
 				FROM parts
 				INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID 
-				INNER JOIN pages ON pages.ID = parts.page_id
+				INNER JOIN pages ON pages.url = parts.page_url
 				LEFT JOIN part_visits ON part_visits.part_id = parts.ID
 				WHERE visited_at IS NULL
 				OR visited_at + INTERVAL CAST(SUBSTR(`interval`, 3) AS UNSIGNED) MINUTE <= NOW()'

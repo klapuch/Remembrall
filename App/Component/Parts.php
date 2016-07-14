@@ -5,9 +5,8 @@ namespace Remembrall\Component;
 use Dibi;
 use GuzzleHttp;
 use Nette\Caching\Storages;
-use Nette\Mail;
 use Remembrall\Model\{
-	Access, Email, Http, Subscribing
+	Access, Http, Subscribing
 };
 use Tracy;
 
@@ -96,21 +95,13 @@ final class Parts extends SecureControl {
 				)
 			);
 			$replacedPart = (new Subscribing\LoggedParts(
-				new Subscribing\ReportedParts(
-					new Subscribing\ChangedParts(
-						new Subscribing\OwnedParts(
-							new Subscribing\CollectiveParts(
-								$this->database
-							),
-							$this->database,
-							$this->myself
-						)
-					),
-					new Subscribing\LoggedReports(
-						new Subscribing\OwnedReports(
-							$this->myself, $this->database
+				new Subscribing\ChangedParts(
+					new Subscribing\OwnedParts(
+						new Subscribing\CollectiveParts(
+							$this->database
 						),
-						$this->logger
+						$this->database,
+						$this->myself
 					)
 				),
 				$this->logger

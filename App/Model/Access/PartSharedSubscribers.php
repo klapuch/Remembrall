@@ -37,8 +37,7 @@ final class PartSharedSubscribers implements Subscribers {
 				FROM subscribers
 				INNER JOIN subscribed_parts ON subscribed_parts.subscriber_id = subscribers.ID
 				INNER JOIN parts ON parts.ID = subscribed_parts.part_id 
-				WHERE page_id = (SELECT ID FROM pages WHERE url = ?)
-				AND expression = ?',
+				WHERE page_url = ? AND expression = ?',
 				$this->part->source()->url(),
 				(string)$this->part->expression()
 			),

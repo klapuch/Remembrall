@@ -29,7 +29,7 @@ final class WebBrowser extends TestCase\Database {
 		Assert::equal('Facedown', current($dom->find('h1')[0]));
 		$visits = $this->database->fetchAll('SELECT * FROM page_visits');
 		Assert::count(1, $visits);
-		Assert::same(1, $visits[0]['page_id']);
+		Assert::same('http://www.facedown.cz', $visits[0]['page_url']);
 	}
 
 	public function testHttpsPage() {
@@ -45,7 +45,7 @@ final class WebBrowser extends TestCase\Database {
 		Assert::equal('Framework', current($dom->find('h1')[0]));
 		$visits = $this->database->fetchAll('SELECT * FROM page_visits');
 		Assert::count(1, $visits);
-		Assert::same(1, $visits[0]['page_id']);
+		Assert::same('https://nette.org/', $visits[0]['page_url']);
 	}
 
 	/**

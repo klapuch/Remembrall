@@ -33,8 +33,8 @@ final class LimitedParts extends TestCase\Database {
 	 */
 	public function testSubscribingOverLimit() {
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content) VALUES
-			(2, "//d", "d")'
+			'INSERT INTO parts (page_url, expression, content) VALUES
+			("b", "//d", "d")'
 		);
 		$this->database->query(
 			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
@@ -54,20 +54,20 @@ final class LimitedParts extends TestCase\Database {
         $this->database->query('TRUNCATE parts');
 		$this->database->query('TRUNCATE subscribed_parts');
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content) VALUES
-			(1, "//a", "a")'
+			'INSERT INTO parts (page_url, expression, content) VALUES
+			("a", "//a", "a")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content) VALUES
-			(2, "//b", "b")'
+			'INSERT INTO parts (page_url, expression, content) VALUES
+			("b", "//b", "b")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content) VALUES
-			(2, "//c", "c")'
+			'INSERT INTO parts (page_url, expression, content) VALUES
+			("b", "//c", "c")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content) VALUES
-			(1, "//d", "d")'
+			'INSERT INTO parts (page_url, expression, content) VALUES
+			("a", "//d", "d")'
 		);
 		$this->database->query(
 			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES

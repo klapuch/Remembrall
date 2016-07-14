@@ -17,11 +17,7 @@ require __DIR__ . '/../../bootstrap.php';
 final class CachingBrowser extends TestCase\Database {
 	public function testCaching() {
 		$this->database->query(
-			'INSERT INTO pages (url, content) VALUES
-			("google.com", "foo")'
-		);
-		$this->database->query(
-			'INSERT INTO page_visits (page_id, visited_at) VALUES (1, NOW())'
+			'INSERT INTO page_visits (page_url, visited_at) VALUES ("google.com", NOW())'
 		);
 		Assert::equal(
 			new Subscribing\ConstantPage(
@@ -39,12 +35,8 @@ final class CachingBrowser extends TestCase\Database {
 
 	public function testExpiredCachingByOldVisitation() {
 		$this->database->query(
-			'INSERT INTO pages (url, content) VALUES
-			("google.com", "foo")'
-		);
-		$this->database->query(
-			'INSERT INTO page_visits (page_id, visited_at) VALUES
-			(1, NOW() - INTERVAL 11 MINUTE)'
+			'INSERT INTO page_visits (page_url, visited_at) VALUES
+			("google.com", NOW() - INTERVAL 11 MINUTE)'
 		);
 		$page = new Subscribing\FakePage(
 			'whatever.com',
@@ -64,6 +56,10 @@ final class CachingBrowser extends TestCase\Database {
 	protected function prepareDatabase() {
 		$this->database->query('TRUNCATE pages');
 		$this->database->query('TRUNCATE page_visits');
+		$this->database->query(
+			'INSERT INTO pages (url, content) VALUES
+			("google.com", "foo")'
+		);
 	}
 }
 

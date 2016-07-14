@@ -139,28 +139,28 @@ final class OwnedPart extends TestCase\Database {
 			(1, NOW()), (2, "2000-01-01 01:01:01"), (3, NOW()), (4, NOW())'
 		);
 		$this->database->query(
-			'INSERT INTO pages (ID, url, content) VALUES
-			(1, "www.google.com", "<p>google</p>")'
+			'INSERT INTO pages (url, content) VALUES
+			("www.google.com", "<p>google</p>")'
 		);
 		$this->database->query(
-			'INSERT INTO pages (ID, url, content) VALUES
-			(2, "www.facedown.cz", "<p>facedown</p>")'
+			'INSERT INTO pages (url, content) VALUES
+			("www.facedown.cz", "<p>facedown</p>")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content) VALUES
-			(2, "//b", "b")'
+			'INSERT INTO parts (page_url, expression, content) VALUES
+			("www.facedown.cz", "//b", "b")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content) VALUES
-			(2, "//c", "c")'
+			'INSERT INTO parts (page_url, expression, content) VALUES
+			("www.facedown.cz", "//c", "c")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content) VALUES
-			(1, "//d", "d")'
+			'INSERT INTO parts (page_url, expression, content) VALUES
+			("www.google.com", "//d", "d")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content) VALUES
-			(2, "//d", "d")'
+			'INSERT INTO parts (page_url, expression, content) VALUES
+			("www.facedown.cz", "//d", "d")'
 		);
 		$this->database->query(
 			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
