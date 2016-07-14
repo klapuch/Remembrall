@@ -24,14 +24,15 @@ final class OwnedReports implements Reports {
 		return (array)array_reduce(
 			$this->database->fetchAll(
 				'SELECT reports.ID AS report_id, sent_at,
-				pages.content AS page_content, pages.url,
-				parts.content AS part_content, parts.expression, parts.interval,
+				pages.content AS page_content, url,
+				parts.content AS part_content, expression, `interval`,
 				part_visits.visited_at
 				FROM parts
+				INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID 
 				LEFT JOIN reports ON parts.ID = reports.part_id
 				LEFT JOIN part_visits ON part_visits.part_id = parts.ID
 				INNER JOIN pages ON pages.ID = parts.page_id
-				WHERE parts.subscriber_id = ?',
+				WHERE subscribed_parts.subscriber_id = ?',
 				$this->owner->id()
 			),
 			function($previous, Dibi\Row $row) {
@@ -71,8 +72,9 @@ final class OwnedReports implements Reports {
 	public function archive(Part $part) {
 		$this->database->query(
 			'INSERT INTO reports (part_id, sent_at) VALUES
-			((SELECT ID
+			((SELECT parts.ID
 				FROM parts
+				INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID 
 				WHERE subscriber_id = ?
 				AND expression = ?
 				AND page_id = (SELECT ID FROM pages WHERE url = ?)

@@ -38,9 +38,11 @@ final class ExpiredParts implements Parts {
 	public function iterate(): array {
 		return (array)array_reduce(
 			$this->database->fetchAll(
-				'SELECT parts.content, expression, visited_at, `interval`,
-				pages.content AS page_content, pages.url 
+				'SELECT parts.content AS part_content, expression, visited_at,
+				`interval`,
+				pages.content AS page_content, url 
 				FROM parts
+				INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID 
 				INNER JOIN pages ON pages.ID = parts.page_id
 				LEFT JOIN part_visits ON part_visits.part_id = parts.ID
 				WHERE visited_at IS NULL
@@ -49,7 +51,7 @@ final class ExpiredParts implements Parts {
 			function($previous, Dibi\Row $row) {
 				$previous[] = new ConstantPart(
 					new ConstantPage($row['url'], $row['page_content']),
-					$row['content'],
+					$row['part_content'],
 					new XPathExpression(
 						new ConstantPage($row['url'], $row['page_content']),
 						$row['expression']

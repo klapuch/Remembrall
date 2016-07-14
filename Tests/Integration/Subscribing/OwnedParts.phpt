@@ -16,7 +16,16 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class OwnedParts extends TestCase\Database {
     public function testSubscribingBrandNew() {
+		$this->database->query(
+			'INSERT INTO part_visits (part_id, visited_at) VALUES
+			(1, "2000-01-01 01:01:01")'
+		);
+		$this->database->query(
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(1, "//p", "a")'
+		);
         (new Subscribing\OwnedParts(
+			new Subscribing\FakeParts(),
             $this->database,
             new Access\FakeSubscriber(666)
         ))->subscribe(
@@ -33,14 +42,15 @@ final class OwnedParts extends TestCase\Database {
             )
         );
 		$parts = $this->database->fetchAll(
-			'SELECT ID, page_id, content, expression, `interval`
-			FROM parts'
+			'SELECT parts.ID, page_id, content, expression, `interval` 
+			FROM parts
+			INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID'
 		);
 		Assert::count(1, $parts);
 		$part = current($parts);
 		Assert::same(1, $part['ID']);
 		Assert::same(1, $part['page_id']);
-		Assert::same('<p>Content</p>', $part['content']);
+		Assert::same('a', $part['content']);
 		Assert::same('//p', $part['expression']);
 		Assert::same('PT158M', $part['interval']);
 		$partVisits = $this->database->fetchAll('SELECT part_id, visited_at FROM part_visits');
@@ -51,7 +61,16 @@ final class OwnedParts extends TestCase\Database {
     }
 
 	public function testSubscribingDuplicateWithRollback() {
+		$this->database->query(
+			'INSERT INTO part_visits (part_id, visited_at) VALUES
+			(1, "2000-01-01 01:01:01")'
+		);
+		$this->database->query(
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(1, "//p", "a")'
+		);
 		$parts = new Subscribing\OwnedParts(
+			new Subscribing\FakeParts(),
 			$this->database,
 			new Access\FakeSubscriber(666)
 		);
@@ -93,22 +112,27 @@ final class OwnedParts extends TestCase\Database {
 			(1, NOW()), (2, NOW()), (3, NOW()), (4, NOW())'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, "//a", "a", "PT1M", 1)'
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(1, "//a", "a")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, "//b", "b", "PT2M", 2)'
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(2, "//b", "b")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, "//c", "c", "PT3M", 1)'
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(2, "//c", "c")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, "//d", "d", "PT4M", 1)'
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(1, "//d", "d")'
+		);
+		$this->database->query(
+			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
+			(1, 1, "PT1M"), (2, 2, "PT2M"), (3, 1, "PT3M"), (4, 1, "PT4M")'
 		);
 		$parts = (new Subscribing\OwnedParts(
+			new Subscribing\FakeParts(),
 			$this->database,
 			new Access\FakeSubscriber(1)
 		))->iterate();
@@ -126,10 +150,15 @@ final class OwnedParts extends TestCase\Database {
 			'INSERT INTO part_visits (part_id, visited_at) VALUES (1, NOW())'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, "//a", "a", "PT1M", 666)'
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(1, "//a", "a")'
+		);
+		$this->database->query(
+			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
+			(1, 666, "PT1M")'
 		);
 		(new Subscribing\OwnedParts(
+			new Subscribing\FakeParts(),
 			$this->database,
 			new Access\FakeSubscriber(666)
 		))->replace(
@@ -149,36 +178,32 @@ final class OwnedParts extends TestCase\Database {
 			(1, NOW()), (2, NOW()), (3, NOW()), (4, NOW())'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, "//p", "a", "PT1M", 666), (1, "//p", "a", "PT1M", 10)'
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(2, "//p", "a"), (1, "//p", "a")'
 		);
-		(new Subscribing\OwnedParts(
-			$this->database,
-			new Access\FakeSubscriber(666)
-		))->replace(
-			new Subscribing\FakePart(
-				new Subscribing\FakePage('www.google.com'),
-				new Subscribing\FakeExpression('//p'),
-				'a',
-				$equals = true
-			),
-			new Subscribing\FakePart(
-				null,
-				null,
-				'newContent'
-			)
+		$this->database->query(
+			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
+			(1, 666, "PT1M"), (2, 10, "PT1M")'
 		);
-		$parts = $this->database->fetchAll('SELECT * FROM parts');
-		Assert::count(2, $parts);
-		Assert::same('newContent', $parts[0]['content']); // changed
-		Assert::same('//p', $parts[0]['expression']);
-		Assert::same(1, $parts[0]['page_id']);
-		Assert::same(666, $parts[0]['subscriber_id']);
-
-		Assert::same('a', $parts[1]['content']);
-		Assert::same('//p', $parts[1]['expression']);
-		Assert::same(1, $parts[1]['page_id']);
-		Assert::same(10, $parts[1]['subscriber_id']);
+		Assert::noError(function() {
+			(new Subscribing\OwnedParts(
+				new Subscribing\FakeParts(),
+				$this->database,
+				new Access\FakeSubscriber(666)
+			))->replace(
+				new Subscribing\FakePart(
+					new Subscribing\FakePage('www.google.com'),
+					new Subscribing\FakeExpression('//p'),
+					'a',
+					$equals = true
+				),
+				new Subscribing\FakePart(
+					null,
+					null,
+					'newContent'
+				)
+			);
+		});
 	}
 
 	/**
@@ -190,14 +215,19 @@ final class OwnedParts extends TestCase\Database {
 			(1, NOW()), (2, NOW())'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, "//b", "b", "PT2M", 2)'
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(1, "//b", "b")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, "//b", "c", "PT3M", 666)'
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(2, "//b", "c")'
+		);
+		$this->database->query(
+			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
+			(1, 2, "PT2M"), (2, 666, "PT3M")'
 		);
 		(new Subscribing\OwnedParts(
+			new Subscribing\FakeParts(),
 			$this->database,
 			new Access\FakeSubscriber(666)
 		))->remove(
@@ -216,14 +246,19 @@ final class OwnedParts extends TestCase\Database {
 			(1, NOW()), (2, NOW())'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, "//b", "b", "PT2M", 2)'
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(1, "//b", "b")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, "//b", "c", "PT3M", 666)'
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(2, "//b", "c")'
+		);
+		$this->database->query(
+			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
+			(1, 2, "PT2M"), (2, 666, "PT3M")'
 		);
 		(new Subscribing\OwnedParts(
+			new Subscribing\FakeParts(),
 			$this->database,
 			new Access\FakeSubscriber(666)
 		))->remove(
@@ -234,7 +269,7 @@ final class OwnedParts extends TestCase\Database {
 				$equals = true
 			)
 		);
-		$parts = $this->database->fetchAll('SELECT ID FROM parts');
+		$parts = $this->database->fetchAll('SELECT ID FROM subscribed_parts');
 		Assert::count(1, $parts);
 		Assert::same(1, $parts[0]['ID']);
 	}
@@ -243,6 +278,7 @@ final class OwnedParts extends TestCase\Database {
         $this->database->query('TRUNCATE parts');
         $this->database->query('TRUNCATE part_visits');
 		$this->database->query('TRUNCATE pages');
+		$this->database->query('TRUNCATE subscribed_parts');
 		$this->database->query(
 			'INSERT INTO pages (ID, url, content) VALUES
 			(1, "www.google.com", "<p>google</p>")'

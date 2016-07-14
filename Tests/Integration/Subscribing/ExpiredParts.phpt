@@ -68,20 +68,25 @@ final class ExpiredParts extends TestCase\Database {
 		);
 		$this->database->query('TRUNCATE parts');
 		$this->database->query(
-			'INSERT INTO parts (ID, page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, 1, "//a", "a", "PT10M", 1)'
+			'INSERT INTO parts (ID, page_id, expression, content) VALUES
+			(1, 1, "//a", "a")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (ID, page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, 2, "//b", "b", "PT10M", 2)'
+			'INSERT INTO parts (ID, page_id, expression, content) VALUES
+			(2, 2, "//b", "b")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (ID, page_id, expression, content, `interval`, subscriber_id) VALUES
-			(3, 1, "//c", "c", "PT10M", 1)'
+			'INSERT INTO parts (ID, page_id, expression, content) VALUES
+			(3, 1, "//c", "c")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (ID, page_id, expression, content, `interval`, subscriber_id) VALUES
-			(4, 1, "//d", "d", "PT10M", 1)'
+			'INSERT INTO parts (ID, page_id, expression, content) VALUES
+			(4, 1, "//d", "d")'
+		);
+		$this->database->query('TRUNCATE subscribed_parts');
+		$this->database->query(
+			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
+			(1, 1, "PT10M"), (2, 2, "PT10M"), (3, 1, "PT10M"), (4, 1, "PT10M")'
 		);
 		$this->database->query('TRUNCATE pages');
 		$this->database->query(

@@ -12,13 +12,16 @@ use Remembrall\Model\{
  * Parts which are owned by the given subscriber
  */
 final class OwnedParts implements Parts {
+	private $origin;
 	private $database;
 	private $myself;
 
 	public function __construct(
+		Parts $origin,
 		Dibi\Connection $database,
 		Access\Subscriber $myself
 	) {
+		$this->origin = $origin;
 		$this->database = $database;
 		$this->myself = $myself;
 	}
@@ -27,20 +30,15 @@ final class OwnedParts implements Parts {
 		try {
 			(new Storage\Transaction($this->database))->start(
 				function() use ($interval, $part) {
+					$this->origin->subscribe($part, $interval);
 					$this->database->query(
-						'INSERT INTO parts
-						(`interval`, page_id, expression, content, subscriber_id) VALUES
-						(?, (SELECT ID FROM pages WHERE url = ?), ?, ?, ?)',
-						sprintf('PT%dM', $interval->step()->i),
-						$part->source()->url(),
+						'INSERT INTO subscribed_parts
+						(part_id, subscriber_id, `interval`) VALUES
+						((SELECT ID FROM parts WHERE expression = ? AND page_id = (SELECT ID FROM pages WHERE url = ?)), ?, ?)',
 						(string)$part->expression(),
-						$part->content(),
-						$this->myself->id()
-					);
-					$this->database->query(
-						'INSERT INTO part_visits (part_id, visited_at)
-						VALUES (LAST_INSERT_ID(), ?)',
-						$interval->start()
+						$part->source()->url(),
+						$this->myself->id(),
+						sprintf('PT%dM', $interval->step()->i)
 					);
 				}
 			);
@@ -61,32 +59,19 @@ final class OwnedParts implements Parts {
 	public function replace(Part $old, Part $new): Part {
 		if(!$this->owned($old))
 			throw new Exception\NotFoundException('You do not own this part');
-		$this->database->query(
-			'UPDATE parts
-			INNER JOIN part_visits ON part_visits.part_id = parts.ID
-			SET content = ?, visited_at = NOW()
-			WHERE subscriber_id = ?
-			AND expression = ?
-			AND page_id = (SELECT ID FROM pages WHERE url = ?)',
-			$new->content(),
-			$this->myself->id(),
-			(string)$old->expression(),
-			$old->source()->url()
-		);
-		return $new;
+		return $this->origin->replace($old, $new);
 	}
 
 	public function remove(Part $part) {
 		if(!$this->owned($part))
 			throw new Exception\NotFoundException('You do not own this part');
 		$this->database->query(
-			'DELETE FROM parts
+			'DELETE FROM subscribed_parts
 			WHERE subscriber_id = ?
-			AND page_id = (SELECT ID FROM pages WHERE url = ?)
-			AND expression = ?',
+			AND part_id = (SELECT ID FROM parts WHERE expression = ? AND page_id = (SELECT ID FROM pages WHERE url = ?))',
 			$this->myself->id(),
-			$part->source()->url(),
-			(string)$part->expression()
+			(string)$part->expression(),
+			$part->source()->url()
 		);
 	}
 
@@ -96,6 +81,7 @@ final class OwnedParts implements Parts {
 				'SELECT parts.content AS part_content, expression, url,
 				pages.content AS page_content, `interval`, visited_at
 				FROM parts
+				INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID
 				INNER JOIN part_visits ON part_visits.part_id = parts.ID  
 				LEFT JOIN pages ON pages.ID = parts.page_id
 				WHERE subscriber_id = ?',

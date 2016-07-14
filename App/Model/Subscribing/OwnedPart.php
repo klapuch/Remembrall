@@ -31,6 +31,7 @@ final class OwnedPart implements Part {
 		return (string)$this->database->fetchSingle(
 			'SELECT content
 			FROM parts
+			INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID
 			WHERE subscriber_id = ?
 			AND expression = ?
 			AND page_id = (SELECT ID FROM pages WHERE url = ?)',
@@ -53,6 +54,7 @@ final class OwnedPart implements Part {
 		$interval = $this->database->fetch(
 			'SELECT `interval`, visited_at
 			FROM parts
+			INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID
 			INNER JOIN part_visits ON part_visits.part_id = parts.ID
 			WHERE subscriber_id = ?
 			AND expression = ?

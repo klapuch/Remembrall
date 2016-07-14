@@ -16,22 +16,6 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class LimitedParts extends TestCase\Database {
 	public function testSubscribingWithoutLimit() {
-		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, "//a", "a", 1, 666)'
-		);
-		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, "//b", "b", 2, 666)'
-		);
-		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, "//c", "c", 3, 666)'
-		);
-		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, "//d", "d", 4, 666)'
-		);
 		Assert::noError(function() {
 			(new Subscribing\LimitedParts(
 				$this->database,
@@ -49,24 +33,12 @@ final class LimitedParts extends TestCase\Database {
 	 */
 	public function testSubscribingOverLimit() {
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, "//a", "a", 1, 666)'
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(2, "//d", "d")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, "//b", "b", 2, 666)'
-		);
-		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, "//c", "c", 3, 666)'
-		);
-		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, "//d", "d", 4, 666)'
-		);
-		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, "//d", "d", 4, 666)'
+			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
+			(5, 666, "PT5M")'
 		);
 		(new Subscribing\LimitedParts(
 			$this->database,
@@ -80,6 +52,27 @@ final class LimitedParts extends TestCase\Database {
 
     protected function prepareDatabase() {
         $this->database->query('TRUNCATE parts');
+		$this->database->query('TRUNCATE subscribed_parts');
+		$this->database->query(
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(1, "//a", "a")'
+		);
+		$this->database->query(
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(2, "//b", "b")'
+		);
+		$this->database->query(
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(2, "//c", "c")'
+		);
+		$this->database->query(
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(1, "//d", "d")'
+		);
+		$this->database->query(
+			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
+			(1, 666, "PT1M"), (2, 666, "PT2M"), (3, 666, "PT3M"), (4, 666, "PT4M")'
+		);
     }
 }
 

@@ -133,6 +133,7 @@ final class OwnedPart extends TestCase\Database {
 		$this->database->query('TRUNCATE parts');
 		$this->database->query('TRUNCATE part_visits');
 		$this->database->query('TRUNCATE pages');
+		$this->database->query('TRUNCATE subscribed_parts');
 		$this->database->query(
 			'INSERT INTO part_visits (part_id, visited_at) VALUES
 			(1, NOW()), (2, "2000-01-01 01:01:01"), (3, NOW()), (4, NOW())'
@@ -146,20 +147,24 @@ final class OwnedPart extends TestCase\Database {
 			(2, "www.facedown.cz", "<p>facedown</p>")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, "//b", "b", "PT2M", 666)'
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(2, "//b", "b")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, "//c", "c", "PT3M", 666)'
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(2, "//c", "c")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, "//d", "d", "PT4M", 666)'
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(1, "//d", "d")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, "//d", "d", "PT4M", 666)'
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(2, "//d", "d")'
+		);
+		$this->database->query(
+			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
+			(1, 666, "PT2M"), (2, 666, "PT3M"), (3, 666, "PT4M"), (4, 666, "PT4M")'
 		);
     }
 }

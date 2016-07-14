@@ -24,8 +24,12 @@ final class PartSharedSubscribers extends TestCase\Database {
 			("a"), ("b"), ("c")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, subscriber_id) VALUES
-			(1, "//h1", 1), (1, "//h1", 2), (1, "//h2", 2), (2, "//h1", 3)'
+			'INSERT INTO parts (page_id, expression) VALUES
+			(1, "//h1"), (2, "//h1")'
+		);
+		$this->database->query(
+			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
+			(1, 1, "PT1M"), (1, 2, "PT1M"), (2, 2, "PT1M"), (2, 3, "PT1M")'
 		);
 		Assert::equal(
 			[
@@ -45,6 +49,7 @@ final class PartSharedSubscribers extends TestCase\Database {
 
 	protected function prepareDatabase() {
 		$this->database->query('TRUNCATE pages');
+		$this->database->query('TRUNCATE subscribed_parts');
 		$this->database->query('TRUNCATE parts');
 		$this->database->query('TRUNCATE subscribers');
 	}

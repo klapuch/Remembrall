@@ -30,6 +30,9 @@ final class Parts extends SecureControl {
 	public function render() {
 		$this->template->setFile(__DIR__ . '/Parts.latte');
 		$this->template->parts = (new Subscribing\OwnedParts(
+			new Subscribing\CollectiveParts(
+				$this->database
+			),
 			$this->database,
 			$this->myself
 		))->iterate();
@@ -40,6 +43,9 @@ final class Parts extends SecureControl {
 		try {
 			(new Subscribing\LoggedParts(
 				new Subscribing\OwnedParts(
+					new Subscribing\CollectiveParts(
+						$this->database
+					),
 					$this->database,
 					$this->myself
 				),
@@ -93,6 +99,9 @@ final class Parts extends SecureControl {
 				new Subscribing\ReportedParts(
 					new Subscribing\ChangedParts(
 						new Subscribing\OwnedParts(
+							new Subscribing\CollectiveParts(
+								$this->database
+							),
 							$this->database,
 							$this->myself
 						)

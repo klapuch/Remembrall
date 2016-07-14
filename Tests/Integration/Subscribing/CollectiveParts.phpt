@@ -30,31 +30,67 @@ final class CollectiveParts extends TestCase\Database {
                 false
             ),
             new Subscribing\FakeInterval(
-                new \DateTimeImmutable('2000-01-01 01:01:01'),
-                null,
-                new \DateInterval('PT15M')
+                new \DateTimeImmutable('2000-01-01 01:01:01')
             )
         );
 		$parts = $this->database->fetchAll(
-			'SELECT ID, page_id, content, expression, `interval`
-			FROM parts'
+			'SELECT ID, page_id, content, expression FROM parts'
 		);
-		Assert::count(2, $parts);
+		Assert::count(1, $parts);
 		Assert::same(1, $parts[0]['ID']);
 		Assert::same(1, $parts[0]['page_id']);
 		Assert::same('<p>Content</p>', $parts[0]['content']);
 		Assert::same('//p', $parts[0]['expression']);
-		Assert::same('PT15M', $parts[0]['interval']);
-		Assert::same(2, $parts[1]['ID']);
-		Assert::same(1, $parts[1]['page_id']);
-		Assert::same('<p>Content</p>', $parts[1]['content']);
-		Assert::same('//p', $parts[1]['expression']);
-		Assert::same('PT15M', $parts[1]['interval']);
+		$partVisits = $this->database->fetchAll(
+			'SELECT part_id FROM part_visits'
+		);
+		Assert::count(1, $partVisits);
+    }
+
+	public function testTwiceSubscribingWithUpdate() {
+		$this->database->query(
+			'INSERT INTO subscribers (ID, email, `password`) VALUES
+			(1, "foo@bar.cz", "secret"), (2, "facedown@facedown.cz", "secret")'
+		);
+		(new Subscribing\CollectiveParts(
+			$this->database
+		))->subscribe(
+			new Subscribing\FakePart(
+				new Subscribing\FakePage('www.google.com'),
+				new Subscribing\FakeExpression('//p'),
+				'<p>Content</p>',
+				false
+			),
+			new Subscribing\FakeInterval(
+				new \DateTimeImmutable('2000-01-01 01:01:01')
+			)
+		); //once
+		(new Subscribing\CollectiveParts(
+			$this->database
+		))->subscribe(
+			new Subscribing\FakePart(
+				new Subscribing\FakePage('www.google.com'),
+				new Subscribing\FakeExpression('//p'),
+				'<p>Updated content</p>',
+				false
+			),
+			new Subscribing\FakeInterval(
+				new \DateTimeImmutable('2002-01-01 01:01:01')
+			)
+		); //twice
+		$parts = $this->database->fetchAll(
+			'SELECT ID, page_id, content, expression FROM parts'
+		);
+		Assert::count(1, $parts);
+		Assert::same(1, $parts[0]['ID']);
+		Assert::same(1, $parts[0]['page_id']);
+		Assert::same('<p>Updated content</p>', $parts[0]['content']);
+		Assert::same('//p', $parts[0]['expression']);
 		$partVisits = $this->database->fetchAll(
 			'SELECT part_id FROM part_visits'
 		);
 		Assert::count(2, $partVisits);
-    }
+	}
 
 	public function testReplacing() {
 		$this->database->query(
@@ -62,8 +98,12 @@ final class CollectiveParts extends TestCase\Database {
 			(1, "2000-01-01 01:01:01")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, "//p", "a", "PT1M", 666)'
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(1, "//p", "a")'
+		);
+		$this->database->query(
+			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
+			(1, 666, "PT1M")'
 		);
 		(new Subscribing\CollectiveParts($this->database))->replace(
 			new Subscribing\FakePart(
@@ -83,7 +123,8 @@ final class CollectiveParts extends TestCase\Database {
 			'SELECT content, subscriber_id, expression, page_id,
 			part_visits.visited_at
 			FROM parts
-			INNER JOIN part_visits ON part_visits.part_id = parts.ID'
+			INNER JOIN part_visits ON part_visits.part_id = parts.ID
+			INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID'
 		);
 		Assert::count(1, $parts);
 		$part = current($parts);
@@ -100,20 +141,24 @@ final class CollectiveParts extends TestCase\Database {
 			(1, NOW()), (2, NOW()), (3, NOW()), (4, NOW())'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, "//a", "a", "PT1M", 1)'
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(1, "//a", "a")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, "//b", "b", "PT2M", 2)'
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(2, "//b", "b")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, "//c", "c", "PT3M", 1)'
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(2, "//c", "c")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, "//d", "d", "PT4M", 1)'
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(1, "//d", "d")'
+		);
+		$this->database->query(
+			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
+			(1, 1, "PT1M"), (2, 2, "PT2M"), (3, 1, "PT3M"), (4, 1, "PT4M")'
 		);
 		$parts = (new Subscribing\CollectiveParts(
 			$this->database
@@ -127,20 +172,16 @@ final class CollectiveParts extends TestCase\Database {
 
 	public function testRemovingAllSameParts() {
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, "//b", "b", "PT2M", 2)'
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(2, "//b", "b")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, "//b", "c", "PT3M", 1)'
+			'INSERT INTO parts (page_id, expression, content) VALUES
+			(2, "//d", "c")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(2, "//d", "c", "PT3M", 1)'
-		);
-		$this->database->query(
-			'INSERT INTO parts (page_id, expression, content, `interval`, subscriber_id) VALUES
-			(1, "//d", "d", "PT4M", 1)'
+			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
+			(1, 2, "PT2M"), (2, 1, "PT3M")'
 		);
 		(new Subscribing\CollectiveParts(
 			$this->database
@@ -151,9 +192,8 @@ final class CollectiveParts extends TestCase\Database {
 			)
 		);
 		$parts = $this->database->fetchAll('SELECT ID FROM parts');
-		Assert::count(2, $parts);
-		Assert::same(3, $parts[0]['ID']);
-		Assert::same(4, $parts[1]['ID']);
+		Assert::count(1, $parts);
+		Assert::same(2, $parts[0]['ID']);
 	}
 
     protected function prepareDatabase() {
@@ -161,6 +201,7 @@ final class CollectiveParts extends TestCase\Database {
         $this->database->query('TRUNCATE part_visits');
 		$this->database->query('TRUNCATE pages');
 		$this->database->query('TRUNCATE subscribers');
+		$this->database->query('TRUNCATE subscribed_parts');
 		$this->database->query(
 			'INSERT INTO pages (ID, url, content) VALUES
 			(1, "www.google.com", "<p>google</p>")'
