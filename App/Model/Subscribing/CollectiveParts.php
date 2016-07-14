@@ -59,8 +59,7 @@ final class CollectiveParts implements Parts {
 	public function remove(Part $part) {
 		$this->database->query(
 			'DELETE FROM parts
-			WHERE expression = ?
-			AND page_url = ?',
+			WHERE expression = ? AND page_url = ?',
 			(string)$part->expression(),
 			$part->source()->url()
 		);
