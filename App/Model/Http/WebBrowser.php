@@ -2,28 +2,24 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Http;
 
-use Dibi;
 use GuzzleHttp;
 use GuzzleHttp\Exception\RequestException;
-use Psr\Http\Message;
 use Remembrall\Exception\NotFoundException;
-use Remembrall\Model\{
-	Storage, Subscribing
-};
+use Remembrall\Model\Subscribing;
 
 /**
  * Browser sending a http request and receiving http response
  */
 final class WebBrowser implements Browser {
 	private $http;
-	private $database;
+	private $pages;
 
 	public function __construct(
 		GuzzleHttp\ClientInterface $http,
-		Dibi\Connection $database
+		Subscribing\Pages $pages
 	) {
 		$this->http = $http;
-		$this->database = $database;
+		$this->pages = $pages;
 	}
 
 	public function send(Request $request): Subscribing\Page {
@@ -42,26 +38,11 @@ final class WebBrowser implements Browser {
 					$headers
 				)
 			);
-			(new Storage\Transaction($this->database))->start(
-				function() use ($headers, $response) {
-					$this->database->query(
-						'INSERT INTO pages (url, content) VALUES
-						(?, ?) ON DUPLICATE KEY UPDATE
-						content = VALUES(content)',
-						$headers['host'],
-						$response->content()
-					);
-					$this->database->query(
-						'INSERT INTO page_visits (page_url, visited_at) VALUES
-						(?, ?)',
-						$headers['host'],
-						new \DateTimeImmutable()
-					);
-				}
-			);
-			return new Subscribing\AvailableWebPage(
-				new Subscribing\HtmlWebPage($request, $response),
-				$response
+			return $this->pages->add(
+				new Subscribing\AvailableWebPage(
+					new Subscribing\HtmlWebPage($request, $response),
+					$response
+				)
 			);
 		} catch(RequestException $ex) {
 			throw new NotFoundException(

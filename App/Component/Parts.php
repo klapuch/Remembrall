@@ -70,6 +70,7 @@ final class Parts extends SecureControl {
 				new Http\CachingBrowser(
 					new Http\WebBrowser(
 						new GuzzleHttp\Client(['http_errors' => false]),
+						new Subscribing\WebPages($this->database),
 						$this->database
 					),
 					$this->database

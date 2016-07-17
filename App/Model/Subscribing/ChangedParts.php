@@ -65,7 +65,7 @@ final class ChangedParts implements Parts {
 		return array_filter(
 			$this->origin->iterate(),
 			function(Part $part) {
-				$visualizedPart = $part->print();
+				$visualizedPart = $part->print(); //TODO: Not nice
 				return $this->changed(
 					$part,
 					$visualizedPart['page']->url(),
