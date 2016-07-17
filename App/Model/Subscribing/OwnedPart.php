@@ -8,23 +8,23 @@ use Remembrall\Exception;
 
 final class OwnedPart implements Part {
 	private $origin;
-	private $expression;
-	private $owner;
 	private $page;
+	private $expression;
 	private $database;
+	private $owner;
 
 	public function __construct(
 		Part $origin,
-		Dibi\Connection $database,
+		Page $page,
 		Expression $expression,
-		Access\Subscriber $owner,
-		Page $page
+		Dibi\Connection $database,
+		Access\Subscriber $owner
 	) {
 		$this->origin = $origin;
-		$this->database = $database;
-		$this->expression = $expression;
-		$this->owner = $owner;
 		$this->page = $page;
+		$this->expression = $expression;
+		$this->database = $database;
+		$this->owner = $owner;
 	}
 
 	public function content(): string {

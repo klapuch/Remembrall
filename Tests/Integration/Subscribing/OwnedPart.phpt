@@ -19,10 +19,10 @@ final class OwnedPart extends TestCase\Database {
 			'd',
 			(new Subscribing\OwnedPart(
 				new Subscribing\FakePart(),
-				$this->database,
+				new Subscribing\FakePage('www.facedown.cz'),
 				new Subscribing\FakeExpression('//d'),
-				new Access\FakeSubscriber(666),
-				new Subscribing\FakePage('www.facedown.cz')
+				$this->database,
+				new Access\FakeSubscriber(666)
 			))->content()
 		);
 	}
@@ -33,10 +33,10 @@ final class OwnedPart extends TestCase\Database {
 	public function testContentOnUnknownResult() {
 		(new Subscribing\OwnedPart(
 			new Subscribing\FakePart(),
+			new Subscribing\FakePage('does not exists'),
+			new Subscribing\FakeExpression('also does not exist'),
 			$this->database,
-			new Subscribing\FakeExpression('this does not exist'),
-			new Access\FakeSubscriber(666),
-			new Subscribing\FakePage('this also does not exist')
+			new Access\FakeSubscriber(666)
 		))->content();
 	}
 
@@ -44,10 +44,10 @@ final class OwnedPart extends TestCase\Database {
 		Assert::false(
 			(new Subscribing\OwnedPart(
 				new Subscribing\FakePart(),
-				$this->database,
+				new Subscribing\FakePage('www.facedown.cz'),
 				new Subscribing\FakeExpression('//d'),
-				new Access\FakeSubscriber(666),
-				new Subscribing\FakePage('www.facedown.cz')
+				$this->database,
+				new Access\FakeSubscriber(666)
 			))->equals(
 				new Subscribing\FakePart('<p>abc</p>')
 			)
@@ -58,10 +58,10 @@ final class OwnedPart extends TestCase\Database {
 		Assert::true(
 			(new Subscribing\OwnedPart(
 				new Subscribing\FakePart(),
-				$this->database,
+				new Subscribing\FakePage('www.facedown.cz'),
 				new Subscribing\FakeExpression('//d'),
-				new Access\FakeSubscriber(666),
-				new Subscribing\FakePage('www.facedown.cz')
+				$this->database,
+				new Access\FakeSubscriber(666)
 			))->equals(
 				new Subscribing\FakePart('d')
 			)
@@ -74,10 +74,10 @@ final class OwnedPart extends TestCase\Database {
 	public function testRefreshingForeignPart() {
 		(new Subscribing\OwnedPart(
 			new Subscribing\FakePart(),
-			$this->database,
+			new Subscribing\FakePage('www.facedown.cz'),
 			new Subscribing\FakeExpression('//d'),
-			new Access\FakeSubscriber(1),
-			new Subscribing\FakePage('www.facedown.cz')
+			$this->database,
+			new Access\FakeSubscriber(1)
 		))->refresh();
 	}
 
@@ -85,10 +85,10 @@ final class OwnedPart extends TestCase\Database {
 		Assert::noError(function() {
 			(new Subscribing\OwnedPart(
 				new Subscribing\FakePart(),
-				$this->database,
+				new Subscribing\FakePage('www.facedown.cz'),
 				new Subscribing\FakeExpression('//d'),
-				new Access\FakeSubscriber(666),
-				new Subscribing\FakePage('www.facedown.cz')
+				$this->database,
+				new Access\FakeSubscriber(666)
 			))->refresh();
 		});
 	}

@@ -108,10 +108,10 @@ final class Parts extends SecureControl {
 						$browser,
 						$page
 					),
-					$this->database,
+					$page,
 					new Subscribing\XPathExpression($page, $expression),
-					$this->myself,
-					$page
+					$this->database,
+					$this->myself
 				),
 				$url,
 				$expression,
