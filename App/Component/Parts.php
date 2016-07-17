@@ -28,51 +28,29 @@ final class Parts extends SecureControl {
 
 	public function render() {
 		$this->template->setFile(__DIR__ . '/Parts.latte');
-		$browser = new Http\LoggingBrowser(
-			new Http\CachingBrowser(
-				new Http\WebBrowser(
-					new GuzzleHttp\Client(['http_errors' => false]),
-					new Subscribing\WebPages($this->database),
-					$this->database
-				),
-				$this->database
-			),
-			$this->logger
-		);
 		$this->template->parts = (new Subscribing\OwnedParts(
 			new Subscribing\CollectiveParts(
 				$this->database,
-				$browser
+				new Http\FakeBrowser()
 			),
 			$this->database,
 			$this->myself,
-			$browser
+			new Http\FakeBrowser()
 		))->iterate();
 		$this->template->render();
 	}
 
 	public function handleRemove(string $url, string $expression) {
 		try {
-			$browser = new Http\LoggingBrowser(
-				new Http\CachingBrowser(
-					new Http\WebBrowser(
-						new GuzzleHttp\Client(['http_errors' => false]),
-						new Subscribing\WebPages($this->database),
-						$this->database
-					),
-					$this->database
-				),
-				$this->logger
-			);
 			(new Subscribing\LoggedParts(
 				new Subscribing\OwnedParts(
 					new Subscribing\CollectiveParts(
 						$this->database,
-						$browser
+						new Http\FakeBrowser()
 					),
 					$this->database,
 					$this->myself,
-					$browser
+					new Http\FakeBrowser()
 				),
 				$this->logger
 			))->remove($url, $expression);
