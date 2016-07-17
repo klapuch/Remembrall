@@ -29,7 +29,8 @@ final class ExpiredParts extends TestCase\Database {
 			'INSERT INTO part_visits (part_id, visited_at) VALUES
 			(1, NOW() - INTERVAL 2 DAY),
 			(2, NOW()),
-			(3, NOW() - INTERVAL 3 MINUTE)'
+			(3, NOW() - INTERVAL 3 MINUTE),
+			(1, NOW() - INTERVAL 4 DAY)'
 		);
 		$this->database->query('TRUNCATE parts');
 		$this->database->query(

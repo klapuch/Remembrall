@@ -66,35 +66,45 @@ final class Parts extends SecureControl {
 
 	public function handleRefresh(string $url, string $expression) {
 		try {
-			$page = (new Http\LoggingBrowser(
+			$browser = new Http\LoggingBrowser(
 				new Http\CachingBrowser(
 					new Http\WebBrowser(
-						new GuzzleHttp\Client(), $this->database
+						new GuzzleHttp\Client(['http_errors' => false]),
+						$this->database
 					),
 					$this->database
 				),
 				$this->logger
-			))->send(
+			);
+			$page = $browser->send(
 				new Http\ConstantRequest(
 					new Http\CaseSensitiveHeaders(
 						new Http\UniqueHeaders(
 							[
 								'host' => $url,
 								'method' => 'GET',
-								'http_errors' => false,
 							]
 						)
 					)
 				)
 			);
 			(new Subscribing\LoggedParts(
-				new Subscribing\CollectiveParts($this->database),
+				new Subscribing\ChangedParts(
+					new Subscribing\CollectiveParts($this->database),
+					$browser
+				),
 				$this->logger
 			))->subscribe(
-				new Subscribing\HtmlPart(
-					new Subscribing\ValidXPathExpression(
-						new Subscribing\XPathExpression($page, $expression)
-					)
+				new Subscribing\OwnedPart(
+					new Subscribing\HtmlPart(
+						new Subscribing\ValidXPathExpression(
+							new Subscribing\XPathExpression($page, $expression)
+						)
+					),
+					$this->database,
+					new Subscribing\XPathExpression($page, $expression),
+					$this->myself,
+					$page
 				),
 				$url,
 				$expression,

@@ -22,6 +22,23 @@ final class TextPart extends Tester\TestCase {
 			(new Subscribing\TextPart($part))->content()
 		);
 	}
+
+
+	public function testDifferentParts() {
+		Assert::false(
+			(new Subscribing\TextPart(
+				new Subscribing\FakePart('abcd')
+			))->equals(new Subscribing\FakePart('abc'))
+		);
+	}
+
+	public function testEquivalentParts() {
+		Assert::true(
+			(new Subscribing\TextPart(
+				new Subscribing\FakePart('<p>abc</p>')
+			))->equals(new Subscribing\FakePart('abc'))
+		);
+	}
 }
 
 (new TextPart())->run();

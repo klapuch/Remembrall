@@ -14,7 +14,12 @@ interface Parts {
 	 * @throws Exception\DuplicateException
 	 * @return Part
 	 */
-	public function subscribe(Part $part, string $url, string $expression, Interval $interval): Part;
+	public function subscribe(
+		Part $part,
+		string $url,
+		string $expression,
+		Interval $interval
+	): Part;
 
 	/**
 	 * Remove the given part from the parts

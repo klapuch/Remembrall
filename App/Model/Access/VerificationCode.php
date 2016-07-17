@@ -7,7 +7,7 @@ interface VerificationCode {
 	 * Use the verification code
 	 * @return void
 	 */
-	public function use ();
+	public function use();
 
 	/**
 	 * Who is the owner of this verification code?

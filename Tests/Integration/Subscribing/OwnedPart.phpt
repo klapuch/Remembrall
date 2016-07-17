@@ -5,7 +5,6 @@
  */
 namespace Remembrall\Integration\Subscribing;
 
-use Dibi;
 use Remembrall\Model\{
 	Access, Subscribing
 };
@@ -28,20 +27,48 @@ final class OwnedPart extends TestCase\Database {
 		);
 	}
 
+	/**
+	 * @throws \Remembrall\Exception\NotFoundException You do not own this part
+	 */
 	public function testContentOnUnknownResult() {
-		Assert::same(
-			'',
+		(new Subscribing\OwnedPart(
+			new Subscribing\FakePart(),
+			$this->database,
+			new Subscribing\FakeExpression('this does not exist'),
+			new Access\FakeSubscriber(666),
+			new Subscribing\FakePage('this also does not exist')
+		))->content();
+	}
+
+	public function testDifferentContent() {
+		Assert::false(
 			(new Subscribing\OwnedPart(
 				new Subscribing\FakePart(),
 				$this->database,
-				new Subscribing\FakeExpression('this does not exist'),
+				new Subscribing\FakeExpression('//d'),
 				new Access\FakeSubscriber(666),
-				new Subscribing\FakePage('this also does not exist')
-			))->content()
+				new Subscribing\FakePage('www.facedown.cz')
+			))->equals(
+				new Subscribing\FakePart('<p>abc</p>')
+			)
 		);
 	}
 
-    protected function prepareDatabase() {
+	public function testEquivalentParts() {
+		Assert::true(
+			(new Subscribing\OwnedPart(
+				new Subscribing\FakePart(),
+				$this->database,
+				new Subscribing\FakeExpression('//d'),
+				new Access\FakeSubscriber(666),
+				new Subscribing\FakePage('www.facedown.cz')
+			))->equals(
+				new Subscribing\FakePart('d')
+			)
+		);
+	}
+
+	protected function prepareDatabase() {
 		$this->database->query('TRUNCATE parts');
 		$this->database->query('TRUNCATE part_visits');
 		$this->database->query('TRUNCATE pages');
@@ -78,7 +105,7 @@ final class OwnedPart extends TestCase\Database {
 			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
 			(1, 666, "PT2M"), (2, 666, "PT3M"), (3, 666, "PT4M"), (4, 666, "PT4M")'
 		);
-    }
+	}
 }
 
 (new OwnedPart)->run();

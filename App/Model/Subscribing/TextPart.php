@@ -17,7 +17,7 @@ final class TextPart implements Part {
 	}
 
 	public function equals(Part $part): bool {
-		return $this->origin->equals($part);
+		return $this->content() === $part->content();
 	}
 
 	public function print(): array {

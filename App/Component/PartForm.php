@@ -66,7 +66,8 @@ final class PartForm extends SecureControl {
 			$page = (new Http\LoggingBrowser(
 				new Http\CachingBrowser(
 					new Http\WebBrowser(
-						new GuzzleHttp\Client(), $this->database
+						new GuzzleHttp\Client(['http_errors' => false]),
+						$this->database
 					),
 					$this->database
 				),
@@ -78,7 +79,6 @@ final class PartForm extends SecureControl {
 							[
 								'host' => $values['url'],
 								'method' => 'GET',
-								'http_errors' => false,
 							]
 						)
 					)

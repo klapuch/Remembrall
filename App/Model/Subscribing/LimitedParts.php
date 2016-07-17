@@ -25,7 +25,12 @@ final class LimitedParts implements Parts {
 		$this->origin = $origin;
 	}
 
-	public function subscribe(Part $part, string $url, string $expression, Interval $interval): Part {
+	public function subscribe(
+		Part $part,
+		string $url,
+		string $expression,
+		Interval $interval
+	): Part {
 		if($this->overstepped()) {
 			throw new \OverflowException(
 				sprintf(

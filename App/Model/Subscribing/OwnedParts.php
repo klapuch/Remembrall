@@ -26,11 +26,21 @@ final class OwnedParts implements Parts {
 		$this->myself = $myself;
 	}
 
-	public function subscribe(Part $part, string $url, string $expression, Interval $interval): Part {
+	public function subscribe(
+		Part $part,
+		string $url,
+		string $expression,
+		Interval $interval
+	): Part {
 		try {
 			(new Storage\Transaction($this->database))->start(
 				function() use ($part, $url, $expression, $interval) {
-					$this->origin->subscribe($part, $url, $expression, $interval);
+					$this->origin->subscribe(
+						$part,
+						$url,
+						$expression,
+						$interval
+					);
 					$this->database->query(
 						'INSERT INTO subscribed_parts
 						(part_id, subscriber_id, `interval`) VALUES

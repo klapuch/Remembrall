@@ -52,8 +52,8 @@ final class WebBrowser extends TestCase\Database {
 	 * @throws \Remembrall\Exception\NotFoundException Connection could not be established. Does the URL really exist?
 	 */
 	public function testUnknownUrl() {
-		$http = new GuzzleHttp\Client();
-		$headers = ['method' => 'get', 'host' => 'http://www.čoromoro.xx', 'http_errors' => ''];
+		$http = new GuzzleHttp\Client(['http_errors' => false]);
+		$headers = ['method' => 'get', 'host' => 'http://www.čoromoro.xx'];
 		(new Http\WebBrowser($http, $this->database))->send(
 			new Http\ConstantRequest(new Http\FakeHeaders($headers)));
 	}
@@ -62,8 +62,8 @@ final class WebBrowser extends TestCase\Database {
 	 * @throws \Remembrall\Exception\NotFoundException Connection could not be established. Does the URL really exist?
 	 */
 	public function testEmptyUrl() {
-		$http = new GuzzleHttp\Client();
-		$headers = ['method' => 'get', 'host' => 'http://www.čoromoro.xx', 'http_errors' => ''];
+		$http = new GuzzleHttp\Client(['http_errors' => false]);
+		$headers = ['method' => 'get', 'host' => 'http://www.čoromoro.xx'];
 		(new Http\WebBrowser($http, $this->database))->send(
 			new Http\ConstantRequest(new Http\FakeHeaders($headers)));
 	}

@@ -4,6 +4,7 @@ namespace Remembrall\Model\Subscribing;
 
 use Dibi;
 use Remembrall\Model\Access;
+use Remembrall\Exception;
 
 final class OwnedPart implements Part {
 	private $origin;
@@ -19,15 +20,15 @@ final class OwnedPart implements Part {
 		Access\Subscriber $owner,
 		Page $page
 	) {
-	    $this->origin = $origin;
-	    $this->database = $database;
+		$this->origin = $origin;
+		$this->database = $database;
 		$this->expression = $expression;
 		$this->owner = $owner;
 		$this->page = $page;
 	}
 
 	public function content(): string {
-		return (string)$this->database->fetchSingle(
+		$content = $this->database->fetchSingle(
 			'SELECT content
 			FROM parts
 			INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID
@@ -38,6 +39,9 @@ final class OwnedPart implements Part {
 			(string)$this->expression,
 			$this->page->url()
 		);
+		if(!is_string($content))
+			throw new Exception\NotFoundException('You do not own this part');
+		return $content;
 	}
 
 	public function print(): array {
@@ -49,6 +53,6 @@ final class OwnedPart implements Part {
 	}
 
 	public function equals(Part $part): bool {
-		return $part->content() === $this->content();
+		return $this->content() === $part->content();
 	}
 }
