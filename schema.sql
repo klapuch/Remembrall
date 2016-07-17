@@ -1,9 +1,7 @@
--- Adminer 4.2.4-dev MySQL dump
+-- Adminer 4.2.5 MySQL dump
 
 SET NAMES utf8;
 SET time_zone = '+00:00';
-SET foreign_key_checks = 0;
-SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
 DROP TABLE IF EXISTS `forgotten_passwords`;
 CREATE TABLE `forgotten_passwords` (
@@ -26,6 +24,13 @@ CREATE TABLE `pages` (
   PRIMARY KEY (`url`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+DELIMITER ;;
+
+CREATE TRIGGER `pages_bi` BEFORE INSERT ON `pages` FOR EACH ROW
+  INSERT INTO page_visits (page_url, visited_at) VALUES(NEW.url, NOW());;
+
+DELIMITER ;
 
 DROP TABLE IF EXISTS `page_visits`;
 CREATE TABLE `page_visits` (
@@ -99,4 +104,4 @@ CREATE TABLE `verification_codes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- 2016-07-14 20:32:16
+-- 2016-07-17 16:32:20

@@ -33,7 +33,7 @@ final class CollectiveParts implements Parts {
 					$expression,
 					$part->content()
 				);
-				$this->database->query(
+				$this->database->query(// TODO
 					'INSERT INTO part_visits (part_id, visited_at) VALUES
 					((SELECT ID FROM parts WHERE page_url = ? AND expression = ?), ?)',
 					$url,

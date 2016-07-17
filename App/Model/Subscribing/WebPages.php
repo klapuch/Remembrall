@@ -13,22 +13,12 @@ final class WebPages implements Pages {
 	}
 
 	public function add(Page $page): Page {
-		(new Storage\Transaction($this->database))->start(
-			function() use ($page) {
-				$this->database->query(
-					'INSERT INTO pages (url, content) VALUES
-					(?, ?) ON DUPLICATE KEY UPDATE
-					content = VALUES(content)',
-					$page->url(),
-					$page->content()->saveHTML()
-				);
-				$this->database->query(
-					'INSERT INTO page_visits (page_url, visited_at) VALUES
-					(?, ?)',
-					$page->url(),
-					new \DateTimeImmutable()
-				);
-			}
+		$this->database->query(
+			'INSERT INTO pages (url, content) VALUES
+			(?, ?) ON DUPLICATE KEY UPDATE
+			content = VALUES(content)',
+			$page->url(),
+			$page->content()->saveHTML()
 		);
 		return $page;
 	}

@@ -25,6 +25,12 @@ CREATE TABLE `pages` (
   PRIMARY KEY (`url`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+DELIMITER ;;
+
+CREATE TRIGGER `pages_bi` BEFORE INSERT ON `pages` FOR EACH ROW
+  INSERT INTO page_visits (page_url, visited_at) VALUES(NEW.url, NOW());;
+
+DELIMITER ;
 
 DROP TABLE IF EXISTS `page_visits`;
 CREATE TABLE `page_visits` (
