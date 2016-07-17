@@ -50,11 +50,11 @@ final class CachingBrowser extends TestCase\Database {
 
 	protected function prepareDatabase() {
 		$this->database->query('TRUNCATE pages');
-		$this->database->query('TRUNCATE page_visits');
 		$this->database->query(
 			'INSERT INTO pages (url, content) VALUES
 			("www.google.com", "google")'
 		);
+		$this->database->query('TRUNCATE page_visits');
 	}
 }
 
