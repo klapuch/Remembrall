@@ -31,6 +31,10 @@ final class FakePart implements Part {
 		return $this->equals;
 	}
 
+	public function refresh(): Part {
+		return $this;
+	}
+
 	public function print(): array {
 		return [
 			'page' => $this->page,

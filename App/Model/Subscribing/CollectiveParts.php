@@ -4,7 +4,7 @@ namespace Remembrall\Model\Subscribing;
 
 use Dibi;
 use Remembrall\Model\{
-	Storage
+	Http, Storage
 };
 
 /**
@@ -12,9 +12,14 @@ use Remembrall\Model\{
  */
 final class CollectiveParts implements Parts {
 	private $database;
+	private $browser;
 
-	public function __construct(Dibi\Connection $database) {
+	public function __construct(
+		Dibi\Connection $database,
+		Http\Browser $browser
+	) {
 		$this->database = $database;
+		$this->browser = $browser;
 	}
 
 	public function subscribe(
@@ -33,7 +38,7 @@ final class CollectiveParts implements Parts {
 					$expression,
 					$part->content()
 				);
-				$this->database->query(// TODO
+				$this->database->query(
 					'INSERT INTO part_visits (part_id, visited_at) VALUES
 					((SELECT ID FROM parts WHERE page_url = ? AND expression = ?), ?)',
 					$url,
@@ -78,6 +83,11 @@ final class CollectiveParts implements Parts {
 								$row['url']
 							),
 							$row['expression']
+						),
+						$this->browser,
+						new ConstantPage(
+							$row['page_content'],
+							$row['url']
 						)
 					),
 					$row['part_content'],

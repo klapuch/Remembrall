@@ -68,6 +68,31 @@ final class OwnedPart extends TestCase\Database {
 		);
 	}
 
+	/**
+	 * @throws \Remembrall\Exception\NotFoundException You do not own this part
+	 */
+	public function testRefreshingForeignPart() {
+		(new Subscribing\OwnedPart(
+			new Subscribing\FakePart(),
+			$this->database,
+			new Subscribing\FakeExpression('//d'),
+			new Access\FakeSubscriber(1),
+			new Subscribing\FakePage('www.facedown.cz')
+		))->refresh();
+	}
+
+	public function testRefreshingPart() {
+		Assert::noError(function() {
+			(new Subscribing\OwnedPart(
+				new Subscribing\FakePart(),
+				$this->database,
+				new Subscribing\FakeExpression('//d'),
+				new Access\FakeSubscriber(666),
+				new Subscribing\FakePage('www.facedown.cz')
+			))->refresh();
+		});
+	}
+
 	protected function prepareDatabase() {
 		$this->database->query('TRUNCATE parts');
 		$this->database->query('TRUNCATE part_visits');

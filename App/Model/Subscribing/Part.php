@@ -3,7 +3,6 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Remembrall\Exception;
-use Remembrall\Model\Access;
 
 interface Part {
 	/**
@@ -19,6 +18,12 @@ interface Part {
 	 * @return bool
 	 */
 	public function equals(self $part): bool;
+
+	/**
+	 * Refreshed part
+	 * @return Part
+	 */
+	public function refresh(): Part;
 
 	/**
 	 * Print the visualized form

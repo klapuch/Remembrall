@@ -5,7 +5,7 @@ namespace Remembrall\Model\Subscribing;
 use Dibi;
 use Remembrall\Exception;
 use Remembrall\Model\{
-	Access, Storage
+	Access, Http, Storage
 };
 
 /**
@@ -15,15 +15,18 @@ final class OwnedParts implements Parts {
 	private $origin;
 	private $database;
 	private $myself;
+	private $browser;
 
 	public function __construct(
 		Parts $origin,
 		Dibi\Connection $database,
-		Access\Subscriber $myself
+		Access\Subscriber $myself,
+		Http\Browser $browser
 	) {
 		$this->origin = $origin;
 		$this->database = $database;
 		$this->myself = $myself;
+		$this->browser = $browser;
 	}
 
 	public function subscribe(
@@ -105,6 +108,11 @@ final class OwnedParts implements Parts {
 								$row['url']
 							),
 							$row['expression']
+						),
+						$this->browser,
+						new ConstantPage(
+							$row['page_content'],
+							$row['url']
 						)
 					),
 					$row['part_content'],

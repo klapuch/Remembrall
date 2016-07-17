@@ -23,34 +23,13 @@ final class ChangedParts implements Parts {
 		string $expression,
 		Interval $interval
 	): Part {
-		if(!$this->changed($part, $url, $expression)) {
+		if(!$this->changed($part)) {
 			throw new Exception\NotFoundException(
 				'The part has not changed yet'
 			);
 		}
-		/**
-		 * Part may never be HtmlPart, because they would be the same
-		 */
 		return $this->origin->subscribe(
-			new HtmlPart(
-				new ValidXPathExpression(
-					new XPathExpression(
-						$this->browser->send(
-							new Http\ConstantRequest(
-								new Http\CaseSensitiveHeaders(
-									new Http\UniqueHeaders(
-										[
-											'host' => $url,
-											'method' => 'GET',
-										]
-									)
-								)
-							)
-						),
-						$expression
-					)
-				)
-			),
+			$part->refresh(),
 			$url,
 			$expression,
 			$interval
@@ -64,45 +43,18 @@ final class ChangedParts implements Parts {
 	public function iterate(): array {
 		return array_filter(
 			$this->origin->iterate(),
-			function(Part $part) {
-				$visualizedPart = $part->print(); //TODO: Not nice
-				return $this->changed(
-					$part,
-					$visualizedPart['page']->url(),
-					(string)$visualizedPart['expression']
-				);
+			function(Part $part): bool {
+				return $this->changed($part);
 			}
 		);
 	}
 
 	/**
-	 * Download page from the internet and check whether the change has occurred
+	 * Refresh the part and check whether the change has occurred
 	 * @param Part $part
-	 * @param string $url
-	 * @param string $expression
 	 * @return bool
 	 */
-	private function changed(Part $part, string $url, string $expression) {
-		return !$part->equals(
-			new HtmlPart(
-				new ValidXPathExpression(
-					new XPathExpression(
-						$this->browser->send(
-							new Http\ConstantRequest(
-								new Http\CaseSensitiveHeaders(
-									new Http\UniqueHeaders(
-										[
-											'host' => $url,
-											'method' => 'GET',
-										]
-									)
-								)
-							)
-						),
-						$expression
-					)
-				)
-			)
-		);
+	private function changed(Part $part) {
+		return !$part->equals($part->refresh());
 	}
 }

@@ -28,7 +28,9 @@ final class OwnedPart implements Part {
 	}
 
 	public function content(): string {
-		$content = $this->database->fetchSingle(
+		if(!$this->owned())
+			throw new Exception\NotFoundException('You do not own this part');
+		return $this->database->fetchSingle(
 			'SELECT content
 			FROM parts
 			INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID
@@ -39,9 +41,12 @@ final class OwnedPart implements Part {
 			(string)$this->expression,
 			$this->page->url()
 		);
-		if(!is_string($content))
+	}
+
+	public function refresh(): Part {
+		if(!$this->owned())
 			throw new Exception\NotFoundException('You do not own this part');
-		return $content;
+		return $this->origin->refresh();
 	}
 
 	public function print(): array {
@@ -54,5 +59,25 @@ final class OwnedPart implements Part {
 
 	public function equals(Part $part): bool {
 		return $this->content() === $part->content();
+	}
+
+	/**
+	 * Is the part owned by the given owner?
+	 * @return bool
+	 */
+	private function owned(): bool {
+		return (bool)$this->database->fetchSingle(
+			'SELECT 1
+			FROM subscribed_parts
+			WHERE subscriber_id = ?
+			AND part_id = (
+				SELECT ID
+				FROM parts
+				WHERE expression = ? AND page_url = ?
+			)',
+			$this->owner->id(),
+			(string)$this->expression,
+			$this->page->url()
+		);
 	}
 }

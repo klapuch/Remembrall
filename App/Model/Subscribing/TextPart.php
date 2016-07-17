@@ -20,6 +20,10 @@ final class TextPart implements Part {
 		return $this->content() === $part->content();
 	}
 
+	public function refresh(): Part {
+		return $this->origin->refresh();
+	}
+
 	public function print(): array {
 		return $this->origin->print();
 	}

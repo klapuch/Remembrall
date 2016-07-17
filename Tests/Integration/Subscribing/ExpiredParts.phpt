@@ -5,10 +5,11 @@
  */
 namespace Remembrall\Integration\Subscribing;
 
-use Remembrall\Model\Subscribing;
+use Remembrall\Model\{
+	Http, Subscribing
+};
 use Remembrall\TestCase;
 use Tester\Assert;
-use Nette\Security;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -16,7 +17,8 @@ final class ExpiredParts extends TestCase\Database {
     public function testIteratingExpiredParts() {
         $parts = (new Subscribing\ExpiredParts(
             new Subscribing\FakeParts(),
-			$this->database
+			$this->database,
+			new Http\FakeBrowser()
         ))->iterate();
         Assert::count(2, $parts);
         Assert::same('//a', (string)$parts[0]->print()['expression']);

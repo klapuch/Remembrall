@@ -26,25 +26,32 @@ final class CachedPart extends TestCase\Mockery {
 	public function testCaching() {
 		$content = '<p>XXX</p>';
 		$equals = false;
-		$part = new Subscribing\FakePart();
+		$fakePart = new Subscribing\FakePart();
 		$this->cache->shouldReceive('read')
 			->andReturn($content)
 			->with('Remembrall\Model\Subscribing\CachedPart::content')
 			->times(4);
 		$this->cache->shouldReceive('read')
-			->andReturn($equals)
-			->with('Remembrall\Model\Subscribing\CachedPart::equals' . md5(serialize([$part])))
+			->andReturn($fakePart)
+			->with('Remembrall\Model\Subscribing\CachedPart::refresh')
 			->times(4);
-		$page = new Subscribing\CachedPart(
+		$this->cache->shouldReceive('read')
+			->andReturn($equals)
+			->with('Remembrall\Model\Subscribing\CachedPart::equals' . md5(serialize([$fakePart])))
+			->times(4);
+		$part = new Subscribing\CachedPart(
 			new Subscribing\FakePart($content, $equals),
 			$this->cache
 		);
 
-		Assert::same($content, $page->content());
-		Assert::same($content, $page->content());
+		Assert::same($content, $part->content());
+		Assert::same($content, $part->content());
 
-		Assert::false($page->equals($part));
-		Assert::false($page->equals($part));
+		Assert::false($part->equals($fakePart));
+		Assert::false($part->equals($fakePart));
+
+		Assert::same($fakePart, $part->refresh());
+		Assert::same($fakePart, $part->refresh());
 	}
 }
 

@@ -31,6 +31,10 @@ final class ConstantPart implements Part {
 		return $this->origin->equals($part);
 	}
 
+	public function refresh(): Part {
+		return $this->origin->refresh();
+	}
+
 	public function print(): array {
 		return $this->origin->print() + [
 			'interval' => $this->interval,

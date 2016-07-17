@@ -28,25 +28,51 @@ final class Parts extends SecureControl {
 
 	public function render() {
 		$this->template->setFile(__DIR__ . '/Parts.latte');
-		$this->template->parts = (new Subscribing\OwnedParts(
-			new Subscribing\CollectiveParts(
+		$browser = new Http\LoggingBrowser(
+			new Http\CachingBrowser(
+				new Http\WebBrowser(
+					new GuzzleHttp\Client(['http_errors' => false]),
+					new Subscribing\WebPages($this->database),
+					$this->database
+				),
 				$this->database
 			),
+			$this->logger
+		);
+		$this->template->parts = (new Subscribing\OwnedParts(
+			new Subscribing\CollectiveParts(
+				$this->database,
+				$browser
+			),
 			$this->database,
-			$this->myself
+			$this->myself,
+			$browser
 		))->iterate();
 		$this->template->render();
 	}
 
 	public function handleRemove(string $url, string $expression) {
 		try {
+			$browser = new Http\LoggingBrowser(
+				new Http\CachingBrowser(
+					new Http\WebBrowser(
+						new GuzzleHttp\Client(['http_errors' => false]),
+						new Subscribing\WebPages($this->database),
+						$this->database
+					),
+					$this->database
+				),
+				$this->logger
+			);
 			(new Subscribing\LoggedParts(
 				new Subscribing\OwnedParts(
 					new Subscribing\CollectiveParts(
-						$this->database
+						$this->database,
+						$browser
 					),
 					$this->database,
-					$this->myself
+					$this->myself,
+					$browser
 				),
 				$this->logger
 			))->remove($url, $expression);
@@ -91,7 +117,7 @@ final class Parts extends SecureControl {
 			);
 			(new Subscribing\LoggedParts(
 				new Subscribing\ChangedParts(
-					new Subscribing\CollectiveParts($this->database),
+					new Subscribing\CollectiveParts($this->database, $browser),
 					$browser
 				),
 				$this->logger
@@ -100,7 +126,9 @@ final class Parts extends SecureControl {
 					new Subscribing\HtmlPart(
 						new Subscribing\ValidXPathExpression(
 							new Subscribing\XPathExpression($page, $expression)
-						)
+						),
+						$browser,
+						$page
 					),
 					$this->database,
 					new Subscribing\XPathExpression($page, $expression),

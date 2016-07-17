@@ -6,9 +6,8 @@
 namespace Remembrall\Unit\Subscribing;
 
 use Remembrall\Model\{
-	Subscribing, Access
+	Subscribing, Access, Http
 };
-use Remembrall\TestCase;
 use Tester;
 use Tester\Assert;
 
@@ -34,7 +33,8 @@ final class HtmlPart extends Tester\TestCase {
 					'//p',
 					(new \DOMXPath($dom))->query('//p')
 				),
-				new Access\FakeSubscriber()
+				new Http\FakeBrowser(),
+				new Subscribing\FakePage()
 			))->content()
 		);
 	}
@@ -49,7 +49,8 @@ final class HtmlPart extends Tester\TestCase {
 					'//p',
 					(new \DOMXPath($dom))->query('//span')
 				),
-				new Access\FakeSubscriber()
+				new Http\FakeBrowser(),
+				new Subscribing\FakePage()
 			))->content()
 		);
 	}
@@ -63,7 +64,8 @@ final class HtmlPart extends Tester\TestCase {
 					'//p',
 					(new \DOMXPath($dom))->query('//p')
 				),
-				new Access\FakeSubscriber()
+				new Http\FakeBrowser(),
+				new Subscribing\FakePage()
 			))->equals(
 				new Subscribing\FakePart('<p>abc</p>')
 			)
@@ -79,10 +81,32 @@ final class HtmlPart extends Tester\TestCase {
 					'//p',
 					(new \DOMXPath($dom))->query('//p')
 				),
-				new Access\FakeSubscriber()
+				new Http\FakeBrowser(),
+				new Subscribing\FakePage()
 			))->equals(
 				new Subscribing\FakePart('<p>abc</p>')
 			)
+		);
+	}
+
+	public function testRefreshing() {
+		$fakePage = new Subscribing\FakePage('url');
+		Assert::equal(
+			new Subscribing\HtmlPart(
+				new Subscribing\ValidXPathExpression(
+					new Subscribing\XPathExpression(
+						$fakePage,
+						'//p'
+					)
+				),
+				new Http\FakeBrowser($fakePage),
+				$fakePage
+			),
+			(new Subscribing\HtmlPart(
+				new Subscribing\FakeExpression('//p'),
+				new Http\FakeBrowser($fakePage),
+				$fakePage
+			))->refresh()
 		);
 	}
 }
