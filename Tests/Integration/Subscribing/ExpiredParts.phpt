@@ -19,44 +19,9 @@ final class ExpiredParts extends TestCase\Database {
 			$this->database
         ))->iterate();
         Assert::count(2, $parts);
-        Assert::same('//a', (string)$parts[0]->expression());
-        Assert::same('//d', (string)$parts[1]->expression());
+        Assert::same('//a', (string)$parts[0]->print()['expression']);
+        Assert::same('//d', (string)$parts[1]->print()['expression']);
     }
-
-	/**
-	 * @throws \Remembrall\Exception\NotFoundException This part has not expired yet
-	 */
-	public function testReplacingNonExpiredPart() {
-		(new Subscribing\ExpiredParts(
-			new Subscribing\FakeParts(),
-			$this->database
-		))->replace(
-			new Subscribing\FakePart(
-				new Subscribing\FakePage('www.google.com'),
-				new Subscribing\FakeExpression('//p'),
-				'c',
-				false // non-expired
-			),
-			new Subscribing\FakePart()
-		);
-	}
-
-	public function testReplacingExpiredPartWithNoError() {
-		Assert::noError(function() {
-			(new Subscribing\ExpiredParts(
-				new Subscribing\FakeParts(),
-				$this->database
-			))->replace(
-				new Subscribing\FakePart(
-					new Subscribing\FakePage('www.google.com'),
-					new Subscribing\FakeExpression('//p'),
-					'c',
-					true // expired
-				),
-				new Subscribing\FakePart()
-			);
-		});
-	}
 
 	protected function prepareDatabase() {
         $this->database->query('TRUNCATE part_visits');

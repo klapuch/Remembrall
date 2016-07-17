@@ -16,27 +16,23 @@ final class LoggedParts implements Parts {
 		$this->logger = $logger;
 	}
 
-	public function subscribe(Part $part, Interval $interval): Part {
+	public function subscribe(
+		Part $part,
+		string $url,
+		string $expression,
+		Interval $interval
+	): Part {
 		try {
-			return $this->origin->subscribe($part, $interval);
+			return $this->origin->subscribe($part, $url, $expression, $interval);
 		} catch(\Throwable $ex) {
 			$this->logger->log($ex, Tracy\Logger::ERROR);
 			throw $ex;
 		}
 	}
 
-	public function replace(Part $old, Part $new): Part {
+	public function remove(string $url, string $expression) {
 		try {
-			return $this->origin->replace($old, $new);
-		} catch(\Throwable $ex) {
-			$this->logger->log($ex, Tracy\Logger::ERROR);
-			throw $ex;
-		}
-	}
-
-	public function remove(Part $part) {
-		try {
-			$this->origin->remove($part);
+			$this->origin->remove($url, $expression);
 		} catch(\Throwable $ex) {
 			$this->logger->log($ex, Tracy\Logger::ERROR);
 			throw $ex;

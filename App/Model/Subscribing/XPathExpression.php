@@ -20,7 +20,7 @@ final class XPathExpression implements Expression {
 		))->query($this->expression);
 	}
 
-	public function __toString() {
+	public function __toString(): string {
 		return $this->expression;
 	}
 }

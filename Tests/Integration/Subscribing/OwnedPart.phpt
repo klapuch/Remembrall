@@ -15,85 +15,11 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class OwnedPart extends TestCase\Database {
-	public function testSource() {
-		$source = new Subscribing\FakePage();
-		Assert::same(
-			$source,
-			(new Subscribing\OwnedPart(
-				$this->database,
-				new Subscribing\FakeExpression(),
-				new Access\FakeSubscriber(),
-				$source
-			))->source()
-		);
-	}
-
-	public function testExpression() {
-		$expression = new Subscribing\FakeExpression();
-		Assert::same(
-			$expression,
-			(new Subscribing\OwnedPart(
-				$this->database,
-				$expression,
-				new Access\FakeSubscriber(),
-				new Subscribing\FakePage()
-			))->expression()
-		);
-	}
-
-	public function testSameContentButDifferentPage() {
-		Assert::false(
-			(new Subscribing\OwnedPart(
-				$this->database,
-				new Subscribing\FakeExpression,
-				new Access\FakeSubscriber(),
-				new Subscribing\FakePage('google.com')
-			))->equals(
-				new Subscribing\FakePart(
-					new Subscribing\FakePage('seznam.cz')
-				)
-			)
-		);
-	}
-
-	public function testDifferentContentButSamePage() {
-		Assert::false(
-			(new Subscribing\OwnedPart(
-				$this->database,
-				new Subscribing\FakeExpression('//b'),
-				new Access\FakeSubscriber(666),
-				new Subscribing\FakePage('www.facedown.cz')
-			))->equals(
-				new Subscribing\FakePart(
-					new Subscribing\FakePage('www.facedown.cz'),
-					null,
-					''
-				)
-			)
-		);
-	}
-
-	public function testEquivalentParts() {
-		Assert::true(
-			(new Subscribing\OwnedPart(
-				$this->database,
-				new Subscribing\FakeExpression('//b'),
-				new Access\FakeSubscriber(666),
-				new Subscribing\FakePage('www.facedown.cz')
-			))->equals(
-				new Subscribing\FakePart(
-					new Subscribing\FakePage('www.facedown.cz'),
-					null,
-					'b'
-				)
-			)
-		);
-	}
-
 	public function testContent() {
 		Assert::same(
 			'd',
 			(new Subscribing\OwnedPart(
+				new Subscribing\FakePart(),
 				$this->database,
 				new Subscribing\FakeExpression('//d'),
 				new Access\FakeSubscriber(666),
@@ -106,26 +32,12 @@ final class OwnedPart extends TestCase\Database {
 		Assert::same(
 			'',
 			(new Subscribing\OwnedPart(
+				new Subscribing\FakePart(),
 				$this->database,
 				new Subscribing\FakeExpression('this does not exist'),
 				new Access\FakeSubscriber(666),
 				new Subscribing\FakePage('this also does not exist')
 			))->content()
-		);
-	}
-
-	public function testVisitation() {
-		Assert::equal(
-			new Subscribing\DateTimeInterval(
-				new \DateTimeImmutable('2000-01-01 01:01:01'),
-				new \DateInterval('PT3M')
-			),
-			(new Subscribing\OwnedPart(
-				$this->database,
-				new Subscribing\FakeExpression('//c'),
-				new Access\FakeSubscriber(666),
-				new Subscribing\FakePage('www.facedown.cz')
-			))->visitedAt()
 		);
 	}
 

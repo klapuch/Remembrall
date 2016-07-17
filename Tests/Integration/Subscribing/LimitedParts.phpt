@@ -23,6 +23,8 @@ final class LimitedParts extends TestCase\Database {
 				new Subscribing\FakeParts()
 			))->subscribe(
 				new Subscribing\FakePart(),
+				'url',
+				'//p',
 				new Subscribing\FakeInterval()
 			);
 		});
@@ -46,6 +48,8 @@ final class LimitedParts extends TestCase\Database {
 			new Subscribing\FakeParts()
 		))->subscribe(
 			new Subscribing\FakePart(),
+			'url',
+			'//p',
 			new Subscribing\FakeInterval()
 		);
 	}

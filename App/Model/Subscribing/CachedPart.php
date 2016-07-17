@@ -15,10 +15,6 @@ final class CachedPart extends Storage\Cache implements Part {
 		parent::__construct($origin, $cache);
 	}
 
-	public function source(): Page {
-		return $this->read(__FUNCTION__);
-	}
-
 	public function content(): string {
 		return $this->read(__FUNCTION__);
 	}
@@ -27,11 +23,7 @@ final class CachedPart extends Storage\Cache implements Part {
 		return $this->read(__FUNCTION__, $part);
 	}
 
-	public function expression(): Expression {
-		return $this->read(__FUNCTION__);
-	}
-
-	public function visitedAt(): Interval {
+	public function print(): array {
 		return $this->read(__FUNCTION__);
 	}
 }

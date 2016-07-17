@@ -26,17 +26,17 @@ final class OwnedParts implements Parts {
 		$this->myself = $myself;
 	}
 
-	public function subscribe(Part $part, Interval $interval): Part {
+	public function subscribe(Part $part, string $url, string $expression, Interval $interval): Part {
 		try {
 			(new Storage\Transaction($this->database))->start(
-				function() use ($interval, $part) {
-					$this->origin->subscribe($part, $interval);
+				function() use ($part, $url, $expression, $interval) {
+					$this->origin->subscribe($part, $url, $expression, $interval);
 					$this->database->query(
 						'INSERT INTO subscribed_parts
 						(part_id, subscriber_id, `interval`) VALUES
 						((SELECT ID FROM parts WHERE expression = ? AND page_url = ?), ?, ?)',
-						(string)$part->expression(),
-						$part->source()->url(),
+						$expression,
+						$url,
 						$this->myself->id(),
 						sprintf('PT%dM', $interval->step()->i)
 					);
@@ -47,8 +47,8 @@ final class OwnedParts implements Parts {
 			throw new Exception\DuplicateException(
 				sprintf(
 					'"%s" expression on the "%s" page is already subscribed by you',
-					(string)$part->expression(),
-					$part->source()->url()
+					$expression,
+					$url
 				),
 				$ex->getCode(),
 				$ex
@@ -56,22 +56,16 @@ final class OwnedParts implements Parts {
 		}
 	}
 
-	public function replace(Part $old, Part $new): Part {
-		if(!$this->owned($old))
-			throw new Exception\NotFoundException('You do not own this part');
-		return $this->origin->replace($old, $new);
-	}
-
-	public function remove(Part $part) {
-		if(!$this->owned($part))
+	public function remove(string $url, string $expression) {
+		if(!$this->owned($url, $expression))
 			throw new Exception\NotFoundException('You do not own this part');
 		$this->database->query(
 			'DELETE FROM subscribed_parts
 			WHERE subscriber_id = ?
 			AND part_id = (SELECT ID FROM parts WHERE expression = ? AND page_url = ?)',
 			$this->myself->id(),
-			(string)$part->expression(),
-			$part->source()->url()
+			$expression,
+			$url
 		);
 	}
 
@@ -79,21 +73,34 @@ final class OwnedParts implements Parts {
 		return (array)array_reduce(
 			$this->database->fetchAll(
 				'SELECT parts.content AS part_content, expression, url,
-				pages.content AS page_content, `interval`, visited_at
+				pages.content AS page_content, `interval`, (
+					SELECT visited_at
+					FROM part_visits
+					WHERE part_id = parts.ID
+					ORDER BY visited_at DESC
+					LIMIT 1
+				) AS visited_at
 				FROM parts
-				INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID
-				INNER JOIN part_visits ON part_visits.part_id = parts.ID  
+				INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID  
 				LEFT JOIN pages ON pages.url = parts.page_url
 				WHERE subscriber_id = ?',
 				$this->myself->id()
 			),
 			function($previous, Dibi\Row $row) {
 				$previous[] = new ConstantPart(
-					new ConstantPage($row['url'], $row['page_content']),
+					new HtmlPart(
+						new XPathExpression(
+							new ConstantPage(
+								$row['page_content'],
+								$row['url']
+							),
+							$row['expression']
+						)
+					),
 					$row['part_content'],
-					new XPathExpression(
-						new ConstantPage($row['url'], $row['page_content']),
-						$row['expression']
+					new ConstantPage(
+						$row['page_content'],
+						$row['url']
 					),
 					new DateTimeInterval(
 						new \DateTimeImmutable((string)$row['visited_at']),
@@ -107,15 +114,19 @@ final class OwnedParts implements Parts {
 
 	/**
 	 * Checks whether the subscriber really owns the given part
-	 * @param Part $part
+	 * @param string $url
+	 * @param string $expression
 	 * @return bool
 	 */
-	private function owned(Part $part): bool {
-		return (bool)array_filter(
-			$this->iterate(),
-			function(Part $ownedPart) use ($part) {
-				return $ownedPart->equals($part);
-			}
+	private function owned(string $url, string $expression): bool {
+		return (bool)$this->database->fetchSingle(
+			'SELECT 1
+			FROM parts
+			INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID
+			WHERE subscriber_id = ? AND page_url = ? AND expression = ?',
+			$this->myself->id(),
+			$url,
+			$expression
 		);
 	}
 }

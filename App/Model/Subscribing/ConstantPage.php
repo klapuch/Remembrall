@@ -6,12 +6,12 @@ namespace Remembrall\Model\Subscribing;
  * Constant page without roundtrips
  */
 final class ConstantPage implements Page {
-	private $url;
 	private $content;
+	private $url;
 
-	public function __construct(string $url, string $content) {
-		$this->url = $url;
+	public function __construct(string $content, string $url) {
 		$this->content = $content;
+		$this->url = $url;
 	}
 
 	public function content(): \DOMDocument {

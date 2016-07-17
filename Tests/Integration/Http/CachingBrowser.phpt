@@ -21,7 +21,7 @@ final class CachingBrowser extends TestCase\Database {
 			("www.google.com", NOW())'
 		);
 		Assert::equal(
-			new Subscribing\ConstantPage('www.google.com', 'google'),
+			new Subscribing\ConstantPage('google', 'www.google.com'),
 			(new Http\CachingBrowser(new Http\FakeBrowser(), $this->database))
 				->send(
 					new Http\ConstantRequest(

@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use GuzzleHttp;
 use Remembrall\Exception;
 use Remembrall\Model\Http;
 
@@ -24,8 +23,7 @@ final class AvailableWebPage implements Page {
 			return $this->origin->content();
 		throw new Exception\NotFoundException(
 			sprintf(
-				'Web page "%s" can not be loaded because of %s',
-				$this->url(),
+				'Web page can not be loaded because of %s',
 				$header->value()
 			)
 		);

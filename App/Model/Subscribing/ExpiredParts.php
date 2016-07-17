@@ -18,27 +18,29 @@ final class ExpiredParts implements Parts {
 		$this->database = $database;
 	}
 
-	public function subscribe(Part $part, Interval $interval): Part {
-		return $this->origin->subscribe($part, $interval);
+	public function subscribe(
+		Part $part,
+		string $url,
+		string $expression,
+		Interval $interval
+	): Part {
+		return $this->origin->subscribe($part, $url, $expression, $interval);
 	}
 
-	public function replace(Part $old, Part $new): Part {
-		if(!$this->expired($old)) {
-			throw new Exception\NotFoundException(
-				'This part has not expired yet'
-			);
-		}
-		return $this->origin->replace($old, $new);
-	}
-
-	public function remove(Part $part) {
-		$this->origin->remove($part);
+	public function remove(string $url, string $expression) {
+		$this->origin->remove($url, $expression);
 	}
 
 	public function iterate(): array {
 		return (array)array_reduce(
 			$this->database->fetchAll(
-				'SELECT parts.content AS part_content, expression, visited_at,
+				'SELECT parts.content AS part_content, expression, (
+					SELECT visited_at
+					FROM part_visits
+					WHERE part_id = parts.ID
+					ORDER BY visited_at DESC
+					LIMIT 1
+				) AS visited_at,
 				`interval`,
 				pages.content AS page_content, url 
 				FROM parts
@@ -50,11 +52,19 @@ final class ExpiredParts implements Parts {
 			),
 			function($previous, Dibi\Row $row) {
 				$previous[] = new ConstantPart(
-					new ConstantPage($row['url'], $row['page_content']),
+					new HtmlPart(
+						new XPathExpression(
+							new ConstantPage(
+								$row['page_content'],
+								$row['url']
+							),
+							$row['expression']
+						)
+					),
 					$row['part_content'],
-					new XPathExpression(
-						new ConstantPage($row['url'], $row['page_content']),
-						$row['expression']
+					new ConstantPage(
+						$row['page_content'],
+						$row['url']
 					),
 					new DateTimeInterval(
 						new \DateTimeImmutable((string)$row['visited_at']),
@@ -62,20 +72,6 @@ final class ExpiredParts implements Parts {
 					)
 				);
 				return $previous;
-			}
-		);
-	}
-
-	/**
-	 * Checks whether the given part is really expired
-	 * @param Part $part
-	 * @return bool
-	 */
-	private function expired(Part $part): bool {
-		return (bool)array_filter(
-			$this->iterate(),
-			function(Part $expiredPart) use ($part) {
-				return $part->equals($expiredPart);
 			}
 		);
 	}

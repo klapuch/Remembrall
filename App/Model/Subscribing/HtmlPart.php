@@ -2,22 +2,14 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Remembrall\Model\Access;
-
 /**
  * Part on the html page (in the html format)
  */
 final class HtmlPart implements Part {
-	private $page;
 	private $expression;
 
-	public function __construct(Page $page, Expression $expression) {
-		$this->page = $page;
+	public function __construct(Expression $expression) {
 		$this->expression = $expression;
-	}
-
-	public function source(): Page {
-		return $this->page;
 	}
 
 	public function content(): string {
@@ -35,22 +27,12 @@ final class HtmlPart implements Part {
 	}
 
 	public function equals(Part $part): bool {
-		return $part->source()->url() === $this->source()->url()
-		&& $part->content() === $this->content();
+		return $part->content() === $this->content();
 	}
 
-	public function expression(): Expression {
-		return $this->expression;
-	}
-
-	/**
-	 * Part is visited just now
-	 * @return Interval
-	 */
-	public function visitedAt(): Interval {
-		return new DateTimeInterval(
-			new \DateTimeImmutable(),
-			new \DateInterval('PT0S')
-		);
+	public function print(): array {
+		return [
+			'expression' => $this->expression,
+		];
 	}
 }

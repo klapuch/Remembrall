@@ -2,31 +2,25 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Remembrall\Model\Access;
-
 /**
  * Constant part without roundtrips
  */
 final class ConstantPart implements Part {
-	private $source;
+	private $origin;
 	private $content;
-	private $expression;
-	private $visitedAt;
+	private $page;
+	private $interval;
 
 	public function __construct(
-		Page $source,
+		Part $origin,
 		string $content,
-		Expression $expression,
-		Interval $visitedAt
+		Page $page,
+		Interval $interval
 	) {
-		$this->source = $source;
+		$this->origin = $origin;
 		$this->content = $content;
-		$this->expression = $expression;
-		$this->visitedAt = $visitedAt;
-	}
-
-	public function source(): Page {
-		return $this->source;
+		$this->page = $page;
+		$this->interval = $interval;
 	}
 
 	public function content(): string {
@@ -34,14 +28,13 @@ final class ConstantPart implements Part {
 	}
 
 	public function equals(Part $part): bool {
-		return $part->equals($this);
+		return $this->origin->equals($part);
 	}
 
-	public function expression(): Expression {
-		return $this->expression;
-	}
-
-	public function visitedAt(): Interval {
-		return $this->visitedAt;
+	public function print(): array {
+		return $this->origin->print() + [
+			'interval' => $this->interval,
+			'page' => $this->page,
+		];
 	}
 }

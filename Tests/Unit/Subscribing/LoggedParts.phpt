@@ -25,6 +25,8 @@ final class LoggedParts extends TestCase\Mockery {
 		(new Subscribing\LoggedParts($parts, $logger))
 			->subscribe(
 				new Subscribing\FakePart(),
+				'url',
+				'//p',
 				new Subscribing\FakeInterval()
 			);
 	}
@@ -36,35 +38,9 @@ final class LoggedParts extends TestCase\Mockery {
 				new Subscribing\FakeParts(), $logger
 			))->subscribe(
 				new Subscribing\FakePart(),
+				'url',
+				'//p',
 				new Subscribing\FakeInterval()
-			);
-		});
-	}
-
-	/**
-	 * @throws \Exception exceptionMessage
-	 */
-	public function testLoggedExceptionDuringReplacing() {
-		$ex = new \Exception('exceptionMessage');
-		$parts = $this->mockery(Subscribing\Parts::class);
-		$parts->shouldReceive('replace')->andThrowExceptions([$ex]);
-		$logger = $this->mockery('Tracy\ILogger');
-		$logger->shouldReceive('log')->once()->with($ex, 'error');
-		(new Subscribing\LoggedParts($parts, $logger))
-			->replace(
-				new Subscribing\FakePart(),
-				new Subscribing\FakePart()
-			);
-	}
-
-	public function testNoExceptionDuringReplacing() {
-		Assert::noError(function() {
-			$logger = $this->mockery('Tracy\ILogger');
-			(new Subscribing\LoggedParts(
-				new Subscribing\FakeParts(), $logger
-			))->replace(
-				new Subscribing\FakePart(),
-				new Subscribing\FakePart()
 			);
 		});
 	}
@@ -78,10 +54,7 @@ final class LoggedParts extends TestCase\Mockery {
 		$parts->shouldReceive('remove')->andThrowExceptions([$ex]);
 		$logger = $this->mockery('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
-		(new Subscribing\LoggedParts($parts, $logger))
-			->remove(
-				new Subscribing\FakePart()
-			);
+		(new Subscribing\LoggedParts($parts, $logger))->remove('url', '//p');
 	}
 
 	public function testNoExceptionDuringRemoving() {
@@ -89,7 +62,7 @@ final class LoggedParts extends TestCase\Mockery {
 			$logger = $this->mockery('Tracy\ILogger');
 			(new Subscribing\LoggedParts(
 				new Subscribing\FakeParts(), $logger
-			))->remove(new Subscribing\FakePart());
+			))->remove('url', '//p');
 		});
 	}
 
@@ -102,8 +75,7 @@ final class LoggedParts extends TestCase\Mockery {
 		$parts->shouldReceive('iterate')->andThrowExceptions([$ex]);
 		$logger = $this->mockery('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
-		(new Subscribing\LoggedParts($parts, $logger))
-			->iterate();
+		(new Subscribing\LoggedParts($parts, $logger))->iterate();
 	}
 
 	public function testNoExceptionDuringIterating() {

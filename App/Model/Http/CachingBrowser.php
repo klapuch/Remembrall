@@ -26,11 +26,11 @@ final class CachingBrowser implements Browser {
 		if(!$this->cached($url))
 			return $this->origin->send($request);
 		return new Subscribing\ConstantPage(
-			$url,
 			$this->database->fetchSingle(
 				'SELECT content FROM pages WHERE url = ?',
 				$url
-			)
+			),
+			$url
 		);
 	}
 

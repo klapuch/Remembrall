@@ -12,19 +12,19 @@ final class FakeParts implements Parts {
 		$this->parts = $parts;
 	}
 
-	public function subscribe(Part $part, Interval $interval): Part {
+	public function subscribe(
+		Part $part,
+		string $url,
+		string $expression,
+		Interval $interval
+	): Part {
 		return $part;
 	}
 
-	public function replace(Part $old, Part $new): Part {
-		return $new;
+	public function remove(string $url, string $expression) {
 	}
 
 	public function iterate(): array {
 		return $this->parts;
-	}
-
-	public function remove(Part $part) {
-		
 	}
 }

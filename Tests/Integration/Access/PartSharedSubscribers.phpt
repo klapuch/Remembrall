@@ -38,10 +38,8 @@ final class PartSharedSubscribers extends TestCase\Database {
 			],
 			(new Access\PartSharedSubscribers(
 				new Access\FakeSubscribers(),
-				new Subscribing\FakePart(
-					new Subscribing\FakePage('www.google.com'),
-					new Subscribing\FakeExpression('//h1')
-				),
+				'www.google.com',
+				'//h1',
 				$this->database
 			))->iterate()
 		);

@@ -21,7 +21,7 @@ final class FakeExpression implements Expression {
 		return $this->match;
 	}
 
-	public function __toString() {
+	public function __toString(): string {
 		return $this->expression;
 	}
 }

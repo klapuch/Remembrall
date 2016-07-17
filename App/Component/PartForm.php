@@ -100,7 +100,6 @@ final class PartForm extends SecureControl {
 			))->subscribe(
 				new Subscribing\CachedPart(
 					new Subscribing\HtmlPart(
-						$page,
 						new Subscribing\ValidXPathExpression(
 							new Subscribing\XPathExpression(
 								$page,
@@ -111,6 +110,8 @@ final class PartForm extends SecureControl {
 					),
 					new Storages\MemoryStorage()
 				),
+				$values['url'],
+				$values['expression'],
 				new Subscribing\FutureInterval(
 					new Subscribing\DateTimeInterval(
 						new \DateTimeImmutable($values['start']),

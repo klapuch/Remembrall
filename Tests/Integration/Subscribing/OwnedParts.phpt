@@ -29,12 +29,9 @@ final class OwnedParts extends TestCase\Database {
             $this->database,
             new Access\FakeSubscriber(666)
         ))->subscribe(
-            new Subscribing\FakePart(
-				new Subscribing\FakePage('www.google.com'),
-				new Subscribing\FakeExpression('//p'),
-				'<p>Content</p>',
-                false
-            ),
+        	new Subscribing\FakePart('<p>Content</p>'),
+			'www.google.com',
+			'//p',
             new Subscribing\FakeInterval(
                 new \DateTimeImmutable('2000-01-01 01:01:01'),
                 null,
@@ -75,30 +72,24 @@ final class OwnedParts extends TestCase\Database {
 			new Access\FakeSubscriber(666)
 		);
 		$parts->subscribe(
-			new Subscribing\FakePart(
-				new Subscribing\FakePage('www.google.com'),
-				new Subscribing\FakeExpression('//p'),
-				'<p>Content</p>',
-				false
-			),
+			new Subscribing\FakePart('<p>Content</p>'),
+			'www.google.com',
+			'//p',
 			new Subscribing\FakeInterval(
 				new \DateTimeImmutable('2000-01-01 01:01:01'),
 				null,
-				new \DateInterval('PT2M')
+				new \DateInterval('PT158M')
 			)
 		);
 		Assert::exception(function() use($parts) {
 			$parts->subscribe(
-				new Subscribing\FakePart(
-					new Subscribing\FakePage('www.google.com'),
-					new Subscribing\FakeExpression('//p'),
-					'<p>Content</p>',
-					false
-				),
+				new Subscribing\FakePart('<p>Different content</p>'),
+				'www.google.com',
+				'//p',
 				new Subscribing\FakeInterval(
 					new \DateTimeImmutable('2000-01-01 01:01:01'),
 					null,
-					new \DateInterval('PT2M')
+					new \DateInterval('PT158M')
 				)
 			);
 		}, 'Remembrall\Exception\DuplicateException');
@@ -109,7 +100,7 @@ final class OwnedParts extends TestCase\Database {
 	public function testIteratingOwnedParts() {
 		$this->database->query(
 			'INSERT INTO part_visits (part_id, visited_at) VALUES
-			(1, NOW()), (2, NOW()), (3, NOW()), (4, NOW())'
+			(1, NOW()), (2, NOW()), (3, NOW()), (4, NOW()), (1, NOW())'
 		);
 		$this->database->query(
 			'INSERT INTO parts (page_url, expression, content) VALUES
@@ -137,73 +128,9 @@ final class OwnedParts extends TestCase\Database {
 			new Access\FakeSubscriber(1)
 		))->iterate();
 		Assert::count(3, $parts);
-		Assert::same('//a', (string)$parts[0]->expression());
-		Assert::same('//c', (string)$parts[1]->expression());
-		Assert::same('//d', (string)$parts[2]->expression());
-	}
-
-	/**
-	 * @throws \Remembrall\Exception\NotFoundException You do not own this part
-	 */
-	public function testReplacingForeign() {
-		$this->database->query(
-			'INSERT INTO part_visits (part_id, visited_at) VALUES (1, NOW())'
-		);
-		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.google.com", "//a", "a")'
-		);
-		$this->database->query(
-			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
-			(1, 666, "PT1M")'
-		);
-		(new Subscribing\OwnedParts(
-			new Subscribing\FakeParts(),
-			$this->database,
-			new Access\FakeSubscriber(666)
-		))->replace(
-			new Subscribing\FakePart(
-				new Subscribing\FakePage('www.google.com'),
-				new Subscribing\FakeExpression('//a'),
-				'xxx',
-				$equals = false
-			),
-			new Subscribing\FakePart()
-		);
-	}
-
-	public function testReplacingOwnedPartWithoutError() {
-		$this->database->query(
-			'INSERT INTO part_visits (part_id, visited_at) VALUES
-			(1, NOW()), (2, NOW()), (3, NOW()), (4, NOW())'
-		);
-		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.facedown.cz", "//p", "a"), ("www.google.com", "//p", "a")'
-		);
-		$this->database->query(
-			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
-			(1, 666, "PT1M"), (2, 10, "PT1M")'
-		);
-		Assert::noError(function() {
-			(new Subscribing\OwnedParts(
-				new Subscribing\FakeParts(),
-				$this->database,
-				new Access\FakeSubscriber(666)
-			))->replace(
-				new Subscribing\FakePart(
-					new Subscribing\FakePage('www.google.com'),
-					new Subscribing\FakeExpression('//p'),
-					'a',
-					$equals = true
-				),
-				new Subscribing\FakePart(
-					null,
-					null,
-					'newContent'
-				)
-			);
-		});
+		Assert::same('//a', (string)$parts[0]->print()['expression']);
+		Assert::same('//c', (string)$parts[1]->print()['expression']);
+		Assert::same('//d', (string)$parts[2]->print()['expression']);
 	}
 
 	/**
@@ -230,14 +157,7 @@ final class OwnedParts extends TestCase\Database {
 			new Subscribing\FakeParts(),
 			$this->database,
 			new Access\FakeSubscriber(666)
-		))->remove(
-			new Subscribing\FakePart(
-				new Subscribing\FakePage('www.facedown.cz'),
-				new Subscribing\FakeExpression('//b'),
-				'xxx',
-				$equals = false
-			)
-		);
+		))->remove('www.google.com', '//b');
 	}
 
 	public function testRemovingOwned() {
@@ -261,14 +181,7 @@ final class OwnedParts extends TestCase\Database {
 			new Subscribing\FakeParts(),
 			$this->database,
 			new Access\FakeSubscriber(666)
-		))->remove(
-			new Subscribing\FakePart(
-				new Subscribing\FakePage('www.facedown.cz'),
-				new Subscribing\FakeExpression('//b'),
-				'c',
-				$equals = true
-			)
-		);
+		))->remove('www.facedown.cz', '//b');
 		$parts = $this->database->fetchAll('SELECT ID FROM subscribed_parts');
 		Assert::count(1, $parts);
 		Assert::same(1, $parts[0]['ID']);

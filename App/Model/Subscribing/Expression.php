@@ -17,5 +17,5 @@ interface Expression {
 	 * For XPath, it may be //div[@id=someID]
 	 * @return string
 	 */
-	public function __toString();
+	public function __toString(): string;
 }

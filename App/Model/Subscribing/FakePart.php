@@ -2,34 +2,16 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Remembrall\Model\Access;
-
 /**
  * Fake
  */
 final class FakePart implements Part {
-	private $source;
 	private $content;
 	private $equals;
-	private $expression;
-	private $visitedAt;
 
-	public function __construct(
-		Page $source = null,
-		Expression $expression = null,
-		string $content = null,
-		bool $equals = false,
-		Interval $visitedAt = null
-	) {
-		$this->source = $source;
+	public function __construct(string $content = null, bool $equals = false) {
 		$this->content = $content;
 		$this->equals = $equals;
-		$this->expression = $expression;
-		$this->visitedAt = $visitedAt;
-	}
-
-	public function source(): Page {
-		return $this->source;
 	}
 
 	public function content(): string {
@@ -40,11 +22,7 @@ final class FakePart implements Part {
 		return $this->equals;
 	}
 
-	public function expression(): Expression {
-		return $this->expression;
-	}
-
-	public function visitedAt(): Interval {
-		return $this->visitedAt;
+	public function print(): array {
+		return [];
 	}
 }

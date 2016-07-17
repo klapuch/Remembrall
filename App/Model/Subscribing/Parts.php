@@ -8,27 +8,21 @@ interface Parts {
 	/**
 	 * Add a new part to the parts
 	 * @param Part $part
+	 * @param string $url
+	 * @param string $expression
 	 * @param Interval $interval
 	 * @throws Exception\DuplicateException
-	 * @return Part which was added
-	 */
-	public function subscribe(Part $part, Interval $interval): Part;
-
-	/**
-	 * Replace the old part with the new one
-	 * @param Part $old
-	 * @param Part $new
-	 * @throws Exception\NotFoundException
 	 * @return Part
 	 */
-	public function replace(Part $old, Part $new): Part;
+	public function subscribe(Part $part, string $url, string $expression, Interval $interval): Part;
 
 	/**
 	 * Remove the given part from the parts
-	 * @param Part $part
+	 * @param string $url
+	 * @param string $expression
 	 * @return void
 	 */
-	public function remove(Part $part);
+	public function remove(string $url, string $expression);
 
 	/**
 	 * Go through all the parts

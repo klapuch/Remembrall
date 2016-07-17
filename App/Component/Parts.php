@@ -49,14 +49,7 @@ final class Parts extends SecureControl {
 					$this->myself
 				),
 				$this->logger
-			))->remove(
-				new Subscribing\OwnedPart(
-					$this->database,
-					new Subscribing\FakeExpression($expression),
-					$this->myself,
-					new Subscribing\FakePage($url)
-				)
-			);
+			))->remove($url, $expression);
 			if(!$this->presenter->isAjax()) {
 				$this->presenter->flashMessage(
 					'Part has been deleted',
@@ -94,33 +87,18 @@ final class Parts extends SecureControl {
 					)
 				)
 			);
-			$replacedPart = (new Subscribing\LoggedParts(
-				new Subscribing\ChangedParts(
-					new Subscribing\OwnedParts(
-						new Subscribing\CollectiveParts(
-							$this->database
-						),
-						$this->database,
-						$this->myself
+			(new Subscribing\LoggedParts(
+				new Subscribing\CollectiveParts($this->database),
+				$this->logger
+			))->subscribe(
+				new Subscribing\HtmlPart(
+					new Subscribing\ValidXPathExpression(
+						new Subscribing\XPathExpression($page, $expression)
 					)
 				),
-				$this->logger
-			))->replace(
-				new Subscribing\OwnedPart(
-					$this->database,
-					new Subscribing\FakeExpression($expression),
-					$this->myself,
-					new Subscribing\FakePage($url)
-				),
-				new Subscribing\CachedPart(
-					new Subscribing\HtmlPart(
-						$page,
-						new Subscribing\ValidXPathExpression(
-							new Subscribing\XPathExpression($page, $expression)
-						)
-					),
-					new Storages\MemoryStorage()
-				)
+				$url,
+				$expression,
+				new Subscribing\FakeInterval(new \DateTimeImmutable())
 			);
 			$this->presenter->flashMessage(
 				'The part has been refreshed',

@@ -17,23 +17,27 @@ final class CollectiveParts implements Parts {
 		$this->database = $database;
 	}
 
-	public function subscribe(Part $part, Interval $interval): Part {
+	public function subscribe(
+		Part $part,
+		string $url,
+		string $expression,
+		Interval $interval
+	): Part {
 		(new Storage\Transaction($this->database))->start(
-			function() use ($part, $interval) {
+			function() use ($part, $url, $expression, $interval) {
 				$this->database->query(
 					'INSERT INTO parts
-					(page_url, expression, content) VALUES
-					(?, ?, ?)
+					(page_url, expression, content) VALUES (?, ?, ?)
 					ON DUPLICATE KEY UPDATE content = VALUES(content)',
-					$part->source()->url(),
-					(string)$part->expression(),
+					$url,
+					$expression,
 					$part->content()
 				);
-				$partId = $this->database->insertId();
 				$this->database->query(
 					'INSERT INTO part_visits (part_id, visited_at) VALUES
-					(?, ?)',
-					$partId,
+					((SELECT ID FROM parts WHERE page_url = ? AND expression = ?), ?)',
+					$url,
+					$expression,
 					$interval->start()
 				);
 			}
@@ -41,27 +45,11 @@ final class CollectiveParts implements Parts {
 		return $part;
 	}
 
-	public function replace(Part $old, Part $new): Part {
+	public function remove(string $url, string $expression) {
 		$this->database->query(
-			'UPDATE parts
-			INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID
-			INNER JOIN part_visits ON part_visits.part_id = parts.ID
-			SET content = ?, visited_at = NOW()
-			WHERE expression = ?
-			AND page_url = ?',
-			$new->content(),
-			(string)$old->expression(),
-			$old->source()->url()
-		);
-		return $new;
-	}
-
-	public function remove(Part $part) {
-		$this->database->query(
-			'DELETE FROM parts
-			WHERE expression = ? AND page_url = ?',
-			(string)$part->expression(),
-			$part->source()->url()
+			'DELETE FROM parts WHERE expression = ? AND page_url = ?',
+			$expression,
+			$url
 		);
 	}
 
@@ -70,19 +58,32 @@ final class CollectiveParts implements Parts {
 			$this->database->fetchAll(
 				'SELECT parts.content AS part_content, url,
 				pages.content AS page_content, expression,
-				`interval`, visited_at
+				`interval`, (
+					SELECT visited_at
+					FROM part_visits
+					WHERE part_id = parts.ID
+					ORDER BY visited_at DESC
+					LIMIT 1
+				) AS visited_at
 				FROM parts
 				INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID
-				INNER JOIN part_visits ON part_visits.part_id = parts.ID 
 				LEFT JOIN pages ON pages.url = parts.page_url'
 			),
 			function($previous, Dibi\Row $row) {
 				$previous[] = new ConstantPart(
-					new ConstantPage($row['url'], $row['page_content']),
+					new HtmlPart(
+						new XPathExpression(
+							new ConstantPage(
+								$row['page_content'],
+								$row['url']
+							),
+							$row['expression']
+						)
+					),
 					$row['part_content'],
-					new XPathExpression(
-						new ConstantPage($row['url'], $row['page_content']),
-						$row['expression']
+					new ConstantPage(
+						$row['page_content'],
+						$row['url']
 					),
 					new DateTimeInterval(
 						new \DateTimeImmutable((string)$row['visited_at']),

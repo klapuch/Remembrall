@@ -20,14 +20,11 @@ final class ValidXPathExpression implements Expression {
 		if($nodes->length > 0)
 			return $nodes;
 		throw new Exception\NotFoundException(
-			sprintf(
-				'XPath expression "%s" does not exist',
-				(string)$this
-			)
+			'XPath expression does not exist'
 		);
 	}
 
-	public function __toString() {
+	public function __toString(): string {
 		return (string)$this->origin;
 	}
 }

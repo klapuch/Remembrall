@@ -24,6 +24,8 @@ final class SubscribingMessage extends TestCase\Database {
 			'Remembrall <remembrall@remembrall.org>',
 			(new Email\SubscribingMessage(
 				new Subscribing\FakePart(),
+				'url',
+				'//p',
 				new class implements UI\ITemplateFactory {
 					function createTemplate(UI\Control $control = null) {
 					}
@@ -37,11 +39,14 @@ final class SubscribingMessage extends TestCase\Database {
 		Assert::equal(
 			new Access\PartSharedSubscribers(
 				new Access\FakeSubscribers(),
-				new Subscribing\FakePart(),
+				'url',
+				'//p',
 				$this->database
 			),
 			(new Email\SubscribingMessage(
 				new Subscribing\FakePart(),
+				'url',
+				'//p',
 				new class implements UI\ITemplateFactory {
 					function createTemplate(UI\Control $control = null) {
 					}
@@ -55,10 +60,9 @@ final class SubscribingMessage extends TestCase\Database {
 		Assert::same(
 			'Changes occurred on "www.google.com" page with "//h1" expression',
 			(new Email\SubscribingMessage(
-				new Subscribing\FakePart(
-					new Subscribing\FakePage('www.google.com'),
-					new Subscribing\FakeExpression('//h1')
-				),
+				new Subscribing\FakePart(),
+				'www.google.com',
+				'//h1',
 				new class implements UI\ITemplateFactory {
 					function createTemplate(UI\Control $control = null) {
 					}
@@ -70,11 +74,9 @@ final class SubscribingMessage extends TestCase\Database {
 
 	public function testContent() {
 		$content = (new Email\SubscribingMessage(
-			new Subscribing\FakePart(
-				new Subscribing\FakePage('www.google.com'),
-				new Subscribing\FakeExpression('//h1'),
-				'fooContent'
-			),
+			new Subscribing\FakePart('fooContent'),
+			'www.google.com',
+			'//h1',
 			new class implements UI\ITemplateFactory {
 				function createTemplate(UI\Control $control = null) {
 					return (new ApplicationLatte\TemplateFactory(

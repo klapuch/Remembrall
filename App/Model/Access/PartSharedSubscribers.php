@@ -13,16 +13,19 @@ use Remembrall\Model\{
  */
 final class PartSharedSubscribers implements Subscribers {
 	private $origin;
-	private $part;
+	private $url;
+	private $expression;
 	private $database;
 
 	public function __construct(
 		Subscribers $origin,
-		Subscribing\Part $part,
+		string $url,
+		string $expression,
 		Dibi\Connection $database
 	) {
 		$this->origin = $origin;
-		$this->part = $part;
+		$this->url = $url;
+		$this->expression = $expression;
 		$this->database = $database;
 	}
 
@@ -38,8 +41,8 @@ final class PartSharedSubscribers implements Subscribers {
 				INNER JOIN subscribed_parts ON subscribed_parts.subscriber_id = subscribers.ID
 				INNER JOIN parts ON parts.ID = subscribed_parts.part_id 
 				WHERE page_url = ? AND expression = ?',
-				$this->part->source()->url(),
-				(string)$this->part->expression()
+				$this->url,
+				$this->expression
 			),
 			function($previous, Dibi\Row $row) {
 				$previous[] = new ConstantSubscriber($row['ID'], $row['email']);

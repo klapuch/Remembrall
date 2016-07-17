@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Remembrall\Model\Access;
-
 /**
  * Text part without tags or other elements
  */
@@ -14,24 +12,15 @@ final class TextPart implements Part {
 		$this->origin = $origin;
 	}
 
-	public function source(): Page {
-		return $this->origin->source();
-	}
-
 	public function content(): string {
 		return strip_tags($this->origin->content());
 	}
 
 	public function equals(Part $part): bool {
-		return $part->source()->url() === $this->source()->url()
-		&& $part->content() === $this->content();
+		return $this->origin->equals($part);
 	}
 
-	public function expression(): Expression {
-		return $this->origin->expression();
-	}
-
-	public function visitedAt(): Interval {
-		return $this->origin->visitedAt();
+	public function print(): array {
+		return $this->origin->print();
 	}
 }

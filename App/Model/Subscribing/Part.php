@@ -7,12 +7,6 @@ use Remembrall\Model\Access;
 
 interface Part {
 	/**
-	 * Source where the part comes from
-	 * @return Page
-	 */
-	public function source(): Page;
-
-	/**
 	 * Content of the part
 	 * @throws Exception\NotFoundException
 	 * @return string
@@ -27,14 +21,8 @@ interface Part {
 	public function equals(self $part): bool;
 
 	/**
-	 * Every part can be identified by expression
-	 * @return Expression
+	 * Print the visualized form
+	 * @return array
 	 */
-	public function expression(): Expression;
-
-	/**
-	 * When was the part visited at? What is the next planning visitation?
-	 * @return Interval
-	 */
-	public function visitedAt(): Interval;
+	public function print(): array;
 }
