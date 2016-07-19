@@ -14,29 +14,29 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class LoggingBrowser extends TestCase\Mockery {
+final class LoggedRequest extends TestCase\Mockery {
 	/**
 	 * @throws \Exception exceptionMessage
 	 */
 	public function testLoggedExceptionDuringSending() {
 		$ex = new \Exception('exceptionMessage');
-		$browser = $this->mockery(Http\Browser::class);
+		$browser = $this->mockery(Http\Request::class);
 		$browser->shouldReceive('send')->andThrowExceptions([$ex]);
 		$logger = $this->mockery('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
-		(new Http\LoggingBrowser(
+		(new Http\LoggedRequest(
 			$browser, $logger
-		))->send(new Http\ConstantRequest(new Http\FakeHeaders()));
+		))->send();
 	}
 
 	public function testNoExceptionDuringSending() {
 		Assert::noError(function() {
 			$logger = $this->mockery('Tracy\ILogger');
-			(new Http\LoggingBrowser(
-				new Http\FakeBrowser(new Subscribing\FakePage), $logger
-			))->send(new Http\ConstantRequest(new Http\FakeHeaders()));
+			(new Http\LoggedRequest(
+				new Http\FakeRequest(new Subscribing\FakePage), $logger
+			))->send();
 		});
 	}
 }
 
-(new LoggingBrowser())->run();
+(new LoggedRequest())->run();

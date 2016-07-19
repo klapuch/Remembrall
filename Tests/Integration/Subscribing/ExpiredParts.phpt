@@ -17,8 +17,7 @@ final class ExpiredParts extends TestCase\Database {
     public function testIteratingExpiredParts() {
         $parts = (new Subscribing\ExpiredParts(
             new Subscribing\FakeParts(),
-			$this->database,
-			new Http\FakeBrowser()
+			$this->database
         ))->iterate();
         Assert::count(2, $parts);
         Assert::same('//a', (string)$parts[0]->print()['expression']);

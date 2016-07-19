@@ -29,8 +29,8 @@ final class AvailableWebPage implements Page {
 		);
 	}
 
-	public function url(): string {
-		return $this->origin->url();
+	public function refresh(): Page {
+		return $this->origin->refresh();
 	}
 
 	/**

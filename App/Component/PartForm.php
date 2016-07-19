@@ -63,28 +63,30 @@ final class PartForm extends SecureControl {
 
 	public function formSucceeded(UI\Form $form, ArrayHash $values) {
 		try {
-			$page = (new Http\LoggingBrowser(
-				new Http\CachingBrowser(
-					new Http\WebBrowser(
-						new GuzzleHttp\Client(['http_errors' => false]),
+			$page = (new Http\LoggedRequest(
+				new Http\CachedRequest(
+					new Http\FrugalRequest(
+						new Http\DefaultRequest(
+							new GuzzleHttp\Client(['http_errors' => false]),
+							new Http\CaseSensitiveHeaders(
+								new Http\UniqueHeaders(
+									[
+										'host' => $values['url'],
+										'method' => 'GET',
+									]
+								)
+							)
+						),
+						new Http\CaseSensitiveHeaders(
+							new Http\UniqueHeaders(['host' => $values['url']])
+						),
 						new Subscribing\WebPages($this->database),
 						$this->database
 					),
-					$this->database
+					new Storages\MemoryStorage()
 				),
 				$this->logger
-			))->send(
-				new Http\ConstantRequest(
-					new Http\CaseSensitiveHeaders(
-						new Http\UniqueHeaders(
-							[
-								'host' => $values['url'],
-								'method' => 'GET',
-							]
-						)
-					)
-				)
-			);
+			))->send();
 			(new Subscribing\LoggedParts(
 				new Subscribing\LimitedParts(
 					$this->database,
@@ -107,7 +109,7 @@ final class PartForm extends SecureControl {
 								$values['expression']
 							)
 						),
-						$this->myself
+						$page
 					),
 					new Storages\MemoryStorage()
 				),

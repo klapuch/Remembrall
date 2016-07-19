@@ -8,18 +8,18 @@ namespace Remembrall\Model\Subscribing;
 final class ConstantPart implements Part {
 	private $origin;
 	private $content;
-	private $page;
+	private $url;
 	private $interval;
 
 	public function __construct(
 		Part $origin,
 		string $content,
-		Page $page,
+		string $url,
 		Interval $interval
 	) {
 		$this->origin = $origin;
 		$this->content = $content;
-		$this->page = $page;
+		$this->url = $url;
 		$this->interval = $interval;
 	}
 
@@ -38,7 +38,7 @@ final class ConstantPart implements Part {
 	public function print(): array {
 		return $this->origin->print() + [
 			'interval' => $this->interval,
-			'page' => $this->page,
+			'url' => $this->url,
 		];
 	}
 }

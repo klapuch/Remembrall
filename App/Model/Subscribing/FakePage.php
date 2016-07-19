@@ -6,22 +6,22 @@ namespace Remembrall\Model\Subscribing;
  * Fake
  */
 final class FakePage implements Page {
-	private $url;
 	private $content;
+	private $refreshedPart;
 
 	public function __construct(
-		string $url = null,
-		\DOMDocument $content = null
+		\DOMDocument $content = null,
+		Page $refreshedPart = null
 	) {
-		$this->url = $url;
 		$this->content = $content;
+		$this->refreshedPart = $refreshedPart;
 	}
 
 	public function content(): \DOMDocument {
 		return $this->content;
 	}
 
-	public function url(): string {
-		return $this->url;
+	public function refresh(): Page {
+		return $this->refreshedPart;
 	}
 }

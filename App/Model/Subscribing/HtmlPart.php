@@ -2,23 +2,15 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Remembrall\Model\Http;
-
 /**
  * Part on the html page (in the html format)
  */
 final class HtmlPart implements Part {
 	private $expression;
-	private $browser;
 	private $page;
 
-	public function __construct(
-		Expression $expression,
-		Http\Browser $browser,
-		Page $page
-	) {
+	public function __construct(Expression $expression, Page $page) {
 		$this->expression = $expression;
-		$this->browser = $browser;
 		$this->page = $page;
 	}
 
@@ -37,27 +29,7 @@ final class HtmlPart implements Part {
 	}
 
 	public function refresh(): Part {
-		return new HtmlPart(
-			new ValidXPathExpression(
-				new XPathExpression(
-					$this->browser->send(
-						new Http\ConstantRequest(
-							new Http\CaseSensitiveHeaders(
-								new Http\UniqueHeaders(
-									[
-										'host' => $this->page->url(),
-										'method' => 'GET',
-									]
-								)
-							)
-						)
-					),
-					(string)$this->expression
-				)
-			),
-			$this->browser,
-			$this->page
-		);
+		return new self($this->expression, $this->page->refresh());
 	}
 
 	public function equals(Part $part): bool {

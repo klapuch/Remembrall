@@ -19,7 +19,7 @@ final class WebPages extends TestCase\Database {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('content');
 		(new Subscribing\WebPages($this->database))
-			->add(new Subscribing\FakePage('www.facedown.cz', $dom));
+			->add('www.facedown.cz', new Subscribing\FakePage($dom));
 		Assert::contains(
 			'content',
 			$this->database->fetchSingle(
@@ -41,11 +41,11 @@ final class WebPages extends TestCase\Database {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('content');
 		(new Subscribing\WebPages($this->database))
-			->add(new Subscribing\FakePage('www.facedown.cz', $dom));
+			->add('www.facedown.cz', new Subscribing\FakePage($dom));
 		$dom2 = new \DOMDocument();
 		$dom2->loadHTML('Updated Content');
 		(new Subscribing\WebPages($this->database))
-			->add(new Subscribing\FakePage('www.facedown.cz', $dom2));
+			->add('www.facedown.cz', new Subscribing\FakePage($dom2));
 		$pages = $this->database->fetchAll(
 			'SELECT * FROM pages WHERE url = "www.facedown.cz"'
 		);

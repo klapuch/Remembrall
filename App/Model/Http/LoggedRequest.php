@@ -8,18 +8,18 @@ use Remembrall\Model\Subscribing;
 /**
  * Log every error action
  */
-final class LoggingBrowser implements Browser {
+final class LoggedRequest implements Request {
 	private $origin;
 	private $logger;
 
-	public function __construct(Browser $origin, Tracy\ILogger $logger) {
+	public function __construct(Request $origin, Tracy\ILogger $logger) {
 		$this->origin = $origin;
 		$this->logger = $logger;
 	}
 
-	public function send(Request $request): Subscribing\Page {
+	public function send(): Subscribing\Page {
 		try {
-			return $this->origin->send($request);
+			return $this->origin->send();
 		} catch(\Throwable $ex) {
 			$this->logger->log($ex, Tracy\Logger::ERROR);
 			throw $ex;

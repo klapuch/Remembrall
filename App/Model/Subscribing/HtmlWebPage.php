@@ -9,15 +9,15 @@ use Remembrall\Model\Http;
  * Fresh html page downloaded from the internet
  */
 final class HtmlWebPage implements Page {
-	private $request;
 	private $response;
+	private $request;
 
 	public function __construct(
-		Http\Request $request,
-		Http\Response $response
+		Http\Response $response,
+		Http\Request $request
 	) {
-		$this->request = $request;
 		$this->response = $response;
+		$this->request = $request;
 	}
 
 	public function content(): \DOMDocument {
@@ -28,8 +28,8 @@ final class HtmlWebPage implements Page {
 		return $dom;
 	}
 
-	public function url(): string {
-		return $this->request->headers()->header('host')->value();
+	public function refresh(): Page {
+		return $this->request->send();
 	}
 
 	/**

@@ -4,14 +4,17 @@ namespace Remembrall\Model\Http;
 
 use Remembrall\Model\Subscribing;
 
-final class FakeBrowser implements Browser {
+/**
+ * Fake
+ */
+final class FakeRequest implements Request {
 	private $page;
 
 	public function __construct(Subscribing\Page $page = null) {
 	    $this->page = $page;
 	}
 
-	public function send(Request $request): Subscribing\Page {
+	public function send(): Subscribing\Page {
 		return $this->page;
 	}
 }

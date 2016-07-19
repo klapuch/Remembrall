@@ -13,8 +13,8 @@ interface Page {
 	public function content(): \DOMDocument;
 
 	/**
-	 * Url of the page
-	 * @return string
+	 * Refreshed page
+	 * @return Page
 	 */
-	public function url(): string;
+	public function refresh(): self;
 }

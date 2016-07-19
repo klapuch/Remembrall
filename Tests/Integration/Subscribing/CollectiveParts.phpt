@@ -21,8 +21,7 @@ final class CollectiveParts extends TestCase\Database {
 			(1, "foo@bar.cz", "secret"), (2, "facedown@facedown.cz", "secret")'
 		);
         (new Subscribing\CollectiveParts(
-            $this->database,
-			new Http\FakeBrowser()
+            $this->database
 		))->subscribe(
 			new Subscribing\FakePart('<p>Content</p>'),
 			'www.google.com',
@@ -51,8 +50,7 @@ final class CollectiveParts extends TestCase\Database {
 			(1, "foo@bar.cz", "secret"), (2, "facedown@facedown.cz", "secret")'
 		);
 		(new Subscribing\CollectiveParts(
-			$this->database,
-			new Http\FakeBrowser()
+			$this->database
 		))->subscribe(
 			new Subscribing\FakePart('<p>Content</p>'),
 			'www.google.com',
@@ -62,8 +60,7 @@ final class CollectiveParts extends TestCase\Database {
 			)
 		); //once
 		(new Subscribing\CollectiveParts(
-			$this->database,
-			new Http\FakeBrowser()
+			$this->database
 		))->subscribe(
 			new Subscribing\FakePart('<p>Updated content</p>'),
 			'www.google.com',
@@ -104,8 +101,7 @@ final class CollectiveParts extends TestCase\Database {
 			(1, 1, "PT1M"), (2, 2, "PT2M")'
 		);
 		$parts = (new Subscribing\CollectiveParts(
-			$this->database,
-			new Http\FakeBrowser()
+			$this->database
 		))->iterate();
 		Assert::count(2, $parts);
 		Assert::same('//a', (string)$parts[0]->print()['expression']);
@@ -126,8 +122,7 @@ final class CollectiveParts extends TestCase\Database {
 			(1, 2, "PT2M"), (2, 1, "PT3M")'
 		);
 		(new Subscribing\CollectiveParts(
-			$this->database,
-			new Http\FakeBrowser()
+			$this->database
 		))->remove('www.facedown.cz', '//b');
 		$parts = $this->database->fetchAll('SELECT ID FROM parts');
 		Assert::count(1, $parts);

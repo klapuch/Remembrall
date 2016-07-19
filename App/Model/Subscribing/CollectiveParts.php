@@ -4,7 +4,7 @@ namespace Remembrall\Model\Subscribing;
 
 use Dibi;
 use Remembrall\Model\{
-	Http, Storage
+	Storage
 };
 
 /**
@@ -12,14 +12,9 @@ use Remembrall\Model\{
  */
 final class CollectiveParts implements Parts {
 	private $database;
-	private $browser;
 
-	public function __construct(
-		Dibi\Connection $database,
-		Http\Browser $browser
-	) {
+	public function __construct(Dibi\Connection $database) {
 		$this->database = $database;
-		$this->browser = $browser;
 	}
 
 	public function subscribe(
@@ -84,17 +79,13 @@ final class CollectiveParts implements Parts {
 							),
 							$row['expression']
 						),
-						$this->browser,
 						new ConstantPage(
 							$row['page_content'],
 							$row['url']
 						)
 					),
 					$row['part_content'],
-					new ConstantPage(
-						$row['page_content'],
-						$row['url']
-					),
+					$row['url'],
 					new DateTimeInterval(
 						new \DateTimeImmutable((string)$row['visited_at']),
 						new \DateInterval($row['interval'])

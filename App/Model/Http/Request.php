@@ -2,10 +2,12 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Http;
 
+use Remembrall\Model\Subscribing;
+
 interface Request {
 	/**
-	 * Headers gained from the request
-	 * @return Headers
+	 * Send the request
+	 * @return Subscribing\Page
 	 */
-	public function headers(): Headers;
+	public function send(): Subscribing\Page;
 }

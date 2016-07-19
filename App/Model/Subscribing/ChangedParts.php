@@ -3,18 +3,15 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Remembrall\Exception;
-use Remembrall\Model\Http;
 
 /**
  * Parts which differ from the parts on the internet
  */
 final class ChangedParts implements Parts {
 	private $origin;
-	private $browser;
 
-	public function __construct(Parts $origin, Http\Browser $browser) {
+	public function __construct(Parts $origin) {
 		$this->origin = $origin;
-		$this->browser = $browser;
 	}
 
 	public function subscribe(

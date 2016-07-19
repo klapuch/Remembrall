@@ -29,13 +29,9 @@ final class Parts extends SecureControl {
 	public function render() {
 		$this->template->setFile(__DIR__ . '/Parts.latte');
 		$this->template->parts = (new Subscribing\OwnedParts(
-			new Subscribing\CollectiveParts(
-				$this->database,
-				new Http\FakeBrowser()
-			),
+			new Subscribing\CollectiveParts($this->database),
 			$this->database,
-			$this->myself,
-			new Http\FakeBrowser()
+			$this->myself
 		))->iterate();
 		$this->template->render();
 	}
@@ -44,13 +40,9 @@ final class Parts extends SecureControl {
 		try {
 			(new Subscribing\LoggedParts(
 				new Subscribing\OwnedParts(
-					new Subscribing\CollectiveParts(
-						$this->database,
-						new Http\FakeBrowser()
-					),
+					new Subscribing\CollectiveParts($this->database),
 					$this->database,
-					$this->myself,
-					new Http\FakeBrowser()
+					$this->myself
 				),
 				$this->logger
 			))->remove($url, $expression);
@@ -70,33 +62,33 @@ final class Parts extends SecureControl {
 
 	public function handleRefresh(string $url, string $expression) {
 		try {
-			$browser = new Http\LoggingBrowser(
-				new Http\CachingBrowser(
-					new Http\WebBrowser(
-						new GuzzleHttp\Client(['http_errors' => false]),
+			$page = (new Http\LoggedRequest(
+				new Http\CachedRequest(
+					new Http\FrugalRequest(
+						new Http\DefaultRequest(
+							new GuzzleHttp\Client(['http_errors' => false]),
+							new Http\CaseSensitiveHeaders(
+								new Http\UniqueHeaders(
+									[
+										'host' => $url,
+										'method' => 'GET',
+									]
+								)
+							)
+						),
+						new Http\CaseSensitiveHeaders(
+							new Http\UniqueHeaders(['host' => $url])
+						),
 						new Subscribing\WebPages($this->database),
 						$this->database
 					),
-					$this->database
+					new Storages\MemoryStorage()
 				),
 				$this->logger
-			);
-			$page = $browser->send(
-				new Http\ConstantRequest(
-					new Http\CaseSensitiveHeaders(
-						new Http\UniqueHeaders(
-							[
-								'host' => $url,
-								'method' => 'GET',
-							]
-						)
-					)
-				)
-			);
+			))->send();
 			(new Subscribing\LoggedParts(
 				new Subscribing\ChangedParts(
-					new Subscribing\CollectiveParts($this->database, $browser),
-					$browser
+					new Subscribing\CollectiveParts($this->database)
 				),
 				$this->logger
 			))->subscribe(
@@ -105,10 +97,9 @@ final class Parts extends SecureControl {
 						new Subscribing\ValidXPathExpression(
 							new Subscribing\XPathExpression($page, $expression)
 						),
-						$browser,
 						$page
 					),
-					$page,
+					$url,
 					new Subscribing\XPathExpression($page, $expression),
 					$this->database,
 					$this->myself

@@ -15,41 +15,16 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class HtmlWebPage extends TestCase\Mockery {
-	public function testValidUrl() {
-		$url = 'http://www.google.com';
-		Assert::same(
-			$url,
-			(new Subscribing\HtmlWebPage(
-				new Http\ConstantRequest(
-					new Http\FakeHeaders(['host' => $url])
-				),
-				new Http\FakeResponse()
-			))->url()
-		);
-	}
-
-	public function testInvalidUrlWithoutError() {
-		$url = 'fooBar';
-		Assert::same(
-			$url,
-			(new Subscribing\HtmlWebPage(
-				new Http\ConstantRequest(
-					new Http\FakeHeaders(['host' => $url])
-				),
-				new Http\FakeResponse()
-			))->url()
-		);
-	}
-
 	/**
 	 * @throws \Remembrall\Exception\NotFoundException Web page must be HTML
 	 */
 	public function testCSSContentWithError() {
 		(new Subscribing\HtmlWebPage(
-			new Http\ConstantRequest(new Http\FakeHeaders()),
 			new Http\FakeResponse(
 				new Http\FakeHeaders(['Content-Type' => 'text/css']), ''
-			)
+			),
+			new Http\FakeRequest()
+
 		))->content();
 	}
 
@@ -57,12 +32,23 @@ final class HtmlWebPage extends TestCase\Mockery {
 		Assert::same(
 			'Hello Koňíčku',
 			(new Subscribing\HtmlWebPage(
-				new Http\ConstantRequest(new Http\FakeHeaders()),
 				new Http\FakeResponse(
 					new Http\FakeHeaders(['Content-Type' => 'text/html']),
 					'<html><p>Hello Koňíčku</p></html>'
-				)
+				),
+				new Http\FakeRequest()
 			))->content()->getElementsByTagName('p')->item(0)->nodeValue
+		);
+	}
+
+	public function testRefreshing() {
+		$refreshPage = new Subscribing\FakePage();
+		Assert::same(
+			$refreshPage,
+			(new Subscribing\HtmlWebPage(
+				new Http\FakeResponse(),
+				new Http\FakeRequest($refreshPage)
+			))->refresh()
 		);
 	}
 }

@@ -8,20 +8,20 @@ use Remembrall\Exception;
 
 final class OwnedPart implements Part {
 	private $origin;
-	private $page;
+	private $url;
 	private $expression;
 	private $database;
 	private $owner;
 
 	public function __construct(
 		Part $origin,
-		Page $page,
+		string $url,
 		Expression $expression,
 		Dibi\Connection $database,
 		Access\Subscriber $owner
 	) {
 		$this->origin = $origin;
-		$this->page = $page;
+		$this->url = $url;
 		$this->expression = $expression;
 		$this->database = $database;
 		$this->owner = $owner;
@@ -39,7 +39,7 @@ final class OwnedPart implements Part {
 			AND page_url = ?',
 			$this->owner->id(),
 			(string)$this->expression,
-			$this->page->url()
+			$this->url
 		);
 	}
 
@@ -52,7 +52,7 @@ final class OwnedPart implements Part {
 	public function print(): array {
 		return $this->origin->print() + [
 			'expression' => $this->expression,
-			'page' => $this->page,
+			'url' => $this->url,
 			'subscriber' => $this->owner,
 		];
 	}
@@ -77,7 +77,7 @@ final class OwnedPart implements Part {
 			)',
 			$this->owner->id(),
 			(string)$this->expression,
-			$this->page->url()
+			$this->url
 		);
 	}
 }

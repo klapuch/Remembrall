@@ -3,7 +3,6 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Dibi;
-use Remembrall\Model\Storage;
 
 final class WebPages implements Pages {
 	private $database;
@@ -12,12 +11,12 @@ final class WebPages implements Pages {
 		$this->database = $database;
 	}
 
-	public function add(Page $page): Page {
+	public function add(string $url, Page $page): Page {
 		$this->database->query(
 			'INSERT INTO pages (url, content) VALUES
 			(?, ?) ON DUPLICATE KEY UPDATE
 			content = VALUES(content)',
-			$page->url(),
+			$url,
 			$page->content()->saveHTML()
 		);
 		return $page;

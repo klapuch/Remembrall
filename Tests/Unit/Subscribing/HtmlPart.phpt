@@ -33,7 +33,6 @@ final class HtmlPart extends Tester\TestCase {
 					'//p',
 					(new \DOMXPath($dom))->query('//p')
 				),
-				new Http\FakeBrowser(),
 				new Subscribing\FakePage()
 			))->content()
 		);
@@ -49,7 +48,6 @@ final class HtmlPart extends Tester\TestCase {
 					'//p',
 					(new \DOMXPath($dom))->query('//span')
 				),
-				new Http\FakeBrowser(),
 				new Subscribing\FakePage()
 			))->content()
 		);
@@ -64,7 +62,6 @@ final class HtmlPart extends Tester\TestCase {
 					'//p',
 					(new \DOMXPath($dom))->query('//p')
 				),
-				new Http\FakeBrowser(),
 				new Subscribing\FakePage()
 			))->equals(
 				new Subscribing\FakePart('<p>abc</p>')
@@ -81,7 +78,6 @@ final class HtmlPart extends Tester\TestCase {
 					'//p',
 					(new \DOMXPath($dom))->query('//p')
 				),
-				new Http\FakeBrowser(),
 				new Subscribing\FakePage()
 			))->equals(
 				new Subscribing\FakePart('<p>abc</p>')
@@ -90,21 +86,17 @@ final class HtmlPart extends Tester\TestCase {
 	}
 
 	public function testRefreshing() {
-		$fakePage = new Subscribing\FakePage('url');
+		$dom = new \DOMDocument();
+		$dom->loadHTML('<p>XXX</p>');
+		$refreshedPart = new Subscribing\FakePage($dom);
+		$fakePage = new Subscribing\FakePage(null, $refreshedPart);
 		Assert::equal(
 			new Subscribing\HtmlPart(
-				new Subscribing\ValidXPathExpression(
-					new Subscribing\XPathExpression(
-						$fakePage,
-						'//p'
-					)
-				),
-				new Http\FakeBrowser($fakePage),
-				$fakePage
+				new Subscribing\FakeExpression('//p'),
+				$refreshedPart
 			),
 			(new Subscribing\HtmlPart(
 				new Subscribing\FakeExpression('//p'),
-				new Http\FakeBrowser($fakePage),
 				$fakePage
 			))->refresh()
 		);

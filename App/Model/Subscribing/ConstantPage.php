@@ -7,11 +7,9 @@ namespace Remembrall\Model\Subscribing;
  */
 final class ConstantPage implements Page {
 	private $content;
-	private $url;
 
-	public function __construct(string $content, string $url) {
+	public function __construct(string $content) {
 		$this->content = $content;
-		$this->url = $url;
 	}
 
 	public function content(): \DOMDocument {
@@ -20,7 +18,7 @@ final class ConstantPage implements Page {
 		return $dom;
 	}
 
-	public function url(): string {
-		return $this->url;
+	public function refresh(): Page {
+		return $this;
 	}
 }

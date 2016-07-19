@@ -17,7 +17,7 @@ final class CachedPage extends Storage\Cache implements Page {
 		return $this->read(__FUNCTION__);
 	}
 
-	public function url(): string {
+	public function refresh(): Page {
 		return $this->read(__FUNCTION__);
 	}
 }

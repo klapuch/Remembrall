@@ -3,7 +3,6 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Dibi;
-use Remembrall\Model\Http;
 
 /**
  * Expired parts
@@ -11,16 +10,10 @@ use Remembrall\Model\Http;
 final class ExpiredParts implements Parts {
 	private $origin;
 	private $database;
-	private $browser;
 
-	public function __construct(
-		Parts $origin,
-		Dibi\Connection $database,
-		Http\Browser $browser
-	) {
+	public function __construct(Parts $origin, Dibi\Connection $database) {
 		$this->origin = $origin;
 		$this->database = $database;
-		$this->browser = $browser;
 	}
 
 	public function subscribe(
@@ -60,17 +53,13 @@ final class ExpiredParts implements Parts {
 							),
 							$row['expression']
 						),
-						$this->browser,
 						new ConstantPage(
 							$row['page_content'],
 							$row['url']
 						)
 					),
 					$row['part_content'],
-					new ConstantPage(
-						$row['page_content'],
-						$row['url']
-					),
+					$row['url'],
 					new DateTimeInterval(
 						new \DateTimeImmutable((string)$row['visited_at']),
 						new \DateInterval($row['interval'])

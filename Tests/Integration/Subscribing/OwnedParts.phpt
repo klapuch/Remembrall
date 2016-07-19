@@ -26,8 +26,7 @@ final class OwnedParts extends TestCase\Database {
         (new Subscribing\OwnedParts(
 			new Subscribing\FakeParts(),
             $this->database,
-            new Access\FakeSubscriber(666),
-			new Http\FakeBrowser()
+            new Access\FakeSubscriber(666)
         ))->subscribe(
         	new Subscribing\FakePart('<p>Content</p>'),
 			'www.google.com',
@@ -69,8 +68,7 @@ final class OwnedParts extends TestCase\Database {
 		$parts = new Subscribing\OwnedParts(
 			new Subscribing\FakeParts(),
 			$this->database,
-			new Access\FakeSubscriber(666),
-			new Http\FakeBrowser()
+			new Access\FakeSubscriber(666)
 		);
 		$parts->subscribe(
 			new Subscribing\FakePart('<p>Content</p>'),
@@ -126,8 +124,7 @@ final class OwnedParts extends TestCase\Database {
 		$parts = (new Subscribing\OwnedParts(
 			new Subscribing\FakeParts(),
 			$this->database,
-			new Access\FakeSubscriber(1),
-			new Http\FakeBrowser()
+			new Access\FakeSubscriber(1)
 		))->iterate();
 		Assert::count(3, $parts);
 		Assert::same('//a', (string)$parts[0]->print()['expression']);
@@ -158,8 +155,7 @@ final class OwnedParts extends TestCase\Database {
 		(new Subscribing\OwnedParts(
 			new Subscribing\FakeParts(),
 			$this->database,
-			new Access\FakeSubscriber(666),
-			new Http\FakeBrowser()
+			new Access\FakeSubscriber(666)
 		))->remove('www.google.com', '//b');
 	}
 
@@ -183,8 +179,7 @@ final class OwnedParts extends TestCase\Database {
 		(new Subscribing\OwnedParts(
 			new Subscribing\FakeParts(),
 			$this->database,
-			new Access\FakeSubscriber(666),
-			new Http\FakeBrowser()
+			new Access\FakeSubscriber(666)
 		))->remove('www.facedown.cz', '//b');
 		$parts = $this->database->fetchAll('SELECT ID FROM subscribed_parts');
 		Assert::count(1, $parts);

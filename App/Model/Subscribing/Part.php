@@ -23,7 +23,7 @@ interface Part {
 	 * Refreshed part
 	 * @return Part
 	 */
-	public function refresh(): Part;
+	public function refresh(): self;
 
 	/**
 	 * Print the visualized form

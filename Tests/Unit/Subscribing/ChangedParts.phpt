@@ -18,8 +18,7 @@ final class ChangedParts extends Tester\TestCase {
 		Assert::noError(
 			function() {
 				(new Subscribing\ChangedParts(
-					new Subscribing\FakeParts(),
-					new Http\FakeBrowser(new Subscribing\FakePage())
+					new Subscribing\FakeParts()
 				))->subscribe(
 					new Subscribing\FakePart(null, $same = false),
 					'www.google.com',
@@ -35,8 +34,7 @@ final class ChangedParts extends Tester\TestCase {
 	 */
 	public function testSubscribingUnchangedPartWithError() {
 		(new Subscribing\ChangedParts(
-			new Subscribing\FakeParts(),
-			new Http\FakeBrowser(new Subscribing\FakePage())
+			new Subscribing\FakeParts()
 		))->subscribe(
 			new Subscribing\FakePart(null, $same = true),
 			'www.google.com',
@@ -52,24 +50,23 @@ final class ChangedParts extends Tester\TestCase {
 					new Subscribing\FakePart(
 						null,
 						$same = false,
-						new Subscribing\FakePage('url'),
+						new Subscribing\FakePage(),
 						new Subscribing\FakeExpression('//p')
 					),
 					new Subscribing\FakePart(
 						null,
 						$same = true,
-						new Subscribing\FakePage('url'),
+						new Subscribing\FakePage(),
 						new Subscribing\FakeExpression('//p')
 					),
 					new Subscribing\FakePart(
 						null,
 						$same = false,
-						new Subscribing\FakePage('url'),
+						new Subscribing\FakePage(),
 						new Subscribing\FakeExpression('//p')
 					),
 				]
-			),
-			new Http\FakeBrowser(new Subscribing\FakePage())
+			)
 		))->iterate();
 		Assert::count(2, $parts);
 	}

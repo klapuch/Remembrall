@@ -19,7 +19,7 @@ final class OwnedPart extends TestCase\Database {
 			'd',
 			(new Subscribing\OwnedPart(
 				new Subscribing\FakePart(),
-				new Subscribing\FakePage('www.facedown.cz'),
+				'www.facedown.cz',
 				new Subscribing\FakeExpression('//d'),
 				$this->database,
 				new Access\FakeSubscriber(666)
@@ -33,7 +33,7 @@ final class OwnedPart extends TestCase\Database {
 	public function testContentOnUnknownResult() {
 		(new Subscribing\OwnedPart(
 			new Subscribing\FakePart(),
-			new Subscribing\FakePage('does not exists'),
+			'does not exists',
 			new Subscribing\FakeExpression('also does not exist'),
 			$this->database,
 			new Access\FakeSubscriber(666)
@@ -44,7 +44,7 @@ final class OwnedPart extends TestCase\Database {
 		Assert::false(
 			(new Subscribing\OwnedPart(
 				new Subscribing\FakePart(),
-				new Subscribing\FakePage('www.facedown.cz'),
+				'www.facedown.cz',
 				new Subscribing\FakeExpression('//d'),
 				$this->database,
 				new Access\FakeSubscriber(666)
@@ -58,7 +58,7 @@ final class OwnedPart extends TestCase\Database {
 		Assert::true(
 			(new Subscribing\OwnedPart(
 				new Subscribing\FakePart(),
-				new Subscribing\FakePage('www.facedown.cz'),
+				'www.facedown.cz',
 				new Subscribing\FakeExpression('//d'),
 				$this->database,
 				new Access\FakeSubscriber(666)
@@ -74,7 +74,7 @@ final class OwnedPart extends TestCase\Database {
 	public function testRefreshingForeignPart() {
 		(new Subscribing\OwnedPart(
 			new Subscribing\FakePart(),
-			new Subscribing\FakePage('www.facedown.cz'),
+			'www.facedown.cz',
 			new Subscribing\FakeExpression('//d'),
 			$this->database,
 			new Access\FakeSubscriber(1)
@@ -85,7 +85,7 @@ final class OwnedPart extends TestCase\Database {
 		Assert::noError(function() {
 			(new Subscribing\OwnedPart(
 				new Subscribing\FakePart(),
-				new Subscribing\FakePage('www.facedown.cz'),
+				'www.facedown.cz',
 				new Subscribing\FakeExpression('//d'),
 				$this->database,
 				new Access\FakeSubscriber(666)

@@ -15,14 +15,15 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class WebBrowser extends Tester\TestCase {
+final class DefaultRequest extends Tester\TestCase {
 	public function testHttpPage() {
 		$http = new GuzzleHttp\Client();
 		$headers = ['method' => 'get', 'host' => 'http://www.facedown.cz'];
-		$page = (new Http\WebBrowser($http, new Subscribing\FakePages()))
-			->send(new Http\ConstantRequest(new Http\FakeHeaders($headers)));
+		$page = (new Http\DefaultRequest(
+			$http,
+			new Http\FakeHeaders($headers)
+		))->send();
 		Assert::type(Subscribing\AvailableWebPage::class, $page);
-		Assert::same('http://www.facedown.cz', $page->url());
 		$dom = Tester\DomQuery::fromHtml($page->content()->saveHTML());
 		Assert::equal('Facedown', current($dom->find('h1')[0]));
 	}
@@ -30,33 +31,38 @@ final class WebBrowser extends Tester\TestCase {
 	public function testHttpsPage() {
 		$http = new GuzzleHttp\Client();
 		$headers = ['method' => 'get', 'host' => 'https://nette.org/'];
-		$page = (new Http\WebBrowser($http, new Subscribing\FakePages()))
-			->send(new Http\ConstantRequest(new Http\FakeHeaders($headers)));
+		$page = (new Http\DefaultRequest(
+			$http,
+			new Http\FakeHeaders($headers)
+		))->send();
 		Assert::type(Subscribing\AvailableWebPage::class, $page);
-		Assert::same('https://nette.org/', $page->url());
 		$dom = Tester\DomQuery::fromHtml($page->content()->saveHTML());
 		Assert::equal('Framework', current($dom->find('h1')[0]));
 	}
 
 	/**
-	 * @throws \Remembrall\Exception\NotFoundException Connection could not be established. Does the URL really exist?
+	 * @throws \Remembrall\Exception\NotFoundException Page could not be retrieved. Does the URL really exist?
 	 */
 	public function testUnknownUrl() {
 		$http = new GuzzleHttp\Client(['http_errors' => false]);
 		$headers = ['method' => 'get', 'host' => 'http://www.čoromoro.xx'];
-		(new Http\WebBrowser($http, new Subscribing\FakePages()))
-			->send(new Http\ConstantRequest(new Http\FakeHeaders($headers)));
+		(new Http\DefaultRequest(
+			$http,
+			new Http\FakeHeaders($headers)
+		))->send();
 	}
 
 	/**
-	 * @throws \Remembrall\Exception\NotFoundException Connection could not be established. Does the URL really exist?
+	 * @throws \Remembrall\Exception\NotFoundException Page could not be retrieved. Does the URL really exist?
 	 */
 	public function testEmptyUrl() {
 		$http = new GuzzleHttp\Client(['http_errors' => false]);
 		$headers = ['method' => 'get', 'host' => 'http://www.čoromoro.xx'];
-		(new Http\WebBrowser($http, new Subscribing\FakePages()))
-			->send(new Http\ConstantRequest(new Http\FakeHeaders($headers)));
+		(new Http\DefaultRequest(
+			$http,
+			new Http\FakeHeaders($headers)
+		))->send();
 	}
 }
 
-(new WebBrowser())->run();
+(new DefaultRequest())->run();
