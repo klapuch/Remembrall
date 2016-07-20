@@ -24,9 +24,14 @@ final class CachedPage extends TestCase\Mockery {
 	public function testCaching() {
 		$dom = new \DOMDocument;
 		$dom->loadHTML('<p>Paragraph</p>');
+		$refreshedPage = new Subscribing\FakePage();
 		$this->cache->shouldReceive('read')
 			->andReturn($dom)
 			->with('Remembrall\Model\Subscribing\CachedPage::content')
+			->times(4);
+		$this->cache->shouldReceive('read')
+			->andReturn($refreshedPage)
+			->with('Remembrall\Model\Subscribing\CachedPage::refresh')
 			->times(4);
 		$page = new Subscribing\CachedPage(
 			new Subscribing\FakePage($dom),
@@ -35,6 +40,9 @@ final class CachedPage extends TestCase\Mockery {
 
 		Assert::same($dom, $page->content());
 		Assert::same($dom, $page->content());
+
+		Assert::same($refreshedPage, $page->refresh());
+		Assert::same($refreshedPage, $page->refresh());
 	}
 }
 

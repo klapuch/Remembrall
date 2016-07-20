@@ -6,8 +6,8 @@
 namespace Remembrall\Unit\Subscribing;
 
 use Remembrall\Model\Subscribing;
-use Remembrall\TestCase;
 use Tester;
+use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -21,6 +21,19 @@ final class ValidXPathExpression extends Tester\TestCase {
 		(new Subscribing\ValidXPathExpression(
 			new Subscribing\FakeExpression('//foo', new \DOMNodeList())
 		))->match();
+	}
+
+	public function testMatchedSomeNodes() {
+		Assert::noError(
+			function() {
+				$dom = new \DOMDocument();
+				$dom->loadHTML('<p>Hi there!</p>');
+				$nodeList = (new \DOMXPath($dom))->query('//p');
+				(new Subscribing\ValidXPathExpression(
+					new Subscribing\FakeExpression('//p', $nodeList)
+				))->match();
+			}
+		);
 	}
 }
 
