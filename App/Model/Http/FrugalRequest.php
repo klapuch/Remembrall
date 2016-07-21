@@ -11,31 +11,30 @@ use Remembrall\Model\Subscribing;
  */
 final class FrugalRequest implements Request {
 	private $origin;
-	private $headers;
+	private $url;
 	private $pages;
 	private $database;
 	const EXPIRATION = 'PT10M';
 
 	public function __construct(
 		Request $origin,
-		Headers $headers,
+		string $url,
 		Subscribing\Pages $pages,
 		Dibi\Connection $database
 	) {
 		$this->origin = $origin;
-		$this->headers = $headers;
+		$this->url = $url;
 		$this->pages = $pages;
 		$this->database = $database;
 	}
 
 	public function send(): Subscribing\Page {
-		$url = $this->headers->header('host')->value();
-		if($this->outdated($url))
-			return $this->pages->add($url, $this->origin->send());
+		if($this->outdated($this->url))
+			return $this->pages->add($this->url, $this->origin->send());
 		return new Subscribing\ConstantPage(
 			$this->database->fetchSingle(
 				'SELECT content FROM pages WHERE url = ?',
-				$url
+				$this->url
 			)
 		);
 	}

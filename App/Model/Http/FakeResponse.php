@@ -6,16 +6,10 @@ namespace Remembrall\Model\Http;
  * Fake
  */
 final class FakeResponse implements Response {
-	private $headers;
 	private $content;
 
-	public function __construct(Headers $headers = null, string $content = '') {
-	    $this->headers = $headers;
+	public function __construct(string $content = null) {
 		$this->content = $content;
-	}
-
-	public function headers(): Headers {
-		return $this->headers;
 	}
 
 	public function content(): string {

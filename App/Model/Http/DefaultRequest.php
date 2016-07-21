@@ -4,6 +4,7 @@ namespace Remembrall\Model\Http;
 
 use GuzzleHttp;
 use GuzzleHttp\Exception\RequestException;
+use Psr\Http\Message;
 use Remembrall\Exception\NotFoundException;
 use Remembrall\Model\Subscribing;
 
@@ -12,34 +13,25 @@ use Remembrall\Model\Subscribing;
  */
 final class DefaultRequest implements Request {
 	private $http;
-	private $headers;
+	private $request;
 
 	public function __construct(
 		GuzzleHttp\ClientInterface $http,
-		Headers $headers
+		Message\RequestInterface $request
 	) {
 		$this->http = $http;
-		$this->headers = $headers;
+		$this->request = $request;
 	}
 
 	public function send(): Subscribing\Page {
 		try {
-			$response = new DefaultResponse(
-				$this->http->request(
-					$this->headers->header('method')->value(),
-					$this->headers->header('host')->value(),
-					array_reduce(
-						$this->headers->iterate(),
-						function($previous, Header $header) {
-							$previous[$header->field()] = $header->value();
-							return $previous;
-						}
-					)
-				)
-			);
-			return new Subscribing\AvailableWebPage(
-				new Subscribing\HtmlWebPage($response, $this),
-				$response
+			$response = $this->http->send($this->request);
+			return new Subscribing\HtmlWebPage(
+				new HtmlResponse(
+					new AvailableResponse($response),
+					$response
+				),
+				$this
 			);
 		} catch(RequestException $ex) {
 			throw new NotFoundException(

@@ -2,15 +2,12 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Http;
 
+use Remembrall\Exception;
+
 interface Response {
 	/**
-	 * Headers gained from the response
-	 * @return Headers
-	 */
-	public function headers(): Headers;
-
-	/**
 	 * Content returned by the host
+	 * @throws Exception\NotFoundException
 	 * @return string
 	 */
 	public function content(): string;

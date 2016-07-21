@@ -67,18 +67,12 @@ final class Parts extends SecureControl {
 					new Http\FrugalRequest(
 						new Http\DefaultRequest(
 							new GuzzleHttp\Client(['http_errors' => false]),
-							new Http\CaseSensitiveHeaders(
-								new Http\UniqueHeaders(
-									[
-										'host' => $url,
-										'method' => 'GET',
-									]
-								)
+							new GuzzleHttp\Psr7\Request(
+								'GET',
+								$url
 							)
 						),
-						new Http\CaseSensitiveHeaders(
-							new Http\UniqueHeaders(['host' => $url])
-						),
+						$url,
 						new Subscribing\WebPages($this->database),
 						$this->database
 					),

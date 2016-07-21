@@ -21,8 +21,6 @@ final class HtmlWebPage implements Page {
 	}
 
 	public function content(): \DOMDocument {
-		if(!$this->isHTML())
-			throw new Exception\NotFoundException('Web page must be HTML');
 		$dom = new DOM();
 		$dom->loadHTML($this->response->content());
 		return $dom;
@@ -30,18 +28,5 @@ final class HtmlWebPage implements Page {
 
 	public function refresh(): Page {
 		return $this->request->send();
-	}
-
-	/**
-	 * Checks whether the page is HTML
-	 * @return bool
-	 */
-	private function isHTML(): bool {
-		return $this->response->headers()->included(
-			new Http\CaseSensitiveHeader(
-				'Content-Type',
-				'text/html'
-			)
-		);
 	}
 }

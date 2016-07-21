@@ -24,7 +24,7 @@ final class FrugalRequest extends TestCase\Database {
 			new Subscribing\ConstantPage('google'),
 			(new Http\FrugalRequest(
 				new Http\FakeRequest(),
-				new Http\FakeHeaders(['host' => 'www.google.com']),
+				'www.google.com',
 				new Subscribing\FakePages(),
 				$this->database
 			))->send()
@@ -42,7 +42,7 @@ final class FrugalRequest extends TestCase\Database {
 			new Subscribing\ConstantPage('google'),
 			(new Http\FrugalRequest(
 				new Http\FakeRequest(),
-				new Http\FakeHeaders(['host' => 'www.google.com']),
+				'www.google.com',
 				new Subscribing\FakePages(),
 				$this->database
 			))->send()
@@ -59,7 +59,7 @@ final class FrugalRequest extends TestCase\Database {
 			$page,
 			(new Http\FrugalRequest(
 				new Http\FakeRequest($page),
-				new Http\FakeHeaders(['host' => 'www.google.com']),
+				'www.google.com',
 				new Subscribing\FakePages(),
 				$this->database
 			))->send()
@@ -78,7 +78,7 @@ final class FrugalRequest extends TestCase\Database {
 			$page,
 			(new Http\FrugalRequest(
 				new Http\FakeRequest($page),
-				new Http\FakeHeaders(['host' => 'www.google.com']),
+				'www.google.com',
 				new Subscribing\FakePages(),
 				$this->database
 			))->send()
@@ -91,7 +91,7 @@ final class FrugalRequest extends TestCase\Database {
 			$page,
 			(new Http\FrugalRequest(
 				new Http\FakeRequest($page),
-				new Http\FakeHeaders(['host' => 'www.google.com']),
+				'www.google.com',
 				new Subscribing\FakePages(),
 				$this->database
 			))->send()

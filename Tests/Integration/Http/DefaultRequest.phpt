@@ -17,25 +17,23 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class DefaultRequest extends Tester\TestCase {
 	public function testHttpPage() {
-		$http = new GuzzleHttp\Client();
-		$headers = ['method' => 'get', 'host' => 'http://www.facedown.cz'];
+		$http = new GuzzleHttp\Client(['http_errors' => false]);
 		$page = (new Http\DefaultRequest(
 			$http,
-			new Http\FakeHeaders($headers)
+			new GuzzleHttp\Psr7\Request('GET', 'http://www.facedown.cz')
 		))->send();
-		Assert::type(Subscribing\AvailableWebPage::class, $page);
+		Assert::type(Subscribing\HtmlWebPage::class, $page);
 		$dom = Tester\DomQuery::fromHtml($page->content()->saveHTML());
 		Assert::equal('Facedown', current($dom->find('h1')[0]));
 	}
 
 	public function testHttpsPage() {
-		$http = new GuzzleHttp\Client();
-		$headers = ['method' => 'get', 'host' => 'https://nette.org/'];
+		$http = new GuzzleHttp\Client(['http_errors' => false]);
 		$page = (new Http\DefaultRequest(
 			$http,
-			new Http\FakeHeaders($headers)
+			new GuzzleHttp\Psr7\Request('GET', 'https://nette.org/')
 		))->send();
-		Assert::type(Subscribing\AvailableWebPage::class, $page);
+		Assert::type(Subscribing\HtmlWebPage::class, $page);
 		$dom = Tester\DomQuery::fromHtml($page->content()->saveHTML());
 		Assert::equal('Framework', current($dom->find('h1')[0]));
 	}
@@ -45,10 +43,9 @@ final class DefaultRequest extends Tester\TestCase {
 	 */
 	public function testUnknownUrl() {
 		$http = new GuzzleHttp\Client(['http_errors' => false]);
-		$headers = ['method' => 'get', 'host' => 'http://www.čoromoro.xx'];
 		(new Http\DefaultRequest(
 			$http,
-			new Http\FakeHeaders($headers)
+			new GuzzleHttp\Psr7\Request('GET', 'http://www.čoromoro.xx')
 		))->send();
 	}
 
@@ -57,10 +54,9 @@ final class DefaultRequest extends Tester\TestCase {
 	 */
 	public function testEmptyUrl() {
 		$http = new GuzzleHttp\Client(['http_errors' => false]);
-		$headers = ['method' => 'get', 'host' => 'http://www.čoromoro.xx'];
 		(new Http\DefaultRequest(
 			$http,
-			new Http\FakeHeaders($headers)
+			new GuzzleHttp\Psr7\Request('GET', '')
 		))->send();
 	}
 }
