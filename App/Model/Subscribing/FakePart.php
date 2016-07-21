@@ -8,18 +8,18 @@ namespace Remembrall\Model\Subscribing;
 final class FakePart implements Part {
 	private $content;
 	private $equals;
-	private $page;
+	private $url;
 	private $expression;
 
 	public function __construct(
 		string $content = null,
 		bool $equals = false,
-		Page $page = null,
+		string $url = null,
 		Expression $expression = null
 	) {
 		$this->content = $content;
 		$this->equals = $equals;
-		$this->page = $page;
+		$this->url = $url;
 		$this->expression = $expression;
 	}
 
@@ -37,7 +37,7 @@ final class FakePart implements Part {
 
 	public function print(): array {
 		return [
-			'page' => $this->page,
+			'url' => $this->url,
 			'expression' => $this->expression,
 		];
 	}

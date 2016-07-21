@@ -26,7 +26,7 @@ final class CachedPart extends TestCase\Mockery {
 	public function testCaching() {
 		$content = '<p>XXX</p>';
 		$equals = false;
-		$fakePart = new Subscribing\FakePart();
+		$fakePart = new Subscribing\FakePart(null, false, 'www.google.com');
 		$this->cache->shouldReceive('read')
 			->andReturn($content)
 			->with('Remembrall\Model\Subscribing\CachedPart::content')
@@ -34,6 +34,10 @@ final class CachedPart extends TestCase\Mockery {
 		$this->cache->shouldReceive('read')
 			->andReturn($fakePart)
 			->with('Remembrall\Model\Subscribing\CachedPart::refresh')
+			->times(4);
+		$this->cache->shouldReceive('read')
+			->andReturn(['url' => 'www.google.com', 'expression' => null])
+			->with('Remembrall\Model\Subscribing\CachedPart::print')
 			->times(4);
 		$this->cache->shouldReceive('read')
 			->andReturn($equals)
@@ -52,6 +56,9 @@ final class CachedPart extends TestCase\Mockery {
 
 		Assert::same($fakePart, $part->refresh());
 		Assert::same($fakePart, $part->refresh());
+
+		Assert::same(['url' => 'www.google.com', 'expression' => null], $part->print());
+		Assert::same(['url' => 'www.google.com', 'expression' => null], $part->print());
 	}
 }
 

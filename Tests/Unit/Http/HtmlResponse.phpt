@@ -48,6 +48,7 @@ final class HtmlResponse extends TestCase\Mockery {
 			[['Content-Type' => 'text/html; utf-8']],
 			[['Content-Type' => 'Text/html; Utf-8']],
 			[['Content-Type' => 'Text/html;']],
+			[['Content-Type' => 'text/html']],
 			[['Content-Type' => 'Text/html']],
 		];
 	}
