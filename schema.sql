@@ -39,7 +39,7 @@ CREATE TABLE `page_visits` (
   `visited_at` datetime NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `page_id` (`page_url`),
-  CONSTRAINT `page_visits_ibfk_1` FOREIGN KEY (`page_url`) REFERENCES `pages` (`url`) ON DELETE CASCADE
+  CONSTRAINT `page_visits_ibfk_2` FOREIGN KEY (`page_url`) REFERENCES `pages` (`url`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -51,7 +51,7 @@ CREATE TABLE `parts` (
   `content` text NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `page_id,expression` (`page_url`,`expression`),
-  CONSTRAINT `parts_ibfk_1` FOREIGN KEY (`page_url`) REFERENCES `pages` (`url`) ON DELETE CASCADE
+  CONSTRAINT `parts_ibfk_2` FOREIGN KEY (`page_url`) REFERENCES `pages` (`url`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -104,4 +104,4 @@ CREATE TABLE `verification_codes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- 2016-07-17 16:32:20
+-- 2016-07-21 19:59:57
