@@ -50,19 +50,19 @@ final class ChangedParts extends Tester\TestCase {
 					new Subscribing\FakePart(
 						null,
 						$same = false,
-						new Subscribing\FakePage(),
+						'www.google.com',
 						new Subscribing\FakeExpression('//p')
 					),
 					new Subscribing\FakePart(
 						null,
 						$same = true,
-						new Subscribing\FakePage(),
+						'www.google.com',
 						new Subscribing\FakeExpression('//p')
 					),
 					new Subscribing\FakePart(
 						null,
 						$same = false,
-						new Subscribing\FakePage(),
+						'www.google.com',
 						new Subscribing\FakeExpression('//p')
 					),
 				]
