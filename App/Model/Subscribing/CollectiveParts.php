@@ -73,16 +73,10 @@ final class CollectiveParts implements Parts {
 				$previous[] = new ConstantPart(
 					new HtmlPart(
 						new XPathExpression(
-							new ConstantPage(
-								$row['page_content'],
-								$row['url']
-							),
+							new ConstantPage($row['page_content']),
 							$row['expression']
 						),
-						new ConstantPage(
-							$row['page_content'],
-							$row['url']
-						)
+						new ConstantPage($row['page_content'])
 					),
 					$row['part_content'],
 					$row['url'],

@@ -68,18 +68,12 @@ final class PartForm extends SecureControl {
 					new Http\FrugalRequest(
 						new Http\DefaultRequest(
 							new GuzzleHttp\Client(['http_errors' => false]),
-							new Http\CaseSensitiveHeaders(
-								new Http\UniqueHeaders(
-									[
-										'host' => $values['url'],
-										'method' => 'GET',
-									]
-								)
+							new GuzzleHttp\Psr7\Request(
+								'GET',
+								$values->url
 							)
 						),
-						new Http\CaseSensitiveHeaders(
-							new Http\UniqueHeaders(['host' => $values['url']])
-						),
+						$values->url,
 						new Subscribing\WebPages($this->database),
 						$this->database
 					),
@@ -106,20 +100,20 @@ final class PartForm extends SecureControl {
 						new Subscribing\ValidXPathExpression(
 							new Subscribing\XPathExpression(
 								$page,
-								$values['expression']
+								$values->expression
 							)
 						),
 						$page
 					),
 					new Storages\MemoryStorage()
 				),
-				$values['url'],
-				$values['expression'],
+				$values->url,
+				$values->expression,
 				new Subscribing\FutureInterval(
 					new Subscribing\DateTimeInterval(
-						new \DateTimeImmutable($values['start']),
+						new \DateTimeImmutable($values->start),
 						new \DateInterval(
-							sprintf('PT%dM', max(0, $values['interval']))
+							sprintf('PT%dM', max(0, $values->interval))
 						)
 					)
 				)
