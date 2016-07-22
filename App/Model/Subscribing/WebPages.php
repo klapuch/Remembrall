@@ -16,7 +16,7 @@ final class WebPages implements Pages {
 			'INSERT INTO pages (url, content) VALUES
 			(?, ?) ON DUPLICATE KEY UPDATE
 			content = VALUES(content)',
-			$url,
+			$this->normalizedUrl($url),
 			$page->content()->saveHTML()
 		);
 		return $page;
@@ -30,5 +30,15 @@ final class WebPages implements Pages {
 				return $previous;
 			}
 		);
+	}
+
+	private function normalizedUrl(string $url): string {
+		$parsedUrl = parse_url(strtolower(trim($url, '/')));
+		$scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '';
+		$host = isset($parsedUrl['host']) ? $parsedUrl['host'] : '';
+		$path = isset($parsedUrl['path']) ? $parsedUrl['path'] : '';
+		$query = isset($parsedUrl['query']) ? '?' . $parsedUrl['query'] : '';
+		$fragment = isset($parsedUrl['fragment']) ? '#' . $parsedUrl['fragment'] : '';
+		return $scheme . $host . $path . $query . $fragment;
 	}
 }

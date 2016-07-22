@@ -16,7 +16,9 @@ final class WebPages extends TestCase\Database {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('content');
 		(new Subscribing\WebPages($this->database))
-			->add('www.facedown.cz', new Subscribing\FakePage($dom));
+			->add('www.FacedowN.cz/', new Subscribing\FakePage($dom));
+		(new Subscribing\WebPages($this->database))
+			->add('www.FacedowN.cz/?x=10#here', new Subscribing\FakePage($dom));
 		Assert::contains(
 			'content',
 			$this->database->fetchSingle(
@@ -24,11 +26,11 @@ final class WebPages extends TestCase\Database {
 			)
 		);
 		Assert::same(
-			1,
+			2,
 			$this->database->fetchSingle(
 				'SELECT COUNT(*)
 				FROM page_visits
-				WHERE page_url = "www.facedown.cz"
+				WHERE page_url = "www.facedown.cz" OR page_url = "www.facedown.cz/?x=10#here"
 				AND (visited_at BETWEEN NOW() - INTERVAL 1 MINUTE AND NOW())'
 			)
 		);
