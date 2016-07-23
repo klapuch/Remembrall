@@ -57,7 +57,8 @@ final class DisposableVerificationCode extends TestCase\Database {
 			VALUES (1, "valid:code", 0)'
 		);
 		$this->database->query(
-			'INSERT INTO subscribers (ID, email) VALUES (1, "foo@gmail.com")'
+			'INSERT INTO subscribers (email, `password`) VALUES
+			("foo@gmail.com", "password")'
 		);
 	}
 

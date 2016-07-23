@@ -20,12 +20,15 @@ final class PartSharedSubscribers extends TestCase\Database {
 			("www.google.com", "google"), ("www.facedown.cz", "seznam")'
 		);
 		$this->database->query(
-			'INSERT INTO subscribers (email) VALUES
-			("facedown@gmail.com"), ("facedown@facedown.cz"), ("foo@bar.cz")'
+			'INSERT INTO subscribers (email, `password`) VALUES
+			("facedown@gmail.com", "password"),
+			("facedown@facedown.cz", "password"),
+			("foo@bar.cz", "password")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_url, expression) VALUES
-			("www.google.com", "//h1"), ("www.facedown.cz", "//h1")'
+			'INSERT INTO parts (page_url, expression, content) VALUES
+			("www.google.com", "//h1", "content"),
+			("www.facedown.cz", "//h1", "content")'
 		);
 		$this->database->query(
 			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES

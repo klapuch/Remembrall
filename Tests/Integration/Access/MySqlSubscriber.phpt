@@ -23,7 +23,8 @@ final class MySqlSubscriber extends TestCase\Database {
 
 	public function testEmail() {
 		$this->database->query(
-			'INSERT INTO subscribers (ID, email) VALUES (666, "foo@bar.cz")'
+			'INSERT INTO subscribers (ID, email, `password`) VALUES
+			(666, "foo@bar.cz", "password")'
 		);
 		Assert::same(
 			'foo@bar.cz',

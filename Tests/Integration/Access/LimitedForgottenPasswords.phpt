@@ -56,7 +56,8 @@ final class LimitedForgottenPasswords extends TestCase\Database {
 		$this->database->query('TRUNCATE forgotten_passwords');
 		$this->database->query('TRUNCATE subscribers');
 		$this->database->query(
-			'INSERT INTO subscribers (ID, email) VALUES (1, "foo@gmail.com")'
+			'INSERT INTO subscribers (ID, email, `password`) VALUES
+			(1, "foo@gmail.com", "password")'
 		);
 	}
 }

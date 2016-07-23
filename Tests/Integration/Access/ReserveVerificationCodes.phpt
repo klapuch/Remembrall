@@ -41,7 +41,8 @@ final class ReserveVerificationCodes extends TestCase\Database {
 		$this->database->query('TRUNCATE subscribers');
 		$this->database->query('TRUNCATE verification_codes');
 		$this->database->query(
-			'INSERT INTO subscribers (ID, email) VALUES (6, "foo@bar.cz")'
+			'INSERT INTO subscribers (ID, email, `password`) VALUES
+			(6, "foo@bar.cz", "password")'
 		);
 	}
 }

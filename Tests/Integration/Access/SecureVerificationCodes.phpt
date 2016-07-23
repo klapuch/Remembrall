@@ -29,7 +29,8 @@ final class SecureVerificationCodes extends TestCase\Database {
 		$this->database->query('TRUNCATE verification_codes');
 		$this->database->query('TRUNCATE subscribers');
 		$this->database->query(
-			'INSERT INTO subscribers (ID, email) VALUES (6, "fooBarEmail")'
+			'INSERT INTO subscribers (ID, email, `password`) VALUES
+			(6, "fooBarEmail", "password")'
 		);
 	}
 }

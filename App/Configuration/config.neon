@@ -1,9 +1,8 @@
 dibi:
-    driver: mysqli
-    host: 127.0.0.1
+    driver: pdo
+    dsn: "mysql:host=127.0.0.1;dbname=remembrall;charset=utf8"
     username: root
-    password:
-    database: remembrall
+    password: pass
     lazy: true
 php:
     date.timezone: Europe/Prague

@@ -46,7 +46,7 @@ final class MySqlRemindedPassword extends TestCase\Database {
 		$this->database->query('TRUNCATE forgotten_passwords');
 		$this->database->query('TRUNCATE subscribers');
 		$this->database->query(
-			'INSERT INTO subscribers (`password`, email) VALUES ("123", "foo@bar.cz")'
+			'INSERT INTO subscribers (email, `password`) VALUES ("foo@bar.cz", "123")'
 		);
 	}
 }
