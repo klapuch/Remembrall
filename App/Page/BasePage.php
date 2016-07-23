@@ -19,7 +19,7 @@ abstract class BasePage extends Nette\Application\UI\Presenter {
 
 	public function startup() {
 		parent::startup();
-		//$this->user->login(new Security\Identity(1));
+		$this->user->login(new Security\Identity(1));
 	}
 
 	/*public function checkRequirements($element) {

@@ -45,22 +45,30 @@ final class FrugalRequest implements Request {
 	 * @return bool
 	 */
 	private function outdated(string $url): bool {
+		if(!$this->exists($url))
+			return true;
 		return (bool)$this->database->fetchSingle(
 			'SELECT 1
-			FROM page_visits
-			RIGHT JOIN pages ON pages.url = page_visits.page_url
-			WHERE page_url IS NULL OR page_url = ?
-			AND (
-				SELECT visited_at
+			FROM pages
+			WHERE (
+				SELECT MAX(visited_at)
 				FROM page_visits
 				WHERE page_url = ?
-				ORDER BY visited_at DESC
-				LIMIT 1
-		  	) + INTERVAL ? MINUTE < NOW()
-			LIMIT 1',
-			$url,
+		  	) + INTERVAL ? MINUTE < NOW()',
 			$url,
 			(new \DateInterval(self::EXPIRATION))->i
+		);
+	}
+
+	/**
+	 * Is the url in the database and therefore it is not the first access?
+	 * @param string $url
+	 * @return bool
+	 */
+	private function exists(string $url): bool {
+		return (bool)$this->database->fetchSingle(
+			'SELECT 1 FROM pages WHERE url = ?',
+			$url
 		);
 	}
 }

@@ -86,6 +86,7 @@ final class FrugalRequest extends TestCase\Database {
 	}
 
 	public function testExpiredCachingBecauseOfFirstVisit() {
+		$this->database->query('TRUNCATE pages');
 		$page = new Subscribing\FakePage(new \DOMDocument());
 		Assert::same(
 			$page,
