@@ -7,7 +7,7 @@ use Remembrall\Model\Subscribing;
 
 /**
  * Frugal request firstly check database with a content
- * If the content is outdated, then real request is sent
+ * If the content is outdated, then the real request is sent
  */
 final class FrugalRequest implements Request {
 	private $origin;
@@ -54,7 +54,7 @@ final class FrugalRequest implements Request {
 				SELECT MAX(visited_at)
 				FROM page_visits
 				WHERE page_url = ?
-		  	) + INTERVAL ? MINUTE < NOW()',
+		  	) + INTERVAL "1 MINUTE" * ? < NOW()',
 			$url,
 			(new \DateInterval(self::EXPIRATION))->i
 		);

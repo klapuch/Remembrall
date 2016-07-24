@@ -22,13 +22,13 @@ final class Transaction {
 	 * @throws \Throwable
 	 */
 	public function start(\Closure $callback) {
-		$this->database->begin();
+		$this->database->nativeQuery('BEGIN TRANSACTION');
 		try {
 			$result = $callback();
-			$this->database->commit();
+			$this->database->nativeQuery('COMMIT TRANSACTION');
 			return $result;
 		} catch(\Throwable $ex) {
-			$this->database->rollback();
+			$this->database->nativeQuery('ROLLBACK TRANSACTION');
 			if(get_class($ex) === Dibi\DriverException::class) {
 				throw new \RuntimeException(
 					'Error on the database side. Rolled back.',

@@ -17,7 +17,7 @@ require __DIR__ . '/../../bootstrap.php';
 final class CollectiveParts extends TestCase\Database {
     public function testSubscribing() {
 		$this->database->query(
-			'INSERT INTO subscribers (ID, email, `password`) VALUES
+			'INSERT INTO subscribers (id, email, password) VALUES
 			(1, "foo@bar.cz", "secret"), (2, "facedown@facedown.cz", "secret")'
 		);
         (new Subscribing\CollectiveParts(
@@ -31,10 +31,10 @@ final class CollectiveParts extends TestCase\Database {
 			)
 		);
 		$parts = $this->database->fetchAll(
-			'SELECT ID, page_url, content, expression FROM parts'
+			'SELECT id, page_url, content, expression FROM parts'
 		);
 		Assert::count(1, $parts);
-		Assert::same(1, $parts[0]['ID']);
+		Assert::same(1, $parts[0]['id']);
 		Assert::same('www.google.com', $parts[0]['page_url']);
 		Assert::same('<p>Content</p>', $parts[0]['content']);
 		Assert::same('//p', $parts[0]['expression']);
@@ -46,7 +46,7 @@ final class CollectiveParts extends TestCase\Database {
 
 	public function testTwiceSubscribingWithUpdate() {
 		$this->database->query(
-			'INSERT INTO subscribers (ID, email, `password`) VALUES
+			'INSERT INTO subscribers (id, email, password) VALUES
 			(1, "foo@bar.cz", "secret"), (2, "facedown@facedown.cz", "secret")'
 		);
 		(new Subscribing\CollectiveParts(
@@ -70,10 +70,10 @@ final class CollectiveParts extends TestCase\Database {
 			)
 		); //twice
 		$parts = $this->database->fetchAll(
-			'SELECT ID, page_url, content, expression FROM parts'
+			'SELECT id, page_url, content, expression FROM parts'
 		);
 		Assert::count(1, $parts);
-		Assert::same(1, $parts[0]['ID']);
+		Assert::same(1, $parts[0]['id']);
 		Assert::same('www.google.com', $parts[0]['page_url']);
 		Assert::same('<p>Updated content</p>', $parts[0]['content']);
 		Assert::same('//p', $parts[0]['expression']);
@@ -86,7 +86,7 @@ final class CollectiveParts extends TestCase\Database {
 	public function testIteratingOverAllPages() {
 		$this->database->query(
 			'INSERT INTO part_visits (part_id, visited_at) VALUES
-			(1, NOW()), (2, NOW()), (2, NOW() - INTERVAL 5 MINUTE)'
+			(1, NOW()), (2, NOW()), (2, NOW() - INTERVAL "5 MINUTE")'
 		);
 		$this->database->query(
 			'INSERT INTO parts (page_url, expression, content) VALUES
@@ -97,7 +97,7 @@ final class CollectiveParts extends TestCase\Database {
 			("www.facedown.cz", "//c", "c")'
 		);
 		$this->database->query(
-			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
+			'INSERT INTO subscribed_parts (part_id, subscriber_id, interval) VALUES
 			(1, 1, "PT1M"), (2, 2, "PT2M")'
 		);
 		$parts = (new Subscribing\CollectiveParts(
@@ -118,23 +118,20 @@ final class CollectiveParts extends TestCase\Database {
 			("www.facedown.cz", "//d", "c")'
 		);
 		$this->database->query(
-			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
+			'INSERT INTO subscribed_parts (part_id, subscriber_id, interval) VALUES
 			(1, 2, "PT2M"), (2, 1, "PT3M")'
 		);
 		(new Subscribing\CollectiveParts(
 			$this->database
 		))->remove('www.facedown.cz', '//b');
-		$parts = $this->database->fetchAll('SELECT ID FROM parts');
+		$parts = $this->database->fetchAll('SELECT id FROM parts');
 		Assert::count(1, $parts);
-		Assert::same(2, $parts[0]['ID']);
+		Assert::same(2, $parts[0]['id']);
 	}
 
     protected function prepareDatabase() {
-        $this->database->query('TRUNCATE parts');
-        $this->database->query('TRUNCATE part_visits');
-		$this->database->query('TRUNCATE pages');
-		$this->database->query('TRUNCATE subscribers');
-		$this->database->query('TRUNCATE subscribed_parts');
+		$this->truncate(['parts', 'part_visits', 'pages', 'subscribers', 'subscribed_parts']);
+		$this->restartSequence(['parts', 'part_visits', 'subscribers', 'subscribed_parts']);
 		$this->database->query(
 			'INSERT INTO pages (url, content) VALUES
 			("www.google.com", "<p>google</p>")'

@@ -58,9 +58,9 @@ final class LimitedParts implements Parts {
 		return (bool)$this->database->fetchSingle(
 			'SELECT 1
 			FROM parts
-			INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID 
+			INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.id 
 			WHERE subscriber_id = ?
-			HAVING COUNT(parts.ID) >= ?',
+			HAVING COUNT(parts.id) >= ?',
 			$this->subscriber->id(),
 			self::LIMIT
 		);

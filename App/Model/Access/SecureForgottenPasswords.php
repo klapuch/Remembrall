@@ -23,10 +23,11 @@ final class SecureForgottenPasswords implements ForgottenPasswords {
 	public function remind(string $email): RemindedPassword {
 		$reminder = bin2hex(random_bytes(50)) . ':' . sha1($email);
 		$this->database->query(
-			'INSERT INTO forgotten_passwords (subscriber_id, reminder)
-			VALUES ((SELECT ID FROM subscribers WHERE email = ?), ?)',
+			'INSERT INTO forgotten_passwords (subscriber_id, reminder, reminded_at) VALUES
+			((SELECT id FROM subscribers WHERE email = ?), ?, ?)',
 			$email,
-			$reminder
+			$reminder,
+			new \DateTimeImmutable()
 		);
 		return new MySqlRemindedPassword(
 			$reminder,

@@ -38,7 +38,7 @@ SET default_with_oids = false;
 --
 
 CREATE TABLE forgotten_passwords (
-    "id" integer NOT NULL,
+    id integer NOT NULL,
     subscriber_id integer NOT NULL,
     reminder character varying(141) NOT NULL,
     reminded_at timestamp without time zone NOT NULL,
@@ -52,7 +52,7 @@ ALTER TABLE forgotten_passwords OWNER TO postgres;
 -- Name: forgotten_passwords_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE "forgotten_passwords_id_seq"
+CREATE SEQUENCE forgotten_passwords_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -60,13 +60,13 @@ CREATE SEQUENCE "forgotten_passwords_id_seq"
     CACHE 1;
 
 
-ALTER TABLE "forgotten_passwords_id_seq" OWNER TO postgres;
+ALTER TABLE forgotten_passwords_id_seq OWNER TO postgres;
 
 --
 -- Name: forgotten_passwords_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE "forgotten_passwords_id_seq" OWNED BY forgotten_passwords."id";
+ALTER SEQUENCE forgotten_passwords_id_seq OWNED BY forgotten_passwords.id;
 
 
 --
@@ -74,7 +74,7 @@ ALTER SEQUENCE "forgotten_passwords_id_seq" OWNED BY forgotten_passwords."id";
 --
 
 CREATE TABLE page_visits (
-    "id" integer NOT NULL,
+    id integer NOT NULL,
     page_url character varying NOT NULL,
     visited_at timestamp without time zone NOT NULL
 );
@@ -86,7 +86,7 @@ ALTER TABLE page_visits OWNER TO postgres;
 -- Name: page_visits_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE "page_visits_id_seq"
+CREATE SEQUENCE page_visits_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -94,13 +94,13 @@ CREATE SEQUENCE "page_visits_id_seq"
     CACHE 1;
 
 
-ALTER TABLE "page_visits_id_seq" OWNER TO postgres;
+ALTER TABLE page_visits_id_seq OWNER TO postgres;
 
 --
 -- Name: page_visits_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE "page_visits_id_seq" OWNED BY page_visits."id";
+ALTER SEQUENCE page_visits_id_seq OWNED BY page_visits.id;
 
 
 --
@@ -120,7 +120,7 @@ ALTER TABLE pages OWNER TO postgres;
 --
 
 CREATE TABLE part_visits (
-    "id" integer NOT NULL,
+    id integer NOT NULL,
     part_id integer NOT NULL,
     visited_at timestamp without time zone NOT NULL
 );
@@ -132,7 +132,7 @@ ALTER TABLE part_visits OWNER TO postgres;
 -- Name: part_visits_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE "part_visits_id_seq"
+CREATE SEQUENCE part_visits_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -140,13 +140,13 @@ CREATE SEQUENCE "part_visits_id_seq"
     CACHE 1;
 
 
-ALTER TABLE "part_visits_id_seq" OWNER TO postgres;
+ALTER TABLE part_visits_id_seq OWNER TO postgres;
 
 --
 -- Name: part_visits_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE "part_visits_id_seq" OWNED BY part_visits."id";
+ALTER SEQUENCE part_visits_id_seq OWNED BY part_visits.id;
 
 
 --
@@ -154,7 +154,7 @@ ALTER SEQUENCE "part_visits_id_seq" OWNED BY part_visits."id";
 --
 
 CREATE TABLE parts (
-    "id" integer NOT NULL,
+    id integer NOT NULL,
     page_url character varying NOT NULL,
     expression character varying NOT NULL,
     content text NOT NULL
@@ -167,7 +167,7 @@ ALTER TABLE parts OWNER TO postgres;
 -- Name: parts_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE "parts_id_seq"
+CREATE SEQUENCE parts_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -175,13 +175,13 @@ CREATE SEQUENCE "parts_id_seq"
     CACHE 1;
 
 
-ALTER TABLE "parts_id_seq" OWNER TO postgres;
+ALTER TABLE parts_id_seq OWNER TO postgres;
 
 --
 -- Name: parts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE "parts_id_seq" OWNED BY parts."id";
+ALTER SEQUENCE parts_id_seq OWNED BY parts.id;
 
 
 --
@@ -189,7 +189,7 @@ ALTER SEQUENCE "parts_id_seq" OWNED BY parts."id";
 --
 
 CREATE TABLE subscribed_parts (
-    "id" integer NOT NULL,
+    id integer NOT NULL,
     subscriber_id integer NOT NULL,
     part_id integer NOT NULL,
     "interval" character varying(10) NOT NULL
@@ -202,7 +202,7 @@ ALTER TABLE subscribed_parts OWNER TO postgres;
 -- Name: subscribed_parts_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE "subscribed_parts_id_seq"
+CREATE SEQUENCE subscribed_parts_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -210,13 +210,13 @@ CREATE SEQUENCE "subscribed_parts_id_seq"
     CACHE 1;
 
 
-ALTER TABLE "subscribed_parts_id_seq" OWNER TO postgres;
+ALTER TABLE subscribed_parts_id_seq OWNER TO postgres;
 
 --
 -- Name: subscribed_parts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE "subscribed_parts_id_seq" OWNED BY subscribed_parts."id";
+ALTER SEQUENCE subscribed_parts_id_seq OWNED BY subscribed_parts.id;
 
 
 --
@@ -224,7 +224,7 @@ ALTER SEQUENCE "subscribed_parts_id_seq" OWNED BY subscribed_parts."id";
 --
 
 CREATE TABLE subscribers (
-    "id" integer NOT NULL,
+    id integer NOT NULL,
     email character varying NOT NULL,
     password character varying NOT NULL
 );
@@ -236,7 +236,7 @@ ALTER TABLE subscribers OWNER TO postgres;
 -- Name: subscribers_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE "subscribers_id_seq"
+CREATE SEQUENCE subscribers_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -244,13 +244,13 @@ CREATE SEQUENCE "subscribers_id_seq"
     CACHE 1;
 
 
-ALTER TABLE "subscribers_id_seq" OWNER TO postgres;
+ALTER TABLE subscribers_id_seq OWNER TO postgres;
 
 --
 -- Name: subscribers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE "subscribers_id_seq" OWNED BY subscribers."id";
+ALTER SEQUENCE subscribers_id_seq OWNED BY subscribers.id;
 
 
 --
@@ -258,7 +258,7 @@ ALTER SEQUENCE "subscribers_id_seq" OWNED BY subscribers."id";
 --
 
 CREATE TABLE verification_codes (
-    "id" integer NOT NULL,
+    id integer NOT NULL,
     subscriber_id integer NOT NULL,
     code character varying(91) NOT NULL,
     used boolean DEFAULT false NOT NULL,
@@ -272,7 +272,7 @@ ALTER TABLE verification_codes OWNER TO postgres;
 -- Name: verification_codes_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE "verification_codes_id_seq"
+CREATE SEQUENCE verification_codes_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -280,69 +280,69 @@ CREATE SEQUENCE "verification_codes_id_seq"
     CACHE 1;
 
 
-ALTER TABLE "verification_codes_id_seq" OWNER TO postgres;
+ALTER TABLE verification_codes_id_seq OWNER TO postgres;
 
 --
 -- Name: verification_codes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE "verification_codes_id_seq" OWNED BY verification_codes."id";
+ALTER SEQUENCE verification_codes_id_seq OWNED BY verification_codes.id;
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY forgotten_passwords ALTER COLUMN "id" SET DEFAULT nextval('"forgotten_passwords_id_seq"'::regclass);
+ALTER TABLE ONLY forgotten_passwords ALTER COLUMN id SET DEFAULT nextval('forgotten_passwords_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY page_visits ALTER COLUMN "id" SET DEFAULT nextval('"page_visits_id_seq"'::regclass);
+ALTER TABLE ONLY page_visits ALTER COLUMN id SET DEFAULT nextval('page_visits_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY part_visits ALTER COLUMN "id" SET DEFAULT nextval('"part_visits_id_seq"'::regclass);
+ALTER TABLE ONLY part_visits ALTER COLUMN id SET DEFAULT nextval('part_visits_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY parts ALTER COLUMN "id" SET DEFAULT nextval('"parts_id_seq"'::regclass);
+ALTER TABLE ONLY parts ALTER COLUMN id SET DEFAULT nextval('parts_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY subscribed_parts ALTER COLUMN "id" SET DEFAULT nextval('"subscribed_parts_id_seq"'::regclass);
+ALTER TABLE ONLY subscribed_parts ALTER COLUMN id SET DEFAULT nextval('subscribed_parts_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY subscribers ALTER COLUMN "id" SET DEFAULT nextval('"subscribers_id_seq"'::regclass);
+ALTER TABLE ONLY subscribers ALTER COLUMN id SET DEFAULT nextval('subscribers_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY verification_codes ALTER COLUMN "id" SET DEFAULT nextval('"verification_codes_id_seq"'::regclass);
+ALTER TABLE ONLY verification_codes ALTER COLUMN id SET DEFAULT nextval('verification_codes_id_seq'::regclass);
 
 
 --
 -- Data for Name: forgotten_passwords; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY forgotten_passwords ("id", subscriber_id, reminder, reminded_at, used) FROM stdin;
+COPY forgotten_passwords (id, subscriber_id, reminder, reminded_at, used) FROM stdin;
 \.
 
 
@@ -350,14 +350,14 @@ COPY forgotten_passwords ("id", subscriber_id, reminder, reminded_at, used) FROM
 -- Name: forgotten_passwords_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"forgotten_passwords_id_seq"', 1, true);
+SELECT pg_catalog.setval('forgotten_passwords_id_seq', 1, true);
 
 
 --
 -- Data for Name: page_visits; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY page_visits ("id", page_url, visited_at) FROM stdin;
+COPY page_visits (id, page_url, visited_at) FROM stdin;
 \.
 
 
@@ -365,7 +365,7 @@ COPY page_visits ("id", page_url, visited_at) FROM stdin;
 -- Name: page_visits_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"page_visits_id_seq"', 1, false);
+SELECT pg_catalog.setval('page_visits_id_seq', 1, false);
 
 
 --
@@ -382,7 +382,7 @@ www.facedown.cz	seznam
 -- Data for Name: part_visits; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY part_visits ("id", part_id, visited_at) FROM stdin;
+COPY part_visits (id, part_id, visited_at) FROM stdin;
 \.
 
 
@@ -390,14 +390,14 @@ COPY part_visits ("id", part_id, visited_at) FROM stdin;
 -- Name: part_visits_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"part_visits_id_seq"', 1, false);
+SELECT pg_catalog.setval('part_visits_id_seq', 1, false);
 
 
 --
 -- Data for Name: parts; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY parts ("id", page_url, expression, content) FROM stdin;
+COPY parts (id, page_url, expression, content) FROM stdin;
 1	www.google.com	//h1	content
 2	www.facedown.cz	//h1	content
 \.
@@ -407,14 +407,14 @@ COPY parts ("id", page_url, expression, content) FROM stdin;
 -- Name: parts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"parts_id_seq"', 2, true);
+SELECT pg_catalog.setval('parts_id_seq', 2, true);
 
 
 --
 -- Data for Name: subscribed_parts; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY subscribed_parts ("id", subscriber_id, part_id, "interval") FROM stdin;
+COPY subscribed_parts (id, subscriber_id, part_id, "interval") FROM stdin;
 \.
 
 
@@ -422,14 +422,14 @@ COPY subscribed_parts ("id", subscriber_id, part_id, "interval") FROM stdin;
 -- Name: subscribed_parts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"subscribed_parts_id_seq"', 4, true);
+SELECT pg_catalog.setval('subscribed_parts_id_seq', 4, true);
 
 
 --
 -- Data for Name: subscribers; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY subscribers ("id", email, password) FROM stdin;
+COPY subscribers (id, email, password) FROM stdin;
 \.
 
 
@@ -437,14 +437,14 @@ COPY subscribers ("id", email, password) FROM stdin;
 -- Name: subscribers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"subscribers_id_seq"', 8, true);
+SELECT pg_catalog.setval('subscribers_id_seq', 8, true);
 
 
 --
 -- Data for Name: verification_codes; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY verification_codes ("id", subscriber_id, code, used, used_at) FROM stdin;
+COPY verification_codes (id, subscriber_id, code, used, used_at) FROM stdin;
 \.
 
 
@@ -452,7 +452,7 @@ COPY verification_codes ("id", subscriber_id, code, used, used_at) FROM stdin;
 -- Name: verification_codes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"verification_codes_id_seq"', 1, false);
+SELECT pg_catalog.setval('verification_codes_id_seq', 1, false);
 
 
 --
@@ -460,7 +460,7 @@ SELECT pg_catalog.setval('"verification_codes_id_seq"', 1, false);
 --
 
 ALTER TABLE ONLY forgotten_passwords
-    ADD CONSTRAINT "forgotten_passwords_ID" PRIMARY KEY ("id");
+    ADD CONSTRAINT "forgotten_passwords_ID" PRIMARY KEY (id);
 
 
 --
@@ -476,7 +476,7 @@ ALTER TABLE ONLY forgotten_passwords
 --
 
 ALTER TABLE ONLY page_visits
-    ADD CONSTRAINT "page_visits_ID" PRIMARY KEY ("id");
+    ADD CONSTRAINT "page_visits_ID" PRIMARY KEY (id);
 
 
 --
@@ -492,7 +492,7 @@ ALTER TABLE ONLY pages
 --
 
 ALTER TABLE ONLY part_visits
-    ADD CONSTRAINT "part_visits_ID" PRIMARY KEY ("id");
+    ADD CONSTRAINT "part_visits_ID" PRIMARY KEY (id);
 
 
 --
@@ -500,7 +500,7 @@ ALTER TABLE ONLY part_visits
 --
 
 ALTER TABLE ONLY parts
-    ADD CONSTRAINT "parts_ID" PRIMARY KEY ("id");
+    ADD CONSTRAINT "parts_ID" PRIMARY KEY (id);
 
 
 --
@@ -516,7 +516,7 @@ ALTER TABLE ONLY parts
 --
 
 ALTER TABLE ONLY subscribed_parts
-    ADD CONSTRAINT "subscribed_parts_ID" PRIMARY KEY ("id");
+    ADD CONSTRAINT "subscribed_parts_ID" PRIMARY KEY (id);
 
 
 --
@@ -532,7 +532,7 @@ ALTER TABLE ONLY subscribed_parts
 --
 
 ALTER TABLE ONLY subscribers
-    ADD CONSTRAINT "subscribers_ID" PRIMARY KEY ("id");
+    ADD CONSTRAINT "subscribers_ID" PRIMARY KEY (id);
 
 
 --
@@ -548,7 +548,7 @@ ALTER TABLE ONLY subscribers
 --
 
 ALTER TABLE ONLY verification_codes
-    ADD CONSTRAINT "verification_codes_ID" PRIMARY KEY ("id");
+    ADD CONSTRAINT "verification_codes_ID" PRIMARY KEY (id);
 
 
 --
@@ -565,90 +565,6 @@ ALTER TABLE ONLY verification_codes
 
 ALTER TABLE ONLY verification_codes
     ADD CONSTRAINT verification_codes_subscriber_id UNIQUE (subscriber_id);
-
-
---
--- Name: forgotten_passwords_subscriber_id; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX forgotten_passwords_subscriber_id ON forgotten_passwords USING btree (subscriber_id);
-
-
---
--- Name: page_visits_page_url; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX page_visits_page_url ON page_visits USING btree (page_url);
-
-
---
--- Name: part_visits_part_id; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX part_visits_part_id ON part_visits USING btree (part_id);
-
-
---
--- Name: subscribed_parts_part_id; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX subscribed_parts_part_id ON subscribed_parts USING btree (part_id);
-
-
---
--- Name: forgotten_passwords_subscriber_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY forgotten_passwords
-    ADD CONSTRAINT forgotten_passwords_subscriber_id_fkey FOREIGN KEY (subscriber_id) REFERENCES subscribers("id") ON DELETE CASCADE;
-
-
---
--- Name: page_visits_page_url_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY page_visits
-    ADD CONSTRAINT page_visits_page_url_fkey FOREIGN KEY (page_url) REFERENCES pages(url) ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
--- Name: part_visits_part_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY part_visits
-    ADD CONSTRAINT part_visits_part_id_fkey FOREIGN KEY (part_id) REFERENCES parts("id") ON DELETE CASCADE;
-
-
---
--- Name: parts_page_url_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY parts
-    ADD CONSTRAINT parts_page_url_fkey FOREIGN KEY (page_url) REFERENCES pages(url) ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
--- Name: subscribed_parts_part_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY subscribed_parts
-    ADD CONSTRAINT subscribed_parts_part_id_fkey FOREIGN KEY (part_id) REFERENCES parts("id") ON DELETE CASCADE;
-
-
---
--- Name: subscribed_parts_subscriber_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY subscribed_parts
-    ADD CONSTRAINT subscribed_parts_subscriber_id_fkey FOREIGN KEY (subscriber_id) REFERENCES subscribers("id") ON DELETE CASCADE;
-
-
---
--- Name: verification_codes_subscriber_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY verification_codes
-    ADD CONSTRAINT verification_codes_subscriber_id_fkey FOREIGN KEY (subscriber_id) REFERENCES subscribers("id") ON DELETE CASCADE;
 
 
 --

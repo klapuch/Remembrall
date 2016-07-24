@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Dibi;
+use Remembrall\Model\Storage;
 
 final class WebPages implements Pages {
 	private $database;
@@ -12,14 +13,41 @@ final class WebPages implements Pages {
 	}
 
 	public function add(string $url, Page $page): Page {
-		$this->database->query(
-			'INSERT INTO pages (url, content) VALUES
-			(?, ?) ON DUPLICATE KEY UPDATE
-			content = VALUES(content)',
-			$this->normalizedUrl($url),
-			$page->content()->saveHTML()
-		);
+		(new Storage\Transaction($this->database))->start(function() use($url, $page) {
+			if($this->alreadyExists($url)) {
+				$this->database->query(
+					'UPDATE pages SET content = ? WHERE url = ?',
+					$page->content()->saveHTML(),
+					$this->normalizedUrl($url)
+				);
+			} else {
+				$this->database->query(
+					'INSERT INTO pages (url, content) VALUES
+					(?, ?)',
+					$this->normalizedUrl($url),
+					$page->content()->saveHTML()
+				);
+			}
+			$this->database->query(
+				'INSERT INTO page_visits (page_url, visited_at) VALUES
+				(?, ?)',
+				$this->normalizedUrl($url),
+				new \DateTimeImmutable()
+			);
+		});
 		return $page;
+	}
+
+	/**
+	 * Does the url already exists
+	 * @param string $url
+	 * @return bool
+	 */
+	private function alreadyExists(string $url): bool {
+		return (bool)$this->database->fetchSingle(
+			'SELECT 1 FROM pages WHERE url = ?',
+			$this->normalizedUrl($url)
+		);
 	}
 
 	public function iterate(): array {

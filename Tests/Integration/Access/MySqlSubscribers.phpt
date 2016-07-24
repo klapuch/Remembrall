@@ -15,23 +15,28 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class MySqlSubscribers extends TestCase\Database {
 	public function testRegisteringBrandNewSubscriber() {
-		(new Access\MySqlSubscribers(
+		$subscriber = (new Access\MySqlSubscribers(
 			$this->database,
 			new Security\FakeCipher()
 		))->register('foo@bar.cz', 'passw0rt');
 		$subscribers = $this->database->fetchAll(
-			'SELECT email, `password` FROM subscribers'
+			'SELECT id, email, password
+			FROM subscribers'
+		);
+		Assert::equal(
+			new Access\MySqlSubscriber(1, $this->database),
+			$subscriber
 		);
 		Assert::count(1, $subscribers);
-		$subscriber = current($subscribers);
-		Assert::same('foo@bar.cz', $subscriber['email']);
-		Assert::same('secret', $subscriber['password']);
+		Assert::same('foo@bar.cz', $subscribers[0]['email']);
+		Assert::same('secret', $subscribers[0]['password']);
+		Assert::same(1, $subscribers[0]['id']);
 	}
 
 	public function testRegistrationWithDuplicatedEmail() {
 		$this->database->query(
-			'INSERT INTO subscribers (email, `password`) VALUES
-			("foo@bar.cz", "secret")'
+			'INSERT INTO subscribers (id, email, password) VALUES
+			(1, "foo@bar.cz", "secret")'
 		);
 		Assert::exception(
 			function() {
@@ -46,7 +51,7 @@ final class MySqlSubscribers extends TestCase\Database {
 	}
 
     protected function prepareDatabase() {
-        $this->database->query('TRUNCATE subscribers');
+		$this->purge(['subscribers']);
     }
 }
 

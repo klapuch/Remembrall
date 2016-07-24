@@ -21,15 +21,20 @@ final class MySqlSubscribers implements Subscribers {
 		$this->cipher = $cipher;
 	}
 
+	//TODO: last insert id
 	public function register(string $email, string $password): Subscriber {
 		try {
 			$this->database->query(
-				'INSERT INTO subscribers (email, `password`) VALUES (?, ?)',
+				'INSERT INTO subscribers(email, password) VALUES
+				(?, ?)',
 				$email,
 				$this->cipher->encrypt($password)
 			);
 			return new MySqlSubscriber(
-				$this->database->insertId(),
+				(int)$this->database->fetchSingle(
+					'SELECT ID FROM subscribers WHERE email = ?',
+					$email
+				),
 				$this->database
 			);
 		} catch(Dibi\UniqueConstraintViolationException $ex) {

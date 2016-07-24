@@ -17,11 +17,10 @@ final class LimitedForgottenPasswords extends TestCase\Database {
 	 */
 	public function testOversteppedReminding() {
 		$this->database->query(
-			'INSERT INTO forgotten_passwords (ID, subscriber_id, reminded_at, reminder)
-			VALUES 
-			(1, 1, NOW() - INTERVAL 1 HOUR, "reminder1"),
-			(2, 1, NOW() - INTERVAL 2 HOUR, "reminder2"),
-			(3, 1, NOW() - INTERVAL 3 HOUR, "reminder3")'
+			'INSERT INTO forgotten_passwords (id, subscriber_id, reminded_at, reminder) VALUES 
+			(1, 1, NOW() - INTERVAL "1 HOUR", "reminder1"),
+			(2, 1, NOW() - INTERVAL "2 HOUR", "reminder2"),
+			(3, 1, NOW() - INTERVAL "3 HOUR", "reminder3")'
 		);
 		(new Access\LimitedForgottenPasswords(
 			new Access\FakeForgottenPasswords,
@@ -31,16 +30,15 @@ final class LimitedForgottenPasswords extends TestCase\Database {
 
 	public function testRemindingInAllowedRange() {
 		$this->database->query(
-			'INSERT INTO forgotten_passwords (subscriber_id, reminded_at, reminder)
-			VALUES 
+			'INSERT INTO forgotten_passwords (subscriber_id, reminded_at, reminder) VALUES 
 			(1, NOW(), "reminder0"),
-			(1, NOW() - INTERVAL 25 HOUR, "reminder1"),
-			(1, NOW() - INTERVAL 25 HOUR, "reminder2"),
-			(1, NOW() - INTERVAL 25 HOUR, "reminder3"),
-			(1, NOW() - INTERVAL 24 HOUR, "reminder4"),
-			(1, NOW() - INTERVAL 24 HOUR, "reminder5"),
-			(1, NOW() - INTERVAL 24 HOUR, "reminder6"),
-			(1, NOW() - INTERVAL 26 HOUR, "reminder7")'
+			(1, NOW() - INTERVAL "25 HOUR", "reminder1"),
+			(1, NOW() - INTERVAL "25 HOUR", "reminder2"),
+			(1, NOW() - INTERVAL "25 HOUR", "reminder3"),
+			(1, NOW() - INTERVAL "24 HOUR", "reminder4"),
+			(1, NOW() - INTERVAL "24 HOUR", "reminder5"),
+			(1, NOW() - INTERVAL "24 HOUR", "reminder6"),
+			(1, NOW() - INTERVAL "26 HOUR", "reminder7")'
 		);
 		Assert::noError(
 			function() {
@@ -53,10 +51,9 @@ final class LimitedForgottenPasswords extends TestCase\Database {
 	}
 
 	protected function prepareDatabase() {
-		$this->database->query('TRUNCATE forgotten_passwords');
-		$this->database->query('TRUNCATE subscribers');
+		$this->purge(['subscribers', 'forgotten_passwords']);
 		$this->database->query(
-			'INSERT INTO subscribers (ID, email, `password`) VALUES
+			'INSERT INTO subscribers (id, email, password) VALUES
 			(1, "foo@gmail.com", "password")'
 		);
 	}

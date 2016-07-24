@@ -18,7 +18,7 @@ final class MySqlSubscriber implements Subscriber {
 
 	public function email(): string {
 		return $this->database->fetchSingle(
-			'SELECT email FROM subscribers WHERE ID = ?',
+			'SELECT email FROM subscribers WHERE id = ?',
 			$this->id()
 		);
 	}

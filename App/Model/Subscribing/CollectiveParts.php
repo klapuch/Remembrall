@@ -25,17 +25,28 @@ final class CollectiveParts implements Parts {
 	): Part {
 		(new Storage\Transaction($this->database))->start(
 			function() use ($part, $url, $expression, $interval) {
-				$this->database->query(
-					'INSERT INTO parts
-					(page_url, expression, content) VALUES (?, ?, ?)
-					ON DUPLICATE KEY UPDATE content = VALUES(content)',
-					$url,
-					$expression,
-					$part->content()
-				);
+				if($this->alreadyExists($url, $expression)) {
+					$this->database->query(
+						'UPDATE parts
+						SET content = ?
+						WHERE page_url = ? AND expression = ?',
+						$part->content(),
+						$url,
+						$expression
+					);
+				} else {
+					$this->database->query(
+						'INSERT INTO parts
+						(page_url, expression, content) VALUES
+						(?, ?, ?)',
+						$url,
+						$expression,
+						$part->content()
+					);
+				}
 				$this->database->query(
 					'INSERT INTO part_visits (part_id, visited_at) VALUES
-					((SELECT ID FROM parts WHERE page_url = ? AND expression = ?), ?)',
+					((SELECT id FROM parts WHERE page_url = ? AND expression = ?), ?)',
 					$url,
 					$expression,
 					$interval->start()
@@ -43,6 +54,20 @@ final class CollectiveParts implements Parts {
 			}
 		);
 		return $part;
+	}
+
+	/**
+	 * Does the part already exist?
+	 * @param string $url
+	 * @param string $expression
+	 * @return bool
+	 */
+	private function alreadyExists(string $url, string $expression): bool {
+		return (bool)$this->database->fetchSingle(
+			'SELECT 1 FROM parts WHERE page_url = ? AND expression = ?',
+			$url,
+			$expression
+		);
 	}
 
 	public function remove(string $url, string $expression) {
@@ -58,15 +83,13 @@ final class CollectiveParts implements Parts {
 			$this->database->fetchAll(
 				'SELECT parts.content AS part_content, url,
 				pages.content AS page_content, expression,
-				`interval`, (
-					SELECT visited_at
+				interval, (
+					SELECT MAX(visited_at)
 					FROM part_visits
-					WHERE part_id = parts.ID
-					ORDER BY visited_at DESC
-					LIMIT 1
+					WHERE part_id = parts.id
 				) AS visited_at
 				FROM parts
-				INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID
+				INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.id
 				LEFT JOIN pages ON pages.url = parts.page_url'
 			),
 			function($previous, Dibi\Row $row) {

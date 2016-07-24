@@ -20,20 +20,21 @@ final class ExpiredParts extends TestCase\Database {
 			$this->database
         ))->iterate();
         Assert::count(2, $parts);
+		var_dump($parts);
         Assert::same('//a', (string)$parts[0]->print()['expression']);
         Assert::same('//d', (string)$parts[1]->print()['expression']);
     }
 
 	protected function prepareDatabase() {
-        $this->database->query('TRUNCATE part_visits');
+		$this->truncate(['part_visits', 'parts', 'pages', 'subscribed_parts']);
+		$this->restartSequence(['part_visits', 'parts', 'subscribed_parts']);
 		$this->database->query(
 			'INSERT INTO part_visits (part_id, visited_at) VALUES
-			(1, NOW() - INTERVAL 2 DAY),
+			(1, NOW() - INTERVAL "2 DAY"),
 			(2, NOW()),
-			(3, NOW() - INTERVAL 3 MINUTE),
-			(1, NOW() - INTERVAL 4 DAY)'
+			(3, NOW() - INTERVAL "3 MINUTE"),
+			(1, NOW() - INTERVAL "4 DAY")'
 		);
-		$this->database->query('TRUNCATE parts');
 		$this->database->query(
 			'INSERT INTO parts (page_url, expression, content) VALUES
 			("www.google.com", "//a", "a")'
@@ -50,15 +51,18 @@ final class ExpiredParts extends TestCase\Database {
 			'INSERT INTO parts (page_url, expression, content) VALUES
 			("www.facedown.cz", "//d", "d")'
 		);
-		$this->database->query('TRUNCATE subscribed_parts');
 		$this->database->query(
-			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
-			(1, 1, "PT10M"), (2, 2, "PT10M"), (3, 1, "PT10M"), (4, 1, "PT10M")'
+			'INSERT INTO subscribed_parts (part_id, subscriber_id, interval) VALUES
+			(1, 1, "PT10M"),
+			(2, 2, "PT10M"),
+			(3, 1, "PT10M"),
+			(4, 1, "PT10M")'
 		);
-		$this->database->query('TRUNCATE pages');
 		$this->database->query(
 			'INSERT INTO pages (url, content) VALUES
-			("www.google.com", "google"), ("www.facedown.cz", "facedown"), ("www.foo.cz", "foo")'
+			("www.google.com", "google"),
+			("www.facedown.cz", "facedown"),
+			("www.foo.cz", "foo")'
 		);
     }
 }

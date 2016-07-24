@@ -25,8 +25,9 @@ final class DisposableVerificationCode implements VerificationCode {
 		}
 		$this->database->query(
 			'UPDATE verification_codes
-			SET used = 1, used_at = NOW()
+			SET used = TRUE, used_at = ?
 			WHERE code = ?',
+			new \DateTimeImmutable(),
 			$this->code
 		);
 	}
@@ -52,7 +53,7 @@ final class DisposableVerificationCode implements VerificationCode {
 			'SELECT 1
 			FROM verification_codes
 			WHERE code = ?
-			AND used = 1',
+			AND used = TRUE',
 			$this->code
 		);
 	}

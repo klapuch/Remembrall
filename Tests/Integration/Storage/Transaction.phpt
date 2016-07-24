@@ -29,24 +29,24 @@ final class Transaction extends Tester\TestCase {
 	}
 
 	public function testSuccessfulTransactionWithReturnedValue() {
-		$lastId = $this->transaction->start(
+		$lastName = $this->transaction->start(
 			function() {
 				$this->database->query(
-					'INSERT INTO test (name) VALUES ("foo")'
+					'INSERT INTO test (id, name) VALUES (1, "foo")'
 				);
 				$this->database->query(
-					'INSERT INTO test (name) VALUES ("foo2")'
+					'INSERT INTO test (id, name) VALUES (2, "foo2")'
 				);
-				$foo2Id = $this->database->fetchSingle(
-					'SELECT LAST_INSERT_ID()'
+				$foo2 = $this->database->fetchSingle(
+					'SELECT name FROM test WHERE id = 2'
 				);
 				$this->database->query('DELETE FROM test WHERE name = "foo2"');
-				return $foo2Id;
+				return $foo2;
 			}
 		);
-		Assert::same(2, $lastId);
+		Assert::same('foo2', $lastName);
 		Assert::equal(
-			[new Dibi\Row(['ID' => 1, 'name' => 'foo'])],
+			[new Dibi\Row(['id' => 1, 'name' => 'foo'])],
 			$this->database->fetchAll('SELECT * FROM test')
 		);
 	}
@@ -90,6 +90,32 @@ final class Transaction extends Tester\TestCase {
 							'INSERT INTO test (name) VALUES ("foo2")'
 						);
 						throw new \RuntimeException('Forced exception');
+					}
+				);
+			},
+			'\RuntimeException',
+			'Forced exception'
+		);
+		Assert::equal(
+			[],
+			$this->database->fetchAll('SELECT * FROM test')
+		);
+	}
+
+	public function testNestedTransaction() {
+		Assert::exception(
+			function() {
+				$this->transaction->start(
+					function() {
+						$this->database->query(
+							'INSERT INTO test (name) VALUES ("foo")'
+						);
+						$this->transaction->start(function() {
+							$this->database->query(
+								'INSERT INTO test (name) VALUES ("foo2")'
+							);
+							throw new \RuntimeException('Forced exception');
+						});
 					}
 				);
 			},

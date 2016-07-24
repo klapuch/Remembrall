@@ -36,16 +36,16 @@ final class PartSharedSubscribers implements Subscribers {
 	public function iterate(): array {
 		return array_reduce(
 			$this->database->fetchAll(
-				'SELECT subscribers.ID, email
+				'SELECT subscribers.id, email
 				FROM subscribers
-				INNER JOIN subscribed_parts ON subscribed_parts.subscriber_id = subscribers.ID
-				INNER JOIN parts ON parts.ID = subscribed_parts.part_id 
+				INNER JOIN subscribed_parts ON subscribed_parts.subscriber_id = subscribers.id
+				INNER JOIN parts ON parts.id = subscribed_parts.part_id 
 				WHERE page_url = ? AND expression = ?',
 				$this->url,
 				$this->expression
 			),
 			function($previous, Dibi\Row $row) {
-				$previous[] = new ConstantSubscriber($row['ID'], $row['email']);
+				$previous[] = new ConstantSubscriber($row['id'], $row['email']);
 				return $previous;
 			}
 		);

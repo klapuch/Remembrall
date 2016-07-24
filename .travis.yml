@@ -1,3 +1,6 @@
+services:
+  - postgresql
+
 language: php
 
 php:
@@ -18,10 +21,10 @@ install:
   - composer install --no-interaction --prefer-source
 
 before_script:
-  - mysql -u root -e 'CREATE DATABASE remembrall_test;'
-  - mysql -u root remembrall_test < ./Tests/TestCase/schema.sql
-  - mysql -u root -e 'CREATE DATABASE transaction_test;'
-  - mysql -u root transaction_test < ./Tests/TestCase/transaction_test.sql
+  - psql -c 'create database remembrall_test;' -U postgres
+  - psql -c 'create database transaction_test;' -U postgres
+  - psql -U postgres remembrall_test < ./Tests/TestCase/test_schema.sql
+  - psql -U postgres transaction_test < ./Tests/TestCase/transaction_test.sql
 
 after_script:
     - >

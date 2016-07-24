@@ -23,7 +23,7 @@ final class MySqlSubscriber extends TestCase\Database {
 
 	public function testEmail() {
 		$this->database->query(
-			'INSERT INTO subscribers (ID, email, `password`) VALUES
+			'INSERT INTO subscribers (id, email, password) VALUES
 			(666, "foo@bar.cz", "password")'
 		);
 		Assert::same(
@@ -35,7 +35,7 @@ final class MySqlSubscriber extends TestCase\Database {
 	}
 
     protected function prepareDatabase() {
-        $this->database->query('TRUNCATE subscribers');
+		$this->purge(['subscribers']);
     }
 }
 

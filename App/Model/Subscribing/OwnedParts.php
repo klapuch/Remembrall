@@ -43,8 +43,8 @@ final class OwnedParts implements Parts {
 					);
 					$this->database->query(
 						'INSERT INTO subscribed_parts
-						(part_id, subscriber_id, `interval`) VALUES
-						((SELECT ID FROM parts WHERE expression = ? AND page_url = ?), ?, ?)',
+						(part_id, subscriber_id, interval) VALUES
+						((SELECT id FROM parts WHERE expression = ? AND page_url = ?), ?, ?)',
 						$expression,
 						$url,
 						$this->myself->id(),
@@ -60,7 +60,7 @@ final class OwnedParts implements Parts {
 					$expression,
 					$url
 				),
-				$ex->getCode(),
+				(int)$ex->getCode(),
 				$ex
 			);
 		}
@@ -72,7 +72,7 @@ final class OwnedParts implements Parts {
 		$this->database->query(
 			'DELETE FROM subscribed_parts
 			WHERE subscriber_id = ?
-			AND part_id = (SELECT ID FROM parts WHERE expression = ? AND page_url = ?)',
+			AND part_id = (SELECT id FROM parts WHERE expression = ? AND page_url = ?)',
 			$this->myself->id(),
 			$expression,
 			$url
@@ -83,15 +83,13 @@ final class OwnedParts implements Parts {
 		return (array)array_reduce(
 			$this->database->fetchAll(
 				'SELECT parts.content AS part_content, expression, url,
-				pages.content AS page_content, `interval`, (
-					SELECT visited_at
+				pages.content AS page_content, interval, (
+					SELECT MAX(visited_at)
 					FROM part_visits
-					WHERE part_id = parts.ID
-					ORDER BY visited_at DESC
-					LIMIT 1
+					WHERE part_id = parts.id
 				) AS visited_at
 				FROM parts
-				INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID  
+				INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.id  
 				LEFT JOIN pages ON pages.url = parts.page_url
 				WHERE subscriber_id = ?',
 				$this->myself->id()
@@ -127,7 +125,7 @@ final class OwnedParts implements Parts {
 		return (bool)$this->database->fetchSingle(
 			'SELECT 1
 			FROM parts
-			INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID
+			INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.id
 			WHERE subscriber_id = ? AND page_url = ? AND expression = ?',
 			$this->myself->id(),
 			$url,

@@ -33,7 +33,7 @@ final class OwnedPart implements Part {
 		return $this->database->fetchSingle(
 			'SELECT content
 			FROM parts
-			INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID
+			INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.id
 			WHERE subscriber_id = ?
 			AND expression = ?
 			AND page_url = ?',
@@ -71,7 +71,7 @@ final class OwnedPart implements Part {
 			FROM subscribed_parts
 			WHERE subscriber_id = ?
 			AND part_id = (
-				SELECT ID
+				SELECT id
 				FROM parts
 				WHERE expression = ? AND page_url = ?
 			)',

@@ -26,8 +26,8 @@ final class MySqlRemindedPassword implements RemindedPassword {
 	public function change(string $password) {
 		$this->database->query(
 			'UPDATE subscribers
-			SET `password` = ?
-			WHERE ID = (
+			SET password = ?
+			WHERE id = (
 				SELECT subscriber_id
                 FROM forgotten_passwords
                 WHERE reminder = ?
@@ -37,7 +37,7 @@ final class MySqlRemindedPassword implements RemindedPassword {
 		);
 		$this->database->query(
 			'UPDATE forgotten_passwords
-			SET used = 1
+			SET used = TRUE
 			WHERE reminder = ?',
 			$this->reminder
 		);

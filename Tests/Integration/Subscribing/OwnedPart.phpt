@@ -94,10 +94,8 @@ final class OwnedPart extends TestCase\Database {
 	}
 
 	protected function prepareDatabase() {
-		$this->database->query('TRUNCATE parts');
-		$this->database->query('TRUNCATE part_visits');
-		$this->database->query('TRUNCATE pages');
-		$this->database->query('TRUNCATE subscribed_parts');
+		$this->truncate(['parts', 'part_visits', 'pages', 'subscribed_parts']);
+		$this->restartSequence(['parts', 'part_visits', 'subscribed_parts']);
 		$this->database->query(
 			'INSERT INTO part_visits (part_id, visited_at) VALUES
 			(1, NOW()), (2, "2000-01-01 01:01:01"), (3, NOW()), (4, NOW())'
@@ -127,8 +125,11 @@ final class OwnedPart extends TestCase\Database {
 			("www.facedown.cz", "//d", "d")'
 		);
 		$this->database->query(
-			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
-			(1, 666, "PT2M"), (2, 666, "PT3M"), (3, 666, "PT4M"), (4, 666, "PT4M")'
+			'INSERT INTO subscribed_parts (part_id, subscriber_id, interval) VALUES
+			(1, 666, "PT2M"),
+			(2, 666, "PT3M"),
+			(3, 666, "PT4M"),
+			(4, 666, "PT4M")'
 		);
 	}
 }

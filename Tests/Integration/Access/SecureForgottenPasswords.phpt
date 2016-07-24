@@ -23,25 +23,21 @@ final class SecureForgottenPasswords extends TestCase\Database {
 			[
 				'subscriber_id' => 1,
 				'reminder_length' => 141,
-				'reminded_at' => date('j.n.Y'),
-				'used' => '0',
+				'used' => false,
 			],
 			$this->database->fetch(
-				'SELECT subscriber_id,
-				LENGTH(reminder) AS reminder_length,
-				DATE_FORMAT(reminded_at, "%e.%c.%Y") AS reminded_at,
-				used
-				FROM forgotten_passwords'
+				'SELECT subscriber_id, LENGTH(reminder) AS reminder_length, used
+				FROM forgotten_passwords
+				WHERE reminded_at <= NOW()'
 			)->toArray()
 		);
 	}
 
 	protected function prepareDatabase() {
-		$this->database->query('TRUNCATE forgotten_passwords');
-		$this->database->query('TRUNCATE subscribers');
+		$this->purge(['forgotten_passwords', 'subscribers']);
 		$this->database->query(
-			'INSERT INTO subscribers (email, `password`) VALUES
-			("foo@bar.cz", "123")'
+			'INSERT INTO subscribers (id, email, password) VALUES
+			(1, "foo@bar.cz", "123")'
 		);
 	}
 }

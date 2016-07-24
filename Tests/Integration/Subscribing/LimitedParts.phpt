@@ -39,7 +39,7 @@ final class LimitedParts extends TestCase\Database {
 			("www.facedown.cz", "//d", "d")'
 		);
 		$this->database->query(
-			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
+			'INSERT INTO subscribed_parts (part_id, subscriber_id, interval) VALUES
 			(5, 666, "PT5M")'
 		);
 		(new Subscribing\LimitedParts(
@@ -55,8 +55,7 @@ final class LimitedParts extends TestCase\Database {
 	}
 
     protected function prepareDatabase() {
-        $this->database->query('TRUNCATE parts');
-		$this->database->query('TRUNCATE subscribed_parts');
+    	$this->purge(['parts', 'subscribed_parts']);
 		$this->database->query(
 			'INSERT INTO parts (page_url, expression, content) VALUES
 			("www.google.com", "//a", "a")'
@@ -74,8 +73,11 @@ final class LimitedParts extends TestCase\Database {
 			("www.google.com", "//d", "d")'
 		);
 		$this->database->query(
-			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
-			(1, 666, "PT1M"), (2, 666, "PT2M"), (3, 666, "PT3M"), (4, 666, "PT4M")'
+			'INSERT INTO subscribed_parts (part_id, subscriber_id, interval) VALUES
+			(1, 666, "PT1M"),
+			(2, 666, "PT2M"),
+			(3, 666, "PT3M"),
+			(4, 666, "PT4M")'
 		);
     }
 }

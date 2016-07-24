@@ -16,9 +16,8 @@ require __DIR__ . '/../../bootstrap.php';
 final class MySqlRemindedPassword extends TestCase\Database {
 	public function testChanging() {
 		$this->database->query(
-			'INSERT INTO forgotten_passwords
-			(subscriber_id, used, reminder)
-			VALUES (1, 0, "123456")'
+			'INSERT INTO forgotten_passwords (subscriber_id, used, reminder, reminded_at) VALUES
+			(1, FALSE, "123456", NOW())'
 		);
 		(new Access\MySqlRemindedPassword(
 			'123456',
@@ -28,12 +27,12 @@ final class MySqlRemindedPassword extends TestCase\Database {
 		Assert::same(
 			'secret',
 			$this->database->fetchSingle(
-				'SELECT `password`
+				'SELECT password
 				FROM subscribers
-				WHERE ID = 1'
+				WHERE id = 1'
 			)
 		);
-		Assert::truthy(
+		Assert::true(
 			$this->database->fetchSingle(
 				'SELECT used
 				FROM forgotten_passwords
@@ -43,10 +42,10 @@ final class MySqlRemindedPassword extends TestCase\Database {
 	}
 
 	protected function prepareDatabase() {
-		$this->database->query('TRUNCATE forgotten_passwords');
-		$this->database->query('TRUNCATE subscribers');
+		$this->purge(['subscribers', 'forgotten_passwords']);
 		$this->database->query(
-			'INSERT INTO subscribers (email, `password`) VALUES ("foo@bar.cz", "123")'
+			'INSERT INTO subscribers (id, email, password) VALUES
+			(1, "foo@bar.cz", "123")'
 		);
 	}
 }

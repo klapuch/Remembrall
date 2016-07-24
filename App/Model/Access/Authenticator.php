@@ -15,7 +15,7 @@ final class Authenticator implements Security\IAuthenticator {
 	public function authenticate(array $credentials) {
 		list($plainEmail, $plainPassword) = $credentials;
 		list($id, $password, $role, $email) = $this->database->query(
-			'SELECT ID, `password`, role_id
+			'SELECT id, password, role_id
              FROM subscribers
              WHERE email = ?',
 			$plainEmail
@@ -44,7 +44,7 @@ final class Authenticator implements Security\IAuthenticator {
 
 	private function rehash(string $password, int $id) {
 		$this->database->query(
-			'UPDATE users SET `password` = ? WHERE ID = ?',
+			'UPDATE users SET password = ? WHERE id = ?',
 			[$this->cipher->encrypt($password), $id]
 		);
 	}

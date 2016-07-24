@@ -33,15 +33,17 @@ final class ExpiredParts implements Parts {
 		return (array)array_reduce(
 			$this->database->fetchAll(
 				'SELECT parts.content AS part_content, expression,
-				`interval`, visited_at,
 				pages.content AS page_content, url 
 				FROM parts
 				LEFT JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID 
 				INNER JOIN pages ON pages.url = parts.page_url
-				LEFT JOIN part_visits ON part_visits.part_id = parts.ID
+				LEFT JOIN (
+					SELECT part_id, MIN(visited_at) AS visited_at
+					FROM part_visits
+					GROUP BY part_id
+				) AS part_visits ON part_visits.part_id = parts.ID
 				WHERE visited_at IS NULL
-				OR visited_at + INTERVAL CAST(SUBSTR(`interval`, 3) AS UNSIGNED) MINUTE <= NOW()
-				GROUP BY parts.ID'
+				OR visited_at + INTERVAL "1 MINUTE" * CAST(SUBSTRING(interval FROM "[0-9]+") AS INT) <= NOW();'
 			),
 			function($previous, Dibi\Row $row) {
 				$previous[] = new ConstantPart(
@@ -54,10 +56,7 @@ final class ExpiredParts implements Parts {
 					),
 					$row['part_content'],
 					$row['url'],
-					new DateTimeInterval(
-						new \DateTimeImmutable((string)$row['visited_at']),
-						new \DateInterval($row['interval'])
-					)
+					new FakeInterval()
 				);
 				return $previous;
 			}

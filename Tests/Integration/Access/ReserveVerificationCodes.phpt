@@ -15,7 +15,7 @@ final class ReserveVerificationCodes extends TestCase\Database {
 	public function testRegenerating() {
 		$this->database->query(
 			'INSERT INTO verification_codes (subscriber_id, code, used)
-			VALUES (6, "123456", 0)'
+			VALUES (6, "123456", FALSE)'
 		);
 		$code = (new Access\ReserveVerificationCodes($this->database))
 			->generate('foo@bar.cz');
@@ -30,18 +30,17 @@ final class ReserveVerificationCodes extends TestCase\Database {
 	 */
 	public function testRegeneratingForUsedOne() {
 		$this->database->query(
-			'INSERT INTO verification_codes (subscriber_id, code, used)
-			VALUES (6, "123456", 1)'
+			'INSERT INTO verification_codes (subscriber_id, code, used, used_at)
+			VALUES (6, "123456", TRUE, NOW())'
 		);
 		(new Access\ReserveVerificationCodes($this->database))
 			->generate('foo@bar.cz');
 	}
 
 	protected function prepareDatabase() {
-		$this->database->query('TRUNCATE subscribers');
-		$this->database->query('TRUNCATE verification_codes');
+		$this->purge(['verification_codes', 'subscribers']);
 		$this->database->query(
-			'INSERT INTO subscribers (ID, email, `password`) VALUES
+			'INSERT INTO subscribers (id, email, password) VALUES
 			(6, "foo@bar.cz", "password")'
 		);
 	}

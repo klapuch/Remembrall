@@ -38,13 +38,13 @@ final class OwnedParts extends TestCase\Database {
             )
         );
 		$parts = $this->database->fetchAll(
-			'SELECT parts.ID, page_url, content, expression, `interval` 
+			'SELECT parts.id, page_url, content, expression, interval 
 			FROM parts
-			INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID'
+			INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.id'
 		);
 		Assert::count(1, $parts);
 		$part = current($parts);
-		Assert::same(1, $part['ID']);
+		Assert::same(1, $part['id']);
 		Assert::same('www.google.com', $part['page_url']);
 		Assert::same('a', $part['content']);
 		Assert::same('//p', $part['expression']);
@@ -92,8 +92,8 @@ final class OwnedParts extends TestCase\Database {
 				)
 			);
 		}, 'Remembrall\Exception\DuplicateException');
-		Assert::count(1, $this->database->fetchAll('SELECT ID FROM parts'));
-		Assert::count(1, $this->database->fetchAll('SELECT ID FROM part_visits'));
+		Assert::count(1, $this->database->fetchAll('SELECT id FROM parts'));
+		Assert::count(1, $this->database->fetchAll('SELECT id FROM part_visits'));
 	}
 
 	public function testIteratingOwnedParts() {
@@ -118,8 +118,11 @@ final class OwnedParts extends TestCase\Database {
 			("www.google.com", "//d", "d")'
 		);
 		$this->database->query(
-			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
-			(1, 1, "PT1M"), (2, 2, "PT2M"), (3, 1, "PT3M"), (4, 1, "PT4M")'
+			'INSERT INTO subscribed_parts (part_id, subscriber_id, interval) VALUES
+			(1, 1, "PT1M"),
+			(2, 2, "PT2M"),
+			(3, 1, "PT3M"),
+			(4, 1, "PT4M")'
 		);
 		$parts = (new Subscribing\OwnedParts(
 			new Subscribing\FakeParts(),
@@ -149,8 +152,9 @@ final class OwnedParts extends TestCase\Database {
 			("www.facedown.cz", "//b", "c")'
 		);
 		$this->database->query(
-			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
-			(1, 2, "PT2M"), (2, 666, "PT3M")'
+			'INSERT INTO subscribed_parts (part_id, subscriber_id, interval) VALUES
+			(1, 2, "PT2M"),
+			(2, 666, "PT3M")'
 		);
 		(new Subscribing\OwnedParts(
 			new Subscribing\FakeParts(),
@@ -173,24 +177,23 @@ final class OwnedParts extends TestCase\Database {
 			("www.facedown.cz", "//b", "c")'
 		);
 		$this->database->query(
-			'INSERT INTO subscribed_parts (part_id, subscriber_id, `interval`) VALUES
-			(1, 2, "PT2M"), (2, 666, "PT3M")'
+			'INSERT INTO subscribed_parts (part_id, subscriber_id, interval) VALUES
+			(1, 2, "PT2M"),
+			(2, 666, "PT3M")'
 		);
 		(new Subscribing\OwnedParts(
 			new Subscribing\FakeParts(),
 			$this->database,
 			new Access\FakeSubscriber(666)
 		))->remove('www.facedown.cz', '//b');
-		$parts = $this->database->fetchAll('SELECT ID FROM subscribed_parts');
+		$parts = $this->database->fetchAll('SELECT id FROM subscribed_parts');
 		Assert::count(1, $parts);
-		Assert::same(1, $parts[0]['ID']);
+		Assert::same(1, $parts[0]['id']);
 	}
 
     protected function prepareDatabase() {
-        $this->database->query('TRUNCATE parts');
-        $this->database->query('TRUNCATE part_visits');
-		$this->database->query('TRUNCATE pages');
-		$this->database->query('TRUNCATE subscribed_parts');
+		$this->truncate(['parts', 'part_visits', 'pages', 'subscribed_parts']);
+		$this->restartSequence(['parts', 'part_visits', 'subscribed_parts']);
 		$this->database->query(
 			'INSERT INTO pages (url, content) VALUES
 			("www.google.com", "<p>google</p>")'
