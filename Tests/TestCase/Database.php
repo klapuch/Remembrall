@@ -35,11 +35,9 @@ abstract class Database extends Mockery {
 	 * @param array $tables
 	 */
 	final protected function truncate(array $tables) {
-		foreach($tables as $table) {
-			$this->database->nativeQuery(
-				sprintf('TRUNCATE %s CASCADE', $table)
-			);
-		}
+		$this->database->nativeQuery(
+			sprintf('TRUNCATE %s', implode(',', $tables))
+		);
 	}
 
 	/**
