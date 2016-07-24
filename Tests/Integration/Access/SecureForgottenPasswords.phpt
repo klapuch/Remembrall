@@ -28,7 +28,8 @@ final class SecureForgottenPasswords extends TestCase\Database {
 			$this->database->fetch(
 				'SELECT subscriber_id, LENGTH(reminder) AS reminder_length, used
 				FROM forgotten_passwords
-				WHERE reminded_at <= NOW()'
+				WHERE reminded_at <= ?',
+				new \DateTimeImmutable()
 			)->toArray()
 		);
 	}
