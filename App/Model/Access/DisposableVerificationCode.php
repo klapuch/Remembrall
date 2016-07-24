@@ -19,7 +19,7 @@ final class DisposableVerificationCode implements VerificationCode {
 
 	public function use() {
 		if($this->used()) {
-			throw new Exception\DuplicateException(
+			throw new Exception\NotFoundException(
 				'Verification code was already used'
 			);
 		}

@@ -28,9 +28,9 @@ final class DisposableVerificationCode extends TestCase\Database {
 	}
 
 	/**
-	 * @throws \Remembrall\Exception\DuplicateException Verification code was already used
+	 * @throws \Remembrall\Exception\NotFoundException Verification code was already used
 	 */
-	public function testAlreadyActivatedCode() {
+	public function testUsingAlreadyActivatedCode() {
 		$this->database->query(
 			'INSERT INTO verification_codes (subscriber_id, code, used, used_at) VALUES
 			(2, "activated:code", TRUE, NOW())'
