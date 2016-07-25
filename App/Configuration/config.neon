@@ -1,8 +1,9 @@
 dibi:
-    driver: pdo
-    dsn: "pgsql:host=127.0.0.1;dbname=remembrall"
+    driver: postgre
+    host: 127.0.0.1
     username: postgres
     password: postgres
+    dbname: remembrall
     lazy: true
 php:
     date.timezone: Europe/Prague

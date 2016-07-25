@@ -21,22 +21,15 @@ final class MySqlSubscribers implements Subscribers {
 		$this->cipher = $cipher;
 	}
 
-	//TODO: last insert id
 	public function register(string $email, string $password): Subscriber {
 		try {
-			$this->database->query(
+			$id = (int)$this->database->fetchSingle(
 				'INSERT INTO subscribers(email, password) VALUES
-				(?, ?)',
+				(?, ?) RETURNING id',
 				$email,
 				$this->cipher->encrypt($password)
 			);
-			return new MySqlSubscriber(
-				(int)$this->database->fetchSingle(
-					'SELECT ID FROM subscribers WHERE email = ?',
-					$email
-				),
-				$this->database
-			);
+			return new MySqlSubscriber($id, $this->database);
 		} catch(Dibi\UniqueConstraintViolationException $ex) {
 			throw new Exception\DuplicateException(
 				sprintf('Email "%s" already exists', $email)
