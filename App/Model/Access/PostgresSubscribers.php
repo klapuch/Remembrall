@@ -7,9 +7,9 @@ use Remembrall\Model\Security;
 use Remembrall\Exception;
 
 /**
- * Collection of subscribers stored in the MySql database
+ * Collection of subscribers stored in the Postgres database
  */
-final class MySqlSubscribers implements Subscribers {
+final class PostgresSubscribers implements Subscribers {
 	private $database;
 	private $cipher;
 
@@ -29,7 +29,7 @@ final class MySqlSubscribers implements Subscribers {
 				$email,
 				$this->cipher->encrypt($password)
 			);
-			return new MySqlSubscriber($id, $this->database);
+			return new PostgresSubscriber($id, $this->database);
 		} catch(Dibi\UniqueConstraintViolationException $ex) {
 			throw new Exception\DuplicateException(
 				sprintf('Email "%s" already exists', $email)

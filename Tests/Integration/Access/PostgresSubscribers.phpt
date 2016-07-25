@@ -13,9 +13,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class MySqlSubscribers extends TestCase\Database {
+final class PostgresSubscribers extends TestCase\Database {
 	public function testRegisteringBrandNewSubscriber() {
-		$subscriber = (new Access\MySqlSubscribers(
+		$subscriber = (new Access\PostgresSubscribers(
 			$this->database,
 			new Security\FakeCipher()
 		))->register('foo@bar.cz', 'passw0rt');
@@ -24,7 +24,7 @@ final class MySqlSubscribers extends TestCase\Database {
 			FROM subscribers'
 		);
 		Assert::equal(
-			new Access\MySqlSubscriber(1, $this->database),
+			new Access\PostgresSubscriber(1, $this->database),
 			$subscriber
 		);
 		Assert::count(1, $subscribers);
@@ -40,7 +40,7 @@ final class MySqlSubscribers extends TestCase\Database {
 		);
 		Assert::exception(
 			function() {
-				(new Access\MySqlSubscribers(
+				(new Access\PostgresSubscribers(
 					$this->database,
 					new Security\FakeCipher()
 				))->register('foo@bar.cz', 'passw0rt');
@@ -55,4 +55,4 @@ final class MySqlSubscribers extends TestCase\Database {
     }
 }
 
-(new MySqlSubscribers)->run();
+(new PostgresSubscribers)->run();

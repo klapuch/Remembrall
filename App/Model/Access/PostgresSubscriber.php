@@ -5,9 +5,9 @@ namespace Remembrall\Model\Access;
 use Dibi;
 
 /**
- * Subscriber in the MySql database
+ * Subscriber in the Postgres database
  */
-final class MySqlSubscriber implements Subscriber {
+final class PostgresSubscriber implements Subscriber {
 	private $id;
 	private $database;
 

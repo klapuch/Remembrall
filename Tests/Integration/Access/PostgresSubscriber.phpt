@@ -11,11 +11,11 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class MySqlSubscriber extends TestCase\Database {
+final class PostgresSubscriber extends TestCase\Database {
 	public function testId() {
 		Assert::same(
 			666,
-			(new Access\MySqlSubscriber(
+			(new Access\PostgresSubscriber(
 				 666, $this->database
 			))->id()
 		);
@@ -28,7 +28,7 @@ final class MySqlSubscriber extends TestCase\Database {
 		);
 		Assert::same(
 			'foo@bar.cz',
-			(new Access\MySqlSubscriber(
+			(new Access\PostgresSubscriber(
 				666, $this->database
 			))->email()
 		);
@@ -39,4 +39,4 @@ final class MySqlSubscriber extends TestCase\Database {
     }
 }
 
-(new MySqlSubscriber)->run();
+(new PostgresSubscriber)->run();

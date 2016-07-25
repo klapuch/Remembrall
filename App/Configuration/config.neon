@@ -44,4 +44,4 @@ services:
     - Remembrall\Model\Access\IdentityFactory
     identity: @Remembrall\Model\Access\IdentityFactory::create()
     subscriber:
-        class: Remembrall\Model\Access\MySqlSubscriber(@identity::getId())
+        class: Remembrall\Model\Access\PostgresSubscriber(@identity::getId())

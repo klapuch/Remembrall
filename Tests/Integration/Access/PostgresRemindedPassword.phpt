@@ -13,13 +13,13 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class MySqlRemindedPassword extends TestCase\Database {
+final class PostgresRemindedPassword extends TestCase\Database {
 	public function testChanging() {
 		$this->database->query(
 			'INSERT INTO forgotten_passwords (subscriber_id, used, reminder, reminded_at) VALUES
 			(1, FALSE, "123456", NOW())'
 		);
-		(new Access\MySqlRemindedPassword(
+		(new Access\PostgresRemindedPassword(
 			'123456',
 			$this->database,
 			new Security\FakeCipher()
@@ -50,4 +50,4 @@ final class MySqlRemindedPassword extends TestCase\Database {
 	}
 }
 
-(new MySqlRemindedPassword())->run();
+(new PostgresRemindedPassword())->run();

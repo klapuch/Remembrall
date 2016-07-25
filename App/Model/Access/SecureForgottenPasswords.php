@@ -29,7 +29,7 @@ final class SecureForgottenPasswords implements ForgottenPasswords {
 			$reminder,
 			new \DateTimeImmutable()
 		);
-		return new MySqlRemindedPassword(
+		return new PostgresRemindedPassword(
 			$reminder,
 			$this->database,
 			$this->cipher

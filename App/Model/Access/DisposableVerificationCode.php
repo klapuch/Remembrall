@@ -33,7 +33,7 @@ final class DisposableVerificationCode implements VerificationCode {
 	}
 
 	public function owner(): Subscriber {
-		return new MySqlSubscriber(
+		return new PostgresSubscriber(
 			(int)$this->database->fetchSingle(
 				'SELECT subscriber_id
 				FROM verification_codes

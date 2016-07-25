@@ -6,9 +6,9 @@ use Dibi;
 use Remembrall\Model\Security;
 
 /**
- * Reminded password stored in the MySql database
+ * Reminded password stored in the Postgres database
  */
-final class MySqlRemindedPassword implements RemindedPassword {
+final class PostgresRemindedPassword implements RemindedPassword {
 	private $reminder;
 	private $database;
 	private $cipher;
