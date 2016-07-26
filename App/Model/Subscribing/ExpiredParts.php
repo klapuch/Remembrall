@@ -16,17 +16,8 @@ final class ExpiredParts implements Parts {
 		$this->database = $database;
 	}
 
-	public function subscribe(
-		Part $part,
-		string $url,
-		string $expression,
-		Interval $interval
-	): Part {
-		return $this->origin->subscribe($part, $url, $expression, $interval);
-	}
-
-	public function remove(string $url, string $expression) {
-		$this->origin->remove($url, $expression);
+	public function add(Part $part, string $url, string $expression): Part {
+		return $this->origin->add($part, $url, $expression);
 	}
 
 	public function iterate(): array {
@@ -35,7 +26,7 @@ final class ExpiredParts implements Parts {
 				'SELECT parts.content AS part_content, expression,
 				pages.content AS page_content, url 
 				FROM parts
-				LEFT JOIN subscribed_parts ON subscribed_parts.part_id = parts.ID 
+				LEFT JOIN subscriptions ON subscriptions.part_id = parts.ID 
 				INNER JOIN pages ON pages.url = parts.page_url
 				LEFT JOIN (
 					SELECT part_id, MIN(visited_at) AS visited_at
@@ -55,8 +46,7 @@ final class ExpiredParts implements Parts {
 						new ConstantPage($row['page_content'])
 					),
 					$row['part_content'],
-					$row['url'],
-					new FakeInterval()
+					$row['url']
 				);
 				return $previous;
 			}

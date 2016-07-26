@@ -14,27 +14,13 @@ final class ChangedParts implements Parts {
 		$this->origin = $origin;
 	}
 
-	public function subscribe(
-		Part $part,
-		string $url,
-		string $expression,
-		Interval $interval
-	): Part {
+	public function add(Part $part, string $url, string $expression): Part {
 		if(!$this->changed($part)) {
 			throw new Exception\NotFoundException(
 				'The part has not changed yet'
 			);
 		}
-		return $this->origin->subscribe(
-			$part->refresh(),
-			$url,
-			$expression,
-			$interval
-		);
-	}
-
-	public function remove(string $url, string $expression) {
-		$this->origin->remove($url, $expression);
+		return $this->origin->add($part->refresh(), $url, $expression);
 	}
 
 	public function iterate(): array {
@@ -47,7 +33,7 @@ final class ChangedParts implements Parts {
 	}
 
 	/**
-	 * Refresh the part and check whether the change has occurred
+	 * Is the refreshed part as the current part?
 	 * @param Part $part
 	 * @return bool
 	 */

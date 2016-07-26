@@ -185,10 +185,10 @@ ALTER SEQUENCE parts_id_seq OWNED BY parts.id;
 
 
 --
--- Name: subscribed_parts; Type: TABLE; Schema: public; Owner: postgres
+-- Name: subscriptions; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE subscribed_parts (
+CREATE TABLE subscriptions (
     id integer NOT NULL,
     subscriber_id integer NOT NULL,
     part_id integer NOT NULL,
@@ -196,13 +196,13 @@ CREATE TABLE subscribed_parts (
 );
 
 
-ALTER TABLE subscribed_parts OWNER TO postgres;
+ALTER TABLE subscriptions OWNER TO postgres;
 
 --
--- Name: subscribed_parts_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: subscriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE subscribed_parts_id_seq
+CREATE SEQUENCE subscriptions_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -210,13 +210,13 @@ CREATE SEQUENCE subscribed_parts_id_seq
     CACHE 1;
 
 
-ALTER TABLE subscribed_parts_id_seq OWNER TO postgres;
+ALTER TABLE subscriptions_id_seq OWNER TO postgres;
 
 --
--- Name: subscribed_parts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: subscriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE subscribed_parts_id_seq OWNED BY subscribed_parts.id;
+ALTER SEQUENCE subscriptions_id_seq OWNED BY subscriptions.id;
 
 
 --
@@ -321,7 +321,7 @@ ALTER TABLE ONLY parts ALTER COLUMN id SET DEFAULT nextval('parts_id_seq'::regcl
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY subscribed_parts ALTER COLUMN id SET DEFAULT nextval('subscribed_parts_id_seq'::regclass);
+ALTER TABLE ONLY subscriptions ALTER COLUMN id SET DEFAULT nextval('subscriptions_id_seq'::regclass);
 
 
 --
@@ -411,18 +411,18 @@ SELECT pg_catalog.setval('parts_id_seq', 2, true);
 
 
 --
--- Data for Name: subscribed_parts; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: subscriptions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY subscribed_parts (id, subscriber_id, part_id, "interval") FROM stdin;
+COPY subscriptions (id, subscriber_id, part_id, "interval") FROM stdin;
 \.
 
 
 --
--- Name: subscribed_parts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: subscriptions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('subscribed_parts_id_seq', 4, true);
+SELECT pg_catalog.setval('subscriptions_id_seq', 4, true);
 
 
 --
@@ -512,19 +512,19 @@ ALTER TABLE ONLY parts
 
 
 --
--- Name: subscribed_parts_ID; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: subscriptions_ID; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY subscribed_parts
-    ADD CONSTRAINT "subscribed_parts_ID" PRIMARY KEY (id);
+ALTER TABLE ONLY subscriptions
+    ADD CONSTRAINT "subscriptions_ID" PRIMARY KEY (id);
 
 
 --
--- Name: subscribed_parts_subscriber_id_part_id; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: subscriptions_subscriber_id_part_id; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY subscribed_parts
-    ADD CONSTRAINT subscribed_parts_subscriber_id_part_id UNIQUE (subscriber_id, part_id);
+ALTER TABLE ONLY subscriptions
+    ADD CONSTRAINT subscriptions_subscriber_id_part_id UNIQUE (subscriber_id, part_id);
 
 
 --

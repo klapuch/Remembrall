@@ -20,14 +20,39 @@ final class ExpiredParts extends TestCase\Database {
 			$this->database
         ))->iterate();
         Assert::count(2, $parts);
-		var_dump($parts);
-        Assert::same('//a', (string)$parts[0]->print()['expression']);
-        Assert::same('//d', (string)$parts[1]->print()['expression']);
+		Assert::equal(
+			new Subscribing\ConstantPart(
+				new Subscribing\HtmlPart(
+					new Subscribing\XPathExpression(
+						new Subscribing\ConstantPage('google'),
+						'//a'
+					),
+					new Subscribing\ConstantPage('google')
+				),
+				'a',
+				'www.google.com'
+			),
+			$parts[0]
+		);
+		Assert::equal(
+			new Subscribing\ConstantPart(
+				new Subscribing\HtmlPart(
+					new Subscribing\XPathExpression(
+						new Subscribing\ConstantPage('facedown'),
+						'//d'
+					),
+					new Subscribing\ConstantPage('facedown')
+				),
+				'd',
+				'www.facedown.cz'
+			),
+			$parts[1]
+		);
     }
 
 	protected function prepareDatabase() {
-		$this->truncate(['part_visits', 'parts', 'pages', 'subscribed_parts']);
-		$this->restartSequence(['part_visits', 'parts', 'subscribed_parts']);
+		$this->truncate(['part_visits', 'parts', 'pages', 'subscriptions']);
+		$this->restartSequence(['part_visits', 'parts', 'subscriptions']);
 		$this->database->query(
 			'INSERT INTO part_visits (part_id, visited_at) VALUES
 			(1, NOW() - INTERVAL "2 DAY"),
@@ -52,7 +77,7 @@ final class ExpiredParts extends TestCase\Database {
 			("www.facedown.cz", "//d", "d")'
 		);
 		$this->database->query(
-			'INSERT INTO subscribed_parts (part_id, subscriber_id, interval) VALUES
+			'INSERT INTO subscriptions (part_id, subscriber_id, interval) VALUES
 			(1, 1, "PT10M"),
 			(2, 2, "PT10M"),
 			(3, 1, "PT10M"),

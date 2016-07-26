@@ -9,7 +9,7 @@ use Remembrall\Model\{
 };
 
 /**
- * Parts which are owned by the given subscriber
+ * Parts which are owned with the given subscriber
  */
 final class OwnedParts implements Parts {
 	private $origin;
@@ -26,57 +26,8 @@ final class OwnedParts implements Parts {
 		$this->myself = $myself;
 	}
 
-	public function subscribe(
-		Part $part,
-		string $url,
-		string $expression,
-		Interval $interval
-	): Part {
-		try {
-			(new Storage\Transaction($this->database))->start(
-				function() use ($part, $url, $expression, $interval) {
-					$this->origin->subscribe(
-						$part,
-						$url,
-						$expression,
-						$interval
-					);
-					$this->database->query(
-						'INSERT INTO subscribed_parts
-						(part_id, subscriber_id, interval) VALUES
-						((SELECT id FROM parts WHERE expression = ? AND page_url = ?), ?, ?)',
-						$expression,
-						$url,
-						$this->myself->id(),
-						sprintf('PT%dM', $interval->step()->i)
-					);
-				}
-			);
-			return $part;
-		} catch(Dibi\UniqueConstraintViolationException $ex) {
-			throw new Exception\DuplicateException(
-				sprintf(
-					'"%s" expression on the "%s" page is already subscribed by you',
-					$expression,
-					$url
-				),
-				(int)$ex->getCode(),
-				$ex
-			);
-		}
-	}
-
-	public function remove(string $url, string $expression) {
-		if(!$this->owned($url, $expression))
-			throw new Exception\NotFoundException('You do not own this part');
-		$this->database->query(
-			'DELETE FROM subscribed_parts
-			WHERE subscriber_id = ?
-			AND part_id = (SELECT id FROM parts WHERE expression = ? AND page_url = ?)',
-			$this->myself->id(),
-			$expression,
-			$url
-		);
+	public function add(Part $part, string $url, string $expression): Part {
+		return $this->origin->add($part, $url, $expression);
 	}
 
 	public function iterate(): array {
@@ -89,7 +40,7 @@ final class OwnedParts implements Parts {
 					WHERE part_id = parts.id
 				) AS visited_at
 				FROM parts
-				INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.id  
+				INNER JOIN subscriptions ON subscriptions.part_id = parts.id  
 				LEFT JOIN pages ON pages.url = parts.page_url
 				WHERE subscriber_id = ?',
 				$this->myself->id()
@@ -104,32 +55,10 @@ final class OwnedParts implements Parts {
 						new ConstantPage($row['page_content'])
 					),
 					$row['part_content'],
-					$row['url'],
-					new DateTimeInterval(
-						new \DateTimeImmutable((string)$row['visited_at']),
-						new \DateInterval($row['interval'])
-					)
+					$row['url']
 				);
 				return $previous;
 			}
-		);
-	}
-
-	/**
-	 * Checks whether the subscriber really owns the given part
-	 * @param string $url
-	 * @param string $expression
-	 * @return bool
-	 */
-	private function owned(string $url, string $expression): bool {
-		return (bool)$this->database->fetchSingle(
-			'SELECT 1
-			FROM parts
-			INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.id
-			WHERE subscriber_id = ? AND page_url = ? AND expression = ?',
-			$this->myself->id(),
-			$url,
-			$expression
 		);
 	}
 }

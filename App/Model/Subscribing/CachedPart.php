@@ -23,10 +23,6 @@ final class CachedPart extends Storage\Cache implements Part {
 		return $this->read(__FUNCTION__, $part);
 	}
 
-	public function print(): array {
-		return $this->read(__FUNCTION__);
-	}
-
 	public function refresh(): Part {
 		return $this->read(__FUNCTION__);
 	}

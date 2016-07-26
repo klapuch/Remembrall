@@ -3,8 +3,8 @@
     <thead>
     <tr>
         <th><p>#</p></th>
-        <th><p>Last update</p></th>
-        <th><p>Interval</p></th>
+        {*<th><p>Last update</p></th>
+        <th><p>Interval</p></th>*}
         <th><p>Expression</p></th>
         <th><p>Page</p></th>
         <th><p>Options</p></th>
@@ -14,8 +14,8 @@
     <tr n:foreach="$parts as $part">
         {var $visualPart = $part->print()}
         <td><p>{$iterator->counter}</p></td>
-        <td><p>{$visualPart[interval]->start()|date:'Y-m-d H:i'}</p></td>
-        <td><p>{$visualPart[interval]->step()->i}</p></td>
+        {*<td><p>{$visualPart[interval]->start()|date:'Y-m-d H:i'}</p></td>
+        <td><p>{$visualPart[interval]->step()->i}</p></td>*}
         <td><p>{$visualPart[expression]}</p></td>
         <td><p>{$visualPart[url]}</p></td>
         <td>

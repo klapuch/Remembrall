@@ -38,8 +38,8 @@ final class PartSharedSubscribers implements Subscribers {
 			$this->database->fetchAll(
 				'SELECT subscribers.id, email
 				FROM subscribers
-				INNER JOIN subscribed_parts ON subscribed_parts.subscriber_id = subscribers.id
-				INNER JOIN parts ON parts.id = subscribed_parts.part_id 
+				INNER JOIN subscriptions ON subscriptions.subscriber_id = subscribers.id
+				INNER JOIN parts ON parts.id = subscriptions.part_id 
 				WHERE page_url = ? AND expression = ?',
 				$this->url,
 				$this->expression

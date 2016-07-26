@@ -3,13 +3,12 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Dibi;
-use Remembrall\Exception;
 use Remembrall\Model\Access;
 
 /**
- * Disallow subscribing after more than X parts
+ * Disallow subscribing after more than X subscriptions
  */
-final class LimitedParts implements Parts {
+final class LimitedSubscriptions implements Subscriptions {
 	const LIMIT = 5;
 	private $database;
 	private $subscriber;
@@ -18,7 +17,7 @@ final class LimitedParts implements Parts {
 	public function __construct(
 		Dibi\Connection $database,
 		Access\Subscriber $subscriber,
-		Parts $origin
+		Subscriptions $origin
 	) {
 		$this->database = $database;
 		$this->subscriber = $subscriber;
@@ -30,7 +29,7 @@ final class LimitedParts implements Parts {
 		string $url,
 		string $expression,
 		Interval $interval
-	): Part {
+	) {
 		if($this->overstepped()) {
 			throw new \OverflowException(
 				sprintf(
@@ -39,11 +38,7 @@ final class LimitedParts implements Parts {
 				)
 			);
 		}
-		return $this->origin->subscribe($part, $url, $expression, $interval);
-	}
-
-	public function remove(string $url, string $expression) {
-		$this->origin->remove($url, $expression);
+		$this->origin->subscribe($part, $url, $expression, $interval);
 	}
 
 	public function iterate(): array {
@@ -58,7 +53,7 @@ final class LimitedParts implements Parts {
 		return (bool)$this->database->fetchSingle(
 			'SELECT 1
 			FROM parts
-			INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.id 
+			INNER JOIN subscriptions ON subscriptions.part_id = parts.id 
 			WHERE subscriber_id = ?
 			HAVING COUNT(parts.id) >= ?',
 			$this->subscriber->id(),

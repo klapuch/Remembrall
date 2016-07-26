@@ -9,18 +9,15 @@ final class ConstantPart implements Part {
 	private $origin;
 	private $content;
 	private $url;
-	private $interval;
 
 	public function __construct(
 		Part $origin,
 		string $content,
-		string $url,
-		Interval $interval
+		string $url
 	) {
 		$this->origin = $origin;
 		$this->content = $content;
 		$this->url = $url;
-		$this->interval = $interval;
 	}
 
 	public function content(): string {
@@ -33,12 +30,5 @@ final class ConstantPart implements Part {
 
 	public function refresh(): Part {
 		return $this->origin->refresh();
-	}
-
-	public function print(): array {
-		return $this->origin->print() + [
-			'interval' => $this->interval,
-			'url' => $this->url,
-		];
 	}
 }

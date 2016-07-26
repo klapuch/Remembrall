@@ -28,24 +28,24 @@ final class Parts extends SecureControl {
 
 	public function render() {
 		$this->template->setFile(__DIR__ . '/Parts.latte');
-		$this->template->parts = (new Subscribing\OwnedParts(
-			new Subscribing\CollectiveParts($this->database),
-			$this->database,
-			$this->myself
+		$this->template->parts = (new Subscribing\OwnedSubscriptions(
+			$this->myself,
+			$this->database
 		))->iterate();
 		$this->template->render();
 	}
 
 	public function handleRemove(string $url, string $expression) {
 		try {
-			(new Subscribing\LoggedParts(
-				new Subscribing\OwnedParts(
-					new Subscribing\CollectiveParts($this->database),
-					$this->database,
-					$this->myself
+			(new Subscribing\LoggedSubscription(
+				new Subscribing\OwnedSubscription(
+					$url,
+					$expression,
+					$this->myself,
+					$this->database
 				),
 				$this->logger
-			))->remove($url, $expression);
+			))->cancel();
 			if(!$this->presenter->isAjax()) {
 				$this->presenter->flashMessage(
 					'Part has been deleted',
@@ -85,8 +85,8 @@ final class Parts extends SecureControl {
 					new Subscribing\CollectiveParts($this->database)
 				),
 				$this->logger
-			))->subscribe(
-				new Subscribing\OwnedPart(
+			))->add(
+				new Subscribing\PostgresPart(
 					new Subscribing\HtmlPart(
 						new Subscribing\ValidXPathExpression(
 							new Subscribing\XPathExpression($page, $expression)
@@ -94,13 +94,12 @@ final class Parts extends SecureControl {
 						$page
 					),
 					$url,
-					new Subscribing\XPathExpression($page, $expression),
+					$expression,
 					$this->database,
 					$this->myself
 				),
 				$url,
-				$expression,
-				new Subscribing\FakeInterval(new \DateTimeImmutable())
+				$expression
 			);
 			$this->presenter->flashMessage(
 				'The part has been refreshed',

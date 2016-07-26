@@ -12,33 +12,35 @@ use Tester;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class LoggedParts extends TestCase\Mockery {
+final class LoggedSubscriptions extends TestCase\Mockery {
 	/**
 	 * @throws \Exception exceptionMessage
 	 */
-	public function testLoggedExceptionDuringAdding() {
+	public function testLoggedExceptionDuringSubscribing() {
 		$ex = new \Exception('exceptionMessage');
-		$parts = $this->mockery(Subscribing\Parts::class);
-		$parts->shouldReceive('add')->andThrowExceptions([$ex]);
+		$subscriptions = $this->mockery(Subscribing\Subscriptions::class);
+		$subscriptions->shouldReceive('subscribe')->andThrowExceptions([$ex]);
 		$logger = $this->mockery('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
-		(new Subscribing\LoggedParts($parts, $logger))
-			->add(
+		(new Subscribing\LoggedSubscriptions($subscriptions, $logger))
+			->subscribe(
 				new Subscribing\FakePart(),
 				'url',
-				'//p'
+				'//p',
+				new Subscribing\FakeInterval()
 			);
 	}
 
-	public function testNoExceptionDuringAdd() {
+	public function testNoExceptionDuringSubscribing() {
 		Assert::noError(function() {
 			$logger = $this->mockery('Tracy\ILogger');
-			(new Subscribing\LoggedParts(
-				new Subscribing\FakeParts(), $logger
-			))->add(
+			(new Subscribing\LoggedSubscriptions(
+				new Subscribing\FakeSubscriptions(), $logger
+			))->subscribe(
 				new Subscribing\FakePart(),
 				'url',
-				'//p'
+				'//p',
+				new Subscribing\FakeInterval()
 			);
 		});
 	}
@@ -48,21 +50,21 @@ final class LoggedParts extends TestCase\Mockery {
 	 */
 	public function testLoggedExceptionDuringIterating() {
 		$ex = new \Exception('exceptionMessage');
-		$parts = $this->mockery(Subscribing\Parts::class);
-		$parts->shouldReceive('iterate')->andThrowExceptions([$ex]);
+		$subscriptions = $this->mockery(Subscribing\Subscriptions::class);
+		$subscriptions->shouldReceive('iterate')->andThrowExceptions([$ex]);
 		$logger = $this->mockery('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
-		(new Subscribing\LoggedParts($parts, $logger))->iterate();
+		(new Subscribing\LoggedSubscriptions($subscriptions, $logger))->iterate();
 	}
 
 	public function testNoExceptionDuringIterating() {
 		Assert::noError(function() {
 			$logger = $this->mockery('Tracy\ILogger');
-			(new Subscribing\LoggedParts(
-				new Subscribing\FakeParts(), $logger
+			(new Subscribing\LoggedSubscriptions(
+				new Subscribing\FakeSubscriptions(), $logger
 			))->iterate();
 		});
 	}
 }
 
-(new LoggedParts())->run();
+(new LoggedSubscriptions())->run();

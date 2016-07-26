@@ -14,13 +14,13 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class LimitedParts extends TestCase\Database {
+final class LimitedSubscriptions extends TestCase\Database {
 	public function testSubscribingWithoutLimit() {
 		Assert::noError(function() {
-			(new Subscribing\LimitedParts(
+			(new Subscribing\LimitedSubscriptions(
 				$this->database,
 				new Access\FakeSubscriber(666),
-				new Subscribing\FakeParts()
+				new Subscribing\FakeSubscriptions()
 			))->subscribe(
 				new Subscribing\FakePart(),
 				'url',
@@ -39,13 +39,13 @@ final class LimitedParts extends TestCase\Database {
 			("www.facedown.cz", "//d", "d")'
 		);
 		$this->database->query(
-			'INSERT INTO subscribed_parts (part_id, subscriber_id, interval) VALUES
+			'INSERT INTO subscriptions (part_id, subscriber_id, interval) VALUES
 			(5, 666, "PT5M")'
 		);
-		(new Subscribing\LimitedParts(
+		(new Subscribing\LimitedSubscriptions(
 			$this->database,
 			new Access\FakeSubscriber(666),
-			new Subscribing\FakeParts()
+			new Subscribing\FakeSubscriptions()
 		))->subscribe(
 			new Subscribing\FakePart(),
 			'url',
@@ -55,7 +55,7 @@ final class LimitedParts extends TestCase\Database {
 	}
 
     protected function prepareDatabase() {
-    	$this->purge(['parts', 'subscribed_parts']);
+    	$this->purge(['parts', 'subscriptions']);
 		$this->database->query(
 			'INSERT INTO parts (page_url, expression, content) VALUES
 			("www.google.com", "//a", "a")'
@@ -73,7 +73,7 @@ final class LimitedParts extends TestCase\Database {
 			("www.google.com", "//d", "d")'
 		);
 		$this->database->query(
-			'INSERT INTO subscribed_parts (part_id, subscriber_id, interval) VALUES
+			'INSERT INTO subscriptions (part_id, subscriber_id, interval) VALUES
 			(1, 666, "PT1M"),
 			(2, 666, "PT2M"),
 			(3, 666, "PT3M"),
@@ -82,4 +82,4 @@ final class LimitedParts extends TestCase\Database {
     }
 }
 
-(new LimitedParts)->run();
+(new LimitedSubscriptions)->run();

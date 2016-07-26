@@ -7,18 +7,28 @@ use Tracy;
 /**
  * Log every error action
  */
-final class LoggedParts implements Parts {
+final class LoggedSubscriptions implements Subscriptions {
 	private $origin;
 	private $logger;
 
-	public function __construct(Parts $origin, Tracy\ILogger $logger) {
+	public function __construct(Subscriptions $origin, Tracy\ILogger $logger) {
 		$this->origin = $origin;
 		$this->logger = $logger;
 	}
 
-	public function add(Part $part, string $url, string $expression): Part {
+	public function subscribe(
+		Part $part,
+		string $url,
+		string $expression,
+		Interval $interval
+	) {
 		try {
-			return $this->origin->add($part, $url, $expression);
+			$this->origin->subscribe(
+				$part,
+				$url,
+				$expression,
+				$interval
+			);
 		} catch(\Throwable $ex) {
 			$this->logger->log($ex, Tracy\Logger::ERROR);
 			throw $ex;

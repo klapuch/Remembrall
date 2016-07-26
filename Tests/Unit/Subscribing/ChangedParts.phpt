@@ -14,16 +14,15 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class ChangedParts extends Tester\TestCase {
-	public function testSubscribingChangedPart() {
+	public function testAddingChangedPart() {
 		Assert::noError(
 			function() {
 				(new Subscribing\ChangedParts(
 					new Subscribing\FakeParts()
-				))->subscribe(
+				))->add(
 					new Subscribing\FakePart(null, $same = false),
 					'www.google.com',
-					'//h1',
-					new Subscribing\FakeInterval()
+					'//h1'
 				);
 			}
 		);
@@ -32,14 +31,13 @@ final class ChangedParts extends Tester\TestCase {
 	/**
 	 * @throws \Remembrall\Exception\NotFoundException The part has not changed yet
 	 */
-	public function testSubscribingUnchangedPartWithError() {
+	public function testAddingUnchangedPartWithError() {
 		(new Subscribing\ChangedParts(
 			new Subscribing\FakeParts()
-		))->subscribe(
+		))->add(
 			new Subscribing\FakePart(null, $same = true),
 			'www.google.com',
-			'//h1',
-			new Subscribing\FakeInterval()
+			'//h1'
 		);
 	}
 

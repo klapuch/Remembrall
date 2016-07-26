@@ -24,10 +24,4 @@ interface Part {
 	 * @return Part
 	 */
 	public function refresh(): self;
-
-	/**
-	 * Print the visualized form
-	 * @return array
-	 */
-	public function print(): array;
 }

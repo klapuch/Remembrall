@@ -32,7 +32,7 @@ final class PartSharedSubscribers extends TestCase\Database {
 			(2, "www.facedown.cz", "//h1", "content")'
 		);
 		$this->database->query(
-			'INSERT INTO subscribed_parts (id, part_id, subscriber_id, interval) VALUES
+			'INSERT INTO subscriptions (id, part_id, subscriber_id, interval) VALUES
 			(1, 1, 1, "PT1M"),
 			(2, 1, 2, "PT1M"),
 			(3, 2, 2, "PT1M"),
@@ -53,8 +53,8 @@ final class PartSharedSubscribers extends TestCase\Database {
 	}
 
 	protected function prepareDatabase() {
-		$this->truncate(['pages', 'subscribed_parts', 'parts', 'subscribers']);
-		$this->restartSequence(['subscribed_parts', 'parts', 'subscribers']);
+		$this->truncate(['pages', 'subscriptions', 'parts', 'subscribers']);
+		$this->restartSequence(['subscriptions', 'parts', 'subscribers']);
 	}
 }
 

@@ -17,14 +17,9 @@ final class CollectiveParts implements Parts {
 		$this->database = $database;
 	}
 
-	public function subscribe(
-		Part $part,
-		string $url,
-		string $expression,
-		Interval $interval
-	): Part {
+	public function add(Part $part, string $url, string $expression): Part {
 		(new Storage\Transaction($this->database))->start(
-			function() use ($part, $url, $expression, $interval) {
+			function() use ($part, $url, $expression) {
 				if($this->alreadyExists($url, $expression)) {
 					$this->database->query(
 						'UPDATE parts
@@ -49,33 +44,11 @@ final class CollectiveParts implements Parts {
 					((SELECT id FROM parts WHERE page_url = ? AND expression = ?), ?)',
 					$url,
 					$expression,
-					$interval->start()
+					new \DateTimeImmutable()
 				);
 			}
 		);
 		return $part;
-	}
-
-	/**
-	 * Does the part already exist?
-	 * @param string $url
-	 * @param string $expression
-	 * @return bool
-	 */
-	private function alreadyExists(string $url, string $expression): bool {
-		return (bool)$this->database->fetchSingle(
-			'SELECT 1 FROM parts WHERE page_url = ? AND expression = ?',
-			$url,
-			$expression
-		);
-	}
-
-	public function remove(string $url, string $expression) {
-		$this->database->query(
-			'DELETE FROM parts WHERE expression = ? AND page_url = ?',
-			$expression,
-			$url
-		);
 	}
 
 	public function iterate(): array {
@@ -89,7 +62,7 @@ final class CollectiveParts implements Parts {
 					WHERE part_id = parts.id
 				) AS visited_at
 				FROM parts
-				INNER JOIN subscribed_parts ON subscribed_parts.part_id = parts.id
+				INNER JOIN subscriptions ON subscriptions.part_id = parts.id
 				LEFT JOIN pages ON pages.url = parts.page_url'
 			),
 			function($previous, Dibi\Row $row) {
@@ -102,14 +75,24 @@ final class CollectiveParts implements Parts {
 						new ConstantPage($row['page_content'])
 					),
 					$row['part_content'],
-					$row['url'],
-					new DateTimeInterval(
-						new \DateTimeImmutable((string)$row['visited_at']),
-						new \DateInterval($row['interval'])
-					)
+					$row['url']
 				);
 				return $previous;
 			}
+		);
+	}
+
+	/**
+	 * Does the part already exists?
+	 * @param string $url
+	 * @param string $expression
+	 * @return bool
+	 */
+	private function alreadyExists(string $url, string $expression): bool {
+		return (bool)$this->database->fetchSingle(
+			'SELECT 1 FROM parts WHERE page_url = ? AND expression = ?',
+			$url,
+			$expression
 		);
 	}
 }
