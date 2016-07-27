@@ -40,7 +40,6 @@ final class OwnedSubscriptions implements Subscriptions {
 	}
 
 	public function subscribe(
-		Part $part,
 		string $url,
 		string $expression,
 		Interval $interval

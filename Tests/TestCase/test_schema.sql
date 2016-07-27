@@ -185,6 +185,40 @@ ALTER SEQUENCE parts_id_seq OWNED BY parts.id;
 
 
 --
+-- Name: subscribers; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE subscribers (
+    id integer NOT NULL,
+    email character varying NOT NULL,
+    password character varying NOT NULL
+);
+
+
+ALTER TABLE subscribers OWNER TO postgres;
+
+--
+-- Name: subscribers_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE subscribers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE subscribers_id_seq OWNER TO postgres;
+
+--
+-- Name: subscribers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE subscribers_id_seq OWNED BY subscribers.id;
+
+
+--
 -- Name: subscriptions; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -217,40 +251,6 @@ ALTER TABLE subscriptions_id_seq OWNER TO postgres;
 --
 
 ALTER SEQUENCE subscriptions_id_seq OWNED BY subscriptions.id;
-
-
---
--- Name: subscribers; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE subscribers (
-    id integer NOT NULL,
-    email character varying NOT NULL,
-    password character varying NOT NULL
-);
-
-
-ALTER TABLE subscribers OWNER TO postgres;
-
---
--- Name: subscribers_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE subscribers_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE subscribers_id_seq OWNER TO postgres;
-
---
--- Name: subscribers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE subscribers_id_seq OWNED BY subscribers.id;
 
 
 --
@@ -321,14 +321,14 @@ ALTER TABLE ONLY parts ALTER COLUMN id SET DEFAULT nextval('parts_id_seq'::regcl
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY subscriptions ALTER COLUMN id SET DEFAULT nextval('subscriptions_id_seq'::regclass);
+ALTER TABLE ONLY subscribers ALTER COLUMN id SET DEFAULT nextval('subscribers_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY subscribers ALTER COLUMN id SET DEFAULT nextval('subscribers_id_seq'::regclass);
+ALTER TABLE ONLY subscriptions ALTER COLUMN id SET DEFAULT nextval('subscriptions_id_seq'::regclass);
 
 
 --
@@ -343,6 +343,7 @@ ALTER TABLE ONLY verification_codes ALTER COLUMN id SET DEFAULT nextval('verific
 --
 
 COPY forgotten_passwords (id, subscriber_id, reminder, reminded_at, used) FROM stdin;
+1	1	c0be7c3852556b9f3b34757144892b92f078e1e7d282cd023c44fcd75e11b8f44be9bc0b2c86371b8056f9280a4ccbcccc74:51954aad0a03f6fd5f86045f8c733da7b3ea704b	2016-07-27 19:12:21	f
 \.
 
 
@@ -358,6 +359,8 @@ SELECT pg_catalog.setval('forgotten_passwords_id_seq', 1, true);
 --
 
 COPY page_visits (id, page_url, visited_at) FROM stdin;
+1	www.facedown.cz	2016-07-27 19:12:23
+2	www.facedown.cz/?x=10#here	2016-07-27 19:12:23
 \.
 
 
@@ -365,7 +368,7 @@ COPY page_visits (id, page_url, visited_at) FROM stdin;
 -- Name: page_visits_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('page_visits_id_seq', 1, false);
+SELECT pg_catalog.setval('page_visits_id_seq', 2, true);
 
 
 --
@@ -373,8 +376,9 @@ SELECT pg_catalog.setval('page_visits_id_seq', 1, false);
 --
 
 COPY pages (url, content) FROM stdin;
-www.google.com	google
-www.facedown.cz	seznam
+www.google.com	<p>google</p>
+www.facedown.cz	<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">\n<html><body><p>content</p></body></html>\n
+www.facedown.cz/?x=10#here	<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">\n<html><body><p>content</p></body></html>\n
 \.
 
 
@@ -398,8 +402,7 @@ SELECT pg_catalog.setval('part_visits_id_seq', 1, false);
 --
 
 COPY parts (id, page_url, expression, content) FROM stdin;
-1	www.google.com	//h1	content
-2	www.facedown.cz	//h1	content
+1	www.facedown.cz	//d	d
 \.
 
 
@@ -407,22 +410,7 @@ COPY parts (id, page_url, expression, content) FROM stdin;
 -- Name: parts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('parts_id_seq', 2, true);
-
-
---
--- Data for Name: subscriptions; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY subscriptions (id, subscriber_id, part_id, "interval") FROM stdin;
-\.
-
-
---
--- Name: subscriptions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('subscriptions_id_seq', 4, true);
+SELECT pg_catalog.setval('parts_id_seq', 1, true);
 
 
 --
@@ -430,6 +418,8 @@ SELECT pg_catalog.setval('subscriptions_id_seq', 4, true);
 --
 
 COPY subscribers (id, email, password) FROM stdin;
+1	foo@bar.cz	secret
+2	facedown@facedown.cz	secret
 \.
 
 
@@ -437,7 +427,24 @@ COPY subscribers (id, email, password) FROM stdin;
 -- Name: subscribers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('subscribers_id_seq', 8, true);
+SELECT pg_catalog.setval('subscribers_id_seq', 1, false);
+
+
+--
+-- Data for Name: subscriptions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY subscriptions (id, subscriber_id, part_id, "interval") FROM stdin;
+1	2	1	PT2M
+2	666	2	PT44M
+\.
+
+
+--
+-- Name: subscriptions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('subscriptions_id_seq', 2, true);
 
 
 --
@@ -445,6 +452,7 @@ SELECT pg_catalog.setval('subscribers_id_seq', 8, true);
 --
 
 COPY verification_codes (id, subscriber_id, code, used, used_at) FROM stdin;
+1	6	123456	t	2016-07-27 19:12:21.610844
 \.
 
 
@@ -452,7 +460,7 @@ COPY verification_codes (id, subscriber_id, code, used, used_at) FROM stdin;
 -- Name: verification_codes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('verification_codes_id_seq', 1, false);
+SELECT pg_catalog.setval('verification_codes_id_seq', 1, true);
 
 
 --
@@ -512,22 +520,6 @@ ALTER TABLE ONLY parts
 
 
 --
--- Name: subscriptions_ID; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY subscriptions
-    ADD CONSTRAINT "subscriptions_ID" PRIMARY KEY (id);
-
-
---
--- Name: subscriptions_subscriber_id_part_id; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY subscriptions
-    ADD CONSTRAINT subscriptions_subscriber_id_part_id UNIQUE (subscriber_id, part_id);
-
-
---
 -- Name: subscribers_ID; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -541,6 +533,22 @@ ALTER TABLE ONLY subscribers
 
 ALTER TABLE ONLY subscribers
     ADD CONSTRAINT subscribers_email UNIQUE (email);
+
+
+--
+-- Name: subscriptions_ID; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY subscriptions
+    ADD CONSTRAINT "subscriptions_ID" PRIMARY KEY (id);
+
+
+--
+-- Name: subscriptions_subscriber_id_part_id; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY subscriptions
+    ADD CONSTRAINT subscriptions_subscriber_id_part_id UNIQUE (subscriber_id, part_id);
 
 
 --

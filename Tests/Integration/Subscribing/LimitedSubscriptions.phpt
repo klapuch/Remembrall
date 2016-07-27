@@ -22,7 +22,6 @@ final class LimitedSubscriptions extends TestCase\Database {
 				new Access\FakeSubscriber(666),
 				new Subscribing\FakeSubscriptions()
 			))->subscribe(
-				new Subscribing\FakePart(),
 				'url',
 				'//p',
 				new Subscribing\FakeInterval()
@@ -47,7 +46,6 @@ final class LimitedSubscriptions extends TestCase\Database {
 			new Access\FakeSubscriber(666),
 			new Subscribing\FakeSubscriptions()
 		))->subscribe(
-			new Subscribing\FakePart(),
 			'url',
 			'//p',
 			new Subscribing\FakeInterval()

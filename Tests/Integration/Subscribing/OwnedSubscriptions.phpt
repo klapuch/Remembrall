@@ -27,7 +27,6 @@ final class OwnedSubscriptions extends TestCase\Database {
 			new Access\FakeSubscriber(666),
             $this->database
         ))->subscribe(
-        	new Subscribing\FakePart('<p>Content</p>'),
 			'www.google.com',
 			'//p',
             new Subscribing\FakeInterval(
@@ -37,7 +36,7 @@ final class OwnedSubscriptions extends TestCase\Database {
             )
         );
 		$parts = $this->database->fetchAll(
-			'SELECT parts.id, page_url, content, expression, interval 
+			'SELECT parts.id, page_url, expression, interval 
 			FROM parts
 			INNER JOIN subscriptions ON subscriptions.part_id = parts.id'
 		);
@@ -45,7 +44,6 @@ final class OwnedSubscriptions extends TestCase\Database {
 		$part = current($parts);
 		Assert::same(1, $part['id']);
 		Assert::same('www.google.com', $part['page_url']);
-		Assert::same('a', $part['content']);
 		Assert::same('//p', $part['expression']);
 		Assert::same('PT158M', $part['interval']);
 		$partVisits = $this->database->fetchAll('SELECT part_id, visited_at FROM part_visits');
@@ -69,7 +67,6 @@ final class OwnedSubscriptions extends TestCase\Database {
 			$this->database
 		);
 		$parts->subscribe(
-			new Subscribing\FakePart('<p>Content</p>'),
 			'www.google.com',
 			'//p',
 			new Subscribing\FakeInterval(
@@ -80,7 +77,6 @@ final class OwnedSubscriptions extends TestCase\Database {
 		);
 		Assert::exception(function() use($parts) {
 			$parts->subscribe(
-				new Subscribing\FakePart('<p>Different content</p>'),
 				'www.google.com',
 				'//p',
 				new Subscribing\FakeInterval(

@@ -25,7 +25,6 @@ final class LimitedSubscriptions implements Subscriptions {
 	}
 
 	public function subscribe(
-		Part $part,
 		string $url,
 		string $expression,
 		Interval $interval
@@ -38,7 +37,7 @@ final class LimitedSubscriptions implements Subscriptions {
 				)
 			);
 		}
-		$this->origin->subscribe($part, $url, $expression, $interval);
+		$this->origin->subscribe($url, $expression, $interval);
 	}
 
 	public function iterate(): array {

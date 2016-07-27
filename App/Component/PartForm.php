@@ -9,7 +9,7 @@ use Nette\Caching\Storages;
 use Nette\Forms;
 use Nette\Utils\ArrayHash;
 use Remembrall\Model\{
-	Access, Http, Subscribing
+	Access, Http, Subscribing, Storage
 };
 use Tracy;
 
@@ -61,7 +61,6 @@ final class PartForm extends SecureControl {
 		return $form;
 	}
 
-	//todo
 	public function formSucceeded(UI\Form $form, ArrayHash $values) {
 		try {
 			$page = (new Http\LoggedRequest(
@@ -82,42 +81,52 @@ final class PartForm extends SecureControl {
 				),
 				$this->logger
 			))->send();
-			(new Subscribing\LoggedParts(
-				new Subscribing\LimitedParts(
-					$this->database,
-					$this->myself,
-					new Subscribing\OwnedParts(
+			(new Storage\Transaction($this->database))->start(
+				function() use ($values, $page) {
+					(new Subscribing\LoggedParts(
 						new Subscribing\CollectiveParts(
 							$this->database
 						),
-						$this->database,
-						$this->myself
-					)
-				),
-				$this->logger
-			))->subscribe(
-				new Subscribing\CachedPart(
-					new Subscribing\HtmlPart(
-						new Subscribing\ValidXPathExpression(
-							new Subscribing\XPathExpression(
-								$page,
-								$values->expression
+						$this->logger
+					))->add(
+						new Subscribing\CachedPart(
+							new Subscribing\HtmlPart(
+								new Subscribing\ValidXPathExpression(
+									new Subscribing\XPathExpression(
+										$page,
+										$values->expression
+									)
+								),
+								$page
+							),
+							new Storages\MemoryStorage()
+						),
+						$values->url,
+						$values->expression
+					);
+					(new Subscribing\LoggedSubscriptions(
+						new Subscribing\LimitedSubscriptions(
+							$this->database,
+							$this->myself,
+							new Subscribing\OwnedSubscriptions(
+								$this->myself,
+								$this->database
 							)
 						),
-						$page
-					),
-					new Storages\MemoryStorage()
-				),
-				$values->url,
-				$values->expression,
-				new Subscribing\FutureInterval(
-					new Subscribing\DateTimeInterval(
-						new \DateTimeImmutable($values->start),
-						new \DateInterval(
-							sprintf('PT%dM', max(0, $values->interval))
+						$this->logger
+					))->subscribe(
+						$values->url,
+						$values->expression,
+						new Subscribing\FutureInterval(
+							new Subscribing\DateTimeInterval(
+								new \DateTimeImmutable($values->start),
+								new \DateInterval(
+									sprintf('PT%dM', max(0, $values->interval))
+								)
+							)
 						)
-					)
-				)
+					);
+				}
 			);
 			$this->onSuccess();
 		} catch(\Throwable $ex) {

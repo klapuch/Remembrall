@@ -17,18 +17,12 @@ final class LoggedSubscriptions implements Subscriptions {
 	}
 
 	public function subscribe(
-		Part $part,
 		string $url,
 		string $expression,
 		Interval $interval
 	) {
 		try {
-			$this->origin->subscribe(
-				$part,
-				$url,
-				$expression,
-				$interval
-			);
+			$this->origin->subscribe($url, $expression, $interval);
 		} catch(\Throwable $ex) {
 			$this->logger->log($ex, Tracy\Logger::ERROR);
 			throw $ex;

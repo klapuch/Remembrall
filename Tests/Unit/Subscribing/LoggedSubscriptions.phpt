@@ -24,7 +24,6 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
 		(new Subscribing\LoggedSubscriptions($subscriptions, $logger))
 			->subscribe(
-				new Subscribing\FakePart(),
 				'url',
 				'//p',
 				new Subscribing\FakeInterval()
@@ -37,7 +36,6 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 			(new Subscribing\LoggedSubscriptions(
 				new Subscribing\FakeSubscriptions(), $logger
 			))->subscribe(
-				new Subscribing\FakePart(),
 				'url',
 				'//p',
 				new Subscribing\FakeInterval()

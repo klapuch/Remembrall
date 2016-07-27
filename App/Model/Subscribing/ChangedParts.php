@@ -33,7 +33,7 @@ final class ChangedParts implements Parts {
 	}
 
 	/**
-	 * Is the refreshed part as the current part?
+	 * Is the refreshed part same as the current part?
 	 * @param Part $part
 	 * @return bool
 	 */
