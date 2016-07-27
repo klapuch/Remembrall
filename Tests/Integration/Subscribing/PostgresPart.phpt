@@ -21,8 +21,7 @@ final class PostgresPart extends TestCase\Database {
 				new Subscribing\FakePart(),
 				'www.facedown.cz',
 				'//d',
-				$this->database,
-				new Access\FakeSubscriber()
+				$this->database
 			))->content()
 		);
 	}
@@ -32,8 +31,7 @@ final class PostgresPart extends TestCase\Database {
 			new Subscribing\FakePart('NEW_CONTENT'),
 			'www.facedown.cz',
 			'//d',
-			$this->database,
-			new Access\FakeSubscriber()
+			$this->database
 		))->refresh();
 		$parts = $this->database->fetchAll('SELECT * FROM parts');
 		Assert::count(1, $parts);

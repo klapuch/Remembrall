@@ -86,12 +86,20 @@ final class Parts extends SecureControl {
 				),
 				$this->logger
 			))->add(
-				new Subscribing\PostgresPart(
-					new Subscribing\HtmlPart(
-						new Subscribing\ValidXPathExpression(
-							new Subscribing\XPathExpression($page, $expression)
+				new Subscribing\ExistingPart(
+					new Subscribing\PostgresPart(
+						new Subscribing\HtmlPart(
+							new Subscribing\ValidXPathExpression(
+								new Subscribing\XPathExpression(
+									$page,
+									$expression
+								)
+							),
+							$page
 						),
-						$page
+						$url,
+						$expression,
+						$this->database
 					),
 					$url,
 					$expression,
