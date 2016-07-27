@@ -48,7 +48,7 @@ final class CollectiveParts extends TestCase\Database {
 			(1, "foo@bar.cz", "secret"), (2, "facedown@facedown.cz", "secret")'
 		);
 		$refreshedPart = new Subscribing\FakePart('<p>Updated content</p>');
-		$part = new Subscribing\FakePart('<p>Content</p>', false, null, $refreshedPart);
+		$part = new Subscribing\FakePart('<p>Content</p>', null, $refreshedPart);
 		Assert::same(
 			$part,
 			(new Subscribing\CollectiveParts(

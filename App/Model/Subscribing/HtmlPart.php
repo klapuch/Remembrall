@@ -31,14 +31,4 @@ final class HtmlPart implements Part {
 	public function refresh(): Part {
 		return new self($this->expression, $this->page->refresh());
 	}
-
-	public function equals(Part $part): bool {
-		return $part->content() === $this->content();
-	}
-
-	public function print(): array {
-		return [
-			'expression' => $this->expression,
-		];
-	}
 }

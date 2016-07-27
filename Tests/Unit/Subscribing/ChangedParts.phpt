@@ -22,7 +22,6 @@ final class ChangedParts extends Tester\TestCase {
 				))->add(
 					new Subscribing\FakePart(
 						'abc',
-						false,
 						null,
 						new Subscribing\FakePart('xxx')
 					),
@@ -42,7 +41,6 @@ final class ChangedParts extends Tester\TestCase {
 		))->add(
 			new Subscribing\FakePart(
 				'abc',
-				false,
 				null,
 				new Subscribing\FakePart('abc')
 			),
@@ -57,19 +55,16 @@ final class ChangedParts extends Tester\TestCase {
 				[
 					new Subscribing\FakePart(
 						'abc',
-						$same = false,
 						'www.google.com',
 						new Subscribing\FakePart('xxx')
 					),
 					new Subscribing\FakePart(
 						'abc',
-						false,
 						'www.google.com',
 						new Subscribing\FakePart('abc')
 					),
 					new Subscribing\FakePart(
 						'def',
-						$same = false,
 						'www.google.com',
 						new Subscribing\FakePart('xxx')
 					),

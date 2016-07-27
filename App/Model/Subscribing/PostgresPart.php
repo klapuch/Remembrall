@@ -47,8 +47,4 @@ final class PostgresPart implements Part {
 		);
 		return $this;
 	}
-
-	public function equals(Part $part): bool {
-		return $this->content() === $part->content();
-	}
 }

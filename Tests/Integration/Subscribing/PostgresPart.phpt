@@ -27,34 +27,6 @@ final class PostgresPart extends TestCase\Database {
 		);
 	}
 
-	public function testDifferentParts() {
-		Assert::false(
-			(new Subscribing\PostgresPart(
-				new Subscribing\FakePart(),
-				'www.facedown.cz',
-				'//d',
-				$this->database,
-				new Access\FakeSubscriber()
-			))->equals(
-				new Subscribing\FakePart('<p>abc</p>')
-			)
-		);
-	}
-
-	public function testEquivalentParts() {
-		Assert::true(
-			(new Subscribing\PostgresPart(
-				new Subscribing\FakePart(),
-				'www.facedown.cz',
-				'//d',
-				$this->database,
-				new Access\FakeSubscriber()
-			))->equals(
-				new Subscribing\FakePart('d')
-			)
-		);
-	}
-
 	public function testRefreshingPart() {
 		(new Subscribing\PostgresPart(
 			new Subscribing\FakePart('NEW_CONTENT'),

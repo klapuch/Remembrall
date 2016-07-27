@@ -13,13 +13,6 @@ interface Part {
 	public function content(): string;
 
 	/**
-	 * Is the given part equals to the current one?
-	 * @param Part $part
-	 * @return bool
-	 */
-	public function equals(self $part): bool;
-
-	/**
 	 * Refreshed part
 	 * @return Part
 	 */

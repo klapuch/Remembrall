@@ -53,38 +53,6 @@ final class HtmlPart extends Tester\TestCase {
 		);
 	}
 
-	public function testDifferentContent() {
-		$dom = new \DOMDocument();
-		$dom->loadHTML('<p>xxx</p>');
-		Assert::false(
-			(new Subscribing\HtmlPart(
-				new Subscribing\FakeExpression(
-					'//p',
-					(new \DOMXPath($dom))->query('//p')
-				),
-				new Subscribing\FakePage()
-			))->equals(
-				new Subscribing\FakePart('<p>abc</p>')
-			)
-		);
-	}
-
-	public function testEquivalentParts() {
-		$dom = new \DOMDocument();
-		$dom->loadHTML('<p>abc</p>');
-		Assert::true(
-			(new Subscribing\HtmlPart(
-				new Subscribing\FakeExpression(
-					'//p',
-					(new \DOMXPath($dom))->query('//p')
-				),
-				new Subscribing\FakePage()
-			))->equals(
-				new Subscribing\FakePart('<p>abc</p>')
-			)
-		);
-	}
-
 	public function testRefreshing() {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>XXX</p>');

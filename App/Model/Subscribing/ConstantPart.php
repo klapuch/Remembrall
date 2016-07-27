@@ -24,10 +24,6 @@ final class ConstantPart implements Part {
 		return $this->content;
 	}
 
-	public function equals(Part $part): bool {
-		return $this->origin->equals($part);
-	}
-
 	public function refresh(): Part {
 		return $this->origin->refresh();
 	}
