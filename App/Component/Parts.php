@@ -95,8 +95,7 @@ final class Parts extends SecureControl {
 					),
 					$url,
 					$expression,
-					$this->database,
-					$this->myself
+					$this->database
 				),
 				$url,
 				$expression

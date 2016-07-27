@@ -37,7 +37,15 @@ final class PostgresPart implements Part {
 	}
 
 	public function refresh(): Part {
-		return $this->origin->refresh();
+		$this->database->query(
+			'UPDATE parts
+			SET content = ?
+			WHERE page_url = ? AND expression = ?',
+			$this->origin->refresh()->content(),
+			$this->url,
+			$this->expression
+		);
+		return $this;
 	}
 
 	public function equals(Part $part): bool {

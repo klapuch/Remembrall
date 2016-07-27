@@ -20,7 +20,7 @@ final class ChangedParts implements Parts {
 				'The part has not changed yet'
 			);
 		}
-		return $this->origin->add($part->refresh(), $url, $expression);
+		return $this->origin->add($part, $url, $expression);
 	}
 
 	public function iterate(): array {
@@ -38,6 +38,6 @@ final class ChangedParts implements Parts {
 	 * @return bool
 	 */
 	private function changed(Part $part) {
-		return !$part->equals($part->refresh());
+		return $part->content() !== $part->refresh()->content();
 	}
 }

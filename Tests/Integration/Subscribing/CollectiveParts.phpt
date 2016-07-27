@@ -47,32 +47,34 @@ final class CollectiveParts extends TestCase\Database {
 			'INSERT INTO subscribers (id, email, password) VALUES
 			(1, "foo@bar.cz", "secret"), (2, "facedown@facedown.cz", "secret")'
 		);
-		(new Subscribing\CollectiveParts(
-			$this->database
-		))->add(
-			new Subscribing\FakePart('<p>Content</p>'),
-			'www.google.com',
-			'//p'
-		); //once
-		(new Subscribing\CollectiveParts(
-			$this->database
-		))->add(
-			new Subscribing\FakePart('<p>Updated content</p>'),
-			'www.google.com',
-			'//p'
-		); //twice
-		$parts = $this->database->fetchAll(
-			'SELECT id, page_url, content, expression FROM parts'
+		$refreshedPart = new Subscribing\FakePart('<p>Updated content</p>');
+		$part = new Subscribing\FakePart('<p>Content</p>', false, null, $refreshedPart);
+		Assert::same(
+			$part,
+			(new Subscribing\CollectiveParts(
+				$this->database
+			))->add(
+				$part,
+				'www.google.com',
+				'//p'
+			)
 		);
-		Assert::count(1, $parts);
-		Assert::same(1, $parts[0]['id']);
-		Assert::same('www.google.com', $parts[0]['page_url']);
-		Assert::same('<p>Updated content</p>', $parts[0]['content']);
-		Assert::same('//p', $parts[0]['expression']);
-		$partVisits = $this->database->fetchAll(
-			'SELECT part_id FROM part_visits'
+		Assert::same(
+			$refreshedPart,
+			(new Subscribing\CollectiveParts(
+				$this->database
+			))->add(
+				$part,
+				'www.google.com',
+				'//p'
+			)
 		);
-		Assert::count(2, $partVisits);
+		Assert::count(
+			2,
+			$this->database->fetchAll(
+				'SELECT part_id FROM part_visits'
+			)
+		);
 	}
 
 	public function testIteratingOverAllPages() {

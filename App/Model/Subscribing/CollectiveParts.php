@@ -18,17 +18,12 @@ final class CollectiveParts implements Parts {
 	}
 
 	public function add(Part $part, string $url, string $expression): Part {
-		(new Storage\Transaction($this->database))->start(
+		return (new Storage\Transaction($this->database))->start(
 			function() use ($part, $url, $expression) {
 				if($this->alreadyExists($url, $expression)) {
-					$this->database->query(
-						'UPDATE parts
-						SET content = ?
-						WHERE page_url = ? AND expression = ?',
-						$part->content(),
-						$url,
-						$expression
-					);
+					$refreshedPart = $part->refresh();
+					$this->record($url, $expression);
+					return $refreshedPart;
 				} else {
 					$this->database->query(
 						'INSERT INTO parts
@@ -38,17 +33,11 @@ final class CollectiveParts implements Parts {
 						$expression,
 						$part->content()
 					);
+					$this->record($url, $expression);
+					return $part;
 				}
-				$this->database->query(
-					'INSERT INTO part_visits (part_id, visited_at) VALUES
-					((SELECT id FROM parts WHERE page_url = ? AND expression = ?), ?)',
-					$url,
-					$expression,
-					new \DateTimeImmutable()
-				);
 			}
 		);
-		return $part;
 	}
 
 	public function iterate(): array {
@@ -79,6 +68,21 @@ final class CollectiveParts implements Parts {
 				);
 				return $previous;
 			}
+		);
+	}
+
+	/**
+	 * Record the access time to the added/refreshed part
+	 * @param string $url
+	 * @param string $expression
+	 */
+	private function record(string $url, string $expression) {
+		$this->database->query(
+			'INSERT INTO part_visits (part_id, visited_at) VALUES
+			((SELECT id FROM parts WHERE page_url = ? AND expression = ?), ?)',
+			$url,
+			$expression,
+			new \DateTimeImmutable()
 		);
 	}
 

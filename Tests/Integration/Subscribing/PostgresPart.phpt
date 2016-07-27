@@ -20,7 +20,7 @@ final class PostgresPart extends TestCase\Database {
 			(new Subscribing\PostgresPart(
 				new Subscribing\FakePart(),
 				'www.facedown.cz',
-				new Subscribing\FakeExpression('//d'),
+				'//d',
 				$this->database,
 				new Access\FakeSubscriber()
 			))->content()
@@ -32,7 +32,7 @@ final class PostgresPart extends TestCase\Database {
 			(new Subscribing\PostgresPart(
 				new Subscribing\FakePart(),
 				'www.facedown.cz',
-				new Subscribing\FakeExpression('//d'),
+				'//d',
 				$this->database,
 				new Access\FakeSubscriber()
 			))->equals(
@@ -46,7 +46,7 @@ final class PostgresPart extends TestCase\Database {
 			(new Subscribing\PostgresPart(
 				new Subscribing\FakePart(),
 				'www.facedown.cz',
-				new Subscribing\FakeExpression('//d'),
+				'//d',
 				$this->database,
 				new Access\FakeSubscriber()
 			))->equals(
@@ -56,15 +56,16 @@ final class PostgresPart extends TestCase\Database {
 	}
 
 	public function testRefreshingPart() {
-		Assert::noError(function() {
-			(new Subscribing\PostgresPart(
-				new Subscribing\FakePart(),
-				'www.facedown.cz',
-				new Subscribing\FakeExpression('//d'),
-				$this->database,
-				new Access\FakeSubscriber()
-			))->refresh();
-		});
+		(new Subscribing\PostgresPart(
+			new Subscribing\FakePart('NEW_CONTENT'),
+			'www.facedown.cz',
+			'//d',
+			$this->database,
+			new Access\FakeSubscriber()
+		))->refresh();
+		$parts = $this->database->fetchAll('SELECT * FROM parts');
+		Assert::count(1, $parts);
+		Assert::same('NEW_CONTENT', $parts[0]['content']);
 	}
 
 	protected function prepareDatabase() {

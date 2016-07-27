@@ -9,15 +9,18 @@ final class FakePart implements Part {
 	private $content;
 	private $equals;
 	private $url;
+	private $refreshedPart;
 
 	public function __construct(
 		string $content = null,
 		bool $equals = false,
-		string $url = null
+		string $url = null,
+		self $refreshedPart = null
 	) {
 		$this->content = $content;
 		$this->equals = $equals;
 		$this->url = $url;
+		$this->refreshedPart = $refreshedPart;
 	}
 
 	public function content(): string {
@@ -29,6 +32,6 @@ final class FakePart implements Part {
 	}
 
 	public function refresh(): Part {
-		return $this;
+		return $this->refreshedPart ?? $this;
 	}
 }

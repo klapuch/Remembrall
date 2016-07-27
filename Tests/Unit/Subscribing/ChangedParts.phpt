@@ -20,7 +20,12 @@ final class ChangedParts extends Tester\TestCase {
 				(new Subscribing\ChangedParts(
 					new Subscribing\FakeParts()
 				))->add(
-					new Subscribing\FakePart(null, $same = false),
+					new Subscribing\FakePart(
+						'abc',
+						false,
+						null,
+						new Subscribing\FakePart('xxx')
+					),
 					'www.google.com',
 					'//h1'
 				);
@@ -35,7 +40,12 @@ final class ChangedParts extends Tester\TestCase {
 		(new Subscribing\ChangedParts(
 			new Subscribing\FakeParts()
 		))->add(
-			new Subscribing\FakePart(null, $same = true),
+			new Subscribing\FakePart(
+				'abc',
+				false,
+				null,
+				new Subscribing\FakePart('abc')
+			),
 			'www.google.com',
 			'//h1'
 		);
@@ -46,22 +56,22 @@ final class ChangedParts extends Tester\TestCase {
 			new Subscribing\FakeParts(
 				[
 					new Subscribing\FakePart(
-						null,
+						'abc',
 						$same = false,
 						'www.google.com',
-						new Subscribing\FakeExpression('//p')
+						new Subscribing\FakePart('xxx')
 					),
 					new Subscribing\FakePart(
-						null,
-						$same = true,
+						'abc',
+						false,
 						'www.google.com',
-						new Subscribing\FakeExpression('//p')
+						new Subscribing\FakePart('abc')
 					),
 					new Subscribing\FakePart(
-						null,
+						'def',
 						$same = false,
 						'www.google.com',
-						new Subscribing\FakeExpression('//p')
+						new Subscribing\FakePart('xxx')
 					),
 				]
 			)
