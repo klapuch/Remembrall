@@ -18,11 +18,11 @@ before_install:
   - composer self-update
 
 install:
-  - composer install --no-interaction --prefer-source
+  - composer install --no-interaction --prefer-source --optimize-autoloader
 
 before_script:
-  - psql -c 'create database remembrall_test;' -U postgres
-  - psql -c 'create database transaction_test;' -U postgres
+  - psql -c 'CREATE DATABASE remembrall_test;' -U postgres
+  - psql -c 'CREATE DATABASE transaction_test;' -U postgres
   - psql -U postgres remembrall_test < ./Tests/TestCase/test_schema.sql
   - psql -U postgres transaction_test < ./Tests/TestCase/transaction_test.sql
 
