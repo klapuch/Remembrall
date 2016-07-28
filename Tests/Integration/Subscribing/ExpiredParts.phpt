@@ -55,25 +55,16 @@ final class ExpiredParts extends TestCase\Database {
 		$this->restartSequence(['part_visits', 'parts', 'subscriptions']);
 		$this->database->query(
 			'INSERT INTO part_visits (part_id, visited_at) VALUES
-			(1, NOW() - INTERVAL "2 DAY"),
+			(1, "2016-07-28 20:00"),
 			(2, NOW()),
 			(3, NOW() - INTERVAL "3 MINUTE"),
-			(1, NOW() - INTERVAL "4 DAY")'
+			(1, "2016-07-24 20:00")'
 		);
 		$this->database->query(
 			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.google.com", "//a", "a")'
-		);
-		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.facedown.cz", "//b", "b")'
-		);
-		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.google.com", "//c", "c")'
-		);
-		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
+			("www.google.com", "//a", "a"),
+			("www.facedown.cz", "//b", "b"),
+			("www.google.com", "//c", "c"),
 			("www.facedown.cz", "//d", "d")'
 		);
 		$this->database->query(

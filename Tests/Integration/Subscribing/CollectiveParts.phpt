@@ -18,7 +18,8 @@ final class CollectiveParts extends TestCase\Database {
     public function testAdding() {
 		$this->database->query(
 			'INSERT INTO subscribers (id, email, password) VALUES
-			(1, "foo@bar.cz", "secret"), (2, "facedown@facedown.cz", "secret")'
+			(1, "foo@bar.cz", "secret"),
+			(2, "facedown@facedown.cz", "secret")'
 		);
         (new Subscribing\CollectiveParts(
             $this->database
@@ -45,7 +46,8 @@ final class CollectiveParts extends TestCase\Database {
 	public function testTwiceAddingWithUpdate() {
 		$this->database->query(
 			'INSERT INTO subscribers (id, email, password) VALUES
-			(1, "foo@bar.cz", "secret"), (2, "facedown@facedown.cz", "secret")'
+			(1, "foo@bar.cz", "secret"),
+			(2, "facedown@facedown.cz", "secret")'
 		);
 		$refreshedPart = new Subscribing\FakePart('<p>Updated content</p>');
 		$part = new Subscribing\FakePart('<p>Content</p>', null, $refreshedPart);
@@ -84,15 +86,13 @@ final class CollectiveParts extends TestCase\Database {
 		);
 		$this->database->query(
 			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.google.com", "//a", "a")'
-		);
-		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
+			("www.google.com", "//a", "a"),
 			("www.facedown.cz", "//c", "c")'
 		);
 		$this->database->query(
 			'INSERT INTO subscriptions (part_id, subscriber_id, interval) VALUES
-			(1, 1, "PT1M"), (2, 2, "PT2M")'
+			(1, 1, "PT1M"),
+			(2, 2, "PT2M")'
 		);
 		$parts = (new Subscribing\CollectiveParts(
 			$this->database
@@ -133,10 +133,7 @@ final class CollectiveParts extends TestCase\Database {
 		$this->restartSequence(['parts', 'part_visits', 'subscribers', 'subscriptions']);
 		$this->database->query(
 			'INSERT INTO pages (url, content) VALUES
-			("www.google.com", "<p>google</p>")'
-		);
-		$this->database->query(
-			'INSERT INTO pages (url, content) VALUES
+			("www.google.com", "<p>google</p>"),
 			("www.facedown.cz", "<p>facedown</p>")'
 		);
     }

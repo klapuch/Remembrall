@@ -94,7 +94,10 @@ final class CollectiveParts implements Parts {
 	 */
 	private function alreadyExists(string $url, string $expression): bool {
 		return (bool)$this->database->fetchSingle(
-			'SELECT 1 FROM parts WHERE page_url = ? AND expression = ?',
+			'SELECT 1
+			FROM parts
+			WHERE page_url = ?
+			AND expression = ?',
 			$url,
 			$expression
 		);

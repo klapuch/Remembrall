@@ -18,19 +18,6 @@ final class OwnedSubscription extends TestCase\Database {
 	 * @throws \Remembrall\Exception\NotFoundException You do not own this part
 	 */
 	public function testCancelingForeign() {
-		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.google.com", "//b", "b")'
-		);
-		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.facedown.cz", "//b", "c")'
-		);
-		$this->database->query(
-			'INSERT INTO subscriptions (part_id, subscriber_id, interval) VALUES
-			(1, 2, "PT2M"),
-			(2, 666, "PT3M")'
-		);
 		(new Subscribing\OwnedSubscription(
 			'www.google.com',
 			'//b',
@@ -40,19 +27,6 @@ final class OwnedSubscription extends TestCase\Database {
 	}
 
 	public function testCancelingOwned() {
-		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.google.com", "//b", "b")'
-		);
-		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.facedown.cz", "//b", "c")'
-		);
-		$this->database->query(
-			'INSERT INTO subscriptions (part_id, subscriber_id, interval) VALUES
-			(1, 2, "PT2M"),
-			(2, 666, "PT3M")'
-		);
 		(new Subscribing\OwnedSubscription(
 			'www.facedown.cz',
 			'//b',
@@ -68,19 +42,6 @@ final class OwnedSubscription extends TestCase\Database {
 	 * @throws \Remembrall\Exception\NotFoundException You do not own this part
 	 */
 	public function testEditingForeign() {
-		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.google.com", "//b", "b")'
-		);
-		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.facedown.cz", "//b", "c")'
-		);
-		$this->database->query(
-			'INSERT INTO subscriptions (part_id, subscriber_id, interval) VALUES
-			(1, 2, "PT2M"),
-			(2, 666, "PT3M")'
-		);
 		(new Subscribing\OwnedSubscription(
 			'www.google.com',
 			'//b',
@@ -90,19 +51,6 @@ final class OwnedSubscription extends TestCase\Database {
 	}
 
 	public function testEditingOwned() {
-		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.google.com", "//b", "b")'
-		);
-		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.facedown.cz", "//b", "c")'
-		);
-		$this->database->query(
-			'INSERT INTO subscriptions (part_id, subscriber_id, interval) VALUES
-			(1, 2, "PT2M"),
-			(2, 666, "PT3M")'
-		);
 		(new Subscribing\OwnedSubscription(
 			'www.facedown.cz',
 			'//b',
@@ -110,7 +58,7 @@ final class OwnedSubscription extends TestCase\Database {
 			$this->database
 		))->edit(
 			new Subscribing\FakeInterval(
-				null,
+				new \DateTimeImmutable('15:00'),
 				null,
 				new \DateInterval('PT44M')
 			)
@@ -125,6 +73,16 @@ final class OwnedSubscription extends TestCase\Database {
 
 	protected function prepareDatabase() {
 		$this->purge(['parts', 'subscriptions']);
+		$this->database->query(
+			'INSERT INTO parts (page_url, expression, content) VALUES
+			("www.google.com", "//b", "b"),
+			("www.facedown.cz", "//b", "c")'
+		);
+		$this->database->query(
+			'INSERT INTO subscriptions (part_id, subscriber_id, interval) VALUES
+			(1, 2, "PT2M"),
+			(2, 666, "PT3M")'
+		);
 	}
 }
 

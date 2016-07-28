@@ -21,18 +21,9 @@ final class OwnedParts extends TestCase\Database {
 		);
 		$this->database->query(
 			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.google.com", "//a", "a")'
-		);
-		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.facedown.cz", "//b", "b")'
-		);
-		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.facedown.cz", "//c", "c")'
-		);
-		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
+			("www.google.com", "//a", "a"),
+			("www.facedown.cz", "//b", "b"),
+			("www.facedown.cz", "//c", "c"),
 			("www.google.com", "//d", "d")'
 		);
 		$this->database->query(
@@ -97,10 +88,7 @@ final class OwnedParts extends TestCase\Database {
 		$this->restartSequence(['parts', 'part_visits', 'subscriptions']);
 		$this->database->query(
 			'INSERT INTO pages (url, content) VALUES
-			("www.google.com", "<p>google</p>")'
-		);
-		$this->database->query(
-			'INSERT INTO pages (url, content) VALUES
+			("www.google.com", "<p>google</p>"),
 			("www.facedown.cz", "<p>facedown</p>")'
 		);
     }

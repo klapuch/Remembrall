@@ -30,7 +30,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 			'www.google.com',
 			'//p',
             new Subscribing\FakeInterval(
-                new \DateTimeImmutable('2000-01-01 01:01:01'),
+                new \DateTimeImmutable('01:01'),
                 null,
                 new \DateInterval('PT158M')
             )
@@ -55,12 +55,12 @@ final class OwnedSubscriptions extends TestCase\Database {
 
 	public function testSubscribingDuplicateWithRollback() {
 		$this->database->query(
-			'INSERT INTO part_visits (part_id, visited_at) VALUES
-			(1, "2000-01-01 01:01:01")'
-		);
-		$this->database->query(
 			'INSERT INTO parts (page_url, expression, content) VALUES
 			("www.google.com", "//p", "a")'
+		);
+		$this->database->query(
+			'INSERT INTO part_visits (part_id, visited_at) VALUES
+			(1, "2000-01-01 01:01:01")'
 		);
 		$parts = new Subscribing\OwnedSubscriptions(
 			new Access\FakeSubscriber(666),
@@ -70,7 +70,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 			'www.google.com',
 			'//p',
 			new Subscribing\FakeInterval(
-				new \DateTimeImmutable('2000-01-01 01:01:01'),
+				new \DateTimeImmutable('01:01'),
 				null,
 				new \DateInterval('PT158M')
 			)
@@ -80,7 +80,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 				'www.google.com',
 				'//p',
 				new Subscribing\FakeInterval(
-					new \DateTimeImmutable('2000-01-01 01:01:01'),
+					new \DateTimeImmutable('01:01'),
 					null,
 					new \DateInterval('PT158M')
 				)
@@ -93,18 +93,9 @@ final class OwnedSubscriptions extends TestCase\Database {
 	public function testIteratingOwnedSubscriptions() {
 		$this->database->query(
 			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.google.com", "//a", "a")'
-		);
-		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.facedown.cz", "//b", "b")'
-		);
-		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.facedown.cz", "//c", "c")'
-		);
-		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
+			("www.google.com", "//a", "a"),
+			("www.facedown.cz", "//b", "b"),
+			("www.facedown.cz", "//c", "c"),
 			("www.google.com", "//d", "d")'
 		);
 		$this->database->query(
@@ -129,10 +120,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 		$this->restartSequence(['parts', 'part_visits', 'subscriptions']);
 		$this->database->query(
 			'INSERT INTO pages (url, content) VALUES
-			("www.google.com", "<p>google</p>")'
-		);
-		$this->database->query(
-			'INSERT INTO pages (url, content) VALUES
+			("www.google.com", "<p>google</p>"),
 			("www.facedown.cz", "<p>facedown</p>")'
 		);
     }
