@@ -26,15 +26,20 @@ final class ExpiredParts implements Parts {
 				'SELECT parts.content AS part_content, expression,
 				pages.content AS page_content, url 
 				FROM parts
-				LEFT JOIN subscriptions ON subscriptions.part_id = parts.ID 
+				LEFT JOIN (
+					SELECT MIN(CAST(SUBSTRING(interval FROM "[0-9]+") AS INT)) AS interval,
+					part_id
+					FROM subscriptions
+					GROUP BY part_id					
+				) AS subscriptions ON subscriptions.part_id = parts.id 
 				INNER JOIN pages ON pages.url = parts.page_url
 				LEFT JOIN (
 					SELECT part_id, MIN(visited_at) AS visited_at
 					FROM part_visits
 					GROUP BY part_id
-				) AS part_visits ON part_visits.part_id = parts.ID
+				) AS part_visits ON part_visits.part_id = parts.id
 				WHERE visited_at IS NULL
-				OR visited_at + INTERVAL "1 MINUTE" * CAST(SUBSTRING(interval FROM "[0-9]+") AS INT) <= NOW();'
+				OR visited_at + INTERVAL "1 MINUTE" * interval <= NOW();'
 			),
 			function($previous, Dibi\Row $row) {
 				$previous[] = new ConstantPart(

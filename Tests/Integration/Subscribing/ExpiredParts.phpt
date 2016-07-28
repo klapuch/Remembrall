@@ -19,21 +19,7 @@ final class ExpiredParts extends TestCase\Database {
             new Subscribing\FakeParts(),
 			$this->database
         ))->iterate();
-        Assert::count(2, $parts);
-		Assert::equal(
-			new Subscribing\ConstantPart(
-				new Subscribing\HtmlPart(
-					new Subscribing\XPathExpression(
-						new Subscribing\ConstantPage('google'),
-						'//a'
-					),
-					new Subscribing\ConstantPage('google')
-				),
-				'a',
-				'www.google.com'
-			),
-			$parts[0]
-		);
+        Assert::count(3, $parts);
 		Assert::equal(
 			new Subscribing\ConstantPart(
 				new Subscribing\HtmlPart(
@@ -46,7 +32,35 @@ final class ExpiredParts extends TestCase\Database {
 				'd',
 				'www.facedown.cz'
 			),
+			$parts[0]
+		);
+		Assert::equal(
+			new Subscribing\ConstantPart(
+				new Subscribing\HtmlPart(
+					new Subscribing\XPathExpression(
+						new Subscribing\ConstantPage('google'),
+						'//a'
+					),
+					new Subscribing\ConstantPage('google')
+				),
+				'a',
+				'www.google.com'
+			),
 			$parts[1]
+		);
+		Assert::equal(
+			new Subscribing\ConstantPart(
+				new Subscribing\HtmlPart(
+					new Subscribing\XPathExpression(
+						new Subscribing\ConstantPage('google'),
+						'//c'
+					),
+					new Subscribing\ConstantPage('google')
+				),
+				'c',
+				'www.google.com'
+			),
+			$parts[2]
 		);
     }
 
@@ -55,10 +69,10 @@ final class ExpiredParts extends TestCase\Database {
 		$this->restartSequence(['part_visits', 'parts', 'subscriptions']);
 		$this->database->query(
 			'INSERT INTO part_visits (part_id, visited_at) VALUES
-			(1, "2016-07-28 20:00"),
+			(1, NOW() - INTERVAL "2 DAY"),
 			(2, NOW()),
-			(3, NOW() - INTERVAL "3 MINUTE"),
-			(1, "2016-07-24 20:00")'
+			(3, NOW() - INTERVAL "10 MINUTE"),
+			(1, NOW() - INTERVAL "4 DAY")'
 		);
 		$this->database->query(
 			'INSERT INTO parts (page_url, expression, content) VALUES
@@ -71,7 +85,8 @@ final class ExpiredParts extends TestCase\Database {
 			'INSERT INTO subscriptions (part_id, subscriber_id, interval) VALUES
 			(1, 1, "PT10M"),
 			(2, 2, "PT10M"),
-			(3, 1, "PT10M"),
+			(3, 3, "PT3M"),
+			(3, 1, "PT20M"),
 			(4, 1, "PT10M")'
 		);
 		$this->database->query(
