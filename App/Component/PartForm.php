@@ -42,17 +42,6 @@ final class PartForm extends SecureControl {
 			->addRule(UI\Form::URL, '%label is not valid');
 		$form->addText('expression', 'XPath expression')
 			->addRule(UI\Form::FILLED);
-		$form->addText('start', 'Start interval')
-			->addRule(UI\Form::FILLED)
-			->addRule(
-				function(Forms\IControl $control) {
-					return date(
-						'Y-m-d H:i',
-						strtotime($control->getValue())
-					) === $control->getValue();
-				},
-				'%label must be in format year-month-day hours:minutes'
-			);
 		$form->addInteger('interval', 'Interval')
 			->addRule(UI\Form::FILLED)
 			->addRule(UI\Form::MIN, 'Minimum range for %label is %d', 30);
@@ -119,7 +108,7 @@ final class PartForm extends SecureControl {
 						$values->expression,
 						new Subscribing\FutureInterval(
 							new Subscribing\DateTimeInterval(
-								new \DateTimeImmutable($values->start),
+								new \DateTimeImmutable(),
 								new \DateInterval(
 									sprintf('PT%dM', max(0, $values->interval))
 								)
