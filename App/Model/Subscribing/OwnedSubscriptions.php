@@ -29,7 +29,8 @@ final class OwnedSubscriptions implements Subscriptions {
 					GROUP BY part_id
 				) AS part_visits ON parts.id = part_visits.part_id
 				INNER JOIN subscriptions ON subscriptions.part_id = parts.id
-				WHERE subscriptions.subscriber_id = ?',
+				WHERE subscriptions.subscriber_id = ?
+				ORDER BY visited_at DESC',
 				$this->owner->id()
 			),
 			function($subscriptions, Dibi\Row $row) {

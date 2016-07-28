@@ -118,9 +118,9 @@ final class OwnedSubscriptions extends TestCase\Database {
 			$this->database
 		))->iterate();
 		Assert::count(3, $parts);
-		Assert::same('//d', (string)$parts[0]->print()['expression']);
-		Assert::same('//a', (string)$parts[1]->print()['expression']);
-		Assert::same('2008', $parts[1]->print()['interval']->start()->format('Y'));
+		Assert::same('//a', (string)$parts[0]->print()['expression']);
+		Assert::same('2008', $parts[0]->print()['interval']->start()->format('Y'));
+		Assert::same('//d', (string)$parts[1]->print()['expression']);
 		Assert::same('//c', (string)$parts[2]->print()['expression']);
 	}
 
