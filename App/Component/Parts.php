@@ -26,7 +26,7 @@ final class Parts extends SecureControl {
 
 	public function render() {
 		$this->template->setFile(__DIR__ . '/Parts.latte');
-		$this->template->parts = (new Subscribing\OwnedSubscriptions(
+		$this->template->subscriptions = (new Subscribing\OwnedSubscriptions(
 			$this->myself,
 			$this->database
 		))->iterate();

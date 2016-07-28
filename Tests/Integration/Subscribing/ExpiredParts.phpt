@@ -24,20 +24,6 @@ final class ExpiredParts extends TestCase\Database {
 			new Subscribing\ConstantPart(
 				new Subscribing\HtmlPart(
 					new Subscribing\XPathExpression(
-						new Subscribing\ConstantPage('facedown'),
-						'//d'
-					),
-					new Subscribing\ConstantPage('facedown')
-				),
-				'd',
-				'www.facedown.cz'
-			),
-			$parts[0]
-		);
-		Assert::equal(
-			new Subscribing\ConstantPart(
-				new Subscribing\HtmlPart(
-					new Subscribing\XPathExpression(
 						new Subscribing\ConstantPage('google'),
 						'//a'
 					),
@@ -46,7 +32,7 @@ final class ExpiredParts extends TestCase\Database {
 				'a',
 				'www.google.com'
 			),
-			$parts[1]
+			$parts[0]
 		);
 		Assert::equal(
 			new Subscribing\ConstantPart(
@@ -59,6 +45,20 @@ final class ExpiredParts extends TestCase\Database {
 				),
 				'c',
 				'www.google.com'
+			),
+			$parts[1]
+		);
+		Assert::equal(
+			new Subscribing\ConstantPart(
+				new Subscribing\HtmlPart(
+					new Subscribing\XPathExpression(
+						new Subscribing\ConstantPage('facedown'),
+						'//d'
+					),
+					new Subscribing\ConstantPage('facedown')
+				),
+				'd',
+				'www.facedown.cz'
 			),
 			$parts[2]
 		);

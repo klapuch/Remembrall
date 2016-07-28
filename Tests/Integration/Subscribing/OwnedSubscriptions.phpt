@@ -105,14 +105,23 @@ final class OwnedSubscriptions extends TestCase\Database {
 			(3, 1, "PT3M"),
 			(4, 1, "PT4M")'
 		);
+		$this->database->query(
+			'INSERT INTO part_visits (part_id, visited_at) VALUES
+			(1, "2000-01-01 01:01:01"),
+			(1, "2008-01-01 01:01:01"),
+			(2, "2001-01-01 01:01:01"),
+			(3, "2002-01-01 01:01:01"),
+			(4, "2003-01-01 01:01:01")'
+		);
 		$parts = (new Subscribing\OwnedSubscriptions(
 			new Access\FakeSubscriber(1),
 			$this->database
 		))->iterate();
 		Assert::count(3, $parts);
-		Assert::same('//a', (string)$parts[0]->print()['expression']);
-		Assert::same('//c', (string)$parts[1]->print()['expression']);
-		Assert::same('//d', (string)$parts[2]->print()['expression']);
+		Assert::same('//d', (string)$parts[0]->print()['expression']);
+		Assert::same('//a', (string)$parts[1]->print()['expression']);
+		Assert::same('2008', $parts[1]->print()['interval']->start()->format('Y'));
+		Assert::same('//c', (string)$parts[2]->print()['expression']);
 	}
 
     protected function prepareDatabase() {

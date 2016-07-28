@@ -21,18 +21,29 @@ final class OwnedSubscriptions implements Subscriptions {
 	public function iterate(): array {
 		return (array)array_reduce(
 			$this->database->fetchAll(
-				'SELECT expression, page_url AS url
+				'SELECT expression, page_url AS url, interval, visited_at
 				FROM parts
+				INNER JOIN (
+					SELECT part_id, MAX(visited_at) AS visited_at
+					FROM part_visits
+					GROUP BY part_id
+				) AS part_visits ON parts.id = part_visits.part_id
 				INNER JOIN subscriptions ON subscriptions.part_id = parts.id
 				WHERE subscriptions.subscriber_id = ?',
 				$this->owner->id()
 			),
 			function($subscriptions, Dibi\Row $row) {
-				$subscriptions[] = new OwnedSubscription(
-					$row['url'],
-					$row['expression'],
-					$this->owner,
-					$this->database
+				$subscriptions[] = new ConstantSubscription(
+					new OwnedSubscription(
+						$row['url'],
+						$row['expression'],
+						$this->owner,
+						$this->database
+					),
+					new DateTimeInterval(
+						new \DateTimeImmutable((string)$row['visited_at']),
+						new \DateInterval($row['interval'])
+					)
 				);
 				return $subscriptions;
 			}

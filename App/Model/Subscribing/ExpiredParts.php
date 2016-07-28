@@ -30,7 +30,7 @@ final class ExpiredParts implements Parts {
 					SELECT MIN(CAST(SUBSTRING(interval FROM "[0-9]+") AS INT)) AS interval,
 					part_id
 					FROM subscriptions
-					GROUP BY part_id					
+					GROUP BY part_id
 				) AS subscriptions ON subscriptions.part_id = parts.id 
 				INNER JOIN pages ON pages.url = parts.page_url
 				LEFT JOIN (
@@ -39,7 +39,8 @@ final class ExpiredParts implements Parts {
 					GROUP BY part_id
 				) AS part_visits ON part_visits.part_id = parts.id
 				WHERE visited_at IS NULL
-				OR visited_at + INTERVAL "1 MINUTE" * interval <= NOW();'
+				OR visited_at + INTERVAL "1 MINUTE" * interval <= NOW()
+				ORDER BY visited_at ASC'
 			),
 			function($previous, Dibi\Row $row) {
 				$previous[] = new ConstantPart(

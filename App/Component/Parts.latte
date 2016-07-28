@@ -3,27 +3,27 @@
     <thead>
     <tr>
         <th><p>#</p></th>
-        {*<th><p>Last update</p></th>
-        <th><p>Interval</p></th>*}
+        <th><p>Last visitation</p></th>
+        <th><p>Interval</p></th>
         <th><p>Expression</p></th>
         <th><p>Page</p></th>
         <th><p>Options</p></th>
     </tr>
     </thead>
     <tbody>
-    <tr n:foreach="$parts as $part">
-        {var $visualPart = $part->print()}
+    <tr n:foreach="$subscriptions as $subscription">
+        {var $visualSubscription = $subscription->print()}
         <td><p>{$iterator->counter}</p></td>
-        {*<td><p>{$visualPart[interval]->start()|date:'Y-m-d H:i'}</p></td>
-        <td><p>{$visualPart[interval]->step()->i}</p></td>*}
-        <td><p>{$visualPart[expression]}</p></td>
-        <td><p>{$visualPart[url]}</p></td>
+        <td><p>{$visualSubscription[interval]->start()|date:'Y-m-d H:i'}</p></td>
+        <td><p>{$visualSubscription[interval]->step()->i}</p></td>
+        <td><p>{$visualSubscription[expression]}</p></td>
+        <td><p>{$visualSubscription[url]}</p></td>
         <td>
             <a role="button" title="Edit" class="btn btn-primary btn-sm">
                 <span class="glyphicon glyphicon-pencil"
                       aria-hidden="true"></span>
             </a>
-            <a role="button" n:href="cancel! url => $visualPart[url], expression => (string)$visualPart[expression]" onclick="return confirm('Are you sure you want to cancel the subscription?')" title="Remove" type="button" class="btn btn-danger btn-sm">
+            <a role="button" n:href="cancel! url => $visualSubscription[url], expression => $visualSubscription[expression]" onclick="return confirm('Are you sure you want to cancel the subscription?')" title="Remove" type="button" class="btn btn-danger btn-sm">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
             </a>
         </td>
