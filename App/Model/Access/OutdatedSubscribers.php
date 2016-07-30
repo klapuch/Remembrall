@@ -9,9 +9,9 @@ use Remembrall\Model\{
 };
 
 /**
- * Subscribers who subscribing shared (same) part
+ * Subscribers without actual subscribing
  */
-final class PartSharedSubscribers implements Subscribers {
+final class OutdatedSubscribers implements Subscribers {
 	private $origin;
 	private $url;
 	private $expression;
@@ -39,8 +39,15 @@ final class PartSharedSubscribers implements Subscribers {
 				'SELECT subscribers.id, email
 				FROM subscribers
 				INNER JOIN subscriptions ON subscriptions.subscriber_id = subscribers.id
-				INNER JOIN parts ON parts.id = subscriptions.part_id 
-				WHERE page_url = ? AND expression = ?',
+				INNER JOIN parts ON parts.id = subscriptions.part_id
+				INNER JOIN (
+					SELECT MAX(visited_at) AS visited_at, part_id
+					FROM part_visits
+					GROUP BY part_id
+				) AS part_visits ON parts.id = part_visits.part_id
+				WHERE visited_at + INTERVAL "1 MINUTE" * CAST(SUBSTRING(interval FROM "[0-9]+") AS INT) < NOW()
+				AND page_url = ?
+				AND expression = ?',
 				$this->url,
 				$this->expression
 			),

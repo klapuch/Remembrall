@@ -37,7 +37,7 @@ final class SubscribingMessage extends TestCase\Database {
 
 	public function testRecipients() {
 		Assert::equal(
-			new Access\PartSharedSubscribers(
+			new Access\OutdatedSubscribers(
 				new Access\FakeSubscribers(),
 				'url',
 				'//p',

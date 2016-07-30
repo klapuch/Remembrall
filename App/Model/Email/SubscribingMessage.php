@@ -35,7 +35,7 @@ final class SubscribingMessage implements Message {
 	}
 
 	public function recipients(): Access\Subscribers {
-		return new Access\PartSharedSubscribers(
+		return new Access\OutdatedSubscribers(
 			new Access\FakeSubscribers(),
 			$this->url,
 			$this->expression,
