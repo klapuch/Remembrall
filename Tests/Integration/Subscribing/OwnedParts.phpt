@@ -17,7 +17,11 @@ final class OwnedParts extends TestCase\Database {
 	public function testIteratingOwnedParts() {
 		$this->database->query(
 			'INSERT INTO part_visits (part_id, visited_at) VALUES
-			(1, NOW()), (2, NOW()), (3, NOW()), (4, NOW()), (1, NOW())'
+			(1, NOW() - INTERVAL "10 MINUTE"),
+			(2, NOW() - INTERVAL "20 MINUTE"),
+			(3, NOW() - INTERVAL "30 MINUTE"),
+			(4, NOW() - INTERVAL "40 MINUTE"),
+			(1, NOW() - INTERVAL "50 MINUTE")'
 		);
 		$this->database->query(
 			'INSERT INTO parts (page_url, expression, content) VALUES

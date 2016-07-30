@@ -47,4 +47,11 @@ final class PostgresPart implements Part {
 		);
 		return $this;
 	}
+
+	public function print(): array {
+		return $this->origin->print() + [
+			'url' => $this->url,
+			'expression' => $this->expression,
+		];
+	}
 }

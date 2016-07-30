@@ -42,7 +42,8 @@ final class OwnedParts implements Parts {
 				FROM parts
 				INNER JOIN subscriptions ON subscriptions.part_id = parts.id  
 				LEFT JOIN pages ON pages.url = parts.page_url
-				WHERE subscriber_id = ?',
+				WHERE subscriber_id = ?
+				ORDER BY visited_at DESC',
 				$this->myself->id()
 			),
 			function($previous, Dibi\Row $row) {

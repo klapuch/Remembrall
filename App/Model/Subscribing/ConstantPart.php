@@ -27,4 +27,10 @@ final class ConstantPart implements Part {
 	public function refresh(): Part {
 		return $this->origin->refresh();
 	}
+
+	public function print(): array {
+		return $this->origin->print() + [
+			'url' => $this->url,
+		];
+	}
 }

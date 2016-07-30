@@ -17,4 +17,10 @@ interface Part {
 	 * @return Part
 	 */
 	public function refresh(): self;
+
+	/**
+	 * Print itself to the array
+	 * @return array
+	 */
+	public function print(): array;
 }

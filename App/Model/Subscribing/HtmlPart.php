@@ -31,4 +31,11 @@ final class HtmlPart implements Part {
 	public function refresh(): Part {
 		return new self($this->expression, $this->page->refresh());
 	}
+
+	public function print(): array {
+		return [
+			'page' => $this->page,
+			'expression' => $this->expression,
+		];
+	}
 }

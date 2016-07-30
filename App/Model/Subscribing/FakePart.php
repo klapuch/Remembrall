@@ -27,4 +27,8 @@ final class FakePart implements Part {
 	public function refresh(): Part {
 		return $this->refreshedPart ?? $this;
 	}
+
+	public function print(): array {
+		return [];
+	}
 }

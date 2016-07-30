@@ -38,6 +38,13 @@ final class ExistingPart implements Part {
 		return $this->origin->refresh();
 	}
 
+	public function print(): array {
+		return $this->origin->print() + [
+			'url' => $this->url,
+			'expression' => $this->expression,
+		];
+	}
+
 	/**
 	 * Does the part really exists?
 	 * @return bool
