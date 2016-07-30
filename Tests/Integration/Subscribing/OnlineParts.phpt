@@ -3,12 +3,10 @@
  * @testCase
  * @phpVersion > 7.0.0
  */
-namespace Remembrall\Unit\Subscribing;
+namespace Remembrall\Integration\Subscribing;
 
 use GuzzleHttp;
-use Remembrall\Model\{
-	Subscribing, Http
-};
+use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
 
