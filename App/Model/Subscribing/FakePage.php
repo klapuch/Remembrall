@@ -7,14 +7,14 @@ namespace Remembrall\Model\Subscribing;
  */
 final class FakePage implements Page {
 	private $content;
-	private $refreshedPart;
+	private $refreshedPage;
 
 	public function __construct(
 		\DOMDocument $content = null,
-		Page $refreshedPart = null
+		Page $refreshedPage = null
 	) {
 		$this->content = $content;
-		$this->refreshedPart = $refreshedPart;
+		$this->refreshedPage = $refreshedPage;
 	}
 
 	public function content(): \DOMDocument {
@@ -22,6 +22,6 @@ final class FakePage implements Page {
 	}
 
 	public function refresh(): Page {
-		return $this->refreshedPart;
+		return $this->refreshedPage;
 	}
 }

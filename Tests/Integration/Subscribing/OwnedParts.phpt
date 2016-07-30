@@ -47,10 +47,16 @@ final class OwnedParts extends TestCase\Database {
 			new Subscribing\ConstantPart(
 				new Subscribing\HtmlPart(
 					new Subscribing\XPathExpression(
-						new Subscribing\ConstantPage('<p>google</p>'),
+						new Subscribing\ConstantPage(
+							new Subscribing\FakePage(),
+							'<p>google</p>'
+						),
 						'//a'
 					),
-					new Subscribing\ConstantPage('<p>google</p>')
+					new Subscribing\ConstantPage(
+						new Subscribing\FakePage(),
+						'<p>google</p>'
+					)
 				),
 				'a',
 				'www.google.com'
@@ -61,10 +67,16 @@ final class OwnedParts extends TestCase\Database {
 			new Subscribing\ConstantPart(
 				new Subscribing\HtmlPart(
 					new Subscribing\XPathExpression(
-						new Subscribing\ConstantPage('<p>facedown</p>'),
+						new Subscribing\ConstantPage(
+							new Subscribing\FakePage(),
+							'<p>facedown</p>'
+						),
 						'//c'
 					),
-					new Subscribing\ConstantPage('<p>facedown</p>')
+					new Subscribing\ConstantPage(
+						new Subscribing\FakePage(),
+						'<p>facedown</p>'
+					)
 				),
 				'c',
 				'www.facedown.cz'
@@ -75,10 +87,16 @@ final class OwnedParts extends TestCase\Database {
 			new Subscribing\ConstantPart(
 				new Subscribing\HtmlPart(
 					new Subscribing\XPathExpression(
-						new Subscribing\ConstantPage('<p>google</p>'),
+						new Subscribing\ConstantPage(
+							new Subscribing\FakePage(),
+							'<p>google</p>'
+						),
 						'//d'
 					),
-					new Subscribing\ConstantPage('<p>google</p>')
+					new Subscribing\ConstantPage(
+						new Subscribing\FakePage(),
+						'<p>google</p>'
+					)
 				),
 				'd',
 				'www.google.com'
@@ -87,7 +105,7 @@ final class OwnedParts extends TestCase\Database {
 		);
 	}
 
-    protected function prepareDatabase() {
+	protected function prepareDatabase() {
 		$this->truncate(['parts', 'part_visits', 'pages', 'subscriptions']);
 		$this->restartSequence(['parts', 'part_visits', 'subscriptions']);
 		$this->database->query(
@@ -95,7 +113,7 @@ final class OwnedParts extends TestCase\Database {
 			("www.google.com", "<p>google</p>"),
 			("www.facedown.cz", "<p>facedown</p>")'
 		);
-    }
+	}
 }
 
 (new OwnedParts)->run();

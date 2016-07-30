@@ -32,6 +32,7 @@ final class FrugalRequest implements Request {
 		if($this->outdated($this->url))
 			return $this->pages->add($this->url, $this->origin->send());
 		return new Subscribing\ConstantPage(
+			new Subscribing\FakePage(),
 			$this->database->fetchSingle(
 				'SELECT content FROM pages WHERE url = ?',
 				$this->url

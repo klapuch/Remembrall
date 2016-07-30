@@ -6,9 +6,11 @@ namespace Remembrall\Model\Subscribing;
  * Constant page without roundtrips
  */
 final class ConstantPage implements Page {
+	private $origin;
 	private $content;
 
-	public function __construct(string $content) {
+	public function __construct(Page $origin, string $content) {
+		$this->origin = $origin;
 		$this->content = $content;
 	}
 
@@ -19,6 +21,6 @@ final class ConstantPage implements Page {
 	}
 
 	public function refresh(): Page {
-		return $this;
+		return $this->origin->refresh();
 	}
 }

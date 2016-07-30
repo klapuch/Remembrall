@@ -9,15 +9,21 @@ final class FakePart implements Part {
 	private $content;
 	private $url;
 	private $refreshedPart;
+	private $expression;
+	private $page;
 
 	public function __construct(
 		string $content = null,
 		string $url = null,
-		self $refreshedPart = null
+		self $refreshedPart = null,
+		Expression $expression = null,
+		Page $page = null
 	) {
 		$this->content = $content;
 		$this->url = $url;
 		$this->refreshedPart = $refreshedPart;
+		$this->expression = $expression;
+		$this->page = $page;
 	}
 
 	public function content(): string {
@@ -29,6 +35,10 @@ final class FakePart implements Part {
 	}
 
 	public function print(): array {
-		return [];
+		return [
+			'url' => $this->url,
+			'expression' => $this->expression,
+			'page' => $this->page,
+		];
 	}
 }

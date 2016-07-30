@@ -13,28 +13,32 @@ final class WebPages implements Pages {
 	}
 
 	public function add(string $url, Page $page): Page {
-		(new Storage\Transaction($this->database))->start(function() use($url, $page) {
-			if($this->alreadyExists($url)) {
+		(new Storage\Transaction($this->database))->start(
+			function() use ($url, $page) {
+				if($this->alreadyExists($url)) {
+					$this->database->query(
+						'UPDATE pages
+						SET content = ?
+						WHERE url = ?',
+						$page->content()->saveHTML(),
+						$this->normalizedUrl($url)
+					);
+				} else {
+					$this->database->query(
+						'INSERT INTO pages (url, content) VALUES
+						(?, ?)',
+						$this->normalizedUrl($url),
+						$page->content()->saveHTML()
+					);
+				}
 				$this->database->query(
-					'UPDATE pages SET content = ? WHERE url = ?',
-					$page->content()->saveHTML(),
-					$this->normalizedUrl($url)
-				);
-			} else {
-				$this->database->query(
-					'INSERT INTO pages (url, content) VALUES
+					'INSERT INTO page_visits (page_url, visited_at) VALUES
 					(?, ?)',
 					$this->normalizedUrl($url),
-					$page->content()->saveHTML()
+					new \DateTimeImmutable()
 				);
 			}
-			$this->database->query(
-				'INSERT INTO page_visits (page_url, visited_at) VALUES
-				(?, ?)',
-				$this->normalizedUrl($url),
-				new \DateTimeImmutable()
-			);
-		});
+		);
 		return $page;
 	}
 
@@ -45,7 +49,9 @@ final class WebPages implements Pages {
 	 */
 	private function alreadyExists(string $url): bool {
 		return (bool)$this->database->fetchSingle(
-			'SELECT 1 FROM pages WHERE url = ?',
+			'SELECT 1
+			FROM pages
+			WHERE url = ?',
 			$this->normalizedUrl($url)
 		);
 	}
@@ -54,7 +60,7 @@ final class WebPages implements Pages {
 		return (array)array_reduce(
 			$this->database->fetchAll('SELECT url, content FROM pages'),
 			function($previous, Dibi\Row $row) {
-				$previous[] = new ConstantPage($row['content'], $row['url']);
+				$previous[] = new ConstantPage(new FakePage(), $row['content']);
 				return $previous;
 			}
 		);

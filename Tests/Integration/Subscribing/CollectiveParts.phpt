@@ -15,14 +15,14 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class CollectiveParts extends TestCase\Database {
-    public function testAdding() {
+	public function testAdding() {
 		$this->database->query(
 			'INSERT INTO subscribers (id, email, password) VALUES
 			(1, "foo@bar.cz", "secret"),
 			(2, "facedown@facedown.cz", "secret")'
 		);
-        (new Subscribing\CollectiveParts(
-            $this->database
+		(new Subscribing\CollectiveParts(
+			$this->database
 		))->add(
 			new Subscribing\FakePart('<p>Content</p>'),
 			'www.google.com',
@@ -41,7 +41,7 @@ final class CollectiveParts extends TestCase\Database {
 			new \DateTimeImmutable()
 		);
 		Assert::count(1, $partVisits);
-    }
+	}
 
 	public function testTwiceAddingWithUpdate() {
 		$this->database->query(
@@ -50,7 +50,9 @@ final class CollectiveParts extends TestCase\Database {
 			(2, "facedown@facedown.cz", "secret")'
 		);
 		$refreshedPart = new Subscribing\FakePart('<p>Updated content</p>');
-		$part = new Subscribing\FakePart('<p>Content</p>', null, $refreshedPart);
+		$part = new Subscribing\FakePart(
+			'<p>Content</p>', null, $refreshedPart
+		);
 		Assert::same(
 			$part,
 			(new Subscribing\CollectiveParts(
@@ -102,10 +104,16 @@ final class CollectiveParts extends TestCase\Database {
 			new Subscribing\ConstantPart(
 				new Subscribing\HtmlPart(
 					new Subscribing\XPathExpression(
-						new Subscribing\ConstantPage('<p>google</p>'),
+						new Subscribing\ConstantPage(
+							new Subscribing\FakePage(),
+							'<p>google</p>'
+						),
 						'//a'
 					),
-					new Subscribing\ConstantPage('<p>google</p>')
+					new Subscribing\ConstantPage(
+						new Subscribing\FakePage(),
+						'<p>google</p>'
+					)
 				),
 				'a',
 				'www.google.com'
@@ -116,10 +124,16 @@ final class CollectiveParts extends TestCase\Database {
 			new Subscribing\ConstantPart(
 				new Subscribing\HtmlPart(
 					new Subscribing\XPathExpression(
-						new Subscribing\ConstantPage('<p>facedown</p>'),
+						new Subscribing\ConstantPage(
+							new Subscribing\FakePage(),
+							'<p>facedown</p>'
+						),
 						'//c'
 					),
-					new Subscribing\ConstantPage('<p>facedown</p>')
+					new Subscribing\ConstantPage(
+						new Subscribing\FakePage(),
+						'<p>facedown</p>'
+					)
 				),
 				'c',
 				'www.facedown.cz'
@@ -128,15 +142,19 @@ final class CollectiveParts extends TestCase\Database {
 		);
 	}
 
-    protected function prepareDatabase() {
-		$this->truncate(['parts', 'part_visits', 'pages', 'subscribers', 'subscriptions']);
-		$this->restartSequence(['parts', 'part_visits', 'subscribers', 'subscriptions']);
+	protected function prepareDatabase() {
+		$this->truncate(
+			['parts', 'part_visits', 'pages', 'subscribers', 'subscriptions']
+		);
+		$this->restartSequence(
+			['parts', 'part_visits', 'subscribers', 'subscriptions']
+		);
 		$this->database->query(
 			'INSERT INTO pages (url, content) VALUES
 			("www.google.com", "<p>google</p>"),
 			("www.facedown.cz", "<p>facedown</p>")'
 		);
-    }
+	}
 }
 
 (new CollectiveParts)->run();

@@ -14,20 +14,26 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class ExpiredParts extends TestCase\Database {
-    public function testIteratingExpiredParts() {
-        $parts = (new Subscribing\ExpiredParts(
-            new Subscribing\FakeParts(),
+	public function testIteratingExpiredParts() {
+		$parts = (new Subscribing\ExpiredParts(
+			new Subscribing\FakeParts(),
 			$this->database
-        ))->iterate();
-        Assert::count(3, $parts);
+		))->iterate();
+		Assert::count(3, $parts);
 		Assert::equal(
 			new Subscribing\ConstantPart(
 				new Subscribing\HtmlPart(
 					new Subscribing\XPathExpression(
-						new Subscribing\ConstantPage('google'),
+						new Subscribing\ConstantPage(
+							new Subscribing\FakePage(),
+							'google'
+						),
 						'//a'
 					),
-					new Subscribing\ConstantPage('google')
+					new Subscribing\ConstantPage(
+						new Subscribing\FakePage(),
+						'google'
+					)
 				),
 				'a',
 				'www.google.com'
@@ -38,10 +44,16 @@ final class ExpiredParts extends TestCase\Database {
 			new Subscribing\ConstantPart(
 				new Subscribing\HtmlPart(
 					new Subscribing\XPathExpression(
-						new Subscribing\ConstantPage('google'),
+						new Subscribing\ConstantPage(
+							new Subscribing\FakePage(),
+							'google'
+						),
 						'//c'
 					),
-					new Subscribing\ConstantPage('google')
+					new Subscribing\ConstantPage(
+						new Subscribing\FakePage(),
+						'google'
+					)
 				),
 				'c',
 				'www.google.com'
@@ -52,17 +64,23 @@ final class ExpiredParts extends TestCase\Database {
 			new Subscribing\ConstantPart(
 				new Subscribing\HtmlPart(
 					new Subscribing\XPathExpression(
-						new Subscribing\ConstantPage('facedown'),
+						new Subscribing\ConstantPage(
+							new Subscribing\FakePage(),
+							'facedown'
+						),
 						'//d'
 					),
-					new Subscribing\ConstantPage('facedown')
+					new Subscribing\ConstantPage(
+						new Subscribing\FakePage(),
+						'facedown'
+					)
 				),
 				'd',
 				'www.facedown.cz'
 			),
 			$parts[2]
 		);
-    }
+	}
 
 	protected function prepareDatabase() {
 		$this->truncate(['part_visits', 'parts', 'pages', 'subscriptions']);
@@ -95,7 +113,7 @@ final class ExpiredParts extends TestCase\Database {
 			("www.facedown.cz", "facedown"),
 			("www.foo.cz", "foo")'
 		);
-    }
+	}
 }
 
 (new ExpiredParts)->run();

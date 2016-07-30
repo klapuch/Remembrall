@@ -70,8 +70,14 @@ final class WebPages extends TestCase\Database {
 		);
 		Assert::equal(
 			[
-				new Subscribing\ConstantPage('<p>google</p>', 'www.google.com'),
-				new Subscribing\ConstantPage('facedown', 'www.facedown.cz'),
+				new Subscribing\ConstantPage(
+					new Subscribing\FakePage(),
+					'<p>google</p>'
+				),
+				new Subscribing\ConstantPage(
+					new Subscribing\FakePage(),
+					'facedown'
+				),
 			],
 			(new Subscribing\WebPages($this->database))->iterate()
 		);

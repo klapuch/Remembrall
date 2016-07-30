@@ -3,9 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Dibi;
-use Remembrall\Model\{
-	Storage
-};
+use Remembrall\Model\Storage;
 
 /**
  * All parts stored in the database shared with everyone
@@ -58,10 +56,13 @@ final class CollectiveParts implements Parts {
 				$previous[] = new ConstantPart(
 					new HtmlPart(
 						new XPathExpression(
-							new ConstantPage($row['page_content']),
+							new ConstantPage(
+								new FakePage(),
+								$row['page_content']
+							),
 							$row['expression']
 						),
-						new ConstantPage($row['page_content'])
+						new ConstantPage(new FakePage(), $row['page_content'])
 					),
 					$row['part_content'],
 					$row['url']

@@ -39,17 +39,20 @@ final class ExpiredParts implements Parts {
 					GROUP BY part_id
 				) AS part_visits ON part_visits.part_id = parts.id
 				WHERE visited_at IS NULL
-				OR visited_at + INTERVAL "1 MINUTE" * interval < NOW()
+				OR visited_at + INTERVAL "1 MINUTE" * INTERVAL < NOW()
 				ORDER BY visited_at ASC'
 			),
 			function($previous, Dibi\Row $row) {
 				$previous[] = new ConstantPart(
 					new HtmlPart(
 						new XPathExpression(
-							new ConstantPage($row['page_content']),
+							new ConstantPage(
+								new FakePage(),
+								$row['page_content']
+							),
 							$row['expression']
 						),
-						new ConstantPage($row['page_content'])
+						new ConstantPage(new FakePage(), $row['page_content'])
 					),
 					$row['part_content'],
 					$row['url']
