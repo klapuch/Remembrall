@@ -31,12 +31,18 @@ final class FrugalRequest implements Request {
 	public function send(): Subscribing\Page {
 		if($this->outdated($this->url))
 			return $this->pages->add($this->url, $this->origin->send());
+		$content = $this->database->fetchSingle(
+			'SELECT content
+			FROM pages
+			WHERE url = ?',
+			$this->url
+		);
 		return new Subscribing\ConstantPage(
-			new Subscribing\FakePage(),
-			$this->database->fetchSingle(
-				'SELECT content FROM pages WHERE url = ?',
-				$this->url
-			)
+			new Subscribing\HtmlWebPage(
+				new FakeResponse($content),
+				$this->origin
+			),
+			$content
 		);
 	}
 

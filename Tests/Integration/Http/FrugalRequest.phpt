@@ -21,7 +21,13 @@ final class FrugalRequest extends TestCase\Database {
 			("www.google.com", NOW())'
 		);
 		Assert::equal(
-			new Subscribing\ConstantPage(new Subscribing\FakePage(), 'google'),
+			new Subscribing\ConstantPage(
+				new Subscribing\HtmlWebPage(
+					new Http\FakeResponse('google'),
+					new Http\FakeRequest()
+				),
+				'google'
+			),
 			(new Http\FrugalRequest(
 				new Http\FakeRequest(),
 				'www.google.com',
@@ -39,7 +45,13 @@ final class FrugalRequest extends TestCase\Database {
 			("www.google.com", NOW() - INTERVAL "20 MINUTE")'
 		);
 		Assert::equal(
-			new Subscribing\ConstantPage(new Subscribing\FakePage(), 'google'),
+			new Subscribing\ConstantPage(
+				new Subscribing\HtmlWebPage(
+					new Http\FakeResponse('google'),
+					new Http\FakeRequest()
+				),
+				'google'
+			),
 			(new Http\FrugalRequest(
 				new Http\FakeRequest(),
 				'www.google.com',

@@ -5,57 +5,47 @@
  */
 namespace Remembrall\Unit\Subscribing;
 
+use GuzzleHttp;
 use Remembrall\Model\{
 	Subscribing, Http
 };
-use Tester;
+use Remembrall\TestCase;
 use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class OnlineParts extends Tester\TestCase {
+final class OnlineParts extends TestCase\Database {
 	public function testIteratingWithOnlineParts() {
 		$oldContent = new \DOMDocument();
-		$oldContent->loadHTML('<p>Hello</p>');
+		$oldContent->loadHTML('<h1>Hello</h1>');
 		$oldPage = new Subscribing\FakePage($oldContent);
-		$freshContent = new \DOMDocument();
-		$freshContent->loadHTML('<p>Hello There!</p>');
-		$onlinePage = new Subscribing\FakePage($oldContent);
-		$expression = new Subscribing\FakeExpression('//a');
+		$expression = new Subscribing\FakeExpression('//h1');
+		$logger = $this->mockery(\Tracy\ILogger::class);
+		$logger->shouldReceive('log')->never();
 		$parts = (new Subscribing\OnlineParts(
 			new Subscribing\FakeParts(
 				[
 					new Subscribing\FakePart(
-						'a',
-						'www.a.cz',
+						'Nevím',
+						'https://nette.org',
 						null,
 						$expression,
 						$oldPage
 					),
 				]
 			),
-			new Http\FakeRequest($onlinePage)
+			$logger,
+			$this->database,
+			new GuzzleHttp\Client(['http_errors' => false])
 		))->iterate();
-		Assert::equal(
-			new Subscribing\ConstantPart(
-				new Subscribing\HtmlPart(
-					new Subscribing\XPathExpression(
-						new Subscribing\ConstantPage(
-							$onlinePage,
-							$oldContent->saveHTML()
-						),
-						$expression
-					),
-					new Subscribing\ConstantPage(
-						$onlinePage,
-						$oldContent->saveHTML()
-					)
-				),
-				'a',
-				'www.a.cz'
-			),
-			$parts[0]
-		);
+		Assert::count(1, $parts);
+		Assert::same('Nevím', $parts[0]->content());
+		Assert::same('<h1>Framework</h1><h1>Tracy</h1><h1>Latte</h1><h1>Tester</h1>', $parts[0]->refresh()->content());
+	}
+
+	protected function prepareDatabase() {
+		$this->truncate(['pages', 'page_visits', 'parts', 'part_visits']);
+		$this->restartSequence(['page_visits', 'parts', 'part_visits']);
 	}
 }
 
