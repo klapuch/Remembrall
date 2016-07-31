@@ -74,21 +74,6 @@ ALTER TABLE ONLY test ALTER COLUMN id SET DEFAULT nextval('test_id_seq'::regclas
 
 
 --
--- Data for Name: test; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY test (id, name) FROM stdin;
-\.
-
-
---
--- Name: test_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('test_id_seq', 6, true);
-
-
---
 -- Name: test_id; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
