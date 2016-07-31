@@ -37,11 +37,13 @@ final class PostgresPart implements Part {
 	}
 
 	public function refresh(): Part {
+		$refreshedPart = $this->origin->refresh();
 		$this->database->query(
 			'UPDATE parts
-			SET content = ?
+			SET content = ?, content_hash = MD5(?)
 			WHERE page_url = ? AND expression = ?',
-			$this->origin->refresh()->content(),
+			$refreshedPart->content(), //todo
+			$refreshedPart->content(),
 			$this->url,
 			$this->expression
 		);

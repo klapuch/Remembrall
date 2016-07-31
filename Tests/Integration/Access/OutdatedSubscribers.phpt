@@ -20,10 +20,10 @@ final class OutdatedSubscribers extends TestCase\Database {
 			("foo@bar.cz", "password")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.google.com", "//h1", "content"),
-			("www.google.com", "//h2", "content"),
-			("www.google.com", "//h3", "content")'
+			'INSERT INTO parts (page_url, expression, content, content_hash) VALUES
+			("www.google.com", "//h1", "content", MD5("content")),
+			("www.google.com", "//h2", "content", MD5("content")),
+			("www.google.com", "//h3", "content", MD5("content"))'
 		);
 		$this->database->query(
 			'INSERT INTO part_visits (part_id, visited_at) VALUES 

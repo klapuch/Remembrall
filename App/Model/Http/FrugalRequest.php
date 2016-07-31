@@ -74,7 +74,9 @@ final class FrugalRequest implements Request {
 	 */
 	private function exists(string $url): bool {
 		return (bool)$this->database->fetchSingle(
-			'SELECT 1 FROM pages WHERE url = ?',
+			'SELECT 1
+			FROM pages
+			WHERE url = ?',
 			$url
 		);
 	}

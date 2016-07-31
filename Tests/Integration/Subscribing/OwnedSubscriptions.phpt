@@ -20,8 +20,8 @@ final class OwnedSubscriptions extends TestCase\Database {
 			(1, "2000-01-01 01:01:01")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.google.com", "//p", "a")'
+			'INSERT INTO parts (page_url, expression, content, content_hash) VALUES
+			("www.google.com", "//p", "a", MD5("a"))'
 		);
         (new Subscribing\OwnedSubscriptions(
 			new Access\FakeSubscriber(666),
@@ -36,7 +36,7 @@ final class OwnedSubscriptions extends TestCase\Database {
             )
         );
 		$parts = $this->database->fetchAll(
-			'SELECT parts.id, page_url, expression, interval 
+			'SELECT subscriptions.part_id AS id, page_url, expression, interval 
 			FROM parts
 			INNER JOIN subscriptions ON subscriptions.part_id = parts.id'
 		);
@@ -55,8 +55,8 @@ final class OwnedSubscriptions extends TestCase\Database {
 
 	public function testSubscribingDuplicateWithRollback() {
 		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.google.com", "//p", "a")'
+			'INSERT INTO parts (page_url, expression, content, content_hash) VALUES
+			("www.google.com", "//p", "a", MD5("a"))'
 		);
 		$this->database->query(
 			'INSERT INTO part_visits (part_id, visited_at) VALUES
@@ -92,11 +92,11 @@ final class OwnedSubscriptions extends TestCase\Database {
 
 	public function testIteratingOwnedSubscriptions() {
 		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.google.com", "//a", "a"),
-			("www.facedown.cz", "//b", "b"),
-			("www.facedown.cz", "//c", "c"),
-			("www.google.com", "//d", "d")'
+			'INSERT INTO parts (page_url, expression, content, content_hash) VALUES
+			("www.google.com", "//a", "a", MD5("a")),
+			("www.facedown.cz", "//b", "b", MD5("b")),
+			("www.facedown.cz", "//c", "c", MD5("c")),
+			("www.google.com", "//d", "d", MD5("d"))'
 		);
 		$this->database->query(
 			'INSERT INTO subscriptions (part_id, subscriber_id, interval) VALUES

@@ -74,9 +74,9 @@ final class OwnedSubscription extends TestCase\Database {
 	protected function prepareDatabase() {
 		$this->purge(['parts', 'subscriptions']);
 		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.google.com", "//b", "b"),
-			("www.facedown.cz", "//b", "c")'
+			'INSERT INTO parts (page_url, expression, content, content_hash) VALUES
+			("www.google.com", "//b", "b", MD5("b")),
+			("www.facedown.cz", "//b", "c", MD5("c"))'
 		);
 		$this->database->query(
 			'INSERT INTO subscriptions (part_id, subscriber_id, interval) VALUES

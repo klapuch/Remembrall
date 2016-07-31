@@ -36,13 +36,14 @@ final class PostgresPart extends TestCase\Database {
 		$parts = $this->database->fetchAll('SELECT * FROM parts');
 		Assert::count(1, $parts);
 		Assert::same('NEW_CONTENT', $parts[0]['content']);
+		Assert::same(md5($parts[0]['content']), $parts[0]['content_hash']);
 	}
 
 	protected function prepareDatabase() {
 		$this->purge(['parts']);
 		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.facedown.cz", "//d", "d")'
+			'INSERT INTO parts (page_url, expression, content, content_hash) VALUES
+			("www.facedown.cz", "//d", "d", MD5("d"))'
 		);
 	}
 }

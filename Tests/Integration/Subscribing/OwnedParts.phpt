@@ -24,11 +24,11 @@ final class OwnedParts extends TestCase\Database {
 			(1, NOW() - INTERVAL "50 MINUTE")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.google.com", "//a", "a"),
-			("www.facedown.cz", "//b", "b"),
-			("www.facedown.cz", "//c", "c"),
-			("www.google.com", "//d", "d")'
+			'INSERT INTO parts (page_url, expression, content, content_hash) VALUES
+			("www.google.com", "//a", "a", MD5("a")),
+			("www.facedown.cz", "//b", "b", MD5("b")),
+			("www.facedown.cz", "//c", "c", MD5("c")),
+			("www.google.com", "//d", "d", MD5("d"))'
 		);
 		$this->database->query(
 			'INSERT INTO subscriptions (part_id, subscriber_id, interval) VALUES

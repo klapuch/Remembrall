@@ -23,11 +23,11 @@ final class ExpiredParts extends TestCase\Database {
 			(1, NOW() - INTERVAL "4 DAY")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.google.com", "//a", "a"),
-			("www.facedown.cz", "//b", "b"),
-			("www.google.com", "//c", "c"),
-			("www.facedown.cz", "//d", "d")'
+			'INSERT INTO parts (page_url, expression, content, content_hash) VALUES
+			("www.google.com", "//a", "a", MD5("a")),
+			("www.facedown.cz", "//b", "b", MD5("b")),
+			("www.google.com", "//c", "c", MD5("c")),
+			("www.facedown.cz", "//d", "d", MD5("d"))'
 		);
 		$this->database->query(
 			'INSERT INTO subscriptions (part_id, subscriber_id, interval) VALUES

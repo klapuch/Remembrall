@@ -157,7 +157,8 @@ CREATE TABLE parts (
     id integer NOT NULL,
     page_url character varying NOT NULL,
     expression character varying NOT NULL,
-    content text NOT NULL
+    content text NOT NULL,
+    content_hash character varying(32) NOT NULL
 );
 
 

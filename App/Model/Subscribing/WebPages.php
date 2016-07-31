@@ -58,7 +58,7 @@ final class WebPages implements Pages {
 
 	public function iterate(): array {
 		return (array)array_reduce(
-			$this->database->fetchAll('SELECT url, content FROM pages'),
+			$this->database->fetchAll('SELECT content FROM pages'),
 			function($previous, Dibi\Row $row) {
 				$previous[] = new ConstantPage(new FakePage(), $row['content']);
 				return $previous;
