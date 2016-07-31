@@ -18,7 +18,7 @@ before_install:
   - composer self-update
 
 install:
-  - composer install --no-interaction --prefer-source --optimize-autoloader
+  - composer install --no-interaction --prefer-source
 
 before_script:
   - psql -c 'CREATE DATABASE remembrall_test;' -U postgres
