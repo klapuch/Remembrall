@@ -1,4 +1,15 @@
 {
+  "description": "Remembrall sends email about changes on pages",
+  "homepage": "http://github.com/klapuch/remembrall",
+  "type": "project",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Dominik Klapuch",
+      "email": "klapuchdominik@gmail.com",
+      "homepage": "http://www.facedown.cz"
+    }
+  ],
   "require": {
     "php": ">=7.0",
     "nette/application": "^2.4.0",
