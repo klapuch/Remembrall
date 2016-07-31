@@ -20,7 +20,7 @@ final class ExpiredParts implements Parts {
 		return $this->origin->add($part, $url, $expression);
 	}
 
-	public function iterate(): array {
+	public function iterate(): array {//todo check hash
 		return (array)array_reduce(
 			$this->database->fetchAll(
 				'SELECT parts.content AS part_content, expression,

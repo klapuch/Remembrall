@@ -36,9 +36,9 @@ final class OutdatedSubscribers extends TestCase\Database {
 		$this->database->query(
 			'INSERT INTO subscriptions (part_id, subscriber_id, interval, hash) VALUES
 			(1, 1, "PT30M","A"),
-			(1, 4, "PT30M","A"),
-			(2, 2, "PT30M","A"),
-			(1, 3, "PT40M","A")'
+			(1, 4, "PT30M","content1HASH"),
+			(2, 2, "PT30M","content2HASH"),
+			(1, 3, "PT40M","content1HASH")'
 		);
 		Assert::equal(
 			[
@@ -55,10 +55,10 @@ final class OutdatedSubscribers extends TestCase\Database {
 		Assert::equal(
 			[
 				new Dibi\Row(
-					['hash' => 'A', 'part_id' => 2, 'subscriber_id' => 2]
+					['hash' => 'content2HASH', 'part_id' => 2, 'subscriber_id' => 2]
 				),
 				new Dibi\Row(
-					['hash' => 'A', 'part_id' => 1, 'subscriber_id' => 3]
+					['hash' => 'content1HASH', 'part_id' => 1, 'subscriber_id' => 3]
 				),
 				new Dibi\Row(
 					['hash' => 'content1HASH', 'part_id' => 1, 'subscriber_id' => 1]

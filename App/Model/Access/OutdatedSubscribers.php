@@ -49,7 +49,10 @@ final class OutdatedSubscribers implements Subscribers {
 							FROM part_visits
 							GROUP BY part_id
 						) AS part_visits ON parts.id = part_visits.part_id
-						WHERE visited_at + INTERVAL "1 MINUTE" * CAST(SUBSTRING(INTERVAL FROM "[0-9]+") AS INT) < NOW()
+						WHERE (
+							visited_at + INTERVAL "1 MINUTE" * CAST(SUBSTRING(INTERVAL FROM "[0-9]+") AS INT) < NOW()
+							OR hash <> content_hash
+						)
 						AND page_url = ?
 						AND expression = ?
 					) RETURNING subscriber_id AS id
