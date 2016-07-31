@@ -4,7 +4,6 @@ namespace Remembrall\Model\Email;
 
 use Dibi;
 use Nette\Application\UI;
-use Nette\Mail;
 use Remembrall\Model\{
 	Access, Subscribing
 };

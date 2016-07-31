@@ -5,7 +5,7 @@
  */
 namespace Remembrall\Integration\Subscribing;
 
-use Dibi;
+
 use Remembrall\Model\{
 	Subscribing, Access
 };

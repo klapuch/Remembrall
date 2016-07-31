@@ -9,7 +9,6 @@ use Remembrall\Model\{
 	Http, Subscribing
 };
 use Remembrall\TestCase;
-use Tester;
 use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';

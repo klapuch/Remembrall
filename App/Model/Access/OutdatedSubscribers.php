@@ -3,10 +3,6 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Access;
 
 use Dibi;
-use Remembrall\Exception;
-use Remembrall\Model\{
-	Security, Subscribing
-};
 
 /**
  * Subscribers without actual subscribing

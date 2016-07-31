@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Remembrall\Exception;
 use Remembrall\Model\Http;
 
 /**

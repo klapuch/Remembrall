@@ -6,7 +6,7 @@
 namespace Remembrall\Unit\Subscribing;
 
 use Remembrall\Model\{
-	Subscribing, Access, Http
+	Subscribing
 };
 use Tester;
 use Tester\Assert;

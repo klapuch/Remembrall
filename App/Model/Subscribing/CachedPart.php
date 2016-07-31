@@ -3,9 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Nette\Caching;
-use Remembrall\Model\{
-	Access, Storage
-};
+use Remembrall\Model\Storage;
 
 /**
  * Cache any given part

@@ -8,7 +8,6 @@ namespace Remembrall\Unit\Subscribing;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
-use Tester;
 
 require __DIR__ . '/../../bootstrap.php';
 

@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Access;
 
-use Remembrall\Exception;
-
 final class FakeSubscribers implements Subscribers {
 	private $subscribers;
 

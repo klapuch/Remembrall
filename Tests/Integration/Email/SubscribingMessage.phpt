@@ -5,7 +5,7 @@
  */
 namespace Remembrall\Integration\Http;
 
-use Dibi;
+
 use Latte;
 use Nette\Application\UI;
 use Nette\Bridges\ApplicationLatte;
@@ -13,7 +13,6 @@ use Remembrall\Model\{
 	Access, Email, Subscribing
 };
 use Remembrall\TestCase;
-use Tester;
 use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';

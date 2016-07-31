@@ -6,7 +6,7 @@
 namespace Remembrall\Integration\Subscribing;
 
 use Remembrall\Model\{
-	Access, Subscribing
+	Subscribing
 };
 use Remembrall\TestCase;
 use Tester\Assert;

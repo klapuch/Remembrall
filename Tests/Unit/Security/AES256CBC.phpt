@@ -6,11 +6,12 @@
 namespace Remembrall\Model\Unit;
 
 use Remembrall\Model\Security;
+use Tester;
 use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class AES256CBC extends \Tester\TestCase {
+final class AES256CBC extends Tester\TestCase {
 	/** @var Security\Cipher */
 	private $cipher;
 	const LENGTH = 160;

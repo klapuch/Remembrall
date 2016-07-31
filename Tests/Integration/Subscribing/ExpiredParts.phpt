@@ -6,7 +6,7 @@
 namespace Remembrall\Integration\Subscribing;
 
 use Remembrall\Model\{
-	Http, Subscribing
+	Subscribing
 };
 use Remembrall\TestCase;
 use Tester\Assert;

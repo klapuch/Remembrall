@@ -6,7 +6,6 @@
 namespace Remembrall\Unit\Subscribing;
 
 use Remembrall\Model\Subscribing;
-use Remembrall\TestCase;
 use Tester;
 use Tester\Assert;
 

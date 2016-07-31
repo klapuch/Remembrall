@@ -5,10 +5,7 @@
  */
 namespace Remembrall\Integration\Subscribing;
 
-use Dibi;
-use Remembrall\Model\{
-	Subscribing, Access, Http
-};
+use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
 

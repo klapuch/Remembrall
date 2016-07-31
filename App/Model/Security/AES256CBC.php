@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Security;
 
-use Remembrall\Exception;
-
 /**
  * AES-256-CBC cipher
  */
