@@ -87,9 +87,9 @@ final class CollectiveParts extends TestCase\Database {
 			("www.facedown.cz", "//c", "c", MD5("c"))'
 		);
 		$this->database->query(
-			'INSERT INTO subscriptions (part_id, subscriber_id, interval) VALUES
-			(1, 1, "PT1M"),
-			(2, 2, "PT2M")'
+			'INSERT INTO subscriptions (part_id, subscriber_id, interval, hash) VALUES
+			(1, 1, "PT1M", "sample"),
+			(2, 2, "PT2M", "sample")'
 		);
 		$parts = (new Subscribing\CollectiveParts(
 			$this->database

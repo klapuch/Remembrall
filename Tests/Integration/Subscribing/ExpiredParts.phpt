@@ -30,13 +30,13 @@ final class ExpiredParts extends TestCase\Database {
 			(3, NOW() - INTERVAL "10 MINUTE"),
 			(1, NOW() - INTERVAL "4 DAY")'
 		);
-		$this->database->query(
-			'INSERT INTO subscriptions (part_id, subscriber_id, interval) VALUES
-			(1, 1, "PT10M"),
-			(2, 2, "PT10M"),
-			(3, 3, "PT3M"),
-			(3, 1, "PT20M"),
-			(4, 1, "PT10M")'
+		$this->database->query(//todo
+			'INSERT INTO subscriptions (part_id, subscriber_id, interval, hash) VALUES
+			(1, 1, "PT10M", "A"),
+			(2, 2, "PT10M", "A"),
+			(3, 3, "PT3M", "A"),
+			(3, 1, "PT20M", "A"),
+			(4, 1, "PT10M", "A")'
 		);
 		$this->database->query(
 			'INSERT INTO pages (url, content) VALUES

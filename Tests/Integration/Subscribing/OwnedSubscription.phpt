@@ -79,9 +79,9 @@ final class OwnedSubscription extends TestCase\Database {
 			("www.facedown.cz", "//b", "c", MD5("c"))'
 		);
 		$this->database->query(
-			'INSERT INTO subscriptions (part_id, subscriber_id, interval) VALUES
-			(1, 2, "PT2M"),
-			(2, 666, "PT3M")'
+			'INSERT INTO subscriptions (part_id, subscriber_id, interval, hash) VALUES
+			(1, 2, "PT2M", "sample"),
+			(2, 666, "PT3M", "sample")'
 		);
 	}
 }

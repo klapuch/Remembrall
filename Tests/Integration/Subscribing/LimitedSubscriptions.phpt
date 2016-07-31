@@ -38,8 +38,8 @@ final class LimitedSubscriptions extends TestCase\Database {
 			("www.facedown.cz", "//d", "d", MD5("d"))'
 		);
 		$this->database->query(
-			'INSERT INTO subscriptions (part_id, subscriber_id, interval) VALUES
-			(5, 666, "PT5M")'
+			'INSERT INTO subscriptions (part_id, subscriber_id, interval, hash) VALUES
+			(5, 666, "PT5M", "sample")'
 		);
 		(new Subscribing\LimitedSubscriptions(
 			$this->database,
@@ -62,11 +62,11 @@ final class LimitedSubscriptions extends TestCase\Database {
 			("www.google.com", "//d", "d", MD5("d"))'
 		);
 		$this->database->query(
-			'INSERT INTO subscriptions (part_id, subscriber_id, interval) VALUES
-			(1, 666, "PT1M"),
-			(2, 666, "PT2M"),
-			(3, 666, "PT3M"),
-			(4, 666, "PT4M")'
+			'INSERT INTO subscriptions (part_id, subscriber_id, interval, hash) VALUES
+			(1, 666, "PT1M", "sample"),
+			(2, 666, "PT2M", "sample"),
+			(3, 666, "PT3M", "sample"),
+			(4, 666, "PT4M", "sample")'
 		);
     }
 }

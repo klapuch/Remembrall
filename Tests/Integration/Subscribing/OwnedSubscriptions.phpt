@@ -101,11 +101,11 @@ final class OwnedSubscriptions extends TestCase\Database {
 			("www.google.com", "//d", "d", MD5("d"))'
 		);
 		$this->database->query(
-			'INSERT INTO subscriptions (part_id, subscriber_id, interval) VALUES
-			(1, 1, "PT1M"),
-			(2, 2, "PT2M"),
-			(3, 1, "PT3M"),
-			(4, 1, "PT4M")'
+			'INSERT INTO subscriptions (part_id, subscriber_id, interval, hash) VALUES
+			(1, 1, "PT1M", "sample"),
+			(2, 2, "PT2M", "sample"),
+			(3, 1, "PT3M", "sample"),
+			(4, 1, "PT4M", "sample")'
 		);
 		$this->purge(['part_visits']);
 		$this->database->query(

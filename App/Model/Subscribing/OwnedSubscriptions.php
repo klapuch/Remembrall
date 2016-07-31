@@ -59,12 +59,17 @@ final class OwnedSubscriptions implements Subscriptions {
 		try {
 			$this->database->query(
 				'INSERT INTO subscriptions
-				(part_id, subscriber_id, interval) VALUES
-				((SELECT id FROM parts WHERE expression = ? AND page_url = ?), ?, ?)',
-				$expression,
-				$url,
+				(part_id, hash, subscriber_id, interval)
+				(
+					SELECT id, content_hash, ?, ?
+					FROM parts
+					WHERE expression = ?
+					AND page_url = ?
+				)',
 				$this->owner->id(),
-				sprintf('PT%dM', $interval->step()->i)
+				sprintf('PT%dM', $interval->step()->i),
+				$expression,
+				$url
 			);
 		} catch(Dibi\UniqueConstraintViolationException $ex) {
 			throw new Exception\DuplicateException(
