@@ -31,12 +31,6 @@ final class WebPages implements Pages {
 						$page->content()->saveHTML()
 					);
 				}
-				$this->database->query(
-					'INSERT INTO page_visits (page_url, visited_at) VALUES
-					(?, ?)',
-					$this->normalizedUrl($url),
-					new \DateTimeImmutable()
-				);
 			}
 		);
 		return $page;

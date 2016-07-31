@@ -16,18 +16,19 @@ require __DIR__ . '/../../bootstrap.php';
 final class ExpiredParts extends TestCase\Database {
 	public function testIteratingExpiredParts() {
 		$this->database->query(
-			'INSERT INTO part_visits (part_id, visited_at) VALUES
-			(1, NOW() - INTERVAL "2 DAY"),
-			(2, NOW()),
-			(3, NOW() - INTERVAL "10 MINUTE"),
-			(1, NOW() - INTERVAL "4 DAY")'
-		);
-		$this->database->query(
 			'INSERT INTO parts (page_url, expression, content, content_hash) VALUES
 			("www.google.com", "//a", "a", MD5("a")),
 			("www.facedown.cz", "//b", "b", MD5("b")),
 			("www.google.com", "//c", "c", MD5("c")),
 			("www.facedown.cz", "//d", "d", MD5("d"))'
+		);
+		$this->purge(['part_visits']);
+		$this->database->query(
+			'INSERT INTO part_visits (part_id, visited_at) VALUES
+			(1, NOW() - INTERVAL "2 DAY"),
+			(2, NOW()),
+			(3, NOW() - INTERVAL "10 MINUTE"),
+			(1, NOW() - INTERVAL "4 DAY")'
 		);
 		$this->database->query(
 			'INSERT INTO subscriptions (part_id, subscriber_id, interval) VALUES

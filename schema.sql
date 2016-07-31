@@ -29,6 +29,38 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 SET search_path = public, pg_catalog;
 
+--
+-- Name: record_page_access(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION record_page_access() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+begin
+    INSERT INTO page_visits (page_url, visited_at) VALUES (NEW.url, NOW());
+    return new;
+end
+$$;
+
+
+ALTER FUNCTION public.record_page_access() OWNER TO postgres;
+
+--
+-- Name: record_part_access(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION record_part_access() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+begin
+    INSERT INTO part_visits (part_id, visited_at) VALUES (NEW.id, NOW());
+    return new;
+end
+$$;
+
+
+ALTER FUNCTION public.record_part_access() OWNER TO postgres;
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -477,6 +509,34 @@ CREATE INDEX part_visits_part_id ON part_visits USING btree (part_id);
 --
 
 CREATE INDEX subscribed_parts_part_id ON subscriptions USING btree (part_id);
+
+
+--
+-- Name: pages_ai; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER pages_ai AFTER INSERT ON pages FOR EACH ROW EXECUTE PROCEDURE record_page_access();
+
+
+--
+-- Name: pages_au; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER pages_au AFTER UPDATE ON pages FOR EACH ROW EXECUTE PROCEDURE record_page_access();
+
+
+--
+-- Name: parts_ai; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER parts_ai AFTER INSERT ON parts FOR EACH ROW EXECUTE PROCEDURE record_part_access();
+
+
+--
+-- Name: parts_au; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER parts_au AFTER UPDATE ON parts FOR EACH ROW EXECUTE PROCEDURE record_part_access();
 
 
 --

@@ -19,9 +19,7 @@ final class CollectiveParts implements Parts {
 		return (new Storage\Transaction($this->database))->start(
 			function() use ($part, $url, $expression) {
 				if($this->alreadyExists($url, $expression)) {
-					$refreshedPart = $part->refresh();
-					$this->record($url, $expression);
-					return $refreshedPart;
+					return $part->refresh();
 				} else {
 					$this->database->query(
 						'INSERT INTO parts
@@ -32,7 +30,6 @@ final class CollectiveParts implements Parts {
 						$part->content(), //todo
 						$part->content()
 					);
-					$this->record($url, $expression);
 					return $part;
 				}
 			}
@@ -70,21 +67,6 @@ final class CollectiveParts implements Parts {
 				);
 				return $previous;
 			}
-		);
-	}
-
-	/**
-	 * Record the access time to the added/refreshed part
-	 * @param string $url
-	 * @param string $expression
-	 */
-	private function record(string $url, string $expression) {
-		$this->database->query(
-			'INSERT INTO part_visits (part_id, visited_at) VALUES
-			((SELECT id FROM parts WHERE page_url = ? AND expression = ?), ?)',
-			$url,
-			$expression,
-			new \DateTimeImmutable()
 		);
 	}
 

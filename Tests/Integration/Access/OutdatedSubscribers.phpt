@@ -25,6 +25,7 @@ final class OutdatedSubscribers extends TestCase\Database {
 			("www.google.com", "//h2", "content", MD5("content")),
 			("www.google.com", "//h3", "content", MD5("content"))'
 		);
+		$this->purge(['part_visits']);
 		$this->database->query(
 			'INSERT INTO part_visits (part_id, visited_at) VALUES 
 			(1, "2000-01-01 01:01"),

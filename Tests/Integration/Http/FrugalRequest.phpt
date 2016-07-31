@@ -118,6 +118,7 @@ final class FrugalRequest extends TestCase\Database {
 			'INSERT INTO pages (url, content) VALUES
 			("www.google.com", "google")'
 		);
+		$this->purge(['page_visits']);
 	}
 }
 

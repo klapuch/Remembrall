@@ -39,8 +39,7 @@ final class CollectiveParts extends TestCase\Database {
 		Assert::same(md5($parts[0]['content']), $parts[0]['content_hash']);
 		Assert::same('//p', $parts[0]['expression']);
 		$partVisits = $this->database->fetchAll(
-			'SELECT part_id FROM part_visits WHERE visited_at <= ?',
-			new \DateTimeImmutable()
+			'SELECT part_id FROM part_visits WHERE visited_at <= NOW()'
 		);
 		Assert::count(1, $partVisits);
 	}
@@ -73,12 +72,6 @@ final class CollectiveParts extends TestCase\Database {
 				$part,
 				'www.google.com',
 				'//p'
-			)
-		);
-		Assert::count(
-			2,
-			$this->database->fetchAll(
-				'SELECT part_id FROM part_visits'
 			)
 		);
 	}

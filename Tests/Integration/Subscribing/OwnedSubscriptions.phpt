@@ -16,14 +16,15 @@ require __DIR__ . '/../../bootstrap.php';
 final class OwnedSubscriptions extends TestCase\Database {
     public function testSubscribingBrandNew() {
 		$this->database->query(
-			'INSERT INTO part_visits (part_id, visited_at) VALUES
-			(1, "2000-01-01 01:01:01")'
-		);
-		$this->database->query(
 			'INSERT INTO parts (page_url, expression, content, content_hash) VALUES
 			("www.google.com", "//p", "a", MD5("a"))'
 		);
-        (new Subscribing\OwnedSubscriptions(
+		$this->purge(['part_visits']);
+		$this->database->query(
+			'INSERT INTO part_visits (part_id, visited_at) VALUES
+			(1, "2000-01-01 01:01:01")'
+		);
+		(new Subscribing\OwnedSubscriptions(
 			new Access\FakeSubscriber(666),
             $this->database
         ))->subscribe(
@@ -58,6 +59,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 			'INSERT INTO parts (page_url, expression, content, content_hash) VALUES
 			("www.google.com", "//p", "a", MD5("a"))'
 		);
+		$this->purge(['part_visits']);
 		$this->database->query(
 			'INSERT INTO part_visits (part_id, visited_at) VALUES
 			(1, "2000-01-01 01:01:01")'
@@ -105,6 +107,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 			(3, 1, "PT3M"),
 			(4, 1, "PT4M")'
 		);
+		$this->purge(['part_visits']);
 		$this->database->query(
 			'INSERT INTO part_visits (part_id, visited_at) VALUES
 			(1, "2000-01-01 01:01:01"),

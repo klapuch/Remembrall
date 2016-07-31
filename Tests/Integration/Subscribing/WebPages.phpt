@@ -31,8 +31,7 @@ final class WebPages extends TestCase\Database {
 				'SELECT COUNT(*)
 				FROM page_visits
 				WHERE page_url = "www.facedown.cz" OR page_url = "www.facedown.cz/?x=10#here"
-				AND visited_at <= ?',
-				new \DateTimeImmutable()
+				AND visited_at <= NOW()'
 			)
 		);
 	}
@@ -57,8 +56,7 @@ final class WebPages extends TestCase\Database {
 				'SELECT COUNT(*)
 				FROM page_visits
 				WHERE page_url = "www.facedown.cz"
-				AND visited_at <= ?',
-				new \DateTimeImmutable()
+				AND visited_at <= NOW()'
 			)
 		);
 	}
