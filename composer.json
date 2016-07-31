@@ -12,6 +12,12 @@
   ],
   "require": {
     "php": ">=7.0",
+    "ext-mbstring": "*",
+    "ext-dom": "*",
+    "ext-xml": "*",
+    "ext-tokenizer": "*",
+    "ext-simplexml": "*",
+    "ext-pgsql": "*",
     "nette/application": "^2.4.0",
     "nette/bootstrap": "^2.4.0",
     "nette/caching": "^2.5.0",
