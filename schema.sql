@@ -30,10 +30,10 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 SET search_path = public, pg_catalog;
 
 --
--- Name: record_page_access(); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: record_page_visit(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION record_page_access() RETURNS trigger
+CREATE FUNCTION record_page_visit() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 begin
@@ -43,13 +43,13 @@ end
 $$;
 
 
-ALTER FUNCTION public.record_page_access() OWNER TO postgres;
+ALTER FUNCTION public.record_page_visit() OWNER TO postgres;
 
 --
--- Name: record_part_access(); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: record_part_visit(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION record_part_access() RETURNS trigger
+CREATE FUNCTION record_part_visit() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 begin
@@ -59,7 +59,7 @@ end
 $$;
 
 
-ALTER FUNCTION public.record_part_access() OWNER TO postgres;
+ALTER FUNCTION public.record_part_visit() OWNER TO postgres;
 
 SET default_tablespace = '';
 
@@ -515,28 +515,28 @@ CREATE INDEX subscribed_parts_part_id ON subscriptions USING btree (part_id);
 -- Name: pages_ai; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
-CREATE TRIGGER pages_ai AFTER INSERT ON pages FOR EACH ROW EXECUTE PROCEDURE record_page_access();
+CREATE TRIGGER pages_ai AFTER INSERT ON pages FOR EACH ROW EXECUTE PROCEDURE record_page_visit();
 
 
 --
 -- Name: pages_au; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
-CREATE TRIGGER pages_au AFTER UPDATE ON pages FOR EACH ROW EXECUTE PROCEDURE record_page_access();
+CREATE TRIGGER pages_au AFTER UPDATE ON pages FOR EACH ROW EXECUTE PROCEDURE record_page_visit();
 
 
 --
 -- Name: parts_ai; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
-CREATE TRIGGER parts_ai AFTER INSERT ON parts FOR EACH ROW EXECUTE PROCEDURE record_part_access();
+CREATE TRIGGER parts_ai AFTER INSERT ON parts FOR EACH ROW EXECUTE PROCEDURE record_part_visit();
 
 
 --
 -- Name: parts_au; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
-CREATE TRIGGER parts_au AFTER UPDATE ON parts FOR EACH ROW EXECUTE PROCEDURE record_part_access();
+CREATE TRIGGER parts_au AFTER UPDATE ON parts FOR EACH ROW EXECUTE PROCEDURE record_part_visit();
 
 
 --
