@@ -64,12 +64,17 @@ final class OnlineParts implements Parts {
 					$this->logger
 				))->send();
 				$previous[] = new ConstantPart(
-					new HtmlPart(
-						new XPathExpression($onlinePage, $expression),
-						new ConstantPage(
-							$onlinePage,
-							$oldPage->content()->saveHTML()
-						)
+					new PostgresPart(
+						new HtmlPart(
+							new XPathExpression($onlinePage, $expression),
+							new ConstantPage(
+								$onlinePage,
+								$oldPage->content()->saveHTML()
+							)
+						),
+						$url,
+						$expression,
+						$this->database
 					),
 					$part->content(),
 					$url

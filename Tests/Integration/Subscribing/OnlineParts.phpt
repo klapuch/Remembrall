@@ -6,6 +6,7 @@
 namespace Remembrall\Integration\Subscribing;
 
 use GuzzleHttp;
+use Dibi;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -38,12 +39,27 @@ final class OnlineParts extends TestCase\Database {
 		))->iterate();
 		Assert::count(1, $parts);
 		Assert::same('Nevím', $parts[0]->content());
-		Assert::same('<h1>Framework</h1><h1>Tracy</h1><h1>Latte</h1><h1>Tester</h1>', $parts[0]->refresh()->content());
+		Assert::equal(
+			[new Dibi\Row(['content' => 'Nevím'])],
+			$this->database->fetchAll('SELECT content FROM parts')
+		);
+		Assert::same(
+			'<h1>Framework</h1><h1>Tracy</h1><h1>Latte</h1><h1>Tester</h1>',
+			$parts[0]->refresh()->content()
+		);
+		Assert::equal(
+			[new Dibi\Row(['content' => '<h1>Framework</h1><h1>Tracy</h1><h1>Latte</h1><h1>Tester</h1>'])],
+			$this->database->fetchAll('SELECT content FROM parts')
+		);
 	}
 
 	protected function prepareDatabase() {
 		$this->truncate(['pages', 'page_visits', 'parts', 'part_visits']);
 		$this->restartSequence(['page_visits', 'parts', 'part_visits']);
+		$this->database->query(
+			'INSERT INTO parts (content, expression, page_url) VALUES 
+			("Nevím", "//h1", "https://nette.org")'
+		);
 	}
 }
 
