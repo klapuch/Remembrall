@@ -35,6 +35,9 @@ forms:
     messages:
         FILLED: "Please, fill %label field."
         PROTECTION: "Timeout. Please, make the operation once again."
+tracy:
+    bar:
+        - Nextras\MailPanel\MailPanel(%tempDir%/mail-panel-latte)
 services:
     router: Remembrall\Router\RouterFactory::createRouter
     texy: Texy\Texy
@@ -45,3 +48,6 @@ services:
     identity: @Remembrall\Model\Access\IdentityFactory::create()
     subscriber:
         class: Remembrall\Model\Access\PostgresSubscriber(@identity::getId())
+    nette.mailer:
+            class: Nette\Mail\IMailer
+            factory: Nextras\MailPanel\FileMailer(%tempDir%/mail-panel-mails)

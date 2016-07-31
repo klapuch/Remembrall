@@ -34,7 +34,7 @@ final class OnlineParts implements Parts {
 	}
 
 	public function iterate(): array {
-		return array_reduce(
+		return (array)array_reduce(
 			$this->origin->iterate(),
 			function($previous, Part $part) {
 				$visualPart = $part->print();
