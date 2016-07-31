@@ -124,6 +124,16 @@ final class OwnedSubscriptions extends TestCase\Database {
 		Assert::same('//c', (string)$parts[2]->print()['expression']);
 	}
 
+	public function testEmptySubscriptions() {
+		Assert::same(
+			[],
+			(new Subscribing\OwnedSubscriptions(
+				new Access\FakeSubscriber(1),
+				$this->database
+			))->iterate()
+		);
+	}
+
     protected function prepareDatabase() {
 		$this->truncate(['parts', 'part_visits', 'pages', 'subscriptions']);
 		$this->restartSequence(['parts', 'part_visits', 'subscriptions']);

@@ -53,6 +53,20 @@ final class OnlineParts extends TestCase\Database {
 		);
 	}
 
+	public function testEmptyParts() {
+		$logger = $this->mockery(\Tracy\ILogger::class);
+		$logger->shouldReceive('log')->never();
+		Assert::same(
+			[],
+			(new Subscribing\OnlineParts(
+				new Subscribing\FakeParts([]),
+				$logger,
+				$this->database,
+				new GuzzleHttp\Client(['http_errors' => false])
+			))->iterate()
+		);
+	}
+
 	protected function prepareDatabase() {
 		$this->truncate(['pages', 'page_visits', 'parts', 'part_visits']);
 		$this->restartSequence(['page_visits', 'parts', 'part_visits']);

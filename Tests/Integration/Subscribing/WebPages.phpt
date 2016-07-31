@@ -83,6 +83,14 @@ final class WebPages extends TestCase\Database {
 		);
 	}
 
+	public function testEmptyPages() {
+		$this->truncate(['pages']);
+		Assert::same(
+			[],
+			(new Subscribing\WebPages($this->database))->iterate()
+		);
+	}
+
 	protected function prepareDatabase() {
 		$this->truncate(['pages', 'page_visits']);
 		$this->restartSequence(['page_visits']);

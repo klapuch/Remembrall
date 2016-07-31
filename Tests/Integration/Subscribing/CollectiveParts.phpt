@@ -142,6 +142,15 @@ final class CollectiveParts extends TestCase\Database {
 		);
 	}
 
+	public function testEmptyParts() {
+		Assert::same(
+			[],
+			(new Subscribing\CollectiveParts(
+				$this->database
+			))->iterate()
+		);
+	}
+
 	protected function prepareDatabase() {
 		$this->truncate(
 			['parts', 'part_visits', 'pages', 'subscribers', 'subscriptions']

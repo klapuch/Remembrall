@@ -105,6 +105,17 @@ final class OwnedParts extends TestCase\Database {
 		);
 	}
 
+	public function testEmptyParts() {
+		Assert::same(
+			[],
+			(new Subscribing\OwnedParts(
+				new Subscribing\FakeParts(),
+				$this->database,
+				new Access\FakeSubscriber(777)
+			))->iterate()
+		);
+	}
+
 	protected function prepareDatabase() {
 		$this->truncate(['parts', 'part_visits', 'pages', 'subscriptions']);
 		$this->restartSequence(['parts', 'part_visits', 'subscriptions']);
