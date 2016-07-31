@@ -5,7 +5,7 @@ namespace Remembrall\Model\Subscribing;
 use Dibi;
 
 /**
- * Expired parts
+ * All the parts which are needed to visit because they are no more valid
  */
 final class ExpiredParts implements Parts {
 	private $origin;
