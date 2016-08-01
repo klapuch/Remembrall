@@ -22,23 +22,17 @@ final class OutdatedSubscribers extends TestCase\Database {
 			("someone@else.cz", "password")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content, content_hash) VALUES
-			("www.google.com", "//h1", "content1", "content1HASH"),
-			("www.google.com", "//h2", "content2", "content2HASH"),
-			("www.google.com", "//h3", "content3", "content3HASH")'
-		);
-		$this->purge(['part_visits']);
-		$this->database->query(
-			'INSERT INTO part_visits (part_id, visited_at) VALUES 
-			(1, "2000-01-01 01:01"),
-			(1, NOW() - INTERVAL "35 MINUTE")'
+			'INSERT INTO parts (page_url, expression, content) VALUES
+			("www.google.com", "//h1", "content1"),
+			("www.google.com", "//h2", "content2"),
+			("www.google.com", "//h3", "content3")'
 		);
 		$this->database->query(
-			'INSERT INTO subscriptions (part_id, subscriber_id, interval, hash) VALUES
-			(1, 1, "PT30M","A"),
-			(1, 4, "PT30M","content1HASH"),
-			(2, 2, "PT30M","content2HASH"),
-			(1, 3, "PT40M","content1HASH")'
+			'INSERT INTO subscriptions (part_id, subscriber_id, interval, last_update) VALUES
+			(1, 1, "PT30M", NOW() - INTERVAL "50 MINUTE"),
+			(1, 4, "PT30M", NOW() - INTERVAL "31 MINUTE"),
+			(2, 2, "PT30M", NOW()),
+			(1, 3, "PT30M", NOW() - INTERVAL "29 MINUTE")'
 		);
 		Assert::equal(
 			[
@@ -55,27 +49,28 @@ final class OutdatedSubscribers extends TestCase\Database {
 		Assert::equal(
 			[
 				new Dibi\Row(
-					['hash' => 'content2HASH', 'part_id' => 2, 'subscriber_id' => 2]
+					['part_id' => 2, 'subscriber_id' => 2]
 				),
 				new Dibi\Row(
-					['hash' => 'content1HASH', 'part_id' => 1, 'subscriber_id' => 3]
+					['part_id' => 1, 'subscriber_id' => 3]
 				),
 				new Dibi\Row(
-					['hash' => 'content1HASH', 'part_id' => 1, 'subscriber_id' => 1]
+					['part_id' => 1, 'subscriber_id' => 1]
 				),
 				new Dibi\Row(
-					['hash' => 'content1HASH', 'part_id' => 1, 'subscriber_id' => 4]
+					['part_id' => 1, 'subscriber_id' => 4]
 				),
 			],
 			$this->database->fetchAll(
-				'SELECT hash, part_id, subscriber_id
-				FROM subscriptions'
+				'SELECT part_id, subscriber_id
+				FROM subscriptions
+				WHERE last_update <= NOW()'
 			)
 		);
 	}
 
 	protected function prepareDatabase() {
-		$this->purge(['subscriptions', 'parts', 'part_visits', 'subscribers']);
+		$this->purge(['subscriptions', 'parts', 'subscribers']);
 	}
 }
 

@@ -59,9 +59,9 @@ final class OwnedSubscriptions implements Subscriptions {
 		try {
 			$this->database->query(
 				'INSERT INTO subscriptions
-				(part_id, hash, subscriber_id, interval)
+				(part_id, subscriber_id, interval, last_update)
 				(
-					SELECT id, content_hash, ?, ?
+					SELECT id, ?, ?, NOW()
 					FROM parts
 					WHERE expression = ?
 					AND page_url = ?

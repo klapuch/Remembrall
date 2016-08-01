@@ -23,11 +23,10 @@ final class CollectiveParts implements Parts {
 				} else {
 					$this->database->query(
 						'INSERT INTO parts
-						(page_url, expression, content, content_hash) VALUES
-						(?, ?, ?, MD5(?))',
+						(page_url, expression, content) VALUES
+						(?, ?, ?)',
 						$url,
 						$expression,
-						$part->content(), //todo
 						$part->content()
 					);
 					return $part;

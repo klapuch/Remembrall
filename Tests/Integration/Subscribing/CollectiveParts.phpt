@@ -26,14 +26,13 @@ final class CollectiveParts extends TestCase\Database {
 			'//p'
 		);
 		$parts = $this->database->fetchAll(
-			'SELECT id, page_url, content, content_hash, expression
+			'SELECT id, page_url, content, expression
 			FROM parts'
 		);
 		Assert::count(1, $parts);
 		Assert::same(1, $parts[0]['id']);
 		Assert::same('www.google.com', $parts[0]['page_url']);
 		Assert::same('<p>Content</p>', $parts[0]['content']);
-		Assert::same(md5($parts[0]['content']), $parts[0]['content_hash']);
 		Assert::same('//p', $parts[0]['expression']);
 		$partVisits = $this->database->fetchAll(
 			'SELECT part_id FROM part_visits WHERE visited_at <= NOW()'
@@ -79,14 +78,14 @@ final class CollectiveParts extends TestCase\Database {
 			(1, NOW()), (2, NOW()), (2, NOW() - INTERVAL "5 MINUTE")'
 		);
 		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content, content_hash) VALUES
-			("www.google.com", "//a", "a", MD5("a")),
-			("www.facedown.cz", "//c", "c", MD5("c"))'
+			'INSERT INTO parts (page_url, expression, content) VALUES
+			("www.google.com", "//a", "a"),
+			("www.facedown.cz", "//c", "c")'
 		);
 		$this->database->query(
-			'INSERT INTO subscriptions (part_id, subscriber_id, interval, hash) VALUES
-			(1, 1, "PT1M", "sample"),
-			(2, 2, "PT2M", "sample")'
+			'INSERT INTO subscriptions (part_id, subscriber_id, interval, last_update) VALUES
+			(1, 1, "PT1M", NOW()),
+			(2, 2, "PT2M", NOW())'
 		);
 		$parts = (new Subscribing\CollectiveParts(
 			$this->database

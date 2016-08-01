@@ -23,7 +23,7 @@ install:
 before_script:
   - psql -c 'CREATE DATABASE remembrall_test;' -U postgres
   - psql -c 'CREATE DATABASE transaction_test;' -U postgres
-  - psql -U postgres remembrall_test < ./Tests/TestCase/test_schema.sql
+  - psql -U postgres remembrall_test < ./Tests/TestCase/schema.sql
   - psql -U postgres transaction_test < ./Tests/TestCase/transaction_test.sql
 
 after_script:

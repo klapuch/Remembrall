@@ -20,7 +20,7 @@ final class ExpiredParts implements Parts {
 		return $this->origin->add($part, $url, $expression);
 	}
 
-	public function iterate(): array {//todo check hash
+	public function iterate(): array {
 		return (array)array_reduce(
 			$this->database->fetchAll(
 				'SELECT parts.content AS part_content, expression,
@@ -28,19 +28,13 @@ final class ExpiredParts implements Parts {
 				FROM parts
 				LEFT JOIN (
 					SELECT MIN(CAST(SUBSTRING(interval FROM "[0-9]+") AS INT)) AS interval,
-					part_id
+					part_id, MIN(last_update) AS last_update
 					FROM subscriptions
 					GROUP BY part_id
 				) AS subscriptions ON subscriptions.part_id = parts.id 
 				INNER JOIN pages ON pages.url = parts.page_url
-				LEFT JOIN (
-					SELECT part_id, MIN(visited_at) AS visited_at
-					FROM part_visits
-					GROUP BY part_id
-				) AS part_visits ON part_visits.part_id = parts.id
-				WHERE visited_at IS NULL
-				OR visited_at + INTERVAL "1 MINUTE" * INTERVAL < NOW()
-				ORDER BY visited_at ASC'
+				WHERE last_update + INTERVAL "1 MINUTE" * interval < NOW()
+				ORDER BY last_update ASC'
 			),
 			function($previous, Dibi\Row $row) {
 				$previous[] = new ConstantPart(

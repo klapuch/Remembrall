@@ -189,8 +189,7 @@ CREATE TABLE parts (
     id integer NOT NULL,
     page_url character varying NOT NULL,
     expression character varying NOT NULL,
-    content text NOT NULL,
-    content_hash character varying(32) NOT NULL
+    content text NOT NULL
 );
 
 
@@ -260,7 +259,7 @@ CREATE TABLE subscriptions (
     subscriber_id integer NOT NULL,
     part_id integer NOT NULL,
     "interval" character varying(10) NOT NULL,
-    hash character varying(32) NOT NULL
+    last_update timestamp without time zone NOT NULL
 );
 
 

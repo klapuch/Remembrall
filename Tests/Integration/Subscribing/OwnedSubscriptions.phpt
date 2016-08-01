@@ -16,8 +16,8 @@ require __DIR__ . '/../../bootstrap.php';
 final class OwnedSubscriptions extends TestCase\Database {
     public function testSubscribingBrandNew() {
 		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content, content_hash) VALUES
-			("www.google.com", "//p", "a", MD5("a"))'
+			'INSERT INTO parts (page_url, expression, content) VALUES
+			("www.google.com", "//p", "a")'
 		);
 		$this->purge(['part_visits']);
 		$this->database->query(
@@ -56,8 +56,8 @@ final class OwnedSubscriptions extends TestCase\Database {
 
 	public function testSubscribingDuplicateWithRollback() {
 		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content, content_hash) VALUES
-			("www.google.com", "//p", "a", MD5("a"))'
+			'INSERT INTO parts (page_url, expression, content) VALUES
+			("www.google.com", "//p", "a")'
 		);
 		$this->purge(['part_visits']);
 		$this->database->query(
@@ -94,18 +94,18 @@ final class OwnedSubscriptions extends TestCase\Database {
 
 	public function testIteratingOwnedSubscriptions() {
 		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content, content_hash) VALUES
-			("www.google.com", "//a", "a", MD5("a")),
-			("www.facedown.cz", "//b", "b", MD5("b")),
-			("www.facedown.cz", "//c", "c", MD5("c")),
-			("www.google.com", "//d", "d", MD5("d"))'
+			'INSERT INTO parts (page_url, expression, content) VALUES
+			("www.google.com", "//a", "a"),
+			("www.facedown.cz", "//b", "b"),
+			("www.facedown.cz", "//c", "c"),
+			("www.google.com", "//d", "d")'
 		);
 		$this->database->query(
-			'INSERT INTO subscriptions (part_id, subscriber_id, interval, hash) VALUES
-			(1, 1, "PT1M", "sample"),
-			(2, 2, "PT2M", "sample"),
-			(3, 1, "PT3M", "sample"),
-			(4, 1, "PT4M", "sample")'
+			'INSERT INTO subscriptions (part_id, subscriber_id, interval, last_update) VALUES
+			(1, 1, "PT1M", NOW()),
+			(2, 2, "PT2M", NOW()),
+			(3, 1, "PT3M", NOW()),
+			(4, 1, "PT4M", NOW())'
 		);
 		$this->purge(['part_visits']);
 		$this->database->query(

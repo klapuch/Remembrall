@@ -16,27 +16,18 @@ require __DIR__ . '/../../bootstrap.php';
 final class ExpiredParts extends TestCase\Database {
 	public function testIteratingExpiredParts() {
 		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content, content_hash) VALUES
-			("www.google.com", "//a", "a", MD5("a")),
-			("www.facedown.cz", "//b", "b", MD5("b")),
-			("www.google.com", "//c", "c", MD5("c")),
-			("www.facedown.cz", "//d", "d", MD5("d"))'
+			'INSERT INTO parts (page_url, expression, content) VALUES
+			("www.google.com", "//a", "a"),
+			("www.facedown.cz", "//b", "b"),
+			("www.google.com", "//c", "c"),
+			("www.facedown.cz", "//d", "d")'
 		);
-		$this->purge(['part_visits']);
 		$this->database->query(
-			'INSERT INTO part_visits (part_id, visited_at) VALUES
-			(1, NOW() - INTERVAL "2 DAY"),
-			(2, NOW()),
-			(3, NOW() - INTERVAL "10 MINUTE"),
-			(1, NOW() - INTERVAL "4 DAY")'
-		);
-		$this->database->query(//todo
-			'INSERT INTO subscriptions (part_id, subscriber_id, interval, hash) VALUES
-			(1, 1, "PT10M", "A"),
-			(2, 2, "PT10M", "A"),
-			(3, 3, "PT3M", "A"),
-			(3, 1, "PT20M", "A"),
-			(4, 1, "PT10M", "A")'
+			'INSERT INTO subscriptions (part_id, subscriber_id, interval, last_update) VALUES
+			(1, 1, "PT10M", NOW() - INTERVAL "15 MINUTE"),
+			(2, 2, "PT10M", NOW()),
+			(3, 3, "PT3M", NOW() - INTERVAL "2 MINUTE"),
+			(3, 1, "PT20M", NOW() - INTERVAL "22 MINUTE")'
 		);
 		$this->database->query(
 			'INSERT INTO pages (url, content) VALUES
@@ -48,27 +39,7 @@ final class ExpiredParts extends TestCase\Database {
 			new Subscribing\FakeParts(),
 			$this->database
 		))->iterate();
-		Assert::count(3, $parts);
-		Assert::equal(
-			new Subscribing\ConstantPart(
-				new Subscribing\HtmlPart(
-					new Subscribing\XPathExpression(
-						new Subscribing\ConstantPage(
-							new Subscribing\FakePage(),
-							'google'
-						),
-						'//a'
-					),
-					new Subscribing\ConstantPage(
-						new Subscribing\FakePage(),
-						'google'
-					)
-				),
-				'a',
-				'www.google.com'
-			),
-			$parts[0]
-		);
+		Assert::count(2, $parts);
 		Assert::equal(
 			new Subscribing\ConstantPart(
 				new Subscribing\HtmlPart(
@@ -87,7 +58,7 @@ final class ExpiredParts extends TestCase\Database {
 				'c',
 				'www.google.com'
 			),
-			$parts[1]
+			$parts[0]
 		);
 		Assert::equal(
 			new Subscribing\ConstantPart(
@@ -95,19 +66,19 @@ final class ExpiredParts extends TestCase\Database {
 					new Subscribing\XPathExpression(
 						new Subscribing\ConstantPage(
 							new Subscribing\FakePage(),
-							'facedown'
+							'google'
 						),
-						'//d'
+						'//a'
 					),
 					new Subscribing\ConstantPage(
 						new Subscribing\FakePage(),
-						'facedown'
+						'google'
 					)
 				),
-				'd',
-				'www.facedown.cz'
+				'a',
+				'www.google.com'
 			),
-			$parts[2]
+			$parts[1]
 		);
 	}
 
@@ -122,8 +93,8 @@ final class ExpiredParts extends TestCase\Database {
 	}
 
 	protected function prepareDatabase() {
-		$this->truncate(['part_visits', 'parts', 'pages', 'subscriptions']);
-		$this->restartSequence(['part_visits', 'parts', 'subscriptions']);
+		$this->truncate(['parts', 'part_visits', 'pages', 'subscriptions']);
+		$this->restartSequence(['parts', 'subscriptions']);
 	}
 }
 

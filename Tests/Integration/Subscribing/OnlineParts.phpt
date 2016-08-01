@@ -71,8 +71,8 @@ final class OnlineParts extends TestCase\Database {
 		$this->truncate(['pages', 'page_visits', 'parts', 'part_visits']);
 		$this->restartSequence(['page_visits', 'parts', 'part_visits']);
 		$this->database->query(
-			'INSERT INTO parts (content_hash, content, expression, page_url) VALUES 
-			(MD5("Nevím"), "Nevím", "//h1", "https://nette.org")'
+			'INSERT INTO parts (content, expression, page_url) VALUES 
+			("Nevím", "//h1", "https://nette.org")'
 		);
 	}
 }

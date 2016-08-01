@@ -56,8 +56,8 @@ final class ExistingPart extends TestCase\Database {
 	protected function prepareDatabase() {
 		$this->purge(['parts']);
 		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content, content_hash) VALUES
-			("www.facedown.cz", "//d", "d", MD5("d"))'
+			'INSERT INTO parts (page_url, expression, content) VALUES
+			("www.facedown.cz", "//d", "d")'
 		);
 	}
 }
