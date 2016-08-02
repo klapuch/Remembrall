@@ -487,28 +487,14 @@ ALTER TABLE ONLY verification_codes
 -- Name: pages_ai; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
-CREATE TRIGGER pages_ai AFTER INSERT ON pages FOR EACH ROW EXECUTE PROCEDURE record_page_access();
-
-
---
--- Name: pages_au; Type: TRIGGER; Schema: public; Owner: postgres
---
-
-CREATE TRIGGER pages_au AFTER UPDATE ON pages FOR EACH ROW EXECUTE PROCEDURE record_page_access();
+CREATE TRIGGER pages_aiu AFTER INSERT OR UPDATE ON pages FOR EACH ROW EXECUTE PROCEDURE record_page_access();
 
 
 --
 -- Name: parts_ai; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
-CREATE TRIGGER parts_ai AFTER INSERT ON parts FOR EACH ROW EXECUTE PROCEDURE record_part_access();
-
-
---
--- Name: parts_au; Type: TRIGGER; Schema: public; Owner: postgres
---
-
-CREATE TRIGGER parts_au AFTER UPDATE ON parts FOR EACH ROW EXECUTE PROCEDURE record_part_access();
+CREATE TRIGGER parts_aiu AFTER INSERT OR UPDATE ON parts FOR EACH ROW EXECUTE PROCEDURE record_part_access();
 
 
 --
