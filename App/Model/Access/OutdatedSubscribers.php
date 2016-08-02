@@ -41,8 +41,8 @@ final class OutdatedSubscribers implements Subscribers {
 						INNER JOIN subscriptions ON subscriptions.subscriber_id = subscribers.id
 						INNER JOIN parts ON parts.id = subscriptions.part_id
 						WHERE last_update + INTERVAL "1 MINUTE" * CAST(SUBSTRING(INTERVAL FROM "[0-9]+") AS INT) < NOW()
-						AND page_url = ?
-						AND expression = ?
+						AND page_url IS NOT DISTINCT FROM ?
+						AND expression IS NOT DISTINCT FROM ?
 					) RETURNING subscriber_id AS id
 				) SELECT * FROM subscribers WHERE id IN (SELECT id FROM updated)',
 				$this->url,

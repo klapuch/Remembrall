@@ -20,7 +20,11 @@ final class ReserveVerificationCodes implements VerificationCodes {
 		$code = $this->database->fetchSingle(
 			'SELECT code
 			FROM verification_codes
-			WHERE subscriber_id = (SELECT id FROM subscribers WHERE email = ?)
+			WHERE subscriber_id = (
+				SELECT id
+				FROM subscribers
+				WHERE email IS NOT DISTINCT FROM ?
+			)
 			AND used = FALSE',
 			$email
 		);

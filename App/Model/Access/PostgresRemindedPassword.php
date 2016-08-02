@@ -30,7 +30,7 @@ final class PostgresRemindedPassword implements RemindedPassword {
 			WHERE id = (
 				SELECT subscriber_id
                 FROM forgotten_passwords
-                WHERE reminder = ?
+                WHERE reminder IS NOT DISTINCT FROM ?
             )',
 			$this->cipher->encrypt($password),
 			$this->reminder
@@ -38,7 +38,7 @@ final class PostgresRemindedPassword implements RemindedPassword {
 		$this->database->query(
 			'UPDATE forgotten_passwords
 			SET used = TRUE
-			WHERE reminder = ?',
+			WHERE reminder IS NOT DISTINCT FROM ?',
 			$this->reminder
 		);
 	}

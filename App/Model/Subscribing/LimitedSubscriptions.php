@@ -53,7 +53,7 @@ final class LimitedSubscriptions implements Subscriptions {
 			'SELECT 1
 			FROM parts
 			INNER JOIN subscriptions ON subscriptions.part_id = parts.id 
-			WHERE subscriber_id = ?
+			WHERE subscriber_id IS NOT DISTINCT FROM ?
 			HAVING COUNT(parts.id) >= ?',
 			$this->subscriber->id(),
 			self::LIMIT

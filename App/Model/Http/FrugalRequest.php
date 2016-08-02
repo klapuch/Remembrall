@@ -34,7 +34,7 @@ final class FrugalRequest implements Request {
 		$content = $this->database->fetchSingle(
 			'SELECT content
 			FROM pages
-			WHERE url = ?',
+			WHERE url IS NOT DISTINCT FROM ?',
 			$this->url
 		);
 		return new Subscribing\ConstantPage(
@@ -60,7 +60,7 @@ final class FrugalRequest implements Request {
 			WHERE (
 				SELECT MAX(visited_at)
 				FROM page_visits
-				WHERE page_url = ?
+				WHERE page_url IS NOT DISTINCT FROM ?
 		  	) + INTERVAL "1 MINUTE" * ? < NOW()',
 			$url,
 			(new \DateInterval(self::EXPIRATION))->i
@@ -76,7 +76,7 @@ final class FrugalRequest implements Request {
 		return (bool)$this->database->fetchSingle(
 			'SELECT 1
 			FROM pages
-			WHERE url = ?',
+			WHERE url IS NOT DISTINCT FROM ?',
 			$url
 		);
 	}

@@ -19,7 +19,7 @@ final class WebPages implements Pages {
 					$this->database->query(
 						'UPDATE pages
 						SET content = ?
-						WHERE url = ?',
+						WHERE url IS NOT DISTINCT FROM ?',
 						$page->content()->saveHTML(),
 						$this->normalizedUrl($url)
 					);
@@ -45,7 +45,7 @@ final class WebPages implements Pages {
 		return (bool)$this->database->fetchSingle(
 			'SELECT 1
 			FROM pages
-			WHERE url = ?',
+			WHERE url IS NOT DISTINCT FROM ?',
 			$this->normalizedUrl($url)
 		);
 	}

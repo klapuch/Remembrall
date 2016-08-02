@@ -44,7 +44,11 @@ final class LimitedForgottenPasswords implements ForgottenPasswords {
 		return (bool)$this->database->fetchSingle(
 			"SELECT 1
 			FROM forgotten_passwords
-			WHERE subscriber_id = (SELECT id FROM subscribers WHERE email = ?)
+			WHERE subscriber_id = (
+				SELECT id
+				FROM subscribers
+				WHERE email IS NOT DISTINCT FROM ?
+			)
 			AND reminded_at > NOW() - INTERVAL '1 HOUR' * ?
 			HAVING COUNT(id) >= ?",
 			$email,

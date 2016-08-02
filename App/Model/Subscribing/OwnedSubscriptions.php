@@ -29,7 +29,7 @@ final class OwnedSubscriptions implements Subscriptions {
 					GROUP BY part_id
 				) AS part_visits ON parts.id = part_visits.part_id
 				INNER JOIN subscriptions ON subscriptions.part_id = parts.id
-				WHERE subscriptions.subscriber_id = ?
+				WHERE subscriptions.subscriber_id IS NOT DISTINCT FROM ?
 				ORDER BY visited_at DESC',
 				$this->owner->id()
 			),
@@ -63,8 +63,8 @@ final class OwnedSubscriptions implements Subscriptions {
 				(
 					SELECT id, ?, ?, NOW()
 					FROM parts
-					WHERE expression = ?
-					AND page_url = ?
+					WHERE expression IS NOT DISTINCT FROM ?
+					AND page_url IS NOT DISTINCT FROM ?
 				)',
 				$this->owner->id(),
 				sprintf('PT%dM', $interval->step()->i),

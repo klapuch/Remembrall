@@ -24,7 +24,7 @@ final class SecureForgottenPasswords implements ForgottenPasswords {
 		$reminder = bin2hex(random_bytes(50)) . ':' . sha1($email);
 		$this->database->query(
 			'INSERT INTO forgotten_passwords (subscriber_id, reminder, reminded_at) VALUES
-			((SELECT id FROM subscribers WHERE email = ?), ?, ?)',
+			((SELECT id FROM subscribers WHERE email IS NOT DISTINCT FROM ?), ?, ?)',
 			$email,
 			$reminder,
 			new \DateTimeImmutable()

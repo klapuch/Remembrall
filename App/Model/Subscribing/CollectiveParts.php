@@ -79,8 +79,8 @@ final class CollectiveParts implements Parts {
 		return (bool)$this->database->fetchSingle(
 			'SELECT 1
 			FROM parts
-			WHERE page_url = ?
-			AND expression = ?',
+			WHERE page_url IS NOT DISTINCT FROM ?
+			AND expression IS NOT DISTINCT FROM ?',
 			$url,
 			$expression
 		);

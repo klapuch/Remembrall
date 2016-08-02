@@ -48,12 +48,12 @@ final class OwnedSubscription implements Subscription {
 		$this->database->query(
 			'UPDATE subscriptions
 			SET interval = ?
-			WHERE subscriber_id = ?
-			AND part_id = (
+			WHERE subscriber_id IS NOT DISTINCT FROM ?
+			AND part_id IS NOT DISTINCT FROM (
 				SELECT ID
 				FROM parts
-				WHERE page_url = ?
-				AND expression = ?
+				WHERE page_url IS NOT DISTINCT FROM ?
+				AND expression IS NOT DISTINCT FROM ?
 			)',
 			sprintf('PT%dM', $interval->step()->i),
 			$this->owner->id(),
@@ -80,9 +80,9 @@ final class OwnedSubscription implements Subscription {
 			'SELECT 1
 			FROM parts
 			INNER JOIN subscriptions ON subscriptions.part_id = parts.id
-			WHERE subscriber_id = ?
-			AND page_url = ?
-			AND expression = ?',
+			WHERE subscriber_id IS NOT DISTINCT FROM ?
+			AND page_url IS NOT DISTINCT FROM ?
+			AND expression IS NOT DISTINCT FROM ?',
 			$this->owner->id(),
 			$this->url,
 			$this->expression

@@ -49,7 +49,7 @@ final class ExistingVerificationCode implements VerificationCode {
 		return (bool)$this->database->fetchSingle(
 			'SELECT 1
 			FROM verification_codes
-			WHERE code = ?',
+			WHERE code IS NOT DISTINCT FROM ?',
 			$this->code
 		);
 	}

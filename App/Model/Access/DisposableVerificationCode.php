@@ -26,7 +26,7 @@ final class DisposableVerificationCode implements VerificationCode {
 		$this->database->query(
 			'UPDATE verification_codes
 			SET used = TRUE, used_at = ?
-			WHERE code = ?',
+			WHERE code IS NOT DISTINCT FROM ?',
 			new \DateTimeImmutable(),
 			$this->code
 		);
@@ -37,7 +37,7 @@ final class DisposableVerificationCode implements VerificationCode {
 			(int)$this->database->fetchSingle(
 				'SELECT subscriber_id
 				FROM verification_codes
-				WHERE code = ?',
+				WHERE code IS NOT DISTINCT FROM ?',
 				$this->code
 			),
 			$this->database
@@ -52,7 +52,7 @@ final class DisposableVerificationCode implements VerificationCode {
 		return (bool)$this->database->fetchSingle(
 			'SELECT 1
 			FROM verification_codes
-			WHERE code = ?
+			WHERE code IS NOT DISTINCT FROM ?
 			AND used = TRUE',
 			$this->code
 		);

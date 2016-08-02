@@ -18,7 +18,7 @@ final class SecureVerificationCodes implements VerificationCodes {
 		$code = bin2hex(random_bytes(25)) . ':' . sha1($email);
 		$this->database->query(
 			'INSERT INTO verification_codes (subscriber_id, code)
-			VALUES ((SELECT id FROM subscribers WHERE email = ?), ?)',
+			VALUES ((SELECT id FROM subscribers WHERE email IS NOT DISTINCT FROM ?), ?)',
 			$email,
 			$code
 		);

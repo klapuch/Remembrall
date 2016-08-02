@@ -29,8 +29,8 @@ final class PostgresPart implements Part {
 		return $this->database->fetchSingle(
 			'SELECT content
 			FROM parts
-			WHERE expression = ?
-			AND page_url = ?',
+			WHERE expression IS NOT DISTINCT FROM ?
+			AND page_url IS NOT DISTINCT FROM ?',
 			$this->expression,
 			$this->url
 		);
@@ -41,7 +41,8 @@ final class PostgresPart implements Part {
 		$this->database->query(
 			'UPDATE parts
 			SET content = ?
-			WHERE page_url = ? AND expression = ?',
+			WHERE page_url IS NOT DISTINCT FROM ? 
+			AND expression IS NOT DISTINCT FROM ?',
 			$refreshedPart->content(),
 			$this->url,
 			$this->expression
