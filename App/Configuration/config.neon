@@ -1,53 +1,53 @@
 dibi:
-    driver: postgre
-    host: 127.0.0.1
-    username: postgres
-    password: postgres
-    dbname: remembrall
-    lazy: true
+	driver: postgre
+	host: 127.0.0.1
+	username: postgres
+	password: postgres
+	dbname: remembrall
+	lazy: true
 php:
-    date.timezone: Europe/Prague
-    default_charset: UTF-8
-    expose_php: 0
-    zlib.output_compression: 1
-    session.name: SESSION
-    error_reporting: 1
+	date.timezone: Europe/Prague
+	default_charset: UTF-8
+	expose_php: 0
+	zlib.output_compression: 1
+	session.name: SESSION
+	error_reporting: 1
 application:
-    errorPresenter: Error
-    scanDirs: false
-    mapping:
-        *: Remembrall\*Module\Page\*Page
+	errorPresenter: Error
+	scanDirs: false
+	mapping:
+		*: Remembrall\*Module\Page\*Page
 session:
-    autoStart: smart
-    expiration: 14 days
-    use_strict_mode: 1
-    cookie_httponly: 1
-    entropy_length: 512
-    entropy_file: /dev/urandom
+	autoStart: smart
+	expiration: 14 days
+	use_strict_mode: 1
+	cookie_httponly: 1
+	entropy_length: 512
+	entropy_file: /dev/urandom
 http:
-    headers:
-        X-Frame-Options: DENY
-        X-Content-Type-Options: nosniff
-        X-Powered-By: ""
+	headers:
+		X-Frame-Options: DENY
+		X-Content-Type-Options: nosniff
+		X-Powered-By: ""
 extensions:
-    dibi: Dibi\Bridges\Nette\DibiExtension22
+	dibi: Dibi\Bridges\Nette\DibiExtension22
 forms:
-    messages:
-        FILLED: "Please, fill %label field."
-        PROTECTION: "Timeout. Please, make the operation once again."
+	messages:
+		FILLED: "Please, fill %label field."
+		PROTECTION: "Timeout. Please, make the operation once again."
 tracy:
-    bar:
-        - Nextras\MailPanel\MailPanel(%tempDir%/mail-panel-latte)
+	bar:
+		- Nextras\MailPanel\MailPanel(%tempDir%/mail-panel-latte)
 services:
-    router: Remembrall\Router\RouterFactory::createRouter
-    texy: Texy\Texy
-    latte.latteFactory:
-        setup:
-            - addFilter(texy, [@texy, process])
-    - Remembrall\Model\Access\IdentityFactory
-    identity: @Remembrall\Model\Access\IdentityFactory::create()
-    subscriber:
-        class: Remembrall\Model\Access\PostgresSubscriber(@identity::getId())
-    nette.mailer:
-            class: Nette\Mail\IMailer
-            factory: Nextras\MailPanel\FileMailer(%tempDir%/mail-panel-mails)
+	router: Remembrall\Router\RouterFactory::createRouter
+	texy: Texy\Texy
+	latte.latteFactory:
+		setup:
+			- addFilter(texy, [@texy, process])
+	- Remembrall\Model\Access\IdentityFactory
+	identity: @Remembrall\Model\Access\IdentityFactory::create()
+	subscriber:
+		class: Remembrall\Model\Access\PostgresSubscriber(@identity::getId())
+	nette.mailer:
+			class: Nette\Mail\IMailer
+			factory: Nextras\MailPanel\FileMailer(%tempDir%/mail-panel-mails)
