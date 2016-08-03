@@ -27,7 +27,7 @@ final class ExpiredParts implements Parts {
 				pages.content AS page_content, url 
 				FROM parts
 				LEFT JOIN (
-					SELECT MIN(CAST(SUBSTRING(interval FROM "[0-9]+") AS INT)) AS interval,
+					SELECT MIN(SUBSTRING(interval FROM "[0-9]+")::INT) AS interval,
 					part_id, MIN(last_update) AS last_update
 					FROM subscriptions
 					GROUP BY part_id

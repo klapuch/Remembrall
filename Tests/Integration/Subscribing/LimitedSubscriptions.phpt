@@ -35,10 +35,18 @@ final class LimitedSubscriptions extends TestCase\Database {
 	public function testSubscribingOverLimit() {
 		$this->database->query(
 			'INSERT INTO parts (page_url, expression, content) VALUES
+			("www.google.com", "//a", "a"),
+			("www.facedown.cz", "//b", "b"),
+			("www.facedown.cz", "//c", "c"),
+			("www.google.com", "//d", "d"),
 			("www.facedown.cz", "//d", "d")'
 		);
 		$this->database->query(
 			'INSERT INTO subscriptions (part_id, subscriber_id, interval, last_update) VALUES
+			(1, 666, "PT1M", NOW()),
+			(2, 666, "PT2M", NOW()),
+			(3, 666, "PT3M", NOW()),
+			(4, 666, "PT4M", NOW()),
 			(5, 666, "PT5M", NOW())'
 		);
 		(new Subscribing\LimitedSubscriptions(
@@ -54,20 +62,6 @@ final class LimitedSubscriptions extends TestCase\Database {
 
     protected function prepareDatabase() {
     	$this->purge(['parts', 'subscriptions']);
-		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.google.com", "//a", "a"),
-			("www.facedown.cz", "//b", "b"),
-			("www.facedown.cz", "//c", "c"),
-			("www.google.com", "//d", "d")'
-		);
-		$this->database->query(
-			'INSERT INTO subscriptions (part_id, subscriber_id, interval, last_update) VALUES
-			(1, 666, "PT1M", NOW()),
-			(2, 666, "PT2M", NOW()),
-			(3, 666, "PT3M", NOW()),
-			(4, 666, "PT4M", NOW())'
-		);
     }
 }
 

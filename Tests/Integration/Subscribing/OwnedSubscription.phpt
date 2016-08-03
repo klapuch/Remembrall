@@ -15,7 +15,7 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class OwnedSubscription extends TestCase\Database {
 	/**
-	 * @throws \Remembrall\Exception\NotFoundException You do not own this part
+	 * @throws \Remembrall\Exception\NotFoundException You do not own this subscription
 	 */
 	public function testCancelingForeign() {
 		(new Subscribing\OwnedSubscription(
@@ -39,7 +39,7 @@ final class OwnedSubscription extends TestCase\Database {
 	}
 
 	/**
-	 * @throws \Remembrall\Exception\NotFoundException You do not own this part
+	 * @throws \Remembrall\Exception\NotFoundException You do not own this subscription
 	 */
 	public function testEditingForeign() {
 		(new Subscribing\OwnedSubscription(

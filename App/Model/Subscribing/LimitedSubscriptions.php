@@ -45,7 +45,7 @@ final class LimitedSubscriptions implements Subscriptions {
 	}
 
 	/**
-	 * Checks whether the subscriber has more than X subscribed parts
+	 * Has the subscriber subscribed more than X parts and overtepped the limit?
 	 * @return bool
 	 */
 	private function overstepped(): bool {

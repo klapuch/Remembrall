@@ -40,11 +40,7 @@ final class CollectiveParts implements Parts {
 			$this->database->fetchAll(
 				'SELECT parts.content AS part_content, url,
 				pages.content AS page_content, expression,
-				interval, (
-					SELECT MAX(visited_at)
-					FROM part_visits
-					WHERE part_id = parts.id
-				) AS visited_at
+				interval
 				FROM parts
 				INNER JOIN subscriptions ON subscriptions.part_id = parts.id
 				LEFT JOIN pages ON pages.url = parts.page_url'

@@ -47,7 +47,8 @@ final class FrugalRequest implements Request {
 	}
 
 	/**
-	 * Is the response still available (valid) in the database?
+	 * Is the url outdated and needs to be loaded from the another source
+	 * By the source is meant the internet or probably another storage
 	 * @param string $url
 	 * @return bool
 	 */
@@ -68,7 +69,7 @@ final class FrugalRequest implements Request {
 	}
 
 	/**
-	 * Is the url in the database and therefore it is not the first access?
+	 * Does the url exist in the database and therefore it is not the first access?
 	 * @param string $url
 	 * @return bool
 	 */

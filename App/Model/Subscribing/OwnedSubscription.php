@@ -26,15 +26,15 @@ final class OwnedSubscription implements Subscription {
 
 	public function cancel() {
 		if(!$this->owned())
-			throw new Exception\NotFoundException('You do not own this part');
+			throw new Exception\NotFoundException('You do not own this subscription');
 		$this->database->query(
 			'DELETE FROM subscriptions
-			WHERE subscriber_id = ?
+			WHERE subscriber_id IS NOT DISTINCT FROM ?
 			AND part_id = (
 				SELECT id
 				FROM parts
-				WHERE expression = ?
-				AND page_url = ?
+				WHERE expression IS NOT DISTINCT FROM ?
+				AND page_url IS NOT DISTINCT FROM ?
 			)',
 			$this->owner->id(),
 			$this->expression,
@@ -44,7 +44,7 @@ final class OwnedSubscription implements Subscription {
 
 	public function edit(Interval $interval): Subscription {
 		if(!$this->owned())
-			throw new Exception\NotFoundException('You do not own this part');
+			throw new Exception\NotFoundException('You do not own this subscription');
 		$this->database->query(
 			'UPDATE subscriptions
 			SET interval = ?
@@ -72,7 +72,7 @@ final class OwnedSubscription implements Subscription {
 	}
 
 	/**
-	 * Checks whether the subscriber really owns the part
+	 * Is the current subscriber owner of the subscription?
 	 * @return bool
 	 */
 	private function owned(): bool {

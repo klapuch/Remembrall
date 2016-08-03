@@ -17,7 +17,7 @@ final class DOM extends \DOMDocument {
 	 * @return void
 	 */
 	public function loadHTML($source, $options = 0) {
-		libxml_use_internal_errors(true);
+		$previous = libxml_use_internal_errors(true);
 		parent::loadHTML(
 			mb_convert_encoding(
 				$source,
@@ -26,6 +26,6 @@ final class DOM extends \DOMDocument {
 			),
 			$options
 		);
-		libxml_use_internal_errors(false);
+		libxml_use_internal_errors($previous);
 	}
 }

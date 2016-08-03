@@ -35,6 +35,10 @@ final class ExistingPart extends TestCase\Database {
 	}
 
 	public function testExistingPart() {
+		$this->database->query(
+			'INSERT INTO parts (page_url, expression, content) VALUES
+			("www.facedown.cz", "//d", "d")'
+		);
 		Assert::noError(function() {
 			(new Subscribing\ExistingPart(
 				new Subscribing\FakePart('notEmpty'),
@@ -55,10 +59,6 @@ final class ExistingPart extends TestCase\Database {
 
 	protected function prepareDatabase() {
 		$this->purge(['parts']);
-		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.facedown.cz", "//d", "d")'
-		);
 	}
 }
 
