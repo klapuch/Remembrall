@@ -5,9 +5,8 @@
  */
 namespace Remembrall\Integration\Access;
 
-use Remembrall\Model\{
-	Access, Security
-};
+use Klapuch\Encryption;
+use Remembrall\Model\Access;
 use Remembrall\TestCase;
 use Tester\Assert;
 
@@ -17,7 +16,7 @@ final class PostgresSubscribers extends TestCase\Database {
 	public function testRegisteringBrandNewSubscriber() {
 		$subscriber = (new Access\PostgresSubscribers(
 			$this->database,
-			new Security\FakeCipher()
+			new Encryption\FakeCipher()
 		))->register('foo@bar.cz', 'passw0rt');
 		$subscribers = $this->database->fetchAll(
 			'SELECT id, email, password
@@ -42,7 +41,7 @@ final class PostgresSubscribers extends TestCase\Database {
 			function() {
 				(new Access\PostgresSubscribers(
 					$this->database,
-					new Security\FakeCipher()
+					new Encryption\FakeCipher()
 				))->register('foo@bar.cz', 'passw0rt');
 			},
 			\Remembrall\Exception\DuplicateException::class,

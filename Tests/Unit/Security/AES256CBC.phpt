@@ -5,14 +5,14 @@
  */
 namespace Remembrall\Model\Unit;
 
-use Remembrall\Model\Security;
+use Klapuch\Encryption;
 use Tester;
 use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
 final class AES256CBC extends Tester\TestCase {
-	/** @var Security\Cipher */
+	/** @var Encryption\Cipher */
 	private $cipher;
 	const LENGTH = 160;
 	const KEY = '\x1d\x6b\x3e\x91\x66\xdf\xb9\x90\x80\xf5\x03\xac\x6a\x3b\xcd\xae';
@@ -21,7 +21,7 @@ final class AES256CBC extends Tester\TestCase {
 
 	protected function setUp() {
 		parent::setUp();
-		$this->cipher = new Security\AES256CBC(self::KEY);
+		$this->cipher = new Encryption\AES256CBC(self::KEY);
 	}
 
 	public function testCorrectEncryption() {

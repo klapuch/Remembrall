@@ -32,7 +32,8 @@
     "nextras/mail-panel": "^2.3",
     "dibi/dibi": "^3.0",
     "guzzlehttp/guzzle": "^6.2",
-    "texy/texy": "^2.9.0"
+    "texy/texy": "^2.9.0",
+    "klapuch/encryption": "@dev"
   },
   "require-dev": {
     "nette/tester": "^1.7",

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Access;
 
 use Dibi;
-use Remembrall\Model\Security;
+use Klapuch\Encryption;
 use Remembrall\Exception;
 
 /**
@@ -15,7 +15,7 @@ final class PostgresSubscribers implements Subscribers {
 
 	public function __construct(
 		Dibi\Connection $database,
-		Security\Cipher $cipher
+		Encryption\Cipher $cipher
 	) {
 		$this->database = $database;
 		$this->cipher = $cipher;

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Access;
 
 use Dibi;
-use Remembrall\Model\Security;
+use Klapuch\Encryption;
 
 /**
  * Reminded password stored in the Postgres database
@@ -16,7 +16,7 @@ final class PostgresRemindedPassword implements RemindedPassword {
 	public function __construct(
 		string $reminder,
 		Dibi\Connection $database,
-		Security\Cipher $cipher
+		Encryption\Cipher $cipher
 	) {
 		$this->reminder = $reminder;
 		$this->database = $database;

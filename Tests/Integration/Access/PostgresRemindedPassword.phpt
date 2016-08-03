@@ -5,9 +5,8 @@
  */
 namespace Remembrall\Integration\Access;
 
-use Remembrall\Model\{
-	Access, Security
-};
+use Klapuch\Encryption;
+use Remembrall\Model\Access;
 use Remembrall\TestCase;
 use Tester\Assert;
 
@@ -22,7 +21,7 @@ final class PostgresRemindedPassword extends TestCase\Database {
 		(new Access\PostgresRemindedPassword(
 			'123456',
 			$this->database,
-			new Security\FakeCipher()
+			new Encryption\FakeCipher()
 		))->change('123456789');
 		Assert::same(
 			'secret',
