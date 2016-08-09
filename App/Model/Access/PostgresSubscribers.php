@@ -4,7 +4,7 @@ namespace Remembrall\Model\Access;
 
 use Dibi;
 use Klapuch\Encryption;
-use Remembrall\Exception;
+use Remembrall\Exception\DuplicateException;
 
 /**
  * Collection of subscribers stored in the Postgres database
@@ -31,7 +31,7 @@ final class PostgresSubscribers implements Subscribers {
 			);
 			return new PostgresSubscriber($id, $this->database);
 		} catch(Dibi\UniqueConstraintViolationException $ex) {
-			throw new Exception\DuplicateException(
+			throw new DuplicateException(
 				sprintf('Email "%s" already exists', $email)
 			);
 		}

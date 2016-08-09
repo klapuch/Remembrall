@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Dibi;
-use Remembrall\Exception;
+use Remembrall\Exception\NotFoundException;
 use Remembrall\Model\Access;
 
 final class OwnedSubscription implements Subscription {
@@ -26,7 +26,7 @@ final class OwnedSubscription implements Subscription {
 
 	public function cancel() {
 		if(!$this->owned())
-			throw new Exception\NotFoundException('You do not own this subscription');
+			throw new NotFoundException('You do not own this subscription');
 		$this->database->query(
 			'DELETE FROM subscriptions
 			WHERE subscriber_id IS NOT DISTINCT FROM ?
@@ -44,7 +44,7 @@ final class OwnedSubscription implements Subscription {
 
 	public function edit(Interval $interval): Subscription {
 		if(!$this->owned())
-			throw new Exception\NotFoundException('You do not own this subscription');
+			throw new NotFoundException('You do not own this subscription');
 		$this->database->query(
 			'UPDATE subscriptions
 			SET interval = ?

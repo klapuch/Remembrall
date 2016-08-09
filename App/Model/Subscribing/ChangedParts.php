@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Remembrall\Exception;
+use Remembrall\Exception\NotFoundException;
 
 /**
  * Parts which differ from the parts on the internet
@@ -16,7 +16,7 @@ final class ChangedParts implements Parts {
 
 	public function add(Part $part, string $url, string $expression): Part {
 		if(!$this->changed($part)) {
-			throw new Exception\NotFoundException(
+			throw new NotFoundException(
 				'The part has not changed yet'
 			);
 		}

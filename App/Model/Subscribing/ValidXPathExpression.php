@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Remembrall\Exception;
+use Remembrall\Exception\NotFoundException;
 
 /**
  * XPath expression must be only valid
@@ -19,7 +19,7 @@ final class ValidXPathExpression implements Expression {
 		$nodes = $this->origin->match();
 		if($nodes->length > 0)
 			return $nodes;
-		throw new Exception\NotFoundException(
+		throw new NotFoundException(
 			'XPath expression does not exist'
 		);
 	}

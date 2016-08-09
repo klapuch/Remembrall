@@ -2,12 +2,12 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Remembrall\Exception;
+use Remembrall\Exception\NotFoundException;
 
 interface Subscription {
 	/**
 	 * Cancel the subscription
-	 * @throws Exception\NotFoundException
+	 * @throws NotFoundException
 	 * @return void
 	 */
 	public function cancel();
@@ -16,7 +16,7 @@ interface Subscription {
 	 * Edit the subscription
 	 * Editing may not cause transformation to another part
 	 * @param Interval $interval
-	 * @throws Exception\NotFoundException
+	 * @throws NotFoundException
 	 * @return Subscription
 	 */
 	public function edit(Interval $interval): self;

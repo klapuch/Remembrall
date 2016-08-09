@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Dibi;
-use Remembrall\Exception;
+use Remembrall\Exception\NotFoundException;
 
 /**
  * Part which will always exists in the database
@@ -28,13 +28,13 @@ final class ExistingPart implements Part {
 
 	public function content(): string {
 		if(!$this->exists())
-			throw new Exception\NotFoundException('The part does not exist');
+			throw new NotFoundException('The part does not exist');
 		return $this->origin->content();
 	}
 
 	public function refresh(): Part {
 		if(!$this->exists())
-			throw new Exception\NotFoundException('The part does not exist');
+			throw new NotFoundException('The part does not exist');
 		return $this->origin->refresh();
 	}
 

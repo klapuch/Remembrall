@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Remembrall\Exception;
+use Remembrall\Exception\DuplicateException;
 
 interface Subscriptions {
 	/**
@@ -15,7 +15,7 @@ interface Subscriptions {
 	 * @param string $url
 	 * @param string $expression
 	 * @param Interval $interval
-	 * @throws Exception\DuplicateException
+	 * @throws DuplicateException
 	 */
 	public function subscribe(
 		string $url,

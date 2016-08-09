@@ -2,12 +2,12 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Remembrall\Exception;
+use Remembrall\Exception\NotFoundException;
 
 interface Expression {
 	/**
 	 * Match found by the expression
-	 * @throws Exception\NotFoundException
+	 * @throws NotFoundException
 	 * @return \DOMNodeList
 	 */
 	public function match(): \DOMNodeList;

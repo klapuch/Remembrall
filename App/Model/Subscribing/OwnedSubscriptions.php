@@ -4,7 +4,7 @@ namespace Remembrall\Model\Subscribing;
 
 use Dibi;
 use Remembrall\Model\Access;
-use Remembrall\Exception;
+use Remembrall\Exception\DuplicateException;
 
 final class OwnedSubscriptions implements Subscriptions {
 	private $owner;
@@ -72,7 +72,7 @@ final class OwnedSubscriptions implements Subscriptions {
 				$url
 			);
 		} catch(Dibi\UniqueConstraintViolationException $ex) {
-			throw new Exception\DuplicateException(
+			throw new DuplicateException(
 				sprintf(
 					'"%s" expression on the "%s" page is already subscribed by you',
 					$expression,
