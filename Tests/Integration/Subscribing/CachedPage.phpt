@@ -3,60 +3,46 @@
  * @testCase
  * @phpVersion > 7.0.0
  */
-namespace Remembrall\Integration\Http;
+namespace Remembrall\Integration\Subscribing;
 
-use Remembrall\Model\{
-	Http, Subscribing
-};
+use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class FrugalRequest extends TestCase\Database {
-	public function testCachedRequest() {
+final class CachedPage extends TestCase\Database {
+	public function testCachedPage() {
 		$this->database->query(
 			'INSERT INTO page_visits (page_url, visited_at) VALUES
 			("www.google.com", NOW())'
 		);
-		Assert::equal(
-			new Subscribing\ConstantPage(
-				new Subscribing\HtmlWebPage(
-					new Http\FakeResponse('google'),
-					new Http\FakeRequest()
-				),
-				'google'
-			),
-			(new Http\FrugalRequest(
-				new Http\FakeRequest(),
+		Assert::contains(
+			'google',
+			(new Subscribing\CachedPage(
 				'www.google.com',
+				new Subscribing\FakePage(),
 				new Subscribing\FakePages(),
 				$this->database
-			))->send()
+			))->content()->saveHTML()
 		);
 	}
 
-	public function testCachedRequestWithMultipleVisitation() {
+	public function testCachedPageWithMultipleVisitation() {
 		$this->database->query(
 			'INSERT INTO page_visits (page_url, visited_at) VALUES
 			("www.google.com", NOW() - INTERVAL "70 MINUTE"),
 			("www.google.com", NOW()),
 			("www.google.com", NOW() - INTERVAL "20 MINUTE")'
 		);
-		Assert::equal(
-			new Subscribing\ConstantPage(
-				new Subscribing\HtmlWebPage(
-					new Http\FakeResponse('google'),
-					new Http\FakeRequest()
-				),
-				'google'
-			),
-			(new Http\FrugalRequest(
-				new Http\FakeRequest(),
+		Assert::contains(
+			'google',
+			(new Subscribing\CachedPage(
 				'www.google.com',
+				new Subscribing\FakePage(),
 				new Subscribing\FakePages(),
 				$this->database
-			))->send()
+			))->content()->saveHTML()
 		);
 	}
 
@@ -65,15 +51,16 @@ final class FrugalRequest extends TestCase\Database {
 			'INSERT INTO page_visits (page_url, visited_at) VALUES
 			("www.google.com", NOW() - INTERVAL "11 MINUTE")'
 		);
-		$page = new Subscribing\FakePage(new \DOMDocument());
-		Assert::same(
-			$page,
-			(new Http\FrugalRequest(
-				new Http\FakeRequest($page),
+		$dom = new \DOMDocument();
+		$dom->loadHTML('<p>Google</p>');
+		Assert::contains(
+			'<p>Google</p>',
+			(new Subscribing\CachedPage(
 				'www.google.com',
-				new Subscribing\FakePages(),
+				new Subscribing\FakePage($dom),
+				new Subscribing\WebPages($this->database),
 				$this->database
-			))->send()
+			))->content()->saveHTML()
 		);
 	}
 
@@ -84,29 +71,31 @@ final class FrugalRequest extends TestCase\Database {
 			("www.google.com", NOW() - INTERVAL "20 MINUTE"),
 			("www.google.com", NOW() - INTERVAL "70 MINUTE")'
 		);
-		$page = new Subscribing\FakePage(new \DOMDocument());
-		Assert::same(
-			$page,
-			(new Http\FrugalRequest(
-				new Http\FakeRequest($page),
+		$dom = new \DOMDocument();
+		$dom->loadHTML('<p>Google</p>');
+		Assert::contains(
+			'<p>Google</p>',
+			(new Subscribing\CachedPage(
 				'www.google.com',
-				new Subscribing\FakePages(),
+				new Subscribing\FakePage($dom),
+				new Subscribing\WebPages($this->database),
 				$this->database
-			))->send()
+			))->content()->saveHTML()
 		);
 	}
 
 	public function testExpiredCachingBecauseOfFirstVisit() {
 		$this->truncate(['pages']);
-		$page = new Subscribing\FakePage(new \DOMDocument());
-		Assert::same(
-			$page,
-			(new Http\FrugalRequest(
-				new Http\FakeRequest($page),
+		$dom = new \DOMDocument();
+		$dom->loadHTML('<p>Google</p>');
+		Assert::contains(
+			'<p>Google</p>',
+			(new Subscribing\CachedPage(
 				'www.google.com',
-				new Subscribing\FakePages(),
+				new Subscribing\FakePage($dom),
+				new Subscribing\WebPages($this->database),
 				$this->database
-			))->send()
+			))->content()->saveHTML()
 		);
 	}
 
@@ -121,4 +110,4 @@ final class FrugalRequest extends TestCase\Database {
 	}
 }
 
-(new FrugalRequest())->run();
+(new CachedPage())->run();

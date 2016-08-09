@@ -48,21 +48,12 @@ final class OnlineParts implements Parts {
 					(string)$visualPart['expression'],
 					$visualPart['page'],
 				];
-				$onlinePage = (new Http\LoggedRequest(
-					new Http\CachedRequest(
-						new Http\FrugalRequest(
-							new Http\DefaultRequest(
-								$this->http,
-								new GuzzleHttp\Psr7\Request('GET', $url)
-							),
-							$url,
-							new WebPages($this->database),
-							$this->database
-						),
-						new Storages\MemoryStorage()
-					),
-					$this->logger
-				))->send();
+				$onlinePage = new CachedPage(
+					$url,
+					new HtmlWebPage($url, $this->http),
+					new WebPages($this->database),
+					$this->database
+				);
 				$previous[] = new ConstantPart(
 					new PostgresPart(
 						new HtmlPart(

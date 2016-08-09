@@ -29,7 +29,7 @@ final class LoggedParts extends TestCase\Mockery {
 			);
 	}
 
-	public function testNoExceptionDuringAdd() {
+	public function testNoExceptionDuringAdding() {
 		Assert::noError(function() {
 			$logger = $this->mockery('Tracy\ILogger');
 			(new Subscribing\LoggedParts(

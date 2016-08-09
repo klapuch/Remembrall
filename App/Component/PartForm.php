@@ -52,24 +52,18 @@ final class PartForm extends SecureControl {
 
 	public function formSucceeded(UI\Form $form, ArrayHash $values) {
 		try {
-			$page = (new Http\LoggedRequest(
-				new Http\CachedRequest(
-					new Http\FrugalRequest(
-						new Http\DefaultRequest(
-							new GuzzleHttp\Client(['http_errors' => false]),
-							new GuzzleHttp\Psr7\Request(
-								'GET',
-								$values->url
-							)
-						),
+			$page = new Subscribing\LoggedPage(
+				new Subscribing\CachedPage(
+					$values->url,
+					new Subscribing\HtmlWebPage(
 						$values->url,
-						new Subscribing\WebPages($this->database),
-						$this->database
+						new GuzzleHttp\Client(['http_errors' => false])
 					),
-					new Storages\MemoryStorage()
+					new Subscribing\WebPages($this->database),
+					$this->database
 				),
 				$this->logger
-			))->send();
+			);
 			(new Storage\Transaction($this->database))->start(
 				function() use ($values, $page) {
 					(new Subscribing\LoggedParts(
