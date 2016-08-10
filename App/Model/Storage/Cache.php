@@ -8,8 +8,8 @@ use Nette\Caching;
  * Cache storage
  */
 abstract class Cache {
-	private $origin;
-	private $cache;
+	protected $origin;
+	protected $cache;
 
 	public function __construct($origin, Caching\IStorage $cache) {
 		$this->origin = $origin;
