@@ -49,5 +49,5 @@ services:
 	subscriber:
 		class: Remembrall\Model\Access\PostgresSubscriber(@identity::getId())
 	nette.mailer:
-			class: Nette\Mail\IMailer
-			factory: Nextras\MailPanel\FileMailer(%tempDir%/mail-panel-mails)
+		class: Nette\Mail\IMailer
+		factory: Nextras\MailPanel\FileMailer(%tempDir%/mail-panel-mails)

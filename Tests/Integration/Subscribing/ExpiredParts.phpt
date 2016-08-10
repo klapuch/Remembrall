@@ -5,9 +5,8 @@
  */
 namespace Remembrall\Integration\Subscribing;
 
-use Remembrall\Model\{
-	Subscribing
-};
+use GuzzleHttp;
+use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
 
@@ -37,46 +36,53 @@ final class ExpiredParts extends TestCase\Database {
 		);
 		$parts = (new Subscribing\ExpiredParts(
 			new Subscribing\FakeParts(),
-			$this->database
+			$this->database,
+			new GuzzleHttp\Client()
 		))->iterate();
 		Assert::count(2, $parts);
 		Assert::equal(
-			new Subscribing\ConstantPart(
+			new Subscribing\PostgresPart(
 				new Subscribing\HtmlPart(
 					new Subscribing\XPathExpression(
-						new Subscribing\ConstantPage(
-							new Subscribing\FakePage(),
-							'google'
+						new Subscribing\HtmlWebPage(
+							'www.google.com',
+							new GuzzleHttp\Client()
 						),
 						'//c'
 					),
 					new Subscribing\ConstantPage(
-						new Subscribing\FakePage(),
+						new Subscribing\HtmlWebPage(
+							'www.google.com',
+							new GuzzleHttp\Client()
+						),
 						'google'
 					)
-				),
-				'c',
-				'www.google.com'
+				), 'www.google.com',
+				'//c',
+				$this->database
 			),
 			$parts[0]
 		);
 		Assert::equal(
-			new Subscribing\ConstantPart(
+			new Subscribing\PostgresPart(
 				new Subscribing\HtmlPart(
 					new Subscribing\XPathExpression(
-						new Subscribing\ConstantPage(
-							new Subscribing\FakePage(),
-							'google'
+						new Subscribing\HtmlWebPage(
+							'www.google.com',
+							new GuzzleHttp\Client()
 						),
 						'//a'
 					),
 					new Subscribing\ConstantPage(
-						new Subscribing\FakePage(),
+						new Subscribing\HtmlWebPage(
+							'www.google.com',
+							new GuzzleHttp\Client()
+						),
 						'google'
 					)
-				),
-				'a',
-				'www.google.com'
+				), 'www.google.com',
+				'//a',
+				$this->database
 			),
 			$parts[1]
 		);
@@ -87,7 +93,8 @@ final class ExpiredParts extends TestCase\Database {
 			[],
 			(new Subscribing\ExpiredParts(
 				new Subscribing\FakeParts(),
-				$this->database
+				$this->database,
+				new GuzzleHttp\Client()
 			))->iterate()
 		);
 	}

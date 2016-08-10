@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Dibi;
+use GuzzleHttp;
 
 /**
  * All the parts which are needed to visit because they are no more valid
@@ -10,10 +11,16 @@ use Dibi;
 final class ExpiredParts implements Parts {
 	private $origin;
 	private $database;
+	private $http;
 
-	public function __construct(Parts $origin, Dibi\Connection $database) {
+	public function __construct(
+		Parts $origin,
+		Dibi\Connection $database,
+		GuzzleHttp\ClientInterface $http
+	) {
 		$this->origin = $origin;
 		$this->database = $database;
+		$this->http = $http;
 	}
 
 	public function add(Part $part, string $url, string $expression): Part {
@@ -33,23 +40,23 @@ final class ExpiredParts implements Parts {
 					GROUP BY part_id
 				) AS subscriptions ON subscriptions.part_id = parts.id 
 				INNER JOIN pages ON pages.url = parts.page_url
-				WHERE last_update + INTERVAL "1 MINUTE" * interval < NOW()
+				WHERE last_update + INTERVAL "1 MINUTE" * INTERVAL < NOW()
 				ORDER BY last_update ASC'
 			),
 			function($previous, Dibi\Row $row) {
-				$previous[] = new ConstantPart(
+				$previous[] = new PostgresPart(
 					new HtmlPart(
 						new XPathExpression(
-							new ConstantPage(
-								new FakePage(),
-								$row['page_content']
-							),
+							new HtmlWebPage($row['url'], $this->http),
 							$row['expression']
 						),
-						new ConstantPage(new FakePage(), $row['page_content'])
-					),
-					$row['part_content'],
-					$row['url']
+						new ConstantPage(
+							new HtmlWebPage($row['url'], $this->http),
+							$row['page_content']
+						)
+					), $row['url'],
+					$row['expression'],
+					$this->database
 				);
 				return $previous;
 			}

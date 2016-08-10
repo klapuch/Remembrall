@@ -1,3 +1,4 @@
-<p>Hi, there are some changes on the {$url} website with the {$expression} expression</p>
+{var visualPart = $part->print()}
+<p>Hi, there are some changes on the {$visualPart[url]} website with the {$visualPart[expression]} expression</p>
 <p>Check it out bellow this text</p>
 <p>{$part->content()}</p>

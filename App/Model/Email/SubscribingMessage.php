@@ -11,21 +11,15 @@ use Remembrall\Model\{
 final class SubscribingMessage implements Message {
 	private $part;
 	private $templateFactory;
-	private $url;
-	private $expression;
 	private $database;
 
 	public function __construct(
 		Subscribing\Part $part,
-		string $url,
-		string $expression,
 		UI\ITemplateFactory $templateFactory,
 		Dibi\Connection $database
 	) {
 		$this->part = $part;
 		$this->templateFactory = $templateFactory;
-		$this->url = $url;
-		$this->expression = $expression;
 		$this->database = $database;
 	}
 
@@ -34,19 +28,21 @@ final class SubscribingMessage implements Message {
 	}
 
 	public function recipients(): Access\Subscribers {
+		$visualPart = $this->part->print();
 		return new Access\OutdatedSubscribers(
 			new Access\FakeSubscribers(),
-			$this->url,
-			$this->expression,
+			$visualPart['url'],
+			(string)$visualPart['expression'],
 			$this->database
 		);
 	}
 
 	public function subject(): string {
+		$visualPart = $this->part->print();
 		return sprintf(
 			'Changes occurred on "%s" page with "%s" expression',
-			$this->url,
-			$this->expression
+			$visualPart['url'],
+			(string)$visualPart['expression']
 		);
 	}
 
@@ -56,8 +52,6 @@ final class SubscribingMessage implements Message {
 			__DIR__ . '/../../Page/templates/Email/subscribing.latte'
 		);
 		$template->part = $this->part;
-		$template->url = $this->url;
-		$template->expression = $this->expression;
 		return (string)$template;
 	}
 }

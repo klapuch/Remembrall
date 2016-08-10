@@ -5,6 +5,7 @@
  */
 namespace Remembrall\Integration\Subscribing;
 
+use GuzzleHttp;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -124,7 +125,8 @@ final class CollectiveParts extends TestCase\Database {
 		Assert::same(
 			[],
 			(new Subscribing\CollectiveParts(
-				$this->database
+				$this->database,
+				new GuzzleHttp\Client()
 			))->iterate()
 		);
 	}
