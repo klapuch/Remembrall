@@ -14,8 +14,8 @@ require __DIR__ . '/../../bootstrap.php';
 final class ReserveVerificationCodes extends TestCase\Database {
 	public function testRegenerating() {
 		$this->database->query(
-			'INSERT INTO verification_codes (subscriber_id, code, used)
-			VALUES (6, "123456", FALSE)'
+			"INSERT INTO verification_codes (subscriber_id, code, used)
+			VALUES (6, '123456', FALSE)"
 		);
 		$code = (new Access\ReserveVerificationCodes($this->database))
 			->generate('foo@bar.cz');
@@ -30,8 +30,8 @@ final class ReserveVerificationCodes extends TestCase\Database {
 	 */
 	public function testRegeneratingForUsedOne() {
 		$this->database->query(
-			'INSERT INTO verification_codes (subscriber_id, code, used, used_at)
-			VALUES (6, "123456", TRUE, NOW())'
+			"INSERT INTO verification_codes (subscriber_id, code, used, used_at)
+			VALUES (6, '123456', TRUE, NOW())"
 		);
 		(new Access\ReserveVerificationCodes($this->database))
 			->generate('foo@bar.cz');
@@ -40,8 +40,8 @@ final class ReserveVerificationCodes extends TestCase\Database {
 	protected function prepareDatabase() {
 		$this->purge(['verification_codes', 'subscribers']);
 		$this->database->query(
-			'INSERT INTO subscribers (id, email, password) VALUES
-			(6, "foo@bar.cz", "password")'
+			"INSERT INTO subscribers (id, email, password) VALUES
+			(6, 'foo@bar.cz', 'password')"
 		);
 	}
 }

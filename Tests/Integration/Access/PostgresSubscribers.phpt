@@ -34,8 +34,8 @@ final class PostgresSubscribers extends TestCase\Database {
 
 	public function testRegistrationWithDuplicatedEmail() {
 		$this->database->query(
-			'INSERT INTO subscribers (id, email, password) VALUES
-			(1, "foo@bar.cz", "secret")'
+			"INSERT INTO subscribers (id, email, password) VALUES
+			(1, 'foo@bar.cz', 'secret')"
 		);
 		Assert::exception(
 			function() {

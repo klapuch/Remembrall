@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Dibi;
+use Klapuch\Storage;
 use Remembrall\Model\Access;
 
 /**
@@ -15,7 +15,7 @@ final class LimitedSubscriptions implements Subscriptions {
 	private $origin;
 
 	public function __construct(
-		Dibi\Connection $database,
+		Storage\Database $database,
 		Access\Subscriber $subscriber,
 		Subscriptions $origin
 	) {
@@ -45,18 +45,17 @@ final class LimitedSubscriptions implements Subscriptions {
 	}
 
 	/**
-	 * Has the subscriber subscribed more than X parts and overtepped the limit?
+	 * Has the subscriber subscribed more than X parts and overstepped the limit?
 	 * @return bool
 	 */
 	private function overstepped(): bool {
-		return (bool)$this->database->fetchSingle(
+		return (bool)$this->database->fetchColumn(
 			'SELECT 1
 			FROM parts
 			INNER JOIN subscriptions ON subscriptions.part_id = parts.id 
 			WHERE subscriber_id IS NOT DISTINCT FROM ?
 			HAVING COUNT(parts.id) >= ?',
-			$this->subscriber->id(),
-			self::LIMIT
+			[$this->subscriber->id(), self::LIMIT]
 		);
 	}
 }

@@ -2,33 +2,30 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Dibi;
-use Remembrall\Model\Storage;
+use Klapuch\Storage;
 
 final class WebPages implements Pages {
 	private $database;
 
-	public function __construct(Dibi\Connection $database) {
+	public function __construct(Storage\Database $database) {
 		$this->database = $database;
 	}
 
 	public function add(string $url, Page $page): Page {
-		(new Storage\Transaction($this->database))->start(
+		(new Storage\PostgresTransaction($this->database))->start(
 			function() use ($url, $page) {
 				if($this->alreadyExists($url)) {
 					$this->database->query(
 						'UPDATE pages
 						SET content = ?
 						WHERE url IS NOT DISTINCT FROM ?',
-						$page->content()->saveHTML(),
-						$this->normalizedUrl($url)
+						[$page->content()->saveHTML(), $this->normalizedUrl($url)]
 					);
 				} else {
 					$this->database->query(
 						'INSERT INTO pages (url, content) VALUES
 						(?, ?)',
-						$this->normalizedUrl($url),
-						$page->content()->saveHTML()
+						[$this->normalizedUrl($url), $page->content()->saveHTML()]
 					);
 				}
 			}
@@ -42,18 +39,18 @@ final class WebPages implements Pages {
 	 * @return bool
 	 */
 	private function alreadyExists(string $url): bool {
-		return (bool)$this->database->fetchSingle(
+		return (bool)$this->database->fetchColumn(
 			'SELECT 1
 			FROM pages
 			WHERE url IS NOT DISTINCT FROM ?',
-			$this->normalizedUrl($url)
+			[$this->normalizedUrl($url)]
 		);
 	}
 
 	public function iterate(): array {
 		return (array)array_reduce(
 			$this->database->fetchAll('SELECT content FROM pages'),
-			function($previous, Dibi\Row $row) {
+			function($previous, array $row) {
 				$previous[] = new ConstantPage(new FakePage(), $row['content']);
 				return $previous;
 			}

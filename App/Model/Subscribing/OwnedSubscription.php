@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Dibi;
+use Klapuch\Storage;
 use Remembrall\Exception\NotFoundException;
 use Remembrall\Model\Access;
 
@@ -16,7 +16,7 @@ final class OwnedSubscription implements Subscription {
 		string $url,
 		string $expression,
 		Access\Subscriber $owner,
-		Dibi\Connection $database
+		Storage\Database $database
 	) {
 		$this->url = $url;
 		$this->expression = $expression;
@@ -36,9 +36,7 @@ final class OwnedSubscription implements Subscription {
 				WHERE expression IS NOT DISTINCT FROM ?
 				AND page_url IS NOT DISTINCT FROM ?
 			)',
-			$this->owner->id(),
-			$this->expression,
-			$this->url
+			[$this->owner->id(), $this->expression, $this->url]
 		);
 	}
 
@@ -55,10 +53,12 @@ final class OwnedSubscription implements Subscription {
 				WHERE page_url IS NOT DISTINCT FROM ?
 				AND expression IS NOT DISTINCT FROM ?
 			)',
-			sprintf('PT%dM', $interval->step()->i),
-			$this->owner->id(),
-			$this->url,
-			$this->expression
+			[
+				sprintf('PT%dM', $interval->step()->i),
+				$this->owner->id(),
+				$this->url,
+				$this->expression
+			]
 		);
 		return $this;
 	}
@@ -76,16 +76,14 @@ final class OwnedSubscription implements Subscription {
 	 * @return bool
 	 */
 	private function owned(): bool {
-		return (bool)$this->database->fetchSingle(
+		return (bool)$this->database->fetchColumn(
 			'SELECT 1
 			FROM parts
 			INNER JOIN subscriptions ON subscriptions.part_id = parts.id
 			WHERE subscriber_id IS NOT DISTINCT FROM ?
 			AND page_url IS NOT DISTINCT FROM ?
 			AND expression IS NOT DISTINCT FROM ?',
-			$this->owner->id(),
-			$this->url,
-			$this->expression
+			[$this->owner->id(), $this->url, $this->expression]
 		);
 	}
 }

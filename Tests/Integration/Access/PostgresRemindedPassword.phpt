@@ -15,8 +15,8 @@ require __DIR__ . '/../../bootstrap.php';
 final class PostgresRemindedPassword extends TestCase\Database {
 	public function testChanging() {
 		$this->database->query(
-			'INSERT INTO forgotten_passwords (subscriber_id, used, reminder, reminded_at) VALUES
-			(1, FALSE, "123456", NOW())'
+			"INSERT INTO forgotten_passwords (subscriber_id, used, reminder, reminded_at) VALUES
+			(1, FALSE, '123456', NOW())"
 		);
 		(new Access\PostgresRemindedPassword(
 			'123456',
@@ -25,14 +25,14 @@ final class PostgresRemindedPassword extends TestCase\Database {
 		))->change('123456789');
 		Assert::same(
 			'secret',
-			$this->database->fetchSingle(
+			$this->database->fetchColumn(
 				'SELECT password
 				FROM subscribers
 				WHERE id = 1'
 			)
 		);
 		Assert::true(
-			$this->database->fetchSingle(
+			$this->database->fetchColumn(
 				'SELECT used
 				FROM forgotten_passwords
 				WHERE subscriber_id = 1'
@@ -43,8 +43,8 @@ final class PostgresRemindedPassword extends TestCase\Database {
 	protected function prepareDatabase() {
 		$this->purge(['subscribers', 'forgotten_passwords']);
 		$this->database->query(
-			'INSERT INTO subscribers (id, email, password) VALUES
-			(1, "foo@bar.cz", "123")'
+			"INSERT INTO subscribers (id, email, password) VALUES
+			(1, 'foo@bar.cz', '123')"
 		);
 	}
 }

@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Dibi;
+use Klapuch\Storage;
 use Remembrall\Model\Access;
 use Remembrall\Exception\DuplicateException;
 
@@ -12,7 +12,7 @@ final class OwnedSubscriptions implements Subscriptions {
 
 	public function __construct(
 		Access\Subscriber $owner,
-		Dibi\Connection $database
+		Storage\Database $database
 	) {
 		$this->owner = $owner;
 		$this->database = $database;
@@ -31,9 +31,9 @@ final class OwnedSubscriptions implements Subscriptions {
 				INNER JOIN subscriptions ON subscriptions.part_id = parts.id
 				WHERE subscriptions.subscriber_id IS NOT DISTINCT FROM ?
 				ORDER BY visited_at DESC',
-				$this->owner->id()
+				[$this->owner->id()]
 			),
-			function($subscriptions, Dibi\Row $row) {
+			function($subscriptions, array $row) {
 				$subscriptions[] = new ConstantSubscription(
 					new OwnedSubscription(
 						$row['url'],
@@ -66,19 +66,21 @@ final class OwnedSubscriptions implements Subscriptions {
 					WHERE expression IS NOT DISTINCT FROM ?
 					AND page_url IS NOT DISTINCT FROM ?
 				)',
-				$this->owner->id(),
-				sprintf('PT%dM', $interval->step()->i),
-				$expression,
-				$url
+				[
+					$this->owner->id(),
+					sprintf('PT%dM', $interval->step()->i),
+					$expression,
+					$url
+				]
 			);
-		} catch(Dibi\UniqueConstraintViolationException $ex) {
+		} catch(Storage\UniqueConstraint $ex) {
 			throw new DuplicateException(
 				sprintf(
 					'"%s" expression on the "%s" page is already subscribed by you',
 					$expression,
 					$url
 				),
-				(int)$ex->getCode(),
+				$ex->getCode(),
 				$ex
 			);
 		}

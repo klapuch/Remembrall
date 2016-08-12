@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Access;
 
-use Dibi;
+use Klapuch\Storage;
 use Remembrall\Exception;
 
 /**
@@ -16,7 +16,7 @@ final class ExistingVerificationCode implements VerificationCode {
 	public function __construct(
 		VerificationCode $origin,
 		string $code,
-		Dibi\Connection $database
+		Storage\Database $database
 	) {
 		$this->origin = $origin;
 		$this->code = $code;
@@ -46,11 +46,11 @@ final class ExistingVerificationCode implements VerificationCode {
 	 * @return bool
 	 */
 	private function exists(): bool {
-		return (bool)$this->database->fetchSingle(
+		return (bool)$this->database->fetchColumn(
 			'SELECT 1
 			FROM verification_codes
 			WHERE code IS NOT DISTINCT FROM ?',
-			$this->code
+			[$this->code]
 		);
 	}
 }

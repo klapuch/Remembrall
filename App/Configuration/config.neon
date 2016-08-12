@@ -1,10 +1,8 @@
-dibi:
-	driver: postgre
-	host: 127.0.0.1
-	username: postgres
-	password: postgres
-	dbname: remembrall
-	lazy: true
+parameters:
+	database:
+		dsn: "pgsql:host=127.0.0.1;dbname=remembrall;"
+		user: postgres
+		password: postgres
 php:
 	date.timezone: Europe/Prague
 	default_charset: UTF-8
@@ -29,8 +27,6 @@ http:
 		X-Frame-Options: DENY
 		X-Content-Type-Options: nosniff
 		X-Powered-By: ""
-extensions:
-	dibi: Dibi\Bridges\Nette\DibiExtension22
 forms:
 	messages:
 		FILLED: "Please, fill %label field."
@@ -39,6 +35,9 @@ tracy:
 	bar:
 		- Nextras\MailPanel\MailPanel(%tempDir%/mail-panel-latte)
 services:
+	database:
+		class: Klapuch\Storage\PDODatabase
+		arguments: [%database.dsn%, %database.user%, %database.password%]
 	router: Remembrall\Router\RouterFactory::createRouter
 	texy: Texy\Texy
 	latte.latteFactory:

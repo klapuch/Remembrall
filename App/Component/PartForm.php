@@ -2,14 +2,13 @@
 declare(strict_types = 1);
 namespace Remembrall\Component;
 
-use Dibi;
+use Klapuch\Storage;
 use GuzzleHttp;
 use Nette\Application\UI;
 use Nette\Caching\Storages;
-use Nette\Forms;
 use Nette\Utils\ArrayHash;
 use Remembrall\Model\{
-	Access, Http, Subscribing, Storage
+	Access, Subscribing
 };
 use Tracy;
 
@@ -21,7 +20,7 @@ final class PartForm extends SecureControl {
 
 	public function __construct(
 		Access\Subscriber $myself,
-		Dibi\Connection $database,
+		Storage\Database $database,
 		Tracy\ILogger $logger
 	) {
 		$this->myself = $myself;
@@ -64,7 +63,7 @@ final class PartForm extends SecureControl {
 				),
 				$this->logger
 			);
-			(new Storage\Transaction($this->database))->start(
+			(new Storage\PostgresTransaction($this->database))->start(
 				function() use ($values, $page) {
 					(new Subscribing\LoggedParts(
 						new Subscribing\CollectiveParts(

@@ -14,8 +14,8 @@ require __DIR__ . '/../../bootstrap.php';
 final class CachedPage extends TestCase\Database {
 	public function testCachedPage() {
 		$this->database->query(
-			'INSERT INTO page_visits (page_url, visited_at) VALUES
-			("www.google.com", NOW())'
+			"INSERT INTO page_visits (page_url, visited_at) VALUES
+			('www.google.com', NOW())"
 		);
 		Assert::contains(
 			'google',
@@ -30,10 +30,10 @@ final class CachedPage extends TestCase\Database {
 
 	public function testCachedPageWithMultipleVisitation() {
 		$this->database->query(
-			'INSERT INTO page_visits (page_url, visited_at) VALUES
-			("www.google.com", NOW() - INTERVAL "70 MINUTE"),
-			("www.google.com", NOW()),
-			("www.google.com", NOW() - INTERVAL "20 MINUTE")'
+			"INSERT INTO page_visits (page_url, visited_at) VALUES
+			('www.google.com', NOW() - INTERVAL '70 MINUTE'),
+			('www.google.com', NOW()),
+			('www.google.com', NOW() - INTERVAL '20 MINUTE')"
 		);
 		Assert::contains(
 			'google',
@@ -48,8 +48,8 @@ final class CachedPage extends TestCase\Database {
 
 	public function testExpiredCaching() {
 		$this->database->query(
-			'INSERT INTO page_visits (page_url, visited_at) VALUES
-			("www.google.com", NOW() - INTERVAL "11 MINUTE")'
+			"INSERT INTO page_visits (page_url, visited_at) VALUES
+			('www.google.com', NOW() - INTERVAL '11 MINUTE')"
 		);
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>Google</p>');
@@ -66,10 +66,10 @@ final class CachedPage extends TestCase\Database {
 
 	public function testExpiredCachingWithMultipleVisitation() {
 		$this->database->query(
-			'INSERT INTO page_visits (page_url, visited_at) VALUES
-			("www.google.com", NOW() - INTERVAL "11 MINUTE"),
-			("www.google.com", NOW() - INTERVAL "20 MINUTE"),
-			("www.google.com", NOW() - INTERVAL "70 MINUTE")'
+			"INSERT INTO page_visits (page_url, visited_at) VALUES
+			('www.google.com', NOW() - INTERVAL '11 MINUTE'),
+			('www.google.com', NOW() - INTERVAL '20 MINUTE'),
+			('www.google.com', NOW() - INTERVAL '70 MINUTE')"
 		);
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>Google</p>');
@@ -103,8 +103,8 @@ final class CachedPage extends TestCase\Database {
 		$this->truncate(['pages', 'page_visits']);
 		$this->restartSequence(['page_visits']);
 		$this->database->query(
-			'INSERT INTO pages (url, content) VALUES
-			("www.google.com", "google")'
+			"INSERT INTO pages (url, content) VALUES
+			('www.google.com', 'google')"
 		);
 		$this->purge(['page_visits']);
 	}

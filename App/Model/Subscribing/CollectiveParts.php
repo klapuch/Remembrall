@@ -2,8 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Dibi;
-use Remembrall\Model\Storage;
+use Klapuch\Storage;
 
 /**
  * All parts stored in the database shared with everyone
@@ -11,12 +10,12 @@ use Remembrall\Model\Storage;
 final class CollectiveParts implements Parts {
 	private $database;
 
-	public function __construct(Dibi\Connection $database) {
+	public function __construct(Storage\Database $database) {
 		$this->database = $database;
 	}
 
 	public function add(Part $part, string $url, string $expression): Part {
-		return (new Storage\Transaction($this->database))->start(
+		return (new Storage\PostgresTransaction($this->database))->start(
 			function() use ($part, $url, $expression) {
 				if($this->alreadyExists($url, $expression)) {
 					return $part->refresh();
@@ -25,9 +24,7 @@ final class CollectiveParts implements Parts {
 						'INSERT INTO parts
 						(page_url, expression, content) VALUES
 						(?, ?, ?)',
-						$url,
-						$expression,
-						$part->content()
+						[$url, $expression, $part->content()]
 					);
 					return $part;
 				}
@@ -45,7 +42,7 @@ final class CollectiveParts implements Parts {
 				INNER JOIN subscriptions ON subscriptions.part_id = parts.id
 				LEFT JOIN pages ON pages.url = parts.page_url'
 			),
-			function($previous, Dibi\Row $row) {
+			function($previous, array $row) {
 				$previous[] = new ConstantPart(
 					new HtmlPart(
 						new XPathExpression(
@@ -72,13 +69,12 @@ final class CollectiveParts implements Parts {
 	 * @return bool
 	 */
 	private function alreadyExists(string $url, string $expression): bool {
-		return (bool)$this->database->fetchSingle(
+		return (bool)$this->database->fetchColumn(
 			'SELECT 1
 			FROM parts
 			WHERE page_url IS NOT DISTINCT FROM ?
 			AND expression IS NOT DISTINCT FROM ?',
-			$url,
-			$expression
+			[$url, $expression]
 		);
 	}
 }

@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Email;
 
-use Dibi;
+use Klapuch\Storage;
 use Nette\Application\UI;
 use Remembrall\Model\{
 	Access, Subscribing
@@ -16,7 +16,7 @@ final class SubscribingMessage implements Message {
 	public function __construct(
 		Subscribing\Part $part,
 		UI\ITemplateFactory $templateFactory,
-		Dibi\Connection $database
+		Storage\Database $database
 	) {
 		$this->part = $part;
 		$this->templateFactory = $templateFactory;

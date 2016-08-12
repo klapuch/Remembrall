@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Access;
 
-use Dibi;
+use Klapuch\Storage;
 
 /**
  * Subscribers without actual subscribing
@@ -17,7 +17,7 @@ final class OutdatedSubscribers implements Subscribers {
 		Subscribers $origin,
 		string $url,
 		string $expression,
-		Dibi\Connection $database
+		Storage\Database $database
 	) {
 		$this->origin = $origin;
 		$this->url = $url;
@@ -32,7 +32,7 @@ final class OutdatedSubscribers implements Subscribers {
 	public function iterate(): array {
 		return array_reduce(
 			$this->database->fetchAll(
-				'WITH updated AS (
+				"WITH updated AS (
 					UPDATE subscriptions
 					SET last_update = NOW()
 					WHERE subscriber_id IN (
@@ -40,15 +40,14 @@ final class OutdatedSubscribers implements Subscribers {
 						FROM subscribers
 						INNER JOIN subscriptions ON subscriptions.subscriber_id = subscribers.id
 						INNER JOIN parts ON parts.id = subscriptions.part_id
-						WHERE last_update + INTERVAL "1 MINUTE" * CAST(SUBSTRING(INTERVAL FROM "[0-9]+") AS INT) < NOW()
+						WHERE last_update + INTERVAL '1 MINUTE' * CAST(SUBSTRING(INTERVAL FROM '[0-9]+') AS INT) < NOW()
 						AND page_url IS NOT DISTINCT FROM ?
 						AND expression IS NOT DISTINCT FROM ?
 					) RETURNING subscriber_id AS id
-				) SELECT * FROM subscribers WHERE id IN (SELECT id FROM updated)',
-				$this->url,
-				$this->expression
+				) SELECT * FROM subscribers WHERE id IN (SELECT id FROM updated)",
+				[$this->url, $this->expression]
 			),
-			function($previous, Dibi\Row $row) {
+			function($previous, array $row) {
 				$previous[] = new ConstantSubscriber($row['id'], $row['email']);
 				return $previous;
 			}

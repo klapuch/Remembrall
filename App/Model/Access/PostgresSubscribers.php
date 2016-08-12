@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Access;
 
-use Dibi;
+use Klapuch\Storage;
 use Klapuch\Encryption;
 use Remembrall\Exception\DuplicateException;
 
@@ -14,7 +14,7 @@ final class PostgresSubscribers implements Subscribers {
 	private $cipher;
 
 	public function __construct(
-		Dibi\Connection $database,
+		Storage\Database $database,
 		Encryption\Cipher $cipher
 	) {
 		$this->database = $database;
@@ -23,14 +23,13 @@ final class PostgresSubscribers implements Subscribers {
 
 	public function register(string $email, string $password): Subscriber {
 		try {
-			$id = (int)$this->database->fetchSingle(
+			$id = (int)$this->database->fetchColumn(
 				'INSERT INTO subscribers(email, password) VALUES
 				(?, ?) RETURNING id',
-				$email,
-				$this->cipher->encrypt($password)
+				[$email, $this->cipher->encrypt($password)]
 			);
 			return new PostgresSubscriber($id, $this->database);
-		} catch(Dibi\UniqueConstraintViolationException $ex) {
+		} catch(Storage\UniqueConstraint $ex) {
 			throw new DuplicateException(
 				sprintf('Email "%s" already exists', $email)
 			);

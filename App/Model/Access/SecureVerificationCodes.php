@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Access;
 
-use Dibi;
+use Klapuch\Storage;
 
 /**
  * Works just with securely generated codes
@@ -10,7 +10,7 @@ use Dibi;
 final class SecureVerificationCodes implements VerificationCodes {
 	private $database;
 
-	public function __construct(Dibi\Connection $database) {
+	public function __construct(Storage\Database $database) {
 		$this->database = $database;
 	}
 
@@ -19,8 +19,7 @@ final class SecureVerificationCodes implements VerificationCodes {
 		$this->database->query(
 			'INSERT INTO verification_codes (subscriber_id, code)
 			VALUES ((SELECT id FROM subscribers WHERE email IS NOT DISTINCT FROM ?), ?)',
-			$email,
-			$code
+			[$email, $code]
 		);
 		return new DisposableVerificationCode($code, $this->database);
 	}

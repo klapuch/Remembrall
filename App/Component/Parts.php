@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Component;
 
-use Dibi;
+use Klapuch\Storage;
 use Remembrall\Model\{
 	Access, Subscribing
 };
@@ -15,7 +15,7 @@ final class Parts extends SecureControl {
 
 	public function __construct(
 		Access\Subscriber $myself,
-		Dibi\Connection $database,
+		Storage\Database $database,
 		Tracy\ILogger $logger
 	) {
 		parent::__construct();

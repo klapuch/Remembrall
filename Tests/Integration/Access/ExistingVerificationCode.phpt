@@ -62,8 +62,8 @@ final class ExistingVerificationCode extends TestCase\Database {
 
 	private function prepareCode() {
 		$this->database->query(
-			'INSERT INTO verification_codes (subscriber_id, code, used) VALUES
-			(2, "123", FALSE)'
+			"INSERT INTO verification_codes (subscriber_id, code, used) VALUES
+			(2, '123', FALSE)"
 		);
 	}
 

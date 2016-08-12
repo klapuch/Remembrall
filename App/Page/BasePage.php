@@ -8,7 +8,7 @@ use Nette\Security;
 abstract class BasePage extends Nette\Application\UI\Presenter {
 	use \Nextras\Application\UI\SecuredLinksPresenterTrait;
 
-	/** @inject @var \Dibi\Connection */
+	/** @inject @var \Klapuch\Storage\Database */
 	public $database;
 
 	/** @inject @var \Tracy\ILogger */

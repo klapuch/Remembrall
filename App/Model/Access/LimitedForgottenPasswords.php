@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Access;
 
-use Dibi;
+use Klapuch\Storage;
 
 /**
  * Collection of forgotten passwords which can be reminded just X times in Y hours
@@ -16,7 +16,7 @@ final class LimitedForgottenPasswords implements ForgottenPasswords {
 
 	public function __construct(
 		ForgottenPasswords $origin,
-		Dibi\Connection $database
+		Storage\Database $database
 	) {
 		$this->origin = $origin;
 		$this->database = $database;
@@ -41,7 +41,7 @@ final class LimitedForgottenPasswords implements ForgottenPasswords {
 	 * @return bool
 	 */
 	private function overstepped(string $email): bool {
-		return (bool)$this->database->fetchSingle(
+		return (bool)$this->database->fetchColumn(
 			"SELECT 1
 			FROM forgotten_passwords
 			WHERE subscriber_id = (
@@ -51,9 +51,7 @@ final class LimitedForgottenPasswords implements ForgottenPasswords {
 			)
 			AND reminded_at > NOW() - INTERVAL '1 HOUR' * ?
 			HAVING COUNT(id) >= ?",
-			$email,
-			self::HOUR_LIMIT,
-			self::ATTEMPT_LIMIT
+			[$email, self::HOUR_LIMIT, self::ATTEMPT_LIMIT]
 		);
 	}
 }

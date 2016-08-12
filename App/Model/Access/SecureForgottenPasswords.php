@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Access;
 
-use Dibi;
+use Klapuch\Storage;
 use Klapuch\Encryption;
 
 /**
@@ -13,7 +13,7 @@ final class SecureForgottenPasswords implements ForgottenPasswords {
 	private $cipher;
 
 	public function __construct(
-		Dibi\Connection $database,
+		Storage\Database $database,
 		Encryption\Cipher $cipher
 	) {
 		$this->database = $database;
@@ -24,10 +24,8 @@ final class SecureForgottenPasswords implements ForgottenPasswords {
 		$reminder = bin2hex(random_bytes(50)) . ':' . sha1($email);
 		$this->database->query(
 			'INSERT INTO forgotten_passwords (subscriber_id, reminder, reminded_at) VALUES
-			((SELECT id FROM subscribers WHERE email IS NOT DISTINCT FROM ?), ?, ?)',
-			$email,
-			$reminder,
-			new \DateTimeImmutable()
+			((SELECT id FROM subscribers WHERE email IS NOT DISTINCT FROM ?), ?, NOW())',
+			[$email, $reminder]
 		);
 		return new PostgresRemindedPassword(
 			$reminder,

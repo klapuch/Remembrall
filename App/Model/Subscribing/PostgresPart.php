@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Dibi;
+use Klapuch\Storage;
 
 /**
  * Part stored in the Postgres database
@@ -17,7 +17,7 @@ final class PostgresPart implements Part {
 		Part $origin,
 		string $url,
 		string $expression,
-		Dibi\Connection $database
+		Storage\Database $database
 	) {
 		$this->origin = $origin;
 		$this->url = $url;
@@ -26,13 +26,12 @@ final class PostgresPart implements Part {
 	}
 
 	public function content(): string {
-		return $this->database->fetchSingle(
+		return $this->database->fetchColumn(
 			'SELECT content
 			FROM parts
 			WHERE expression IS NOT DISTINCT FROM ?
 			AND page_url IS NOT DISTINCT FROM ?',
-			$this->expression,
-			$this->url
+			[$this->expression, $this->url]
 		);
 	}
 
@@ -43,9 +42,7 @@ final class PostgresPart implements Part {
 			SET content = ?
 			WHERE page_url IS NOT DISTINCT FROM ? 
 			AND expression IS NOT DISTINCT FROM ?',
-			$refreshedPart->content(),
-			$this->url,
-			$this->expression
+			[$refreshedPart->content(), $this->url, $this->expression]
 		);
 		return $this;
 	}

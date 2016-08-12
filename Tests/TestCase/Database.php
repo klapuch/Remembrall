@@ -2,18 +2,22 @@
 declare(strict_types = 1);
 namespace Remembrall\TestCase;
 
-use Dibi;
+use Klapuch\Storage;
 use Tester;
 
 abstract class Database extends Mockery {
-	/** @var Dibi\Connection */
+	/** @var Storage\Database */
 	protected $database;
 
 	protected function setUp() {
 		parent::setUp();
 		Tester\Environment::lock('database', __DIR__ . '/../Temporary');
 		$credentials = parse_ini_file(__DIR__ . '/.database.ini');
-		$this->database = new Dibi\Connection($credentials);
+		$this->database = new Storage\PDODatabase(
+			$credentials['dsn'],
+			$credentials['user'],
+			$credentials['password']
+		);
 		$this->prepareDatabase();
 	}
 
@@ -35,7 +39,7 @@ abstract class Database extends Mockery {
 	 * @param array $tables
 	 */
 	final protected function truncate(array $tables) {
-		$this->database->nativeQuery(
+		$this->database->exec(
 			sprintf('TRUNCATE %s', implode(',', $tables))
 		);
 	}
@@ -46,7 +50,7 @@ abstract class Database extends Mockery {
 	 */
 	final protected function restartSequence(array $tables) {
 		foreach($tables as $table) {
-			$this->database->nativeQuery(
+			$this->database->exec(
 				sprintf('ALTER SEQUENCE %s_id_seq RESTART', $table)
 			);
 		}

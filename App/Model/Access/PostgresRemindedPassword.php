@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Access;
 
-use Dibi;
+use Klapuch\Storage;
 use Klapuch\Encryption;
 
 /**
@@ -15,7 +15,7 @@ final class PostgresRemindedPassword implements RemindedPassword {
 
 	public function __construct(
 		string $reminder,
-		Dibi\Connection $database,
+		Storage\Database $database,
 		Encryption\Cipher $cipher
 	) {
 		$this->reminder = $reminder;
@@ -32,14 +32,13 @@ final class PostgresRemindedPassword implements RemindedPassword {
                 FROM forgotten_passwords
                 WHERE reminder IS NOT DISTINCT FROM ?
             )',
-			$this->cipher->encrypt($password),
-			$this->reminder
+			[$this->cipher->encrypt($password), $this->reminder]
 		);
 		$this->database->query(
 			'UPDATE forgotten_passwords
 			SET used = TRUE
 			WHERE reminder IS NOT DISTINCT FROM ?',
-			$this->reminder
+			[$this->reminder]
 		);
 	}
 }

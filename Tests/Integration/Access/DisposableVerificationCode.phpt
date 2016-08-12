@@ -19,10 +19,10 @@ final class DisposableVerificationCode extends TestCase\Database {
 			$this->database
 		))->use();
 		Assert::true(
-			$this->database->fetchSingle(
-				'SELECT used
+			$this->database->fetchColumn(
+				"SELECT used
 				FROM verification_codes
-				WHERE code = "valid:code"'
+				WHERE code = 'valid:code'"
 			)
 		);
 	}
@@ -32,8 +32,8 @@ final class DisposableVerificationCode extends TestCase\Database {
 	 */
 	public function testUsingAlreadyActivatedCode() {
 		$this->database->query(
-			'INSERT INTO verification_codes (subscriber_id, code, used, used_at) VALUES
-			(2, "activated:code", TRUE, NOW())'
+			"INSERT INTO verification_codes (subscriber_id, code, used, used_at) VALUES
+			(2, 'activated:code', TRUE, NOW())"
 		);
 		(new Access\DisposableVerificationCode(
 			'activated:code',
@@ -53,12 +53,12 @@ final class DisposableVerificationCode extends TestCase\Database {
 
 	private function prepareValidCode() {
 		$this->database->query(
-			'INSERT INTO subscribers (id, email, password) VALUES
-			(1, "foo@gmail.com", "password")'
+			"INSERT INTO subscribers (id, email, password) VALUES
+			(1, 'foo@gmail.com', 'password')"
 		);
 		$this->database->query(
-			'INSERT INTO verification_codes (subscriber_id, code, used)
-			VALUES (1, "valid:code", FALSE)'
+			"INSERT INTO verification_codes (subscriber_id, code, used)
+			VALUES (1, 'valid:code', FALSE)"
 		);
 	}
 

@@ -66,14 +66,14 @@ final class CollectiveParts extends TestCase\Database {
 
 	public function testIteratingOverAllPages() {
 		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.google.com", "//a", "a"),
-			("www.facedown.cz", "//c", "c")'
+			"INSERT INTO parts (page_url, expression, content) VALUES
+			('www.google.com', '//a', 'a'),
+			('www.facedown.cz', '//c', 'c')"
 		);
 		$this->database->query(
-			'INSERT INTO subscriptions (part_id, subscriber_id, interval, last_update) VALUES
-			(1, 1, "PT1M", NOW()),
-			(2, 2, "PT2M", NOW())'
+			"INSERT INTO subscriptions (part_id, subscriber_id, interval, last_update) VALUES
+			(1, 1, 'PT1M', NOW()),
+			(2, 2, 'PT2M', NOW())"
 		);
 		$parts = (new Subscribing\CollectiveParts(
 			$this->database
@@ -135,9 +135,9 @@ final class CollectiveParts extends TestCase\Database {
 		$this->truncate(['parts', 'part_visits', 'pages', 'subscriptions']);
 		$this->restartSequence(['parts', 'part_visits', 'subscriptions']);
 		$this->database->query(
-			'INSERT INTO pages (url, content) VALUES
-			("www.google.com", "<p>google</p>"),
-			("www.facedown.cz", "<p>facedown</p>")'
+			"INSERT INTO pages (url, content) VALUES
+			('www.google.com', '<p>google</p>'),
+			('www.facedown.cz', '<p>facedown</p>')"
 		);
 	}
 }

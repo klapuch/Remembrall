@@ -23,8 +23,8 @@ final class PostgresSubscriber extends TestCase\Database {
 
 	public function testEmail() {
 		$this->database->query(
-			'INSERT INTO subscribers (id, email, password) VALUES
-			(666, "foo@bar.cz", "password")'
+			"INSERT INTO subscribers (id, email, password) VALUES
+			(666, 'foo@bar.cz', 'password')"
 		);
 		Assert::same(
 			'foo@bar.cz',

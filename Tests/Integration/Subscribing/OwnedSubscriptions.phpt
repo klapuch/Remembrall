@@ -16,13 +16,13 @@ require __DIR__ . '/../../bootstrap.php';
 final class OwnedSubscriptions extends TestCase\Database {
     public function testSubscribingBrandNew() {
 		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.google.com", "//p", "a")'
+			"INSERT INTO parts (page_url, expression, content) VALUES
+			('www.google.com', '//p', 'a')"
 		);
 		$this->purge(['part_visits']);
 		$this->database->query(
-			'INSERT INTO part_visits (part_id, visited_at) VALUES
-			(1, "2000-01-01 01:01:01")'
+			"INSERT INTO part_visits (part_id, visited_at) VALUES
+			(1, '2000-01-01 01:01:01')"
 		);
 		(new Subscribing\OwnedSubscriptions(
 			new Access\FakeSubscriber(666),
@@ -56,13 +56,13 @@ final class OwnedSubscriptions extends TestCase\Database {
 
 	public function testSubscribingDuplicateWithRollback() {
 		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.google.com", "//p", "a")'
+			"INSERT INTO parts (page_url, expression, content) VALUES
+			('www.google.com', '//p', 'a')"
 		);
 		$this->purge(['part_visits']);
 		$this->database->query(
-			'INSERT INTO part_visits (part_id, visited_at) VALUES
-			(1, "2000-01-01 01:01:01")'
+			"INSERT INTO part_visits (part_id, visited_at) VALUES
+			(1, '2000-01-01 01:01:01')"
 		);
 		$parts = new Subscribing\OwnedSubscriptions(
 			new Access\FakeSubscriber(666),
@@ -94,27 +94,27 @@ final class OwnedSubscriptions extends TestCase\Database {
 
 	public function testIteratingOwnedSubscriptions() {
 		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.google.com", "//a", "a"),
-			("www.facedown.cz", "//b", "b"),
-			("www.facedown.cz", "//c", "c"),
-			("www.google.com", "//d", "d")'
+			"INSERT INTO parts (page_url, expression, content) VALUES
+			('www.google.com', '//a', 'a'),
+			('www.facedown.cz', '//b', 'b'),
+			('www.facedown.cz', '//c', 'c'),
+			('www.google.com', '//d', 'd')"
 		);
 		$this->database->query(
-			'INSERT INTO subscriptions (part_id, subscriber_id, interval, last_update) VALUES
-			(1, 1, "PT1M", NOW()),
-			(2, 2, "PT2M", NOW()),
-			(3, 1, "PT3M", NOW()),
-			(4, 1, "PT4M", NOW())'
+			"INSERT INTO subscriptions (part_id, subscriber_id, interval, last_update) VALUES
+			(1, 1, 'PT1M', NOW()),
+			(2, 2, 'PT2M', NOW()),
+			(3, 1, 'PT3M', NOW()),
+			(4, 1, 'PT4M', NOW())"
 		);
 		$this->purge(['part_visits']);
 		$this->database->query(
-			'INSERT INTO part_visits (part_id, visited_at) VALUES
-			(1, "2000-01-01 01:01:01"),
-			(1, "2008-01-01 01:01:01"),
-			(2, "2001-01-01 01:01:01"),
-			(3, "2002-01-01 01:01:01"),
-			(4, "2003-01-01 01:01:01")'
+			"INSERT INTO part_visits (part_id, visited_at) VALUES
+			(1, '2000-01-01 01:01:01'),
+			(1, '2008-01-01 01:01:01'),
+			(2, '2001-01-01 01:01:01'),
+			(3, '2002-01-01 01:01:01'),
+			(4, '2003-01-01 01:01:01')"
 		);
 		$parts = (new Subscribing\OwnedSubscriptions(
 			new Access\FakeSubscriber(1),
@@ -141,9 +141,9 @@ final class OwnedSubscriptions extends TestCase\Database {
 		$this->truncate(['parts', 'part_visits', 'pages', 'subscriptions']);
 		$this->restartSequence(['parts', 'part_visits', 'subscriptions']);
 		$this->database->query(
-			'INSERT INTO pages (url, content) VALUES
-			("www.google.com", "<p>google</p>"),
-			("www.facedown.cz", "<p>facedown</p>")'
+			"INSERT INTO pages (url, content) VALUES
+			('www.google.com', '<p>google</p>'),
+			('www.facedown.cz', '<p>facedown</p>')"
 		);
     }
 }

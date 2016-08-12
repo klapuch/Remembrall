@@ -27,17 +27,16 @@ final class SecureForgottenPasswords extends TestCase\Database {
 			$this->database->fetch(
 				'SELECT subscriber_id, LENGTH(reminder) AS reminder_length, used
 				FROM forgotten_passwords
-				WHERE reminded_at <= ?',
-				new \DateTimeImmutable()
-			)->toArray()
+				WHERE reminded_at <= NOW()'
+			)
 		);
 	}
 
 	protected function prepareDatabase() {
 		$this->purge(['forgotten_passwords', 'subscribers']);
 		$this->database->query(
-			'INSERT INTO subscribers (id, email, password) VALUES
-			(1, "foo@bar.cz", "123")'
+			"INSERT INTO subscribers (id, email, password) VALUES
+			(1, 'foo@bar.cz', '123')"
 		);
 	}
 }

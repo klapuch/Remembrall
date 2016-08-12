@@ -17,7 +17,7 @@ final class SecureVerificationCodes extends TestCase\Database {
 			->generate('fooBarEmail');
 		Assert::same(
 			91,
-			$this->database->fetchSingle(
+			$this->database->fetchColumn(
 				'SELECT LENGTH(code)
 				FROM verification_codes
 				WHERE subscriber_id = 6'
@@ -28,8 +28,8 @@ final class SecureVerificationCodes extends TestCase\Database {
 	protected function prepareDatabase() {
 		$this->purge(['verification_codes', 'subscribers']);
 		$this->database->query(
-			'INSERT INTO subscribers (id, email, password) VALUES
-			(6, "fooBarEmail", "password")'
+			"INSERT INTO subscribers (id, email, password) VALUES
+			(6, 'fooBarEmail', 'password')"
 		);
 	}
 }

@@ -74,14 +74,14 @@ final class OwnedSubscription extends TestCase\Database {
 	protected function prepareDatabase() {
 		$this->purge(['parts', 'subscriptions']);
 		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.google.com", "//b", "b"),
-			("www.facedown.cz", "//b", "c")'
+			"INSERT INTO parts (page_url, expression, content) VALUES
+			('www.google.com', '//b', 'b'),
+			('www.facedown.cz', '//b', 'c')"
 		);
 		$this->database->query(
-			'INSERT INTO subscriptions (part_id, subscriber_id, interval, last_update) VALUES
-			(1, 2, "PT2M", NOW()),
-			(2, 666, "PT3M", NOW())'
+			"INSERT INTO subscriptions (part_id, subscriber_id, interval, last_update) VALUES
+			(1, 2, 'PT2M', NOW()),
+			(2, 666, 'PT3M', NOW())"
 		);
 	}
 }

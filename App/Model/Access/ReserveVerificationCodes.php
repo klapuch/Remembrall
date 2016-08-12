@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Access;
 
-use Dibi;
+use Klapuch\Storage;
 use Remembrall\Exception;
 
 /**
@@ -12,12 +12,12 @@ use Remembrall\Exception;
 final class ReserveVerificationCodes implements VerificationCodes {
 	private $database;
 
-	public function __construct(Dibi\Connection $database) {
+	public function __construct(Storage\Database $database) {
 		$this->database = $database;
 	}
 
 	public function generate(string $email): VerificationCode {
-		$code = $this->database->fetchSingle(
+		$code = $this->database->fetchColumn(
 			'SELECT code
 			FROM verification_codes
 			WHERE subscriber_id = (
@@ -26,7 +26,7 @@ final class ReserveVerificationCodes implements VerificationCodes {
 				WHERE email IS NOT DISTINCT FROM ?
 			)
 			AND used = FALSE',
-			$email
+			[$email]
 		);
 		if($code)
 			return new DisposableVerificationCode($code, $this->database);

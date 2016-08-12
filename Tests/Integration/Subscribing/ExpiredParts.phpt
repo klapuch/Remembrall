@@ -15,24 +15,24 @@ require __DIR__ . '/../../bootstrap.php';
 final class ExpiredParts extends TestCase\Database {
 	public function testIteratingExpiredParts() {
 		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			("www.google.com", "//a", "a"),
-			("www.facedown.cz", "//b", "b"),
-			("www.google.com", "//c", "c"),
-			("www.facedown.cz", "//d", "d")'
+			"INSERT INTO parts (page_url, expression, content) VALUES
+			('www.google.com', '//a', 'a'),
+			('www.facedown.cz', '//b', 'b'),
+			('www.google.com', '//c', 'c'),
+			('www.facedown.cz', '//d', 'd')"
 		);
 		$this->database->query(
-			'INSERT INTO subscriptions (part_id, subscriber_id, interval, last_update) VALUES
-			(1, 1, "PT10M", NOW() - INTERVAL "15 MINUTE"),
-			(2, 2, "PT10M", NOW()),
-			(3, 3, "PT3M", NOW() - INTERVAL "2 MINUTE"),
-			(3, 1, "PT20M", NOW() - INTERVAL "22 MINUTE")'
+			"INSERT INTO subscriptions (part_id, subscriber_id, interval, last_update) VALUES
+			(1, 1, 'PT10M', NOW() - INTERVAL '15 MINUTE'),
+			(2, 2, 'PT10M', NOW()),
+			(3, 3, 'PT3M', NOW() - INTERVAL '2 MINUTE'),
+			(3, 1, 'PT20M', NOW() - INTERVAL '22 MINUTE')"
 		);
 		$this->database->query(
-			'INSERT INTO pages (url, content) VALUES
-			("www.google.com", "google"),
-			("www.facedown.cz", "facedown"),
-			("www.foo.cz", "foo")'
+			"INSERT INTO pages (url, content) VALUES
+			('www.google.com', 'google'),
+			('www.facedown.cz', 'facedown'),
+			('www.foo.cz', 'foo')"
 		);
 		$parts = (new Subscribing\ExpiredParts(
 			new Subscribing\FakeParts(),

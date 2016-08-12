@@ -21,17 +21,17 @@ final class WebPages extends TestCase\Database {
 			->add('www.FacedowN.cz/?x=10#here', new Subscribing\FakePage($dom));
 		Assert::contains(
 			'content',
-			$this->database->fetchSingle(
-				'SELECT content FROM pages WHERE url = "www.facedown.cz"'
+			$this->database->fetchColumn(
+				"SELECT content FROM pages WHERE url = 'www.facedown.cz'"
 			)
 		);
 		Assert::same(
 			2,
-			$this->database->fetchSingle(
-				'SELECT COUNT(*)
+			$this->database->fetchColumn(
+				"SELECT COUNT(*)
 				FROM page_visits
-				WHERE page_url = "www.facedown.cz" OR page_url = "www.facedown.cz/?x=10#here"
-				AND visited_at <= NOW()'
+				WHERE page_url = 'www.facedown.cz' OR page_url = 'www.facedown.cz/?x=10#here'
+				AND visited_at <= NOW()"
 			)
 		);
 	}
@@ -46,25 +46,25 @@ final class WebPages extends TestCase\Database {
 		(new Subscribing\WebPages($this->database))
 			->add('www.facedown.cz/', new Subscribing\FakePage($dom2));
 		$pages = $this->database->fetchAll(
-			'SELECT * FROM pages WHERE url = "www.facedown.cz"'
+			"SELECT * FROM pages WHERE url = 'www.facedown.cz'"
 		);
 		Assert::count(1, $pages);
 		Assert::contains('Updated Content', $pages[0]['content']);
 		Assert::same(
 			2,
-			$this->database->fetchSingle(
-				'SELECT COUNT(*)
+			$this->database->fetchColumn(
+				"SELECT COUNT(*)
 				FROM page_visits
-				WHERE page_url = "www.facedown.cz"
-				AND visited_at <= NOW()'
+				WHERE page_url = 'www.facedown.cz'
+				AND visited_at <= NOW()"
 			)
 		);
 	}
 
 	public function testIterating() {
 		$this->database->query(
-			'INSERT INTO pages (url, content) VALUES
-			("www.facedown.cz", "facedown")'
+			"INSERT INTO pages (url, content) VALUES
+			('www.facedown.cz', 'facedown')"
 		);
 		Assert::equal(
 			[
@@ -93,8 +93,8 @@ final class WebPages extends TestCase\Database {
 		$this->truncate(['pages', 'page_visits']);
 		$this->restartSequence(['page_visits']);
 		$this->database->query(
-			'INSERT INTO pages (url, content) VALUES
-			("www.google.com", "<p>google</p>")'
+			"INSERT INTO pages (url, content) VALUES
+			('www.google.com', '<p>google</p>')"
 		);
 	}
 }

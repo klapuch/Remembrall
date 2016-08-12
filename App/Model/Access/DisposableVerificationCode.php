@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Access;
 
-use Dibi;
+use Klapuch\Storage;
 use Remembrall\Exception;
 
 /**
@@ -12,7 +12,7 @@ final class DisposableVerificationCode implements VerificationCode {
 	private $code;
 	private $database;
 
-	public function __construct(string $code, Dibi\Connection $database) {
+	public function __construct(string $code, Storage\Database $database) {
 		$this->code = $code;
 		$this->database = $database;
 	}
@@ -25,20 +25,19 @@ final class DisposableVerificationCode implements VerificationCode {
 		}
 		$this->database->query(
 			'UPDATE verification_codes
-			SET used = TRUE, used_at = ?
+			SET used = TRUE, used_at = NOW()
 			WHERE code IS NOT DISTINCT FROM ?',
-			new \DateTimeImmutable(),
-			$this->code
+			[$this->code]
 		);
 	}
 
 	public function owner(): Subscriber {
 		return new PostgresSubscriber(
-			(int)$this->database->fetchSingle(
+			(int)$this->database->fetchColumn(
 				'SELECT subscriber_id
 				FROM verification_codes
 				WHERE code IS NOT DISTINCT FROM ?',
-				$this->code
+				[$this->code]
 			),
 			$this->database
 		);
@@ -49,12 +48,12 @@ final class DisposableVerificationCode implements VerificationCode {
 	 * @return bool
 	 */
 	private function used(): bool {
-		return (bool)$this->database->fetchSingle(
+		return (bool)$this->database->fetchColumn(
 			'SELECT 1
 			FROM verification_codes
 			WHERE code IS NOT DISTINCT FROM ?
 			AND used = TRUE',
-			$this->code
+			[$this->code]
 		);
 	}
 }

@@ -2,13 +2,13 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Access;
 //TODO
-use Dibi;
+use Klapuch\Storage;
 use Nette\Security;
 
 final class Authenticator implements Security\IAuthenticator {
 	private $database;
 
-	public function __construct(Dibi\Connection $database) {
+	public function __construct(Storage\Database $database) {
 		$this->database = $database;
 	}
 
