@@ -2,6 +2,8 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+use Klapuch\Output;
+
 final class FakeSubscription implements Subscription {
 	private $exception;
 
@@ -18,9 +20,9 @@ final class FakeSubscription implements Subscription {
 		return $this;
 	}
 
-	public function print(): array {
+	public function print(Output\Printer $printer): Output\Printer {
 		$this->throwException();
-		return [];
+		return $printer;
 	}
 
 	private function throwException() {

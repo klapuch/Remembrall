@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+use Klapuch\Output;
 use Remembrall\Exception\NotFoundException;
 
 interface Subscription {
@@ -23,7 +24,7 @@ interface Subscription {
 
 	/**
 	 * Print the current subscription
-	 * @return array
+	 * @return Output\Printer
 	 */
-	public function print(): array;
+	public function print(Output\Printer $printer): Output\Printer;
 }

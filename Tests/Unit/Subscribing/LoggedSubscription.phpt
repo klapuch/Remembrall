@@ -8,6 +8,7 @@ namespace Remembrall\Unit\Subscribing;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
+use Klapuch\Output;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -70,7 +71,7 @@ final class LoggedSubscription extends TestCase\Mockery {
 		(new Subscribing\LoggedSubscription(
 			new Subscribing\FakeSubscription($ex),
 			$logger
-		))->print();
+		))->print(new Output\XmlPrinter());
 	}
 
 	public function testNoExceptionDuringPrinting() {
@@ -79,7 +80,7 @@ final class LoggedSubscription extends TestCase\Mockery {
 				$logger = $this->mockery('Tracy\ILogger');
 				(new Subscribing\LoggedSubscription(
 					new Subscribing\FakeSubscription(), $logger
-				))->print();
+			))->print(new Output\XmlPrinter());
 			}
 		);
 	}

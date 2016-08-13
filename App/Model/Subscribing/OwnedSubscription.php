@@ -5,6 +5,7 @@ namespace Remembrall\Model\Subscribing;
 use Klapuch\Storage;
 use Remembrall\Exception\NotFoundException;
 use Remembrall\Model\Access;
+use Klapuch\Output;
 
 final class OwnedSubscription implements Subscription {
 	private $url;
@@ -63,12 +64,11 @@ final class OwnedSubscription implements Subscription {
 		return $this;
 	}
 
-	public function print(): array {
-		return [
-			'url' => $this->url,
-			'expression' => $this->expression,
-			'subscriber' => $this->owner,
-		];
+	public function print(Output\Printer $printer): Output\Printer {
+		return $printer->with('url', $this->url)
+			->with('expression', $this->expression)
+			->with('ownerEmail', $this->owner->email())
+			->with('ownerId', $this->owner->id());
 	}
 
 	/**

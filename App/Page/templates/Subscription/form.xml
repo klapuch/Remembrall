@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <placeholder>
+        <url>http://www.facedown.cz</url>
+        <expression>//h1</expression>
+        <interval>32</interval>
+    </placeholder>
+    <submit>Subscribe</submit>
+</form>

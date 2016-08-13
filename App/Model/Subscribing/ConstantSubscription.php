@@ -2,6 +2,8 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+use Klapuch\Output;
+
 final class ConstantSubscription implements Subscription {
 	private $origin;
 	private $interval;
@@ -19,9 +21,9 @@ final class ConstantSubscription implements Subscription {
 		return $this->origin->edit($interval);
 	}
 
-	public function print(): array {
-		return $this->origin->print() + [
-			'interval' => $this->interval,
-		];
+	public function print(Output\Printer $printer): Output\Printer {
+		return $this->origin->print($printer)
+			->with('visitation', $this->interval->start()->format('Y-m-d H:i'))
+			->with('interval', $this->interval->step()->i);
 	}
 }
