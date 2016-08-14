@@ -4,20 +4,31 @@ header('X-Frame-Option: DENY');
 header('X-Content-Type-Options: nosniff');
 header('X-Powered-By: ');
 header('X-XSS-Protection: 1; mode=block;');
+date_default_timezone_set('Europe/Prague');
 mb_internal_encoding('UTF-8');
+session_start(
+	[
+		'cookie_secure' => 0,
+		'cookie_httponly' => 1,
+		'use_strict_mode' => 1,
+	]
+);
 require __DIR__ . '/../vendor/autoload.php';
 use Klapuch\{
-	Output, Storage
+	Output, Storage, Ini
 };
 use Nette\Caching\Storages;
 use Remembrall\Model\{
 	Access, Subscribing
 };
+
 define('TEMPLATES', __DIR__ . '/../App/Page/templates');
+define('INI', __DIR__ . '/../App/Configuration/.config.ini');
+$config = (new Ini\Valid(INI, new Ini\Typed(INI)))->read();
 $database = new Storage\PDODatabase(
-	'pgsql:host=127.0.0.1;dbname=remembrall;',
-	'postgres',
-	'postgres'
+	$config['DATABASE']['dsn'],
+	$config['DATABASE']['user'],
+	$config['DATABASE']['password']
 );
 $logger = new Tracy\Logger(__DIR__ . '/../Log');
 $subscriber = new Access\PostgresSubscriber(1, $database);

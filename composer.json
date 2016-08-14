@@ -25,7 +25,8 @@
     "guzzlehttp/guzzle": "^6.2",
     "klapuch/encryption": "@dev",
     "klapuch/storage": "@dev",
-    "klapuch/output": "@dev"
+    "klapuch/output": "@dev",
+    "klapuch/ini": "@dev"
   },
   "require-dev": {
     "nette/tester": "^1.7",
