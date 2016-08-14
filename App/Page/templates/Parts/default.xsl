@@ -39,6 +39,4 @@
 	<xsl:template match="number|visitation|interval|expression|url|options">
         <th><p><xsl:value-of select="."/></p></th>
 	</xsl:template>
-	<xsl:template name="additionalScripts"/>
-	<xsl:template name="additionalStyles"/>
 </xsl:stylesheet>

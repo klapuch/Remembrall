@@ -2,6 +2,8 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:php="http://php.net/xsl">
     <xsl:import href="@headers.xsl"/>
     <xsl:output method="html" encoding="utf-8"/>
+    <xsl:template name="additionalStyles"/>
+    <xsl:template name="additionalScripts"/>
     <xsl:template match="/">
         <html lang="cs-cz">
             <head>

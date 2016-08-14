@@ -31,6 +31,4 @@
             </div>
         </form>
     </xsl:template>
-    <xsl:template name="additionalScripts"/>
-    <xsl:template name="additionalStyles"/>
 </xsl:stylesheet>
