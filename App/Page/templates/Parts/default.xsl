@@ -18,6 +18,7 @@
 	</xsl:template>
 	<xsl:template name="rows">
 		 <xsl:for-each select="subscription">
+			 <xsl:sort select="visitation" order="descending"/>
 			<tr>
 				<td><xsl:number value="position()" format="1."/></td>
 				<td><xsl:value-of select="visitation"/></td>
