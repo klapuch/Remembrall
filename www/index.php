@@ -45,11 +45,8 @@ if($_SERVER['REQUEST_METHOD'] === 'GET') {
 				return $subscriptions;
 			}
 		);
-		$xsl = new \DOMDocument();
-		$xsl->load(TEMPLATES . '/Parts/default.xsl');
-		$xslt = new \XSLTProcessor();
-		$xslt->importStylesheet($xsl);
-		echo $xslt->transformToXml(
+		echo (new Output\XsltTemplate(
+			TEMPLATES . '/Parts/default.xsl',
 			new \SimpleXMLElement(
 				sprintf(
 					'<%1$s>%2$s</%1$s>',
@@ -57,15 +54,14 @@ if($_SERVER['REQUEST_METHOD'] === 'GET') {
 					$xmlData
 				)
 			)
-		);
+		))->render();
 	} elseif($url === '/Remembrall/www/subscription') {
-		$xsl = new \DOMDocument();
-		$xsl->load(TEMPLATES . '/Subscription/default.xsl');
-		$xslt = new \XSLTProcessor();
-		$xslt->importStylesheet($xsl);
 		$xml = new \DOMDocument();
 		$xml->load(TEMPLATES . '/Subscription/form.xml');
-		echo $xslt->transformToXml($xml);
+		echo (new Output\XsltTemplate(
+			TEMPLATES . '/Subscription/default.xsl',
+			new \SimpleXMLElement($xml->saveXML())
+		))->render();
 	} elseif($url === '/Remembrall/www/cron') {
 		$parts = new Subscribing\ChangedParts(
 			new Subscribing\ExpiredParts(
