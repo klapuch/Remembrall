@@ -29,7 +29,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET') {
 			$subscriptions->iterate(),
 			function($subscriptions, Subscribing\Subscription $subscription) {
 				$subscriptions .= $subscription->print(
-					new Output\XmlPrinter('subscription')
+					new Output\Xml('subscription')
 				);
 				return $subscriptions;
 			}
