@@ -4,27 +4,27 @@
     <xsl:param name="title" select="'Subscription'"/>
     <xsl:param name="description" select="'Subscribe a new part'"/>
     <xsl:include href="../@layout.xsl"/>
-    <xsl:template match="//form">
+    <xsl:template match="/form">
         <xsl:param name="url" select="placeholder/url"/>
         <xsl:param name="expression" select="placeholder/expression"/>
         <xsl:param name="interval" select="placeholder/interval"/>
-        <xsl:param name="act" select="submit"/>
+        <xsl:param name="act" select="submit/act"/>
         <form class="form-horizontal" role="form" method="POST">
             <div class="form-group">
                 <div class="col-sm-5">
-                    <label>URL</label>
+                    <label><xsl:value-of select="label/url"/></label>
                     <input type="text" required="required" name="url" class="form-control" placeholder="{$url}"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-5">
-                    <label>XPath expression</label>
+                    <label><xsl:value-of select="label/expression"/></label>
                     <input type="text" required="required" name="expression" class="form-control" placeholder="{$expression}"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-5">
-                    <label>Interval</label>
+                    <label><xsl:value-of select="label/interval"/></label>
                     <input type="number" required="required" min="30" name="interval" class="form-control" placeholder="{$interval}"/>
                 </div>
             </div>
