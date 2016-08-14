@@ -20,9 +20,9 @@ final class FakeSubscription implements Subscription {
 		return $this;
 	}
 
-	public function print(Output\Printer $printer): Output\Printer {
+	public function print(Output\Format $format): Output\Format {
 		$this->throwException();
-		return $printer;
+		return $format;
 	}
 
 	private function throwException() {

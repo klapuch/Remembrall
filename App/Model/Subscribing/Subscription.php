@@ -23,8 +23,8 @@ interface Subscription {
 	public function edit(Interval $interval): self;
 
 	/**
-	 * Print the current subscription
-	 * @return Output\Printer
+	 * Print itself to the given format
+	 * @return Output\Format
 	 */
-	public function print(Output\Printer $printer): Output\Printer;
+	public function print(Output\Format $format): Output\Format;
 }

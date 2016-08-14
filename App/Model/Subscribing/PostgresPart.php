@@ -2,7 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\Storage;
+use Klapuch\{
+	Storage, Output
+};
 
 /**
  * Part stored in the Postgres database
@@ -47,10 +49,9 @@ final class PostgresPart implements Part {
 		return $this;
 	}
 
-	public function print(): array {
-		return $this->origin->print() + [
-			'url' => $this->url,
-			'expression' => $this->expression,
-		];
+	public function print(Output\Format $format): Output\Format {
+		return $this->origin->print($format)
+		->with('url', $this->url)
+		->with('expression', $this->expression);
 	}
 }

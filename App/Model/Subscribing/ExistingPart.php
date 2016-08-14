@@ -4,6 +4,7 @@ namespace Remembrall\Model\Subscribing;
 
 use Klapuch\Storage;
 use Remembrall\Exception\NotFoundException;
+use Klapuch\Output;
 
 /**
  * Part which will always exists in the database
@@ -38,11 +39,9 @@ final class ExistingPart implements Part {
 		return $this->origin->refresh();
 	}
 
-	public function print(): array {
-		return $this->origin->print() + [
-			'url' => $this->url,
-			'expression' => $this->expression,
-		];
+	public function print(Output\Format $format): Output\Format {
+		$format->with('url', $this->url)
+			->with('expression', $this->expression);
 	}
 
 	/**

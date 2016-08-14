@@ -2,24 +2,22 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Email;
 
-use Klapuch\Storage;
-use Nette\Application\UI;
+use Klapuch\{
+	Storage, Output
+};
 use Remembrall\Model\{
 	Access, Subscribing
 };
 
 final class SubscribingMessage implements Message {
 	private $part;
-	private $templateFactory;
 	private $database;
 
 	public function __construct(
 		Subscribing\Part $part,
-		UI\ITemplateFactory $templateFactory,
 		Storage\Database $database
 	) {
 		$this->part = $part;
-		$this->templateFactory = $templateFactory;
 		$this->database = $database;
 	}
 
@@ -28,30 +26,34 @@ final class SubscribingMessage implements Message {
 	}
 
 	public function recipients(): Access\Subscribers {
-		$visualPart = $this->part->print();
+		$part = $this->part->print(new Output\Xml('part'));
 		return new Access\OutdatedSubscribers(
 			new Access\FakeSubscribers(),
-			$visualPart['url'],
-			(string)$visualPart['expression'],
+			current($part->valueOf('url')),
+			current($part->valueOf('expression')),
 			$this->database
 		);
 	}
 
 	public function subject(): string {
-		$visualPart = $this->part->print();
+		$part = $this->part->print(new Output\Xml('part'));
 		return sprintf(
 			'Changes occurred on "%s" page with "%s" expression',
-			$visualPart['url'],
-			(string)$visualPart['expression']
+			current($part->valueOf('url')),
+			current($part->valueOf('expression'))
 		);
 	}
 
 	public function content(): string {
-		$template = $this->templateFactory->createTemplate();
-		$template->setFile(
-			__DIR__ . '/../../Page/templates/Email/subscribing.latte'
+		$xsl = new \DOMDocument();
+		$xsl->load(__DIR__ . '/../../Page/templates/Email/subscribing.xsl');
+		$xslt = new \XSLTProcessor();
+		$xslt->importStylesheet($xsl);
+		$xslt->setParameter('', 'content', $this->part->content());
+		return $xslt->transformToXml(
+			new \SimpleXMLElement(
+				(string)$this->part->print(new Output\Xml('part'))
+			)
 		);
-		$template->part = $this->part;
-		return (string)$template;
 	}
 }

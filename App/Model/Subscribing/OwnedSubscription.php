@@ -64,8 +64,8 @@ final class OwnedSubscription implements Subscription {
 		return $this;
 	}
 
-	public function print(Output\Printer $printer): Output\Printer {
-		return $printer->with('url', $this->url)
+	public function print(Output\Format $format): Output\Format {
+		return $format->with('url', $this->url)
 			->with('expression', $this->expression)
 			->with('ownerEmail', $this->owner->email())
 			->with('ownerId', $this->owner->id());

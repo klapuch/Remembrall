@@ -1,5 +1,10 @@
 <?php
 declare(strict_types = 1);
+header('X-Frame-Option: DENY');
+header('X-Content-Type-Options: nosniff');
+header('X-Powered-By: ');
+header('X-XSS-Protection: 1; mode=block;');
+mb_internal_encoding('UTF-8');
 require __DIR__ . '/../vendor/autoload.php';
 use Klapuch\{
 	Output, Storage
@@ -8,7 +13,7 @@ use Nette\Caching\Storages;
 use Remembrall\Model\{
 	Access, Subscribing
 };
-
+define('TEMPLATES', __DIR__ . '/../App/Page/templates');
 $database = new Storage\PDODatabase(
 	'pgsql:host=127.0.0.1;dbname=remembrall;',
 	'postgres',
@@ -30,7 +35,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET') {
 			}
 		);
 		$xsl = new \DOMDocument();
-		$xsl->load(__DIR__ . '/../App/Page/templates/Parts/default.xsl');
+		$xsl->load(TEMPLATES . '/Parts/default.xsl');
 		$xslt = new \XSLTProcessor();
 		$xslt->importStylesheet($xsl);
 		echo $xslt->transformToXml(
@@ -44,11 +49,11 @@ if($_SERVER['REQUEST_METHOD'] === 'GET') {
 		);
 	} elseif($url === '/Remembrall/www/subscription') {
 		$xsl = new \DOMDocument();
-		$xsl->load(__DIR__ . '/../App/Page/templates/Subscription/default.xsl');
+		$xsl->load(TEMPLATES . '/Subscription/default.xsl');
 		$xslt = new \XSLTProcessor();
 		$xslt->importStylesheet($xsl);
 		$xml = new \DOMDocument();
-		$xml->load(__DIR__ . '/../App/Page/templates/Subscription/form.xml');
+		$xml->load(TEMPLATES . '/Subscription/form.xml');
 		echo $xslt->transformToXml($xml);
 	}
 } elseif($_SERVER['REQUEST_METHOD'] === 'POST') {

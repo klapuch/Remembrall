@@ -2,13 +2,9 @@
 /**
  * @testCase
  * @phpVersion > 7.0.0
- * @skip
  */
-namespace Remembrall\Integration\Http;
+namespace Remembrall\Unit\Http;
 
-use Latte;
-use Nette\Application\UI;
-use Nette\Bridges\ApplicationLatte;
 use Remembrall\Model\{
 	Access, Email, Subscribing
 };
@@ -28,10 +24,6 @@ final class SubscribingMessage extends TestCase\Database {
 					null,
 					new Subscribing\FakeExpression('//p')
 				),
-				new class implements UI\ITemplateFactory {
-					function createTemplate(UI\Control $control = null) {
-					}
-				},
 				$this->database
 			))->sender()
 		);
@@ -52,10 +44,6 @@ final class SubscribingMessage extends TestCase\Database {
 					null,
 					new Subscribing\FakeExpression('//p')
 				),
-				new class implements UI\ITemplateFactory {
-					function createTemplate(UI\Control $control = null) {
-					}
-				},
 				$this->database
 			))->recipients()
 		);
@@ -71,10 +59,6 @@ final class SubscribingMessage extends TestCase\Database {
 					null,
 					new Subscribing\FakeExpression('//h1')
 				),
-				new class implements UI\ITemplateFactory {
-					function createTemplate(UI\Control $control = null) {
-					}
-				},
 				$this->database
 			))->subject()
 		);
@@ -83,27 +67,16 @@ final class SubscribingMessage extends TestCase\Database {
 	public function testContent() {
 		$content = (new Email\SubscribingMessage(
 			new Subscribing\FakePart(
-				'fooContent',
+				'<p>I don\'t know</p>',
 				'www.google.com',
 				null,
 				new Subscribing\FakeExpression('//h1')
 			),
-			new class implements UI\ITemplateFactory {
-				function createTemplate(UI\Control $control = null) {
-					return (new ApplicationLatte\TemplateFactory(
-						new class implements ApplicationLatte\ILatteFactory {
-							public function create() {
-								return new Latte\Engine();
-							}
-						}
-					))->createTemplate($control);
-				}
-			},
 			$this->database
 		))->content();
 		Assert::contains('www.google.com', $content);
 		Assert::contains('//h1', $content);
-		Assert::contains('fooContent', $content);
+		Assert::contains("<p>&lt;p&gt;I don't know&lt;/p&gt;</p>", $content);
 	}
 }
 

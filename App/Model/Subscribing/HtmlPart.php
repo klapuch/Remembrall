@@ -2,6 +2,8 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+use Klapuch\Output;
+
 /**
  * Part on the html page (in the html format)
  */
@@ -32,10 +34,7 @@ final class HtmlPart implements Part {
 		return new self($this->expression, $this->page->refresh());
 	}
 
-	public function print(): array {
-		return [
-			'page' => $this->page,
-			'expression' => $this->expression,
-		];
+	public function print(Output\Format $format): Output\Format {
+		return $format->with('expression', $this->expression);
 	}
 }

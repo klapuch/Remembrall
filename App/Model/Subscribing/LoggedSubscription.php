@@ -35,9 +35,9 @@ final class LoggedSubscription implements Subscription {
 		}
 	}
 
-	public function print(Output\Printer $printer): Output\Printer {
+	public function print(Output\Format $format): Output\Format {
 		try {
-			return $this->origin->print($printer);
+			return $this->origin->print($format);
 		} catch(\Throwable $ex) {
 			$this->logger->log($ex, Tracy\Logger::ERROR);
 			throw $ex;

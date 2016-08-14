@@ -21,8 +21,8 @@ final class ConstantSubscription implements Subscription {
 		return $this->origin->edit($interval);
 	}
 
-	public function print(Output\Printer $printer): Output\Printer {
-		return $this->origin->print($printer)
+	public function print(Output\Format $format): Output\Format {
+		return $this->origin->print($format)
 			->with('visitation', $this->interval->start()->format('Y-m-d H:i'))
 			->with('interval', $this->interval->step()->i);
 	}

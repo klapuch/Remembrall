@@ -8,6 +8,7 @@ namespace Remembrall\Unit\Subscribing;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
+use Klapuch\Output;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -22,14 +23,15 @@ final class CachedPart extends TestCase\Mockery {
 
 	public function testCaching() {
 		$content = '<p>XXX</p>';
+		$printer = new Output\Xml();
 		$fakePart = new Subscribing\FakePart(null, 'www.google.com');
 		$this->cache->shouldReceive('read')
 			->andReturn($content)
 			->with('Remembrall\Model\Subscribing\CachedPart::content')
 			->times(4);
 		$this->cache->shouldReceive('read')
-			->andReturn(['url' => 'www.google.com', 'expression' => null])
-			->with('Remembrall\Model\Subscribing\CachedPart::print')
+			->andReturn($printer)
+			->with('Remembrall\Model\Subscribing\CachedPart::print' . md5(serialize([$printer])))
 			->times(4);
 		$this->cache->shouldReceive('read')
 			->andReturn($fakePart)
@@ -46,8 +48,8 @@ final class CachedPart extends TestCase\Mockery {
 		Assert::same($fakePart, $part->refresh());
 		Assert::same($fakePart, $part->refresh());
 
-		Assert::same(['url' => 'www.google.com', 'expression' => null], $part->print());
-		Assert::same(['url' => 'www.google.com', 'expression' => null], $part->print());
+		Assert::same($printer, $part->print($printer));
+		Assert::same($printer, $part->print($printer));
 	}
 }
 
