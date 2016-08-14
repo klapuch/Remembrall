@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<default>
+    <title>Parts</title>
+    <description>All the parts owned by you</description>
+    <cancelConfirmation>
+        <message>Are you sure you want to cancle the subscription?</message>
+        <title>Cancel</title>
+    </cancelConfirmation>
+</default>
