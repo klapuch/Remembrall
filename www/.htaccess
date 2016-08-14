@@ -1,5 +1,4 @@
 Options -Indexes
-
 RewriteEngine On
 
 #RewriteCond %{HTTPS} !on

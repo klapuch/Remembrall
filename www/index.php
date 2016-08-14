@@ -14,12 +14,12 @@ session_start(
 	]
 );
 require __DIR__ . '/../vendor/autoload.php';
+use Nette\Caching\Storages;
 use Klapuch\{
 	Output, Storage, Ini
 };
-use Nette\Caching\Storages;
 use Remembrall\Model\{
-	Access, Subscribing
+	Access, Subscribing, Email
 };
 
 define('TEMPLATES', __DIR__ . '/../App/Page/templates');
@@ -66,6 +66,26 @@ if($_SERVER['REQUEST_METHOD'] === 'GET') {
 		$xml = new \DOMDocument();
 		$xml->load(TEMPLATES . '/Subscription/form.xml');
 		echo $xslt->transformToXml($xml);
+	} elseif($url === '/Remembrall/www/cron') {
+		$parts = new Subscribing\ChangedParts(
+			new Subscribing\ExpiredParts(
+				new Subscribing\CollectiveParts($database),
+				$database,
+				new GuzzleHttp\Client(['http_errors' => false])
+			)
+		);
+		/** @var Subscribing\Part $part */
+		foreach($parts->iterate() as $part) {
+			$this->mailer->send(
+				(new Email\NetteMessageFactory(
+					new Email\SubscribingMessage(
+						new Subscribing\TextPart($part),
+						$database
+					)
+				))->create()
+			);
+		}
+		echo 'OK';
 	}
 } elseif($_SERVER['REQUEST_METHOD'] === 'POST') {
 	if($url === '/Remembrall/www/subscription') {
