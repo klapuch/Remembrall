@@ -11,7 +11,7 @@ use Klapuch\Output;
  */
 final class CachedPart extends Storage\Cache implements Part {
 	public function __construct(Part $origin, Caching\IStorage $cache) {
-		parent::__construct($origin, $cache);
+		parent::__construct($origin, $cache, new \DateInterval('PT0S'));
 	}
 
 	public function content(): string {
@@ -23,6 +23,6 @@ final class CachedPart extends Storage\Cache implements Part {
 	}
 
 	public function print(Output\Format $format): Output\Format {
-		return $this->read(__FUNCTION__, $format);
+		return $this->read(__FUNCTION__, null, $format);
 	}
 }

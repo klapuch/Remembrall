@@ -27,15 +27,15 @@ final class CachedPart extends TestCase\Mockery {
 		$fakePart = new Subscribing\FakePart(null, 'www.google.com');
 		$this->cache->shouldReceive('read')
 			->andReturn($content)
-			->with('Remembrall\Model\Subscribing\CachedPart::content')
+			->with('Remembrall\Model\Subscribing\CachedPart::content#-')
 			->times(4);
 		$this->cache->shouldReceive('read')
 			->andReturn($printer)
-			->with('Remembrall\Model\Subscribing\CachedPart::print' . md5(serialize([$printer])))
+			->with('Remembrall\Model\Subscribing\CachedPart::print#' . md5(serialize([$printer])) . '-')
 			->times(4);
 		$this->cache->shouldReceive('read')
 			->andReturn($fakePart)
-			->with('Remembrall\Model\Subscribing\CachedPart::refresh')
+			->with('Remembrall\Model\Subscribing\CachedPart::refresh#-')
 			->times(4);
 		$part = new Subscribing\CachedPart(
 			new Subscribing\FakePart($content),
