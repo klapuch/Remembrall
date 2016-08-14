@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <xsl:import href="../@layout.xsl"/>
     <xsl:param name="default" select="document('default.xml')/default"/>
     <xsl:param name="title" select="$default/title"/>
     <xsl:param name="description" select="$default/description"/>
-    <xsl:include href="../@layout.xsl"/>
     <xsl:template match="/form">
         <form class="form-horizontal" role="form" method="POST">
             <div class="form-group">
