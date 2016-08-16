@@ -13,12 +13,12 @@
 	<tables>
 		<subscribing>
 			<headings>
-				<number>#</number>
-				<visitation>Last visitation</visitation>
-				<interval>Interval</interval>
-				<expression>Expression</expression>
-				<url>URL</url>
-				<options>Options</options>
+                <heading>#</heading>
+				<heading>Last visitation</heading>
+				<heading>Interval</heading>
+				<heading>Expression</heading>
+				<heading>URL</heading>
+				<heading>Options</heading>
 			</headings>
 		</subscribing>
 	</tables>
