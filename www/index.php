@@ -57,7 +57,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET') {
 		))->render();
 	} elseif($url === '/Remembrall/www/subscription') {
 		$xml = new \DOMDocument();
-		$xml->load(TEMPLATES . '/Subscription/form.xml');
+		$xml->load(TEMPLATES . '/Subscription/default.xml');
 		echo (new Output\XsltTemplate(
 			TEMPLATES . '/Subscription/default.xsl',
 			new \SimpleXMLElement($xml->saveXML())

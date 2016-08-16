@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <default>
-    <title>Parts</title>
-    <description>All the parts owned by you</description>
-    <cancelConfirmation>
-        <message>Are you sure you want to cancle the subscription?</message>
-        <title>Cancel</title>
-    </cancelConfirmation>
+	<title>Parts</title>
+	<description>All the parts owned by you</description>
+	<confirmations>
+		<cancel>
+			<message>Are you sure you want to cancel the subscription?</message>
+			<title>Cancel</title>
+            <href></href>
+            <glyphicon>remove</glyphicon>
+		</cancel>
+	</confirmations>
+	<tables>
+		<subscribing>
+			<headings>
+				<number>#</number>
+				<visitation>Last visitation</visitation>
+				<interval>Interval</interval>
+				<expression>Expression</expression>
+				<url>URL</url>
+				<options>Options</options>
+			</headings>
+		</subscribing>
+	</tables>
 </default>
