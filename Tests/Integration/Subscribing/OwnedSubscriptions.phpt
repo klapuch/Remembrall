@@ -10,6 +10,7 @@ use Remembrall\Model\{
 };
 use Remembrall\TestCase;
 use Tester\Assert;
+use Klapuch\Output;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -117,10 +118,13 @@ final class OwnedSubscriptions extends TestCase\Database {
 			(4, '2003-01-01 01:01:01')"
 		);
 		$parts = (new Subscribing\OwnedSubscriptions(
-			new Access\FakeSubscriber(1),
+			new Access\FakeSubscriber(1, 'idk@email.cz'),
 			$this->database
 		))->iterate();
 		Assert::count(3, $parts);
+		Assert::contains('2008-01-01 01:01', (string)$parts[0]->print(new Output\Xml()));
+		Assert::contains('2003-01-01 01:01', (string)$parts[1]->print(new Output\Xml()));
+		Assert::contains('2002-01-01 01:01', (string)$parts[2]->print(new Output\Xml()));
 	}
 
 	public function testEmptySubscriptions() {
