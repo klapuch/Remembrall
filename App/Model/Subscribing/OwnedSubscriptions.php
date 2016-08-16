@@ -21,7 +21,7 @@ final class OwnedSubscriptions implements Subscriptions {
 	public function iterate(): array {
 		return (array)array_reduce(
 			$this->database->fetchAll(
-				'SELECT expression, page_url AS url, interval, visited_at
+				'SELECT expression, page_url AS url, interval, visited_at, last_update
 				FROM parts
 				INNER JOIN (
 					SELECT part_id, MAX(visited_at) AS visited_at
@@ -44,7 +44,8 @@ final class OwnedSubscriptions implements Subscriptions {
 					new DateTimeInterval(
 						new \DateTimeImmutable((string)$row['visited_at']),
 						new \DateInterval($row['interval'])
-					)
+					),
+					new \DateTimeImmutable($row['last_update'])
 				);
 				return $subscriptions;
 			}
