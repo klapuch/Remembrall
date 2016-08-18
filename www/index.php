@@ -45,13 +45,20 @@ if($_SERVER['REQUEST_METHOD'] === 'GET') {
 				return $subscriptions;
 			}
 		);
+		$default = new \DOMDocument();
+		$default->load(TEMPLATES . '/Parts/default.xml');
 		echo (new Output\XsltTemplate(
 			TEMPLATES . '/Parts/default.xsl',
 			new \SimpleXMLElement(
 				sprintf(
-					'<%1$s>%2$s</%1$s>',
-					'subscriptions',
-					$xmlData
+					'<%1$s>%2$s %3$s</%1$s>',
+					'template',
+					preg_replace('~^.+\n~', '', $default->saveXML()),
+					sprintf(
+						'<%1$s>%2$s</%1$s>',
+						'subscriptions',
+						$xmlData
+					)
 				)
 			)
 		))->render();

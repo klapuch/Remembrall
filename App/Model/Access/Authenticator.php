@@ -1,50 +1,63 @@
 <?php
-declare(strict_types = 1);
 namespace Remembrall\Model\Access;
-//TODO
-use Klapuch\Storage;
+
+use Klapuch\{
+	Storage, Encryption
+};
+use Nette\Security\AuthenticationException;
 use Nette\Security;
 
 final class Authenticator implements Security\IAuthenticator {
 	private $database;
+	private $cipher;
 
-	public function __construct(Storage\Database $database) {
+	public function __construct(
+		Storage\Database $database,
+		Encryption\Cipher $cipher
+	) {
 		$this->database = $database;
+		$this->cipher = $cipher;
 	}
 
 	public function authenticate(array $credentials) {
-		list($plainEmail, $plainPassword) = $credentials;
-		list($id, $password, $role, $email) = $this->database->query(
-			'SELECT id, password, role_id
-             FROM subscribers
-             WHERE email = ?',
-			$plainEmail
-		)->fetch(\PDO::FETCH_NUM);
-		if(!$this->exists($id))
-			throw new Security\AuthenticationException('Uživatel neexistuje');
-		elseif(!$this->activated($id))
-			throw new Security\AuthenticationException('Účet není aktivován');
-		elseif(!$this->cipher->decrypt($plainPassword, $password))
-			throw new Security\AuthenticationException('Nesprávné heslo');
-		if($this->cipher->deprecated($password))
-			$this->rehash($plainPassword, $id);
-		return new Security\Identity($id, $role, ['email' => $email]);
-	}
-
-	private function exists($id): bool {
-		return (int)$id !== 0;
-	}
-
-	private function activated(int $id): bool {
-		return (bool)$this->database->fetch(
-			'SELECT 1 FROM verification_codes WHERE user_id = ? AND used = 1',
-			[$id]
+		list($plainUsername, $plainPassword) = $credentials;
+		$row = $this->database->fetch(
+			'SELECT id, password
+			 FROM subscribers  
+			 WHERE email IS NOT DISTINCT FROM ?',
+			[$plainUsername]
 		);
+		if(!$this->exists($row)) {
+			throw new AuthenticationException(
+				sprintf('Email "%s" does not exist', $plainUsername)
+			);
+		} elseif(!$this->cipher->decrypt($plainPassword, $row['password'])) {
+			throw new AuthenticationException('Wrong password');
+		}
+		if($this->cipher->deprecated($row->password))
+			$this->rehash($plainPassword, $row['id']);
+		return new Security\Identity($row['id']);
 	}
 
+	/**
+	 * Does the record exist?
+	 * @param int|null $id
+	 * @return bool
+	 */
+	private function exists($id): bool {
+		return $id !== null;
+	}
+
+	/**
+	 * Rehash the password with the newest one
+	 * @param string $password
+	 * @param int $id
+	 */
 	private function rehash(string $password, int $id) {
 		$this->database->query(
-			'UPDATE users SET password = ? WHERE id = ?',
+			'UPDATE subscribers
+			SET password = ?
+			WHERE id IS NOT DISTINCT FROM ?',
 			[$this->cipher->encrypt($password), $id]
 		);
 	}

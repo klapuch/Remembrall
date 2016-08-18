@@ -3,23 +3,24 @@
 	<title>Parts</title>
 	<description>All the parts owned by you</description>
 	<confirmations>
-		<cancel>
-			<message>Are you sure you want to cancel the subscription?</message>
+		<confirmation>
+			<message>Are you sure you want to cancel the subscription?
+			</message>
 			<title>Cancel</title>
-            <href></href>
-            <glyphicon>remove</glyphicon>
-		</cancel>
+			<href></href>
+			<glyphicon>remove</glyphicon>
+		</confirmation>
 	</confirmations>
 	<tables>
-		<subscribing>
+		<subscription>
 			<headings>
-                <heading>#</heading>
+				<heading>#</heading>
 				<heading>Last update</heading>
 				<heading>Interval</heading>
 				<heading>Expression</heading>
 				<heading>URL</heading>
 				<heading>Options</heading>
 			</headings>
-		</subscribing>
+		</subscription>
 	</tables>
 </default>
