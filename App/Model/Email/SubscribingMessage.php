@@ -26,7 +26,7 @@ final class SubscribingMessage implements Message {
 	}
 
 	public function recipients(): Access\Subscribers {
-		$part = $this->part->print(new Output\Xml('part'));
+		$part = $this->part->print(new Output\Xml([], 'part'));
 		return new Access\OutdatedSubscribers(
 			new Access\FakeSubscribers(),
 			current($part->valueOf('url')),
@@ -36,7 +36,7 @@ final class SubscribingMessage implements Message {
 	}
 
 	public function subject(): string {
-		$part = $this->part->print(new Output\Xml('part'));
+		$part = $this->part->print(new Output\Xml([], 'part'));
 		return sprintf(
 			'Changes occurred on "%s" page with "%s" expression',
 			current($part->valueOf('url')),
@@ -52,7 +52,7 @@ final class SubscribingMessage implements Message {
 		$xslt->setParameter('', 'content', $this->part->content());
 		return $xslt->transformToXml(
 			new \SimpleXMLElement(
-				(string)$this->part->print(new Output\Xml('part'))
+				(string)$this->part->print(new Output\Xml([], 'part'))
 			)
 		);
 	}

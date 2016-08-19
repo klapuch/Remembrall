@@ -23,7 +23,7 @@ final class CachedPart extends TestCase\Mockery {
 
 	public function testCaching() {
 		$content = '<p>XXX</p>';
-		$printer = new Output\Xml();
+		$printer = new Output\Xml([]);
 		$fakePart = new Subscribing\FakePart(null, 'www.google.com');
 		$this->cache->shouldReceive('read')
 			->andReturn($content)

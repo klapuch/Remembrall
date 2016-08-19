@@ -122,9 +122,9 @@ final class OwnedSubscriptions extends TestCase\Database {
 			$this->database
 		))->iterate();
 		Assert::count(3, $parts);
-		Assert::contains('2008-01-01 01:01', (string)$parts[0]->print(new Output\Xml()));
-		Assert::contains('2003-01-01 01:01', (string)$parts[1]->print(new Output\Xml()));
-		Assert::contains('2002-01-01 01:01', (string)$parts[2]->print(new Output\Xml()));
+		Assert::contains('2008-01-01 01:01', (string)$parts[0]->print(new Output\Xml([])));
+		Assert::contains('2003-01-01 01:01', (string)$parts[1]->print(new Output\Xml([])));
+		Assert::contains('2002-01-01 01:01', (string)$parts[2]->print(new Output\Xml([])));
 	}
 
 	public function testEmptySubscriptions() {

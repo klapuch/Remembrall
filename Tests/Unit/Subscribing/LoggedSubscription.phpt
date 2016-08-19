@@ -71,7 +71,7 @@ final class LoggedSubscription extends TestCase\Mockery {
 		(new Subscribing\LoggedSubscription(
 			new Subscribing\FakeSubscription($ex),
 			$logger
-		))->print(new Output\Xml());
+		))->print(new Output\Xml([]));
 	}
 
 	public function testNoExceptionDuringPrinting() {
@@ -80,7 +80,7 @@ final class LoggedSubscription extends TestCase\Mockery {
 				$logger = $this->mockery('Tracy\ILogger');
 				(new Subscribing\LoggedSubscription(
 					new Subscribing\FakeSubscription(), $logger
-			))->print(new Output\Xml());
+			))->print(new Output\Xml([]));
 			}
 		);
 	}
