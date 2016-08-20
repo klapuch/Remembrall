@@ -15,7 +15,7 @@
 	</xsl:template>
 
 	<xsl:template match="subscribing">
-		<form class="form-horizontal" role="form" method="POST">
+		<form action="subscribe" class="form-horizontal" role="form" method="POST">
 			<div class="form-group">
 				<div class="col-sm-5">
 					<label><xsl:value-of select="label/url"/></label>

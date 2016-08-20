@@ -42,8 +42,9 @@
 		<th><p><xsl:value-of select="."/></p></th>
 	</xsl:template>
 
-	<xsl:template match="confirmation">
-		<a role="button" href="{href}" onclick="return confirm ('{message}')" title="{title}" type="button" class="btn btn-danger btn-sm">
+    <xsl:template match="confirmation">
+        <a role="button" href="{href}" onclick="return confirm ('{message}')"
+                 title="{title}" type="button" class="btn btn-danger btn-sm">
 			<span class="glyphicon glyphicon-{glyphicon}" aria-hidden="true"/>
 		</a>
 	</xsl:template>
