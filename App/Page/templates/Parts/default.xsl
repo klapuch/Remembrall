@@ -14,7 +14,9 @@
 		<table class="table table-hover">
 			<xsl:apply-templates select="//subscription/headings"/>
 			<tbody>
-				<xsl:apply-templates select="subscription"/>
+                <xsl:apply-templates select="subscription">
+                    <xsl:sort select="lastUpdate" order="descending"/>
+                </xsl:apply-templates>
 			</tbody>
 		</table>
 	</xsl:template>
