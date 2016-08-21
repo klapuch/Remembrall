@@ -28,9 +28,9 @@ final class SubscribingMessage implements Message {
 	public function recipients(): Access\Subscribers {
 		$part = $this->part->print(new Output\Xml([], 'part'));
 		return new Access\OutdatedSubscribers(
-			new Access\FakeSubscribers(),
-			current($part->valueOf('url')),
-			current($part->valueOf('expression')),
+            new Access\FakeSubscribers(),
+            current((new Output\XPathExpression('url', $part))->matches()),
+            current((new Output\XPathExpression('expression', $part))->matches()),
 			$this->database
 		);
 	}
@@ -38,9 +38,9 @@ final class SubscribingMessage implements Message {
 	public function subject(): string {
 		$part = $this->part->print(new Output\Xml([], 'part'));
 		return sprintf(
-			'Changes occurred on "%s" page with "%s" expression',
-			current($part->valueOf('url')),
-			current($part->valueOf('expression'))
+            'Changes occurred on "%s" page with "%s" expression',
+            current((new Output\XPathExpression('url', $part))->matches()),
+            current((new Output\XPathExpression('expression', $part))->matches())
 		);
 	}
 
