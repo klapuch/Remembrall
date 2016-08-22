@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<default>
-	<title>Parts</title>
-	<description>All the parts owned by you</description>
-	<confirmations>
-		<confirmation>
-			<message>Are you sure you want to cancel the subscription?
-			</message>
-			<title>Cancel</title>
-			<href></href>
-			<glyphicon>remove</glyphicon>
-		</confirmation>
-	</confirmations>
-	<tables>
-		<subscription>
-			<headings>
-				<heading>#</heading>
-				<heading>Last update</heading>
-				<heading>Interval</heading>
-				<heading>Expression</heading>
-				<heading>URL</heading>
-				<heading>Options</heading>
-			</headings>
-		</subscription>
-	</tables>
-</default>
+<template>
+    <default>
+        <title>Parts</title>
+        <description>All the parts owned by you</description>
+        <confirmations>
+            <confirmation>
+                <message>Are you sure you want to cancel the subscription?
+                </message>
+                <title>Cancel</title>
+                <href></href>
+                <glyphicon>remove</glyphicon>
+            </confirmation>
+        </confirmations>
+        <tables>
+            <subscription>
+                <headings>
+                    <heading>#</heading>
+                    <heading>Last update</heading>
+                    <heading>Interval</heading>
+                    <heading>Expression</heading>
+                    <heading>URL</heading>
+                    <heading>Options</heading>
+                </headings>
+            </subscription>
+        </tables>
+    </default>
+</template>

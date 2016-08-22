@@ -4,6 +4,7 @@ namespace Remembrall\Page;
 
 use Remembrall\Model\Subscribing;
 use Klapuch\Output;
+use Tracy\Debugger;
 
 final class PartsPage extends BasePage {
     public function renderDefault() {
@@ -20,20 +21,19 @@ final class PartsPage extends BasePage {
                 return $subscriptions;
             }
         );
-        $default = new \DOMDocument();
-        $default->load(self::TEMPLATES . '/Parts/default.xml');
+        $template = new \DOMDocument();
+        $template->load(self::TEMPLATES . '/Parts/default.xml');
         echo (new Output\XsltTemplate(
             self::TEMPLATES . '/Parts/default.xsl',
-            new \SimpleXMLElement(
-                sprintf(
-                    '<%1$s>%2$s %3$s</%1$s>',
-                    'template',
-                    preg_replace('~^.+\n~', '', $default->saveXML()),
+            new Output\MergedXml(
+                $template,
+                new \SimpleXMLElement(
                     sprintf(
                         '<%1$s>%2$s</%1$s>',
                         'subscriptions',
                         $xmlData
                     )
+
                 )
             )
         ))->render();

@@ -11,11 +11,14 @@ use Nette\Caching\Storages;
 
 final class SubscriptionPage extends BasePage {
     public function renderDefault() {
-        $xml = new \DOMDocument();
-        $xml->load(self::TEMPLATES . '/Subscription/default.xml');
+        $template = new \DOMDocument();
+        $template->load(self::TEMPLATES . '/Subscription/default.xml');
         echo (new Output\XsltTemplate(
             self::TEMPLATES . '/Subscription/default.xsl',
-            new \SimpleXMLElement($xml->saveXML())
+            new Output\MergedXml(
+                $template,
+                new \SimpleXMLElement('<empty/>')
+            )
         ))->render();
     }
 

@@ -6,7 +6,7 @@
 	<xsl:param name="title" select="template/default/title"/>
 	<xsl:param name="description" select="template/default/description"/>
 
-	<xsl:template match="template">
+    <xsl:template match="template">
 		<xsl:apply-templates select="subscriptions"/>
 	</xsl:template>
 
