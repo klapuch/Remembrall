@@ -33,20 +33,6 @@ final class WebPages implements Pages {
 		return $page;
 	}
 
-	/**
-	 * Does the url already exists
-	 * @param string $url
-	 * @return bool
-	 */
-	private function alreadyExists(string $url): bool {
-		return (bool)$this->database->fetchColumn(
-			'SELECT 1
-			FROM pages
-			WHERE url IS NOT DISTINCT FROM ?',
-			[$this->normalizedUrl($url)]
-		);
-	}
-
 	public function iterate(): array {
 		return (array)array_reduce(
 			$this->database->fetchAll('SELECT content FROM pages'),
@@ -57,13 +43,32 @@ final class WebPages implements Pages {
 		);
 	}
 
+    /**
+     * Normalized and united URL
+     * @param string $url
+     * @return string
+     */
 	private function normalizedUrl(string $url): string {
 		$parsedUrl = parse_url(strtolower(trim($url, '/')));
 		$scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '';
-		$host = isset($parsedUrl['host']) ? $parsedUrl['host'] : '';
-		$path = isset($parsedUrl['path']) ? $parsedUrl['path'] : '';
+		$host = $parsedUrl['host'] ?? '';
+		$path = $parsedUrl['path'] ?? '';
 		$query = isset($parsedUrl['query']) ? '?' . $parsedUrl['query'] : '';
 		$fragment = isset($parsedUrl['fragment']) ? '#' . $parsedUrl['fragment'] : '';
 		return $scheme . $host . $path . $query . $fragment;
+	}
+
+	/**
+	 * Does the url already exists?
+	 * @param string $url
+	 * @return bool
+	 */
+	private function alreadyExists(string $url): bool {
+		return (bool)$this->database->fetchColumn(
+			'SELECT 1
+			FROM pages
+			WHERE url IS NOT DISTINCT FROM ?',
+			[$this->normalizedUrl($url)]
+		);
 	}
 }

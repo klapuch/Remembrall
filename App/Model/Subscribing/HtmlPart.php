@@ -19,12 +19,10 @@ final class HtmlPart implements Part {
 	public function content(): string {
 		return (string)array_reduce(
 			iterator_to_array($this->expression->match()),
-			function($previous, \DOMNode $node) {
-				$previous .= preg_replace(
-					'~[\t\r\n]+~', // removes tabs and new lines (CR and LF)
-					'',
-					$node->ownerDocument->saveHTML($node)
-				);
+            function($previous, \DOMNode $node) {
+                $previous .= $this->withoutWhiteSpaces(
+                    $node->ownerDocument->saveHTML($node)
+                );
 				return $previous;
 			}
 		);
@@ -36,5 +34,14 @@ final class HtmlPart implements Part {
 
 	public function print(Output\Format $format): Output\Format {
 		return $format->with('expression', $this->expression);
-	}
+    }
+
+    /**
+     * Html without tabs and new lines (CR and LF)
+     * @param string $html
+     * @return string
+     */
+    private function withoutWhiteSpaces(string $html): string {
+        return preg_replace('~[\t\r\n]+~', '', $html);
+    }
 }
