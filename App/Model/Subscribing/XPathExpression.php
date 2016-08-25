@@ -14,7 +14,7 @@ final class XPathExpression implements Expression {
 		$this->expression = $expression;
 	}
 
-	public function match(): \DOMNodeList {
+	public function matches(): \DOMNodeList {
 		return (new \DOMXPath(
 			$this->page->content()
 		))->query($this->expression);

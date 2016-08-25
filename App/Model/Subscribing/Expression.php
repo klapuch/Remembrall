@@ -10,7 +10,7 @@ interface Expression {
 	 * @throws NotFoundException
 	 * @return \DOMNodeList
 	 */
-	public function match(): \DOMNodeList;
+	public function matches(): \DOMNodeList;
 
 	/**
 	 * Expression itself

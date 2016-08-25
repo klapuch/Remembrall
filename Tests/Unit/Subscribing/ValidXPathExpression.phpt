@@ -20,7 +20,7 @@ final class ValidXPathExpression extends Tester\TestCase {
 		$dom->loadHTML('<p>Hi there!</p>');
 		(new Subscribing\ValidXPathExpression(
 			new Subscribing\FakeExpression('//foo', new \DOMNodeList())
-		))->match();
+		))->matches();
 	}
 
 	public function testMatchedSomeNodes() {
@@ -31,7 +31,7 @@ final class ValidXPathExpression extends Tester\TestCase {
 				$nodeList = (new \DOMXPath($dom))->query('//p');
 				(new Subscribing\ValidXPathExpression(
 					new Subscribing\FakeExpression('//p', $nodeList)
-				))->match();
+				))->matches();
 			}
 		);
 	}

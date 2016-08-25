@@ -15,8 +15,8 @@ final class ValidXPathExpression implements Expression {
 		$this->origin = $origin;
 	}
 
-	public function match(): \DOMNodeList {
-		$nodes = $this->origin->match();
+	public function matches(): \DOMNodeList {
+		$nodes = $this->origin->matches();
 		if($nodes->length > 0)
 			return $nodes;
 		throw new NotFoundException(

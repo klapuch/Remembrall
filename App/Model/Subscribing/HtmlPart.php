@@ -18,7 +18,7 @@ final class HtmlPart implements Part {
 
 	public function content(): string {
 		return (string)array_reduce(
-			iterator_to_array($this->expression->match()),
+			iterator_to_array($this->expression->matches()),
             function($previous, \DOMNode $node) {
                 $previous .= $this->withoutWhiteSpaces(
                     $node->ownerDocument->saveHTML($node)

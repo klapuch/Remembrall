@@ -17,7 +17,7 @@ final class FakeExpression implements Expression {
 		$this->match = $match;
 	}
 
-	public function match(): \DOMNodeList {
+	public function matches(): \DOMNodeList {
 		return $this->match;
 	}
 

@@ -37,7 +37,7 @@ final class XPathExpression extends Tester\TestCase {
 		$dom->loadHTML('<p>Hi there</p>');
 		$page = new Subscribing\FakePage($dom);
 		$expression = new Subscribing\XPathExpression($page, '//p');
-		$match = $expression->match();
+		$match = $expression->matches();
 		Assert::same(1, $match->length);
 		Assert::same($match->item(0)->nodeValue, 'Hi there');
 		Assert::same($match->item(0)->nodeName, 'p');
@@ -47,7 +47,7 @@ final class XPathExpression extends Tester\TestCase {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>Hi there</p>');
 		$page = new Subscribing\FakePage($dom);
-		$expression = (new Subscribing\XPathExpression($page, '//foo'))->match();
+		$expression = (new Subscribing\XPathExpression($page, '//foo'))->matches();
 		Assert::same(0, $expression->length);
 	}
 }
