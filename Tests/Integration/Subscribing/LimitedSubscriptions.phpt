@@ -30,7 +30,7 @@ final class LimitedSubscriptions extends TestCase\Database {
 	}
 
 	/**
-	 * @throws \OverflowException You have reached limit of 5 subscribed parts
+	 * @throws \OverflowException You have reached the limit of 5 subscribed parts
 	 */
 	public function testSubscribingOverLimit() {
 		$this->database->query(

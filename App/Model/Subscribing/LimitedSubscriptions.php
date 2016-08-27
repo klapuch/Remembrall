@@ -32,7 +32,7 @@ final class LimitedSubscriptions implements Subscriptions {
 		if($this->overstepped()) {
 			throw new \OverflowException(
 				sprintf(
-					'You have reached limit of %d subscribed parts',
+					'You have reached the limit of %d subscribed parts',
 					self::LIMIT
 				)
 			);
