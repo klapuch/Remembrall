@@ -6,7 +6,7 @@ use Klapuch\Storage;
 use Remembrall\Exception;
 
 /**
- * Existing verification code
+ * Verification code which always exists
  */
 final class ExistingVerificationCode implements VerificationCode {
 	private $origin;
