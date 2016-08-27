@@ -27,8 +27,8 @@ final class CachedPage implements Page {
 	}
 
 	public function content(): \DOMDocument {
-		if($this->outdated($this->url))
-			$this->pages->add($this->url, $this->origin);
+        if($this->outdated($this->url))
+            return $this->pages->add($this->url, $this->origin)->content();
 		$dom = new DOM();
 		$dom->loadHTML(
 			$this->database->fetchColumn(

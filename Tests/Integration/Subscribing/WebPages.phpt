@@ -30,35 +30,28 @@ final class WebPages extends TestCase\Database {
 			$this->database->fetchColumn(
 				"SELECT COUNT(*)
 				FROM page_visits
-				WHERE page_url = 'www.facedown.cz' OR page_url = 'www.facedown.cz/?x=10#here'
+                WHERE page_url = 'www.facedown.cz'
+                OR page_url = 'www.facedown.cz/?x=10#here'
 				AND visited_at <= NOW()"
 			)
 		);
 	}
 
-	public function testAddingSameUrl() {
+    public function testAddingSameUrl() {
 		$dom = new \DOMDocument();
-		$dom->loadHTML('content');
-		(new Subscribing\WebPages($this->database))
-			->add('www.FacedowN.cz/', new Subscribing\FakePage($dom));
-		$dom2 = new \DOMDocument();
-		$dom2->loadHTML('Updated Content');
-		(new Subscribing\WebPages($this->database))
-			->add('www.facedown.cz/', new Subscribing\FakePage($dom2));
-		$pages = $this->database->fetchAll(
-			"SELECT * FROM pages WHERE url = 'www.facedown.cz'"
-		);
-		Assert::count(1, $pages);
-		Assert::contains('Updated Content', $pages[0]['content']);
-		Assert::same(
-			2,
-			$this->database->fetchColumn(
-				"SELECT COUNT(*)
-				FROM page_visits
-				WHERE page_url = 'www.facedown.cz'
-				AND visited_at <= NOW()"
-			)
-		);
+        $dom->loadHTML('content');
+        $page = new Subscribing\FakePage($dom);
+		$addedPage = (new Subscribing\WebPages($this->database))
+            ->add('www.FacedowN.cz/', $page);
+        Assert::same($addedPage, $page);
+        Assert::count(
+            1,
+            $this->database->fetchAll(
+                "SELECT *
+                FROM pages
+                WHERE url = 'www.facedown.cz'"
+            )
+        );
 	}
 
 	public function testIterating() {

@@ -58,7 +58,7 @@ final class CachedPage extends TestCase\Database {
 			(new Subscribing\CachedPage(
 				'www.google.com',
 				new Subscribing\FakePage($dom),
-				new Subscribing\WebPages($this->database),
+				new Subscribing\FakePages(),
 				$this->database
 			))->content()->saveHTML()
 		);
@@ -78,7 +78,7 @@ final class CachedPage extends TestCase\Database {
 			(new Subscribing\CachedPage(
 				'www.google.com',
 				new Subscribing\FakePage($dom),
-				new Subscribing\WebPages($this->database),
+                new Subscribing\FakePages(),
 				$this->database
 			))->content()->saveHTML()
 		);

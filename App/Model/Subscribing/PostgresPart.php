@@ -7,7 +7,7 @@ use Klapuch\{
 };
 
 /**
- * Part stored in the Postgres database
+ * Part stored in the PostgreSQL database
  */
 final class PostgresPart implements Part {
 	private $origin;

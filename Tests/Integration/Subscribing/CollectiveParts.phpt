@@ -39,9 +39,8 @@ final class CollectiveParts extends TestCase\Database {
 		);
 	}
 
-	public function testTwiceAddingWithUpdate() {
-		$refreshedPart = new Subscribing\FakePart('<p>Updated content</p>');
-		$part = new Subscribing\FakePart('<p>Content</p>', null, $refreshedPart);
+	public function testAddingSamePart() {
+		$part = new Subscribing\FakePart('<p>Content</p>');
 		Assert::same(
 			$part,
 			(new Subscribing\CollectiveParts(
@@ -53,7 +52,7 @@ final class CollectiveParts extends TestCase\Database {
 			)
 		);
 		Assert::same(
-			$refreshedPart,
+			$part,
 			(new Subscribing\CollectiveParts(
 				$this->database
 			))->add(
@@ -62,6 +61,13 @@ final class CollectiveParts extends TestCase\Database {
 				'//p'
 			)
 		);
+        Assert::count(
+            1,
+            $this->database->fetchAll(
+                'SELECT page_url, content, expression
+                FROM parts'
+            )
+        );
 	}
 
 	public function testIteratingOverAllPages() {

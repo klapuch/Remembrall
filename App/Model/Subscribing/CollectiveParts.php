@@ -15,21 +15,15 @@ final class CollectiveParts implements Parts {
 	}
 
 	public function add(Part $part, string $url, string $expression): Part {
-		return (new Storage\PostgresTransaction($this->database))->start(
-			function() use ($part, $url, $expression) {
-				if($this->alreadyExists($url, $expression)) {
-					return $part->refresh();
-				} else {
-					$this->database->query(
-						'INSERT INTO parts
-						(page_url, expression, content) VALUES
-						(?, ?, ?)',
-						[$url, $expression, $part->content()]
-					);
-					return $part;
-				}
-			}
-		);
+        if(!$this->alreadyExists($url, $expression)) {
+            $this->database->query(
+                'INSERT INTO parts
+                (page_url, expression, content) VALUES
+                (?, ?, ?)',
+                [$url, $expression, $part->content()]
+            );
+        }
+        return $part;
 	}
 
 	public function iterate(): array {

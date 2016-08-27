@@ -12,25 +12,14 @@ final class WebPages implements Pages {
 	}
 
 	public function add(string $url, Page $page): Page {
-		(new Storage\PostgresTransaction($this->database))->start(
-			function() use ($url, $page) {
-				if($this->alreadyExists($url)) {
-					$this->database->query(
-						'UPDATE pages
-						SET content = ?
-						WHERE url IS NOT DISTINCT FROM ?',
-						[$page->content()->saveHTML(), $this->normalizedUrl($url)]
-					);
-				} else {
-					$this->database->query(
-						'INSERT INTO pages (url, content) VALUES
-						(?, ?)',
-						[$this->normalizedUrl($url), $page->content()->saveHTML()]
-					);
-				}
-			}
-		);
-		return $page;
+        if(!$this->alreadyExists($url)) {
+            $this->database->query(
+                'INSERT INTO pages (url, content) VALUES
+                (?, ?)',
+                [$this->normalizedUrl($url), $page->content()->saveHTML()]
+            );
+        }
+        return $page;
 	}
 
 	public function iterate(): array {
@@ -59,7 +48,7 @@ final class WebPages implements Pages {
 	}
 
 	/**
-	 * Does the url already exists?
+	 * Does the url already exist?
 	 * @param string $url
 	 * @return bool
 	 */
