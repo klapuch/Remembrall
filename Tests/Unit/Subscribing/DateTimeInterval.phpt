@@ -40,6 +40,7 @@ final class DateTimeInterval extends Tester\TestCase {
 			[new \DateInterval('PT4S'), 4],
 			[new \DateInterval('PT1H'), 3600],
 			[new \DateInterval('P2D'), 86400 * 2],
+			[new \DateInterval('PT1H4M4S'), 3844], // 1 hour, 4 minutes, 4 seconds
 			[$negativeInterval, 240],
 			[new \DateInterval('PT0M'), 0],
 		];
