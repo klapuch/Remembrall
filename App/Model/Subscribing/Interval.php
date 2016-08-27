@@ -19,7 +19,7 @@ interface Interval {
 	/**
 	 * How many units have a one step?
 	 * @throws \OutOfRangeException
-	 * @return \DateInterval
+	 * @return int
 	 */
-	public function step(): \DateInterval;
+	public function step(): int;
 }

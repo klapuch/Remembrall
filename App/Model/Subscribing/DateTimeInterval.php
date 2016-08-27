@@ -23,10 +23,36 @@ final class DateTimeInterval implements Interval {
 	}
 
 	public function next(): \DateTimeInterface {
-		return $this->start->add($this->step());
+		return $this->start->add($this->step);
 	}
 
-	public function step(): \DateInterval {
-		return $this->step;
+	public function step(): int {
+		if($this->transferable($this->step))
+			return $this->toSecond($this->step);
+		throw new \OutOfRangeException(
+			'Months or years can not be precisely transferred'
+		);
+	}
+
+	/**
+	 * Transfer step to the seconds
+	 * @param \DateInterval $step
+	 * @return int
+	 */
+	private function toSecond(\DateInterval $step): int {
+		return $step->d * 86400
+		+ $step->h * 3600
+		+ $step->i * 60
+		+ $step->s;
+	}
+
+	/**
+	 * Can be the step precisely transferred to the seconds?
+	 * Years and months differs and can not be precisely calculated
+	 * @param \DateInterval $step
+	 * @return bool
+	 */
+	private function transferable(\DateInterval $step): bool {
+		return $step->m === 0 && $step->y === 0;
 	}
 }

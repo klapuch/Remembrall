@@ -30,7 +30,7 @@ final class ConstantSubscription implements Subscription {
 	public function print(Output\Format $format): Output\Format {
 		return $this->origin->print($format)
 			->with('visitation', $this->interval->start()->format('Y-m-d H:i'))
-			->with('interval', $this->interval->step()->i)
+			->with('interval', $this->interval->step())
 			->with('lastUpdate', $this->lastUpdate->format('Y-m-d H:i'));
 	}
 }

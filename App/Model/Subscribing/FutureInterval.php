@@ -25,9 +25,7 @@ final class FutureInterval implements Interval {
 		throw new \OutOfRangeException('Next step must points to the future');
 	}
 
-	public function step(): \DateInterval {
-		if($this->origin->step()->invert === 0)
-			return $this->origin->step();
-		throw new \OutOfRangeException('Step must points to the future');
+	public function step(): int {
+		return $this->origin->step();
 	}
 }

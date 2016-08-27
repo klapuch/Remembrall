@@ -69,7 +69,7 @@ final class OwnedSubscriptions implements Subscriptions {
 				)',
 				[
 					$this->owner->id(),
-					sprintf('PT%dM', $interval->step()->i),
+					sprintf('PT%dS', $interval->step()),
 					$expression,
 					$url
 				]

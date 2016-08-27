@@ -48,31 +48,10 @@ final class FutureInterval extends Tester\TestCase {
 		});
 	}
 
-	protected function pastSteps() {
-		return [
-			[new \DateInterval('PT2M'), 1],
-			[new \DateInterval('PT2M'), true],
-			[new \DateInterval('PT2M'), 5],
-			[new \DateInterval('PT2M'), -1],
-			[new \DateInterval('PT2M'), '1'],
-		];
-	}
-
-	/**
-	 * @dataProvider pastSteps
-	 * @throws \OutOfRangeException Step must points to the future
-	 */
-	public function testStepPointingToPast(\DateInterval $step, $invert) {
-		$step->invert = $invert;
-		(new Subscribing\FutureInterval(
-			new Subscribing\FakeInterval(null, null, $step)
-		))->step();
-	}
-
 	public function testStepPointingToFuture() {
 		Assert::noError(function() {
 			(new Subscribing\FutureInterval(
-				new Subscribing\FakeInterval(null, null, new \DateInterval('PT2M'))
+				new Subscribing\FakeInterval(null, null, 120)
 			))->step();
 		});
 	}

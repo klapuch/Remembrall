@@ -34,7 +34,7 @@ final class OwnedSubscriptions extends TestCase\Database {
             new Subscribing\FakeInterval(
                 new \DateTimeImmutable('01:01'),
                 null,
-                new \DateInterval('PT158M')
+				120
             )
         );
 		$parts = $this->database->fetchAll(
@@ -47,7 +47,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 		Assert::same(1, $part['id']);
 		Assert::same('www.google.com', $part['page_url']);
 		Assert::same('//p', $part['expression']);
-		Assert::same('PT158M', $part['interval']);
+		Assert::same('PT120S', $part['interval']);
 		$partVisits = $this->database->fetchAll('SELECT part_id, visited_at FROM part_visits');
 		Assert::count(1, $partVisits);
 		$partVisit = current($partVisits);
@@ -75,7 +75,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 			new Subscribing\FakeInterval(
 				new \DateTimeImmutable('01:01'),
 				null,
-				new \DateInterval('PT158M')
+				120
 			)
 		);
 		Assert::exception(function() use($parts) {
@@ -85,7 +85,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 				new Subscribing\FakeInterval(
 					new \DateTimeImmutable('01:01'),
 					null,
-					new \DateInterval('PT158M')
+					120
 				)
 			);
 		}, 'Remembrall\Exception\DuplicateException');

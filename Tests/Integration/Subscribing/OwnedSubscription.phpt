@@ -60,7 +60,7 @@ final class OwnedSubscription extends TestCase\Database {
 			new Subscribing\FakeInterval(
 				new \DateTimeImmutable('15:00'),
 				null,
-				new \DateInterval('PT44M')
+				44
 			)
 		);
 		$parts = $this->database->fetchAll('SELECT id, interval FROM subscriptions');
@@ -68,7 +68,7 @@ final class OwnedSubscription extends TestCase\Database {
 		Assert::same(1, $parts[0]['id']);
 		Assert::same('PT2M', $parts[0]['interval']);
 		Assert::same(2, $parts[1]['id']);
-		Assert::same('PT44M', $parts[1]['interval']);
+		Assert::same('PT44S', $parts[1]['interval']);
 	}
 
 	protected function prepareDatabase() {
