@@ -29,7 +29,17 @@ final class HtmlWebPage extends Tester\TestCase {
 		))->content();
 		$dom = Tester\DomQuery::fromHtml($content->saveHTML());
 		Assert::equal('Framework', current($dom->find('h1')[0]));
+    }
+
+    public function testHttpPageWithExactlyContentTypeMatchWithoutError() {
+        Assert::noError(function() {
+            $content = (new Subscribing\HtmlWebPage(
+                'http://www.example.com',
+                new GuzzleHttp\Client(['http_errors' => false])
+            ))->content();
+        });
 	}
+
 
 	/**
 	 * @throws \Remembrall\Exception\NotFoundException Content could not be retrieved because of "404 Not Found"
