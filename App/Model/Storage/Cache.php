@@ -4,6 +4,8 @@ namespace Remembrall\Model\Storage;
 
 use Nette\Caching;
 
+//TODO: Move to separate class
+
 /**
  * Cache storage
  */
