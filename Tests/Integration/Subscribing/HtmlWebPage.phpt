@@ -6,13 +6,15 @@
 namespace Remembrall\Integration\Subscribing;
 
 use GuzzleHttp;
+use Psr\Http\Message\ResponseInterface;
 use Remembrall\Model\Subscribing;
 use Tester;
 use Tester\Assert;
+use Remembrall\TestCase;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class HtmlWebPage extends Tester\TestCase {
+final class HtmlWebPage extends TestCase\Mockery {
 	public function testHttpPageContentWithoutError() {
 		$content = (new Subscribing\HtmlWebPage(
 			'http://www.facedown.cz',
@@ -33,13 +35,31 @@ final class HtmlWebPage extends Tester\TestCase {
 
     public function testHttpPageWithExactlyContentTypeMatchWithoutError() {
         Assert::noError(function() {
-            $content = (new Subscribing\HtmlWebPage(
+           (new Subscribing\HtmlWebPage(
                 'http://www.example.com',
                 new GuzzleHttp\Client(['http_errors' => false])
             ))->content();
         });
 	}
 
+	/**
+	 * @throws \Remembrall\Exception\NotFoundException Page "http://www.example.com" is not in HTML format
+	 */
+	public function testHttpPageWithEmptyContentType() {
+		$request = $this->mockery(GuzzleHttp\ClientInterface::class);
+		$response = $this->mockery(ResponseInterface::class);
+		$response->shouldReceive('getHeader')
+			->with('Content-Type')
+			->andReturn([]);
+		$response->shouldReceive('getStatusCode')
+			->andReturn(0);
+		$request->shouldReceive('send')
+			->andReturn($response);
+		(new Subscribing\HtmlWebPage(
+			'http://www.example.com',
+			$request
+		))->content();
+	}
 
 	/**
 	 * @throws \Remembrall\Exception\NotFoundException Content could not be retrieved because of "404 Not Found"

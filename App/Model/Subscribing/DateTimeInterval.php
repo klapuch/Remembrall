@@ -35,7 +35,7 @@ final class DateTimeInterval implements Interval {
 	}
 
 	/**
-	 * Transfer step to the seconds
+	 * Transferred step to the seconds
 	 * @param \DateInterval $step
 	 * @return int
 	 */
