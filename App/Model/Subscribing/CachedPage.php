@@ -12,23 +12,20 @@ final class CachedPage implements Page {
 	private $url;
 	private $origin;
 	private $database;
-	private $pages;
 
 	public function __construct(
 		string $url,
 		Page $origin,
-		Pages $pages,
 		Storage\Database $database
 	) {
 		$this->url = $url;
 		$this->origin = $origin;
 		$this->database = $database;
-		$this->pages = $pages;
 	}
 
 	public function content(): \DOMDocument {
         if($this->outdated($this->url))
-            return $this->pages->add($this->url, $this->origin)->content();
+        	return $this->refresh()->content();
 		$dom = new DOM();
 		$dom->loadHTML(
 			$this->database->fetchColumn(

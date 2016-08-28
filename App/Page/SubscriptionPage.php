@@ -24,18 +24,24 @@ final class SubscriptionPage extends BasePage {
 
     public function actionSubscribe() {
         try {
-            $page = new Subscribing\LoggedPage(
-                new Subscribing\CachedPage(
-                    $_POST['url'],
-                    new Subscribing\HtmlWebPage(
-                        $_POST['url'],
-                        new GuzzleHttp\Client(['http_errors' => false])
-                    ),
-                    new Subscribing\WebPages($this->database),
-                    $this->database
-                ),
-                $this->logger
-            );
+			$page = (new Subscribing\WebPages($this->database))->add(
+				$_POST['url'],
+				new Subscribing\LoggedPage(
+					new Subscribing\CachedPage(
+						$_POST['url'],
+						new Subscribing\PostgresPage(
+							new Subscribing\HtmlWebPage(
+								$_POST['url'],
+								new GuzzleHttp\Client(['http_errors' => false])
+							),
+							$_POST['url'],
+							$this->database
+						),
+						$this->database
+					),
+					$this->logger
+				)
+			);
             (new Storage\PostgresTransaction($this->database))->start(
                 function() use ($page) {
                     (new Subscribing\LoggedParts(

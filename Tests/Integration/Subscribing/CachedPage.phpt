@@ -22,7 +22,6 @@ final class CachedPage extends TestCase\Database {
 			(new Subscribing\CachedPage(
 				'www.google.com',
 				new Subscribing\FakePage(),
-				new Subscribing\FakePages(),
 				$this->database
 			))->content()->saveHTML()
 		);
@@ -40,7 +39,6 @@ final class CachedPage extends TestCase\Database {
 			(new Subscribing\CachedPage(
 				'www.google.com',
 				new Subscribing\FakePage(),
-				new Subscribing\FakePages(),
 				$this->database
 			))->content()->saveHTML()
 		);
@@ -57,8 +55,10 @@ final class CachedPage extends TestCase\Database {
 			'<p>Google</p>',
 			(new Subscribing\CachedPage(
 				'www.google.com',
-				new Subscribing\FakePage($dom),
-				new Subscribing\FakePages(),
+				new Subscribing\FakePage(
+					new \DOMDocument(),
+					new Subscribing\FakePage($dom)
+				),
 				$this->database
 			))->content()->saveHTML()
 		);
@@ -77,8 +77,10 @@ final class CachedPage extends TestCase\Database {
 			'<p>Google</p>',
 			(new Subscribing\CachedPage(
 				'www.google.com',
-				new Subscribing\FakePage($dom),
-                new Subscribing\FakePages(),
+				new Subscribing\FakePage(
+					new \DOMDocument(),
+					new Subscribing\FakePage($dom)
+				),
 				$this->database
 			))->content()->saveHTML()
 		);
@@ -92,8 +94,10 @@ final class CachedPage extends TestCase\Database {
 			'<p>Google</p>',
 			(new Subscribing\CachedPage(
 				'www.google.com',
-				new Subscribing\FakePage($dom),
-				new Subscribing\WebPages($this->database),
+				new Subscribing\FakePage(
+					new \DOMDocument(),
+					new Subscribing\FakePage($dom)
+				),
 				$this->database
 			))->content()->saveHTML()
 		);
