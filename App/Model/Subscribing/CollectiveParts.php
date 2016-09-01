@@ -2,7 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\Storage;
+use Klapuch\{
+	Storage, Uri
+};
 
 /**
  * All parts stored in the database shared with everyone
@@ -14,13 +16,13 @@ final class CollectiveParts implements Parts {
 		$this->database = $database;
 	}
 
-	public function add(Part $part, string $url, string $expression): Part {
-        if(!$this->alreadyExists($url, $expression)) {
+	public function add(Part $part, Uri\Uri $uri, string $expression): Part {
+        if(!$this->alreadyExists($uri, $expression)) {
             $this->database->query(
                 'INSERT INTO parts
                 (page_url, expression, content) VALUES
                 (?, ?, ?)',
-                [$url, $expression, $part->content()]
+                [$uri->reference(), $expression, $part->content()]
             );
         }
         return $part;
@@ -58,17 +60,17 @@ final class CollectiveParts implements Parts {
 
 	/**
 	 * Does the part already exists?
-	 * @param string $url
+	 * @param Uri\Uri $uri
 	 * @param string $expression
 	 * @return bool
 	 */
-	private function alreadyExists(string $url, string $expression): bool {
+	private function alreadyExists(Uri\Uri $uri, string $expression): bool {
 		return (bool)$this->database->fetchColumn(
 			'SELECT 1
 			FROM parts
 			WHERE page_url IS NOT DISTINCT FROM ?
 			AND expression IS NOT DISTINCT FROM ?',
-			[$url, $expression]
+			[$uri->reference(), $expression]
 		);
 	}
 }

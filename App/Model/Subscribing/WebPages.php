@@ -2,7 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\Storage;
+use Klapuch\{
+	Storage, Uri
+};
 
 final class WebPages implements Pages {
 	private $database;
@@ -11,12 +13,12 @@ final class WebPages implements Pages {
 		$this->database = $database;
 	}
 
-	public function add(string $url, Page $page): Page {
-        if(!$this->alreadyExists($url)) {
+	public function add(Uri\Uri $uri, Page $page): Page {
+        if(!$this->alreadyExists($uri)) {
             $this->database->query(
                 'INSERT INTO pages (url, content) VALUES
                 (?, ?)',
-                [$this->normalizedUrl($url), $page->content()->saveHTML()]
+                [$uri->reference(), $page->content()->saveHTML()]
             );
         }
         return $page;
@@ -32,32 +34,17 @@ final class WebPages implements Pages {
 		);
 	}
 
-    /**
-     * Normalized and united URL
-     * @param string $url
-     * @return string
-     */
-	private function normalizedUrl(string $url): string {
-		$parsedUrl = parse_url(strtolower(trim($url, '/')));
-		$scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '';
-		$host = $parsedUrl['host'] ?? '';
-		$path = $parsedUrl['path'] ?? '';
-		$query = isset($parsedUrl['query']) ? '?' . $parsedUrl['query'] : '';
-		$fragment = isset($parsedUrl['fragment']) ? '#' . $parsedUrl['fragment'] : '';
-		return $scheme . $host . $path . $query . $fragment;
-	}
-
 	/**
 	 * Does the url already exist?
-	 * @param string $url
+	 * @param Uri\Uri $uri
 	 * @return bool
 	 */
-	private function alreadyExists(string $url): bool {
+	private function alreadyExists(Uri\Uri $uri): bool {
 		return (bool)$this->database->fetchColumn(
 			'SELECT 1
 			FROM pages
 			WHERE url IS NOT DISTINCT FROM ?',
-			[$this->normalizedUrl($url)]
+			[$uri->reference()]
 		);
 	}
 }

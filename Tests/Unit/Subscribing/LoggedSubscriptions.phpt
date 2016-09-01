@@ -8,6 +8,7 @@ namespace Remembrall\Unit\Subscribing;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
+use Klapuch\Uri;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -23,7 +24,7 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
 		(new Subscribing\LoggedSubscriptions($subscriptions, $logger))
 			->subscribe(
-				'url',
+				new Uri\FakeUri('url'),
 				'//p',
 				new Subscribing\FakeInterval()
 			);
@@ -35,7 +36,7 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 			(new Subscribing\LoggedSubscriptions(
 				new Subscribing\FakeSubscriptions(), $logger
 			))->subscribe(
-				'url',
+				new Uri\FakeUri('url'),
 				'//p',
 				new Subscribing\FakeInterval()
 			);

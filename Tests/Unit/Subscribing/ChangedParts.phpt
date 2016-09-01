@@ -8,6 +8,7 @@ namespace Remembrall\Unit\Subscribing;
 use Remembrall\Model\Subscribing;
 use Tester;
 use Tester\Assert;
+use Klapuch\Uri;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -23,7 +24,7 @@ final class ChangedParts extends Tester\TestCase {
 						null,
 						new Subscribing\FakePart('xxx')
 					),
-					'www.google.com',
+					new Uri\FakeUri('www.google.com'),
 					'//h1'
 				);
 			}
@@ -42,7 +43,7 @@ final class ChangedParts extends Tester\TestCase {
 				null,
 				new Subscribing\FakePart('abc')
 			),
-			'www.google.com',
+			new Uri\FakeUri('www.google.com'),
 			'//h1'
 		);
 	}

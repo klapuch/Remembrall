@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Remembrall\Exception\NotFoundException;
+use Klapuch\Uri;
 
 /**
  * Parts which differ from the parts on the internet
@@ -14,13 +15,13 @@ final class ChangedParts implements Parts {
 		$this->origin = $origin;
 	}
 
-	public function add(Part $part, string $url, string $expression): Part {
+	public function add(Part $part, Uri\Uri $uri, string $expression): Part {
 		if(!$this->changed($part)) {
 			throw new NotFoundException(
 				'The part has not changed yet'
 			);
 		}
-		return $this->origin->add($part, $url, $expression);
+		return $this->origin->add($part, $uri, $expression);
 	}
 
 	public function iterate(): array {

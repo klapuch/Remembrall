@@ -31,7 +31,8 @@
         "klapuch/encryption": "@dev",
         "klapuch/storage": "@dev",
         "klapuch/output": "@dev",
-        "klapuch/ini": "@dev"
+        "klapuch/ini": "@dev",
+        "klapuch/uri": "@dev"
     },
     "require-dev": {
         "nette/tester": "^1.7",

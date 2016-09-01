@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Tracy;
+use Klapuch\Uri;
 
 /**
  * Log every error action
@@ -16,9 +17,9 @@ final class LoggedParts implements Parts {
 		$this->logger = $logger;
 	}
 
-	public function add(Part $part, string $url, string $expression): Part {
+	public function add(Part $part, Uri\Uri $uri, string $expression): Part {
 		try {
-			return $this->origin->add($part, $url, $expression);
+			return $this->origin->add($part, $uri, $expression);
 		} catch(\Throwable $ex) {
 			$this->logger->log($ex, Tracy\Logger::ERROR);
 			throw $ex;

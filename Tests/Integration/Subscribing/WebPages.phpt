@@ -8,6 +8,7 @@ namespace Remembrall\Integration\Subscribing;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
+use Klapuch\Uri;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -16,9 +17,15 @@ final class WebPages extends TestCase\Database {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('content');
 		(new Subscribing\WebPages($this->database))
-			->add('www.FacedowN.cz/', new Subscribing\FakePage($dom));
+			->add(
+				new Uri\FakeUri('www.facedown.cz'),
+				new Subscribing\FakePage($dom)
+			);
 		(new Subscribing\WebPages($this->database))
-			->add('www.FacedowN.cz/?x=10#here', new Subscribing\FakePage($dom));
+			->add(
+				new Uri\FakeUri('www.facedown.cz/?x=10#here'),
+				new Subscribing\FakePage($dom)
+			);
 		Assert::contains(
 			'content',
 			$this->database->fetchColumn(
@@ -42,7 +49,7 @@ final class WebPages extends TestCase\Database {
         $dom->loadHTML('content');
         $page = new Subscribing\FakePage($dom);
 		$addedPage = (new Subscribing\WebPages($this->database))
-            ->add('www.FacedowN.cz/', $page);
+            ->add(new Uri\FakeUri('www.facedown.cz'), $page);
         Assert::same($addedPage, $page);
         Assert::count(
             1,

@@ -11,13 +11,14 @@ use Remembrall\Model\Subscribing;
 use Tester;
 use Tester\Assert;
 use Remembrall\TestCase;
+use Klapuch\Uri;
 
 require __DIR__ . '/../../bootstrap.php';
 
 final class HtmlWebPage extends TestCase\Mockery {
 	public function testHttpPageContentWithoutError() {
 		$content = (new Subscribing\HtmlWebPage(
-			'http://www.facedown.cz',
+			new Uri\FakeUri('http://www.facedown.cz'),
 			new GuzzleHttp\Client(['http_errors' => false])
 		))->content();
 		$dom = Tester\DomQuery::fromHtml($content->saveHTML());
@@ -26,7 +27,7 @@ final class HtmlWebPage extends TestCase\Mockery {
 
 	public function testHttpsPage() {
 		$content = (new Subscribing\HtmlWebPage(
-			'https://nette.org/',
+			new Uri\FakeUri('https://nette.org/'),
 			new GuzzleHttp\Client(['http_errors' => false])
 		))->content();
 		$dom = Tester\DomQuery::fromHtml($content->saveHTML());
@@ -36,8 +37,8 @@ final class HtmlWebPage extends TestCase\Mockery {
     public function testHttpPageWithExactlyContentTypeMatchWithoutError() {
         Assert::noError(function() {
            (new Subscribing\HtmlWebPage(
-                'http://www.example.com',
-                new GuzzleHttp\Client(['http_errors' => false])
+			   new Uri\FakeUri('http://www.example.com'),
+			   new GuzzleHttp\Client(['http_errors' => false])
             ))->content();
         });
 	}
@@ -56,7 +57,7 @@ final class HtmlWebPage extends TestCase\Mockery {
 		$request->shouldReceive('send')
 			->andReturn($response);
 		(new Subscribing\HtmlWebPage(
-			'http://www.example.com',
+			new Uri\FakeUri('http://www.example.com'),
 			$request
 		))->content();
 	}
@@ -66,7 +67,7 @@ final class HtmlWebPage extends TestCase\Mockery {
 	 */
 	public function testWithErrorStatusCode() {
 		(new Subscribing\HtmlWebPage(
-			'https://www.google.cz/404',
+			new Uri\FakeUri('https://www.google.cz/404'),
 			new GuzzleHttp\Client(['http_errors' => false])
 		))->content();
 	}
@@ -76,7 +77,7 @@ final class HtmlWebPage extends TestCase\Mockery {
 	 */
 	public function testXmlPageWithError() {
 		(new Subscribing\HtmlWebPage(
-			'https://www.google.com/sitemap.xml',
+			new Uri\FakeUri('https://www.google.com/sitemap.xml'),
 			new GuzzleHttp\Client(['http_errors' => false])
 		))->content();
 	}
@@ -86,7 +87,7 @@ final class HtmlWebPage extends TestCase\Mockery {
 	 */
 	public function testUnknownUrl() {
 		(new Subscribing\HtmlWebPage(
-			'http://www.čoromoro.xx',
+			new Uri\FakeUri('http://www.čoromoro.xx'),
 			new GuzzleHttp\Client(['http_errors' => false])
 		))->content();
 	}
@@ -96,14 +97,14 @@ final class HtmlWebPage extends TestCase\Mockery {
 	 */
 	public function testEmptyUrl() {
 		(new Subscribing\HtmlWebPage(
-			'',
+			new Uri\FakeUri(''),
 			new GuzzleHttp\Client(['http_errors' => false])
 		))->content();
 	}
 
 	public function testRefreshing() {
 		$page = new Subscribing\HtmlWebPage(
-			'whatever',
+			new Uri\FakeUri('whatever'),
 			new GuzzleHttp\Client(['http_errors' => false])
 		);
 		Assert::notSame($page, $page->refresh());

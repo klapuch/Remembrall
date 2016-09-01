@@ -10,7 +10,9 @@ use Remembrall\Model\{
 };
 use Remembrall\TestCase;
 use Tester\Assert;
-use Klapuch\Output;
+use Klapuch\{
+	Output, Uri
+};
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -29,7 +31,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 			new Access\FakeSubscriber(666),
             $this->database
         ))->subscribe(
-			'www.google.com',
+			new Uri\FakeUri('www.google.com'),
 			'//p',
             new Subscribing\FakeInterval(
                 new \DateTimeImmutable('01:01'),
@@ -70,7 +72,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 			$this->database
 		);
 		$parts->subscribe(
-			'www.google.com',
+			new Uri\FakeUri('www.google.com'),
 			'//p',
 			new Subscribing\FakeInterval(
 				new \DateTimeImmutable('01:01'),
@@ -80,7 +82,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 		);
 		Assert::exception(function() use($parts) {
 			$parts->subscribe(
-				'www.google.com',
+				new Uri\FakeUri('www.google.com'),
 				'//p',
 				new Subscribing\FakeInterval(
 					new \DateTimeImmutable('01:01'),

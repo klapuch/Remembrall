@@ -4,7 +4,7 @@ namespace Remembrall\Page;
 
 use GuzzleHttp;
 use Klapuch\{
-    Output, Storage
+    Output, Storage, Uri
 };
 use Remembrall\Model\Subscribing;
 use Nette\Caching\Storages;
@@ -24,17 +24,25 @@ final class SubscriptionPage extends BasePage {
 
     public function actionSubscribe() {
         try {
+        	$url = new Uri\NormalizedUrl(
+        		new Uri\ProtocolBasedUrl(
+        			new Uri\ReachableUri(
+        				new Uri\ValidUrl($_POST['url'])
+					),
+					['http', 'https', '']
+				)
+			);
 			$page = (new Subscribing\WebPages($this->database))->add(
-				$_POST['url'],
+				$url,
 				new Subscribing\LoggedPage(
 					new Subscribing\CachedPage(
-						$_POST['url'],
+						$url,
 						new Subscribing\PostgresPage(
 							new Subscribing\HtmlWebPage(
-								$_POST['url'],
+								$url,
 								new GuzzleHttp\Client(['http_errors' => false])
 							),
-							$_POST['url'],
+							$url,
 							$this->database
 						),
 						$this->database
@@ -43,7 +51,7 @@ final class SubscriptionPage extends BasePage {
 				)
 			);
             (new Storage\PostgresTransaction($this->database))->start(
-                function() use ($page) {
+                function() use ($page, $url) {
                     (new Subscribing\LoggedParts(
                         new Subscribing\CollectiveParts(
                             $this->database
@@ -62,7 +70,7 @@ final class SubscriptionPage extends BasePage {
                             ),
                             new Storages\MemoryStorage()
                         ),
-                        $_POST['url'],
+                        $url,
                         $_POST['expression']
                     );
                     (new Subscribing\LoggedSubscriptions(
@@ -76,7 +84,7 @@ final class SubscriptionPage extends BasePage {
                         ),
                         $this->logger
                     ))->subscribe(
-                        $_POST['url'],
+                        $url,
                         $_POST['expression'],
                         new Subscribing\FutureInterval(
                             new Subscribing\DateTimeInterval(

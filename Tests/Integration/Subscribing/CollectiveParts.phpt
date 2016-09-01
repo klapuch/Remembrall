@@ -9,6 +9,7 @@ use GuzzleHttp;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
+use Klapuch\Uri;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -18,7 +19,7 @@ final class CollectiveParts extends TestCase\Database {
 			$this->database
 		))->add(
 			new Subscribing\FakePart('<p>Content</p>'),
-			'www.google.com',
+			new Uri\FakeUri('www.google.com'),
 			'//p'
 		);
 		$parts = $this->database->fetchAll(
@@ -47,7 +48,7 @@ final class CollectiveParts extends TestCase\Database {
 				$this->database
 			))->add(
 				$part,
-				'www.google.com',
+				new Uri\FakeUri('www.google.com'),
 				'//p'
 			)
 		);
@@ -57,7 +58,7 @@ final class CollectiveParts extends TestCase\Database {
 				$this->database
 			))->add(
 				$part,
-				'www.google.com',
+				new Uri\FakeUri('www.google.com'),
 				'//p'
 			)
 		);

@@ -2,23 +2,25 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\Storage;
+use Klapuch\{
+	Storage, Uri
+};
 
 /**
  * Page stored in the PostgreSQL database
  */
 final class PostgresPage implements Page {
     private $origin;
-    private $url;
+    private $uri;
     private $database;
 
     public function __construct(
         Page $origin,
-        string $url,
+		Uri\Uri $uri,
         Storage\Database $database
     ) {
         $this->origin = $origin;
-        $this->url = $url;
+        $this->uri = $uri;
         $this->database = $database;
     }
 
@@ -29,7 +31,7 @@ final class PostgresPage implements Page {
                 'SELECT content
                 FROM pages
                 WHERE url IS NOT DISTINCT FROM ?',
-                [$this->url]
+                [$this->uri->reference()]
             )
         );
         return $content;
@@ -41,7 +43,7 @@ final class PostgresPage implements Page {
             'UPDATE pages
             SET content = ?
             WHERE url IS NOT DISTINCT FROM ?',
-            [$refreshedPage->content()->saveHTML(), $this->url]
+            [$refreshedPage->content()->saveHTML(), $this->uri->reference()]
         );
         return $this;
     }

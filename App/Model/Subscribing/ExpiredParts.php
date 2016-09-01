@@ -2,7 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\Storage;
+use Klapuch\{
+	Storage, Uri
+};
 use GuzzleHttp;
 
 /**
@@ -23,8 +25,8 @@ final class ExpiredParts implements Parts {
 		$this->http = $http;
 	}
 
-	public function add(Part $part, string $url, string $expression): Part {
-		return $this->origin->add($part, $url, $expression);
+	public function add(Part $part, Uri\Uri $uri, string $expression): Part {
+		return $this->origin->add($part, $uri, $expression);
 	}
 
 	public function iterate(): array {
@@ -47,11 +49,17 @@ final class ExpiredParts implements Parts {
 				$previous[] = new PostgresPart(
 					new HtmlPart(
 						new XPathExpression(
-							new HtmlWebPage($row['url'], $this->http),
+							new HtmlWebPage(
+								new Uri\FakeUri($row['url']),
+								$this->http
+							),
 							$row['expression']
 						),
 						new ConstantPage(
-							new HtmlWebPage($row['url'], $this->http),
+							new HtmlWebPage(
+								new Uri\FakeUri($row['url']),
+								$this->http
+							),
 							$row['page_content']
 						)
 					), $row['url'],

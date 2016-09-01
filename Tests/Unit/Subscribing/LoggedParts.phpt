@@ -8,6 +8,7 @@ namespace Remembrall\Unit\Subscribing;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
+use Klapuch\Uri;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -24,7 +25,7 @@ final class LoggedParts extends TestCase\Mockery {
 		(new Subscribing\LoggedParts($parts, $logger))
 			->add(
 				new Subscribing\FakePart(),
-				'url',
+				new Uri\FakeUri('url'),
 				'//p'
 			);
 	}
@@ -36,7 +37,7 @@ final class LoggedParts extends TestCase\Mockery {
 				new Subscribing\FakeParts(), $logger
 			))->add(
 				new Subscribing\FakePart(),
-				'url',
+				new Uri\FakeUri('url'),
 				'//p'
 			);
 		});

@@ -8,6 +8,7 @@ namespace Remembrall\Integration\Subscribing;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
+use Klapuch\Uri;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -17,7 +18,7 @@ final class PostgresPage extends TestCase\Database {
 			'Hello from facedown website',
 			(new Subscribing\PostgresPage(
 				new Subscribing\FakePage(),
-				'www.facedown.cz',
+				new Uri\FakeUri('www.facedown.cz'),
 				$this->database
 			))->content()->saveHTML()
 		);
@@ -31,7 +32,7 @@ final class PostgresPage extends TestCase\Database {
                 new \DOMDocument(),
                 new Subscribing\FakePage($content)
             ),
-			'www.facedown.cz',
+			new Uri\FakeUri('www.facedown.cz'),
 			$this->database
 		))->refresh();
 		$pages = $this->database->fetchAll('SELECT * FROM pages');

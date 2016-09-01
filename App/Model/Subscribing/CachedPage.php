@@ -2,29 +2,31 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\Storage;
+use Klapuch\{
+	Storage, Uri
+};
 
 /**
  * Cached page on the database side
  */
 final class CachedPage implements Page {
 	const EXPIRATION = 'PT10M';
-	private $url;
+	private $uri;
 	private $origin;
 	private $database;
 
 	public function __construct(
-		string $url,
+		Uri\Uri $uri,
 		Page $origin,
 		Storage\Database $database
 	) {
-		$this->url = $url;
+		$this->uri = $uri;
 		$this->origin = $origin;
 		$this->database = $database;
 	}
 
 	public function content(): \DOMDocument {
-        if($this->outdated($this->url))
+        if($this->outdated($this->uri))
         	return $this->refresh()->content();
 		$dom = new DOM();
 		$dom->loadHTML(
@@ -32,7 +34,7 @@ final class CachedPage implements Page {
 				'SELECT content
 				FROM pages
 				WHERE url IS NOT DISTINCT FROM ?',
-				[$this->url]
+				[$this->uri->reference()]
 			)
 		);
 		return $dom;
@@ -45,11 +47,11 @@ final class CachedPage implements Page {
 	/**
 	 * Is the url outdated and needs to be loaded from the another source?
 	 * By the source is meant the internet or probably another storage
-	 * @param string $url
+	 * @param Uri\Uri $uri
 	 * @return bool
 	 */
-	private function outdated(string $url): bool {
-		if(!$this->exists($url))
+	private function outdated(Uri\Uri $uri): bool {
+		if(!$this->exists($uri))
 			return true;
 		return (bool)$this->database->fetchColumn(
 			"SELECT 1
@@ -59,21 +61,21 @@ final class CachedPage implements Page {
 				FROM page_visits
 				WHERE page_url IS NOT DISTINCT FROM ?
 			) + INTERVAL '1 MINUTE' * ? < NOW()",
-			[$url, (new \DateInterval(self::EXPIRATION))->i]
+			[$uri->reference(), (new \DateInterval(self::EXPIRATION))->i]
 		);
 	}
 
 	/**
 	 * Does the url exist in the database and therefore it's not the first access?
-	 * @param string $url
+	 * @param Uri\Uri $uri
 	 * @return bool
 	 */
-	private function exists(string $url): bool {
+	private function exists(Uri\Uri $uri): bool {
 		return (bool)$this->database->fetchColumn(
 			'SELECT 1
 			FROM pages
 			WHERE url IS NOT DISTINCT FROM ?',
-			[$url]
+			[$uri->reference()]
 		);
 	}
 }

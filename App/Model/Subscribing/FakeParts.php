@@ -2,6 +2,8 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+use Klapuch\Uri;
+
 /**
  * Fake
  */
@@ -12,7 +14,7 @@ final class FakeParts implements Parts {
 		$this->parts = $parts;
 	}
 
-	public function add(Part $part, string $url, string $expression): Part {
+	public function add(Part $part, Uri\Uri $uri, string $expression): Part {
 		return $part;
 	}
 

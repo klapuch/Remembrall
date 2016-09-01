@@ -2,7 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\Storage;
+use Klapuch\{
+	Storage, Uri
+};
 use Remembrall\Model\Access;
 use Remembrall\Exception\DuplicateException;
 
@@ -53,7 +55,7 @@ final class OwnedSubscriptions implements Subscriptions {
 	}
 
 	public function subscribe(
-		string $url,
+		Uri\Uri $uri,
 		string $expression,
 		Interval $interval
 	) {
@@ -71,7 +73,7 @@ final class OwnedSubscriptions implements Subscriptions {
 					$this->owner->id(),
 					sprintf('PT%dS', $interval->step()),
 					$expression,
-					$url
+					$uri->reference()
 				]
 			);
 		} catch(Storage\UniqueConstraint $ex) {
@@ -79,7 +81,7 @@ final class OwnedSubscriptions implements Subscriptions {
 				sprintf(
 					'"%s" expression on the "%s" page is already subscribed by you',
 					$expression,
-					$url
+					$uri->reference()
 				),
 				$ex->getCode(),
 				$ex

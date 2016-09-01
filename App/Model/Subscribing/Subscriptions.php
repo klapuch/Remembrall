@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Remembrall\Exception\DuplicateException;
+use Klapuch\Uri;
 
 interface Subscriptions {
 	/**
@@ -12,13 +13,13 @@ interface Subscriptions {
 	public function iterate(): array;
 
 	/**
-	 * @param string $url
+	 * @param Uri\Uri $uri
 	 * @param string $expression
 	 * @param Interval $interval
 	 * @throws DuplicateException
 	 */
 	public function subscribe(
-		string $url,
+		Uri\Uri $uri,
 		string $expression,
 		Interval $interval
 	);

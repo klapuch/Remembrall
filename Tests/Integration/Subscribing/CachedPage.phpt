@@ -8,6 +8,7 @@ namespace Remembrall\Integration\Subscribing;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
+use Klapuch\Uri;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -20,7 +21,7 @@ final class CachedPage extends TestCase\Database {
 		Assert::contains(
 			'google',
 			(new Subscribing\CachedPage(
-				'www.google.com',
+				new Uri\FakeUri('www.google.com'),
 				new Subscribing\FakePage(),
 				$this->database
 			))->content()->saveHTML()
@@ -37,7 +38,7 @@ final class CachedPage extends TestCase\Database {
 		Assert::contains(
 			'google',
 			(new Subscribing\CachedPage(
-				'www.google.com',
+				new Uri\FakeUri('www.google.com'),
 				new Subscribing\FakePage(),
 				$this->database
 			))->content()->saveHTML()
@@ -54,7 +55,7 @@ final class CachedPage extends TestCase\Database {
 		Assert::contains(
 			'<p>Google</p>',
 			(new Subscribing\CachedPage(
-				'www.google.com',
+				new Uri\FakeUri('www.google.com'),
 				new Subscribing\FakePage(
 					new \DOMDocument(),
 					new Subscribing\FakePage($dom)
@@ -76,7 +77,7 @@ final class CachedPage extends TestCase\Database {
 		Assert::contains(
 			'<p>Google</p>',
 			(new Subscribing\CachedPage(
-				'www.google.com',
+				new Uri\FakeUri('www.google.com'),
 				new Subscribing\FakePage(
 					new \DOMDocument(),
 					new Subscribing\FakePage($dom)
@@ -93,7 +94,7 @@ final class CachedPage extends TestCase\Database {
 		Assert::contains(
 			'<p>Google</p>',
 			(new Subscribing\CachedPage(
-				'www.google.com',
+				new Uri\FakeUri('www.google.com'),
 				new Subscribing\FakePage(
 					new \DOMDocument(),
 					new Subscribing\FakePage($dom)

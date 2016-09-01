@@ -7,23 +7,29 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message\ResponseInterface;
 use Remembrall\Exception\NotFoundException;
+use Klapuch\Uri;
 
 /**
  * Fresh html page downloaded from the internet
  */
 final class HtmlWebPage implements Page {
-	private $url;
+	private $uri;
 	private $http;
 	const ALLOWED_CONTENT_TYPE = 'text/html';
 
-	public function __construct(string $url, GuzzleHttp\ClientInterface $http) {
-		$this->url = $url;
+	public function __construct(
+		Uri\Uri $uri,
+		GuzzleHttp\ClientInterface $http
+	) {
+		$this->uri = $uri;
 		$this->http = $http;
 	}
 
 	public function content(): \DOMDocument {
 		try {
-			$response = $this->http->send(new Request('GET', $this->url));
+			$response = $this->http->send(
+				new Request('GET', $this->uri->reference())
+			);
 			if(!$this->isAvailable($response)) {
 				throw new NotFoundException(
 					sprintf(
@@ -37,7 +43,10 @@ final class HtmlWebPage implements Page {
 				);
 			} elseif(!$this->isHtml($response)) {
 				throw new NotFoundException(
-					sprintf('Page "%s" is not in HTML format', $this->url)
+					sprintf(
+						'Page "%s" is not in HTML format',
+						$this->uri->reference()
+					)
 				);
 			}
 			$dom = new DOM();
@@ -47,7 +56,7 @@ final class HtmlWebPage implements Page {
 			throw new NotFoundException(
 				sprintf(
 					'Page "%s" is unreachable. Does the URL exist?',
-					$this->url
+					$this->uri->reference()
 				),
 				$ex->getCode(),
 				$ex
@@ -56,7 +65,7 @@ final class HtmlWebPage implements Page {
 	}
 
 	public function refresh(): Page {
-		return new self($this->url, $this->http);
+		return new self($this->uri, $this->http);
 	}
 
 	/**

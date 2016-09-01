@@ -9,6 +9,7 @@ use GuzzleHttp;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
+use Klapuch\Uri;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -45,14 +46,14 @@ final class ExpiredParts extends TestCase\Database {
 				new Subscribing\HtmlPart(
 					new Subscribing\XPathExpression(
 						new Subscribing\HtmlWebPage(
-							'www.google.com',
+							new Uri\FakeUri('www.google.com'),
 							new GuzzleHttp\Client()
 						),
 						'//c'
 					),
 					new Subscribing\ConstantPage(
 						new Subscribing\HtmlWebPage(
-							'www.google.com',
+							new Uri\FakeUri('www.google.com'),
 							new GuzzleHttp\Client()
 						),
 						'google'
@@ -68,14 +69,14 @@ final class ExpiredParts extends TestCase\Database {
 				new Subscribing\HtmlPart(
 					new Subscribing\XPathExpression(
 						new Subscribing\HtmlWebPage(
-							'www.google.com',
+							new Uri\FakeUri('www.google.com'),
 							new GuzzleHttp\Client()
 						),
 						'//a'
 					),
 					new Subscribing\ConstantPage(
 						new Subscribing\HtmlWebPage(
-							'www.google.com',
+							new Uri\FakeUri('www.google.com'),
 							new GuzzleHttp\Client()
 						),
 						'google'
