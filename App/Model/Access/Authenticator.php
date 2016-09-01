@@ -4,8 +4,8 @@ namespace Remembrall\Model\Access;
 use Klapuch\{
 	Storage, Encryption
 };
-use Nette\Security\AuthenticationException;
 use Nette\Security;
+use Nette\Security\AuthenticationException;
 
 final class Authenticator implements Security\IAuthenticator {
 	private $database;
