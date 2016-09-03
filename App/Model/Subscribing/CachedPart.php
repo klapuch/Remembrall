@@ -10,10 +10,6 @@ use Klapuch\Output;
  * Cache any given part
  */
 final class CachedPart extends Storage\Cache implements Part {
-	public function __construct(Part $origin, Caching\IStorage $cache) {
-		parent::__construct($origin, $cache, new \DateInterval('PT0S'));
-	}
-
 	public function content(): string {
 		return $this->read(__FUNCTION__);
 	}

@@ -4,24 +4,16 @@ namespace Remembrall\Model\Storage;
 
 use Nette\Caching;
 
-//TODO: Move to separate class
-
 /**
  * Cache storage
  */
 abstract class Cache {
 	private $cache;
-	private $expiration;
 	protected $origin;
 
-	public function __construct(
-		$origin,
-		Caching\IStorage $cache,
-		\DateInterval $expiration
-	) {
+	public function __construct($origin, Caching\IStorage $cache) {
 		$this->origin = $origin;
 		$this->cache = $cache;
-		$this->expiration = $expiration;
 	}
 
 	/**
@@ -43,27 +35,9 @@ abstract class Cache {
 		if($this->cache->read($key) === null) {
 			$this->cache->write(
 				$key,
-				$this->origin->$method(...$args),
-				[
-					Caching\Cache::EXPIRE => sprintf(
-						'%d seconds',
-						$this->toSeconds($this->expiration)
-					),
-				]
+				$this->origin->$method(...$args)
 			);
 		}
 		return $this->cache->read($key);
-	}
-
-	/**
-	 * Converted expiration to single unit (seconds)
-	 * @param \DateInterval $expiration
-	 * @return int
-	 */
-	private function toSeconds(\DateInterval $expiration): int {
-		return $expiration->days * 86400
-		+ $expiration->h * 3600
-		+ $expiration->i * 60
-		+ $expiration->s;
 	}
 }
