@@ -8,7 +8,9 @@ namespace Remembrall\Unit\Subscribing;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
-use Klapuch\Uri;
+use Klapuch\{
+    Time, Uri
+};
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -26,7 +28,7 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 			->subscribe(
 				new Uri\FakeUri('url'),
 				'//p',
-				new Subscribing\FakeInterval()
+				new Time\FakeInterval()
 			);
 	}
 
@@ -38,7 +40,7 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 			))->subscribe(
 				new Uri\FakeUri('url'),
 				'//p',
-				new Subscribing\FakeInterval()
+				new Time\FakeInterval()
 			);
 		});
 	}

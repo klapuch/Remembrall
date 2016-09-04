@@ -2,7 +2,10 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\Output;
+use Klapuch\{
+    Output, Time
+};
+
 use Remembrall\Exception\NotFoundException;
 
 interface Subscription {
@@ -16,11 +19,11 @@ interface Subscription {
 	/**
 	 * Edit the subscription
 	 * Editing may not cause transformation to another part
-	 * @param Interval $interval
+	 * @param Time\Interval $interval
 	 * @throws NotFoundException
 	 * @return Subscription
 	 */
-	public function edit(Interval $interval): self;
+	public function edit(Time\Interval $interval): self;
 
 	/**
 	 * Print itself to the given format

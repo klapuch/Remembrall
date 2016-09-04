@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Storage, Uri
+	Storage, Uri, Time
 };
 use Remembrall\Model\Access;
 use Remembrall\Exception\DuplicateException;
@@ -43,7 +43,7 @@ final class OwnedSubscriptions implements Subscriptions {
 						$this->owner,
 						$this->database
 					),
-					new DateTimeInterval(
+					new Time\DateTimeInterval(
 						new \DateTimeImmutable((string)$row['visited_at']),
 						new \DateInterval($row['interval'])
 					),
@@ -57,7 +57,7 @@ final class OwnedSubscriptions implements Subscriptions {
 	public function subscribe(
 		Uri\Uri $uri,
 		string $expression,
-		Interval $interval
+		Time\Interval $interval
 	) {
 		try {
 			$this->database->query(

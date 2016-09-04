@@ -2,7 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\Uri;
+use Klapuch\{
+    Uri, Time
+};
 
 final class FakeSubscriptions implements Subscriptions {
 	public function iterate(): array {
@@ -12,7 +14,7 @@ final class FakeSubscriptions implements Subscriptions {
 	public function subscribe(
 		Uri\Uri $uri,
 		string $expression,
-		Interval $interval
+		Time\Interval $interval
 	) {
 
 	}

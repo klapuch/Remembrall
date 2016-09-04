@@ -20,7 +20,7 @@ final class ValidXPathExpression implements Expression {
 		if($nodes->length > 0)
 			return $nodes;
 		throw new NotFoundException(
-			'XPath expression does not exist'
+			'For the given XPath expression there are no matches'
 		);
 	}
 

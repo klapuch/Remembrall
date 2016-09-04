@@ -4,7 +4,7 @@ namespace Remembrall\Page;
 
 use GuzzleHttp;
 use Klapuch\{
-    Output, Storage, Uri
+    Output, Storage, Uri, Time
 };
 use Remembrall\Model\Subscribing;
 use Nette\Caching\Storages;
@@ -86,12 +86,15 @@ final class SubscriptionPage extends BasePage {
                     ))->subscribe(
                         $url,
                         $_POST['expression'],
-                        new Subscribing\FutureInterval(
-                            new Subscribing\DateTimeInterval(
-                                new \DateTimeImmutable(),
-                                new \DateInterval(
-                                    sprintf('PT%dM', max(0, $_POST['interval']))
-                                )
+                        new Time\FutureInterval(
+                            new Time\LimitedInterval(
+                                new Time\DateTimeInterval(
+                                    new \DateTimeImmutable(),
+                                    new \DateInterval(
+                                        sprintf('PT%dM', $_POST['interval'])
+                                    )
+                                ),
+                                [30 * 60, 9000 * 60]
                             )
                         )
                     );

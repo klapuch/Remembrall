@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Storage, Uri
+	Storage, Uri, Time
 };
 use Remembrall\Model\Access;
 
@@ -29,7 +29,7 @@ final class LimitedSubscriptions implements Subscriptions {
 	public function subscribe(
 		Uri\Uri $uri,
 		string $expression,
-		Interval $interval
+		Time\Interval $interval
 	) {
 		if($this->overstepped()) {
 			throw new \OverflowException(

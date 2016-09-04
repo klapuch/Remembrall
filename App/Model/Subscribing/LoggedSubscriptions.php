@@ -3,7 +3,9 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Tracy;
-use Klapuch\Uri;
+use Klapuch\{
+    Uri, Time
+};
 
 /**
  * Log every error action
@@ -20,7 +22,7 @@ final class LoggedSubscriptions implements Subscriptions {
 	public function subscribe(
 		Uri\Uri $uri,
 		string $expression,
-		Interval $interval
+		Time\Interval $interval
 	) {
 		try {
 			$this->origin->subscribe($uri, $expression, $interval);

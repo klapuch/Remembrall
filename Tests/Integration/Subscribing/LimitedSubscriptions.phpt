@@ -11,7 +11,9 @@ use Remembrall\Model\{
 };
 use Remembrall\TestCase;
 use Tester\Assert;
-use Klapuch\Uri;
+use Klapuch\{
+    Uri, Time
+};
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -25,7 +27,7 @@ final class LimitedSubscriptions extends TestCase\Database {
 			))->subscribe(
 				new Uri\FakeUri('url'),
 				'//p',
-				new Subscribing\FakeInterval()
+				new Time\FakeInterval()
 			);
 		});
 	}
@@ -57,7 +59,7 @@ final class LimitedSubscriptions extends TestCase\Database {
 		))->subscribe(
 			new Uri\FakeUri('url'),
 			'//p',
-			new Subscribing\FakeInterval()
+			new Time\FakeInterval()
 		);
 	}
 

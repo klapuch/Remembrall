@@ -2,7 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\Output;
+use Klapuch\{
+    Time, Output
+};
 
 final class ConstantSubscription implements Subscription {
 	private $origin;
@@ -11,7 +13,7 @@ final class ConstantSubscription implements Subscription {
 
 	public function __construct(
 		Subscription $origin,
-		Interval $interval,
+		Time\Interval $interval,
 		\DateTimeImmutable $lastUpdate
 	) {
 		$this->origin = $origin;
@@ -23,13 +25,13 @@ final class ConstantSubscription implements Subscription {
 		$this->origin->cancel();
 	}
 
-	public function edit(Interval $interval): Subscription {
+	public function edit(Time\Interval $interval): Subscription {
 		return $this->origin->edit($interval);
 	}
 
 	public function print(Output\Format $format): Output\Format {
 		return $this->origin->print($format)
-			->with('visitation', $this->interval->start()->format('Y-m-d H:i'))
+			->with('visitation', $this->interval->current()->format('Y-m-d H:i'))
 			->with('interval', $this->interval->step())
 			->with('lastUpdate', $this->lastUpdate->format('Y-m-d H:i'));
 	}

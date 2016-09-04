@@ -8,7 +8,9 @@ namespace Remembrall\Unit\Subscribing;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
-use Klapuch\Output;
+use Klapuch\{
+    Time, Output
+};
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -47,7 +49,7 @@ final class LoggedSubscription extends TestCase\Mockery {
 		(new Subscribing\LoggedSubscription(
 			new Subscribing\FakeSubscription($ex),
 			$logger
-		))->edit(new Subscribing\FakeInterval());
+		))->edit(new Time\FakeInterval());
 	}
 
 	public function testNoExceptionDuringEditing() {
@@ -56,7 +58,7 @@ final class LoggedSubscription extends TestCase\Mockery {
 				$logger = $this->mockery('Tracy\ILogger');
 				(new Subscribing\LoggedSubscription(
 					new Subscribing\FakeSubscription(), $logger
-				))->edit(new Subscribing\FakeInterval());
+				))->edit(new Time\FakeInterval());
 			}
 		);
 	}
@@ -80,8 +82,8 @@ final class LoggedSubscription extends TestCase\Mockery {
 				$logger = $this->mockery('Tracy\ILogger');
 				(new Subscribing\LoggedSubscription(
 					new Subscribing\FakeSubscription(), $logger
-			))->print(new Output\Xml([]));
-			}
+                ))->print(new Output\Xml([]));
+            }
 		);
 	}
 }

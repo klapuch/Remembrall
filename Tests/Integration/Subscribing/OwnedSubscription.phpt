@@ -10,6 +10,7 @@ use Remembrall\Model\{
 };
 use Remembrall\TestCase;
 use Tester\Assert;
+use Klapuch\Time;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -47,7 +48,7 @@ final class OwnedSubscription extends TestCase\Database {
 			'//b',
 			new Access\FakeSubscriber(666),
 			$this->database
-		))->edit(new Subscribing\FakeInterval());
+		))->edit(new Time\FakeInterval());
 	}
 
 	public function testEditingOwned() {
@@ -57,7 +58,7 @@ final class OwnedSubscription extends TestCase\Database {
 			new Access\FakeSubscriber(666),
 			$this->database
 		))->edit(
-			new Subscribing\FakeInterval(
+			new Time\FakeInterval(
 				new \DateTimeImmutable('15:00'),
 				null,
 				44

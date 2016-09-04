@@ -11,7 +11,7 @@ use Remembrall\Model\{
 use Remembrall\TestCase;
 use Tester\Assert;
 use Klapuch\{
-	Output, Uri
+	Output, Uri, Time
 };
 
 require __DIR__ . '/../../bootstrap.php';
@@ -33,7 +33,7 @@ final class OwnedSubscriptions extends TestCase\Database {
         ))->subscribe(
 			new Uri\FakeUri('www.google.com'),
 			'//p',
-            new Subscribing\FakeInterval(
+            new Time\FakeInterval(
                 new \DateTimeImmutable('01:01'),
                 null,
 				120
@@ -74,7 +74,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 		$parts->subscribe(
 			new Uri\FakeUri('www.google.com'),
 			'//p',
-			new Subscribing\FakeInterval(
+			new Time\FakeInterval(
 				new \DateTimeImmutable('01:01'),
 				null,
 				120
@@ -84,7 +84,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 			$parts->subscribe(
 				new Uri\FakeUri('www.google.com'),
 				'//p',
-				new Subscribing\FakeInterval(
+				new Time\FakeInterval(
 					new \DateTimeImmutable('01:01'),
 					null,
 					120

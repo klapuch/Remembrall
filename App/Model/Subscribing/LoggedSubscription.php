@@ -3,7 +3,9 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Tracy;
-use Klapuch\Output;
+use Klapuch\{
+    Output, Time
+};
 
 /**
  * Log every error action
@@ -26,7 +28,7 @@ final class LoggedSubscription implements Subscription {
 		}
 	}
 
-	public function edit(Interval $interval): Subscription {
+	public function edit(Time\Interval $interval): Subscription {
 		try {
 			return $this->origin->edit($interval);
 		} catch(\Throwable $ex) {

@@ -13,8 +13,8 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class ValidXPathExpression extends Tester\TestCase {
 	/**
-	 * @throws \Remembrall\Exception\NotFoundException XPath expression does not exist
-	 */
+     * @throws \Remembrall\Exception\NotFoundException For the given XPath expression there are no matches	
+     */
 	public function testEmptyMatchWithError() {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>Hi there!</p>');

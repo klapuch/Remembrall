@@ -2,10 +2,11 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\Storage;
 use Remembrall\Exception\NotFoundException;
 use Remembrall\Model\Access;
-use Klapuch\Output;
+use Klapuch\{
+    Output, Time, Storage
+};
 
 final class OwnedSubscription implements Subscription {
 	private $url;
@@ -41,7 +42,7 @@ final class OwnedSubscription implements Subscription {
 		);
 	}
 
-	public function edit(Interval $interval): Subscription {
+	public function edit(Time\Interval $interval): Subscription {
 		if(!$this->owned())
 			throw new NotFoundException('You do not own this subscription');
 		$this->database->query(
