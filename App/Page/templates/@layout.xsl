@@ -35,21 +35,37 @@
 									<span class="icon-bar"/>
 									<span class="icon-bar"/>
 									<span class="icon-bar"/>
-								</button>
-								<a class="navbar-brand" href="/"
-								   title="Remembrall">
-									<strong>Remembrall</strong>
-								</a>
+                                </button>
+                                <xsl:element name="a">
+                                    <xsl:attribute name="href">
+                                        <xsl:value-of select="$baseUrl"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="class">
+                                        navbar-brand
+                                    </xsl:attribute>
+                                    <xsl:attribute name="title">
+                                        Remembrall
+                                    </xsl:attribute>
+                                    <strong>Remembrall</strong>
+                                </xsl:element>
 							</div>
 							<div id="navbar" class="navbar-collapse collapse">
 								<ul class="nav navbar-nav">
-									<li>
-										<a href="/parts">Parts</a>
+                                    <li>
+                                        <xsl:element name="a">
+                                            <xsl:attribute name="href">
+                                                <xsl:value-of select="concat($baseUrl, 'parts/')"/>
+                                            </xsl:attribute>
+                                            Parts
+                                        </xsl:element>
 									</li>
-									<li>
-										<a href="/subscription">
-											Subscription
-										</a>
+                                    <li>
+                                        <xsl:element name="a">
+                                            <xsl:attribute name="href">
+                                                <xsl:value-of select="concat($baseUrl, 'subscription/')"/>
+                                            </xsl:attribute>
+                                            Subscription
+                                        </xsl:element>
 									</li>
 								</ul>
 							</div>

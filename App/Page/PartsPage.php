@@ -36,6 +36,6 @@ final class PartsPage extends BasePage {
 					)
 				)
 			)
-		))->render();
+		))->render(['baseUrl' => $this->baseUrl->reference()]);
 	}
 }

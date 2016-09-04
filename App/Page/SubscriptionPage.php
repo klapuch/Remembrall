@@ -16,7 +16,7 @@ final class SubscriptionPage extends BasePage {
             new Output\RemoteXml(
                 self::TEMPLATES . '/Subscription/default.xml'
             )
-        ))->render();
+        ))->render(['baseUrl' => $this->baseUrl->reference()]);
     }
 
     public function actionSubscribe() {
