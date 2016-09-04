@@ -11,13 +11,10 @@ use Nette\Caching\Storages;
 
 final class SubscriptionPage extends BasePage {
     public function renderDefault() {
-        $template = new \DOMDocument();
-        $template->load(self::TEMPLATES . '/Subscription/default.xml');
         echo (new Output\XsltTemplate(
             self::TEMPLATES . '/Subscription/default.xsl',
-            new Output\MergedXml(
-                $template,
-                new \SimpleXMLElement('<empty/>')
+            new Output\RemoteXml(
+                self::TEMPLATES . '/Subscription/default.xml'
             )
         ))->render();
     }
@@ -94,7 +91,7 @@ final class SubscriptionPage extends BasePage {
                                         sprintf('PT%dM', $_POST['interval'])
                                     )
                                 ),
-                                [30 * 60, 9000 * 60]
+                                [30 * 60, 9000 * 60] //TODO
                             )
                         )
                     );
