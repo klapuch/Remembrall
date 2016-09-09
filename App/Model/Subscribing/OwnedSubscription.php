@@ -5,7 +5,7 @@ namespace Remembrall\Model\Subscribing;
 use Remembrall\Exception\NotFoundException;
 use Remembrall\Model\Access;
 use Klapuch\{
-    Output, Time, Storage
+    Output, Time, Storage, Uri
 };
 
 final class OwnedSubscription implements Subscription {
@@ -15,7 +15,7 @@ final class OwnedSubscription implements Subscription {
 	private $owner;
 
 	public function __construct(
-		string $url,
+		Uri\Uri $url,
 		string $expression,
 		Access\Subscriber $owner,
 		Storage\Database $database
@@ -38,7 +38,7 @@ final class OwnedSubscription implements Subscription {
 				WHERE expression IS NOT DISTINCT FROM ?
 				AND page_url IS NOT DISTINCT FROM ?
 			)',
-			[$this->owner->id(), $this->expression, $this->url]
+			[$this->owner->id(), $this->expression, $this->url->reference()]
 		);
 	}
 
@@ -58,7 +58,7 @@ final class OwnedSubscription implements Subscription {
 			[
 				sprintf('PT%dS', $interval->step()),
 				$this->owner->id(),
-				$this->url,
+				$this->url->reference(),
 				$this->expression
 			]
 		);
@@ -66,7 +66,7 @@ final class OwnedSubscription implements Subscription {
 	}
 
 	public function print(Output\Format $format): Output\Format {
-		return $format->with('url', $this->url)
+		return $format->with('url', $this->url->reference())
 			->with('expression', $this->expression)
 			->with('ownerEmail', $this->owner->email())
 			->with('ownerId', $this->owner->id());
@@ -84,7 +84,7 @@ final class OwnedSubscription implements Subscription {
 			WHERE subscriber_id IS NOT DISTINCT FROM ?
 			AND page_url IS NOT DISTINCT FROM ?
 			AND expression IS NOT DISTINCT FROM ?',
-			[$this->owner->id(), $this->url, $this->expression]
+			[$this->owner->id(), $this->url->reference(), $this->expression]
 		);
 	}
 }

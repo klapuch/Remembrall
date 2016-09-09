@@ -8,7 +8,7 @@
                 <message>Are you sure you want to cancel the subscription?
                 </message>
                 <title>Cancel</title>
-                <href></href>
+                <href>?do=delete</href>
                 <glyphicon>remove</glyphicon>
             </confirmation>
         </confirmations>

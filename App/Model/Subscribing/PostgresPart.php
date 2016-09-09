@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Storage, Output
+	Storage, Output, Uri
 };
 
 /**
@@ -17,7 +17,7 @@ final class PostgresPart implements Part {
 
 	public function __construct(
 		Part $origin,
-		string $url,
+		Uri\Uri $url,
 		string $expression,
 		Storage\Database $database
 	) {
@@ -33,7 +33,7 @@ final class PostgresPart implements Part {
 			FROM parts
 			WHERE expression IS NOT DISTINCT FROM ?
 			AND page_url IS NOT DISTINCT FROM ?',
-			[$this->expression, $this->url]
+			[$this->expression, $this->url->reference()]
 		);
 	}
 
@@ -44,14 +44,14 @@ final class PostgresPart implements Part {
 			SET content = ?
 			WHERE page_url IS NOT DISTINCT FROM ? 
 			AND expression IS NOT DISTINCT FROM ?',
-			[$refreshedPart->content(), $this->url, $this->expression]
+			[$refreshedPart->content(), $this->url->reference(), $this->expression]
 		);
 		return $this;
 	}
 
 	public function print(Output\Format $format): Output\Format {
 		return $this->origin->print($format)
-		->with('url', $this->url)
+		->with('url', $this->url->reference())
 		->with('expression', $this->expression);
 	}
 }

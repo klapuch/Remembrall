@@ -4,7 +4,9 @@ namespace Remembrall\Model\Subscribing;
 
 use Klapuch\Storage;
 use Remembrall\Exception\NotFoundException;
-use Klapuch\Output;
+use Klapuch\{
+    Output, Uri
+};
 
 /**
  * Part which will always exists in the database
@@ -17,7 +19,7 @@ final class ExistingPart implements Part {
 
 	public function __construct(
 		Part $origin,
-		string $url,
+		Uri\Uri $url,
 		string $expression,
 		Storage\Database $database
 	) {
@@ -40,7 +42,7 @@ final class ExistingPart implements Part {
 	}
 
 	public function print(Output\Format $format): Output\Format {
-		$format->with('url', $this->url)
+		$format->with('url', $this->url->reference())
 			->with('expression', $this->expression);
 	}
 
@@ -54,7 +56,7 @@ final class ExistingPart implements Part {
 			FROM parts
 			WHERE page_url IS NOT DISTINCT FROM ?
 			AND expression IS NOT DISTINCT FROM ?',
-			[$this->url, $this->expression]
+			[$this->url->reference(), $this->expression]
 		);
 	}
 }

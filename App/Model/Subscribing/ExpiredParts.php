@@ -50,19 +50,19 @@ final class ExpiredParts implements Parts {
 					new HtmlPart(
 						new XPathExpression(
 							new HtmlWebPage(
-								new Uri\FakeUri($row['url']),
+								new Uri\ValidUrl($row['url']),
 								$this->http
 							),
 							$row['expression']
 						),
 						new ConstantPage(
 							new HtmlWebPage(
-								new Uri\FakeUri($row['url']),
+								new Uri\ValidUrl($row['url']),
 								$this->http
 							),
 							$row['page_content']
 						)
-					), $row['url'],
+					), new Uri\ValidUrl($row['url']),
 					$row['expression'],
 					$this->database
 				);

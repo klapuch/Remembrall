@@ -2,7 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\Output;
+use Klapuch\{
+    Output, Uri
+};
 
 /**
  * Constant part without roundtrips
@@ -32,6 +34,6 @@ final class ConstantPart implements Part {
 
 	public function print(Output\Format $format): Output\Format {
 		return $this->origin->print($format)
-			->with('url', $this->url);
+			->with('url', $this->url->reference());
 	}
 }

@@ -3,7 +3,9 @@ declare(strict_types = 1);
 namespace Remembrall\Page;
 
 use Remembrall\Model\Subscribing;
-use Klapuch\Output;
+use Klapuch\{
+    Output, Uri
+};
 use Tracy\Debugger;
 
 final class PartsPage extends BasePage {
@@ -36,6 +38,21 @@ final class PartsPage extends BasePage {
 					)
 				)
 			)
-		))->render(['baseUrl' => $this->baseUrl->reference()]);
-	}
+        ))->render([
+            'baseUrl' => $this->baseUrl->reference(),
+        ]);
+    }
+
+    public function handleDelete($expression, $url) {
+        try {
+            (new Subscribing\OwnedSubscription(
+                new Uri\ValidUrl($url),
+                $expression,
+                $this->subscriber,
+                $this->database
+            ))->cancel();
+        } catch(\Throwable $ex) {
+            echo $ex->getMessage();
+        }
+    }
 }

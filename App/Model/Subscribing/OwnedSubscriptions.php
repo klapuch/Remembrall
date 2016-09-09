@@ -38,7 +38,7 @@ final class OwnedSubscriptions implements Subscriptions {
 			function($subscriptions, array $row) {
 				$subscriptions[] = new ConstantSubscription(
 					new OwnedSubscription(
-						$row['url'],
+                        new Uri\ValidUrl($row['url']),
 						$row['expression'],
 						$this->owner,
 						$this->database

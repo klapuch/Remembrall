@@ -46,19 +46,19 @@ final class ExpiredParts extends TestCase\Database {
 				new Subscribing\HtmlPart(
 					new Subscribing\XPathExpression(
 						new Subscribing\HtmlWebPage(
-							new Uri\FakeUri('www.google.com'),
+							new Uri\ValidUrl('www.google.com'),
 							new GuzzleHttp\Client()
 						),
 						'//c'
 					),
 					new Subscribing\ConstantPage(
 						new Subscribing\HtmlWebPage(
-							new Uri\FakeUri('www.google.com'),
+							new Uri\ValidUrl('www.google.com'),
 							new GuzzleHttp\Client()
 						),
 						'google'
 					)
-				), 'www.google.com',
+				), new Uri\ValidUrl('www.google.com'),
 				'//c',
 				$this->database
 			),
@@ -69,19 +69,19 @@ final class ExpiredParts extends TestCase\Database {
 				new Subscribing\HtmlPart(
 					new Subscribing\XPathExpression(
 						new Subscribing\HtmlWebPage(
-							new Uri\FakeUri('www.google.com'),
+							new Uri\ValidUrl('www.google.com'),
 							new GuzzleHttp\Client()
 						),
 						'//a'
 					),
 					new Subscribing\ConstantPage(
 						new Subscribing\HtmlWebPage(
-							new Uri\FakeUri('www.google.com'),
+							new Uri\ValidUrl('www.google.com'),
 							new GuzzleHttp\Client()
 						),
 						'google'
 					)
-				), 'www.google.com',
+				), new Uri\ValidUrl('www.google.com'),
 				'//a',
 				$this->database
 			),

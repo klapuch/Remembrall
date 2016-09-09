@@ -10,7 +10,9 @@ use Remembrall\Model\{
 };
 use Remembrall\TestCase;
 use Tester\Assert;
-use Klapuch\Time;
+use Klapuch\{
+    Time, Uri
+};
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -20,7 +22,7 @@ final class OwnedSubscription extends TestCase\Database {
 	 */
 	public function testCancelingForeign() {
 		(new Subscribing\OwnedSubscription(
-			'www.google.com',
+            new Uri\FakeUri('www.google.com'),
 			'//b',
 			new Access\FakeSubscriber(666),
 			$this->database
@@ -29,7 +31,7 @@ final class OwnedSubscription extends TestCase\Database {
 
 	public function testCancelingOwned() {
 		(new Subscribing\OwnedSubscription(
-			'www.facedown.cz',
+            new Uri\FakeUri('www.facedown.cz'),
 			'//b',
 			new Access\FakeSubscriber(666),
 			$this->database
@@ -44,7 +46,7 @@ final class OwnedSubscription extends TestCase\Database {
 	 */
 	public function testEditingForeign() {
 		(new Subscribing\OwnedSubscription(
-			'www.google.com',
+            new Uri\FakeUri('www.google.com'),
 			'//b',
 			new Access\FakeSubscriber(666),
 			$this->database
@@ -53,7 +55,7 @@ final class OwnedSubscription extends TestCase\Database {
 
 	public function testEditingOwned() {
 		(new Subscribing\OwnedSubscription(
-			'www.facedown.cz',
+            new Uri\FakeUri('www.facedown.cz'),
 			'//b',
 			new Access\FakeSubscriber(666),
 			$this->database

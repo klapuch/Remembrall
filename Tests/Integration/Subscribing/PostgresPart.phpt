@@ -10,6 +10,7 @@ use Remembrall\Model\{
 };
 use Remembrall\TestCase;
 use Tester\Assert;
+use Klapuch\Uri;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -18,8 +19,8 @@ final class PostgresPart extends TestCase\Database {
 		Assert::same(
 			'd',
 			(new Subscribing\PostgresPart(
-				new Subscribing\FakePart(),
-				'www.facedown.cz',
+                new Subscribing\FakePart(),
+                new Uri\FakeUri('www.facedown.cz'),
 				'//d',
 				$this->database
 			))->content()
@@ -29,7 +30,7 @@ final class PostgresPart extends TestCase\Database {
 	public function testRefreshingPart() {
 		(new Subscribing\PostgresPart(
 			new Subscribing\FakePart('NEW_CONTENT'),
-			'www.facedown.cz',
+            new Uri\FakeUri('www.facedown.cz'),
 			'//d',
 			$this->database
 		))->refresh();

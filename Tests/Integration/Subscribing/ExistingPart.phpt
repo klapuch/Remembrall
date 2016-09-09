@@ -11,6 +11,7 @@ use Remembrall\Model\{
 };
 use Remembrall\TestCase;
 use Tester\Assert;
+use Klapuch\Uri;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -18,8 +19,8 @@ final class ExistingPart extends TestCase\Database {
 	public function testUnknownPart() {
 		Assert::exception(function() {
 			(new Subscribing\ExistingPart(
-				new Subscribing\FakePart(),
-				'www.facedown.cz',
+                new Subscribing\FakePart(),
+                new Uri\FakeUri('www.facedown.cz'),
 				'//xxxx',
 				$this->database
 			))->content();
@@ -27,7 +28,7 @@ final class ExistingPart extends TestCase\Database {
 		Assert::exception(function() {
 			(new Subscribing\ExistingPart(
 				new Subscribing\FakePart(),
-				'www.facedown.cz',
+                new Uri\FakeUri('www.facedown.cz'),
 				'//xxxx',
 				$this->database
 			))->refresh();
@@ -42,7 +43,7 @@ final class ExistingPart extends TestCase\Database {
 		Assert::noError(function() {
 			(new Subscribing\ExistingPart(
 				new Subscribing\FakePart('notEmpty'),
-				'www.facedown.cz',
+                new Uri\FakeUri('www.facedown.cz'),
 				'//d',
 				$this->database
 			))->content();
@@ -50,7 +51,7 @@ final class ExistingPart extends TestCase\Database {
 		Assert::noError(function() {
 			(new Subscribing\ExistingPart(
 				new Subscribing\FakePart(),
-				'www.facedown.cz',
+                new Uri\FakeUri('www.facedown.cz'),
 				'//d',
 				$this->database
 			))->refresh();

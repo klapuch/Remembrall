@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <template>
-	<default>
-		<title>Subscription</title>
-		<description>Subscribe a new part</description>
-		<forms>
-			<subscribing>
-				<label>
-					<url>URL</url>
-					<expression>XPath expression</expression>
-					<interval>Interval</interval>
-				</label>
-				<placeholder>
-					<url>http://www.facedown.cz</url>
-					<expression>//h1</expression>
-					<interval>32</interval>
-				</placeholder>
-				<submit>
-					<act>Subscribe</act>
-				</submit>
-			</subscribing>
-		</forms>
-	</default>
+    <default>
+        <title>Subscription</title>
+        <description>Subscribe a new part</description>
+        <forms>
+            <subscribing>
+                <label>
+                    <url>URL</url>
+                    <expression>XPath expression</expression>
+                    <interval>Interval</interval>
+                </label>
+                <placeholder>
+                    <url>http://www.facedown.cz</url>
+                    <expression>//h1</expression>
+                    <interval>32</interval>
+                </placeholder>
+                <submit>
+                    <act>Subscribe</act>
+                </submit>
+            </subscribing>
+        </forms>
+    </default>
 </template>

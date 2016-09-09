@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <assets>
-	<styles>
-		<style>
-			<href>https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css</href>
-			<integrity>sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u</integrity>
-			<crossorigin>anonymous</crossorigin>
-		</style>
-	</styles>
-	<scripts>
-		<script>
-			<src>https://code.jquery.com/jquery-3.1.0.min.js</src>
-		</script>
-		<script>
-			<src>https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js</src>
-			<integrity>sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa</integrity>
-			<crossorigin>anonymous</crossorigin>
-		</script>
-	</scripts>
+    <styles>
+        <style>
+            <href>https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css</href>
+            <integrity>sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u</integrity>
+            <crossorigin>anonymous</crossorigin>
+        </style>
+    </styles>
+    <scripts>
+        <script>
+            <src>https://code.jquery.com/jquery-3.1.0.min.js</src>
+        </script>
+        <script>
+            <src>https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js</src>
+            <integrity>sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa</integrity>
+            <crossorigin>anonymous</crossorigin>
+        </script>
+    </scripts>
 </assets>
