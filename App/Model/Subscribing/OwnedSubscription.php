@@ -56,7 +56,7 @@ final class OwnedSubscription implements Subscription {
 				AND expression IS NOT DISTINCT FROM ?
 			)',
 			[
-				sprintf('PT%dS', $interval->step()),
+				sprintf('PT%dS', $interval->step()), #TODO
 				$this->owner->id(),
 				$this->url->reference(),
 				$this->expression

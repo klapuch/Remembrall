@@ -11,16 +11,16 @@ use Klapuch\{
  */
 final class PostgresPage implements Page {
     private $origin;
-    private $uri;
+    private $url;
     private $database;
 
     public function __construct(
         Page $origin,
-		Uri\Uri $uri,
+		Uri\Uri $url,
         Storage\Database $database
     ) {
         $this->origin = $origin;
-        $this->uri = $uri;
+        $this->url = $url;
         $this->database = $database;
     }
 
@@ -31,7 +31,7 @@ final class PostgresPage implements Page {
                 'SELECT content
                 FROM pages
                 WHERE url IS NOT DISTINCT FROM ?',
-                [$this->uri->reference()]
+                [$this->url->reference()]
             )
         );
         return $content;
@@ -43,7 +43,7 @@ final class PostgresPage implements Page {
             'UPDATE pages
             SET content = ?
             WHERE url IS NOT DISTINCT FROM ?',
-            [$refreshedPage->content()->saveHTML(), $this->uri->reference()]
+            [$refreshedPage->content()->saveHTML(), $this->url->reference()]
         );
         return $this;
     }

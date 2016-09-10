@@ -8,6 +8,7 @@ use Klapuch\Output;
  * Part on the html page (in the html format)
  */
 final class HtmlPart implements Part {
+    const EMPTY_PART = '';
 	private $expression;
 	private $page;
 
@@ -17,14 +18,15 @@ final class HtmlPart implements Part {
 	}
 
 	public function content(): string {
-		return (string)array_reduce(
+		return array_reduce(
 			iterator_to_array($this->expression->matches()),
             function($previous, \DOMNode $node) {
                 $previous .= $this->withoutWhiteSpaces(
                     $node->ownerDocument->saveHTML($node)
                 );
 				return $previous;
-			}
+            },
+            self::EMPTY_PART
 		);
 	}
 

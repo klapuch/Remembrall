@@ -16,13 +16,13 @@ final class CollectiveParts implements Parts {
 		$this->database = $database;
 	}
 
-	public function add(Part $part, Uri\Uri $uri, string $expression): Part {
-        if(!$this->alreadyExists($uri, $expression)) {
+	public function add(Part $part, Uri\Uri $url, string $expression): Part {
+        if(!$this->alreadyExists($url, $expression)) {
             $this->database->query(
                 'INSERT INTO parts
                 (page_url, expression, content) VALUES
                 (?, ?, ?)',
-                [$uri->reference(), $expression, $part->content()]
+                [$url->reference(), $expression, $part->content()]
             );
         }
         return $part;
