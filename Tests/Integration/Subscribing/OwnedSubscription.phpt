@@ -63,7 +63,8 @@ final class OwnedSubscription extends TestCase\Database {
 			new Time\FakeInterval(
 				new \DateTimeImmutable('15:00'),
 				null,
-				44
+                null,
+                'PT44S'
 			)
 		);
 		$parts = $this->database->fetchAll('SELECT id, interval FROM subscriptions');
