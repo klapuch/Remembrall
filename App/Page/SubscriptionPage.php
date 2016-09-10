@@ -91,7 +91,17 @@ final class SubscriptionPage extends BasePage {
                                         sprintf('PT%dM', $_POST['interval'])
                                     )
                                 ),
-                                [30 * 60, 9000 * 60] //TODO
+                                [
+                                    new Time\DateTimeInterval(
+                                        new \DateTimeImmutable(),
+                                        new \DateInterval('PT30M')
+                                    ),
+                                    new Time\DateTimeInterval(
+                                        new \DateTimeImmutable(),
+                                        new \DateInterval('PT9000M')
+                                    )
+
+                                ]
                             )
                         )
                     );
