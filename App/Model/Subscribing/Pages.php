@@ -12,10 +12,4 @@ interface Pages {
 	 * @return Page
 	 */
 	public function add(Uri\Uri $uri, Page $page): Page;
-
-	/**
-	 * Go through all the pages
-	 * @return Page[]
-	 */
-	public function iterate(): array;
 }

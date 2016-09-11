@@ -24,16 +24,6 @@ final class WebPages implements Pages {
         return $page;
 	}
 
-	public function iterate(): array {
-		return (array)array_reduce(
-			$this->database->fetchAll('SELECT content FROM pages'),
-			function($previous, array $row) {
-				$previous[] = new ConstantPage(new FakePage(), $row['content']);
-				return $previous;
-			}
-		);
-	}
-
 	/**
 	 * Does the url already exist?
 	 * @param Uri\Uri $uri
