@@ -85,18 +85,18 @@ final class SubscriptionPage extends BasePage {
                         $_POST['expression'],
                         new Time\FutureInterval(
                             new Time\LimitedInterval(
-                                new Time\DateTimeInterval(
+                                new Time\TimeInterval(
                                     new \DateTimeImmutable(),
                                     new \DateInterval(
                                         sprintf('PT%dM', $_POST['interval'])
                                     )
                                 ),
                                 [
-                                    new Time\DateTimeInterval(
+                                    new Time\TimeInterval(
                                         new \DateTimeImmutable(),
                                         new \DateInterval('PT30M')
                                     ),
-                                    new Time\DateTimeInterval(
+                                    new Time\TimeInterval(
                                         new \DateTimeImmutable(),
                                         new \DateInterval('PT9000M')
                                     )

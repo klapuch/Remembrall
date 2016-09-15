@@ -43,7 +43,7 @@ final class OwnedSubscriptions implements Subscriptions {
 						$this->owner,
 						$this->database
 					),
-					new Time\DateTimeInterval(
+					new Time\TimeInterval(
 						new \DateTimeImmutable((string)$row['visited_at']),
 						new \DateInterval($row['interval'])
 					),
@@ -71,7 +71,7 @@ final class OwnedSubscriptions implements Subscriptions {
 				)',
 				[
 					$this->owner->id(),
-					sprintf('PT%dS', $interval->step()),
+					$interval->iso(),
 					$expression,
 					$uri->reference()
 				]

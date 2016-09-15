@@ -35,7 +35,8 @@ abstract class Cache {
 		if($this->cache->read($key) === null) {
 			$this->cache->write(
 				$key,
-				$this->origin->$method(...$args)
+				$this->origin->$method(...$args),
+				[]
 			);
 		}
 		return $this->cache->read($key);
