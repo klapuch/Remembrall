@@ -63,7 +63,6 @@ final class OwnedSubscription extends TestCase\Database {
 			new Time\FakeInterval(
 				new \DateTimeImmutable('15:00'),
 				null,
-                null,
                 'PT44S'
 			)
 		);

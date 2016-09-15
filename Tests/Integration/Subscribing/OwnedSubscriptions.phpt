@@ -36,7 +36,7 @@ final class OwnedSubscriptions extends TestCase\Database {
             new Time\FakeInterval(
                 new \DateTimeImmutable('01:01'),
                 null,
-				120
+				'PT120S'
             )
         );
 		$parts = $this->database->fetchAll(
@@ -77,7 +77,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 			new Time\FakeInterval(
 				new \DateTimeImmutable('01:01'),
 				null,
-				120
+				'PT120S'
 			)
 		);
 		Assert::exception(function() use($parts) {
@@ -87,7 +87,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 				new Time\FakeInterval(
 					new \DateTimeImmutable('01:01'),
 					null,
-					120
+					'PT120S'
 				)
 			);
 		}, 'Remembrall\Exception\DuplicateException');
