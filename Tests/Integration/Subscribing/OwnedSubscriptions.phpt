@@ -95,7 +95,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 		Assert::count(1, $this->database->fetchAll('SELECT id FROM part_visits'));
 	}
 
-	public function testIteratingOwnedSubscriptions() {
+	public function testPrintingOwnedSubscriptions() {
 		$this->database->query(
 			"INSERT INTO parts (page_url, expression, content) VALUES
 			('https://www.google.com', '//a', 'a'),
@@ -105,10 +105,10 @@ final class OwnedSubscriptions extends TestCase\Database {
 		);
 		$this->database->query(
 			"INSERT INTO subscriptions (part_id, subscriber_id, interval, last_update) VALUES
-			(1, 1, 'PT1M', NOW()),
-			(2, 2, 'PT2M', NOW()),
-			(3, 1, 'PT3M', NOW()),
-			(4, 1, 'PT4M', NOW())"
+			(1, 1, 'PT1M', '1993-01-01'),
+			(2, 2, 'PT2M', '1994-01-01'),
+			(3, 1, 'PT3M', '1996-01-01'),
+			(4, 1, 'PT4M', '1997-01-01')"
 		);
 		$this->purge(['part_visits']);
 		$this->database->query(
@@ -119,15 +119,15 @@ final class OwnedSubscriptions extends TestCase\Database {
 			(3, '2002-01-01 01:01:01'),
 			(4, '2003-01-01 01:01:01')"
 		);
-		$parts = (new Subscribing\OwnedSubscriptions(
+		$subscriptions = (new Subscribing\OwnedSubscriptions(
 			new Access\FakeSubscriber(1, 'idk@email.cz'),
 			$this->database
-		))->iterate();
-		Assert::count(3, $parts);
-		Assert::contains('2008-01-01 01:01', (string)$parts[0]->print(new Output\Xml([])));
-		Assert::contains('2003-01-01 01:01', (string)$parts[1]->print(new Output\Xml([])));
-		Assert::contains('2002-01-01 01:01', (string)$parts[2]->print(new Output\Xml([])));
-	}
+		))->print(new Output\FakeFormat(''));
+		Assert::count(3, $subscriptions);
+        Assert::contains('1993-01-01', (string)$subscriptions[0]);
+        Assert::contains('1997-01-01', (string)$subscriptions[1]);
+        Assert::contains('1996-01-01', (string)$subscriptions[2]);
+    }
 
 	public function testEmptySubscriptions() {
 		Assert::same(
@@ -135,7 +135,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 			(new Subscribing\OwnedSubscriptions(
 				new Access\FakeSubscriber(1),
 				$this->database
-			))->iterate()
+			))->print(new Output\FakeFormat(''))
 		);
 	}
 

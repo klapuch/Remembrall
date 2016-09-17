@@ -4,7 +4,7 @@ namespace Remembrall\Model\Subscribing;
 
 use Tracy;
 use Klapuch\{
-    Uri, Time
+    Uri, Time, Output
 };
 
 /**
@@ -32,9 +32,9 @@ final class LoggedSubscriptions implements Subscriptions {
 		}
 	}
 
-	public function iterate(): array {
+	public function print(Output\Format $format): array {
 		try {
-			return $this->origin->iterate();
+			return $this->origin->print($format);
 		} catch(\Throwable $ex) {
 			$this->logger->log($ex, Tracy\Logger::ERROR);
 			throw $ex;

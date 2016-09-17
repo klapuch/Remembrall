@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Storage, Uri, Time
+	Storage, Uri, Time, Output
 };
 use Remembrall\Model\Access;
 use Remembrall\Exception\DuplicateException;
@@ -20,38 +20,39 @@ final class OwnedSubscriptions implements Subscriptions {
 		$this->database = $database;
 	}
 
-	public function iterate(): array {
-		return (array)array_reduce(
-			$this->database->fetchAll(
-				'SELECT expression, page_url AS url, interval, visited_at, last_update
-				FROM parts
-				INNER JOIN (
-					SELECT part_id, MAX(visited_at) AS visited_at
-					FROM part_visits
-					GROUP BY part_id
-				) AS part_visits ON parts.id = part_visits.part_id
-				INNER JOIN subscriptions ON subscriptions.part_id = parts.id
-				WHERE subscriptions.subscriber_id IS NOT DISTINCT FROM ?
-				ORDER BY visited_at DESC',
-				[$this->owner->id()]
-			),
-			function($subscriptions, array $row) {
-				$subscriptions[] = new ConstantSubscription(
-					new OwnedSubscription(
-                        new Uri\ValidUrl($row['url']),
-						$row['expression'],
-						$this->owner,
-						$this->database
-					),
-					new Time\TimeInterval(
-						new \DateTimeImmutable((string)$row['visited_at']),
-						new \DateInterval($row['interval'])
-					),
-					new \DateTimeImmutable($row['last_update'])
-				);
-				return $subscriptions;
-			}
-		);
+	public function print(Output\Format $format): array {
+        $rows = $this->database->fetchAll(
+            'SELECT expression, page_url AS url, interval, visited_at, last_update
+            FROM parts
+            INNER JOIN (
+                SELECT part_id, MAX(visited_at) AS visited_at
+                FROM part_visits
+                GROUP BY part_id
+            ) AS part_visits ON parts.id = part_visits.part_id
+            INNER JOIN subscriptions ON subscriptions.part_id = parts.id
+            WHERE subscriptions.subscriber_id IS NOT DISTINCT FROM ?
+            ORDER BY visited_at DESC',
+            [$this->owner->id()]
+        );
+        return (array)array_reduce(
+            array_map(
+                function(array $row) use($format) {
+                    return $format->with('expression', $row['expression'])
+                        ->with('url', $row['url'])
+                        ->with(
+                            'interval',
+                            new Time\TimeInterval(
+                                new \DateTimeImmutable($row['visited_at']),
+                                new \DateInterval($row['interval'])
+                            )
+                        )
+                        ->with('lastUpdate', $row['last_update']);
+                },
+                $rows
+            ), function($formats, $format) {
+                $formats[] = $format;
+            return $formats;
+        });
 	}
 
 	public function subscribe(

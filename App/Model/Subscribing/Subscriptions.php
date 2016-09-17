@@ -4,15 +4,15 @@ namespace Remembrall\Model\Subscribing;
 
 use Remembrall\Exception\DuplicateException;
 use Klapuch\{
-    Uri, Time
+    Uri, Time, Output
 };
 
 interface Subscriptions {
 	/**
-	 * Go through all the subscriptions
-	 * @return Subscription[]
+	 * Print itself
+	 * @return Output\Format[]
 	 */
-	public function iterate(): array;
+	public function print(Output\Format $format): array;
 
 	/**
 	 * @param Uri\Uri $uri
