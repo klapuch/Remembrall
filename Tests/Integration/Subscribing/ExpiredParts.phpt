@@ -9,7 +9,9 @@ use GuzzleHttp;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
-use Klapuch\Uri;
+use Klapuch\{
+	Uri, Http
+};
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -37,8 +39,7 @@ final class ExpiredParts extends TestCase\Database {
 		);
 		$parts = (new Subscribing\ExpiredParts(
 			new Subscribing\FakeParts(),
-			$this->database,
-			new GuzzleHttp\Client()
+			$this->database
 		))->iterate();
 		Assert::count(2, $parts);
 		Assert::equal(
@@ -46,14 +47,14 @@ final class ExpiredParts extends TestCase\Database {
 				new Subscribing\HtmlPart(
 					new Subscribing\XPathExpression(
 						new Subscribing\HtmlWebPage(
-							new Uri\ValidUrl('www.google.com'),
+							new Http\BasicRequest('GET', new Uri\ValidUrl('www.google.com')),
 							new GuzzleHttp\Client()
 						),
 						'//c'
 					),
 					new Subscribing\ConstantPage(
 						new Subscribing\HtmlWebPage(
-							new Uri\ValidUrl('www.google.com'),
+							new Http\BasicRequest('GET', new Uri\ValidUrl('www.google.com')),
 							new GuzzleHttp\Client()
 						),
 						'google'
@@ -69,14 +70,14 @@ final class ExpiredParts extends TestCase\Database {
 				new Subscribing\HtmlPart(
 					new Subscribing\XPathExpression(
 						new Subscribing\HtmlWebPage(
-							new Uri\ValidUrl('www.google.com'),
+							new Http\BasicRequest('GET', new Uri\ValidUrl('www.google.com')),
 							new GuzzleHttp\Client()
 						),
 						'//a'
 					),
 					new Subscribing\ConstantPage(
 						new Subscribing\HtmlWebPage(
-							new Uri\ValidUrl('www.google.com'),
+							new Http\BasicRequest('GET', new Uri\ValidUrl('www.google.com')),
 							new GuzzleHttp\Client()
 						),
 						'google'
@@ -94,8 +95,7 @@ final class ExpiredParts extends TestCase\Database {
 			[],
 			(new Subscribing\ExpiredParts(
 				new Subscribing\FakeParts(),
-				$this->database,
-				new GuzzleHttp\Client()
+				$this->database
 			))->iterate()
 		);
 	}

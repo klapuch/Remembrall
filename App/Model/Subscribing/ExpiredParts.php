@@ -3,9 +3,8 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Storage, Uri
+	Storage, Uri, Http
 };
-use GuzzleHttp;
 
 /**
  * All the parts which are needed to visit because they are no more valid
@@ -13,16 +12,10 @@ use GuzzleHttp;
 final class ExpiredParts implements Parts {
 	private $origin;
 	private $database;
-	private $http;
 
-	public function __construct(
-		Parts $origin,
-		Storage\Database $database,
-		GuzzleHttp\ClientInterface $http
-	) {
+	public function __construct(Parts $origin, Storage\Database $database ) {
 		$this->origin = $origin;
 		$this->database = $database;
-		$this->http = $http;
 	}
 
 	public function add(Part $part, Uri\Uri $uri, string $expression): Part {
@@ -50,15 +43,19 @@ final class ExpiredParts implements Parts {
 					new HtmlPart(
 						new XPathExpression(
 							new HtmlWebPage(
-								new Uri\ValidUrl($row['url']),
-								$this->http
+								new Http\BasicRequest(
+									'GET',
+									new Uri\ValidUrl($row['url'])
+								)
 							),
 							$row['expression']
 						),
 						new ConstantPage(
 							new HtmlWebPage(
-								new Uri\ValidUrl($row['url']),
-								$this->http
+								new Http\BasicRequest(
+									'GET',
+									new Uri\ValidUrl($row['url'])
+								)
 							),
 							$row['page_content']
 						)

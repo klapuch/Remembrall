@@ -6,7 +6,6 @@ use Nette\Mail;
 use Remembrall\Model\{
     Email, Subscribing
 };
-use GuzzleHttp;
 
 final class CronPage extends BasePage {
     /** @var Mail\IMailer @inject */
@@ -16,8 +15,7 @@ final class CronPage extends BasePage {
         $parts = new Subscribing\ChangedParts(
             new Subscribing\ExpiredParts(
                 new Subscribing\CollectiveParts($this->database),
-                $this->database,
-                new GuzzleHttp\Client(['http_errors' => false])
+                $this->database
             )
         );
         /** @var Subscribing\Part $part */

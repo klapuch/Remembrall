@@ -2,62 +2,32 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use GuzzleHttp;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Exception\RequestException;
-use Psr\Http\Message\ResponseInterface;
 use Remembrall\Exception\NotFoundException;
-use Klapuch\Uri;
+use Klapuch\Http;
 
 /**
- * Fresh html page downloaded from the internet
+ * Html web page downloaded from the internet
  */
 final class HtmlWebPage implements Page {
-	private $uri;
-	private $http;
-	const ALLOWED_CONTENT_TYPE = 'text/html';
+    const CONTENT_TYPE = 'text/html';
+	private $request;
 
-	public function __construct(
-		Uri\Uri $uri,
-		GuzzleHttp\ClientInterface $http
-	) {
-		$this->uri = $uri;
-		$this->http = $http;
+	public function __construct(Http\Request $request) {
+		$this->request = $request;
 	}
 
 	public function content(): \DOMDocument {
-		try {
-			$response = $this->http->send(
-				new Request('GET', $this->uri->reference())
-			);
-			if(!$this->isAvailable($response)) {
-				throw new NotFoundException(
-					sprintf(
-						'Content could not be retrieved because of "%s"',
-						sprintf(
-							'%d %s',
-							$response->getStatusCode(),
-							$response->getReasonPhrase()
-						)
-					)
-				);
-			} elseif(!$this->isHtml($response)) {
-				throw new NotFoundException(
-					sprintf(
-						'Page "%s" is not in HTML format',
-						$this->uri->reference()
-					)
-				);
-			}
+        try {
+            $response = new Http\StrictResponse(
+                ['Content-Type' => self::CONTENT_TYPE],
+                new Http\AvailableResponse($this->request->send())
+            );
 			$dom = new DOM();
-			$dom->loadHTML((string)$response->getBody());
+			$dom->loadHTML($response->body());
 			return $dom;
-		} catch(RequestException $ex) {
+		} catch(\Exception $ex) {
 			throw new NotFoundException(
-				sprintf(
-					'Page "%s" is unreachable. Does the URL exist?',
-					$this->uri->reference()
-				),
+                'Page is unreachable. Does the URL exist?',
 				$ex->getCode(),
 				$ex
 			);
@@ -65,34 +35,6 @@ final class HtmlWebPage implements Page {
 	}
 
 	public function refresh(): Page {
-		return new self($this->uri, $this->http);
-	}
-
-	/**
-	 * Is the response in html format?
-	 * @param ResponseInterface $response
-	 * @return bool
-	 */
-	private function isHtml(ResponseInterface $response): bool {
-		$contentType = current($response->getHeader('Content-Type'));
-		if(!empty($contentType)) {
-			if($contentType !== self::ALLOWED_CONTENT_TYPE) {
-				foreach(explode(';', $contentType) as $value)
-					if(strcasecmp($value, self::ALLOWED_CONTENT_TYPE) === 0)
-						return true;
-				return false;
-			}
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Is the page without error and therefore available?
-	 * @param ResponseInterface $response
-	 * @return bool
-	 */
-	private function isAvailable(ResponseInterface $response) {
-		return $response->getStatusCode() < 400;
+		return new self($this->request);
 	}
 }

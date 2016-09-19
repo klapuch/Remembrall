@@ -2,9 +2,8 @@
 declare(strict_types = 1);
 namespace Remembrall\Page;
 
-use GuzzleHttp;
 use Klapuch\{
-    Output, Storage, Uri, Time
+    Output, Storage, Uri, Time, Http
 };
 use Remembrall\Model\Subscribing;
 use Nette\Caching\Storages;
@@ -36,8 +35,7 @@ final class SubscriptionPage extends BasePage {
 						$url,
 						new Subscribing\PostgresPage(
 							new Subscribing\HtmlWebPage(
-								$url,
-								new GuzzleHttp\Client(['http_errors' => false])
+								new Http\BasicRequest('GET', $url)
 							),
 							$url,
 							$this->database

@@ -33,7 +33,8 @@
         "klapuch/output": "@dev",
         "klapuch/ini": "@dev",
         "klapuch/uri": "@dev",
-        "klapuch/time": "@dev"
+        "klapuch/time": "@dev",
+        "klapuch/http": "@dev"
     },
     "require-dev": {
         "nette/tester": "^1.7",
