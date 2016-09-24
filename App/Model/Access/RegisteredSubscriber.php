@@ -5,9 +5,9 @@ namespace Remembrall\Model\Access;
 use Klapuch\Storage;
 
 /**
- * Subscriber in the Postgres database
+ * Already registered subscriber
  */
-final class PostgresSubscriber implements Subscriber {
+final class RegisteredSubscriber implements Subscriber {
 	private $id;
 	private $database;
 
@@ -18,7 +18,9 @@ final class PostgresSubscriber implements Subscriber {
 
 	public function email(): string {
 		return $this->database->fetchColumn(
-			'SELECT email FROM subscribers WHERE id = ?',
+            'SELECT email
+            FROM subscribers
+            WHERE id IS NOT DISTINCT FROM ?',
 			[$this->id()]
 		);
 	}

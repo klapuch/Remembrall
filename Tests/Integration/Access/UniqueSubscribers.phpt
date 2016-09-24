@@ -5,16 +5,18 @@
  */
 namespace Remembrall\Integration\Access;
 
-use Klapuch\Encryption;
+use Klapuch\{
+	Encryption, Storage
+};
 use Remembrall\Model\Access;
 use Remembrall\TestCase;
 use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class PostgresSubscribers extends TestCase\Database {
+final class UniqueSubscribers extends TestCase\Database {
 	public function testRegisteringBrandNewSubscriber() {
-		$subscriber = (new Access\PostgresSubscribers(
+		$subscriber = (new Access\UniqueSubscribers(
 			$this->database,
 			new Encryption\FakeCipher()
 		))->register('foo@bar.cz', 'passw0rt');
@@ -23,7 +25,7 @@ final class PostgresSubscribers extends TestCase\Database {
 			FROM subscribers'
 		);
 		Assert::equal(
-			new Access\PostgresSubscriber(1, $this->database),
+			new Access\RegisteredSubscriber(1, $this->database),
 			$subscriber
 		);
 		Assert::count(1, $subscribers);
@@ -32,14 +34,14 @@ final class PostgresSubscribers extends TestCase\Database {
 		Assert::same(1, $subscribers[0]['id']);
 	}
 
-	public function testRegistrationWithDuplicatedEmail() {
+	public function testRegisteringWithDuplicatedEmail() {
 		$this->database->query(
-			"INSERT INTO subscribers (id, email, password) VALUES
-			(1, 'foo@bar.cz', 'secret')"
+			"INSERT INTO subscribers (email, password) VALUES
+			('foo@bar.cz', 'secret')"
 		);
-		Assert::exception(
+		$ex = Assert::exception(
 			function() {
-				(new Access\PostgresSubscribers(
+				(new Access\UniqueSubscribers(
 					$this->database,
 					new Encryption\FakeCipher()
 				))->register('foo@bar.cz', 'passw0rt');
@@ -47,6 +49,7 @@ final class PostgresSubscribers extends TestCase\Database {
 			\Remembrall\Exception\DuplicateException::class,
 			'Email "foo@bar.cz" already exists'
 		);
+		Assert::type(Storage\UniqueConstraint::class, $ex->getPrevious());
 	}
 
     protected function prepareDatabase() {
@@ -54,4 +57,4 @@ final class PostgresSubscribers extends TestCase\Database {
     }
 }
 
-(new PostgresSubscribers)->run();
+(new UniqueSubscribers())->run();

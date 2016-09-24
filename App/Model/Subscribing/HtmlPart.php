@@ -2,10 +2,8 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\Output;
-
 /**
- * Part on the html page (in the html format)
+ * Part in html format
  */
 final class HtmlPart implements Part {
     const EMPTY_PART = '';
@@ -33,10 +31,6 @@ final class HtmlPart implements Part {
 	public function refresh(): Part {
 		return new self($this->expression, $this->page->refresh());
 	}
-
-	public function print(Output\Format $format): Output\Format {
-		return $format->with('expression', $this->expression);
-    }
 
     /**
      * Html without tabs and new lines (CR and LF)

@@ -14,7 +14,7 @@ use Klapuch\Http;
 require __DIR__ . '/../../bootstrap.php';
 
 final class HtmlWebPage extends Tester\TestCase {
-    public function testContentAsValidDom() {
+    public function testValidHtml() {
         Assert::contains(
             'Hi, there!',
             (new Subscribing\HtmlWebPage(
@@ -29,8 +29,23 @@ final class HtmlWebPage extends Tester\TestCase {
         );
     }
 
-    public function testErrorWithPassedPreviousMessage() {
-        $previous = Assert::exception(function() {
+    public function testInvalidHtml() {
+		$ex = Assert::exception(function() {
+			(new Subscribing\HtmlWebPage(
+                new Http\FakeRequest(
+                    new Http\FakeResponse(
+                        'body{}',
+                        ['Content-Type' => 'text/css'],
+                        200
+                    )
+                )
+            ))->content();
+		}, NotFoundException::class, 'Page is unreachable. Does the URL exist?');
+		Assert::type(\Exception::class, $ex->getPrevious());
+    }
+
+    public function testHttpError() {
+        $ex = Assert::exception(function() {
             (new Subscribing\HtmlWebPage(
                 new Http\FakeRequest(
                     new Http\FakeResponse(
@@ -41,7 +56,7 @@ final class HtmlWebPage extends Tester\TestCase {
                 )
             ))->content();
         }, NotFoundException::class, 'Page is unreachable. Does the URL exist?');
-        Assert::type(\Exception::class, $previous);
+        Assert::type(\Exception::class, $ex->getPrevious());
     }
 
     public function testRefreshing() {

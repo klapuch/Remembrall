@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.3
--- Dumped by pg_dump version 9.5.3
+-- Dumped from database version 9.5.4
+-- Dumped by pg_dump version 9.5.4
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -99,6 +99,40 @@ ALTER TABLE forgotten_passwords_id_seq OWNER TO postgres;
 --
 
 ALTER SEQUENCE forgotten_passwords_id_seq OWNED BY forgotten_passwords.id;
+
+
+--
+-- Name: notifications; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE notifications (
+    id integer NOT NULL,
+    subscription_id integer NOT NULL,
+    notified_at timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE notifications OWNER TO postgres;
+
+--
+-- Name: notifications_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE notifications_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE notifications_id_seq OWNER TO postgres;
+
+--
+-- Name: notifications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE notifications_id_seq OWNED BY notifications.id;
 
 
 --
@@ -333,6 +367,13 @@ ALTER TABLE ONLY forgotten_passwords ALTER COLUMN id SET DEFAULT nextval('forgot
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
+ALTER TABLE ONLY notifications ALTER COLUMN id SET DEFAULT nextval('notifications_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
 ALTER TABLE ONLY page_visits ALTER COLUMN id SET DEFAULT nextval('page_visits_id_seq'::regclass);
 
 
@@ -385,6 +426,14 @@ ALTER TABLE ONLY forgotten_passwords
 
 ALTER TABLE ONLY forgotten_passwords
     ADD CONSTRAINT forgotten_passwords_reminder UNIQUE (reminder);
+
+
+--
+-- Name: notifications_id; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY notifications
+    ADD CONSTRAINT notifications_id PRIMARY KEY (id);
 
 
 --
@@ -512,14 +561,14 @@ CREATE INDEX subscribed_parts_part_id ON subscriptions USING btree (part_id);
 
 
 --
--- Name: pages_ai; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: pages_aiu; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
 CREATE TRIGGER pages_aiu AFTER INSERT OR UPDATE ON pages FOR EACH ROW EXECUTE PROCEDURE record_page_access();
 
 
 --
--- Name: parts_ai; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: parts_aiu; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
 CREATE TRIGGER parts_aiu AFTER INSERT OR UPDATE ON parts FOR EACH ROW EXECUTE PROCEDURE record_part_access();
@@ -531,6 +580,14 @@ CREATE TRIGGER parts_aiu AFTER INSERT OR UPDATE ON parts FOR EACH ROW EXECUTE PR
 
 ALTER TABLE ONLY forgotten_passwords
     ADD CONSTRAINT forgotten_passwords_subscriber_id_fkey FOREIGN KEY (subscriber_id) REFERENCES subscribers(id) ON DELETE CASCADE;
+
+
+--
+-- Name: notifications_subscription_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY notifications
+    ADD CONSTRAINT notifications_subscription_id_fkey FOREIGN KEY (subscription_id) REFERENCES subscriptions(id) ON DELETE CASCADE;
 
 
 --

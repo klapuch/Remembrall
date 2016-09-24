@@ -5,16 +5,14 @@
  */
 namespace Remembrall\Unit\Subscribing;
 
-use Remembrall\Model\{
-	Subscribing
-};
+use Remembrall\Model\Subscribing;
 use Tester;
 use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
 final class HtmlPart extends Tester\TestCase {
-	public function testMergedHTMLNodes() {
+	public function testShrinkingHtml() {
 		$dom = new \DOMDocument();
 		$dom->loadHTML(
 			'
@@ -38,22 +36,22 @@ final class HtmlPart extends Tester\TestCase {
 		);
 	}
 
-	public function testEmptyNodes() {
+	public function testEmptyPart() {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<div><p>Blank</p></div>');
 		Assert::same(
 			'',
 			(new Subscribing\HtmlPart(
 				new Subscribing\FakeExpression(
-					'//p',
-					(new \DOMXPath($dom))->query('//span')
+					'//invalid',
+					(new \DOMXPath($dom))->query('//invalid')
 				),
 				new Subscribing\FakePage()
 			))->content()
 		);
 	}
 
-	public function testRefreshing() {
+	public function testRefreshingWithPage() {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>XXX</p>');
 		$refreshedPart = new Subscribing\FakePage($dom);

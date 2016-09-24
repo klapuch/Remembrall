@@ -17,8 +17,4 @@ final class CachedPart extends Storage\Cache implements Part {
 	public function refresh(): Part {
 		return $this->read(__FUNCTION__);
 	}
-
-	public function print(Output\Format $format): Output\Format {
-		return $this->read(__FUNCTION__, null, $format);
-	}
 }

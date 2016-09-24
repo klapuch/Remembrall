@@ -87,7 +87,7 @@ final class CachedPage extends TestCase\Database {
 		);
 	}
 
-	public function testExpiredCachingBecauseOfFirstVisit() {
+	public function testExpiredCachingAsFirstVisit() {
 		$this->truncate(['pages']);
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>Google</p>');

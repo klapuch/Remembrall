@@ -12,23 +12,6 @@ final class CronPage extends BasePage {
     public $mailer;
 
     public function actionDefault() {
-        $parts = new Subscribing\ChangedParts(
-            new Subscribing\ExpiredParts(
-                new Subscribing\CollectiveParts($this->database),
-                $this->database
-            )
-        );
-        /** @var Subscribing\Part $part */
-        foreach($parts->iterate() as $part) {
-            $this->mailer->send(
-                (new Email\NetteMessageFactory(
-                    new Email\SubscribingMessage(
-                        new Subscribing\TextPart($part),
-                        $this->database
-                    )
-                ))->create()
-            );
-        }
         echo 'OK';
     }
 }

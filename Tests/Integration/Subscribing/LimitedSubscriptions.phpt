@@ -18,12 +18,12 @@ use Klapuch\{
 require __DIR__ . '/../../bootstrap.php';
 
 final class LimitedSubscriptions extends TestCase\Database {
-	public function testSubscribingWithoutLimit() {
+	public function testSubscribingInLimit() {
 		Assert::noError(function() {
 			(new Subscribing\LimitedSubscriptions(
-				$this->database,
+				new Subscribing\FakeSubscriptions(),
 				new Access\FakeSubscriber(666),
-				new Subscribing\FakeSubscriptions()
+				$this->database
 			))->subscribe(
 				new Uri\FakeUri('url'),
 				'//p',
@@ -53,9 +53,9 @@ final class LimitedSubscriptions extends TestCase\Database {
 			(5, 666, 'PT5M', NOW())"
 		);
 		(new Subscribing\LimitedSubscriptions(
-			$this->database,
+			new Subscribing\FakeSubscriptions(),
 			new Access\FakeSubscriber(666),
-			new Subscribing\FakeSubscriptions()
+			$this->database
 		))->subscribe(
 			new Uri\FakeUri('url'),
 			'//p',

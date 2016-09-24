@@ -5,97 +5,54 @@
  */
 namespace Remembrall\Integration\Subscribing;
 
+use Remembrall\Exception\DuplicateException;
 use Remembrall\Model\{
 	Subscribing, Access
 };
 use Remembrall\TestCase;
 use Tester\Assert;
 use Klapuch\{
-	Output, Uri, Time
+	Output, Storage\UniqueConstraint, Uri, Time
 };
 
 require __DIR__ . '/../../bootstrap.php';
 
 final class OwnedSubscriptions extends TestCase\Database {
     public function testSubscribingBrandNew() {
-		$this->database->query(
-			"INSERT INTO parts (page_url, expression, content) VALUES
-			('www.google.com', '//p', 'a')"
-		);
-		$this->purge(['part_visits']);
-		$this->database->query(
-			"INSERT INTO part_visits (part_id, visited_at) VALUES
-			(1, '2000-01-01 01:01:01')"
-		);
 		(new Subscribing\OwnedSubscriptions(
 			new Access\FakeSubscriber(666),
             $this->database
         ))->subscribe(
 			new Uri\FakeUri('www.google.com'),
-			'//p',
-            new Time\FakeInterval(
-                new \DateTimeImmutable('01:01'),
-                null,
-				'PT120S'
-            )
+			'//google',
+            new Time\FakeInterval(null, null, 'PT120S')
         );
-		$parts = $this->database->fetchAll(
-			'SELECT subscriptions.part_id AS id, page_url, expression, interval 
-			FROM parts
-			INNER JOIN subscriptions ON subscriptions.part_id = parts.id'
-		);
-		Assert::count(1, $parts);
-		$part = current($parts);
-		Assert::same(1, $part['id']);
-		Assert::same('www.google.com', $part['page_url']);
-		Assert::same('//p', $part['expression']);
-		Assert::same('PT120S', $part['interval']);
-		$partVisits = $this->database->fetchAll('SELECT part_id, visited_at FROM part_visits');
-		Assert::count(1, $partVisits);
-		$partVisit = current($partVisits);
-		Assert::same(1, $partVisit['part_id']);
-		Assert::same('2000-01-01 01:01:01', (string)$partVisit['visited_at']);
+		$subscriptions = $this->database->fetchAll('SELECT * FROM subscriptions');
+		Assert::count(1, $subscriptions);
+		Assert::same(1, $subscriptions[0]['id']);
+		Assert::same(666, $subscriptions[0]['subscriber_id']);
+		Assert::same('PT120S', $subscriptions[0]['interval']);
     }
 
-	public function testSubscribingDuplicateWithRollback() {
-		$this->database->query(
-			"INSERT INTO parts (page_url, expression, content) VALUES
-			('www.google.com', '//p', 'a')"
-		);
-		$this->purge(['part_visits']);
-		$this->database->query(
-			"INSERT INTO part_visits (part_id, visited_at) VALUES
-			(1, '2000-01-01 01:01:01')"
-		);
-		$parts = new Subscribing\OwnedSubscriptions(
+    public function testSubscribingDuplication() {
+		$subscriptions = new Subscribing\OwnedSubscriptions(
 			new Access\FakeSubscriber(666),
-			$this->database
-		);
-		$parts->subscribe(
+            $this->database
+        );
+		$subscription = [
 			new Uri\FakeUri('www.google.com'),
-			'//p',
-			new Time\FakeInterval(
-				new \DateTimeImmutable('01:01'),
-				null,
-				'PT120S'
-			)
-		);
-		Assert::exception(function() use($parts) {
-			$parts->subscribe(
-				new Uri\FakeUri('www.google.com'),
-				'//p',
-				new Time\FakeInterval(
-					new \DateTimeImmutable('01:01'),
-					null,
-					'PT120S'
-				)
-			);
-		}, 'Remembrall\Exception\DuplicateException');
-		Assert::count(1, $this->database->fetchAll('SELECT id FROM parts'));
-		Assert::count(1, $this->database->fetchAll('SELECT id FROM part_visits'));
-	}
+			'//google',
+            new Time\FakeInterval(null, null, 'PT120S'),
+		];
+		$subscriptions->subscribe(...$subscription);
+		$ex = Assert::exception(function() use($subscription, $subscriptions) {
+			$subscriptions->subscribe(...$subscription);
+		}, DuplicateException::class, '"//google" expression on "www.google.com" page is already subscribed by you');
+		Assert::type(UniqueConstraint::class, $ex->getPrevious());
+		Assert::count(1, $this->database->fetchAll('SELECT * FROM subscriptions'));
+    }
 
-	public function testPrintingOwnedSubscriptions() {
+	public function testPrinting() {
 		$this->database->query(
 			"INSERT INTO parts (page_url, expression, content) VALUES
 			('https://www.google.com', '//a', 'a'),
@@ -110,7 +67,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 			(3, 1, 'PT3M', '1996-01-01'),
 			(4, 1, 'PT4M', '1997-01-01')"
 		);
-		$this->purge(['part_visits']);
+		$this->truncate(['part_visits']);
 		$this->database->query(
 			"INSERT INTO part_visits (part_id, visited_at) VALUES
 			(1, '2000-01-01 01:01:01'),
@@ -129,7 +86,7 @@ final class OwnedSubscriptions extends TestCase\Database {
         Assert::contains('1996-01-01', (string)$subscriptions[2]);
     }
 
-	public function testEmptySubscriptions() {
+	public function testEmptyPrinting() {
 		Assert::same(
 			[],
 			(new Subscribing\OwnedSubscriptions(
@@ -140,12 +97,16 @@ final class OwnedSubscriptions extends TestCase\Database {
 	}
 
     protected function prepareDatabase() {
-		$this->truncate(['parts', 'part_visits', 'pages', 'subscriptions']);
-		$this->restartSequence(['parts', 'part_visits', 'subscriptions']);
+		$this->truncate(['parts', 'pages', 'subscriptions']);
+		$this->restartSequence(['parts', 'subscriptions']);
 		$this->database->query(
 			"INSERT INTO pages (url, content) VALUES
 			('www.google.com', '<p>google</p>'),
 			('www.facedown.cz', '<p>facedown</p>')"
+		);
+		$this->database->query(
+			"INSERT INTO parts (page_url, expression, content) VALUES
+			('www.google.com', '//google', 'google content')"
 		);
     }
 }

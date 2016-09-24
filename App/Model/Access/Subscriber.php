@@ -4,7 +4,7 @@ namespace Remembrall\Model\Access;
 
 interface Subscriber {
 	/**
-	 * id of the subscriber
+	 * Id of the subscriber
 	 * @return int
 	 */
 	public function id(): int;

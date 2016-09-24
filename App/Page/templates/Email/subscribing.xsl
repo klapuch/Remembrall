@@ -14,7 +14,7 @@
         </xsl:element>
 
         <xsl:element name="p">
-            <xsl:value-of select="$content"/>
+            <xsl:value-of select="/part/content"/>
         </xsl:element>
 
     </body>

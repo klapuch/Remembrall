@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\Output;
-
 /**
  * Text part without tags or other elements
  */
@@ -20,9 +18,5 @@ final class TextPart implements Part {
 
 	public function refresh(): Part {
 		return $this->origin->refresh();
-	}
-
-	public function print(Output\Format $format): Output\Format {
-		return $this->origin->print($format);
 	}
 }

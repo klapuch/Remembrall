@@ -2,14 +2,15 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Access;
 
-use Klapuch\Storage;
-use Klapuch\Encryption;
+use Klapuch\{
+    Storage, Encryption
+};
 use Remembrall\Exception\DuplicateException;
 
 /**
- * Collection of subscribers stored in the Postgres database
+ * Collection of unique subscribers
  */
-final class PostgresSubscribers implements Subscribers {
+final class UniqueSubscribers implements Subscribers {
 	private $database;
 	private $cipher;
 
@@ -23,20 +24,18 @@ final class PostgresSubscribers implements Subscribers {
 
 	public function register(string $email, string $password): Subscriber {
 		try {
-			$id = (int)$this->database->fetchColumn(
+			$id = $this->database->fetchColumn(
 				'INSERT INTO subscribers(email, password) VALUES
 				(?, ?) RETURNING id',
 				[$email, $this->cipher->encrypt($password)]
 			);
-			return new PostgresSubscriber($id, $this->database);
+			return new RegisteredSubscriber($id, $this->database);
 		} catch(Storage\UniqueConstraint $ex) {
 			throw new DuplicateException(
-				sprintf('Email "%s" already exists', $email)
+				sprintf('Email "%s" already exists', $email),
+				$ex->getCode(),
+				$ex
 			);
 		}
-	}
-
-	public function iterate(): array {
-		throw new \Exception('Not implemented');
 	}
 }

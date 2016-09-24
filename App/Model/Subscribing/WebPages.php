@@ -13,28 +13,17 @@ final class WebPages implements Pages {
 		$this->database = $database;
 	}
 
-	public function add(Uri\Uri $uri, Page $page): Page {
-        if(!$this->alreadyExists($uri)) {
-            $this->database->query(
-                'INSERT INTO pages (url, content) VALUES
-                (?, ?)',
-                [$uri->reference(), $page->content()->saveHTML()]
-            );
-        }
-        return $page;
-	}
-
-	/**
-	 * Does the url already exist?
-	 * @param Uri\Uri $uri
-	 * @return bool
-	 */
-	private function alreadyExists(Uri\Uri $uri): bool {
-		return (bool)$this->database->fetchColumn(
-			'SELECT 1
-			FROM pages
-			WHERE url IS NOT DISTINCT FROM ?',
-			[$uri->reference()]
+	public function add(Uri\Uri $url, Page $page): Page {
+		$this->database->query(
+			'INSERT INTO pages (url, content)
+			VALUES (:url, :content)
+			ON CONFLICT (url) DO UPDATE
+			SET content = :content',
+			[
+				':url' => $url->reference(),
+				':content' => $page->content()->saveHTML(),
+			]
 		);
-	}
+		return $page;
+    }
 }

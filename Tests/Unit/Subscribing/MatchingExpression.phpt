@@ -11,25 +11,25 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class ValidXPathExpression extends Tester\TestCase {
+final class MatchingExpression extends Tester\TestCase {
 	/**
-     * @throws \Remembrall\Exception\NotFoundException For the given XPath expression there are no matches	
+     * @throws \Remembrall\Exception\NotFoundException For the given expression there are no matches
      */
-	public function testEmptyMatchWithError() {
+	public function testNoMatch() {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>Hi there!</p>');
-		(new Subscribing\ValidXPathExpression(
-			new Subscribing\FakeExpression('//foo', new \DOMNodeList())
+		(new Subscribing\MatchingExpression(
+			new Subscribing\FakeExpression('//invalid', new \DOMNodeList())
 		))->matches();
 	}
 
-	public function testMatchedSomeNodes() {
+	public function testMatchedNodes() {
 		Assert::noError(
 			function() {
 				$dom = new \DOMDocument();
 				$dom->loadHTML('<p>Hi there!</p>');
 				$nodeList = (new \DOMXPath($dom))->query('//p');
-				(new Subscribing\ValidXPathExpression(
+				(new Subscribing\MatchingExpression(
 					new Subscribing\FakeExpression('//p', $nodeList)
 				))->matches();
 			}
@@ -37,4 +37,4 @@ final class ValidXPathExpression extends Tester\TestCase {
 	}
 }
 
-(new ValidXPathExpression())->run();
+(new MatchingExpression())->run();

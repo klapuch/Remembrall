@@ -12,18 +12,18 @@ use Remembrall\Model\Access;
  */
 final class LimitedSubscriptions implements Subscriptions {
 	const LIMIT = 5;
-	private $database;
-	private $subscriber;
 	private $origin;
+	private $subscriber;
+	private $database;
 
 	public function __construct(
-		Storage\Database $database,
+		Subscriptions $origin,
 		Access\Subscriber $subscriber,
-		Subscriptions $origin
+		Storage\Database $database
 	) {
-		$this->database = $database;
-		$this->subscriber = $subscriber;
 		$this->origin = $origin;
+		$this->subscriber = $subscriber;
+		$this->database = $database;
 	}
 
 	public function subscribe(

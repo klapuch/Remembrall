@@ -12,9 +12,7 @@ final class SubscriptionPage extends BasePage {
     public function renderDefault() {
         echo (new Output\XsltTemplate(
             self::TEMPLATES . '/Subscription/default.xsl',
-            new Output\RemoteXml(
-                self::TEMPLATES . '/Subscription/default.xml'
-            )
+            new Output\RemoteXml(self::TEMPLATES . '/Subscription/default.xml')
         ))->render(['baseUrl' => $this->baseUrl->reference()]);
     }
 
@@ -48,14 +46,12 @@ final class SubscriptionPage extends BasePage {
             (new Storage\PostgresTransaction($this->database))->start(
                 function() use ($page, $url) {
                     (new Subscribing\LoggedParts(
-                        new Subscribing\CollectiveParts(
-                            $this->database
-                        ),
+                        new Subscribing\CollectiveParts($this->database),
                         $this->logger
                     ))->add(
                         new Subscribing\CachedPart(
                             new Subscribing\HtmlPart(
-                                new Subscribing\ValidXPathExpression(
+                                new Subscribing\MatchingExpression(
                                     new Subscribing\XPathExpression(
                                         $page,
                                         $_POST['expression']
@@ -70,12 +66,13 @@ final class SubscriptionPage extends BasePage {
                     );
                     (new Subscribing\LoggedSubscriptions(
                         new Subscribing\LimitedSubscriptions(
-                            $this->database,
-                            $this->subscriber,
-                            new Subscribing\OwnedSubscriptions(
+                        	new Subscribing\OwnedSubscriptions(
                                 $this->subscriber,
                                 $this->database
-                            )
+                            ),
+                            $this->subscriber,
+							$this->database
+
                         ),
                         $this->logger
                     ))->subscribe(
@@ -105,11 +102,7 @@ final class SubscriptionPage extends BasePage {
                     );
                 }
             );
-            header(
-                sprintf(
-                    'Location: %s', $this->link('Parts:default')
-                )
-            );
+            header(sprintf('Location: %s', $this->link('Parts:default')));
             exit;
         } catch(\Throwable $ex) {
             echo $ex->getMessage();

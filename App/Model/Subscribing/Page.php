@@ -16,5 +16,5 @@ interface Page {
 	 * Refreshed page
 	 * @return Page
 	 */
-	public function refresh(): Page; //todo because of mockery, should be self
+	public function refresh(): Page;
 }

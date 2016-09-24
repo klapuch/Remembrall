@@ -20,10 +20,12 @@ final class LoggedSubscription extends TestCase\Mockery {
 	 */
 	public function testLoggedExceptionDuringCanceling() {
 		$ex = new \Exception('exceptionMessage');
+		$subscription = $this->mockery(Subscribing\Subscription::class);
+		$subscription->shouldReceive('cancel')->andThrowExceptions([$ex]);
 		$logger = $this->mockery('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
 		(new Subscribing\LoggedSubscription(
-			new Subscribing\FakeSubscription($ex),
+			$subscription,
 			$logger
 		))->cancel();
 	}
@@ -44,10 +46,12 @@ final class LoggedSubscription extends TestCase\Mockery {
 	 */
 	public function testLoggedExceptionDuringEditing() {
 		$ex = new \Exception('exceptionMessage');
+		$subscription = $this->mockery(Subscribing\Subscription::class);
+		$subscription->shouldReceive('edit')->andThrowExceptions([$ex]);
 		$logger = $this->mockery('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
 		(new Subscribing\LoggedSubscription(
-			new Subscribing\FakeSubscription($ex),
+			$subscription,
 			$logger
 		))->edit(new Time\FakeInterval());
 	}
@@ -66,23 +70,25 @@ final class LoggedSubscription extends TestCase\Mockery {
 	/**
 	 * @throws \Exception exceptionMessage
 	 */
-	public function testLoggedExceptionDuringPrinting() {
+	public function testLoggedExceptionDuringNotifying() {
 		$ex = new \Exception('exceptionMessage');
+		$subscription = $this->mockery(Subscribing\Subscription::class);
+		$subscription->shouldReceive('notify')->andThrowExceptions([$ex]);
 		$logger = $this->mockery('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
 		(new Subscribing\LoggedSubscription(
-			new Subscribing\FakeSubscription($ex),
+			$subscription,
 			$logger
-		))->print(new Output\Xml([]));
+		))->notify();
 	}
 
-	public function testNoExceptionDuringPrinting() {
+	public function testNoExceptionDuringNotifying() {
 		Assert::noError(
 			function() {
 				$logger = $this->mockery('Tracy\ILogger');
 				(new Subscribing\LoggedSubscription(
 					new Subscribing\FakeSubscription(), $logger
-                ))->print(new Output\Xml([]));
+                ))->notify();
             }
 		);
 	}

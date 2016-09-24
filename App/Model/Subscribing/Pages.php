@@ -11,5 +11,5 @@ interface Pages {
 	 * @param Page $page
 	 * @return Page
 	 */
-	public function add(Uri\Uri $uri, Page $page): Page;
+    public function add(Uri\Uri $uri, Page $page): Page;
 }

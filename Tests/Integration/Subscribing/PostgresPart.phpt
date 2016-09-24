@@ -5,45 +5,64 @@
  */
 namespace Remembrall\Integration\Subscribing;
 
-use Remembrall\Model\{
-	Subscribing
-};
+use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
-use Klapuch\Uri;
 
 require __DIR__ . '/../../bootstrap.php';
 
 final class PostgresPart extends TestCase\Database {
 	public function testContent() {
 		Assert::same(
-			'd',
+			'facedown content',
 			(new Subscribing\PostgresPart(
                 new Subscribing\FakePart(),
-                new Uri\FakeUri('www.facedown.cz'),
-				'//d',
+				1,
 				$this->database
 			))->content()
 		);
 	}
 
-	public function testRefreshingPart() {
+	public function testRefreshingPartWithNewContent() {
 		(new Subscribing\PostgresPart(
 			new Subscribing\FakePart('NEW_CONTENT'),
-            new Uri\FakeUri('www.facedown.cz'),
-			'//d',
+			1,
+			$this->database
+		))->refresh();
+		$part = $this->database->fetch('SELECT * FROM parts WHERE id = 1');
+		Assert::same('NEW_CONTENT', $part['content']);
+	}
+
+	public function testRefreshingPartWithRecordedVisitation() {
+		$this->purge(['part_visits']);
+		(new Subscribing\PostgresPart(
+			new Subscribing\FakePart('NEW_CONTENT'),
+			1,
+			$this->database
+		))->refresh();
+		Assert::count(1, $this->database->fetchAll('SELECT * FROM part_visits'));
+	}
+
+	public function testRefreshingPartWithoutAffectingOthers() {
+		(new Subscribing\PostgresPart(
+			new Subscribing\FakePart('NEW_CONTENT'),
+			1,
 			$this->database
 		))->refresh();
 		$parts = $this->database->fetchAll('SELECT * FROM parts');
-		Assert::count(1, $parts);
-		Assert::same('NEW_CONTENT', $parts[0]['content']);
+		Assert::count(2, $parts);
+		Assert::same(2, $parts[0]['id']);
+		Assert::same('google content', $parts[0]['content']);
+		Assert::same(1, $parts[1]['id']);
+		Assert::same('NEW_CONTENT', $parts[1]['content']);
 	}
 
 	protected function prepareDatabase() {
 		$this->purge(['parts']);
 		$this->database->query(
 			"INSERT INTO parts (page_url, expression, content) VALUES
-			('www.facedown.cz', '//d', 'd')"
+			('www.facedown.cz', '//facedown', 'facedown content'),
+			('www.google.com', '//google', 'google content')"
 		);
 	}
 }

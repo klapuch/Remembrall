@@ -5,86 +5,65 @@ namespace Remembrall\Model\Subscribing;
 use Remembrall\Exception\NotFoundException;
 use Remembrall\Model\Access;
 use Klapuch\{
-    Output, Time, Storage, Uri
+    Time, Storage
 };
 
 final class OwnedSubscription implements Subscription {
-	private $url;
-	private $expression;
-	private $database;
+	private $origin;
+	private $id;
 	private $owner;
+	private $database;
 
-	public function __construct(
-		Uri\Uri $url,
-		string $expression,
+    public function __construct(
+        Subscription $origin,
+        int $id,
 		Access\Subscriber $owner,
 		Storage\Database $database
 	) {
-		$this->url = $url;
-		$this->expression = $expression;
+		$this->origin = $origin;
+		$this->id = $id;
 		$this->owner = $owner;
 		$this->database = $database;
 	}
 
 	public function cancel() {
-		if(!$this->owned())
-			throw new NotFoundException('You do not own this subscription');
-		$this->database->query(
-			'DELETE FROM subscriptions
-			WHERE subscriber_id IS NOT DISTINCT FROM ?
-			AND part_id = (
-				SELECT id
-				FROM parts
-				WHERE expression IS NOT DISTINCT FROM ?
-				AND page_url IS NOT DISTINCT FROM ?
-			)',
-			[$this->owner->id(), $this->expression, $this->url->reference()]
-		);
+        if(!$this->owned()) {
+            throw new NotFoundException(
+                'You can not cancel foreign subscription'
+            );
+        }
+        $this->origin->cancel();
 	}
 
-	public function edit(Time\Interval $interval): Subscription {
-		if(!$this->owned())
-			throw new NotFoundException('You do not own this subscription');
-		$this->database->query(
-			'UPDATE subscriptions
-			SET interval = ?
-			WHERE subscriber_id IS NOT DISTINCT FROM ?
-			AND part_id IS NOT DISTINCT FROM (
-				SELECT ID
-				FROM parts
-				WHERE page_url IS NOT DISTINCT FROM ?
-				AND expression IS NOT DISTINCT FROM ?
-			)',
-			[
-                $interval->iso(),
-				$this->owner->id(),
-				$this->url->reference(),
-				$this->expression
-			]
-		);
-		return $this;
-	}
+	public function edit(Time\Interval $interval) {
+        if(!$this->owned()) {
+            throw new NotFoundException(
+                'You can not edit foreign subscription'
+            );
+        }
+        $this->origin->edit($interval);
+    }
 
-	public function print(Output\Format $format): Output\Format {
-		return $format->with('url', $this->url->reference())
-			->with('expression', $this->expression)
-			->with('ownerEmail', $this->owner->email())
-			->with('ownerId', $this->owner->id());
-	}
+    public function notify() {
+        if(!$this->owned()) {
+            throw new NotFoundException(
+                'You can not be notified on foreign subscription'
+            );
+        }
+        $this->origin->notify();
+    }
 
 	/**
 	 * Is the current subscriber owner of the subscription?
 	 * @return bool
 	 */
 	private function owned(): bool {
-		return (bool)$this->database->fetchColumn(
-			'SELECT 1
-			FROM parts
-			INNER JOIN subscriptions ON subscriptions.part_id = parts.id
-			WHERE subscriber_id IS NOT DISTINCT FROM ?
-			AND page_url IS NOT DISTINCT FROM ?
-			AND expression IS NOT DISTINCT FROM ?',
-			[$this->owner->id(), $this->url->reference(), $this->expression]
+        return (bool)$this->database->fetchColumn(
+            'SELECT 1
+            FROM subscriptions
+            WHERE id = ?
+            AND subscriber_id = ?',
+			[$this->id, $this->owner->id()]
 		);
 	}
 }

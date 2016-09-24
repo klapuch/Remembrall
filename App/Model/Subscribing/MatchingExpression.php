@@ -5,10 +5,9 @@ namespace Remembrall\Model\Subscribing;
 use Remembrall\Exception\NotFoundException;
 
 /**
- * XPath expression must be only valid
- * By "valid" is meant that it must produce some nodes
+ * Expression with always matching nodes
  */
-final class ValidXPathExpression implements Expression {
+final class MatchingExpression implements Expression {
 	private $origin;
 
 	public function __construct(Expression $origin) {
@@ -20,7 +19,7 @@ final class ValidXPathExpression implements Expression {
 		if($nodes->length > 0)
 			return $nodes;
 		throw new NotFoundException(
-			'For the given XPath expression there are no matches'
+			'For the given expression there are no matches'
 		);
 	}
 

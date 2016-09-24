@@ -11,24 +11,24 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class PostgresSubscriber extends TestCase\Database {
+final class RegisteredSubscriber extends TestCase\Database {
 	public function testId() {
 		Assert::same(
 			666,
-			(new Access\PostgresSubscriber(
+			(new Access\RegisteredSubscriber(
 				 666, $this->database
 			))->id()
 		);
 	}
 
-	public function testEmail() {
+	public function testExistingUserEmail() {
 		$this->database->query(
 			"INSERT INTO subscribers (id, email, password) VALUES
 			(666, 'foo@bar.cz', 'password')"
 		);
 		Assert::same(
 			'foo@bar.cz',
-			(new Access\PostgresSubscriber(
+			(new Access\RegisteredSubscriber(
 				666, $this->database
 			))->email()
 		);
@@ -39,4 +39,4 @@ final class PostgresSubscriber extends TestCase\Database {
     }
 }
 
-(new PostgresSubscriber)->run();
+(new RegisteredSubscriber)->run();

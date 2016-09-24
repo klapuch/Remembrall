@@ -10,13 +10,13 @@ interface Parts {
 	 * @param Part $part
 	 * @param Uri\Uri $uri
 	 * @param string $expression
-	 * @return Part
+	 * @return void
 	 */
-	public function add(Part $part, Uri\Uri $uri, string $expression): Part;
+	public function add(Part $part, Uri\Uri $uri, string $expression);
 
 	/**
 	 * Go through all the parts
-	 * @return Part[]
+	 * @return \Iterator
 	 */
-	public function iterate(): array;
+	public function iterate(): \Iterator;
 }

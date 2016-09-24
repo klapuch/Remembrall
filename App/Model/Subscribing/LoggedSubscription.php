@@ -28,21 +28,21 @@ final class LoggedSubscription implements Subscription {
 		}
 	}
 
-	public function edit(Time\Interval $interval): Subscription {
+	public function edit(Time\Interval $interval) {
 		try {
-			return $this->origin->edit($interval);
+			$this->origin->edit($interval);
 		} catch(\Throwable $ex) {
 			$this->logger->log($ex, Tracy\Logger::ERROR);
 			throw $ex;
 		}
-	}
+    }
 
-	public function print(Output\Format $format): Output\Format {
+    public function notify() {
 		try {
-			return $this->origin->print($format);
+			$this->origin->notify();
 		} catch(\Throwable $ex) {
 			$this->logger->log($ex, Tracy\Logger::ERROR);
 			throw $ex;
 		}
-	}
+    }
 }

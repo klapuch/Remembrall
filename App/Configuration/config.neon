@@ -31,14 +31,8 @@ services:
 		class: Klapuch\Storage\PDODatabase
 		arguments: [%database.dsn%, %database.user%, %database.password%]
 	router: Remembrall\Router\RouterFactory::createRouter
-	texy: Texy\Texy
-	latte.latteFactory:
-		setup:
-			- addFilter(texy, [@texy, process])
-	- Remembrall\Model\Access\IdentityFactory
-	identity: @Remembrall\Model\Access\IdentityFactory::create()
 	subscriber:
-		class: Remembrall\Model\Access\PostgresSubscriber(@identity::getId())
+		class: Remembrall\Model\Access\RegisteredSubscriber(1)
 	nette.mailer:
 		class: Nette\Mail\IMailer
 		factory: Nextras\MailPanel\FileMailer(%tempDir%/mail-panel-mails)

@@ -5,13 +5,10 @@
  */
 namespace Remembrall\Integration\Subscribing;
 
-use Remembrall\Exception;
-use Remembrall\Model\{
-	Subscribing
-};
+use Remembrall\Exception\NotFoundException;
+use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
-use Klapuch\Uri;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -20,19 +17,17 @@ final class ExistingPart extends TestCase\Database {
 		Assert::exception(function() {
 			(new Subscribing\ExistingPart(
                 new Subscribing\FakePart(),
-                new Uri\FakeUri('www.facedown.cz'),
-				'//xxxx',
+				123,
 				$this->database
 			))->content();
-		}, Exception\NotFoundException::class, 'The part does not exist');
+		}, NotFoundException::class, 'The part does not exist');
 		Assert::exception(function() {
 			(new Subscribing\ExistingPart(
 				new Subscribing\FakePart(),
-                new Uri\FakeUri('www.facedown.cz'),
-				'//xxxx',
+				124,
 				$this->database
 			))->refresh();
-		}, Exception\NotFoundException::class, 'The part does not exist');
+		}, NotFoundException::class, 'The part does not exist');
 	}
 
 	public function testExistingPart() {
@@ -43,16 +38,14 @@ final class ExistingPart extends TestCase\Database {
 		Assert::noError(function() {
 			(new Subscribing\ExistingPart(
 				new Subscribing\FakePart('notEmpty'),
-                new Uri\FakeUri('www.facedown.cz'),
-				'//d',
+				1,
 				$this->database
 			))->content();
 		});
 		Assert::noError(function() {
 			(new Subscribing\ExistingPart(
 				new Subscribing\FakePart(),
-                new Uri\FakeUri('www.facedown.cz'),
-				'//d',
+				1,
 				$this->database
 			))->refresh();
 		});

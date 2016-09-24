@@ -13,10 +13,4 @@ interface Subscribers {
 	 * @return Subscriber
 	 */
 	public function register(string $email, string $password): Subscriber;
-
-	/**
-	 * Go through all the subscribers
-	 * @return Subscriber[]
-	 */
-	public function iterate(): array;
 }

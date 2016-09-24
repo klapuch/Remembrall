@@ -7,28 +7,15 @@ use Klapuch\{
 };
 
 final class FakeSubscription implements Subscription {
-	private $exception;
-
-	public function __construct(\Exception $exception = null) {
-	    $this->exception = $exception;
-	}
-
 	public function cancel() {
-		$this->throwException();
 	}
 
-	public function edit(Time\Interval $interval): Subscription {
-		$this->throwException();
-		return $this;
+	public function edit(Time\Interval $interval) {
+    }
+
+    public function notify() {
 	}
 
 	public function print(Output\Format $format): Output\Format {
-		$this->throwException();
-		return $format;
-	}
-
-	private function throwException() {
-		if($this->exception !== null)
-			throw $this->exception;
 	}
 }

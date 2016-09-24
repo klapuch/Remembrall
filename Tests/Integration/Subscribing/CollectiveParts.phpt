@@ -5,16 +5,58 @@
  */
 namespace Remembrall\Integration\Subscribing;
 
-use GuzzleHttp;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
-use Klapuch\Uri;
+use Klapuch\{
+	Uri, Http
+};
 
 require __DIR__ . '/../../bootstrap.php';
 
 final class CollectiveParts extends TestCase\Database {
-	public function testSuccessfulAdding() {
+	public function testAddingBrandNewPart() {
+		(new Subscribing\CollectiveParts(
+			$this->database
+		))->add(
+			new Subscribing\FakePart('<p>google content</p>'),
+			new Uri\FakeUri('www.google.com'),
+			'//p'
+		);
+		$parts = $this->database->fetchAll('SELECT * FROM parts');
+		Assert::count(1, $parts);
+		Assert::same('www.google.com', $parts[0]['page_url']);
+		Assert::same('<p>google content</p>', $parts[0]['content']);
+		Assert::same('//p', $parts[0]['expression']);
+	}
+
+	public function testAddingMultipleBrandNewParts() {
+		(new Subscribing\CollectiveParts(
+			$this->database
+		))->add(
+			new Subscribing\FakePart('<p>google content</p>'),
+			new Uri\FakeUri('www.google.com'),
+			'//google'
+		);
+		(new Subscribing\CollectiveParts(
+			$this->database
+		))->add(
+			new Subscribing\FakePart('<p>facedown content</p>'),
+			new Uri\FakeUri('www.facedown.cz'),
+			'//facedown'
+		);
+		$parts = $this->database->fetchAll('SELECT * FROM parts');
+		Assert::count(2, $parts);
+		Assert::same('www.google.com', $parts[0]['page_url']);
+		Assert::same('<p>google content</p>', $parts[0]['content']);
+		Assert::same('//google', $parts[0]['expression']);
+		Assert::same('www.facedown.cz', $parts[1]['page_url']);
+		Assert::same('<p>facedown content</p>', $parts[1]['content']);
+		Assert::same('//facedown', $parts[1]['expression']);
+	}
+
+	public function testAddingPartWithRecordedVisitation() {
+		$this->truncate(['part_visits']);
 		(new Subscribing\CollectiveParts(
 			$this->database
 		))->add(
@@ -22,53 +64,39 @@ final class CollectiveParts extends TestCase\Database {
 			new Uri\FakeUri('www.google.com'),
 			'//p'
 		);
-		$parts = $this->database->fetchAll(
-			'SELECT page_url, content, expression
-			FROM parts'
-		);
-		Assert::count(1, $parts);
-		Assert::same('www.google.com', $parts[0]['page_url']);
-		Assert::same('<p>Content</p>', $parts[0]['content']);
-		Assert::same('//p', $parts[0]['expression']);
 		Assert::count(
 			1,
-			$this->database->fetchAll(
-				'SELECT part_id
-				FROM part_visits
-				WHERE visited_at <= NOW()'
-			)
+			$this->database->fetchAll('SELECT * FROM part_visits')
 		);
 	}
 
-	public function testAddingSamePart() {
+	public function testUpdatingPartAsDuplication() {
+		$oldPart = new Subscribing\FakePart('<p>Content</p>');
+		(new Subscribing\CollectiveParts(
+			$this->database
+		))->add($oldPart, new Uri\FakeUri('www.google.com'), '//p');
+		$newPart = new Subscribing\FakePart('<p>NEW_CONTENT</p>');
+		(new Subscribing\CollectiveParts(
+			$this->database
+		))->add($newPart, new Uri\FakeUri('www.google.com'), '//p');
+		$parts = $this->database->fetchAll('SELECT * FROM parts');
+		Assert::count(1, $parts);
+		Assert::same('<p>NEW_CONTENT</p>', $parts[0]['content']);
+	}
+
+	public function testUpdatingPartAsDuplicationWithRecordedVisitation() {
+		$this->truncate(['part_visits']);
 		$part = new Subscribing\FakePart('<p>Content</p>');
-		Assert::same(
-			$part,
-			(new Subscribing\CollectiveParts(
-				$this->database
-			))->add(
-				$part,
-				new Uri\FakeUri('www.google.com'),
-				'//p'
-			)
+		(new Subscribing\CollectiveParts(
+			$this->database
+		))->add($part, new Uri\FakeUri('www.google.com'), '//p');
+		(new Subscribing\CollectiveParts(
+			$this->database
+		))->add($part, new Uri\FakeUri('www.google.com'), '//p');
+		Assert::count(
+			2,
+			$this->database->fetchAll('SELECT * FROM part_visits')
 		);
-		Assert::same(
-			$part,
-			(new Subscribing\CollectiveParts(
-				$this->database
-			))->add(
-				$part,
-				new Uri\FakeUri('www.google.com'),
-				'//p'
-			)
-		);
-        Assert::count(
-            1,
-            $this->database->fetchAll(
-                'SELECT page_url, content, expression
-                FROM parts'
-            )
-        );
 	}
 
 	public function testIteratingOverAllPages() {
@@ -77,75 +105,75 @@ final class CollectiveParts extends TestCase\Database {
 			('www.google.com', '//a', 'a'),
 			('www.facedown.cz', '//c', 'c')"
 		);
-		$this->database->query(
-			"INSERT INTO subscriptions (part_id, subscriber_id, interval, last_update) VALUES
-			(1, 1, 'PT1M', NOW()),
-			(2, 2, 'PT2M', NOW())"
-		);
 		$parts = (new Subscribing\CollectiveParts(
 			$this->database
 		))->iterate();
-		Assert::count(2, $parts);
-		Assert::equal(
-			new Subscribing\ConstantPart(
-				new Subscribing\HtmlPart(
-					new Subscribing\XPathExpression(
-						new Subscribing\ConstantPage(
-							new Subscribing\FakePage(),
-							'<p>google</p>'
-						),
-						'//a'
-					),
-					new Subscribing\ConstantPage(
-						new Subscribing\FakePage(),
-						'<p>google</p>'
-					)
+		$part = $parts->current();
+		$googleUrl = new Uri\ReachableUrl(new Uri\ValidUrl('www.google.com'));
+		$facedownUrl = new Uri\ReachableUrl(new Uri\ValidUrl('www.facedown.cz'));
+		$googlePage = new Subscribing\CachedPage(
+			$googleUrl,
+			new Subscribing\PostgresPage(
+				new Subscribing\HtmlWebPage(
+					new Http\BasicRequest('GET', $googleUrl)
 				),
-				'a',
-				'www.google.com'
+				$googleUrl,
+				$this->database
 			),
-			$parts[0]
+			$this->database
+		);
+		$facedownPage = new Subscribing\CachedPage(
+			$facedownUrl,
+			new Subscribing\PostgresPage(
+				new Subscribing\HtmlWebPage(
+					new Http\BasicRequest('GET', $facedownUrl)
+				),
+				$facedownUrl,
+				$this->database
+			),
+			$this->database
 		);
 		Assert::equal(
-			new Subscribing\ConstantPart(
+			new Subscribing\PostgresPart(
 				new Subscribing\HtmlPart(
-					new Subscribing\XPathExpression(
-						new Subscribing\ConstantPage(
-							new Subscribing\FakePage(),
-							'<p>facedown</p>'
-						),
-						'//c'
+					new Subscribing\MatchingExpression(
+						new Subscribing\XPathExpression($googlePage, '//a')
 					),
-					new Subscribing\ConstantPage(
-						new Subscribing\FakePage(),
-						'<p>facedown</p>'
-					)
+					$googlePage
 				),
-				'c',
-				'www.facedown.cz'
+				1,
+				$this->database
 			),
-			$parts[1]
+			$part
 		);
+		$parts->next();
+		$part = $parts->current();
+		Assert::equal(
+			new Subscribing\PostgresPart(
+				new Subscribing\HtmlPart(
+					new Subscribing\MatchingExpression(
+						new Subscribing\XPathExpression($facedownPage, '//c')
+					),
+					$facedownPage
+				),
+				2,
+				$this->database
+			),
+			$part
+		);
+		$parts->next();
+		Assert::null($parts->current());
 	}
 
-	public function testEmptyParts() {
-		Assert::same(
-			[],
-			(new Subscribing\CollectiveParts(
-				$this->database,
-				new GuzzleHttp\Client()
-			))->iterate()
-		);
+	public function testIteratingWithEmptyParts() {
+		$parts = (new Subscribing\CollectiveParts(
+			$this->database
+		))->iterate();
+		Assert::null($parts->current());
 	}
 
 	protected function prepareDatabase() {
-		$this->truncate(['parts', 'part_visits', 'pages', 'subscriptions']);
-		$this->restartSequence(['parts', 'part_visits', 'subscriptions']);
-		$this->database->query(
-			"INSERT INTO pages (url, content) VALUES
-			('www.google.com', '<p>google</p>'),
-			('www.facedown.cz', '<p>facedown</p>')"
-		);
+		$this->purge(['parts']);
 	}
 }
 

@@ -3,9 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Page;
 
 use Remembrall\Model\Subscribing;
-use Klapuch\{
-    Output, Uri
-};
+use Klapuch\Output;
 
 final class PartsPage extends BasePage {
     public function renderDefault() {
@@ -30,11 +28,12 @@ final class PartsPage extends BasePage {
         ]);
     }
 
-    public function handleDelete($expression, $url) {
+    //TODO
+    public function handleDelete(int $id) {
         try {
             (new Subscribing\OwnedSubscription(
-                new Uri\ValidUrl($url),
-                $expression,
+            	new Subscribing\PostgresSubscription($id, $this->database),
+				$id,
                 $this->subscriber,
                 $this->database
             ))->cancel();

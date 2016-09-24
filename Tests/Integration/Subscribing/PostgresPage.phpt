@@ -13,9 +13,9 @@ use Klapuch\Uri;
 require __DIR__ . '/../../bootstrap.php';
 
 final class PostgresPage extends TestCase\Database {
-    public function testContent() {
+    public function testHtmlContent() {
 		Assert::contains(
-			'Hello from facedown website',
+			'facedown content',
 			(new Subscribing\PostgresPage(
 				new Subscribing\FakePage(),
 				new Uri\FakeUri('www.facedown.cz'),
@@ -24,7 +24,24 @@ final class PostgresPage extends TestCase\Database {
 		);
 	}
 
-    public function testRefreshingPage() {
+    public function testRefreshingWithNewContent() {
+        $content = new \DOMDocument();
+        $content->loadHTML('NEW_CONTENT');
+		(new Subscribing\PostgresPage(
+            new Subscribing\FakePage(
+                new \DOMDocument(),
+                new Subscribing\FakePage($content)
+            ),
+			new Uri\FakeUri('www.facedown.cz'),
+			$this->database
+		))->refresh();
+		$page = $this->database->fetch(
+			"SELECT * FROM pages WHERE url = 'www.facedown.cz'"
+		);
+		Assert::contains('NEW_CONTENT', $page['content']);
+	}
+
+	public function testRefreshingWithoutAffectingOthers() {
         $content = new \DOMDocument();
         $content->loadHTML('NEW_CONTENT');
 		(new Subscribing\PostgresPage(
@@ -36,15 +53,33 @@ final class PostgresPage extends TestCase\Database {
 			$this->database
 		))->refresh();
 		$pages = $this->database->fetchAll('SELECT * FROM pages');
+		Assert::count(2, $pages);
+		Assert::contains('google content', $pages[0]['content']);
+		Assert::contains('NEW_CONTENT', $pages[1]['content']);
+	}
+
+	public function testRecordingVisitation() {
+		$this->truncate(['page_visits']);
+        $content = new \DOMDocument();
+        $content->loadHTML('NEW_CONTENT');
+		(new Subscribing\PostgresPage(
+            new Subscribing\FakePage(
+                new \DOMDocument(),
+                new Subscribing\FakePage($content)
+            ),
+			new Uri\FakeUri('www.facedown.cz'),
+			$this->database
+		))->refresh();
+		$pages = $this->database->fetchAll('SELECT * FROM page_visits');
 		Assert::count(1, $pages);
-		Assert::contains('NEW_CONTENT', $pages[0]['content']);
 	}
 
     protected function prepareDatabase() {
         $this->truncate(['pages']);
 		$this->database->query(
 			"INSERT INTO pages (url, content) VALUES
-			('www.facedown.cz', 'Hello from facedown website')"
+			('www.facedown.cz', 'facedown content'),
+			('www.google.com', 'google content')"
 		);
 	}
 }

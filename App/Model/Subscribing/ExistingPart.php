@@ -9,23 +9,20 @@ use Klapuch\{
 };
 
 /**
- * Part which will always exists in the database
+ * Part which will always exists
  */
 final class ExistingPart implements Part {
 	private $origin;
-	private $url;
-	private $expression;
+	private $id;
 	private $database;
 
 	public function __construct(
 		Part $origin,
-		Uri\Uri $url,
-		string $expression,
+		int $id,
 		Storage\Database $database
 	) {
 		$this->origin = $origin;
-		$this->url = $url;
-		$this->expression = $expression;
+		$this->id = $id;
 		$this->database = $database;
 	}
 
@@ -41,22 +38,16 @@ final class ExistingPart implements Part {
 		return $this->origin->refresh();
 	}
 
-	public function print(Output\Format $format): Output\Format {
-		$format->with('url', $this->url->reference())
-			->with('expression', $this->expression);
-	}
-
 	/**
-	 * Does the part really exists?
+	 * Does the part really exist?
 	 * @return bool
 	 */
 	private function exists(): bool {
 		return (bool)$this->database->fetchColumn(
 			'SELECT 1
 			FROM parts
-			WHERE page_url IS NOT DISTINCT FROM ?
-			AND expression IS NOT DISTINCT FROM ?',
-			[$this->url->reference(), $this->expression]
+			WHERE id IS NOT DISTINCT FROM ?',
+			[$this->id]
 		);
 	}
 }

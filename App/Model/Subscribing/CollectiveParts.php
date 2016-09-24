@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Storage, Uri
+	Http, Storage, Uri
 };
 
 /**
@@ -16,61 +16,45 @@ final class CollectiveParts implements Parts {
 		$this->database = $database;
 	}
 
-	public function add(Part $part, Uri\Uri $url, string $expression): Part {
-        if(!$this->alreadyExists($url, $expression)) {
-            $this->database->query(
-                'INSERT INTO parts
-                (page_url, expression, content) VALUES
-                (?, ?, ?)',
-                [$url->reference(), $expression, $part->content()]
-            );
-        }
-        return $part;
+	public function add(Part $part, Uri\Uri $url, string $expression) {
+		$this->database->query(
+			'INSERT INTO parts (page_url, expression, content) VALUES
+			(:url, :expression, :content)
+			ON CONFLICT (page_url, expression)
+			DO UPDATE SET content = :content',
+			[
+				':url' => $url->reference(),
+				':expression' => $expression,
+				':content' => $part->content(),
+			]
+		);
 	}
 
-	public function iterate(): array {
-		return (array)array_reduce(
-			$this->database->fetchAll(
-				'SELECT parts.content AS part_content, url,
-				pages.content AS page_content, expression,
-				interval
-				FROM parts
-				INNER JOIN subscriptions ON subscriptions.part_id = parts.id
-				LEFT JOIN pages ON pages.url = parts.page_url'
-			),
-			function($previous, array $row) {
-				$previous[] = new ConstantPart(
-					new HtmlPart(
-						new XPathExpression(
-							new ConstantPage(
-								new FakePage(),
-								$row['page_content']
-							),
-							$row['expression']
-						),
-						new ConstantPage(new FakePage(), $row['page_content'])
+	public function iterate(): \Iterator {
+		$rows = $this->database->fetchAll(
+			'SELECT page_url AS url, id, expression FROM parts'
+		);
+		foreach($rows as $row) {
+			$url = new Uri\ReachableUrl(new Uri\ValidUrl($row['url']));
+			$page = new CachedPage(
+				$url,
+				new PostgresPage(
+					new HtmlWebPage(new Http\BasicRequest('GET', $url)),
+					$url,
+					$this->database
+				),
+				$this->database
+			);
+			yield new PostgresPart(
+				new HtmlPart(
+					new MatchingExpression(
+						new XPathExpression($page, $row['expression'])
 					),
-					$row['part_content'],
-					$row['url']
-				);
-				return $previous;
-			}
-		);
-	}
-
-	/**
-	 * Does the part already exists?
-	 * @param Uri\Uri $uri
-	 * @param string $expression
-	 * @return bool
-	 */
-	private function alreadyExists(Uri\Uri $uri, string $expression): bool {
-		return (bool)$this->database->fetchColumn(
-			'SELECT 1
-			FROM parts
-			WHERE page_url IS NOT DISTINCT FROM ?
-			AND expression IS NOT DISTINCT FROM ?',
-			[$uri->reference(), $expression]
-		);
+					$page
+				),
+				$row['id'],
+				$this->database
+			);
+		}
 	}
 }

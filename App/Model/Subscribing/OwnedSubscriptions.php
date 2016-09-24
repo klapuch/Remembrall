@@ -8,6 +8,9 @@ use Klapuch\{
 use Remembrall\Model\Access;
 use Remembrall\Exception\DuplicateException;
 
+/**
+ * All the subscriptions owned by one particular subscriber
+ */
 final class OwnedSubscriptions implements Subscriptions {
 	private $owner;
 	private $database;
@@ -56,7 +59,7 @@ final class OwnedSubscriptions implements Subscriptions {
 	}
 
 	public function subscribe(
-		Uri\Uri $uri,
+		Uri\Uri $url,
 		string $expression,
 		Time\Interval $interval
 	) {
@@ -74,15 +77,15 @@ final class OwnedSubscriptions implements Subscriptions {
 					$this->owner->id(),
 					$interval->iso(),
 					$expression,
-					$uri->reference()
+					$url->reference()
 				]
 			);
 		} catch(Storage\UniqueConstraint $ex) {
 			throw new DuplicateException(
 				sprintf(
-					'"%s" expression on the "%s" page is already subscribed by you',
+					'"%s" expression on "%s" page is already subscribed by you',
 					$expression,
-					$uri->reference()
+					$url->reference()
 				),
 				$ex->getCode(),
 				$ex

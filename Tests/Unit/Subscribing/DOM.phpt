@@ -12,7 +12,7 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class DOM extends Tester\TestCase {
-	public function testCorrectEncoding() {
+	public function testUtf8Encoding() {
 		$dom = new Subscribing\DOM();
 		$dom->loadHTML('<p>Příliš žluťoučký kůň úpěl ďábelské ódy.</p>');
 		Assert::same(
@@ -21,7 +21,7 @@ final class DOM extends Tester\TestCase {
 		);
 	}
 
-	public function testSuppressedWarningOnWrongHtml() {
+	public function testSuppressedWarningOnInvalidHtml() {
 		Assert::noError(function() {
 			(new Subscribing\DOM())->loadHTML(
 				'<a href="script.php?foo=bar&hello=world">link</a>'

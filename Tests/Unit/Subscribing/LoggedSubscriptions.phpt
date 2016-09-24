@@ -19,17 +19,17 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 	 * @throws \Exception exceptionMessage
 	 */
 	public function testLoggedExceptionDuringSubscribing() {
-        $ex = new \Exception('exceptionMessage');
-        $logger = $this->mockery('Tracy\ILogger');
+		$ex = new \Exception('exceptionMessage');
+		$logger = $this->mockery('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
-        (new Subscribing\LoggedSubscriptions(
-            new Subscribing\FakeSubscriptions($ex),
-            $logger
-        ))->subscribe(
-				new Uri\FakeUri('url'),
-				'//p',
-				new Time\FakeInterval()
-            );
+		(new Subscribing\LoggedSubscriptions(
+			new Subscribing\FakeSubscriptions($ex),
+			$logger
+		))->subscribe(
+			new Uri\FakeUri('url'),
+			'//p',
+			new Time\FakeInterval()
+		);
 	}
 
 	public function testNoExceptionDuringSubscribing() {
@@ -50,12 +50,12 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 	 */
 	public function testLoggedExceptionDuringPrinting() {
 		$ex = new \Exception('exceptionMessage');
-        $logger = $this->mockery('Tracy\ILogger');
+		$logger = $this->mockery('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
-        (new Subscribing\LoggedSubscriptions(
-            new Subscribing\FakeSubscriptions($ex),
-            $logger
-        ))->print(new Output\FakeFormat());
+		(new Subscribing\LoggedSubscriptions(
+			new Subscribing\FakeSubscriptions($ex),
+			$logger
+		))->print(new Output\FakeFormat());
 	}
 
 	public function testNoExceptionDuringIterating() {

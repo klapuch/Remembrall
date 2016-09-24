@@ -18,16 +18,17 @@ interface Subscription {
 
 	/**
 	 * Edit the subscription
-	 * Editing may not cause transformation to another part
+	 * Editing must not cause transformation to another part
 	 * @param Time\Interval $interval
 	 * @throws NotFoundException
-	 * @return Subscription
+	 * @return void
 	 */
-	public function edit(Time\Interval $interval): self;
+    public function edit(Time\Interval $interval);
 
-	/**
-	 * Print itself to the given format
-	 * @return Output\Format
-	 */
-	public function print(Output\Format $format): Output\Format;
+    /**
+     * Send notification about changes on the current subscription
+     * @throws NotFoundException
+     * @return void
+     */
+    public function notify();
 }

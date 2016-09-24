@@ -17,7 +17,7 @@ final class LoggedParts implements Parts {
 		$this->logger = $logger;
 	}
 
-	public function add(Part $part, Uri\Uri $uri, string $expression): Part {
+	public function add(Part $part, Uri\Uri $uri, string $expression) {
 		try {
 			return $this->origin->add($part, $uri, $expression);
 		} catch(\Throwable $ex) {
@@ -26,7 +26,7 @@ final class LoggedParts implements Parts {
 		}
 	}
 
-	public function iterate(): array {
+	public function iterate(): \Iterator {
 		try {
 			return $this->origin->iterate();
 		} catch(\Throwable $ex) {

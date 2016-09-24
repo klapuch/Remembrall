@@ -22,7 +22,7 @@ final class XPathExpression extends Tester\TestCase {
 		);
 	}
 
-	public function testInvalidExpressionWithoutError() {
+	public function testInvalidExpressionWithout() {
 		Assert::same(
 			(string)new Subscribing\XPathExpression(
 				new Subscribing\FakePage,
@@ -32,7 +32,7 @@ final class XPathExpression extends Tester\TestCase {
 		);
 	}
 
-	public function testMatchedPart() {
+	public function testMatching() {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>Hi there</p>');
 		$page = new Subscribing\FakePage($dom);
@@ -43,7 +43,7 @@ final class XPathExpression extends Tester\TestCase {
 		Assert::same($match->item(0)->nodeName, 'p');
 	}
 
-	public function testEmptyMatchWithoutError() {
+	public function testNoMatch() {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>Hi there</p>');
 		$page = new Subscribing\FakePage($dom);
