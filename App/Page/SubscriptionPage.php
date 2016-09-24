@@ -22,7 +22,7 @@ final class SubscriptionPage extends BasePage {
         try {
         	$url = new Uri\NormalizedUrl(
         		new Uri\ProtocolBasedUrl(
-        			new Uri\ReachableUri(
+        			new Uri\ReachableUrl(
         				new Uri\ValidUrl($_POST['url'])
 					),
 					['http', 'https', '']
