@@ -21,6 +21,6 @@ final class SecureVerificationCodes implements VerificationCodes {
 			VALUES ((SELECT id FROM subscribers WHERE email IS NOT DISTINCT FROM ?), ?)',
 			[$email, $code]
 		);
-		return new DisposableVerificationCode($code, $this->database);
+		return new ThrowawayVerificationCode($code, $this->database);
 	}
 }

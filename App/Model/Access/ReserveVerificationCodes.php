@@ -29,7 +29,7 @@ final class ReserveVerificationCodes implements VerificationCodes {
 			[$email]
 		);
 		if($code)
-			return new DisposableVerificationCode($code, $this->database);
+			return new ThrowawayVerificationCode($code, $this->database);
 		throw new Exception\NotFoundException(
 			'For the given email, there is no valid verification code'
 		);

@@ -8,7 +8,7 @@ use Remembrall\Exception;
 /**
  * Verification code which can be used just once
  */
-final class DisposableVerificationCode implements VerificationCode {
+final class ThrowawayVerificationCode implements VerificationCode {
 	private $code;
 	private $database;
 

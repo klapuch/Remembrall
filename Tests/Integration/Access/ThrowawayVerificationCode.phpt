@@ -11,10 +11,10 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class DisposableVerificationCode extends TestCase\Database {
+final class ThrowawayVerificationCode extends TestCase\Database {
 	public function testSuccessfulUsing() {
 		$this->prepareValidCode();
-		(new Access\DisposableVerificationCode(
+		(new Access\ThrowawayVerificationCode(
 			'valid:code',
 			$this->database
 		))->use();
@@ -35,7 +35,7 @@ final class DisposableVerificationCode extends TestCase\Database {
 			"INSERT INTO verification_codes (subscriber_id, code, used, used_at) VALUES
 			(2, 'activated:code', TRUE, NOW())"
 		);
-		(new Access\DisposableVerificationCode(
+		(new Access\ThrowawayVerificationCode(
 			'activated:code',
 			$this->database
 		))->use();
@@ -43,7 +43,7 @@ final class DisposableVerificationCode extends TestCase\Database {
 
 	public function testOwner() {
 		$this->prepareValidCode();
-		$identity = (new Access\DisposableVerificationCode(
+		$identity = (new Access\ThrowawayVerificationCode(
 			'valid:code',
 			$this->database
 		))->owner();
@@ -67,4 +67,4 @@ final class DisposableVerificationCode extends TestCase\Database {
 	}
 }
 
-(new DisposableVerificationCode())->run();
+(new ThrowawayVerificationCode())->run();

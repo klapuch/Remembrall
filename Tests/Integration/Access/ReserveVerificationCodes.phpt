@@ -20,7 +20,7 @@ final class ReserveVerificationCodes extends TestCase\Database {
 		$code = (new Access\ReserveVerificationCodes($this->database))
 			->generate('foo@bar.cz');
 		Assert::equal(
-			new Access\DisposableVerificationCode('123456', $this->database),
+			new Access\ThrowawayVerificationCode('123456', $this->database),
 			$code
 		);
 	}
