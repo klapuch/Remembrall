@@ -3,7 +3,7 @@
     <body>
 
         <xsl:element name="p">
-            Hi, there are some change on the
+            Hi, there are some changes on the
             <xsl:value-of select="/part/url"/>
             website with the
             <xsl:value-of select="/part/expression"/> expression
