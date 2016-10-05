@@ -3,7 +3,6 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\Time;
-
 use Remembrall\Exception\NotFoundException;
 
 interface Subscription {
