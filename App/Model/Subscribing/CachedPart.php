@@ -2,9 +2,8 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Nette\Caching;
+
 use Remembrall\Model\Storage;
-use Klapuch\Output;
 
 /**
  * Cache any given part

@@ -3,9 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Tracy;
-use Klapuch\{
-    Output, Time
-};
+use Klapuch\Time;
 
 /**
  * Log every error action

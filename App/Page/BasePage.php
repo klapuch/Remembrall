@@ -2,7 +2,6 @@
 namespace Remembrall\Page;
 
 use Nette;
-use Nette\Http\IResponse;
 use Nette\Security;
 use Klapuch\Uri;
 

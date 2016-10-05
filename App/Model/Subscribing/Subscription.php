@@ -2,9 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\{
-    Output, Time
-};
+use Klapuch\Time;
 
 use Remembrall\Exception\NotFoundException;
 

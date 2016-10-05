@@ -4,9 +4,6 @@ namespace Remembrall\Model\Subscribing;
 
 use Klapuch\Storage;
 use Remembrall\Exception\NotFoundException;
-use Klapuch\{
-    Output, Uri
-};
 
 /**
  * Part which will always exists
