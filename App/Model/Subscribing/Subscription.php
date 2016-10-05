@@ -19,7 +19,7 @@ interface Subscription {
 	/**
 	 * Edit the subscription
 	 * Editing must not cause transformation to another part
-	 * @param Time\Interval $interval
+	 * @param \Klapuch\Time\Interval $interval
 	 * @throws NotFoundException
 	 * @return void
 	 */
