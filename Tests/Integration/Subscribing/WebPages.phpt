@@ -16,10 +16,14 @@ final class WebPages extends TestCase\Database {
 	public function testAddingSinglePage() {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('content');
-		(new Subscribing\WebPages($this->database))->add(
-            new Uri\FakeUri('www.facedown.cz'),
-            new Subscribing\FakePage($dom)
-        );
+		$page = new Subscribing\FakePage($dom);
+		Assert::same(
+			$page,
+			(new Subscribing\WebPages($this->database))->add(
+				new Uri\FakeUri('www.facedown.cz'),
+				$page
+			)
+		);
 		$pages = $this->database->fetchAll("SELECT url, content FROM pages");
 		Assert::count(1, $pages);
 		Assert::contains('content', $pages[0]['content']);
