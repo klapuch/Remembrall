@@ -10,9 +10,9 @@ use Klapuch\{
 interface Subscriptions {
     /**
      * Subscribe to a new part
-	 * @param Uri\Uri $uri
+	 * @param \Klapuch\Uri\Uri $uri
 	 * @param string $expression
-	 * @param Time\Interval $interval
+	 * @param \Klapuch\Time\Interval $interval
 	 * @throws DuplicateException
 	 * @return void
 	 */
@@ -24,7 +24,7 @@ interface Subscriptions {
 
 	/**
 	 * Print itself
-	 * @param Output\Format $format
+	 * @param \Klapuch\Output\Format $format
 	 * @return Output\Format[]
 	 */
 	public function print(Output\Format $format): array;
