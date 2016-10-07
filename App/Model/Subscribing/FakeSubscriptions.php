@@ -23,7 +23,7 @@ final class FakeSubscriptions implements Subscriptions {
 		Uri\Uri $uri,
 		string $expression,
 		Time\Interval $interval
-	) {
+	): void {
 		if($this->exception)
     		throw $this->exception;
 	}

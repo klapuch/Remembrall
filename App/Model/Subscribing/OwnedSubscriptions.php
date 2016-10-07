@@ -12,6 +12,7 @@ use Remembrall\Exception\DuplicateException;
  * All the subscriptions owned by one particular subscriber
  */
 final class OwnedSubscriptions implements Subscriptions {
+	private const EMPTY_FORMAT = [];
 	private $owner;
 	private $database;
 
@@ -37,7 +38,7 @@ final class OwnedSubscriptions implements Subscriptions {
             ORDER BY visited_at DESC',
             [$this->owner->id()]
         );
-        return (array)array_reduce(
+        return array_reduce(
             array_map(
                 function(array $row) use($format) {
                     return $format->with('expression', $row['expression'])
@@ -55,14 +56,14 @@ final class OwnedSubscriptions implements Subscriptions {
             ), function($formats, $format) {
                 $formats[] = $format;
             return $formats;
-        });
+        }, self::EMPTY_FORMAT);
 	}
 
 	public function subscribe(
 		Uri\Uri $url,
 		string $expression,
 		Time\Interval $interval
-	) {
+	): void {
 		try {
 			$this->database->query(
 				'INSERT INTO subscriptions

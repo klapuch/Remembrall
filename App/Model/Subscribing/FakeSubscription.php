@@ -2,20 +2,27 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\{
-    Time, Output
-};
+use Klapuch\Time;
 
 final class FakeSubscription implements Subscription {
-	public function cancel() {
+	private $exception;
+
+	public function __construct(\Throwable $exception = null) {
+	    $this->exception = $exception;
 	}
 
-	public function edit(Time\Interval $interval) {
+	public function cancel(): void {
+		if($this->exception)
+			throw $this->exception;
+	}
+
+	public function edit(Time\Interval $interval): void {
+		if($this->exception)
+			throw $this->exception;
     }
 
-    public function notify() {
-	}
-
-	public function print(Output\Format $format): Output\Format {
+    public function notify(): void {
+		if($this->exception)
+			throw $this->exception;
 	}
 }

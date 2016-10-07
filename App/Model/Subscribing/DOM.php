@@ -16,7 +16,7 @@ final class DOM extends \DOMDocument {
 	 * @param int $options
 	 * @return void
 	 */
-	public function loadHTML($source, $options = 0) {
+	public function loadHTML($source, $options = 0): void {
 		$previous = libxml_use_internal_errors(true);
 		parent::loadHTML(
 			mb_convert_encoding(

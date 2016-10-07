@@ -15,7 +15,7 @@ final class PostgresSubscription implements Subscription {
 		$this->database = $database;
 	}
 
-	public function cancel() {
+	public function cancel(): void {
 		$this->database->query(
 			'DELETE FROM subscriptions
 			WHERE id IS NOT DISTINCT FROM ?',
@@ -23,7 +23,7 @@ final class PostgresSubscription implements Subscription {
 		);
 	}
 
-	public function edit(Time\Interval $interval) {
+	public function edit(Time\Interval $interval): void {
 		$this->database->query(
 			'UPDATE subscriptions
 			SET interval = ?
@@ -32,7 +32,7 @@ final class PostgresSubscription implements Subscription {
 		);
     }
 
-    public function notify() {
+    public function notify(): void {
         $this->database->query(
             'INSERT INTO notifications (subscription_id, notified_at) VALUES
             (?, NOW())',

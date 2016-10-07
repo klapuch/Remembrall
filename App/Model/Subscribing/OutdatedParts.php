@@ -18,8 +18,8 @@ final class OutdatedParts implements Parts {
 		$this->database = $database;
 	}
 
-	public function add(Part $part, Uri\Uri $uri, string $expression): Part {
-		return $this->origin->add($part, $uri, $expression);
+	public function add(Part $part, Uri\Uri $uri, string $expression): void {
+		$this->origin->add($part, $uri, $expression);
 	}
 
 	public function iterate(): \Iterator {

@@ -23,7 +23,7 @@ final class LoggedSubscriptions implements Subscriptions {
 		Uri\Uri $uri,
 		string $expression,
 		Time\Interval $interval
-	) {
+	): void {
 		try {
 			$this->origin->subscribe($uri, $expression, $interval);
 		} catch(\Throwable $ex) {

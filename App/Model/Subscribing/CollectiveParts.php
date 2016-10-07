@@ -16,7 +16,7 @@ final class CollectiveParts implements Parts {
 		$this->database = $database;
 	}
 
-	public function add(Part $part, Uri\Uri $url, string $expression) {
+	public function add(Part $part, Uri\Uri $url, string $expression): void {
 		$this->database->query(
 			'INSERT INTO parts (page_url, expression, content) VALUES
 			(:url, :expression, :content)

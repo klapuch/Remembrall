@@ -17,9 +17,9 @@ final class LoggedParts implements Parts {
 		$this->logger = $logger;
 	}
 
-	public function add(Part $part, Uri\Uri $uri, string $expression) {
+	public function add(Part $part, Uri\Uri $uri, string $expression): void {
 		try {
-			return $this->origin->add($part, $uri, $expression);
+			$this->origin->add($part, $uri, $expression);
 		} catch(\Throwable $ex) {
 			$this->logger->log($ex, Tracy\Logger::ERROR);
 			throw $ex;

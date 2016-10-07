@@ -26,7 +26,7 @@ final class OwnedSubscription implements Subscription {
 		$this->database = $database;
 	}
 
-	public function cancel() {
+	public function cancel(): void {
         if(!$this->owned()) {
             throw new NotFoundException(
                 'You can not cancel foreign subscription'
@@ -35,7 +35,7 @@ final class OwnedSubscription implements Subscription {
         $this->origin->cancel();
 	}
 
-	public function edit(Time\Interval $interval) {
+	public function edit(Time\Interval $interval): void {
         if(!$this->owned()) {
             throw new NotFoundException(
                 'You can not edit foreign subscription'
@@ -44,7 +44,7 @@ final class OwnedSubscription implements Subscription {
         $this->origin->edit($interval);
     }
 
-    public function notify() {
+    public function notify(): void {
         if(!$this->owned()) {
             throw new NotFoundException(
                 'You can not be notified on foreign subscription'

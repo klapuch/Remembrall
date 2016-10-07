@@ -20,8 +20,7 @@ final class LoggedSubscription extends TestCase\Mockery {
 	 */
 	public function testLoggedExceptionDuringCanceling() {
 		$ex = new \Exception('exceptionMessage');
-		$subscription = $this->mockery(Subscribing\Subscription::class);
-		$subscription->shouldReceive('cancel')->andThrowExceptions([$ex]);
+		$subscription = new Subscribing\FakeSubscription($ex);
 		$logger = $this->mockery('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
 		(new Subscribing\LoggedSubscription(
@@ -46,8 +45,7 @@ final class LoggedSubscription extends TestCase\Mockery {
 	 */
 	public function testLoggedExceptionDuringEditing() {
 		$ex = new \Exception('exceptionMessage');
-		$subscription = $this->mockery(Subscribing\Subscription::class);
-		$subscription->shouldReceive('edit')->andThrowExceptions([$ex]);
+		$subscription = new Subscribing\FakeSubscription($ex);
 		$logger = $this->mockery('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
 		(new Subscribing\LoggedSubscription(
@@ -72,8 +70,7 @@ final class LoggedSubscription extends TestCase\Mockery {
 	 */
 	public function testLoggedExceptionDuringNotifying() {
 		$ex = new \Exception('exceptionMessage');
-		$subscription = $this->mockery(Subscribing\Subscription::class);
-		$subscription->shouldReceive('notify')->andThrowExceptions([$ex]);
+		$subscription = new Subscribing\FakeSubscription($ex);
 		$logger = $this->mockery('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
 		(new Subscribing\LoggedSubscription(

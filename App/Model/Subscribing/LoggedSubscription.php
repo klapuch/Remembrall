@@ -17,7 +17,7 @@ final class LoggedSubscription implements Subscription {
 		$this->logger = $logger;
 	}
 
-	public function cancel() {
+	public function cancel(): void {
 		try {
 			$this->origin->cancel();
 		} catch(\Throwable $ex) {
@@ -26,7 +26,7 @@ final class LoggedSubscription implements Subscription {
 		}
 	}
 
-	public function edit(Time\Interval $interval) {
+	public function edit(Time\Interval $interval): void {
 		try {
 			$this->origin->edit($interval);
 		} catch(\Throwable $ex) {
@@ -35,7 +35,7 @@ final class LoggedSubscription implements Subscription {
 		}
     }
 
-    public function notify() {
+    public function notify(): void {
 		try {
 			$this->origin->notify();
 		} catch(\Throwable $ex) {

@@ -12,7 +12,7 @@ interface Parts {
 	 * @param string $expression
 	 * @return void
 	 */
-	public function add(Part $part, Uri\Uri $uri, string $expression);
+	public function add(Part $part, Uri\Uri $uri, string $expression): void;
 
 	/**
 	 * Go through all the parts

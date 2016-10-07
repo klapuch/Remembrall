@@ -9,7 +9,7 @@ use Klapuch\Http;
  * Html web page downloaded from the internet
  */
 final class HtmlWebPage implements Page {
-    const CONTENT_TYPE = 'text/html';
+    private const CONTENT_TYPE = 'text/html';
     private $request;
 
     public function __construct(Http\Request $request) {

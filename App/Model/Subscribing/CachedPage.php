@@ -10,7 +10,7 @@ use Klapuch\{
  * Cached page on the database side
  */
 final class CachedPage implements Page {
-	const EXPIRATION = 'PT10M';
+	private const EXPIRATION = 'PT10M';
 	private $uri;
 	private $origin;
 	private $database;

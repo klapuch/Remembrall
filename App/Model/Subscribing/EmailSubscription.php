@@ -25,16 +25,16 @@ final class EmailSubscription implements Subscription {
 		$this->database = $database;
 	}
 
-	public function cancel() {
+	public function cancel(): void {
 		$this->origin->cancel();
 	}
 
-	public function edit(Time\Interval $interval) {
+	public function edit(Time\Interval $interval): void {
 		$this->origin->edit($interval);
 	}
 
 	// TODO, it can not be tested
-	public function notify() {
+	public function notify(): void {
 		(new Storage\PostgresTransaction($this->database))->start(
 			function() {
 				$this->origin->notify();

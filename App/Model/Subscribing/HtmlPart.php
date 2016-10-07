@@ -6,7 +6,7 @@ namespace Remembrall\Model\Subscribing;
  * Part in html format
  */
 final class HtmlPart implements Part {
-    const EMPTY_PART = '';
+    private const EMPTY_PART = '';
 	private $expression;
 	private $page;
 

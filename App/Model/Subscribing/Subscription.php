@@ -11,7 +11,7 @@ interface Subscription {
 	 * @throws NotFoundException
 	 * @return void
 	 */
-	public function cancel();
+	public function cancel(): void;
 
 	/**
 	 * Edit the subscription
@@ -20,12 +20,12 @@ interface Subscription {
 	 * @throws NotFoundException
 	 * @return void
 	 */
-    public function edit(Time\Interval $interval);
+    public function edit(Time\Interval $interval): void;
 
     /**
      * Send notification about changes on the current subscription
      * @throws NotFoundException
      * @return void
      */
-    public function notify();
+    public function notify(): void;
 }

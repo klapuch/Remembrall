@@ -8,10 +8,20 @@ use Klapuch\Uri;
  * Fake
  */
 final class FakeParts implements Parts {
-	public function add(Part $part, Uri\Uri $uri, string $expression) {
+	private $exception;
+
+	public function __construct(\Throwable $exception = null) {
+	    $this->exception = $exception;
+	}
+
+	public function add(Part $part, Uri\Uri $uri, string $expression): void {
+		if($this->exception)
+			throw $this->exception;
 	}
 
 	public function iterate(): \Iterator {
+		if($this->exception)
+			throw $this->exception;
 		return new \ArrayIterator();
 	}
 }

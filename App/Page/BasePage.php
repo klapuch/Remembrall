@@ -8,7 +8,7 @@ use Klapuch\Uri;
 abstract class BasePage extends Nette\Application\UI\Presenter {
     use \Nextras\Application\UI\SecuredLinksPresenterTrait;
 
-    const TEMPLATES = __DIR__ . '/templates';
+    protected const TEMPLATES = __DIR__ . '/templates';
 
     /** @inject @var \Klapuch\Storage\Database */
     public $database;
