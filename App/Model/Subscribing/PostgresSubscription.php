@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Time, Storage
+	Storage, Time
 };
 
 final class PostgresSubscription implements Subscription {

@@ -11,7 +11,7 @@ final class FakeParts implements Parts {
 	private $exception;
 
 	public function __construct(\Throwable $exception = null) {
-	    $this->exception = $exception;
+		$this->exception = $exception;
 	}
 
 	public function add(Part $part, Uri\Uri $uri, string $expression): void {

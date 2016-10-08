@@ -7,6 +7,5 @@ namespace Remembrall\Model\Access;
  */
 final class FakeSubscribers implements Subscribers {
 	public function register(string $email, string $password): Subscriber {
-
 	}
 }

@@ -4,14 +4,14 @@ namespace Remembrall\Page;
 
 use Nette\Mail;
 use Remembrall\Model\{
-    Email, Subscribing
+	Email
 };
 
 final class CronPage extends BasePage {
-    /** @var Mail\IMailer @inject */
-    public $mailer;
+	/** @var Mail\IMailer @inject */
+	public $mailer;
 
-    public function actionDefault() {
-        echo 'OK';
-    }
+	public function actionDefault() {
+		echo 'OK';
+	}
 }

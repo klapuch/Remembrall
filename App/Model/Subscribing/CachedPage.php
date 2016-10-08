@@ -26,8 +26,8 @@ final class CachedPage implements Page {
 	}
 
 	public function content(): \DOMDocument {
-        if($this->outdated($this->uri))
-        	return $this->refresh()->content();
+		if($this->outdated($this->uri))
+			return $this->refresh()->content();
 		$dom = new DOM();
 		$dom->loadHTML(
 			$this->database->fetchColumn(
@@ -38,10 +38,6 @@ final class CachedPage implements Page {
 			)
 		);
 		return $dom;
-	}
-
-	public function refresh(): Page {
-		return $this->origin->refresh();
 	}
 
 	/**
@@ -76,5 +72,9 @@ final class CachedPage implements Page {
 			WHERE url IS NOT DISTINCT FROM ?',
 			[$uri->reference()]
 		);
+	}
+
+	public function refresh(): Page {
+		return $this->origin->refresh();
 	}
 }

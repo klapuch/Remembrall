@@ -2,39 +2,39 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Remembrall\Exception\NotFoundException;
 use Klapuch\Http;
+use Remembrall\Exception\NotFoundException;
 
 /**
  * Html web page downloaded from the internet
  */
 final class HtmlWebPage implements Page {
-    private const CONTENT_TYPE = 'text/html';
-    private $request;
+	private const CONTENT_TYPE = 'text/html';
+	private $request;
 
-    public function __construct(Http\Request $request) {
-        $this->request = $request;
-    }
+	public function __construct(Http\Request $request) {
+		$this->request = $request;
+	}
 
-    public function content(): \DOMDocument {
-        try {
-            $response = new Http\StrictResponse(
-                ['Content-Type' => self::CONTENT_TYPE],
-                new Http\AvailableResponse($this->request->send())
-            );
-            $dom = new DOM();
-            $dom->loadHTML($response->body());
-            return $dom;
-        } catch(\Throwable $ex) {
-            throw new NotFoundException(
-                'Page is unreachable. Does the URL exist?',
-                $ex->getCode(),
-                $ex
-            );
-        }
-    }
+	public function content(): \DOMDocument {
+		try {
+			$response = new Http\StrictResponse(
+				['Content-Type' => self::CONTENT_TYPE],
+				new Http\AvailableResponse($this->request->send())
+			);
+			$dom = new DOM();
+			$dom->loadHTML($response->body());
+			return $dom;
+		} catch(\Throwable $ex) {
+			throw new NotFoundException(
+				'Page is unreachable. Does the URL exist?',
+				$ex->getCode(),
+				$ex
+			);
+		}
+	}
 
-    public function refresh(): Page {
-        return new self($this->request);
-    }
+	public function refresh(): Page {
+		return new self($this->request);
+	}
 }

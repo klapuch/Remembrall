@@ -29,18 +29,6 @@ final class ExistingPart implements Part {
 		return $this->origin->content();
 	}
 
-	public function snapshot(): string {
-		if(!$this->exists())
-			throw new NotFoundException('The part does not exist');
-		return $this->origin->snapshot();
-	}
-
-	public function refresh(): Part {
-		if(!$this->exists())
-			throw new NotFoundException('The part does not exist');
-		return $this->origin->refresh();
-	}
-
 	/**
 	 * Does the part really exist?
 	 * @return bool
@@ -52,5 +40,17 @@ final class ExistingPart implements Part {
 			WHERE id IS NOT DISTINCT FROM ?',
 			[$this->id]
 		);
+	}
+
+	public function snapshot(): string {
+		if(!$this->exists())
+			throw new NotFoundException('The part does not exist');
+		return $this->origin->snapshot();
+	}
+
+	public function refresh(): Part {
+		if(!$this->exists())
+			throw new NotFoundException('The part does not exist');
+		return $this->origin->refresh();
 	}
 }

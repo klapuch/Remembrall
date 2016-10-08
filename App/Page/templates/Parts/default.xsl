@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
     <xsl:import href="../@layout.xsl"/>
 
@@ -23,11 +23,21 @@
 
     <xsl:template match="subscription">
         <tr>
-            <td><xsl:number value="position()" format="1. "/></td>
-            <td><xsl:value-of select="lastUpdate"/></td>
-            <td><xsl:value-of select="interval"/></td>
-            <td><xsl:value-of select="expression"/></td>
-            <td><xsl:value-of select="url"/></td>
+            <td>
+                <xsl:number value="position()" format="1. "/>
+            </td>
+            <td>
+                <xsl:value-of select="lastUpdate"/>
+            </td>
+            <td>
+                <xsl:value-of select="interval"/>
+            </td>
+            <td>
+                <xsl:value-of select="expression"/>
+            </td>
+            <td>
+                <xsl:value-of select="url"/>
+            </td>
             <td>
                 <xsl:apply-templates select="//confirmation">
                     <xsl:with-param name="expression" select="expression"/>
@@ -46,17 +56,21 @@
     </xsl:template>
 
     <xsl:template match="heading">
-        <th><p><xsl:value-of select="."/></p></th>
+        <th>
+            <p>
+                <xsl:value-of select="."/>
+            </p>
+        </th>
     </xsl:template>
 
     <xsl:template match="confirmation">
         <xsl:param name="expression"/>
         <xsl:param name="url"/>
         <a
-            role="button"
-            href="{concat(href, concat(concat('&amp;url=', $url), concat('&amp;expression=', $expression)))}"
-            onclick="return confirm('{normalize-space(message)}')"
-            title="{title}" type="button" class="btn btn-danger btn-sm">
+                role="button"
+                href="{concat(href, concat(concat('&amp;url=', $url), concat('&amp;expression=', $expression)))}"
+                onclick="return confirm('{normalize-space(message)}')"
+                title="{title}" type="button" class="btn btn-danger btn-sm">
             <span class="glyphicon glyphicon-{glyphicon}" aria-hidden="true"/>
         </a>
     </xsl:template>

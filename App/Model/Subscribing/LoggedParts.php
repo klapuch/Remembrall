@@ -2,8 +2,8 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Tracy;
 use Klapuch\Uri;
+use Tracy;
 
 /**
  * Log every error action

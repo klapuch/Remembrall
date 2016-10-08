@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Storage, Uri, Time, Output
+	Output, Storage, Time, Uri
 };
 use Remembrall\Model\Access;
 
@@ -42,10 +42,6 @@ final class LimitedSubscriptions implements Subscriptions {
 		$this->origin->subscribe($uri, $expression, $interval);
 	}
 
-	public function print(Output\Format $format): array {
-		return $this->origin->print($format);
-	}
-
 	/**
 	 * Has the subscriber subscribed more than X parts and overstepped the limit?
 	 * @return bool
@@ -59,5 +55,9 @@ final class LimitedSubscriptions implements Subscriptions {
 			HAVING COUNT(parts.id) >= ?',
 			[$this->subscriber->id(), self::LIMIT]
 		);
+	}
+
+	public function print(Output\Format $format): array {
+		return $this->origin->print($format);
 	}
 }

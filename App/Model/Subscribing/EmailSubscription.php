@@ -2,10 +2,10 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Nette\Mail;
 use Klapuch\{
-	Time, Storage, Output
+	Output, Storage, Time
 };
+use Nette\Mail;
 
 final class EmailSubscription implements Subscription {
 	private $origin;

@@ -2,10 +2,10 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Tracy;
 use Klapuch\{
-    Uri, Time, Output
+	Output, Time, Uri
 };
+use Tracy;
 
 /**
  * Log every error action

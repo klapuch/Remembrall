@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Access;
 
 use Klapuch\{
-    Storage, Encryption
+	Encryption, Storage
 };
 use Remembrall\Exception\DuplicateException;
 

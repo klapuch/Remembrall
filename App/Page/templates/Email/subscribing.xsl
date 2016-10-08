@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<html lang="cs-cz" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xsl:version='1.0'>
+<html xmlns:xsl="http://www.w3.org/1999/XSL/Transform" lang="cs-cz"
+      xsl:version='1.0'>
     <body>
 
         <xsl:element name="p">

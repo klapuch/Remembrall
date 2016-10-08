@@ -8,7 +8,7 @@ final class FakeSubscription implements Subscription {
 	private $exception;
 
 	public function __construct(\Throwable $exception = null) {
-	    $this->exception = $exception;
+		$this->exception = $exception;
 	}
 
 	public function cancel(): void {
@@ -19,9 +19,9 @@ final class FakeSubscription implements Subscription {
 	public function edit(Time\Interval $interval): void {
 		if($this->exception)
 			throw $this->exception;
-    }
+	}
 
-    public function notify(): void {
+	public function notify(): void {
 		if($this->exception)
 			throw $this->exception;
 	}

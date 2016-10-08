@@ -2,8 +2,8 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Tracy;
 use Klapuch\Time;
+use Tracy;
 
 /**
  * Log every error action
@@ -33,14 +33,14 @@ final class LoggedSubscription implements Subscription {
 			$this->logger->log($ex, Tracy\Logger::ERROR);
 			throw $ex;
 		}
-    }
+	}
 
-    public function notify(): void {
+	public function notify(): void {
 		try {
 			$this->origin->notify();
 		} catch(\Throwable $ex) {
 			$this->logger->log($ex, Tracy\Logger::ERROR);
 			throw $ex;
 		}
-    }
+	}
 }

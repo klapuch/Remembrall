@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet version="1.0"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:php="http://php.net/xsl">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                version="1.0"
+>
     <xsl:import href="@headers.xsl"/>
 
     <xsl:output method="html" encoding="utf-8"/>
@@ -25,11 +25,11 @@
                         <div class="container">
                             <div class="navbar-header">
                                 <button type="button"
-                                    class="navbar-toggle collapsed"
-                                    data-toggle="collapse"
-                                    data-target="#navbar"
-                                    aria-expanded="false"
-                                    aria-controls="navbar">
+                                        class="navbar-toggle collapsed"
+                                        data-toggle="collapse"
+                                        data-target="#navbar"
+                                        aria-expanded="false"
+                                        aria-controls="navbar">
                                     <span class="sr-only">
                                         Toggle navigation
                                     </span>
@@ -52,11 +52,13 @@
                             </div>
                             <div id="navbar" class="navbar-collapse collapse">
                                 <ul class="nav navbar-nav">
-                                    <xsl:for-each select="document('@links.xml')/links/link">
+                                    <xsl:for-each
+                                            select="document('@links.xml')/links/link">
                                         <li>
                                             <xsl:element name="a">
                                                 <xsl:attribute name="href">
-                                                    <xsl:value-of select="concat($baseUrl, href)"/>
+                                                    <xsl:value-of
+                                                            select="concat($baseUrl, href)"/>
                                                 </xsl:attribute>
                                                 <xsl:value-of select="title"/>
                                             </xsl:element>
@@ -74,8 +76,8 @@
                     <div class="container">
                         <p class="muted credit text-center">
                             <a href="https://www.github.com/klapuch"
-                                class="no-link"
-                                target="_blank">
+                               class="no-link"
+                               target="_blank">
                                 Created with
                                 <span id="heart">❤</span>
                             </a>

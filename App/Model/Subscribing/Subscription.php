@@ -20,12 +20,12 @@ interface Subscription {
 	 * @throws NotFoundException
 	 * @return void
 	 */
-    public function edit(Time\Interval $interval): void;
+	public function edit(Time\Interval $interval): void;
 
-    /**
-     * Send notification about changes on the current subscription
-     * @throws NotFoundException
-     * @return void
-     */
-    public function notify(): void;
+	/**
+	 * Send notification about changes on the current subscription
+	 * @throws NotFoundException
+	 * @return void
+	 */
+	public function notify(): void;
 }

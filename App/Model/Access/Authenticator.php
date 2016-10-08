@@ -12,16 +12,16 @@ final class Authenticator implements Security\IAuthenticator {
 		$this->entrance = $entrance;
 	}
 
-    public function authenticate(array $credentials) {
-        try {
-            $user = $this->entrance->entry($credentials);
-            return new Security\Identity($user->id());
-        } catch(\Exception $ex) {
-            throw new AuthenticationException(
-                'The password or email is incorrect',
-                $ex->getCode(),
-                $ex
-            );
-        }
+	public function authenticate(array $credentials) {
+		try {
+			$user = $this->entrance->entry($credentials);
+			return new Security\Identity($user->id());
+		} catch(\Exception $ex) {
+			throw new AuthenticationException(
+				'The password or email is incorrect',
+				$ex->getCode(),
+				$ex
+			);
+		}
 	}
 }

@@ -2,14 +2,14 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Remembrall\Exception\DuplicateException;
 use Klapuch\{
-    Uri, Time, Output
+	Output, Time, Uri
 };
+use Remembrall\Exception\DuplicateException;
 
 interface Subscriptions {
-    /**
-     * Subscribe to a new part
+	/**
+	 * Subscribe to a new part
 	 * @param \Klapuch\Uri\Uri $uri
 	 * @param string $expression
 	 * @param \Klapuch\Time\Interval $interval
@@ -20,7 +20,7 @@ interface Subscriptions {
 		Uri\Uri $uri,
 		string $expression,
 		Time\Interval $interval
-    ): void;
+	): void;
 
 	/**
 	 * Print itself
@@ -28,5 +28,4 @@ interface Subscriptions {
 	 * @return Output\Format[]
 	 */
 	public function print(Output\Format $format): array;
-
 }

@@ -25,5 +25,5 @@ final class WebPages implements Pages {
 			]
 		);
 		return $page;
-    }
+	}
 }
