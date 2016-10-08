@@ -24,6 +24,52 @@ final class OwnedSubscriptions implements Subscriptions {
 		$this->database = $database;
 	}
 
+	public function subscribe(
+		Uri\Uri $url,
+		string $expression,
+		Time\Interval $interval
+	): void {
+		try {
+			$this->database->query(
+				'INSERT INTO subscriptions
+				(part_id, subscriber_id, interval, last_update, snapshot)
+				(
+					SELECT id, ?, ?, NOW(), snapshot
+					FROM parts
+					WHERE expression IS NOT DISTINCT FROM ?
+					AND page_url IS NOT DISTINCT FROM ?
+				)',
+				[
+					$this->owner->id(),
+					$interval->iso(),
+					$expression,
+					$url->reference(),
+				]
+			);
+		} catch(Storage\UniqueConstraint $ex) {
+			throw new DuplicateException(
+				sprintf(
+					'"%s" expression on "%s" page is already subscribed by you',
+					$expression,
+					$url->reference()
+				),
+				$ex->getCode(),
+				$ex
+			);
+		}
+	}
+
+	public function iterate(): \Iterator {
+		$rows = $this->database->fetchAll(
+			'SELECT id
+			FROM subscriptions
+			WHERE subscriber_id IS NOT DISTINCT FROM ?',
+			[$this->owner->id()]
+		);
+		foreach($rows as ['id' => $id])
+			yield new PostgresSubscription($id, $this->database);
+	}
+
 	public function print(Output\Format $format): array {
 		$rows = $this->database->fetchAll(
 			'SELECT expression, page_url AS url, interval, visited_at, last_update
@@ -60,40 +106,5 @@ final class OwnedSubscriptions implements Subscriptions {
 			},
 			self::EMPTY_FORMAT
 		);
-	}
-
-	public function subscribe(
-		Uri\Uri $url,
-		string $expression,
-		Time\Interval $interval
-	): void {
-		try {
-			$this->database->query(
-				'INSERT INTO subscriptions
-				(part_id, subscriber_id, interval, last_update, snapshot)
-				(
-					SELECT id, ?, ?, NOW(), snapshot
-					FROM parts
-					WHERE expression IS NOT DISTINCT FROM ?
-					AND page_url IS NOT DISTINCT FROM ?
-				)',
-				[
-					$this->owner->id(),
-					$interval->iso(),
-					$expression,
-					$url->reference(),
-				]
-			);
-		} catch(Storage\UniqueConstraint $ex) {
-			throw new DuplicateException(
-				sprintf(
-					'"%s" expression on "%s" page is already subscribed by you',
-					$expression,
-					$url->reference()
-				),
-				$ex->getCode(),
-				$ex
-			);
-		}
 	}
 }

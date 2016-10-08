@@ -97,6 +97,41 @@ final class OwnedSubscriptions extends TestCase\Database {
 		);
 	}
 
+	public function testEmptyIterating() {
+		$subscriptions = (new Subscribing\OwnedSubscriptions(
+			new Access\FakeSubscriber(1),
+			$this->database
+		))->iterate();
+		Assert::null($subscriptions->current());
+	}
+
+	public function testIteratingOwned() {
+		$this->database->query(
+			"INSERT INTO subscriptions (part_id, subscriber_id, interval, last_update, snapshot) VALUES
+			(1, 4, 'PT1M', NOW(), ''),
+			(2, 2, 'PT2M', NOW(), ''),
+			(3, 1, 'PT3M', NOW(), ''),
+			(4, 1, 'PT4M', NOW(), '')"
+		);
+		$subscriptions = (new Subscribing\OwnedSubscriptions(
+			new Access\FakeSubscriber(1),
+			$this->database
+		))->iterate();
+		$subscription = $subscriptions->current();
+		Assert::equal(
+			new Subscribing\PostgresSubscription(3, $this->database),
+			$subscription
+		);
+		$subscriptions->next();
+		$subscription = $subscriptions->current();
+		Assert::equal(
+			new Subscribing\PostgresSubscription(4, $this->database),
+			$subscription
+		);
+		$subscriptions->next();
+		Assert::null($subscriptions->current());
+	}
+
     protected function prepareDatabase() {
 		$this->truncate(['parts', 'pages', 'subscriptions']);
 		$this->restartSequence(['parts', 'subscriptions']);

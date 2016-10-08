@@ -13,12 +13,6 @@ final class FakeSubscriptions implements Subscriptions {
 		$this->exception = $exception;
 	}
 
-	public function print(Output\Format $format): array {
-		if($this->exception)
-			throw $this->exception;
-		return [];
-	}
-
 	public function subscribe(
 		Uri\Uri $uri,
 		string $expression,
@@ -27,4 +21,17 @@ final class FakeSubscriptions implements Subscriptions {
 		if($this->exception)
 			throw $this->exception;
 	}
+
+	public function iterate(): \Iterator {
+		if($this->exception)
+			throw $this->exception;
+		return new \ArrayIterator();
+	}
+
+	public function print(Output\Format $format): array {
+		if($this->exception)
+			throw $this->exception;
+		return [];
+	}
+
 }

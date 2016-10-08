@@ -58,12 +58,34 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 		))->print(new Output\FakeFormat());
 	}
 
-	public function testNoExceptionDuringIterating() {
+	public function testNoExceptionDuringPrinting() {
 		Assert::noError(function() {
 			$logger = $this->mock('Tracy\ILogger');
 			(new Subscribing\LoggedSubscriptions(
 				new Subscribing\FakeSubscriptions(), $logger
 			))->print(new Output\FakeFormat());
+		});
+	}
+
+	/**
+	 * @throws \Exception exceptionMessage
+	 */
+	public function testLoggedExceptionDuringIterating() {
+		$ex = new \Exception('exceptionMessage');
+		$logger = $this->mock('Tracy\ILogger');
+		$logger->shouldReceive('log')->once()->with($ex, 'error');
+		(new Subscribing\LoggedSubscriptions(
+			new Subscribing\FakeSubscriptions($ex),
+			$logger
+		))->iterate();
+	}
+
+	public function testNoExceptionDuringIterating() {
+		Assert::noError(function() {
+			$logger = $this->mock('Tracy\ILogger');
+			(new Subscribing\LoggedSubscriptions(
+				new Subscribing\FakeSubscriptions(), $logger
+			))->iterate();
 		});
 	}
 }

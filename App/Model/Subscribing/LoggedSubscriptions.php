@@ -32,6 +32,15 @@ final class LoggedSubscriptions implements Subscriptions {
 		}
 	}
 
+	public function iterate(): \Iterator {
+		try {
+			return $this->origin->iterate();
+		} catch(\Throwable $ex) {
+			$this->logger->log($ex, Tracy\Logger::ERROR);
+			throw $ex;
+		}
+	}
+
 	public function print(Output\Format $format): array {
 		try {
 			return $this->origin->print($format);

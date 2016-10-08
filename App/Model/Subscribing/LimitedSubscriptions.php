@@ -42,6 +42,10 @@ final class LimitedSubscriptions implements Subscriptions {
 		$this->origin->subscribe($uri, $expression, $interval);
 	}
 
+	public function iterate(): \Iterator {
+		return $this->origin->iterate();
+	}
+
 	/**
 	 * Has the subscriber subscribed more than X parts and overstepped the limit?
 	 * @return bool

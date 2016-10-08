@@ -23,6 +23,12 @@ interface Subscriptions {
 	): void;
 
 	/**
+	 * Go through all the subscriptions
+	 * @return \Iterator
+	 */
+	public function iterate(): \Iterator;
+
+	/**
 	 * Print itself
 	 * @param \Klapuch\Output\Format $format
 	 * @return Output\Format[]
