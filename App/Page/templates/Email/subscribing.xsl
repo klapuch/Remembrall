@@ -4,9 +4,9 @@
     <body>
 
         <xsl:element name="p">
-            Hi, there are some changes on the
+            Hi, there are some changes on
             <xsl:value-of select="/part/url"/>
-            website with the
+            website with
             <xsl:value-of select="/part/expression"/> expression
         </xsl:element>
 

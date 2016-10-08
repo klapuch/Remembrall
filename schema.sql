@@ -295,7 +295,7 @@ CREATE TABLE subscriptions (
     part_id integer NOT NULL,
     "interval" character varying(10) NOT NULL,
     last_update timestamp without time zone NOT NULL,
-    snaphost character varying(40) NOT NULL
+    snapshot character varying(40) NOT NULL
 );
 
 
@@ -570,10 +570,10 @@ CREATE INDEX subscribed_parts_part_id ON subscriptions USING btree (part_id);
 
 
 --
--- Name: subscriptions_snaphost; Type: INDEX; Schema: public; Owner: postgres
+-- Name: subscriptions_snapshot; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX subscriptions_snaphost ON subscriptions USING btree (snaphost);
+CREATE INDEX subscriptions_snapshot ON subscriptions USING btree (snapshot);
 
 
 --
