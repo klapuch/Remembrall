@@ -14,8 +14,8 @@ use Klapuch\{
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class OutdatedParts extends TestCase\Database {
-	public function testIteratingOutdatedParts() {
+final class UnreliableParts extends TestCase\Database {
+	public function testIteratingUnreliableParts() {
 		$this->database->query(
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
 			('www.google.com', '//a', 'a', ''),
@@ -30,7 +30,7 @@ final class OutdatedParts extends TestCase\Database {
 			(3, 3, 'PT3M', NOW() - INTERVAL '2 MINUTE', ''),
 			(3, 1, 'PT20M', NOW() - INTERVAL '22 MINUTE', '')"
 		);
-		$parts = (new Subscribing\OutdatedParts(
+		$parts = (new Subscribing\UnreliableParts(
 			new Subscribing\FakeParts(),
 			$this->database
 		))->iterate();
@@ -96,7 +96,7 @@ final class OutdatedParts extends TestCase\Database {
 	}
 
 	public function testEmptyIterating() {
-		$parts = (new Subscribing\OutdatedParts(
+		$parts = (new Subscribing\UnreliableParts(
 			new Subscribing\FakeParts(),
 			$this->database
 		))->iterate();
@@ -109,4 +109,4 @@ final class OutdatedParts extends TestCase\Database {
 	}
 }
 
-(new OutdatedParts)->run();
+(new UnreliableParts)->run();
