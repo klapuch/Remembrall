@@ -29,6 +29,12 @@ final class ExistingPart implements Part {
 		return $this->origin->content();
 	}
 
+	public function snapshot(): string {
+		if(!$this->exists())
+			throw new NotFoundException('The part does not exist');
+		return $this->origin->snapshot();
+	}
+
 	public function refresh(): Part {
 		if(!$this->exists())
 			throw new NotFoundException('The part does not exist');

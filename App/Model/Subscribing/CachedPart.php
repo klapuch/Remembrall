@@ -12,6 +12,10 @@ final class CachedPart extends Storage\Cache implements Part {
 		return $this->read(__FUNCTION__);
 	}
 
+	public function snapshot(): string {
+		return $this->read(__FUNCTION__);
+	}
+
 	public function refresh(): Part {
 		return $this->read(__FUNCTION__);
 	}

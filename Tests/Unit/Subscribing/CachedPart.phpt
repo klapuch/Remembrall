@@ -23,6 +23,7 @@ final class CachedPart extends TestCase\Mockery {
 
 	public function testCaching() {
 		$content = '<p>XXX</p>';
+		$snapshot = sha1($content);
 		$fakePart = new Subscribing\FakePart();
 		$this->cache->shouldReceive('read')
 			->andReturn($content)
@@ -32,6 +33,10 @@ final class CachedPart extends TestCase\Mockery {
 			->andReturn($fakePart)
 			->with('Remembrall\Model\Subscribing\CachedPart::refresh#-')
 			->times(4);
+		$this->cache->shouldReceive('read')
+			->andReturn($snapshot)
+			->with('Remembrall\Model\Subscribing\CachedPart::snapshot#-')
+			->times(4);
 		$part = new Subscribing\CachedPart(
 			new Subscribing\FakePart($content, $fakePart),
 			$this->cache
@@ -39,6 +44,9 @@ final class CachedPart extends TestCase\Mockery {
 
 		Assert::same($content, $part->content());
 		Assert::same($content, $part->content());
+
+		Assert::same($snapshot, $part->snapshot());
+		Assert::same($snapshot, $part->snapshot());
 
 		Assert::same($fakePart, $part->refresh());
 		Assert::same($fakePart, $part->refresh());

@@ -8,17 +8,24 @@ namespace Remembrall\Model\Subscribing;
 final class FakePart implements Part {
 	private $content;
 	private $refreshedPart;
+	private $snapshot;
 
 	public function __construct(
 		string $content = null,
-		self $refreshedPart = null
+		self $refreshedPart = null,
+		string $snapshot = null
 	) {
 		$this->content = $content;
 		$this->refreshedPart = $refreshedPart;
+		$this->snapshot = $snapshot;
 	}
 
 	public function content(): string {
 		return $this->content;
+	}
+
+	public function snapshot(): string {
+		return $this->snapshot;
 	}
 
 	public function refresh(): Part {

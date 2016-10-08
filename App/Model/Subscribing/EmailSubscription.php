@@ -9,20 +9,17 @@ use Klapuch\{
 
 final class EmailSubscription implements Subscription {
 	private $origin;
-	private $id;
 	private $mailer;
-	private $database;
+	private $message;
 
 	public function __construct(
 		Subscription $origin,
-		int $id,
 		Mail\IMailer $mailer,
-		Storage\Database $database
+		Mail\Message $message
 	) {
 		$this->origin = $origin;
-		$this->id = $id;
 		$this->mailer = $mailer;
-		$this->database = $database;
+		$this->message = $message;
 	}
 
 	public function cancel(): void {
@@ -33,8 +30,9 @@ final class EmailSubscription implements Subscription {
 		$this->origin->edit($interval);
 	}
 
-	// TODO, it can not be tested
 	public function notify(): void {
+		$this->origin->notify();
+		$this->mailer->send($this->message);
 		(new Storage\PostgresTransaction($this->database))->start(
 			function() {
 				$this->origin->notify();

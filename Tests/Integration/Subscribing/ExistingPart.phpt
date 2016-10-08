@@ -28,12 +28,19 @@ final class ExistingPart extends TestCase\Database {
 				$this->database
 			))->refresh();
 		}, NotFoundException::class, 'The part does not exist');
+		Assert::exception(function() {
+			(new Subscribing\ExistingPart(
+				new Subscribing\FakePart(),
+				125,
+				$this->database
+			))->snapshot();
+		}, NotFoundException::class, 'The part does not exist');
 	}
 
 	public function testExistingPart() {
 		$this->database->query(
-			"INSERT INTO parts (page_url, expression, content) VALUES
-			('www.facedown.cz', '//d', 'd')"
+			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
+			('www.facedown.cz', '//d', 'd', '')"
 		);
 		Assert::noError(function() {
 			(new Subscribing\ExistingPart(
@@ -48,6 +55,13 @@ final class ExistingPart extends TestCase\Database {
 				1,
 				$this->database
 			))->refresh();
+		});
+		Assert::noError(function() {
+			(new Subscribing\ExistingPart(
+				new Subscribing\FakePart('notEmpty', null, 'snap'),
+				1,
+				$this->database
+			))->snapshot();
 		});
 	}
 

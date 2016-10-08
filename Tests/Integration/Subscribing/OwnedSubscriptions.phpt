@@ -32,6 +32,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 		Assert::same(1, $subscriptions[0]['id']);
 		Assert::same(666, $subscriptions[0]['subscriber_id']);
 		Assert::same('PT120S', $subscriptions[0]['interval']);
+		Assert::same('google snap', $subscriptions[0]['snapshot']);
     }
 
     public function testSubscribingDuplication() {
@@ -54,18 +55,18 @@ final class OwnedSubscriptions extends TestCase\Database {
 
 	public function testPrinting() {
 		$this->database->query(
-			"INSERT INTO parts (page_url, expression, content) VALUES
-			('https://www.google.com', '//a', 'a'),
-			('http://www.facedown.cz', '//b', 'b'),
-			('http://www.facedown.cz', '//c', 'c'),
-			('https://www.google.com', '//d', 'd')"
+			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
+			('https://www.google.com', '//a', 'a', ''),
+			('http://www.facedown.cz', '//b', 'b', ''),
+			('http://www.facedown.cz', '//c', 'c', ''),
+			('https://www.google.com', '//d', 'd', '')"
 		);
 		$this->database->query(
-			"INSERT INTO subscriptions (part_id, subscriber_id, interval, last_update) VALUES
-			(1, 1, 'PT1M', '1993-01-01'),
-			(2, 2, 'PT2M', '1994-01-01'),
-			(3, 1, 'PT3M', '1996-01-01'),
-			(4, 1, 'PT4M', '1997-01-01')"
+			"INSERT INTO subscriptions (part_id, subscriber_id, interval, last_update, snapshot) VALUES
+			(1, 1, 'PT1M', '1993-01-01', ''),
+			(2, 2, 'PT2M', '1994-01-01', ''),
+			(3, 1, 'PT3M', '1996-01-01', ''),
+			(4, 1, 'PT4M', '1997-01-01', '')"
 		);
 		$this->truncate(['part_visits']);
 		$this->database->query(
@@ -105,8 +106,8 @@ final class OwnedSubscriptions extends TestCase\Database {
 			('www.facedown.cz', '<p>facedown</p>')"
 		);
 		$this->database->query(
-			"INSERT INTO parts (page_url, expression, content) VALUES
-			('www.google.com', '//google', 'google content')"
+			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
+			('www.google.com', '//google', 'google content', 'google snap')"
 		);
     }
 }

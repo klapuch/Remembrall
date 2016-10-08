@@ -18,14 +18,15 @@ final class CollectiveParts implements Parts {
 
 	public function add(Part $part, Uri\Uri $url, string $expression): void {
 		$this->database->query(
-			'INSERT INTO parts (page_url, expression, content) VALUES
-			(:url, :expression, :content)
+			'INSERT INTO parts (page_url, expression, content, snapshot) VALUES
+			(:url, :expression, :content, :snapshot)
 			ON CONFLICT (page_url, expression)
-			DO UPDATE SET content = :content',
+			DO UPDATE SET content = :content, snapshot = :snapshot',
 			[
 				':url' => $url->reference(),
 				':expression' => $expression,
 				':content' => $part->content(),
+				':snapshot' => $part->snapshot(),
 			]
 		);
 	}

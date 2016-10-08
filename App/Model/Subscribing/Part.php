@@ -13,6 +13,12 @@ interface Part {
 	public function content(): string;
 
 	/**
+	 * Snapshot of the part
+	 * @return string
+	 */
+	public function snapshot(): string;
+
+	/**
 	 * Refreshed part
 	 * @return Part
 	 */

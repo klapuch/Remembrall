@@ -35,7 +35,7 @@ final class PostgresSubscription extends TestCase\Database {
 		Assert::same('2000-01-01 00:00:00', $subscription['last_update']);
 	}
 
-	public function testNotifyingOnGivenSubscription() {
+	public function testAddedNewNotification() {
 		(new Subscribing\PostgresSubscription(
 			1,
 			$this->database
@@ -47,12 +47,28 @@ final class PostgresSubscription extends TestCase\Database {
 		Assert::same(1, $notifications[0]['subscription_id']);
 	}
 
+	public function testNotifyingWithUpdatedSnapshot() {
+		(new Subscribing\PostgresSubscription(
+			1,
+			$this->database
+		))->notify();
+		$subscription = $this->database->fetch(
+			'SELECT * FROM subscriptions WHERE id = 1'
+		);
+		Assert::same('facedown snap', $subscription['snapshot']);
+	}
+
 	protected function prepareDatabase() {
-		$this->purge(['subscriptions', 'notifications']);
+		$this->purge(['subscriptions', 'notifications', 'parts']);
 		$this->database->query(
-			"INSERT INTO subscriptions (subscriber_id, part_id, interval, last_update) VALUES
-			(111, 3, 'PT2M', '2000-01-01'),
-			(666, 4, 'PT3M', '2000-01-01')"
+			"INSERT INTO subscriptions (id, subscriber_id, part_id, interval, last_update, snapshot) VALUES
+			(1, 111, 3, 'PT2M', '2000-01-01', ''),
+			(2, 666, 4, 'PT3M', '2000-01-01', '')"
+		);
+		$this->database->query(
+			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
+			(3, 'www.facedown.cz', '//p', 'facedown content', 'facedown snap'),
+			(4, 'www.google.com', '//p', 'google content', 'google snap')"
 		);
 	}
 }

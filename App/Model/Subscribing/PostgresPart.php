@@ -31,13 +31,22 @@ final class PostgresPart implements Part {
 		);
 	}
 
+	public function snapshot(): string {
+		return $this->database->fetchColumn(
+			'SELECT snapshot
+			FROM parts
+			WHERE id IS NOT DISTINCT FROM ?',
+			[$this->id]
+		);
+	}
+
 	public function refresh(): Part {
 		$refreshedPart = $this->origin->refresh();
 		$this->database->query(
 			'UPDATE parts
-			SET content = ?
+			SET content = ?, snapshot = ?
 			WHERE id IS NOT DISTINCT FROM ?',
-			[$refreshedPart->content(), $this->id]
+			[$refreshedPart->content(), $refreshedPart->snapshot(), $this->id]
 		);
 		return $this;
 	}

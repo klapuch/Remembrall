@@ -7,7 +7,7 @@ use Klapuch\{
 };
 
 /**
- * All the parts which are no longer trusted as reliable
+ * All the parts which are no longer trusted as reliable and need to be reloaded
  */
 final class OutdatedParts implements Parts {
 	private $origin;

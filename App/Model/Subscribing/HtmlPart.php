@@ -6,7 +6,7 @@ namespace Remembrall\Model\Subscribing;
  * Part in html format
  */
 final class HtmlPart implements Part {
-    private const EMPTY_PART = '';
+	private const EMPTY_PART = '';
 	private $expression;
 	private $page;
 
@@ -18,26 +18,30 @@ final class HtmlPart implements Part {
 	public function content(): string {
 		return array_reduce(
 			iterator_to_array($this->expression->matches()),
-            function($previous, \DOMNode $node) {
-                $previous .= $this->withoutWhiteSpaces(
-                    $node->ownerDocument->saveHTML($node)
-                );
+			function($previous, \DOMNode $node) {
+				$previous .= $this->withoutWhiteSpaces(
+					$node->ownerDocument->saveHTML($node)
+				);
 				return $previous;
-            },
-            self::EMPTY_PART
+			},
+			self::EMPTY_PART
 		);
+	}
+
+	public function snapshot(): string {
+		return sha1($this->content());
 	}
 
 	public function refresh(): Part {
 		return new self($this->expression, $this->page->refresh());
 	}
 
-    /**
-     * Html without tabs and new lines (CR and LF)
-     * @param string $html
-     * @return string
-     */
-    private function withoutWhiteSpaces(string $html): string {
-        return preg_replace('~[\t\r\n]+~', '', $html);
-    }
+	/**
+	 * Html without tabs and new lines (CR and LF)
+	 * @param string $html
+	 * @return string
+	 */
+	private function withoutWhiteSpaces(string $html): string {
+		return preg_replace('~[\t\r\n]+~', '', $html);
+	}
 }

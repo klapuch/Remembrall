@@ -223,7 +223,8 @@ CREATE TABLE parts (
     id integer NOT NULL,
     page_url character varying NOT NULL,
     expression character varying NOT NULL,
-    content text NOT NULL
+    content text NOT NULL,
+    snapshot character varying(40) NOT NULL
 );
 
 
@@ -293,7 +294,8 @@ CREATE TABLE subscriptions (
     subscriber_id integer NOT NULL,
     part_id integer NOT NULL,
     "interval" character varying(10) NOT NULL,
-    last_update timestamp without time zone NOT NULL
+    last_update timestamp without time zone NOT NULL,
+    snaphost character varying(40) NOT NULL
 );
 
 
@@ -554,10 +556,24 @@ CREATE INDEX part_visits_part_id ON part_visits USING btree (part_id);
 
 
 --
+-- Name: parts_snapshot; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX parts_snapshot ON parts USING btree (snapshot);
+
+
+--
 -- Name: subscribed_parts_part_id; Type: INDEX; Schema: public; Owner: postgres
 --
 
 CREATE INDEX subscribed_parts_part_id ON subscriptions USING btree (part_id);
+
+
+--
+-- Name: subscriptions_snaphost; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX subscriptions_snaphost ON subscriptions USING btree (snaphost);
 
 
 --

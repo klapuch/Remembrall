@@ -19,7 +19,7 @@ final class CollectiveParts extends TestCase\Database {
 		(new Subscribing\CollectiveParts(
 			$this->database
 		))->add(
-			new Subscribing\FakePart('<p>google content</p>'),
+			new Subscribing\FakePart('<p>google content</p>', null, 'google snap'),
 			new Uri\FakeUri('www.google.com'),
 			'//p'
 		);
@@ -27,6 +27,7 @@ final class CollectiveParts extends TestCase\Database {
 		Assert::count(1, $parts);
 		Assert::same('www.google.com', $parts[0]['page_url']);
 		Assert::same('<p>google content</p>', $parts[0]['content']);
+		Assert::same('google snap', $parts[0]['snapshot']);
 		Assert::same('//p', $parts[0]['expression']);
 	}
 
@@ -34,14 +35,14 @@ final class CollectiveParts extends TestCase\Database {
 		(new Subscribing\CollectiveParts(
 			$this->database
 		))->add(
-			new Subscribing\FakePart('<p>google content</p>'),
+			new Subscribing\FakePart('<p>google content</p>', null, 'google snap'),
 			new Uri\FakeUri('www.google.com'),
 			'//google'
 		);
 		(new Subscribing\CollectiveParts(
 			$this->database
 		))->add(
-			new Subscribing\FakePart('<p>facedown content</p>'),
+			new Subscribing\FakePart('<p>facedown content</p>', null, 'facedown snap'),
 			new Uri\FakeUri('www.facedown.cz'),
 			'//facedown'
 		);
@@ -49,9 +50,11 @@ final class CollectiveParts extends TestCase\Database {
 		Assert::count(2, $parts);
 		Assert::same('www.google.com', $parts[0]['page_url']);
 		Assert::same('<p>google content</p>', $parts[0]['content']);
+		Assert::same('google snap', $parts[0]['snapshot']);
 		Assert::same('//google', $parts[0]['expression']);
 		Assert::same('www.facedown.cz', $parts[1]['page_url']);
 		Assert::same('<p>facedown content</p>', $parts[1]['content']);
+		Assert::same('facedown snap', $parts[1]['snapshot']);
 		Assert::same('//facedown', $parts[1]['expression']);
 	}
 
@@ -60,7 +63,7 @@ final class CollectiveParts extends TestCase\Database {
 		(new Subscribing\CollectiveParts(
 			$this->database
 		))->add(
-			new Subscribing\FakePart('<p>Content</p>'),
+			new Subscribing\FakePart('<p>Content</p>', null, ''),
 			new Uri\FakeUri('www.google.com'),
 			'//p'
 		);
@@ -71,22 +74,23 @@ final class CollectiveParts extends TestCase\Database {
 	}
 
 	public function testUpdatingPartAsDuplication() {
-		$oldPart = new Subscribing\FakePart('<p>Content</p>');
+		$oldPart = new Subscribing\FakePart('<p>Content</p>', null, 'OLD_SNAP');
 		(new Subscribing\CollectiveParts(
 			$this->database
 		))->add($oldPart, new Uri\FakeUri('www.google.com'), '//p');
-		$newPart = new Subscribing\FakePart('<p>NEW_CONTENT</p>');
+		$newPart = new Subscribing\FakePart('<p>NEW_CONTENT</p>', null, 'NEW_SNAP');
 		(new Subscribing\CollectiveParts(
 			$this->database
 		))->add($newPart, new Uri\FakeUri('www.google.com'), '//p');
 		$parts = $this->database->fetchAll('SELECT * FROM parts');
 		Assert::count(1, $parts);
 		Assert::same('<p>NEW_CONTENT</p>', $parts[0]['content']);
+		Assert::same('NEW_SNAP', $parts[0]['snapshot']);
 	}
 
 	public function testUpdatingPartAsDuplicationWithRecordedVisitation() {
 		$this->truncate(['part_visits']);
-		$part = new Subscribing\FakePart('<p>Content</p>');
+		$part = new Subscribing\FakePart('<p>Content</p>', null, 'snap');
 		(new Subscribing\CollectiveParts(
 			$this->database
 		))->add($part, new Uri\FakeUri('www.google.com'), '//p');
@@ -101,9 +105,9 @@ final class CollectiveParts extends TestCase\Database {
 
 	public function testIteratingOverAllPages() {
 		$this->database->query(
-			"INSERT INTO parts (page_url, expression, content) VALUES
-			('www.google.com', '//a', 'a'),
-			('www.facedown.cz', '//c', 'c')"
+			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
+			('www.google.com', '//a', 'a', ''),
+			('www.facedown.cz', '//c', 'c', '')"
 		);
 		$parts = (new Subscribing\CollectiveParts(
 			$this->database

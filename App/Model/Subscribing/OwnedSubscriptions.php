@@ -67,9 +67,9 @@ final class OwnedSubscriptions implements Subscriptions {
 		try {
 			$this->database->query(
 				'INSERT INTO subscriptions
-				(part_id, subscriber_id, interval, last_update)
+				(part_id, subscriber_id, interval, last_update, snapshot)
 				(
-					SELECT id, ?, ?, NOW()
+					SELECT id, ?, ?, NOW(), snapshot
 					FROM parts
 					WHERE expression IS NOT DISTINCT FROM ?
 					AND page_url IS NOT DISTINCT FROM ?

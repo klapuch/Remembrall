@@ -51,6 +51,38 @@ final class HtmlPart extends Tester\TestCase {
 		);
 	}
 
+	public function testSnapshotHash() {
+		$dom = new \DOMDocument();
+		$dom->loadHTML('<div><p>SNAPSHOT</p></div>');
+		Assert::same(
+			sha1('<p>SNAPSHOT</p>'),
+			(new Subscribing\HtmlPart(
+				new Subscribing\FakeExpression(
+					'//p',
+					(new \DOMXPath($dom))->query('//p')
+				),
+				new Subscribing\FakePage()
+			))->snapshot()
+		);
+	}
+
+	public function testSnapshotLength() {
+		$dom = new \DOMDocument();
+		$dom->loadHTML('<div><p>Blank</p></div>');
+		Assert::same(
+			40,
+			strlen(
+				(new Subscribing\HtmlPart(
+					new Subscribing\FakeExpression(
+						'//p',
+						(new \DOMXPath($dom))->query('//p')
+					),
+					new Subscribing\FakePage()
+				))->snapshot()
+			)
+		);
+	}
+
 	public function testRefreshingWithPage() {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>XXX</p>');

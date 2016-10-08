@@ -16,6 +16,10 @@ final class TextPart implements Part {
 		return strip_tags($this->origin->content());
 	}
 
+	public function snapshot(): string {
+		return $this->origin->snapshot();
+	}
+
 	public function refresh(): Part {
 		return $this->origin->refresh();
 	}
