@@ -19,7 +19,7 @@ final class LoggedParts extends TestCase\Mockery {
 	public function testLoggedExceptionDuringAdding() {
 		$ex = new \Exception('exceptionMessage');
 		$parts = new Subscribing\FakeParts($ex);
-		$logger = $this->mockery('Tracy\ILogger');
+		$logger = $this->mock('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
 		(new Subscribing\LoggedParts(
 			$parts, $logger
@@ -28,7 +28,7 @@ final class LoggedParts extends TestCase\Mockery {
 
 	public function testNoExceptionDuringAdding() {
 		Assert::noError(function() {
-			$logger = $this->mockery('Tracy\ILogger');
+			$logger = $this->mock('Tracy\ILogger');
 			(new Subscribing\LoggedParts(
 				new Subscribing\FakeParts(), $logger
 			))->add(new Subscribing\FakePart(), new Uri\FakeUri('url'), '//p');
@@ -41,14 +41,14 @@ final class LoggedParts extends TestCase\Mockery {
 	public function testLoggedExceptionDuringIterating() {
 		$ex = new \Exception('exceptionMessage');
 		$parts = new Subscribing\FakeParts($ex);
-		$logger = $this->mockery('Tracy\ILogger');
+		$logger = $this->mock('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
 		(new Subscribing\LoggedParts($parts, $logger))->iterate();
 	}
 
 	public function testNoExceptionDuringIterating() {
 		Assert::noError(function() {
-			$logger = $this->mockery('Tracy\ILogger');
+			$logger = $this->mock('Tracy\ILogger');
 			(new Subscribing\LoggedParts(
 				new Subscribing\FakeParts(), $logger
 			))->iterate();

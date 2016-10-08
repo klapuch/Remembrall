@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\TestCase;
 
 abstract class Mockery extends \Tester\TestCase {
-	protected function mockery($class) {
+	protected function mock($class) {
 		return \Mockery::mock($class);
 	}
 

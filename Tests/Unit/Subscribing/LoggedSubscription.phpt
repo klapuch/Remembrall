@@ -21,7 +21,7 @@ final class LoggedSubscription extends TestCase\Mockery {
 	public function testLoggedExceptionDuringCanceling() {
 		$ex = new \Exception('exceptionMessage');
 		$subscription = new Subscribing\FakeSubscription($ex);
-		$logger = $this->mockery('Tracy\ILogger');
+		$logger = $this->mock('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
 		(new Subscribing\LoggedSubscription(
 			$subscription,
@@ -32,7 +32,7 @@ final class LoggedSubscription extends TestCase\Mockery {
 	public function testNoExceptionDuringCanceling() {
 		Assert::noError(
 			function() {
-				$logger = $this->mockery('Tracy\ILogger');
+				$logger = $this->mock('Tracy\ILogger');
 				(new Subscribing\LoggedSubscription(
 					new Subscribing\FakeSubscription(), $logger
 				))->cancel();
@@ -46,7 +46,7 @@ final class LoggedSubscription extends TestCase\Mockery {
 	public function testLoggedExceptionDuringEditing() {
 		$ex = new \Exception('exceptionMessage');
 		$subscription = new Subscribing\FakeSubscription($ex);
-		$logger = $this->mockery('Tracy\ILogger');
+		$logger = $this->mock('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
 		(new Subscribing\LoggedSubscription(
 			$subscription,
@@ -57,7 +57,7 @@ final class LoggedSubscription extends TestCase\Mockery {
 	public function testNoExceptionDuringEditing() {
 		Assert::noError(
 			function() {
-				$logger = $this->mockery('Tracy\ILogger');
+				$logger = $this->mock('Tracy\ILogger');
 				(new Subscribing\LoggedSubscription(
 					new Subscribing\FakeSubscription(), $logger
 				))->edit(new Time\FakeInterval());
@@ -71,7 +71,7 @@ final class LoggedSubscription extends TestCase\Mockery {
 	public function testLoggedExceptionDuringNotifying() {
 		$ex = new \Exception('exceptionMessage');
 		$subscription = new Subscribing\FakeSubscription($ex);
-		$logger = $this->mockery('Tracy\ILogger');
+		$logger = $this->mock('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
 		(new Subscribing\LoggedSubscription(
 			$subscription,
@@ -82,7 +82,7 @@ final class LoggedSubscription extends TestCase\Mockery {
 	public function testNoExceptionDuringNotifying() {
 		Assert::noError(
 			function() {
-				$logger = $this->mockery('Tracy\ILogger');
+				$logger = $this->mock('Tracy\ILogger');
 				(new Subscribing\LoggedSubscription(
 					new Subscribing\FakeSubscription(), $logger
                 ))->notify();

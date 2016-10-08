@@ -17,9 +17,9 @@ final class LoggedPage extends TestCase\Mockery {
 	 */
 	public function testLoggedExceptionDuringContent() {
 		$ex = new \Exception('exceptionMessage');
-		$parts = $this->mockery(Subscribing\Page::class);
+		$parts = $this->mock(Subscribing\Page::class);
 		$parts->shouldReceive('content')->andThrowExceptions([$ex]);
-		$logger = $this->mockery('Tracy\ILogger');
+		$logger = $this->mock('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
 		(new Subscribing\LoggedPage($parts, $logger))->content();
 	}
@@ -27,7 +27,7 @@ final class LoggedPage extends TestCase\Mockery {
 	public function testNoExceptionDuringContent() {
 		Assert::noError(
 			function() {
-				$logger = $this->mockery('Tracy\ILogger');
+				$logger = $this->mock('Tracy\ILogger');
 				(new Subscribing\LoggedPage(
 					new Subscribing\FakePage(new \DOMDocument()), $logger
 				))->content();
@@ -40,9 +40,9 @@ final class LoggedPage extends TestCase\Mockery {
 	 */
 	public function testLoggedExceptionDuringRefreshing() {
 		$ex = new \Exception('exceptionMessage');
-		$parts = $this->mockery(Subscribing\Page::class);
+		$parts = $this->mock(Subscribing\Page::class);
 		$parts->shouldReceive('refresh')->andThrowExceptions([$ex]);
-		$logger = $this->mockery('Tracy\ILogger');
+		$logger = $this->mock('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
 		(new Subscribing\LoggedPage($parts, $logger))->refresh();
 	}
@@ -50,7 +50,7 @@ final class LoggedPage extends TestCase\Mockery {
 	public function testNoExceptionDuringRefreshing() {
 		Assert::noError(
 			function() {
-				$logger = $this->mockery('Tracy\ILogger');
+				$logger = $this->mock('Tracy\ILogger');
 				(new Subscribing\LoggedPage(
 					new Subscribing\FakePage(null, new Subscribing\FakePage()),
 					$logger

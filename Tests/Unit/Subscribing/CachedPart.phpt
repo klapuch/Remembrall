@@ -18,7 +18,7 @@ final class CachedPart extends TestCase\Mockery {
 
 	public function setUp() {
 		parent::setUp();
-		$this->cache = $this->mockery('Nette\Caching\IStorage');
+		$this->cache = $this->mock('Nette\Caching\IStorage');
 	}
 
 	public function testCaching() {

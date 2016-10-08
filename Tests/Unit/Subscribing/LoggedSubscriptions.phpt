@@ -20,7 +20,7 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 	 */
 	public function testLoggedExceptionDuringSubscribing() {
 		$ex = new \Exception('exceptionMessage');
-		$logger = $this->mockery('Tracy\ILogger');
+		$logger = $this->mock('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
 		(new Subscribing\LoggedSubscriptions(
 			new Subscribing\FakeSubscriptions($ex),
@@ -34,7 +34,7 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 
 	public function testNoExceptionDuringSubscribing() {
 		Assert::noError(function() {
-			$logger = $this->mockery('Tracy\ILogger');
+			$logger = $this->mock('Tracy\ILogger');
 			(new Subscribing\LoggedSubscriptions(
 				new Subscribing\FakeSubscriptions(), $logger
 			))->subscribe(
@@ -50,7 +50,7 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 	 */
 	public function testLoggedExceptionDuringPrinting() {
 		$ex = new \Exception('exceptionMessage');
-		$logger = $this->mockery('Tracy\ILogger');
+		$logger = $this->mock('Tracy\ILogger');
 		$logger->shouldReceive('log')->once()->with($ex, 'error');
 		(new Subscribing\LoggedSubscriptions(
 			new Subscribing\FakeSubscriptions($ex),
@@ -60,7 +60,7 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 
 	public function testNoExceptionDuringIterating() {
 		Assert::noError(function() {
-			$logger = $this->mockery('Tracy\ILogger');
+			$logger = $this->mock('Tracy\ILogger');
 			(new Subscribing\LoggedSubscriptions(
 				new Subscribing\FakeSubscriptions(), $logger
 			))->print(new Output\FakeFormat());
