@@ -24,6 +24,21 @@ final class EmailSubscription extends TestCase\Mockery {
 			))->notify();
 		}, \Exception::class, 'foo');
 	}
+
+	public function testSendingWithoutModifiedMessage() {
+		Assert::noError(function() {
+			$message = new Mail\Message();
+			$mailer = $this->mock(Mail\IMailer::class);
+			$mailer->shouldReceive('send')
+				->with($message)
+				->once();
+			(new Subscribing\EmailSubscription(
+				new Subscribing\FakeSubscription(),
+				$mailer,
+				$message
+			))->notify();
+		});
+	}
 }
 
 (new EmailSubscription())->run();
