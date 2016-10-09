@@ -14,17 +14,18 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class WebPages extends TestCase\Database {
 	public function testAddingSinglePage() {
+		$url = new Uri\FakeUri('www.facedown.cz');
 		$dom = new \DOMDocument();
 		$dom->loadHTML('content');
 		$page = new Subscribing\FakePage($dom);
-		Assert::same(
-			$page,
+		Assert::equal(
+			new Subscribing\PostgresPage($page, $url, $this->database),
 			(new Subscribing\WebPages($this->database))->add(
-				new Uri\FakeUri('www.facedown.cz'),
+				$url,
 				$page
 			)
 		);
-		$pages = $this->database->fetchAll("SELECT url, content FROM pages");
+		$pages = $this->database->fetchAll("SELECT * FROM pages");
 		Assert::count(1, $pages);
 		Assert::contains('content', $pages[0]['content']);
 		Assert::same('www.facedown.cz', $pages[0]['url']);
@@ -62,11 +63,15 @@ final class WebPages extends TestCase\Database {
 		);
 		$dom = new \DOMDocument();
         $dom->loadHTML('content');
+		$url = new Uri\FakeUri('www.facedown.cz');
         $page = new Subscribing\FakePage($dom);
 		$addedPage = (new Subscribing\WebPages(
 			$this->database
-		))->add(new Uri\FakeUri('www.facedown.cz'), $page);
-        Assert::same($addedPage, $page);
+		))->add($url, $page);
+        Assert::equal(
+        	new Subscribing\PostgresPage($page, $url, $this->database),
+			$addedPage
+		);
 		$pages = $this->database->fetchAll('SELECT * FROM pages');
         Assert::count(1, $pages);
 		Assert::contains('content', $pages[0]['content']);

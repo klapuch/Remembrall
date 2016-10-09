@@ -26,7 +26,9 @@ final class CachedPage implements Page {
 	}
 
 	public function content(): \DOMDocument {
-		if($this->outdated($this->uri))
+		if(!$this->exists($this->uri))
+			return $this->origin->content();
+		elseif($this->outdated($this->uri))
 			return $this->refresh()->content();
 		$dom = new DOM();
 		$dom->loadHTML(
@@ -40,14 +42,16 @@ final class CachedPage implements Page {
 		return $dom;
 	}
 
+	public function refresh(): Page {
+		return $this->origin->refresh();
+	}
+
 	/**
 	 * Is the url outdated and needs to be loaded from original source?
 	 * @param Uri\Uri $uri
 	 * @return bool
 	 */
 	private function outdated(Uri\Uri $uri): bool {
-		if(!$this->exists($uri))
-			return true;
 		return (bool)$this->database->fetchColumn(
 			"SELECT 1
 			FROM pages
@@ -61,7 +65,7 @@ final class CachedPage implements Page {
 	}
 
 	/**
-	 * Does the url exist in the database and therefore it's not the first access?
+	 * Does the url exist in the database?
 	 * @param Uri\Uri $uri
 	 * @return bool
 	 */
@@ -72,9 +76,5 @@ final class CachedPage implements Page {
 			WHERE url IS NOT DISTINCT FROM ?',
 			[$uri->reference()]
 		);
-	}
-
-	public function refresh(): Page {
-		return $this->origin->refresh();
 	}
 }

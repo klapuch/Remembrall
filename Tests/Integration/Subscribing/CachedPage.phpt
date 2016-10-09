@@ -87,7 +87,7 @@ final class CachedPage extends TestCase\Database {
 		);
 	}
 
-	public function testExpiredCachingAsFirstVisit() {
+	public function testOriginContentAsFirstVisit() {
 		$this->truncate(['pages']);
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>Google</p>');
@@ -96,8 +96,8 @@ final class CachedPage extends TestCase\Database {
 			(new Subscribing\CachedPage(
 				new Uri\FakeUri('www.google.com'),
 				new Subscribing\FakePage(
-					new \DOMDocument(),
-					new Subscribing\FakePage($dom)
+					$dom,
+					new Subscribing\FakePage(new \DOMDocument())
 				),
 				$this->database
 			))->content()->saveHTML()

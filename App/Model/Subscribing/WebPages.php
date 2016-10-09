@@ -24,6 +24,6 @@ final class WebPages implements Pages {
 				':content' => $page->content()->saveHTML(),
 			]
 		);
-		return $page;
+		return new PostgresPage($page, $url, $this->database);
 	}
 }

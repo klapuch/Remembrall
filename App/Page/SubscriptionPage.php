@@ -21,7 +21,7 @@ final class SubscriptionPage extends BasePage {
 			$url = new Uri\NormalizedUrl(
 				new Uri\ProtocolBasedUrl(
 					new Uri\ReachableUrl(
-						new Uri\ValidUrl($_POST['url'])
+						new Uri\ValidUrl($this->request->post['url'])
 					),
 					['http', 'https', '']
 				)
@@ -31,12 +31,8 @@ final class SubscriptionPage extends BasePage {
 				new Subscribing\LoggedPage(
 					new Subscribing\CachedPage(
 						$url,
-						new Subscribing\PostgresPage(
-							new Subscribing\HtmlWebPage(
-								new Http\BasicRequest('GET', $url)
-							),
-							$url,
-							$this->database
+						new Subscribing\HtmlWebPage(
+							new Http\BasicRequest('GET', $url)
 						),
 						$this->database
 					),
@@ -54,7 +50,7 @@ final class SubscriptionPage extends BasePage {
 								new Subscribing\MatchingExpression(
 									new Subscribing\XPathExpression(
 										$page,
-										$_POST['expression']
+										$this->request->post['expression']
 									)
 								),
 								$page
@@ -62,7 +58,7 @@ final class SubscriptionPage extends BasePage {
 							new Storages\MemoryStorage()
 						),
 						$url,
-						$_POST['expression']
+						$this->request->post['expression']
 					);
 					(new Subscribing\LoggedSubscriptions(
 						new Subscribing\LimitedSubscriptions(
@@ -76,13 +72,16 @@ final class SubscriptionPage extends BasePage {
 						$this->logger
 					))->subscribe(
 						$url,
-						$_POST['expression'],
+						$this->request->post['expression'],
 						new Time\FutureInterval(
 							new Time\LimitedInterval(
 								new Time\TimeInterval(
 									new \DateTimeImmutable(),
 									new \DateInterval(
-										sprintf('PT%dM', $_POST['interval'])
+										sprintf(
+											'PT%dM',
+											$this->request->post['interval']
+										)
 									)
 								),
 								[
@@ -100,8 +99,7 @@ final class SubscriptionPage extends BasePage {
 					);
 				}
 			);
-			header(sprintf('Location: %s', $this->link('Parts:default')));
-			exit;
+			$this->redirect('Parts:default');
 		} catch(\Throwable $ex) {
 			echo $ex->getMessage();
 		}
