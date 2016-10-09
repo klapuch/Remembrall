@@ -5,12 +5,12 @@
  */
 namespace Remembrall\Unit\Subscribing;
 
+use Klapuch\{
+	Output, Time, Uri
+};
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
-use Klapuch\{
-    Time, Uri, Output
-};
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -33,16 +33,18 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 	}
 
 	public function testNoExceptionDuringSubscribing() {
-		Assert::noError(function() {
-			$logger = $this->mock('Tracy\ILogger');
-			(new Subscribing\LoggedSubscriptions(
-				new Subscribing\FakeSubscriptions(), $logger
-			))->subscribe(
-				new Uri\FakeUri('url'),
-				'//p',
-				new Time\FakeInterval()
-			);
-		});
+		Assert::noError(
+			function() {
+				$logger = $this->mock('Tracy\ILogger');
+				(new Subscribing\LoggedSubscriptions(
+					new Subscribing\FakeSubscriptions(), $logger
+				))->subscribe(
+					new Uri\FakeUri('url'),
+					'//p',
+					new Time\FakeInterval()
+				);
+			}
+		);
 	}
 
 	/**
@@ -59,12 +61,14 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 	}
 
 	public function testNoExceptionDuringPrinting() {
-		Assert::noError(function() {
-			$logger = $this->mock('Tracy\ILogger');
-			(new Subscribing\LoggedSubscriptions(
-				new Subscribing\FakeSubscriptions(), $logger
-			))->print(new Output\FakeFormat());
-		});
+		Assert::noError(
+			function() {
+				$logger = $this->mock('Tracy\ILogger');
+				(new Subscribing\LoggedSubscriptions(
+					new Subscribing\FakeSubscriptions(), $logger
+				))->print(new Output\FakeFormat());
+			}
+		);
 	}
 
 	/**
@@ -81,12 +85,14 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 	}
 
 	public function testNoExceptionDuringIterating() {
-		Assert::noError(function() {
-			$logger = $this->mock('Tracy\ILogger');
-			(new Subscribing\LoggedSubscriptions(
-				new Subscribing\FakeSubscriptions(), $logger
-			))->iterate();
-		});
+		Assert::noError(
+			function() {
+				$logger = $this->mock('Tracy\ILogger');
+				(new Subscribing\LoggedSubscriptions(
+					new Subscribing\FakeSubscriptions(), $logger
+				))->iterate();
+			}
+		);
 	}
 }
 

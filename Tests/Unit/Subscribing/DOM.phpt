@@ -22,11 +22,13 @@ final class DOM extends Tester\TestCase {
 	}
 
 	public function testSuppressedWarningOnInvalidHtml() {
-		Assert::noError(function() {
-			(new Subscribing\DOM())->loadHTML(
-				'<a href="script.php?foo=bar&hello=world">link</a>'
-			);
-		});
+		Assert::noError(
+			function() {
+				(new Subscribing\DOM())->loadHTML(
+					'<a href="script.php?foo=bar&hello=world">link</a>'
+				);
+			}
+		);
 	}
 }
 

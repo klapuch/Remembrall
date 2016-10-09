@@ -5,53 +5,62 @@
  */
 namespace Remembrall\Integration\Subscribing;
 
+use Klapuch\{
+	Output, Storage\UniqueConstraint, Time, Uri
+};
 use Remembrall\Exception\DuplicateException;
 use Remembrall\Model\{
-	Subscribing, Access
+	Access, Subscribing
 };
 use Remembrall\TestCase;
 use Tester\Assert;
-use Klapuch\{
-	Output, Storage\UniqueConstraint, Uri, Time
-};
 
 require __DIR__ . '/../../bootstrap.php';
 
 final class OwnedSubscriptions extends TestCase\Database {
-    public function testSubscribingBrandNew() {
+	public function testSubscribingBrandNew() {
 		(new Subscribing\OwnedSubscriptions(
 			new Access\FakeSubscriber(666),
-            $this->database
-        ))->subscribe(
+			$this->database
+		))->subscribe(
 			new Uri\FakeUri('www.google.com'),
 			'//google',
-            new Time\FakeInterval(null, null, 'PT120S')
-        );
-		$subscriptions = $this->database->fetchAll('SELECT * FROM subscriptions');
+			new Time\FakeInterval(null, null, 'PT120S')
+		);
+		$subscriptions = $this->database->fetchAll(
+			'SELECT * FROM subscriptions'
+		);
 		Assert::count(1, $subscriptions);
 		Assert::same(1, $subscriptions[0]['id']);
 		Assert::same(666, $subscriptions[0]['subscriber_id']);
 		Assert::same('PT120S', $subscriptions[0]['interval']);
 		Assert::same('google snap', $subscriptions[0]['snapshot']);
-    }
+	}
 
-    public function testSubscribingDuplication() {
+	public function testSubscribingDuplication() {
 		$subscriptions = new Subscribing\OwnedSubscriptions(
 			new Access\FakeSubscriber(666),
-            $this->database
-        );
+			$this->database
+		);
 		$subscription = [
 			new Uri\FakeUri('www.google.com'),
 			'//google',
-            new Time\FakeInterval(null, null, 'PT120S'),
+			new Time\FakeInterval(null, null, 'PT120S'),
 		];
 		$subscriptions->subscribe(...$subscription);
-		$ex = Assert::exception(function() use($subscription, $subscriptions) {
-			$subscriptions->subscribe(...$subscription);
-		}, DuplicateException::class, '"//google" expression on "www.google.com" page is already subscribed by you');
+		$ex = Assert::exception(
+			function() use ($subscription, $subscriptions) {
+				$subscriptions->subscribe(...$subscription);
+			},
+			DuplicateException::class,
+			'"//google" expression on "www.google.com" page is already subscribed by you'
+		);
 		Assert::type(UniqueConstraint::class, $ex->getPrevious());
-		Assert::count(1, $this->database->fetchAll('SELECT * FROM subscriptions'));
-    }
+		Assert::count(
+			1,
+			$this->database->fetchAll('SELECT * FROM subscriptions')
+		);
+	}
 
 	public function testPrinting() {
 		$this->database->query(
@@ -82,10 +91,10 @@ final class OwnedSubscriptions extends TestCase\Database {
 			$this->database
 		))->print(new Output\FakeFormat(''));
 		Assert::count(3, $subscriptions);
-        Assert::contains('1993-01-01', (string)$subscriptions[0]);
-        Assert::contains('1997-01-01', (string)$subscriptions[1]);
-        Assert::contains('1996-01-01', (string)$subscriptions[2]);
-    }
+		Assert::contains('1993-01-01', (string)$subscriptions[0]);
+		Assert::contains('1997-01-01', (string)$subscriptions[1]);
+		Assert::contains('1996-01-01', (string)$subscriptions[2]);
+	}
 
 	public function testEmptyPrinting() {
 		Assert::same(
@@ -132,7 +141,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 		Assert::null($subscriptions->current());
 	}
 
-    protected function prepareDatabase() {
+	protected function prepareDatabase() {
 		$this->truncate(['parts', 'pages', 'subscriptions']);
 		$this->restartSequence(['parts', 'subscriptions']);
 		$this->database->query(
@@ -144,7 +153,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
 			('www.google.com', '//google', 'google content', 'google snap')"
 		);
-    }
+	}
 }
 
 (new OwnedSubscriptions)->run();

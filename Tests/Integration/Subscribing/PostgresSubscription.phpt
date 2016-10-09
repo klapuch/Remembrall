@@ -5,10 +5,10 @@
  */
 namespace Remembrall\Integration\Subscribing;
 
+use Klapuch\Time;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
-use Klapuch\Time;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -18,7 +18,9 @@ final class PostgresSubscription extends TestCase\Database {
 			1,
 			$this->database
 		))->cancel();
-		$subscriptions = $this->database->fetchAll('SELECT * FROM subscriptions');
+		$subscriptions = $this->database->fetchAll(
+			'SELECT * FROM subscriptions'
+		);
 		Assert::count(1, $subscriptions);
 		Assert::same(2, $subscriptions[0]['id']);
 	}

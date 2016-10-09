@@ -5,15 +5,15 @@
  */
 namespace Remembrall\Integration\Subscribing;
 
+use Klapuch\Uri;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
-use Klapuch\Uri;
 
 require __DIR__ . '/../../bootstrap.php';
 
 final class PostgresPage extends TestCase\Database {
-    public function testHtmlContent() {
+	public function testHtmlContent() {
 		Assert::contains(
 			'facedown content',
 			(new Subscribing\PostgresPage(
@@ -24,14 +24,14 @@ final class PostgresPage extends TestCase\Database {
 		);
 	}
 
-    public function testRefreshingWithNewContent() {
-        $content = new \DOMDocument();
-        $content->loadHTML('NEW_CONTENT');
+	public function testRefreshingWithNewContent() {
+		$content = new \DOMDocument();
+		$content->loadHTML('NEW_CONTENT');
 		(new Subscribing\PostgresPage(
-            new Subscribing\FakePage(
-                new \DOMDocument(),
-                new Subscribing\FakePage($content)
-            ),
+			new Subscribing\FakePage(
+				new \DOMDocument(),
+				new Subscribing\FakePage($content)
+			),
 			new Uri\FakeUri('www.facedown.cz'),
 			$this->database
 		))->refresh();
@@ -42,13 +42,13 @@ final class PostgresPage extends TestCase\Database {
 	}
 
 	public function testRefreshingWithoutAffectingOthers() {
-        $content = new \DOMDocument();
-        $content->loadHTML('NEW_CONTENT');
+		$content = new \DOMDocument();
+		$content->loadHTML('NEW_CONTENT');
 		(new Subscribing\PostgresPage(
-            new Subscribing\FakePage(
-                new \DOMDocument(),
-                new Subscribing\FakePage($content)
-            ),
+			new Subscribing\FakePage(
+				new \DOMDocument(),
+				new Subscribing\FakePage($content)
+			),
 			new Uri\FakeUri('www.facedown.cz'),
 			$this->database
 		))->refresh();
@@ -60,13 +60,13 @@ final class PostgresPage extends TestCase\Database {
 
 	public function testRecordingVisitation() {
 		$this->truncate(['page_visits']);
-        $content = new \DOMDocument();
-        $content->loadHTML('NEW_CONTENT');
+		$content = new \DOMDocument();
+		$content->loadHTML('NEW_CONTENT');
 		(new Subscribing\PostgresPage(
-            new Subscribing\FakePage(
-                new \DOMDocument(),
-                new Subscribing\FakePage($content)
-            ),
+			new Subscribing\FakePage(
+				new \DOMDocument(),
+				new Subscribing\FakePage($content)
+			),
 			new Uri\FakeUri('www.facedown.cz'),
 			$this->database
 		))->refresh();
@@ -74,8 +74,8 @@ final class PostgresPage extends TestCase\Database {
 		Assert::count(1, $pages);
 	}
 
-    protected function prepareDatabase() {
-        $this->truncate(['pages']);
+	protected function prepareDatabase() {
+		$this->truncate(['pages']);
 		$this->database->query(
 			"INSERT INTO pages (url, content) VALUES
 			('www.facedown.cz', 'facedown content'),

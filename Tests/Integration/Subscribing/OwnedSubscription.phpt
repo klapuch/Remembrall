@@ -5,12 +5,12 @@
  */
 namespace Remembrall\Integration\Subscribing;
 
+use Klapuch\Time;
 use Remembrall\Model\{
-	Subscribing, Access
+	Access, Subscribing
 };
 use Remembrall\TestCase;
 use Tester\Assert;
-use Klapuch\Time;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -28,14 +28,16 @@ final class OwnedSubscription extends TestCase\Database {
 	}
 
 	public function testCancelingOwned() {
-		Assert::noError(function() {
-			(new Subscribing\OwnedSubscription(
-				new Subscribing\FakeSubscription(),
-				2,
-				new Access\FakeSubscriber(666),
-				$this->database
-			))->cancel();
-		});
+		Assert::noError(
+			function() {
+				(new Subscribing\OwnedSubscription(
+					new Subscribing\FakeSubscription(),
+					2,
+					new Access\FakeSubscriber(666),
+					$this->database
+				))->cancel();
+			}
+		);
 	}
 
 	/**
@@ -51,14 +53,16 @@ final class OwnedSubscription extends TestCase\Database {
 	}
 
 	public function testEditingOwned() {
-		Assert::noError(function() {
-			(new Subscribing\OwnedSubscription(
-				new Subscribing\FakeSubscription(),
-				2,
-				new Access\FakeSubscriber(666),
-				$this->database
-			))->edit(new Time\FakeInterval(null, null, 'PT10M'));
-		});
+		Assert::noError(
+			function() {
+				(new Subscribing\OwnedSubscription(
+					new Subscribing\FakeSubscription(),
+					2,
+					new Access\FakeSubscriber(666),
+					$this->database
+				))->edit(new Time\FakeInterval(null, null, 'PT10M'));
+			}
+		);
 	}
 
 	/**
@@ -74,14 +78,16 @@ final class OwnedSubscription extends TestCase\Database {
 	}
 
 	public function testNotifyingOwned() {
-		Assert::noError(function() {
-			(new Subscribing\OwnedSubscription(
-				new Subscribing\FakeSubscription(),
-				2,
-				new Access\FakeSubscriber(666),
-				$this->database
-			))->notify();
-		});
+		Assert::noError(
+			function() {
+				(new Subscribing\OwnedSubscription(
+					new Subscribing\FakeSubscription(),
+					2,
+					new Access\FakeSubscriber(666),
+					$this->database
+				))->notify();
+			}
+		);
 	}
 
 	protected function prepareDatabase() {

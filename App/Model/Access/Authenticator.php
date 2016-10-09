@@ -5,6 +5,9 @@ use Klapuch\Access;
 use Nette\Security;
 use Nette\Security\AuthenticationException;
 
+/**
+ * Basic Nette authenticator
+ */
 final class Authenticator implements Security\IAuthenticator {
 	private $entrance;
 

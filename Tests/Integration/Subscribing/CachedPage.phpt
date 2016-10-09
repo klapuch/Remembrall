@@ -5,10 +5,10 @@
  */
 namespace Remembrall\Integration\Subscribing;
 
+use Klapuch\Uri;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
-use Klapuch\Uri;
 
 require __DIR__ . '/../../bootstrap.php';
 

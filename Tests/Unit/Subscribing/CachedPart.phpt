@@ -8,7 +8,6 @@ namespace Remembrall\Unit\Subscribing;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
-use Klapuch\Output;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -41,13 +40,10 @@ final class CachedPart extends TestCase\Mockery {
 			new Subscribing\FakePart($content, $fakePart),
 			$this->cache
 		);
-
 		Assert::same($content, $part->content());
 		Assert::same($content, $part->content());
-
 		Assert::same($snapshot, $part->snapshot());
 		Assert::same($snapshot, $part->snapshot());
-
 		Assert::same($fakePart, $part->refresh());
 		Assert::same($fakePart, $part->refresh());
 	}

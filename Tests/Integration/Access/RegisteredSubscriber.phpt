@@ -16,12 +16,12 @@ final class RegisteredSubscriber extends TestCase\Database {
 		Assert::same(
 			666,
 			(new Access\RegisteredSubscriber(
-				 666, $this->database
+				666, $this->database
 			))->id()
 		);
 	}
 
-	public function testExistingUserEmail() {
+	public function testExistingEmail() {
 		$this->database->query(
 			"INSERT INTO subscribers (id, email, password) VALUES
 			(666, 'foo@bar.cz', 'password')"
@@ -34,9 +34,9 @@ final class RegisteredSubscriber extends TestCase\Database {
 		);
 	}
 
-    protected function prepareDatabase() {
+	protected function prepareDatabase() {
 		$this->purge(['subscribers']);
-    }
+	}
 }
 
 (new RegisteredSubscriber)->run();

@@ -16,7 +16,7 @@ final class PostgresPart extends TestCase\Database {
 		Assert::same(
 			'facedown content',
 			(new Subscribing\PostgresPart(
-                new Subscribing\FakePart(),
+				new Subscribing\FakePart(),
 				1,
 				$this->database
 			))->content()
@@ -27,7 +27,7 @@ final class PostgresPart extends TestCase\Database {
 		Assert::same(
 			'face snap',
 			(new Subscribing\PostgresPart(
-                new Subscribing\FakePart(),
+				new Subscribing\FakePart(),
 				1,
 				$this->database
 			))->snapshot()
@@ -52,7 +52,10 @@ final class PostgresPart extends TestCase\Database {
 			1,
 			$this->database
 		))->refresh();
-		Assert::count(1, $this->database->fetchAll('SELECT * FROM part_visits'));
+		Assert::count(
+			1,
+			$this->database->fetchAll('SELECT * FROM part_visits')
+		);
 	}
 
 	public function testRefreshingPartWithoutAffectingOthers() {

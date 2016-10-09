@@ -14,27 +14,39 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class ExistingPart extends TestCase\Database {
 	public function testUnknownPart() {
-		Assert::exception(function() {
-			(new Subscribing\ExistingPart(
-                new Subscribing\FakePart(),
-				123,
-				$this->database
-			))->content();
-		}, NotFoundException::class, 'The part does not exist');
-		Assert::exception(function() {
-			(new Subscribing\ExistingPart(
-				new Subscribing\FakePart(),
-				124,
-				$this->database
-			))->refresh();
-		}, NotFoundException::class, 'The part does not exist');
-		Assert::exception(function() {
-			(new Subscribing\ExistingPart(
-				new Subscribing\FakePart(),
-				125,
-				$this->database
-			))->snapshot();
-		}, NotFoundException::class, 'The part does not exist');
+		Assert::exception(
+			function() {
+				(new Subscribing\ExistingPart(
+					new Subscribing\FakePart(),
+					123,
+					$this->database
+				))->content();
+			},
+			NotFoundException::class,
+			'The part does not exist'
+		);
+		Assert::exception(
+			function() {
+				(new Subscribing\ExistingPart(
+					new Subscribing\FakePart(),
+					124,
+					$this->database
+				))->refresh();
+			},
+			NotFoundException::class,
+			'The part does not exist'
+		);
+		Assert::exception(
+			function() {
+				(new Subscribing\ExistingPart(
+					new Subscribing\FakePart(),
+					125,
+					$this->database
+				))->snapshot();
+			},
+			NotFoundException::class,
+			'The part does not exist'
+		);
 	}
 
 	public function testExistingPart() {
@@ -42,27 +54,33 @@ final class ExistingPart extends TestCase\Database {
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
 			('www.facedown.cz', '//d', 'd', '')"
 		);
-		Assert::noError(function() {
-			(new Subscribing\ExistingPart(
-				new Subscribing\FakePart('notEmpty'),
-				1,
-				$this->database
-			))->content();
-		});
-		Assert::noError(function() {
-			(new Subscribing\ExistingPart(
-				new Subscribing\FakePart(),
-				1,
-				$this->database
-			))->refresh();
-		});
-		Assert::noError(function() {
-			(new Subscribing\ExistingPart(
-				new Subscribing\FakePart('notEmpty', null, 'snap'),
-				1,
-				$this->database
-			))->snapshot();
-		});
+		Assert::noError(
+			function() {
+				(new Subscribing\ExistingPart(
+					new Subscribing\FakePart('notEmpty'),
+					1,
+					$this->database
+				))->content();
+			}
+		);
+		Assert::noError(
+			function() {
+				(new Subscribing\ExistingPart(
+					new Subscribing\FakePart(),
+					1,
+					$this->database
+				))->refresh();
+			}
+		);
+		Assert::noError(
+			function() {
+				(new Subscribing\ExistingPart(
+					new Subscribing\FakePart('notEmpty', null, 'snap'),
+					1,
+					$this->database
+				))->snapshot();
+			}
+		);
 	}
 
 	protected function prepareDatabase() {

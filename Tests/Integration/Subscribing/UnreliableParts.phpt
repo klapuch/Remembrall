@@ -5,12 +5,12 @@
  */
 namespace Remembrall\Integration\Subscribing;
 
+use Klapuch\{
+	Http, Uri
+};
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
-use Klapuch\{
-	Uri, Http
-};
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -40,7 +40,8 @@ final class UnreliableParts extends TestCase\Database {
 			$url,
 			new Subscribing\PostgresPage(
 				new Subscribing\HtmlWebPage(
-					new Http\BasicRequest('GET', $url)),
+					new Http\BasicRequest('GET', $url)
+				),
 				$url,
 				$this->database
 			),
@@ -69,7 +70,8 @@ final class UnreliableParts extends TestCase\Database {
 			$url,
 			new Subscribing\PostgresPage(
 				new Subscribing\HtmlWebPage(
-					new Http\BasicRequest('GET', $url)),
+					new Http\BasicRequest('GET', $url)
+				),
 				$url,
 				$this->database
 			),

@@ -20,10 +20,7 @@ final class UniqueSubscribers extends TestCase\Database {
 			$this->database,
 			new Encryption\FakeCipher()
 		))->register('foo@bar.cz', 'passw0rt');
-		$subscribers = $this->database->fetchAll(
-			'SELECT id, email, password
-			FROM subscribers'
-		);
+		$subscribers = $this->database->fetchAll('SELECT * FROM subscribers');
 		Assert::equal(
 			new Access\RegisteredSubscriber(1, $this->database),
 			$subscriber
@@ -52,9 +49,9 @@ final class UniqueSubscribers extends TestCase\Database {
 		Assert::type(Storage\UniqueConstraint::class, $ex->getPrevious());
 	}
 
-    protected function prepareDatabase() {
+	protected function prepareDatabase() {
 		$this->purge(['subscribers']);
-    }
+	}
 }
 
 (new UniqueSubscribers())->run();

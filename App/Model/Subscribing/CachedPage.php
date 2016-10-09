@@ -47,7 +47,7 @@ final class CachedPage implements Page {
 	}
 
 	/**
-	 * Is the url outdated and needs to be loaded from original source?
+	 * Is the url outdated and needs to be loaded from the original source?
 	 * @param Uri\Uri $uri
 	 * @return bool
 	 */

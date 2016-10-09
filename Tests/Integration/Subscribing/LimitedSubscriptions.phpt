@@ -5,27 +5,32 @@
  */
 namespace Remembrall\Integration\Subscribing;
 
-
+use Klapuch\{
+	Time, Uri
+};
 use Remembrall\Model\{
-	Subscribing, Access
+	Access, Subscribing
 };
 use Remembrall\TestCase;
 use Tester\Assert;
-use Klapuch\{
-    Uri, Time
-};
 
 require __DIR__ . '/../../bootstrap.php';
 
 final class LimitedSubscriptions extends TestCase\Database {
 	public function testSubscribingInLimit() {
-		Assert::noError(function() {
-			(new Subscribing\LimitedSubscriptions(
-				new Subscribing\FakeSubscriptions(),
-				new Access\FakeSubscriber(666),
-				$this->database
-			))->subscribe(new Uri\FakeUri('url'), '//p', new Time\FakeInterval());
-		});
+		Assert::noError(
+			function() {
+				(new Subscribing\LimitedSubscriptions(
+					new Subscribing\FakeSubscriptions(),
+					new Access\FakeSubscriber(666),
+					$this->database
+				))->subscribe(
+					new Uri\FakeUri('url'),
+					'//p',
+					new Time\FakeInterval()
+				);
+			}
+		);
 	}
 
 	/**
@@ -55,9 +60,9 @@ final class LimitedSubscriptions extends TestCase\Database {
 		))->subscribe(new Uri\FakeUri('url'), '//p', new Time\FakeInterval());
 	}
 
-    protected function prepareDatabase() {
-    	$this->purge(['parts', 'subscriptions']);
-    }
+	protected function prepareDatabase() {
+		$this->purge(['parts', 'subscriptions']);
+	}
 }
 
 (new LimitedSubscriptions)->run();

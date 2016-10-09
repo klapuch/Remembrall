@@ -5,12 +5,12 @@
  */
 namespace Remembrall\Integration\Subscribing;
 
+use Klapuch\{
+	Http, Uri
+};
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
-use Klapuch\{
-	Uri, Http
-};
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -19,7 +19,11 @@ final class CollectiveParts extends TestCase\Database {
 		(new Subscribing\CollectiveParts(
 			$this->database
 		))->add(
-			new Subscribing\FakePart('<p>google content</p>', null, 'google snap'),
+			new Subscribing\FakePart(
+				'<p>google content</p>',
+				null,
+				'google snap'
+			),
 			new Uri\FakeUri('www.google.com'),
 			'//p'
 		);
@@ -35,14 +39,22 @@ final class CollectiveParts extends TestCase\Database {
 		(new Subscribing\CollectiveParts(
 			$this->database
 		))->add(
-			new Subscribing\FakePart('<p>google content</p>', null, 'google snap'),
+			new Subscribing\FakePart(
+				'<p>google content</p>',
+				null,
+				'google snap'
+			),
 			new Uri\FakeUri('www.google.com'),
 			'//google'
 		);
 		(new Subscribing\CollectiveParts(
 			$this->database
 		))->add(
-			new Subscribing\FakePart('<p>facedown content</p>', null, 'facedown snap'),
+			new Subscribing\FakePart(
+				'<p>facedown content</p>',
+				null,
+				'facedown snap'
+			),
 			new Uri\FakeUri('www.facedown.cz'),
 			'//facedown'
 		);
@@ -78,7 +90,11 @@ final class CollectiveParts extends TestCase\Database {
 		(new Subscribing\CollectiveParts(
 			$this->database
 		))->add($oldPart, new Uri\FakeUri('www.google.com'), '//p');
-		$newPart = new Subscribing\FakePart('<p>NEW_CONTENT</p>', null, 'NEW_SNAP');
+		$newPart = new Subscribing\FakePart(
+			'<p>NEW_CONTENT</p>',
+			null,
+			'NEW_SNAP'
+		);
 		(new Subscribing\CollectiveParts(
 			$this->database
 		))->add($newPart, new Uri\FakeUri('www.google.com'), '//p');
@@ -114,7 +130,9 @@ final class CollectiveParts extends TestCase\Database {
 		))->iterate();
 		$part = $parts->current();
 		$googleUrl = new Uri\ReachableUrl(new Uri\ValidUrl('www.google.com'));
-		$facedownUrl = new Uri\ReachableUrl(new Uri\ValidUrl('www.facedown.cz'));
+		$facedownUrl = new Uri\ReachableUrl(
+			new Uri\ValidUrl('www.facedown.cz')
+		);
 		$googlePage = new Subscribing\CachedPage(
 			$googleUrl,
 			new Subscribing\PostgresPage(

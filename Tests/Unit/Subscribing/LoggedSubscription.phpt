@@ -5,12 +5,12 @@
  */
 namespace Remembrall\Unit\Subscribing;
 
+use Klapuch\{
+	Time
+};
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
-use Klapuch\{
-    Time, Output
-};
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -85,8 +85,8 @@ final class LoggedSubscription extends TestCase\Mockery {
 				$logger = $this->mock('Tracy\ILogger');
 				(new Subscribing\LoggedSubscription(
 					new Subscribing\FakeSubscription(), $logger
-                ))->notify();
-            }
+				))->notify();
+			}
 		);
 	}
 }

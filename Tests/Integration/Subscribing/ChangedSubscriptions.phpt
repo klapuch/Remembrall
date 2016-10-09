@@ -31,7 +31,8 @@ final class ChangedSubscriptions extends TestCase\Database {
 					->setSubject(
 						'Changes occurred on b page with //b expression'
 					)
-					->setHtmlBody('<html lang="cs-cz"><body>
+					->setHtmlBody(
+						'<html lang="cs-cz"><body>
 <p>
             Hi, there are some changes on
             b
@@ -43,7 +44,8 @@ final class ChangedSubscriptions extends TestCase\Database {
         </p>
 <p>bc</p>
 </body></html>
-')
+'
+					)
 			),
 			$subscription
 		);
