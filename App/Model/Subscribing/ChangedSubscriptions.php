@@ -69,7 +69,8 @@ final class ChangedSubscriptions implements Subscriptions {
 
 	public function print(Output\Format $format): array {
 		$rows = $this->database->fetchAll(
-			"SELECT expression, page_url AS url, interval, visited_at, last_update
+			"SELECT subscriptions.id, expression, page_url AS url, interval,
+			visited_at, last_update
 			FROM parts
 			INNER JOIN (
                 SELECT part_id, MAX(visited_at) AS visited_at
@@ -85,6 +86,7 @@ final class ChangedSubscriptions implements Subscriptions {
 			array_map(
 				function(array $row) use ($format) {
 					return $format->with('expression', $row['expression'])
+						->with('id', $row['id'])
 						->with('url', $row['url'])
 						->with(
 							'interval',

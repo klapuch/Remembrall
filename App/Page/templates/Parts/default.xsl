@@ -40,8 +40,7 @@
             </td>
             <td>
                 <xsl:apply-templates select="//confirmation">
-                    <xsl:with-param name="expression" select="expression"/>
-                    <xsl:with-param name="url" select="url"/>
+                    <xsl:with-param name="id" select="id"/>
                 </xsl:apply-templates>
             </td>
         </tr>
@@ -64,11 +63,10 @@
     </xsl:template>
 
     <xsl:template match="confirmation">
-        <xsl:param name="expression"/>
-        <xsl:param name="url"/>
+        <xsl:param name="id"/>
         <a
                 role="button"
-                href="{concat(href, concat(concat('&amp;url=', $url), concat('&amp;expression=', $expression)))}"
+                href="{concat(href, concat('&amp;id=', $id))}"
                 onclick="return confirm('{normalize-space(message)}')"
                 title="{title}" type="button" class="btn btn-danger btn-sm">
             <span class="glyphicon glyphicon-{glyphicon}" aria-hidden="true"/>

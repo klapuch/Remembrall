@@ -28,7 +28,6 @@ final class PartsPage extends BasePage {
 		]);
 	}
 
-	//TODO
 	public function handleDelete(int $id) {
 		try {
 			(new Subscribing\OwnedSubscription(
