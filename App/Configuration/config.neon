@@ -30,6 +30,9 @@ services:
 	database:
 		class: Klapuch\Storage\PDODatabase
 		arguments: [%database.dsn%, %database.user%, %database.password%]
+		autowired: no
+	monitoredDatabase:
+	    class: Klapuch\Storage\MonitoredDatabase(@database)
 	router: Remembrall\Router\RouterFactory::createRouter
 	subscriber:
 		class: Remembrall\Model\Access\RegisteredSubscriber(1)
