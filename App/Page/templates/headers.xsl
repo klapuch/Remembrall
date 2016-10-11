@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
-    <xsl:param name="assets" select="document('@headers.xml')/assets"/>
+    <xsl:param name="assets" select="document('headers.xml')/assets"/>
 
     <xsl:template name="meta">
         <meta name="description" content="{substring($description, 1, 150)}"/>

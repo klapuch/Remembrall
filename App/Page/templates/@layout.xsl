@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0"
 >
-    <xsl:import href="@headers.xsl"/>
+    <xsl:import href="headers.xsl"/>
 
     <xsl:output method="html" encoding="utf-8"/>
 
@@ -53,7 +53,7 @@
                             <div id="navbar" class="navbar-collapse collapse">
                                 <ul class="nav navbar-nav">
                                     <xsl:for-each
-                                            select="document('@links.xml')/links/link">
+                                            select="document('links.xml')/links/link">
                                         <li>
                                             <xsl:element name="a">
                                                 <xsl:attribute name="href">
@@ -69,6 +69,7 @@
                         </div>
                     </nav>
                     <div class="container">
+                        <xsl:apply-templates select="//flashMessage" />
                         <xsl:apply-templates/>
                     </div>
                 </div>
@@ -88,6 +89,15 @@
                 <xsl:call-template name="additionalScripts"/>
             </body>
         </html>
+    </xsl:template>
+
+    <xsl:template match="flashMessage">
+        <xsl:element name="div">
+            <xsl:attribute name="class">
+                alert alert-<xsl:value-of select="type"/>
+            </xsl:attribute>
+            <xsl:value-of select="content" />
+        </xsl:element>
     </xsl:template>
 
 </xsl:stylesheet>

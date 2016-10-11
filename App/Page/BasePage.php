@@ -30,11 +30,6 @@ abstract class BasePage extends Nette\Application\UI\Presenter {
 		$this->user->login(new Security\Identity(1));
 	}
 
-	public function afterRender() {
-		if($this->isAjax() && $this->hasFlashSession())
-			$this->redrawControl('flashes');
-	}
-
 	protected function createTemplate() {
 		// Do not call createTemplate
 	}
