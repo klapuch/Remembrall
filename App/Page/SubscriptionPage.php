@@ -99,7 +99,8 @@ final class SubscriptionPage extends BasePage {
 					);
 				}
 			);
-			$this->redirect('Parts:default');
+			header('Location: ' . $this->link('Parts:default'));
+			exit;
 		} catch(\Throwable $ex) {
 			echo $ex->getMessage();
 		}

@@ -17,11 +17,11 @@
         <xsl:element name="link">
             <xsl:attribute name="rel">stylesheet</xsl:attribute>
             <xsl:attribute name="href">
-                <xsl:value-of select="href"/>
+                <xsl:value-of select="normalize-space(href)"/>
             </xsl:attribute>
             <xsl:if test="integrity">
                 <xsl:attribute name="integrity">
-                    <xsl:value-of select="integrity"/>
+                    <xsl:value-of select="normalize-space(integrity)"/>
                 </xsl:attribute>
             </xsl:if>
             <xsl:if test="crossorigin">
@@ -39,11 +39,11 @@
     <xsl:template match="script">
         <xsl:element name="script">
             <xsl:attribute name="src">
-                <xsl:value-of select="src"/>
+                <xsl:value-of select="normalize-space(src)"/>
             </xsl:attribute>
             <xsl:if test="integrity">
                 <xsl:attribute name="integrity">
-                    <xsl:value-of select="integrity"/>
+                    <xsl:value-of select="normalize-space(integrity)"/>
                 </xsl:attribute>
             </xsl:if>
             <xsl:if test="crossorigin">
