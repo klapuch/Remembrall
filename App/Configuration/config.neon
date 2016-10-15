@@ -1,4 +1,21 @@
+parameters:
+	database:
+		dsn: "pgsql:host=127.0.0.1;dbname=remembrall;"
+		user: postgres
+		password: postgres
+php:
+	date.timezone: Europe/Prague
+	default_charset: UTF-8
+	expose_php: 0
+	zlib.output_compression: 1
+application:
+	errorPresenter: Error
+	scanDirs: false
+	mapping:
+		*: Remembrall\*Module\Page\*Page
 session:
+	autoStart: smart
+	expiration: 14 days
 	use_strict_mode: 1
 	cookie_httponly: 1
 http:
@@ -6,3 +23,19 @@ http:
 		X-Frame-Options: DENY
 		X-Content-Type-Options: nosniff
 		X-Powered-By: ""
+tracy:
+	bar:
+		- Nextras\MailPanel\MailPanel(%tempDir%/mail-panel-latte)
+services:
+	database:
+		class: Klapuch\Storage\PDODatabase
+		arguments: [%database.dsn%, %database.user%, %database.password%]
+		autowired: no
+	monitoredDatabase:
+	    class: Klapuch\Storage\MonitoredDatabase(@database)
+	router: Remembrall\Router\RouterFactory::createRouter
+	subscriber:
+		class: Remembrall\Model\Access\RegisteredSubscriber(1)
+	nette.mailer:
+		class: Nette\Mail\IMailer
+		factory: Nextras\MailPanel\FileMailer(%tempDir%/mail-panel-mails)
