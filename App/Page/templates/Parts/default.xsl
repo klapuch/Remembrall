@@ -66,7 +66,7 @@
         <xsl:param name="id"/>
         <a
                 role="button"
-                href="{concat(href, concat('&amp;id=', $id))}"
+                href="{concat(href, concat('?id=', $id))}"
                 onclick="return confirm('{normalize-space(message)}')"
                 title="{title}" type="button" class="btn btn-danger btn-sm">
             <span class="glyphicon glyphicon-{glyphicon}" aria-hidden="true"/>

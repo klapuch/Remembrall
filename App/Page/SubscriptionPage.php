@@ -21,7 +21,7 @@ final class SubscriptionPage extends BasePage {
 			$url = new Uri\NormalizedUrl(
 				new Uri\ProtocolBasedUrl(
 					new Uri\ReachableUrl(
-						new Uri\ValidUrl($this->request->post['url'])
+						new Uri\ValidUrl($_POST['url'])
 					),
 					['http', 'https', '']
 				)
@@ -50,7 +50,7 @@ final class SubscriptionPage extends BasePage {
 								new Subscribing\MatchingExpression(
 									new Subscribing\XPathExpression(
 										$page,
-										$this->request->post['expression']
+										$_POST['expression']
 									)
 								),
 								$page
@@ -58,7 +58,7 @@ final class SubscriptionPage extends BasePage {
 							new Storages\MemoryStorage()
 						),
 						$url,
-						$this->request->post['expression']
+						$_POST['expression']
 					);
 					(new Subscribing\LoggedSubscriptions(
 						new Subscribing\LimitedSubscriptions(
@@ -72,7 +72,7 @@ final class SubscriptionPage extends BasePage {
 						$this->logger
 					))->subscribe(
 						$url,
-						$this->request->post['expression'],
+						$_POST['expression'],
 						new Time\FutureInterval(
 							new Time\LimitedInterval(
 								new Time\TimeInterval(
@@ -80,7 +80,7 @@ final class SubscriptionPage extends BasePage {
 									new \DateInterval(
 										sprintf(
 											'PT%dM',
-											$this->request->post['interval']
+											$_POST['interval']
 										)
 									)
 								),
@@ -99,7 +99,7 @@ final class SubscriptionPage extends BasePage {
 					);
 				}
 			);
-			header('Location: ' . $this->link('Parts:default'));
+			header('Location: ' . $this->baseUrl->reference() . '/parts');
 			exit;
 		} catch(\Throwable $ex) {
 			echo $ex->getMessage();

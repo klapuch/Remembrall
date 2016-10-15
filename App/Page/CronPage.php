@@ -6,10 +6,7 @@ use Nette\Mail;
 use Remembrall\Model\Subscribing;
 
 final class CronPage extends BasePage {
-	/** @var Mail\IMailer @inject */
-	public $mailer;
-
-	public function actionDefault() {
+	public function renderDefault() {
 		try {
 			$parts = (new Subscribing\LoggedParts(
 				new Subscribing\UnreliableParts(
@@ -27,7 +24,7 @@ final class CronPage extends BasePage {
 						$this->subscriber,
 						$this->database
 					),
-					$this->mailer,
+					new Mail\SendmailMailer(),
 					$this->database
 				),
 				$this->logger

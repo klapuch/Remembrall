@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+    <default>
+        <title>Sign in</title>
+        <description>Sign in via existing account</description>
+        <forms>
+            <in>
+                <label>
+                    <email>E-mail</email>
+                    <password>Password</password>
+                </label>
+                <submit>
+                    <act>Sign in</act>
+                </submit>
+            </in>
+        </forms>
+    </default>
+</template>

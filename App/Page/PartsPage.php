@@ -28,11 +28,11 @@ final class PartsPage extends BasePage {
 		]);
 	}
 
-	public function handleDelete(int $id) {
+	public function renderDelete() {
 		try {
 			(new Subscribing\OwnedSubscription(
-				new Subscribing\PostgresSubscription($id, $this->database),
-				$id,
+				new Subscribing\PostgresSubscription($_GET['id'], $this->database),
+				$_GET['id'],
 				$this->subscriber,
 				$this->database
 			))->cancel();

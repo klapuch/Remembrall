@@ -8,4 +8,8 @@
         <href>subscription/</href>
         <title>Subscription</title>
     </link>
+    <link>
+        <href>sign/in/</href>
+        <title>Sign in</title>
+    </link>
 </links>

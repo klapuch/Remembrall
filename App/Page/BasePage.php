@@ -1,36 +1,33 @@
 <?php
 namespace Remembrall\Page;
 
-use Klapuch\Uri;
-use Nette;
-use Nette\Security;
+use Klapuch\{
+	Storage, Uri
+};
+use Remembrall\Model\Access;
+use Tracy;
 
-abstract class BasePage extends Nette\Application\UI\Presenter {
-	use \Nextras\Application\UI\SecuredLinksPresenterTrait;
+abstract class BasePage {
 	protected const TEMPLATES = __DIR__ . '/templates';
-	/** @inject @var \Klapuch\Storage\Database */
+	/** @var \Klapuch\Storage\Database */
 	public $database;
-	/** @inject @var \Tracy\ILogger */
+	/** @var \Tracy\ILogger */
 	public $logger;
-	/** @inject @var \Remembrall\Model\Access\Subscriber */
-	public $subscriber;
 	/** @var Uri\BaseUrl */
 	protected $baseUrl;
+	/** @var \Remembrall\Model\Access\Subscriber */
+	protected $subscriber;
 
-	public function __construct() {
-		parent::__construct();
+	public function __construct(
+		Storage\Database $database,
+		Tracy\Logger $logger
+	) {
+		$this->database = $database;
+		$this->logger = $logger;
+		$this->subscriber = new Access\RegisteredSubscriber(1, $database);
 		$this->baseUrl = new Uri\BaseUrl(
 			$_SERVER['SCRIPT_NAME'],
 			$_SERVER['REQUEST_URI']
 		);
-	}
-
-	public function startup() {
-		parent::startup();
-		$this->user->login(new Security\Identity(1));
-	}
-
-	protected function createTemplate() {
-		// Do not call createTemplate
 	}
 }
