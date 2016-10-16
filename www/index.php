@@ -6,6 +6,7 @@ use Klapuch\{
 };
 const CONFIGURATION = __DIR__ . '/../App/Configuration/.config.ini';
 try {
+	Tracy\Debugger::enable();
 	mb_internal_encoding('UTF-8');
 	$configuration = (new Ini\Valid(
 		CONFIGURATION,
@@ -29,13 +30,17 @@ try {
 		: 'render' . $action;
 	(new $class(
 		$url,
-		new Storage\PDODatabase(
-			$configuration['DATABASE']['dsn'],
-			$configuration['DATABASE']['username'],
-			$configuration['DATABASE']['password']
+		new Storage\MonitoredDatabase(
+			new Storage\PDODatabase(
+				$configuration['DATABASE']['dsn'],
+				$configuration['DATABASE']['username'],
+				$configuration['DATABASE']['password']
+			)
 		),
 		$logger
-	))->$method($_SERVER['REQUEST_METHOD'] === 'GET' ? $_GET : $_POST);
+	))->$method(
+		$_SERVER['REQUEST_METHOD'] === 'GET' ? $_GET : $_POST
+	);
 } catch(Throwable $ex) {
 	$logger->log($ex, Tracy\Logger::WARNING);
 	echo 'Error';

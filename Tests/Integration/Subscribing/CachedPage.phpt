@@ -105,8 +105,7 @@ final class CachedPage extends TestCase\Database {
 	}
 
 	protected function prepareDatabase() {
-		$this->truncate(['pages', 'page_visits']);
-		$this->restartSequence(['page_visits']);
+		$this->truncate(['pages']);
 		$this->database->query(
 			"INSERT INTO pages (url, content) VALUES
 			('www.google.com', 'google')"
