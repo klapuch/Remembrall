@@ -21,21 +21,34 @@ final class UnreliableParts extends TestCase\Database {
 			('www.google.com', '//a', 'a', ''),
 			('www.facedown.cz', '//b', 'b', ''),
 			('www.google.com', '//c', 'c', ''),
-			('www.facedown.cz', '//d', 'd', '')"
+			('www.facedown.cz', '//d', 'd', ''),
+			('www.new.cz', '//e', 'e', '')"
+		);
+		$this->truncate(['part_visits']);
+		$this->database->query(
+			"INSERT INTO part_visits (part_id, visited_at) VALUES
+			(1, NOW() - INTERVAL '50 SECOND'),
+			(1, NOW() - INTERVAL '10 SECOND'),
+			(1, NOW() - INTERVAL '20 SECOND'),
+			(2, NOW()),
+			(2, NOW() - INTERVAL '5 SECOND'),
+			(4, NOW() - INTERVAL '45 SECOND')"
 		);
 		$this->database->query(
 			"INSERT INTO subscriptions (part_id, subscriber_id, interval, last_update, snapshot) VALUES
-			(1, 1, 'PT10M', NOW() - INTERVAL '15 MINUTE', ''),
-			(2, 2, 'PT10M', NOW(), ''),
-			(3, 3, 'PT3M', NOW() - INTERVAL '2 MINUTE', ''),
-			(3, 1, 'PT20M', NOW() - INTERVAL '22 MINUTE', '')"
+			(1, 1, 'PT10S', NOW(), ''),
+			(1, 2, 'PT50S', NOW(), ''),
+			(1, 3, 'PT5S', NOW(), ''),
+			(2, 3, 'PT10S', NOW(), ''),
+			(2, 4, 'PT50S', NOW(), ''),
+			(4, 1, 'PT10S', NOW(), '')"
 		);
 		$parts = (new Subscribing\UnreliableParts(
 			new Subscribing\FakeParts(),
 			$this->database
 		))->iterate();
 		$part = $parts->current();
-		$url = new Uri\ReachableUrl(new Uri\ValidUrl('www.google.com'));
+		$url = new Uri\ReachableUrl(new Uri\ValidUrl('www.facedown.cz'));
 		$page = new Subscribing\CachedPage(
 			$url,
 			new Subscribing\PostgresPage(
@@ -53,12 +66,12 @@ final class UnreliableParts extends TestCase\Database {
 					new Subscribing\MatchingExpression(
 						new Subscribing\XPathExpression(
 							$page,
-							'//c'
+							'//d'
 						)
 					),
 					$page
 				),
-				3,
+				4,
 				$this->database
 			),
 			$part

@@ -26,14 +26,19 @@ final class UnreliableParts implements Parts {
 		$rows = $this->database->fetchAll(
 			"SELECT page_url AS url, expression, parts.id
 				FROM parts
-				LEFT JOIN (
+				RIGHT JOIN (
 					SELECT MIN(SUBSTRING(interval FROM '[0-9]+')::INT) AS interval,
-					part_id, MIN(last_update) AS last_update
+					part_id
 					FROM subscriptions
 					GROUP BY part_id
 				) AS subscriptions ON subscriptions.part_id = parts.id 
-				WHERE last_update + INTERVAL '1 MINUTE' * INTERVAL < NOW()
-				ORDER BY last_update ASC"
+				LEFT JOIN (
+					SELECT MAX(visited_at) AS visited_at, part_id
+					FROM part_visits
+					GROUP BY part_id
+				) AS part_visits ON part_visits.part_id = parts.id
+				WHERE visited_at + INTERVAL '1 SECOND' * interval < NOW()
+				ORDER BY visited_at ASC"
 		);
 		foreach($rows as $row) {
 			$url = new Uri\ReachableUrl(new Uri\ValidUrl($row['url']));
