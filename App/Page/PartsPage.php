@@ -33,11 +33,13 @@ final class PartsPage extends BasePage {
 		try {
 			['id' => $id] = $parameters;
 			(new Subscribing\OwnedSubscription(
-				new Subscribing\PostgresSubscription($id, $this->database),
-				$id,
+				new Subscribing\PostgresSubscription((int)$id, $this->database),
+				(int)$id,
 				$this->subscriber,
 				$this->database
 			))->cancel();
+			header('Location: ' . $this->url->reference() . 'parts');
+			exit;
 		} catch(NotFoundException $ex) {
 			echo $ex->getMessage();
 		}
