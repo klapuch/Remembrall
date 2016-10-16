@@ -16,31 +16,31 @@ final class SubscriptionPage extends BasePage {
 		))->render(['baseUrl' => $this->url->reference()]);
 	}
 
-	public function actionSubscribe() {
+	public function actionSubscribe(array $subscription) {
 		try {
 			$url = new Uri\NormalizedUrl(
 				new Uri\ProtocolBasedUrl(
 					new Uri\ReachableUrl(
-						new Uri\ValidUrl($_POST['url'])
+						new Uri\ValidUrl($subscription['url'])
 					),
 					['http', 'https', '']
 				)
 			);
-			$page = (new Subscribing\WebPages($this->database))->add(
-				$url,
-				new Subscribing\LoggedPage(
-					new Subscribing\CachedPage(
-						$url,
-						new Subscribing\HtmlWebPage(
-							new Http\BasicRequest('GET', $url)
-						),
-						$this->database
-					),
-					$this->logger
-				)
-			);
 			(new Storage\PostgresTransaction($this->database))->start(
-				function() use ($page, $url) {
+				function() use ($url, $subscription) {
+					$page = (new Subscribing\WebPages($this->database))->add(
+						$url,
+						new Subscribing\LoggedPage(
+							new Subscribing\CachedPage(
+								$url,
+								new Subscribing\HtmlWebPage(
+									new Http\BasicRequest('GET', $url)
+								),
+								$this->database
+							),
+							$this->logger
+						)
+					);
 					(new Subscribing\LoggedParts(
 						new Subscribing\CollectiveParts($this->database),
 						$this->logger
@@ -50,7 +50,7 @@ final class SubscriptionPage extends BasePage {
 								new Subscribing\MatchingExpression(
 									new Subscribing\XPathExpression(
 										$page,
-										$_POST['expression']
+										$subscription['expression']
 									)
 								),
 								$page
@@ -58,7 +58,7 @@ final class SubscriptionPage extends BasePage {
 							new Storages\MemoryStorage()
 						),
 						$url,
-						$_POST['expression']
+						$subscription['expression']
 					);
 					(new Subscribing\LoggedSubscriptions(
 						new Subscribing\LimitedSubscriptions(
@@ -72,7 +72,7 @@ final class SubscriptionPage extends BasePage {
 						$this->logger
 					))->subscribe(
 						$url,
-						$_POST['expression'],
+						$subscription['expression'],
 						new Time\FutureInterval(
 							new Time\LimitedInterval(
 								new Time\TimeInterval(
@@ -80,7 +80,7 @@ final class SubscriptionPage extends BasePage {
 									new \DateInterval(
 										sprintf(
 											'PT%dM',
-											$_POST['interval']
+											$subscription['interval']
 										)
 									)
 								),
@@ -99,7 +99,7 @@ final class SubscriptionPage extends BasePage {
 					);
 				}
 			);
-			header('Location: ' . $this->url->reference() . '/parts');
+			header('Location: ' . $this->url->reference() . 'parts');
 			exit;
 		} catch(\Throwable $ex) {
 			echo $ex->getMessage();

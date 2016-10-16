@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Page;
 
 use Klapuch\Output;
+use Remembrall\Exception\NotFoundException;
 use Remembrall\Model\Subscribing;
 
 final class PartsPage extends BasePage {
@@ -28,15 +29,16 @@ final class PartsPage extends BasePage {
 		]);
 	}
 
-	public function renderDelete() {
+	public function renderDelete(array $parameters) {
 		try {
+			['id' => $id] = $parameters;
 			(new Subscribing\OwnedSubscription(
-				new Subscribing\PostgresSubscription($_GET['id'], $this->database),
-				$_GET['id'],
+				new Subscribing\PostgresSubscription($id, $this->database),
+				$id,
 				$this->subscriber,
 				$this->database
 			))->cancel();
-		} catch(\Throwable $ex) {
+		} catch(NotFoundException $ex) {
 			echo $ex->getMessage();
 		}
 	}

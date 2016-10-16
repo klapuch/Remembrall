@@ -35,7 +35,7 @@ try {
 			$configuration['DATABASE']['password']
 		),
 		$logger
-	))->$method();
+	))->$method($_SERVER['REQUEST_METHOD'] === 'GET' ? $_GET : $_POST);
 } catch(Throwable $ex) {
 	$logger->log($ex, Tracy\Logger::WARNING);
 	echo 'Error';
