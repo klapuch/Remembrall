@@ -2,33 +2,41 @@
 declare(strict_types = 1);
 require __DIR__ . '/../vendor/autoload.php';
 use Klapuch\{
-	Ini, Storage
+	Ini, Storage, Uri
 };
 const CONFIGURATION = __DIR__ . '/../App/Configuration/.config.ini';
-$configuration = (new Ini\Valid(
-	CONFIGURATION,
-	new Ini\Typed(CONFIGURATION)
-))->read();
-$pathname = explode('/', $_SERVER['REQUEST_URI'], 5);
-$page = isset($pathname[3]) && $pathname[3]
-	? trim(ucfirst(strtolower($pathname[3])), '/')
-	: 'Default';
-$action = isset($pathname[4]) && $pathname[4]
-	? trim(ucfirst(strtolower($pathname[4])), '/')
-	: 'Default';
-$class = 'Remembrall\\Page\\' . $page . 'Page';
-$method = $_SERVER['REQUEST_METHOD'] === 'POST'
-	? 'action' . $action
-	: 'render' . $action;
 try {
+	mb_internal_encoding('UTF-8');
+	$configuration = (new Ini\Valid(
+		CONFIGURATION,
+		new Ini\Typed(CONFIGURATION)
+	))->read();
+	foreach($configuration['INI'] as $name => $value)
+		ini_set($name, (string)$value);
+	date_default_timezone_set('Europe/Prague');
+	session_start($configuration['SESSIONS']);
+	regenerateSessions();
+	foreach($configuration['HEADERS'] as $field => $value)
+		header(sprintf('%s:%s', $field, $value));
+	$logger = new Tracy\Logger(__DIR__ . '/../Log');
+	$url = new Uri\BaseUrl($_SERVER['SCRIPT_NAME'], $_SERVER['REQUEST_URI']);
+	$path = explode('/', $url->path());
+	$page = isset($path[0]) && $path[0] ? ucfirst($path[0]) : 'Default';
+	$action = isset($path[1]) && $path[1] ? ucfirst($path[1]) : 'Default';
+	$class = 'Remembrall\\Page\\' . $page . 'Page';
+	$method = $_SERVER['REQUEST_METHOD'] === 'POST'
+		? 'action' . $action
+		: 'render' . $action;
 	(new $class(
+		$url,
 		new Storage\PDODatabase(
 			$configuration['DATABASE']['dsn'],
 			$configuration['DATABASE']['username'],
 			$configuration['DATABASE']['password']
 		),
-		new Tracy\Logger(__DIR__ . '/../Log')
+		$logger
 	))->$method();
 } catch(Throwable $ex) {
-	echo $ex->getMessage();
+	$logger->log($ex, Tracy\Logger::WARNING);
+	echo 'Error';
 }

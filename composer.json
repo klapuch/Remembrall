@@ -1,44 +1,47 @@
 {
-    "description": "Remembrall sends emails about changes on pages",
-    "homepage": "https://github.com/klapuch/remembrall",
-    "type": "project",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Dominik Klapuch",
-            "email": "klapuchdominik@gmail.com",
-            "homepage": "https://www.github.com/klapuch"
-        }
-    ],
-    "require": {
-        "php": ">=7.0",
-        "ext-mbstring": "*",
-        "ext-dom": "*",
-        "nette/caching": "^2.5.0",
-        "nette/mail": "^2.4.0",
-        "tracy/tracy": "^2.4.0",
-        "klapuch/encryption": "@dev",
-        "klapuch/storage": "@dev",
-        "klapuch/output": "@dev",
-        "klapuch/ini": "@dev",
-        "klapuch/uri": "@dev",
-        "klapuch/time": "@dev",
-        "klapuch/http": "@dev",
-        "klapuch/access": "@dev"
-    },
-    "require-dev": {
-        "nette/tester": "^1.7",
-        "mockery/mockery": "^0.9.5"
-    },
-    "config": {
-        "optimize-autoloader": true
-    },
-    "autoload": {
-        "psr-4": {
-            "Remembrall\\": [
-                "App",
-                "Tests"
-            ]
-        }
+  "description": "Remembrall sends emails about changes on pages",
+  "homepage": "https://github.com/klapuch/remembrall",
+  "type": "project",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Dominik Klapuch",
+      "email": "klapuchdominik@gmail.com",
+      "homepage": "https://www.github.com/klapuch"
     }
+  ],
+  "require": {
+    "php": ">=7.1",
+    "ext-mbstring": "*",
+    "ext-dom": "*",
+    "nette/caching": "^2.5.0",
+    "nette/mail": "^2.4.0",
+    "tracy/tracy": "^2.4.0",
+    "klapuch/encryption": "@dev",
+    "klapuch/storage": "@dev",
+    "klapuch/output": "@dev",
+    "klapuch/ini": "@dev",
+    "klapuch/uri": "@dev",
+    "klapuch/time": "@dev",
+    "klapuch/http": "@dev",
+    "klapuch/access": "@dev"
+  },
+  "require-dev": {
+    "nette/tester": "^1.7",
+    "mockery/mockery": "^0.9.5"
+  },
+  "config": {
+    "optimize-autoloader": true
+  },
+  "autoload": {
+    "psr-4": {
+      "Remembrall\\": [
+        "App",
+        "Tests"
+      ]
+    },
+    "files": [
+      "App/regenerateSessions.php"
+    ]
+  }
 }

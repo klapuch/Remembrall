@@ -13,7 +13,7 @@ final class SubscriptionPage extends BasePage {
 		echo (new Output\XsltTemplate(
 			self::TEMPLATES . '/Subscription/default.xsl',
 			new Output\RemoteXml(self::TEMPLATES . '/Subscription/default.xml')
-		))->render(['baseUrl' => $this->baseUrl->reference()]);
+		))->render(['baseUrl' => $this->url->reference()]);
 	}
 
 	public function actionSubscribe() {
@@ -99,7 +99,7 @@ final class SubscriptionPage extends BasePage {
 					);
 				}
 			);
-			header('Location: ' . $this->baseUrl->reference() . '/parts');
+			header('Location: ' . $this->url->reference() . '/parts');
 			exit;
 		} catch(\Throwable $ex) {
 			echo $ex->getMessage();

@@ -11,7 +11,7 @@ final class SignPage extends BasePage {
 			self::TEMPLATES . '/Sign/in.xsl',
 			new Output\RemoteXml(self::TEMPLATES . '/Sign/in.xml')
 		))->render([
-			'baseUrl' => $this->baseUrl->reference(),
+			'baseUrl' => $this->url->reference(),
 		]);
 	}
 }

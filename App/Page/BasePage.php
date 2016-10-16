@@ -14,20 +14,18 @@ abstract class BasePage {
 	/** @var \Tracy\ILogger */
 	public $logger;
 	/** @var Uri\BaseUrl */
-	protected $baseUrl;
+	protected $url;
 	/** @var \Remembrall\Model\Access\Subscriber */
 	protected $subscriber;
 
 	public function __construct(
+		Uri\Uri $url,
 		Storage\Database $database,
 		Tracy\Logger $logger
 	) {
 		$this->database = $database;
 		$this->logger = $logger;
 		$this->subscriber = new Access\RegisteredSubscriber(1, $database);
-		$this->baseUrl = new Uri\BaseUrl(
-			$_SERVER['SCRIPT_NAME'],
-			$_SERVER['REQUEST_URI']
-		);
+		$this->url = $url;
 	}
 }
