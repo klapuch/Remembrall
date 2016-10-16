@@ -20,10 +20,7 @@ final class CronPage extends BasePage {
 				$part->refresh();
 			$subscriptions = (new Subscribing\LoggedSubscriptions(
 				new Subscribing\ChangedSubscriptions(
-					new Subscribing\OwnedSubscriptions(
-						$this->subscriber,
-						$this->database
-					),
+					new Subscribing\FakeSubscriptions(),
 					new Mail\SendmailMailer(),
 					$this->database
 				),
