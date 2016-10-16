@@ -41,7 +41,7 @@ final class ChangedSubscriptions implements Subscriptions {
 			INNER JOIN subscriptions ON subscriptions.part_id = parts.id
 			INNER JOIN subscribers ON subscribers.id = subscriptions.subscriber_id
 			WHERE parts.snapshot != subscriptions.snapshot
-			AND last_update + INTERVAL '1 MINUTE' * SUBSTRING(interval FROM '[0-9]+')::INT < NOW()"
+			AND last_update + INTERVAL '1 SECOND' * SUBSTRING(interval FROM '[0-9]+')::INT < NOW()"
 		);
 		foreach($subscriptions as $subscription) {
 			yield new EmailSubscription(
@@ -79,7 +79,7 @@ final class ChangedSubscriptions implements Subscriptions {
             ) AS part_visits ON parts.id = part_visits.part_id
 			INNER JOIN subscriptions ON subscriptions.part_id = parts.id
 			WHERE parts.snapshot != subscriptions.snapshot
-			AND last_update + INTERVAL '1 MINUTE' * SUBSTRING(interval FROM '[0-9]+')::INT < NOW()
+			AND last_update + INTERVAL '1 SECOND' * SUBSTRING(interval FROM '[0-9]+')::INT < NOW()
 			ORDER BY visited_at DESC"
 		);
 		return array_reduce(

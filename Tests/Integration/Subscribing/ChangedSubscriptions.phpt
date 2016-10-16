@@ -84,11 +84,11 @@ final class ChangedSubscriptions extends TestCase\Database {
 		);
 		$this->database->query(
 			"INSERT INTO subscriptions (subscriber_id, part_id, interval, last_update, snapshot) VALUES 
-			(1, 1, 'PT10M', '2000-01-01', 'as'),
-			(2, 2, 'PT10M', '2002-01-01', 'changed'),
-			(3, 3, 'PT10M', NOW(), 'changed but time is recent'),
-			(4, 4, 'PT10M', NOW(), 'ds'),
-			(5, 5, 'PT10M', '2001-01-01', 'es')"
+			(1, 1, 'PT10S', '2000-01-01', 'as'),
+			(2, 2, 'PT10S', '2002-01-01', 'changed'),
+			(3, 3, 'PT10S', NOW(), 'changed but time is recent'),
+			(4, 4, 'PT10S', NOW(), 'ds'),
+			(5, 5, 'PT10S', '2001-01-01', 'es')"
 		);
 		$this->database->query(
 			"INSERT INTO subscribers (id, email, password) VALUES 
