@@ -39,9 +39,6 @@
         "App",
         "Tests"
       ]
-    },
-    "files": [
-      "App/regenerateSessions.php"
-    ]
+    }
   }
 }

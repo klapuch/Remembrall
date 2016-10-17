@@ -16,7 +16,7 @@ try {
 		ini_set($name, (string)$value);
 	date_default_timezone_set('Europe/Prague');
 	session_start($configuration['SESSIONS']);
-	regenerateSessions();
+	session_regenerate_id(true);
 	foreach($configuration['HEADERS'] as $field => $value)
 		header(sprintf('%s:%s', $field, $value));
 	$logger = new Tracy\Logger(__DIR__ . '/../Log');
