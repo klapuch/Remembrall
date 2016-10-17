@@ -37,7 +37,7 @@ final class CollectiveParts implements Parts {
 		);
 		foreach($rows as $row) {
 			$url = new Uri\ReachableUrl(new Uri\ValidUrl($row['url']));
-			$page = new CachedPage(
+			$page = new FrugalPage(
 				$url,
 				new PostgresPage(
 					new HtmlWebPage(new Http\BasicRequest('GET', $url)),

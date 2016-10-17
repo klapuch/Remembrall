@@ -133,7 +133,7 @@ final class CollectiveParts extends TestCase\Database {
 		$facedownUrl = new Uri\ReachableUrl(
 			new Uri\ValidUrl('www.facedown.cz')
 		);
-		$googlePage = new Subscribing\CachedPage(
+		$googlePage = new Subscribing\FrugalPage(
 			$googleUrl,
 			new Subscribing\PostgresPage(
 				new Subscribing\HtmlWebPage(
@@ -144,7 +144,7 @@ final class CollectiveParts extends TestCase\Database {
 			),
 			$this->database
 		);
-		$facedownPage = new Subscribing\CachedPage(
+		$facedownPage = new Subscribing\FrugalPage(
 			$facedownUrl,
 			new Subscribing\PostgresPage(
 				new Subscribing\HtmlWebPage(

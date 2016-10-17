@@ -5,9 +5,6 @@
  */
 namespace Remembrall\Integration\Subscribing;
 
-use Klapuch\{
-	Http, Uri
-};
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -48,64 +45,10 @@ final class UnreliableParts extends TestCase\Database {
 			$this->database
 		))->iterate();
 		$part = $parts->current();
-		$url = new Uri\ReachableUrl(new Uri\ValidUrl('www.facedown.cz'));
-		$page = new Subscribing\CachedPage(
-			$url,
-			new Subscribing\PostgresPage(
-				new Subscribing\HtmlWebPage(
-					new Http\BasicRequest('GET', $url)
-				),
-				$url,
-				$this->database
-			),
-			$this->database
-		);
-		Assert::equal(
-			new Subscribing\PostgresPart(
-				new Subscribing\HtmlPart(
-					new Subscribing\MatchingExpression(
-						new Subscribing\XPathExpression(
-							$page,
-							'//d'
-						)
-					),
-					$page
-				),
-				4,
-				$this->database
-			),
-			$part
-		);
+		Assert::equal('d', $part->content());
 		$parts->next();
 		$part = $parts->current();
-		$url = new Uri\ReachableUrl(new Uri\ValidUrl('www.google.com'));
-		$page = new Subscribing\CachedPage(
-			$url,
-			new Subscribing\PostgresPage(
-				new Subscribing\HtmlWebPage(
-					new Http\BasicRequest('GET', $url)
-				),
-				$url,
-				$this->database
-			),
-			$this->database
-		);
-		Assert::equal(
-			new Subscribing\PostgresPart(
-				new Subscribing\HtmlPart(
-					new Subscribing\MatchingExpression(
-						new Subscribing\XPathExpression(
-							$page,
-							'//a'
-						)
-					),
-					$page
-				),
-				1,
-				$this->database
-			),
-			$part
-		);
+		Assert::equal('a', $part->content());
 		$parts->next();
 		Assert::null($parts->current());
 	}

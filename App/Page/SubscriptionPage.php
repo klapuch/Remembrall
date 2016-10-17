@@ -31,7 +31,7 @@ final class SubscriptionPage extends BasePage {
 					$page = (new Subscribing\WebPages($this->database))->add(
 						$url,
 						new Subscribing\LoggedPage(
-							new Subscribing\CachedPage(
+							new Subscribing\FrugalPage(
 								$url,
 								new Subscribing\HtmlWebPage(
 									new Http\BasicRequest('GET', $url)

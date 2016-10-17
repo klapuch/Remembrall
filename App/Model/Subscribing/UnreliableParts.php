@@ -5,6 +5,7 @@ namespace Remembrall\Model\Subscribing;
 use Klapuch\{
 	Http, Storage, Uri
 };
+use Nette\Caching\Storages;
 
 /**
  * All the parts which are no longer trusted as reliable and need to be reloaded
@@ -43,13 +44,16 @@ final class UnreliableParts implements Parts {
 		foreach($rows as $row) {
 			$url = new Uri\ReachableUrl(new Uri\ValidUrl($row['url']));
 			$page = new CachedPage(
-				$url,
-				new PostgresPage(
-					new HtmlWebPage(new Http\BasicRequest('GET', $url)),
+				new FrugalPage(
 					$url,
+					new PostgresPage(
+						new HtmlWebPage(new Http\BasicRequest('GET', $url)),
+						$url,
+						$this->database
+					),
 					$this->database
 				),
-				$this->database
+				new Storages\MemoryStorage()
 			);
 			yield new PostgresPart(
 				new HtmlPart(

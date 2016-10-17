@@ -12,15 +12,15 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class CachedPage extends TestCase\Database {
-	public function testCachedPage() {
+final class FrugalPage extends TestCase\Database {
+	public function testFrugalPage() {
 		$this->database->query(
 			"INSERT INTO page_visits (page_url, visited_at) VALUES
 			('www.google.com', NOW())"
 		);
 		Assert::contains(
 			'google',
-			(new Subscribing\CachedPage(
+			(new Subscribing\FrugalPage(
 				new Uri\FakeUri('www.google.com'),
 				new Subscribing\FakePage(),
 				$this->database
@@ -28,7 +28,7 @@ final class CachedPage extends TestCase\Database {
 		);
 	}
 
-	public function testCachedPageWithMultipleVisitation() {
+	public function testFrugalPageWithMultipleVisitation() {
 		$this->database->query(
 			"INSERT INTO page_visits (page_url, visited_at) VALUES
 			('www.google.com', NOW() - INTERVAL '70 MINUTE'),
@@ -37,7 +37,7 @@ final class CachedPage extends TestCase\Database {
 		);
 		Assert::contains(
 			'google',
-			(new Subscribing\CachedPage(
+			(new Subscribing\FrugalPage(
 				new Uri\FakeUri('www.google.com'),
 				new Subscribing\FakePage(),
 				$this->database
@@ -45,7 +45,7 @@ final class CachedPage extends TestCase\Database {
 		);
 	}
 
-	public function testExpiredCaching() {
+	public function testOutdatedPage() {
 		$this->database->query(
 			"INSERT INTO page_visits (page_url, visited_at) VALUES
 			('www.google.com', NOW() - INTERVAL '11 MINUTE')"
@@ -54,7 +54,7 @@ final class CachedPage extends TestCase\Database {
 		$dom->loadHTML('<p>Google</p>');
 		Assert::contains(
 			'<p>Google</p>',
-			(new Subscribing\CachedPage(
+			(new Subscribing\FrugalPage(
 				new Uri\FakeUri('www.google.com'),
 				new Subscribing\FakePage(
 					new \DOMDocument(),
@@ -65,7 +65,7 @@ final class CachedPage extends TestCase\Database {
 		);
 	}
 
-	public function testExpiredCachingWithMultipleVisitation() {
+	public function testOutdatedPageWithMultipleVisitation() {
 		$this->database->query(
 			"INSERT INTO page_visits (page_url, visited_at) VALUES
 			('www.google.com', NOW() - INTERVAL '11 MINUTE'),
@@ -76,7 +76,7 @@ final class CachedPage extends TestCase\Database {
 		$dom->loadHTML('<p>Google</p>');
 		Assert::contains(
 			'<p>Google</p>',
-			(new Subscribing\CachedPage(
+			(new Subscribing\FrugalPage(
 				new Uri\FakeUri('www.google.com'),
 				new Subscribing\FakePage(
 					new \DOMDocument(),
@@ -93,7 +93,7 @@ final class CachedPage extends TestCase\Database {
 		$dom->loadHTML('<p>Google</p>');
 		Assert::contains(
 			'<p>Google</p>',
-			(new Subscribing\CachedPage(
+			(new Subscribing\FrugalPage(
 				new Uri\FakeUri('www.google.com'),
 				new Subscribing\FakePage(
 					$dom,
@@ -114,4 +114,4 @@ final class CachedPage extends TestCase\Database {
 	}
 }
 
-(new CachedPage())->run();
+(new FrugalPage())->run();
