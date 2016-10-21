@@ -1,7 +1,7 @@
 <?php
 /**
  * @testCase
- * @phpVersion > 7.0.0
+ * @phpVersion > 7.1
  */
 namespace Remembrall\Integration\Subscribing;
 
