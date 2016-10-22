@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 require __DIR__ . '/../vendor/autoload.php';
 use Klapuch\{
-	Ini, Storage, Uri
+	Ini, Storage, Uri, Log
 };
 const CONFIGURATION = __DIR__ . '/../App/Configuration/.config.ini';
 try {
@@ -19,7 +19,11 @@ try {
 	session_regenerate_id(true);
 	foreach($configuration['HEADERS'] as $field => $value)
 		header(sprintf('%s:%s', $field, $value));
-	$logger = new Tracy\Logger(__DIR__ . '/../Log');
+	$logs = new Log\FilesystemLogs(
+		new Log\DynamicLocation(
+			new Log\DirectoryLocation(__DIR__ . '/../Log')
+		)
+	);
 	$url = new Uri\BaseUrl($_SERVER['SCRIPT_NAME'], $_SERVER['REQUEST_URI']);
 	$path = explode('/', $url->path());
 	$page = isset($path[0]) && $path[0] ? ucfirst($path[0]) : 'Default';
@@ -37,11 +41,16 @@ try {
 				$configuration['DATABASE']['password']
 			)
 		),
-		$logger
-	))->$method(
-		$_SERVER['REQUEST_METHOD'] === 'GET' ? $_GET : $_POST
-	);
+		new Tracy\Logger(__DIR__ . '/../Log')
+	))->$method($_SERVER['REQUEST_METHOD'] === 'GET' ? $_GET : $_POST);
 } catch(Throwable $ex) {
-	$logger->log($ex, Tracy\Logger::WARNING);
+	$logs->put(
+		new Log\PrettyLog(
+			$ex,
+			new Log\PrettySeverity(
+				new Log\JustifiedSeverity(Log\Severity::ERROR)
+			)
+		)
+	);
 	echo 'Error';
 }
