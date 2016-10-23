@@ -22,11 +22,10 @@ final class PartsPage extends BasePage {
 							$this->database
 						))->print(new Output\Xml([], 'subscription'))
 					)
-				)
+				),
+				...$this->layout()
 			)
-		))->render([
-			'baseUrl' => $this->url->reference(),
-		]);
+		))->render();
 	}
 
 	public function renderDelete(array $parameters) {

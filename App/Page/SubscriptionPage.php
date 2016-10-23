@@ -10,10 +10,12 @@ use Remembrall\Model\Subscribing;
 
 final class SubscriptionPage extends BasePage {
 	public function renderDefault() {
+		$xml = new \DOMDocument();
+		$xml->load(self::TEMPLATES . '/Subscription/default.xml');
 		echo (new Output\XsltTemplate(
 			self::TEMPLATES . '/Subscription/default.xsl',
-			new Output\RemoteXml(self::TEMPLATES . '/Subscription/default.xml')
-		))->render(['baseUrl' => $this->url->reference()]);
+			new Output\MergedXml($xml, ...$this->layout())
+		))->render();
 	}
 
 	public function actionSubscribe(array $subscription) {

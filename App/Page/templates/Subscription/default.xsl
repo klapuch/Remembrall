@@ -6,8 +6,12 @@
     <xsl:param name="title" select="template/default/title"/>
     <xsl:param name="description" select="template/default/description"/>
 
+    <xsl:template match="template">
+        <xsl:apply-templates select="default"/>
+    </xsl:template>
+
     <xsl:template match="default">
-        <xsl:apply-templates select="forms"/>
+       <xsl:apply-templates select="forms"/>
     </xsl:template>
 
     <xsl:template match="forms">
@@ -19,9 +23,7 @@
               method="POST">
             <div class="form-group">
                 <div class="col-sm-5">
-                    <label>
-                        <xsl:value-of select="label/url"/>
-                    </label>
+                    <label><xsl:value-of select="label/url"/></label>
                     <input type="text" required="required" name="url"
                            class="form-control"
                            placeholder="{placeholder/url}"/>
@@ -29,9 +31,7 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-5">
-                    <label>
-                        <xsl:value-of select="label/expression"/>
-                    </label>
+                    <label><xsl:value-of select="label/expression"/></label>
                     <input type="text" required="required" name="expression"
                            class="form-control"
                            placeholder="{placeholder/expression}"/>
@@ -39,9 +39,7 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-5">
-                    <label>
-                        <xsl:value-of select="label/interval"/>
-                    </label>
+                    <label><xsl:value-of select="label/interval"/></label>
                     <input type="number" required="required" min="30"
                            name="interval" class="form-control"
                            placeholder="{placeholder/interval}"/>

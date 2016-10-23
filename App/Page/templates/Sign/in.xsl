@@ -6,6 +6,10 @@
     <xsl:param name="title" select="template/default/title"/>
     <xsl:param name="description" select="template/default/description"/>
 
+    <xsl:template match="template">
+        <xsl:apply-templates select="default"/>
+    </xsl:template>
+
     <xsl:template match="default">
         <xsl:apply-templates select="forms"/>
     </xsl:template>

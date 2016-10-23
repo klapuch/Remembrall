@@ -7,11 +7,11 @@ use Remembrall\Model\Subscribing;
 
 final class SignPage extends BasePage {
 	public function renderIn() {
+		$xml = new \DOMDocument();
+		$xml->load(self::TEMPLATES . '/Sign/in.xml');
 		echo (new Output\XsltTemplate(
 			self::TEMPLATES . '/Sign/in.xsl',
-			new Output\RemoteXml(self::TEMPLATES . '/Sign/in.xml')
-		))->render([
-			'baseUrl' => $this->url->reference(),
-		]);
+			new Output\MergedXml($xml, ...$this->layout())
+		))->render();
 	}
 }

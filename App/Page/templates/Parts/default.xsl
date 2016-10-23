@@ -23,21 +23,11 @@
 
     <xsl:template match="subscription">
         <tr>
-            <td>
-                <xsl:number value="position()" format="1. "/>
-            </td>
-            <td>
-                <xsl:value-of select="lastUpdate"/>
-            </td>
-            <td>
-                <xsl:value-of select="interval"/>
-            </td>
-            <td>
-                <xsl:value-of select="expression"/>
-            </td>
-            <td>
-                <xsl:value-of select="url"/>
-            </td>
+            <td><xsl:number value="position()" format="1. "/></td>
+            <td><xsl:value-of select="lastUpdate"/></td>
+            <td><xsl:value-of select="interval"/></td>
+            <td><xsl:value-of select="expression"/></td>
+            <td><xsl:value-of select="url"/></td>
             <td>
                 <xsl:apply-templates select="//confirmation">
                     <xsl:with-param name="id" select="id"/>
@@ -47,19 +37,11 @@
     </xsl:template>
 
     <xsl:template match="headings">
-        <thead>
-            <tr>
-                <xsl:apply-templates/>
-            </tr>
-        </thead>
+        <thead><tr><xsl:apply-templates/></tr></thead>
     </xsl:template>
 
     <xsl:template match="heading">
-        <th>
-            <p>
-                <xsl:value-of select="."/>
-            </p>
-        </th>
+        <th><p><xsl:value-of select="."/></p></th>
     </xsl:template>
 
     <xsl:template match="confirmation">
