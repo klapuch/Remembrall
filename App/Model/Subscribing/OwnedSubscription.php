@@ -44,7 +44,7 @@ final class OwnedSubscription implements Subscription {
 			'SELECT 1
             FROM subscriptions
             WHERE id = ?
-            AND subscriber_id = ?',
+            AND user_id = ?',
 			[$this->id, $this->owner->id()]
 		);
 	}

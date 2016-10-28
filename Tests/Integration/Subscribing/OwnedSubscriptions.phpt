@@ -32,7 +32,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 		);
 		Assert::count(1, $subscriptions);
 		Assert::same(1, $subscriptions[0]['id']);
-		Assert::same(666, $subscriptions[0]['subscriber_id']);
+		Assert::same(666, $subscriptions[0]['user_id']);
 		Assert::same('PT120S', $subscriptions[0]['interval']);
 		Assert::same('google snap', $subscriptions[0]['snapshot']);
 	}
@@ -71,7 +71,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 			('https://www.google.com', '//d', 'd', '')"
 		);
 		$this->database->query(
-			"INSERT INTO subscriptions (part_id, subscriber_id, interval, last_update, snapshot) VALUES
+			"INSERT INTO subscriptions (part_id, user_id, interval, last_update, snapshot) VALUES
 			(1, 1, 'PT1M', '1993-01-01', ''),
 			(2, 2, 'PT2M', '1994-01-01', ''),
 			(3, 1, 'PT3M', '1996-01-01', ''),
@@ -116,7 +116,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 
 	public function testIteratingOwned() {
 		$this->database->query(
-			"INSERT INTO subscriptions (part_id, subscriber_id, interval, last_update, snapshot) VALUES
+			"INSERT INTO subscriptions (part_id, user_id, interval, last_update, snapshot) VALUES
 			(1, 4, 'PT1M', NOW(), ''),
 			(2, 2, 'PT2M', NOW(), ''),
 			(3, 1, 'PT3M', NOW(), ''),

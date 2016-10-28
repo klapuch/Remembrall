@@ -63,7 +63,7 @@ final class PostgresSubscription extends TestCase\Database {
 	protected function prepareDatabase() {
 		$this->purge(['subscriptions', 'notifications', 'parts']);
 		$this->database->query(
-			"INSERT INTO subscriptions (id, subscriber_id, part_id, interval, last_update, snapshot) VALUES
+			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
 			(1, 111, 3, 'PT2M', '2000-01-01', ''),
 			(2, 666, 4, 'PT3M', '2000-01-01', '')"
 		);

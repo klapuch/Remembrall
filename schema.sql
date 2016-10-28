@@ -71,10 +71,10 @@ SET default_with_oids = false;
 
 CREATE TABLE forgotten_passwords (
     id integer NOT NULL,
-    subscriber_id integer NOT NULL,
+    user_id integer NOT NULL,
     reminder character varying(141) NOT NULL,
-    reminded_at timestamp without time zone NOT NULL,
-    used boolean DEFAULT false NOT NULL
+    used boolean NOT NULL,
+    reminded_at timestamp without time zone NOT NULL
 );
 
 
@@ -252,46 +252,12 @@ ALTER SEQUENCE parts_id_seq OWNED BY parts.id;
 
 
 --
--- Name: subscribers; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE subscribers (
-    id integer NOT NULL,
-    email character varying NOT NULL,
-    password character varying NOT NULL
-);
-
-
-ALTER TABLE subscribers OWNER TO postgres;
-
---
--- Name: subscribers_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE subscribers_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE subscribers_id_seq OWNER TO postgres;
-
---
--- Name: subscribers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE subscribers_id_seq OWNED BY subscribers.id;
-
-
---
 -- Name: subscriptions; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE subscriptions (
     id integer NOT NULL,
-    subscriber_id integer NOT NULL,
+    user_id integer NOT NULL,
     part_id integer NOT NULL,
     "interval" character varying(10) NOT NULL,
     last_update timestamp without time zone NOT NULL,
@@ -323,15 +289,49 @@ ALTER SEQUENCE subscriptions_id_seq OWNED BY subscriptions.id;
 
 
 --
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE users (
+    id integer NOT NULL,
+    email character varying NOT NULL,
+    password character varying(255) NOT NULL
+);
+
+
+ALTER TABLE users OWNER TO postgres;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE users_id_seq OWNER TO postgres;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE users_id_seq OWNED BY users.id;
+
+
+--
 -- Name: verification_codes; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE verification_codes (
     id integer NOT NULL,
-    subscriber_id integer NOT NULL,
+    user_id integer NOT NULL,
     code character varying(91) NOT NULL,
-    used boolean DEFAULT false NOT NULL,
-    used_at timestamp without time zone NOT NULL
+    used boolean NOT NULL,
+    used_at timestamp without time zone
 );
 
 
@@ -397,14 +397,14 @@ ALTER TABLE ONLY parts ALTER COLUMN id SET DEFAULT nextval('parts_id_seq'::regcl
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY subscribers ALTER COLUMN id SET DEFAULT nextval('subscribers_id_seq'::regclass);
+ALTER TABLE ONLY subscriptions ALTER COLUMN id SET DEFAULT nextval('subscriptions_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY subscriptions ALTER COLUMN id SET DEFAULT nextval('subscriptions_id_seq'::regclass);
+ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
 
 
 --
@@ -415,19 +415,11 @@ ALTER TABLE ONLY verification_codes ALTER COLUMN id SET DEFAULT nextval('verific
 
 
 --
--- Name: forgotten_passwords_ID; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: forgotten_passwords_id; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY forgotten_passwords
-    ADD CONSTRAINT "forgotten_passwords_ID" PRIMARY KEY (id);
-
-
---
--- Name: forgotten_passwords_reminder; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY forgotten_passwords
-    ADD CONSTRAINT forgotten_passwords_reminder UNIQUE (reminder);
+    ADD CONSTRAINT forgotten_passwords_id PRIMARY KEY (id);
 
 
 --
@@ -491,54 +483,46 @@ ALTER TABLE ONLY subscriptions
 --
 
 ALTER TABLE ONLY subscriptions
-    ADD CONSTRAINT subscribed_parts_subscriber_id_part_id UNIQUE (subscriber_id, part_id);
+    ADD CONSTRAINT subscribed_parts_subscriber_id_part_id UNIQUE (user_id, part_id);
 
 
 --
--- Name: subscribers_ID; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: users_email; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY subscribers
-    ADD CONSTRAINT "subscribers_ID" PRIMARY KEY (id);
-
-
---
--- Name: subscribers_email; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY subscribers
-    ADD CONSTRAINT subscribers_email UNIQUE (email);
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_email UNIQUE (email);
 
 
 --
--- Name: verification_codes_ID; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: users_id; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY verification_codes
-    ADD CONSTRAINT "verification_codes_ID" PRIMARY KEY (id);
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_id PRIMARY KEY (id);
 
 
 --
--- Name: verification_codes_code; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: verification_codes_id; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY verification_codes
-    ADD CONSTRAINT verification_codes_code UNIQUE (code);
+    ADD CONSTRAINT verification_codes_id PRIMARY KEY (id);
 
 
 --
--- Name: verification_codes_subscriber_id; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: verification_codes_user_id; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY verification_codes
-    ADD CONSTRAINT verification_codes_subscriber_id UNIQUE (subscriber_id);
+    ADD CONSTRAINT verification_codes_user_id UNIQUE (user_id);
 
 
 --
--- Name: forgotten_passwords_subscriber_id; Type: INDEX; Schema: public; Owner: postgres
+-- Name: forgotten_passwords_user_id; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX forgotten_passwords_subscriber_id ON forgotten_passwords USING btree (subscriber_id);
+CREATE INDEX forgotten_passwords_user_id ON forgotten_passwords USING btree (user_id);
 
 
 --
@@ -570,10 +554,10 @@ CREATE INDEX subscribed_parts_part_id ON subscriptions USING btree (part_id);
 
 
 --
--- Name: subscriptions_snapshot; Type: INDEX; Schema: public; Owner: postgres
+-- Name: subscriptions_snaphost; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX subscriptions_snapshot ON subscriptions USING btree (snapshot);
+CREATE INDEX subscriptions_snaphost ON subscriptions USING btree (snapshot);
 
 
 --
@@ -591,11 +575,11 @@ CREATE TRIGGER parts_aiu AFTER INSERT OR UPDATE ON parts FOR EACH ROW EXECUTE PR
 
 
 --
--- Name: forgotten_passwords_subscriber_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: forgotten_passwords_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY forgotten_passwords
-    ADD CONSTRAINT forgotten_passwords_subscriber_id_fkey FOREIGN KEY (subscriber_id) REFERENCES subscribers(id) ON DELETE CASCADE;
+    ADD CONSTRAINT forgotten_passwords_user_id_fkey FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
 
 
 --
@@ -639,19 +623,19 @@ ALTER TABLE ONLY subscriptions
 
 
 --
--- Name: subscribed_parts_subscriber_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: subscriptions_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY subscriptions
-    ADD CONSTRAINT subscribed_parts_subscriber_id_fkey FOREIGN KEY (subscriber_id) REFERENCES subscribers(id) ON DELETE CASCADE;
+    ADD CONSTRAINT subscriptions_user_id_fkey FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
 
 
 --
--- Name: verification_codes_subscriber_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: verification_codes_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY verification_codes
-    ADD CONSTRAINT verification_codes_subscriber_id_fkey FOREIGN KEY (subscriber_id) REFERENCES subscribers(id) ON DELETE CASCADE;
+    ADD CONSTRAINT verification_codes_user_id_fkey FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
 
 
 --

@@ -25,7 +25,7 @@ final class UniqueSubscribers implements Subscribers {
 	public function register(string $email, string $password): Subscriber {
 		try {
 			$id = $this->database->fetchColumn(
-				'INSERT INTO subscribers(email, password) VALUES
+				'INSERT INTO users(email, password) VALUES
 				(?, ?) RETURNING id',
 				[$email, $this->cipher->encrypt($password)]
 			);

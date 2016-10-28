@@ -32,7 +32,7 @@ final class OwnedSubscriptions implements Subscriptions {
 		try {
 			$this->database->query(
 				'INSERT INTO subscriptions
-				(part_id, subscriber_id, interval, last_update, snapshot)
+				(part_id, user_id, interval, last_update, snapshot)
 				(
 					SELECT id, ?, ?, NOW(), snapshot
 					FROM parts
@@ -63,7 +63,7 @@ final class OwnedSubscriptions implements Subscriptions {
 		$rows = $this->database->fetchAll(
 			'SELECT id
 			FROM subscriptions
-			WHERE subscriber_id IS NOT DISTINCT FROM ?',
+			WHERE user_id IS NOT DISTINCT FROM ?',
 			[$this->owner->id()]
 		);
 		foreach($rows as ['id' => $id])
@@ -81,7 +81,7 @@ final class OwnedSubscriptions implements Subscriptions {
                 GROUP BY part_id
             ) AS part_visits ON parts.id = part_visits.part_id
             INNER JOIN subscriptions ON subscriptions.part_id = parts.id
-            WHERE subscriptions.subscriber_id IS NOT DISTINCT FROM ?
+            WHERE subscriptions.user_id IS NOT DISTINCT FROM ?
             ORDER BY visited_at DESC',
 			[$this->owner->id()]
 		);

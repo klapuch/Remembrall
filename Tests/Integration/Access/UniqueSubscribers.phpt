@@ -20,7 +20,7 @@ final class UniqueSubscribers extends TestCase\Database {
 			$this->database,
 			new Encryption\FakeCipher()
 		))->register('foo@bar.cz', 'passw0rt');
-		$subscribers = $this->database->fetchAll('SELECT * FROM subscribers');
+		$subscribers = $this->database->fetchAll('SELECT * FROM users');
 		Assert::equal(
 			new Access\RegisteredSubscriber(1, $this->database),
 			$subscriber
@@ -33,7 +33,7 @@ final class UniqueSubscribers extends TestCase\Database {
 
 	public function testRegisteringWithDuplicatedEmail() {
 		$this->database->query(
-			"INSERT INTO subscribers (email, password) VALUES
+			"INSERT INTO users (email, password) VALUES
 			('foo@bar.cz', 'secret')"
 		);
 		$ex = Assert::exception(
@@ -50,7 +50,7 @@ final class UniqueSubscribers extends TestCase\Database {
 	}
 
 	protected function prepareDatabase() {
-		$this->purge(['subscribers']);
+		$this->purge(['users']);
 	}
 }
 

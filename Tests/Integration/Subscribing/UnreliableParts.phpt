@@ -32,7 +32,7 @@ final class UnreliableParts extends TestCase\Database {
 			(4, NOW() - INTERVAL '45 SECOND')"
 		);
 		$this->database->query(
-			"INSERT INTO subscriptions (part_id, subscriber_id, interval, last_update, snapshot) VALUES
+			"INSERT INTO subscriptions (part_id, user_id, interval, last_update, snapshot) VALUES
 			(1, 1, 'PT10S', NOW(), ''),
 			(1, 2, 'PT50S', NOW(), ''),
 			(1, 3, 'PT5S', NOW(), ''),

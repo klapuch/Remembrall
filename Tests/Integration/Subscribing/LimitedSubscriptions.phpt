@@ -46,7 +46,7 @@ final class LimitedSubscriptions extends TestCase\Database {
 			('www.facedown.cz', '//d', 'd', '')"
 		);
 		$this->database->query(
-			"INSERT INTO subscriptions (part_id, subscriber_id, interval, last_update, snapshot) VALUES
+			"INSERT INTO subscriptions (part_id, user_id, interval, last_update, snapshot) VALUES
 			(1, 666, 'PT1M', NOW(), ''),
 			(2, 666, 'PT2M', NOW(), ''),
 			(3, 666, 'PT3M', NOW(), ''),

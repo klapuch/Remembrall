@@ -54,7 +54,7 @@ final class ChangedSubscriptions extends TestCase\Database {
 	}
 
 	public function testEmptyIterating() {
-		$this->purge(['parts', 'subscriptions', 'subscribers']);
+		$this->purge(['parts', 'subscriptions', 'users']);
 		$subscriptions = (new Subscribing\ChangedSubscriptions(
 			new Subscribing\FakeSubscriptions(),
 			new Mail\SendmailMailer(),
@@ -73,7 +73,7 @@ final class ChangedSubscriptions extends TestCase\Database {
 	}
 
 	protected function prepareDatabase() {
-		$this->purge(['parts', 'subscriptions', 'subscribers', 'part_visits']);
+		$this->purge(['parts', 'subscriptions', 'users', 'part_visits']);
 		$this->database->query(
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES 
 			('a', '//a', 'ac', 'as'),
@@ -83,7 +83,7 @@ final class ChangedSubscriptions extends TestCase\Database {
 			('e', '//e', 'ec', 'es')"
 		);
 		$this->database->query(
-			"INSERT INTO subscriptions (subscriber_id, part_id, interval, last_update, snapshot) VALUES 
+			"INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES 
 			(1, 1, 'PT10S', '2000-01-01', 'as'),
 			(2, 2, 'PT10S', '2002-01-01', 'changed'),
 			(3, 3, 'PT10S', NOW(), 'changed but time is recent'),
@@ -91,7 +91,7 @@ final class ChangedSubscriptions extends TestCase\Database {
 			(5, 5, 'PT10S', '2001-01-01', 'es')"
 		);
 		$this->database->query(
-			"INSERT INTO subscribers (id, email, password) VALUES 
+			"INSERT INTO users (id, email, password) VALUES 
 			(1, 'a@a.cz', 'a'),
 			(2, 'b@b.cz', 'b'),
 			(3, 'c@c.cz', 'c'),

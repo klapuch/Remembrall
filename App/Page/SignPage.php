@@ -2,8 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Page;
 
-use Klapuch\Output;
-use Remembrall\Model\Subscribing;
+use Klapuch\{
+	Output, Access
+};
 
 final class SignPage extends BasePage {
 	public function renderIn() {
@@ -13,5 +14,17 @@ final class SignPage extends BasePage {
 			self::TEMPLATES . '/Sign/in.xsl',
 			new Output\MergedXml($xml, ...$this->layout())
 		))->render();
+	}
+
+	public function actionIn(array $credentials) {
+		try {
+			$user = (new Access\SecureEntrance(
+				$this->database,
+				$this->cipher
+			))->enter([$credentials['email'], $credentials['password']]);
+			$_SESSION['id'] = $user->id();
+		} catch(\Exception $ex) {
+			echo $ex->getMessage();
+		}
 	}
 }

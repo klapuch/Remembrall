@@ -2,11 +2,10 @@
 declare(strict_types = 1);
 require __DIR__ . '/../vendor/autoload.php';
 use Klapuch\{
-	Ini, Storage, Uri, Log
+	Ini, Storage, Uri, Log, Encryption
 };
 const CONFIGURATION = __DIR__ . '/../App/Configuration/.config.ini';
 try {
-	Tracy\Debugger::enable();
 	mb_internal_encoding('UTF-8');
 	$configuration = (new Ini\Valid(
 		CONFIGURATION,
@@ -19,6 +18,7 @@ try {
 	session_regenerate_id(true);
 	foreach($configuration['HEADERS'] as $field => $value)
 		header(sprintf('%s:%s', $field, $value));
+	Tracy\Debugger::enable();
 	$logs = new Log\FilesystemLogs(
 		new Log\DynamicLocation(
 			new Log\DirectoryLocation(__DIR__ . '/../Log')
@@ -32,7 +32,8 @@ try {
 	$method = $_SERVER['REQUEST_METHOD'] === 'POST'
 		? 'action' . $action
 		: 'render' . $action;
-	(new $class(
+	/** @var \Remembrall\Page\BasePage $target */
+	$target = new $class(
 		$url,
 		new Storage\MonitoredDatabase(
 			new Storage\PDODatabase(
@@ -41,8 +42,11 @@ try {
 				$configuration['DATABASE']['password']
 			)
 		),
-		new Tracy\Logger(__DIR__ . '/../Log')
-	))->$method($_SERVER['REQUEST_METHOD'] === 'GET' ? $_GET : $_POST);
+		new Tracy\Logger(__DIR__ . '/../Log'),
+		new Encryption\AES256CBC($configuration['KEYS']['password'])
+	);
+	$target->startup();
+	$target->$method($_SERVER['REQUEST_METHOD'] === 'GET' ? $_GET : $_POST);
 } catch(Throwable $ex) {
 	$logs->put(
 		new Log\PrettyLog(

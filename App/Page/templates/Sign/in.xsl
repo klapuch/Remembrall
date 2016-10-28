@@ -19,7 +19,7 @@
     </xsl:template>
 
     <xsl:template match="in">
-        <form action="access" class="form-horizontal" role="form" method="POST">
+        <form action="in" class="form-horizontal" role="form" method="POST">
             <div class="form-group">
                 <div class="col-sm-5">
                     <label>

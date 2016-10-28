@@ -37,8 +37,6 @@ final class PartsPage extends BasePage {
 				$this->subscriber,
 				$this->database
 			))->cancel();
-			header('Location: ' . $this->url->reference() . 'parts');
-			exit;
 		} catch(NotFoundException $ex) {
 			echo $ex->getMessage();
 		}

@@ -19,7 +19,7 @@ final class RegisteredSubscriber implements Subscriber {
 	public function email(): string {
 		return $this->database->fetchColumn(
 			'SELECT email
-            FROM subscribers
+            FROM users
             WHERE id IS NOT DISTINCT FROM ?',
 			[$this->id()]
 		);

@@ -23,7 +23,7 @@ final class RegisteredSubscriber extends TestCase\Database {
 
 	public function testExistingEmail() {
 		$this->database->query(
-			"INSERT INTO subscribers (id, email, password) VALUES
+			"INSERT INTO users (id, email, password) VALUES
 			(666, 'foo@bar.cz', 'password')"
 		);
 		Assert::same(
@@ -35,7 +35,7 @@ final class RegisteredSubscriber extends TestCase\Database {
 	}
 
 	protected function prepareDatabase() {
-		$this->purge(['subscribers']);
+		$this->purge(['users']);
 	}
 }
 
