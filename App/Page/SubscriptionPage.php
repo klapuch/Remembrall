@@ -21,11 +21,11 @@ final class SubscriptionPage extends BasePage {
 	public function actionSubscribe(array $subscription) {
 		try {
 			$url = new Uri\NormalizedUrl(
-				new Uri\ProtocolBasedUrl(
-					new Uri\ReachableUrl(
-						new Uri\ValidUrl($subscription['url'])
-					),
-					['http', 'https', '']
+				new Uri\ReachableUrl(
+					new Uri\SchemeForcedUrl(
+						new Uri\ValidUrl($subscription['url']),
+						['http', 'https']
+					)
 				)
 			);
 			(new Storage\PostgresTransaction($this->database))->start(
@@ -101,8 +101,6 @@ final class SubscriptionPage extends BasePage {
 					);
 				}
 			);
-			header('Location: ' . $this->url->reference() . 'parts');
-			exit;
 		} catch(\Throwable $ex) {
 			echo $ex->getMessage();
 		}
