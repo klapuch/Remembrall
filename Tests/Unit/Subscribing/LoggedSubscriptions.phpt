@@ -6,7 +6,7 @@
 namespace Remembrall\Unit\Subscribing;
 
 use Klapuch\{
-	Output, Time, Uri
+	Output, Time, Uri, Log
 };
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
@@ -20,11 +20,11 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 	 */
 	public function testLoggedExceptionDuringSubscribing() {
 		$ex = new \Exception('exceptionMessage');
-		$logger = $this->mock('Tracy\ILogger');
-		$logger->shouldReceive('log')->once()->with($ex, 'error');
+		$logs = $this->mock(Log\Logs::class);
+		$logs->shouldReceive('put')->once();
 		(new Subscribing\LoggedSubscriptions(
 			new Subscribing\FakeSubscriptions($ex),
-			$logger
+			$logs
 		))->subscribe(
 			new Uri\FakeUri('url'),
 			'//p',
@@ -35,9 +35,9 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 	public function testNoExceptionDuringSubscribing() {
 		Assert::noError(
 			function() {
-				$logger = $this->mock('Tracy\ILogger');
 				(new Subscribing\LoggedSubscriptions(
-					new Subscribing\FakeSubscriptions(), $logger
+					new Subscribing\FakeSubscriptions(),
+					new Log\FakeLogs()
 				))->subscribe(
 					new Uri\FakeUri('url'),
 					'//p',
@@ -52,20 +52,20 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 	 */
 	public function testLoggedExceptionDuringPrinting() {
 		$ex = new \Exception('exceptionMessage');
-		$logger = $this->mock('Tracy\ILogger');
-		$logger->shouldReceive('log')->once()->with($ex, 'error');
+		$logs = $this->mock(Log\Logs::class);
+		$logs->shouldReceive('put')->once();
 		(new Subscribing\LoggedSubscriptions(
 			new Subscribing\FakeSubscriptions($ex),
-			$logger
+			$logs
 		))->print(new Output\FakeFormat());
 	}
 
 	public function testNoExceptionDuringPrinting() {
 		Assert::noError(
 			function() {
-				$logger = $this->mock('Tracy\ILogger');
 				(new Subscribing\LoggedSubscriptions(
-					new Subscribing\FakeSubscriptions(), $logger
+					new Subscribing\FakeSubscriptions(),
+					new Log\FakeLogs()
 				))->print(new Output\FakeFormat());
 			}
 		);
@@ -76,20 +76,20 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 	 */
 	public function testLoggedExceptionDuringIterating() {
 		$ex = new \Exception('exceptionMessage');
-		$logger = $this->mock('Tracy\ILogger');
-		$logger->shouldReceive('log')->once()->with($ex, 'error');
+		$logs = $this->mock(Log\Logs::class);
+		$logs->shouldReceive('put')->once();
 		(new Subscribing\LoggedSubscriptions(
 			new Subscribing\FakeSubscriptions($ex),
-			$logger
+			$logs
 		))->iterate();
 	}
 
 	public function testNoExceptionDuringIterating() {
 		Assert::noError(
 			function() {
-				$logger = $this->mock('Tracy\ILogger');
 				(new Subscribing\LoggedSubscriptions(
-					new Subscribing\FakeSubscriptions(), $logger
+					new Subscribing\FakeSubscriptions(),
+					new Log\FakeLogs()
 				))->iterate();
 			}
 		);

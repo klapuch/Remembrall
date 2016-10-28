@@ -2,26 +2,34 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\Time;
-use Tracy;
+use Klapuch\{
+	Time, Log
+};
 
 /**
  * Log every error action
  */
 final class LoggedSubscription implements Subscription {
 	private $origin;
-	private $logger;
+	private $logs;
 
-	public function __construct(Subscription $origin, Tracy\ILogger $logger) {
+	public function __construct(Subscription $origin, Log\Logs $logs) {
 		$this->origin = $origin;
-		$this->logger = $logger;
+		$this->logs = $logs;
 	}
 
 	public function cancel(): void {
 		try {
 			$this->origin->cancel();
 		} catch(\Throwable $ex) {
-			$this->logger->log($ex, Tracy\Logger::ERROR);
+			$this->logs->put(
+				new Log\PrettyLog(
+					$ex,
+					new Log\PrettySeverity(
+						new Log\JustifiedSeverity(Log\Severity::WARNING)
+					)
+				)
+			);
 			throw $ex;
 		}
 	}
@@ -30,7 +38,14 @@ final class LoggedSubscription implements Subscription {
 		try {
 			$this->origin->edit($interval);
 		} catch(\Throwable $ex) {
-			$this->logger->log($ex, Tracy\Logger::ERROR);
+			$this->logs->put(
+				new Log\PrettyLog(
+					$ex,
+					new Log\PrettySeverity(
+						new Log\JustifiedSeverity(Log\Severity::WARNING)
+					)
+				)
+			);
 			throw $ex;
 		}
 	}
@@ -39,7 +54,14 @@ final class LoggedSubscription implements Subscription {
 		try {
 			$this->origin->notify();
 		} catch(\Throwable $ex) {
-			$this->logger->log($ex, Tracy\Logger::ERROR);
+			$this->logs->put(
+				new Log\PrettyLog(
+					$ex,
+					new Log\PrettySeverity(
+						new Log\JustifiedSeverity(Log\Severity::WARNING)
+					)
+				)
+			);
 			throw $ex;
 		}
 	}

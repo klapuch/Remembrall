@@ -13,7 +13,7 @@ final class CronPage extends BasePage {
 					new Subscribing\CollectiveParts($this->database),
 					$this->database
 				),
-				$this->logger
+				$this->logs
 			))->iterate();
 			/** @var Subscribing\Part $part */
 			foreach($parts as $part)
@@ -24,7 +24,7 @@ final class CronPage extends BasePage {
 					new Mail\SendmailMailer(),
 					$this->database
 				),
-				$this->logger
+				$this->logs
 			))->iterate();
 			/** @var Subscribing\Subscription $subscription */
 			foreach($subscriptions as $subscription)

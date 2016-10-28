@@ -6,7 +6,7 @@
 namespace Remembrall\Unit\Subscribing;
 
 use Klapuch\{
-	Time
+	Time, Log
 };
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
@@ -21,20 +21,20 @@ final class LoggedSubscription extends TestCase\Mockery {
 	public function testLoggedExceptionDuringCanceling() {
 		$ex = new \Exception('exceptionMessage');
 		$subscription = new Subscribing\FakeSubscription($ex);
-		$logger = $this->mock('Tracy\ILogger');
-		$logger->shouldReceive('log')->once()->with($ex, 'error');
+		$logs = $this->mock(Log\Logs::class);
+		$logs->shouldReceive('put')->once();
 		(new Subscribing\LoggedSubscription(
 			$subscription,
-			$logger
+			$logs
 		))->cancel();
 	}
 
 	public function testNoExceptionDuringCanceling() {
 		Assert::noError(
 			function() {
-				$logger = $this->mock('Tracy\ILogger');
 				(new Subscribing\LoggedSubscription(
-					new Subscribing\FakeSubscription(), $logger
+					new Subscribing\FakeSubscription(),
+					new Log\FakeLogs()
 				))->cancel();
 			}
 		);
@@ -46,20 +46,20 @@ final class LoggedSubscription extends TestCase\Mockery {
 	public function testLoggedExceptionDuringEditing() {
 		$ex = new \Exception('exceptionMessage');
 		$subscription = new Subscribing\FakeSubscription($ex);
-		$logger = $this->mock('Tracy\ILogger');
-		$logger->shouldReceive('log')->once()->with($ex, 'error');
+		$logs = $this->mock(Log\Logs::class);
+		$logs->shouldReceive('put')->once();
 		(new Subscribing\LoggedSubscription(
 			$subscription,
-			$logger
+			$logs
 		))->edit(new Time\FakeInterval());
 	}
 
 	public function testNoExceptionDuringEditing() {
 		Assert::noError(
 			function() {
-				$logger = $this->mock('Tracy\ILogger');
 				(new Subscribing\LoggedSubscription(
-					new Subscribing\FakeSubscription(), $logger
+					new Subscribing\FakeSubscription(),
+					new Log\FakeLogs()
 				))->edit(new Time\FakeInterval());
 			}
 		);
@@ -71,20 +71,20 @@ final class LoggedSubscription extends TestCase\Mockery {
 	public function testLoggedExceptionDuringNotifying() {
 		$ex = new \Exception('exceptionMessage');
 		$subscription = new Subscribing\FakeSubscription($ex);
-		$logger = $this->mock('Tracy\ILogger');
-		$logger->shouldReceive('log')->once()->with($ex, 'error');
+		$logs = $this->mock(Log\Logs::class);
+		$logs->shouldReceive('put')->once();
 		(new Subscribing\LoggedSubscription(
 			$subscription,
-			$logger
+			$logs
 		))->notify();
 	}
 
 	public function testNoExceptionDuringNotifying() {
 		Assert::noError(
 			function() {
-				$logger = $this->mock('Tracy\ILogger');
 				(new Subscribing\LoggedSubscription(
-					new Subscribing\FakeSubscription(), $logger
+					new Subscribing\FakeSubscription(),
+					new Log\FakeLogs()
 				))->notify();
 			}
 		);

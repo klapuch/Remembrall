@@ -5,7 +5,9 @@
  */
 namespace Remembrall\Unit\Subscribing;
 
-use Klapuch\Uri;
+use Klapuch\{
+	Uri, Log
+};
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -19,19 +21,19 @@ final class LoggedParts extends TestCase\Mockery {
 	public function testLoggedExceptionDuringAdding() {
 		$ex = new \Exception('exceptionMessage');
 		$parts = new Subscribing\FakeParts($ex);
-		$logger = $this->mock('Tracy\ILogger');
-		$logger->shouldReceive('log')->once()->with($ex, 'error');
+		$logs = $this->mock(Log\Logs::class);
+		$logs->shouldReceive('put')->once();
 		(new Subscribing\LoggedParts(
-			$parts, $logger
+			$parts, $logs
 		))->add(new Subscribing\FakePart(), new Uri\FakeUri('url'), '//p');
 	}
 
 	public function testNoExceptionDuringAdding() {
 		Assert::noError(
 			function() {
-				$logger = $this->mock('Tracy\ILogger');
 				(new Subscribing\LoggedParts(
-					new Subscribing\FakeParts(), $logger
+					new Subscribing\FakeParts(),
+					new Log\FakeLogs()
 				))->add(
 					new Subscribing\FakePart(),
 					new Uri\FakeUri('url'),
@@ -47,17 +49,17 @@ final class LoggedParts extends TestCase\Mockery {
 	public function testLoggedExceptionDuringIterating() {
 		$ex = new \Exception('exceptionMessage');
 		$parts = new Subscribing\FakeParts($ex);
-		$logger = $this->mock('Tracy\ILogger');
-		$logger->shouldReceive('log')->once()->with($ex, 'error');
-		(new Subscribing\LoggedParts($parts, $logger))->iterate();
+		$logs = $this->mock(Log\Logs::class);
+		$logs->shouldReceive('put')->once();
+		(new Subscribing\LoggedParts($parts, $logs))->iterate();
 	}
 
 	public function testNoExceptionDuringIterating() {
 		Assert::noError(
 			function() {
-				$logger = $this->mock('Tracy\ILogger');
 				(new Subscribing\LoggedParts(
-					new Subscribing\FakeParts(), $logger
+					new Subscribing\FakeParts(),
+					new Log\FakeLogs()
 				))->iterate();
 			}
 		);

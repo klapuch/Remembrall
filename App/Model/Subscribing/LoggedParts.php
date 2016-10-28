@@ -2,26 +2,34 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\Uri;
-use Tracy;
+use Klapuch\{
+	Uri, Log
+};
 
 /**
  * Log every error action
  */
 final class LoggedParts implements Parts {
 	private $origin;
-	private $logger;
+	private $logs;
 
-	public function __construct(Parts $origin, Tracy\ILogger $logger) {
+	public function __construct(Parts $origin, Log\Logs $logs) {
 		$this->origin = $origin;
-		$this->logger = $logger;
+		$this->logs = $logs;
 	}
 
 	public function add(Part $part, Uri\Uri $uri, string $expression): void {
 		try {
 			$this->origin->add($part, $uri, $expression);
 		} catch(\Throwable $ex) {
-			$this->logger->log($ex, Tracy\Logger::ERROR);
+			$this->logs->put(
+				new Log\PrettyLog(
+					$ex,
+					new Log\PrettySeverity(
+						new Log\JustifiedSeverity(Log\Severity::WARNING)
+					)
+				)
+			);
 			throw $ex;
 		}
 	}
@@ -30,7 +38,14 @@ final class LoggedParts implements Parts {
 		try {
 			return $this->origin->iterate();
 		} catch(\Throwable $ex) {
-			$this->logger->log($ex, Tracy\Logger::ERROR);
+			$this->logs->put(
+				new Log\PrettyLog(
+					$ex,
+					new Log\PrettySeverity(
+						new Log\JustifiedSeverity(Log\Severity::WARNING)
+					)
+				)
+			);
 			throw $ex;
 		}
 	}

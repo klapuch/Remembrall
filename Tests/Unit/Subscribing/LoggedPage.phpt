@@ -5,6 +5,7 @@
  */
 namespace Remembrall\Unit\Subscribing;
 
+use Klapuch\Log;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -17,19 +18,19 @@ final class LoggedPage extends TestCase\Mockery {
 	 */
 	public function testLoggedExceptionDuringContent() {
 		$ex = new \Exception('exceptionMessage');
-		$parts = $this->mock(Subscribing\Page::class);
-		$parts->shouldReceive('content')->andThrowExceptions([$ex]);
-		$logger = $this->mock('Tracy\ILogger');
-		$logger->shouldReceive('log')->once()->with($ex, 'error');
-		(new Subscribing\LoggedPage($parts, $logger))->content();
+		$page = $this->mock(Subscribing\Page::class);
+		$page->shouldReceive('content')->andThrowExceptions([$ex]);
+		$logs = $this->mock(Log\Logs::class);
+		$logs->shouldReceive('put')->once();
+		(new Subscribing\LoggedPage($page, $logs))->content();
 	}
 
 	public function testNoExceptionDuringContent() {
 		Assert::noError(
 			function() {
-				$logger = $this->mock('Tracy\ILogger');
 				(new Subscribing\LoggedPage(
-					new Subscribing\FakePage(new \DOMDocument()), $logger
+					new Subscribing\FakePage(new \DOMDocument()),
+					new Log\FakeLogs()
 				))->content();
 			}
 		);
@@ -40,20 +41,19 @@ final class LoggedPage extends TestCase\Mockery {
 	 */
 	public function testLoggedExceptionDuringRefreshing() {
 		$ex = new \Exception('exceptionMessage');
-		$parts = $this->mock(Subscribing\Page::class);
-		$parts->shouldReceive('refresh')->andThrowExceptions([$ex]);
-		$logger = $this->mock('Tracy\ILogger');
-		$logger->shouldReceive('log')->once()->with($ex, 'error');
-		(new Subscribing\LoggedPage($parts, $logger))->refresh();
+		$page = $this->mock(Subscribing\Page::class);
+		$page->shouldReceive('refresh')->andThrowExceptions([$ex]);
+		$logs = $this->mock(Log\Logs::class);
+		$logs->shouldReceive('put')->once();
+		(new Subscribing\LoggedPage($page, $logs))->refresh();
 	}
 
 	public function testNoExceptionDuringRefreshing() {
 		Assert::noError(
 			function() {
-				$logger = $this->mock('Tracy\ILogger');
 				(new Subscribing\LoggedPage(
 					new Subscribing\FakePage(null, new Subscribing\FakePage()),
-					$logger
+					new Log\FakeLogs()
 				))->refresh();
 			}
 		);

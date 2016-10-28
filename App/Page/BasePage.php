@@ -2,10 +2,9 @@
 namespace Remembrall\Page;
 
 use Klapuch\{
-	Storage, Uri, Encryption, FlashMessage, Csrf, Output, Form
+	Storage, Uri, Encryption, FlashMessage, Csrf, Form, Log
 };
 use Remembrall\Model\Access;
-use Tracy;
 
 abstract class BasePage {
 	protected const TEMPLATES = __DIR__ . '/templates';
@@ -15,8 +14,8 @@ abstract class BasePage {
 	protected $subscriber;
 	/** @var \Klapuch\Storage\Database */
 	protected $database;
-	/** @var \Tracy\ILogger */
-	protected $logger;
+	/** @var \Klapuch\Log\Logs */
+	protected $logs;
 	/** @var \Klapuch\Encryption\Cipher */
 	protected $cipher;
 	/** @var \Klapuch\Csrf\Csrf */
@@ -27,11 +26,11 @@ abstract class BasePage {
 	public function __construct(
 		Uri\Uri $url,
 		Storage\Database $database,
-		Tracy\Logger $logger,
+		Log\Logs $logs,
 		Encryption\Cipher $cipher
 	) {
 		$this->database = $database;
-		$this->logger = $logger;
+		$this->logs = $logs;
 		$this->url = $url;
 		$this->cipher = $cipher;
 		$this->csrf = new Csrf\StoredCsrf($_SESSION, $_POST, $_GET);

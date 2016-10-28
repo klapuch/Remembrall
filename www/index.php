@@ -29,7 +29,6 @@ try {
 		$_SESSION[TIMER] = time();
 	foreach($configuration['HEADERS'] as $field => $value)
 		header(sprintf('%s:%s', $field, $value));
-	Tracy\Debugger::enable();
 	$url = new Uri\BaseUrl($_SERVER['SCRIPT_NAME'], $_SERVER['REQUEST_URI']);
 	$path = explode('/', $url->path());
 	$page = isset($path[0]) && $path[0] ? ucfirst($path[0]) : 'Default';
@@ -46,7 +45,7 @@ try {
 			$configuration['DATABASE']['username'],
 			$configuration['DATABASE']['password']
 		),
-		new Tracy\Logger(__DIR__ . '/../Log'),
+		$logs,
 		new Encryption\AES256CBC($configuration['KEYS']['password'])
 	);
 	$target->startup();

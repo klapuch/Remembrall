@@ -101,12 +101,12 @@ final class SubscriptionPage extends BasePage {
 								),
 								$this->database
 							),
-							$this->logger
+							$this->logs
 						)
 					);
 					(new Subscribing\LoggedParts(
 						new Subscribing\CollectiveParts($this->database),
-						$this->logger
+						$this->logs
 					))->add(
 						new Subscribing\CachedPart(
 							new Subscribing\HtmlPart(
@@ -132,7 +132,7 @@ final class SubscriptionPage extends BasePage {
 							$this->subscriber,
 							$this->database
 						),
-						$this->logger
+						$this->logs
 					))->subscribe(
 						$url,
 						$subscription['expression'],

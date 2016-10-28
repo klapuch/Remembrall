@@ -16,7 +16,6 @@
 	"ext-dom": "*",
 	"nette/caching": "^2.5.0",
 	"nette/mail": "^2.4.0",
-	"tracy/tracy": "^2.4.0",
 	"klapuch/encryption": "^1.0.0",
 	"klapuch/storage": "^1.0.0",
 	"klapuch/output": "^1.0.0",
@@ -32,7 +31,7 @@
   },
   "require-dev": {
 	"nette/tester": "^1.7",
-	"mockery/mockery": "^0.9.5"
+	"mockery/mockery": "@dev"
   },
   "autoload": {
 	"psr-4": {

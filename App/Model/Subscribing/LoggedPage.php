@@ -2,25 +2,32 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Tracy;
+use Klapuch\Log;
 
 /**
  * Log every error action
  */
 final class LoggedPage implements Page {
 	private $origin;
-	private $logger;
+	private $logs;
 
-	public function __construct(Page $origin, Tracy\ILogger $logger) {
+	public function __construct(Page $origin, Log\Logs $logs) {
 		$this->origin = $origin;
-		$this->logger = $logger;
+		$this->logs = $logs;
 	}
 
 	public function content(): \DOMDocument {
 		try {
 			return $this->origin->content();
 		} catch(\Throwable $ex) {
-			$this->logger->log($ex, Tracy\Logger::ERROR);
+			$this->logs->put(
+				new Log\PrettyLog(
+					$ex,
+					new Log\PrettySeverity(
+						new Log\JustifiedSeverity(Log\Severity::WARNING)
+					)
+				)
+			);
 			throw $ex;
 		}
 	}
@@ -29,7 +36,14 @@ final class LoggedPage implements Page {
 		try {
 			return $this->origin->refresh();
 		} catch(\Throwable $ex) {
-			$this->logger->log($ex, Tracy\Logger::ERROR);
+			$this->logs->put(
+				new Log\PrettyLog(
+					$ex,
+					new Log\PrettySeverity(
+						new Log\JustifiedSeverity(Log\Severity::WARNING)
+					)
+				)
+			);
 			throw $ex;
 		}
 	}
