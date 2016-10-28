@@ -33,7 +33,7 @@ abstract class BasePage {
 	}
 
 	public function startup() {
-		$this->subscriber = new Access\FakeSubscriber(1, 'foo@bar.cz');
+		$this->subscriber = new Access\FakeSubscriber(0, 'NoOne');
 		if(isset($_SESSION['id'])) {
 			$this->subscriber = new Access\RegisteredSubscriber(
 				$_SESSION['id'],

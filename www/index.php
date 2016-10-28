@@ -5,6 +5,8 @@ use Klapuch\{
 	Ini, Storage, Uri, Log, Encryption
 };
 const CONFIGURATION = __DIR__ . '/../App/Configuration/.config.ini';
+const TIMER = 'timer';
+const ELAPSE = 20;
 try {
 	mb_internal_encoding('UTF-8');
 	$configuration = (new Ini\Valid(
@@ -15,7 +17,11 @@ try {
 		ini_set($name, (string)$value);
 	date_default_timezone_set('Europe/Prague');
 	session_start($configuration['SESSIONS']);
-	session_regenerate_id(true);
+	if(isset($_SESSION[TIMER]) && (time() - $_SESSION[TIMER]) > ELAPSE) {
+		$_SESSION[TIMER] = time();
+		session_regenerate_id(true);
+	} elseif(!isset($_SESSION[TIMER]))
+		$_SESSION[TIMER] = time();
 	foreach($configuration['HEADERS'] as $field => $value)
 		header(sprintf('%s:%s', $field, $value));
 	Tracy\Debugger::enable();
