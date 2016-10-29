@@ -62,5 +62,5 @@ try {
 			)
 		)
 	);
-	echo 'Error';
+	echo 'Error has been logged';
 }
