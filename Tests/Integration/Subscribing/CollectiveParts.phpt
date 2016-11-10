@@ -5,9 +5,7 @@
  */
 namespace Remembrall\Integration\Subscribing;
 
-use Klapuch\{
-	Http, Uri
-};
+use Klapuch\Uri;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -129,60 +127,10 @@ final class CollectiveParts extends TestCase\Database {
 			$this->database
 		))->iterate();
 		$part = $parts->current();
-		$googleUrl = new Uri\ReachableUrl(new Uri\ValidUrl('www.google.com'));
-		$facedownUrl = new Uri\ReachableUrl(
-			new Uri\ValidUrl('www.facedown.cz')
-		);
-		$googlePage = new Subscribing\FrugalPage(
-			$googleUrl,
-			new Subscribing\PostgresPage(
-				new Subscribing\HtmlWebPage(
-					new Http\BasicRequest('GET', $googleUrl)
-				),
-				$googleUrl,
-				$this->database
-			),
-			$this->database
-		);
-		$facedownPage = new Subscribing\FrugalPage(
-			$facedownUrl,
-			new Subscribing\PostgresPage(
-				new Subscribing\HtmlWebPage(
-					new Http\BasicRequest('GET', $facedownUrl)
-				),
-				$facedownUrl,
-				$this->database
-			),
-			$this->database
-		);
-		Assert::equal(
-			new Subscribing\PostgresPart(
-				new Subscribing\HtmlPart(
-					new Subscribing\MatchingExpression(
-						new Subscribing\XPathExpression($googlePage, '//a')
-					),
-					$googlePage
-				),
-				1,
-				$this->database
-			),
-			$part
-		);
+		Assert::equal('a', $part->content());
 		$parts->next();
 		$part = $parts->current();
-		Assert::equal(
-			new Subscribing\PostgresPart(
-				new Subscribing\HtmlPart(
-					new Subscribing\MatchingExpression(
-						new Subscribing\XPathExpression($facedownPage, '//c')
-					),
-					$facedownPage
-				),
-				2,
-				$this->database
-			),
-			$part
-		);
+		Assert::equal('c', $part->content());
 		$parts->next();
 		Assert::null($parts->current());
 	}
