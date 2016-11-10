@@ -54,7 +54,11 @@ final class PostgresPart extends TestCase\Database {
 		))->refresh();
 		Assert::count(
 			1,
-			$this->database->fetchAll('SELECT * FROM part_visits')
+			$this->database->fetchAll(
+				"SELECT *
+				FROM part_visits
+				WHERE visited_at >= NOW() - INTERVAL '1 MINUTE'"
+			)
 		);
 	}
 

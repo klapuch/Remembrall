@@ -29,7 +29,7 @@ final class EmailSubscription extends TestCase\Mockery {
 		);
 	}
 
-	public function testSendingWithoutModifiedMessage() {
+	public function testSendingWithoutModifyingMessage() {
 		Assert::noError(
 			function() {
 				$message = new Mail\Message();

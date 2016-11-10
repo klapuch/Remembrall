@@ -30,6 +30,21 @@ final class HtmlWebPage extends Tester\TestCase {
 	}
 
 	public function testInvalidHtml() {
+		Assert::contains(
+			'Hi, there!',
+			(new Subscribing\HtmlWebPage(
+				new Http\FakeRequest(
+					new Http\FakeResponse(
+						'<a href="script.php?foo=bar&hello=world">Hi, there!</}>',
+						['Content-Type' => 'text/html'],
+						200
+					)
+				)
+			))->content()->saveHtml()
+		);
+	}
+
+	public function testNonHtmlContentType() {
 		$ex = Assert::exception(
 			function() {
 				(new Subscribing\HtmlWebPage(

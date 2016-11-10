@@ -20,10 +20,9 @@ final class WebPages extends TestCase\Database {
 		$page = new Subscribing\FakePage($dom);
 		Assert::equal(
 			new Subscribing\PostgresPage($page, $url, $this->database),
-			(new Subscribing\WebPages($this->database))->add(
-				$url,
-				$page
-			)
+			(new Subscribing\WebPages(
+				$this->database
+			))->add($url, $page)
 		);
 		$pages = $this->database->fetchAll("SELECT * FROM pages");
 		Assert::count(1, $pages);
@@ -41,7 +40,11 @@ final class WebPages extends TestCase\Database {
 		);
 		Assert::count(
 			1,
-			$this->database->fetchAll('SELECT * FROM page_visits')
+			$this->database->fetchAll(
+				"SELECT *
+				FROM page_visits
+				WHERE visited_at >= NOW() - INTERVAL '1 MINUTE'"
+			)
 		);
 	}
 
@@ -92,10 +95,7 @@ final class WebPages extends TestCase\Database {
 		(new Subscribing\WebPages(
 			$this->database
 		))->add(new Uri\FakeUri('www.facedown.cz'), $page);
-		Assert::count(
-			1,
-			$this->database->fetchAll('SELECT * FROM page_visits')
-		);
+		Assert::count(1, $this->database->fetchAll('SELECT * FROM page_visits'));
 	}
 
 	protected function prepareDatabase() {

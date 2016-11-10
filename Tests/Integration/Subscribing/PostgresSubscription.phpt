@@ -14,10 +14,7 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class PostgresSubscription extends TestCase\Database {
 	public function testCancelingWithoutAffectingOthers() {
-		(new Subscribing\PostgresSubscription(
-			1,
-			$this->database
-		))->cancel();
+		(new Subscribing\PostgresSubscription(1, $this->database))->cancel();
 		$subscriptions = $this->database->fetchAll(
 			'SELECT * FROM subscriptions'
 		);
@@ -42,9 +39,7 @@ final class PostgresSubscription extends TestCase\Database {
 			1,
 			$this->database
 		))->notify();
-		$notifications = $this->database->fetchAll(
-			'SELECT * FROM notifications'
-		);
+		$notifications = $this->database->fetchAll('SELECT * FROM notifications');
 		Assert::count(1, $notifications);
 		Assert::same(1, $notifications[0]['subscription_id']);
 	}

@@ -14,7 +14,7 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class ChangedSubscriptions extends TestCase\Database {
-	public function testIteratingWithDifferentSnapshotAndPastTime() {
+	public function testChangedSnapshotAndPastDate() {
 		$subscriptions = (new Subscribing\ChangedSubscriptions(
 			new Subscribing\FakeSubscriptions(),
 			new Mail\SendmailMailer(),
@@ -70,6 +70,16 @@ final class ChangedSubscriptions extends TestCase\Database {
 			$this->database
 		))->print(new Output\FakeFormat());
 		Assert::contains('//b', (string)$subscriptions[0]);
+	}
+
+	public function testEmptyPrinting() {
+		$this->purge(['parts', 'subscriptions', 'users']);
+		$subscriptions = (new Subscribing\ChangedSubscriptions(
+			new Subscribing\FakeSubscriptions(),
+			new Mail\SendmailMailer(),
+			$this->database
+		))->print(new Output\FakeFormat());
+		Assert::count(0, $subscriptions);
 	}
 
 	protected function prepareDatabase() {

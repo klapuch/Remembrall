@@ -56,10 +56,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 			'"//google" expression on "www.google.com" page is already subscribed by you'
 		);
 		Assert::type(UniqueConstraint::class, $ex->getPrevious());
-		Assert::count(
-			1,
-			$this->database->fetchAll('SELECT * FROM subscriptions')
-		);
+		Assert::count(1, $this->database->fetchAll('SELECT * FROM subscriptions'));
 	}
 
 	public function testPrinting() {

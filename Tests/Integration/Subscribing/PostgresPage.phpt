@@ -70,7 +70,11 @@ final class PostgresPage extends TestCase\Database {
 			new Uri\FakeUri('www.facedown.cz'),
 			$this->database
 		))->refresh();
-		$pages = $this->database->fetchAll('SELECT * FROM page_visits');
+		$pages = $this->database->fetchAll(
+			"SELECT *
+			FROM page_visits
+			WHERE visited_at >= NOW() - INTERVAL '1 MINUTE'"
+		);
 		Assert::count(1, $pages);
 	}
 

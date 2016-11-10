@@ -15,9 +15,7 @@ final class RegisteredSubscriber extends TestCase\Database {
 	public function testId() {
 		Assert::same(
 			666,
-			(new Access\RegisteredSubscriber(
-				666, $this->database
-			))->id()
+			(new Access\RegisteredSubscriber(666, $this->database))->id()
 		);
 	}
 
@@ -28,9 +26,7 @@ final class RegisteredSubscriber extends TestCase\Database {
 		);
 		Assert::same(
 			'foo@bar.cz',
-			(new Access\RegisteredSubscriber(
-				666, $this->database
-			))->email()
+			(new Access\RegisteredSubscriber(666, $this->database))->email()
 		);
 	}
 

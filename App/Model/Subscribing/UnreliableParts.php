@@ -25,7 +25,7 @@ final class UnreliableParts implements Parts {
 
 	public function iterate(): \Iterator {
 		$rows = $this->database->fetchAll(
-			"SELECT page_url AS url, expression, parts.id
+			"SELECT page_url AS url, expression, parts.id, content, snapshot
 				FROM parts
 				RIGHT JOIN (
 					SELECT MIN(SUBSTRING(interval FROM '[0-9]+')::INT) AS interval,
@@ -55,15 +55,19 @@ final class UnreliableParts implements Parts {
 				),
 				new Storages\MemoryStorage()
 			);
-			yield new PostgresPart(
-				new HtmlPart(
-					new MatchingExpression(
-						new XPathExpression($page, $row['expression'])
+			yield new ConstantPart(
+				new PostgresPart(
+					new HtmlPart(
+						new MatchingExpression(
+							new XPathExpression($page, $row['expression'])
+						),
+						$page
 					),
-					$page
+					$row['id'],
+					$this->database
 				),
-				$row['id'],
-				$this->database
+				$row['content'],
+				$row['snapshot']
 			);
 		}
 	}

@@ -22,7 +22,7 @@ final class XPathExpression extends Tester\TestCase {
 		);
 	}
 
-	public function testInvalidExpressionWithout() {
+	public function testInvalidExpression() {
 		Assert::same(
 			(string)new Subscribing\XPathExpression(
 				new Subscribing\FakePage,

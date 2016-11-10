@@ -17,53 +17,40 @@ final class CollectiveParts extends TestCase\Database {
 		(new Subscribing\CollectiveParts(
 			$this->database
 		))->add(
-			new Subscribing\FakePart(
-				'<p>google content</p>',
-				null,
-				'google snap'
-			),
+			new Subscribing\FakePart('google content', null, 'google snap'),
 			new Uri\FakeUri('www.google.com'),
 			'//p'
 		);
 		$parts = $this->database->fetchAll('SELECT * FROM parts');
 		Assert::count(1, $parts);
 		Assert::same('www.google.com', $parts[0]['page_url']);
-		Assert::same('<p>google content</p>', $parts[0]['content']);
+		Assert::same('google content', $parts[0]['content']);
 		Assert::same('google snap', $parts[0]['snapshot']);
 		Assert::same('//p', $parts[0]['expression']);
 	}
 
-	public function testAddingMultipleBrandNewParts() {
+	public function testAddingMultipleParts() {
 		(new Subscribing\CollectiveParts(
 			$this->database
-		))->add(
-			new Subscribing\FakePart(
-				'<p>google content</p>',
-				null,
-				'google snap'
-			),
+		))->add(new Subscribing\FakePart('google content', null, 'google snap'),
 			new Uri\FakeUri('www.google.com'),
 			'//google'
 		);
 		(new Subscribing\CollectiveParts(
 			$this->database
 		))->add(
-			new Subscribing\FakePart(
-				'<p>facedown content</p>',
-				null,
-				'facedown snap'
-			),
+			new Subscribing\FakePart('facedown content', null, 'facedown snap'),
 			new Uri\FakeUri('www.facedown.cz'),
 			'//facedown'
 		);
 		$parts = $this->database->fetchAll('SELECT * FROM parts');
 		Assert::count(2, $parts);
 		Assert::same('www.google.com', $parts[0]['page_url']);
-		Assert::same('<p>google content</p>', $parts[0]['content']);
+		Assert::same('google content', $parts[0]['content']);
 		Assert::same('google snap', $parts[0]['snapshot']);
 		Assert::same('//google', $parts[0]['expression']);
 		Assert::same('www.facedown.cz', $parts[1]['page_url']);
-		Assert::same('<p>facedown content</p>', $parts[1]['content']);
+		Assert::same('facedown content', $parts[1]['content']);
 		Assert::same('facedown snap', $parts[1]['snapshot']);
 		Assert::same('//facedown', $parts[1]['expression']);
 	}
@@ -79,30 +66,30 @@ final class CollectiveParts extends TestCase\Database {
 		);
 		Assert::count(
 			1,
-			$this->database->fetchAll('SELECT * FROM part_visits')
+			$this->database->fetchAll(
+				"SELECT *
+				FROM part_visits
+				WHERE visited_at >= NOW() - INTERVAL '1 MINUTE'"
+			)
 		);
 	}
 
 	public function testUpdatingPartAsDuplication() {
-		$oldPart = new Subscribing\FakePart('<p>Content</p>', null, 'OLD_SNAP');
+		$oldPart = new Subscribing\FakePart('Content', null, 'OLD_SNAP');
 		(new Subscribing\CollectiveParts(
 			$this->database
 		))->add($oldPart, new Uri\FakeUri('www.google.com'), '//p');
-		$newPart = new Subscribing\FakePart(
-			'<p>NEW_CONTENT</p>',
-			null,
-			'NEW_SNAP'
-		);
+		$newPart = new Subscribing\FakePart('NEW_CONTENT', null, 'NEW_SNAP');
 		(new Subscribing\CollectiveParts(
 			$this->database
 		))->add($newPart, new Uri\FakeUri('www.google.com'), '//p');
 		$parts = $this->database->fetchAll('SELECT * FROM parts');
 		Assert::count(1, $parts);
-		Assert::same('<p>NEW_CONTENT</p>', $parts[0]['content']);
+		Assert::same('NEW_CONTENT', $parts[0]['content']);
 		Assert::same('NEW_SNAP', $parts[0]['snapshot']);
 	}
 
-	public function testUpdatingPartAsDuplicationWithRecordedVisitation() {
+	public function testUpdatingPartAsDuplicationWithAllRecordedVisitation() {
 		$this->truncate(['part_visits']);
 		$part = new Subscribing\FakePart('<p>Content</p>', null, 'snap');
 		(new Subscribing\CollectiveParts(
@@ -111,10 +98,7 @@ final class CollectiveParts extends TestCase\Database {
 		(new Subscribing\CollectiveParts(
 			$this->database
 		))->add($part, new Uri\FakeUri('www.google.com'), '//p');
-		Assert::count(
-			2,
-			$this->database->fetchAll('SELECT * FROM part_visits')
-		);
+		Assert::count(2, $this->database->fetchAll('SELECT * FROM part_visits'));
 	}
 
 	public function testIteratingOverAllPages() {
@@ -123,9 +107,7 @@ final class CollectiveParts extends TestCase\Database {
 			('www.google.com', '//a', 'a', ''),
 			('www.facedown.cz', '//c', 'c', '')"
 		);
-		$parts = (new Subscribing\CollectiveParts(
-			$this->database
-		))->iterate();
+		$parts = (new Subscribing\CollectiveParts($this->database))->iterate();
 		$part = $parts->current();
 		Assert::equal('a', $part->content());
 		$parts->next();
@@ -135,10 +117,8 @@ final class CollectiveParts extends TestCase\Database {
 		Assert::null($parts->current());
 	}
 
-	public function testIteratingWithEmptyParts() {
-		$parts = (new Subscribing\CollectiveParts(
-			$this->database
-		))->iterate();
+	public function testIteratingEmptyParts() {
+		$parts = (new Subscribing\CollectiveParts($this->database))->iterate();
 		Assert::null($parts->current());
 	}
 

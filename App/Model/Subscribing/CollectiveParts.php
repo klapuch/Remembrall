@@ -33,7 +33,8 @@ final class CollectiveParts implements Parts {
 
 	public function iterate(): \Iterator {
 		$rows = $this->database->fetchAll(
-			'SELECT page_url AS url, id, expression FROM parts'
+			'SELECT page_url AS url, snapshot, content, id, expression
+			FROM parts'
 		);
 		foreach($rows as $row) {
 			$url = new Uri\ReachableUrl(new Uri\ValidUrl($row['url']));
@@ -46,15 +47,19 @@ final class CollectiveParts implements Parts {
 				),
 				$this->database
 			);
-			yield new PostgresPart(
-				new HtmlPart(
-					new MatchingExpression(
-						new XPathExpression($page, $row['expression'])
+			yield new ConstantPart(
+				new PostgresPart(
+					new HtmlPart(
+						new MatchingExpression(
+							new XPathExpression($page, $row['expression'])
+						),
+						$page
 					),
-					$page
+					$row['id'],
+					$this->database
 				),
-				$row['id'],
-				$this->database
+				$row['content'],
+				$row['snapshot']
 			);
 		}
 	}
