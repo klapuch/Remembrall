@@ -41,12 +41,10 @@ try {
 	/** @var \Remembrall\Page\BasePage $target */
 	$target = new $class(
 		$url,
-		new Storage\MonitoredDatabase(
-			new Storage\PDODatabase(
-				$configuration['DATABASE']['dsn'],
-				$configuration['DATABASE']['username'],
-				$configuration['DATABASE']['password']
-			)
+		new Storage\PDODatabase(
+			$configuration['DATABASE']['dsn'],
+			$configuration['DATABASE']['username'],
+			$configuration['DATABASE']['password']
 		),
 		new Tracy\Logger(__DIR__ . '/../Log'),
 		new Encryption\AES256CBC($configuration['KEYS']['password'])
