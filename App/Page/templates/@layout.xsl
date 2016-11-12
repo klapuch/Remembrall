@@ -120,12 +120,14 @@
     </xsl:template>
 
     <xsl:template match="flashMessage">
-        <xsl:element name="div">
-            <xsl:attribute name="class">
-                alert alert-<xsl:value-of select="type"/>
-            </xsl:attribute>
-            <xsl:value-of select="content" />
-        </xsl:element>
+        <xsl:if test="boolean(content) and boolean(type)">
+            <xsl:element name="div">
+                <xsl:attribute name="class">
+                    alert alert-<xsl:value-of select="type"/>
+                </xsl:attribute>
+                <xsl:value-of select="content" />
+            </xsl:element>
+        </xsl:if>
     </xsl:template>
 
 </xsl:stylesheet>
