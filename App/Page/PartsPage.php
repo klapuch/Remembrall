@@ -41,6 +41,7 @@ final class PartsPage extends BasePage {
 			$this->redirect('parts');
 		} catch(NotFoundException $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
+			$this->redirect('parts');
 		}
 	}
 }

@@ -10,7 +10,7 @@ use Tracy;
 abstract class BasePage {
 	protected const TEMPLATES = __DIR__ . '/templates';
 	/** @var Uri\BaseUrl */
-	protected $url;
+	private $url;
 	/** @var \Remembrall\Model\Access\Subscriber */
 	protected $subscriber;
 	/** @var \Klapuch\Storage\Database */

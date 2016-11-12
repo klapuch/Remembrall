@@ -27,6 +27,7 @@ final class SignPage extends BasePage {
 			$this->redirect('parts');
 		} catch(\Exception $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
+			$this->redirect('sign/in');
 		}
 	}
 }

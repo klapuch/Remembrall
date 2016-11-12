@@ -105,6 +105,7 @@ final class SubscriptionPage extends BasePage {
 			$this->redirect('parts');
 		} catch(\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
+			$this->redirect('subscription');
 		}
 	}
 }
