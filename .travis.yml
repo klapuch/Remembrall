@@ -5,7 +5,6 @@ addons:
   postgresql: 9.5
 
 sudo: required
-dist: trusty
 
 language: php
 
