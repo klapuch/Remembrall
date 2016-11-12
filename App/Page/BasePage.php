@@ -69,7 +69,16 @@ abstract class BasePage {
 	 * @param string $content
 	 * @param string $type
 	 */
-	final protected function flashMessage(string $content, string $type) {
+	final protected function flashMessage(string $content, string $type): void {
 		(new FlashMessage\XmlMessage($_SESSION))->flash($content, $type);
+	}
+
+	/**
+	 * Redirect relatively to the given url
+	 * @param string $url
+	 */
+	final protected function redirect(string $url): void {
+		header(sprintf('Location: %s', $this->url->reference() . $url));
+		exit;
 	}
 }

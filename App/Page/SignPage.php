@@ -24,6 +24,7 @@ final class SignPage extends BasePage {
 			))->enter([$credentials['email'], $credentials['password']]);
 			$_SESSION['id'] = $user->id();
 			$this->flashMessage('You have been logged in', 'success');
+			$this->redirect('parts');
 		} catch(\Exception $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
 		}
