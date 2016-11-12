@@ -25,7 +25,8 @@
 	"klapuch/time": "@dev",
 	"klapuch/http": "@dev",
 	"klapuch/access": "@dev",
-	"klapuch/log": "@dev"
+	"klapuch/log": "@dev",
+    "klapuch/flash-message": "@dev"
   },
   "require-dev": {
 	"nette/tester": "^1.7",

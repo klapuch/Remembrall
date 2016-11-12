@@ -2,7 +2,7 @@
 namespace Remembrall\Page;
 
 use Klapuch\{
-	Storage, Uri, Encryption
+	Storage, Uri, Encryption, FlashMessage
 };
 use Remembrall\Model\Access;
 use Tracy;
@@ -46,7 +46,7 @@ abstract class BasePage {
 	 * XML for layout
 	 * @return array
 	 */
-	protected function layout(): array {
+	final protected function layout(): array {
 		return [
 			new \SimpleXMLElement(
 				sprintf(
@@ -58,6 +58,18 @@ abstract class BasePage {
 			new \SimpleXMLElement(
 				sprintf('<baseUrl>%s</baseUrl>', $this->url->reference())
 			),
+			new \SimpleXMLElement(
+				(new FlashMessage\XmlMessage($_SESSION))->print()
+			),
 		];
+	}
+
+	/**
+	 * Flash message to the page
+	 * @param string $content
+	 * @param string $type
+	 */
+	final protected function flashMessage(string $content, string $type) {
+		(new FlashMessage\XmlMessage($_SESSION))->flash($content, $type);
 	}
 }

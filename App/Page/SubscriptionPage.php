@@ -101,8 +101,9 @@ final class SubscriptionPage extends BasePage {
 					);
 				}
 			);
+			$this->flashMessage('Subscription has been added', 'success');
 		} catch(\Throwable $ex) {
-			echo $ex->getMessage();
+			$this->flashMessage($ex->getMessage(), 'danger');
 		}
 	}
 }

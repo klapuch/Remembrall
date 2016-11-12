@@ -23,8 +23,9 @@ final class SignPage extends BasePage {
 				$this->cipher
 			))->enter([$credentials['email'], $credentials['password']]);
 			$_SESSION['id'] = $user->id();
+			$this->flashMessage('You have been logged in', 'success');
 		} catch(\Exception $ex) {
-			echo $ex->getMessage();
+			$this->flashMessage($ex->getMessage(), 'danger');
 		}
 	}
 }
