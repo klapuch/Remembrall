@@ -30,4 +30,18 @@ final class SignPage extends BasePage {
 			$this->redirect('sign/in');
 		}
 	}
+
+	public function renderOut() {
+		try {
+			if(!isset($_SESSION['id'])) {
+				throw new \Exception('You are not logged in');
+			}
+			unset($_SESSION['id']);
+			$this->flashMessage('You have been logged out', 'success');
+			$this->redirect('sign/in');
+		} catch(\Exception $ex) {
+			$this->flashMessage($ex->getMessage(), 'danger');
+			$this->redirect('sign/in');
+		}
+	}
 }

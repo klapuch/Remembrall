@@ -45,7 +45,7 @@
                         </div>
                     </nav>
                     <div class="container">
-                        <xsl:apply-templates select="//flashMessage" />
+                        <xsl:apply-templates select="//flashMessage"/>
                         <xsl:apply-templates/>
                     </div>
                 </div>
