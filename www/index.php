@@ -9,6 +9,11 @@ const TIMER = 'timer';
 const ELAPSE = 20;
 try {
 	mb_internal_encoding('UTF-8');
+	$logs = new Log\FilesystemLogs(
+		new Log\DynamicLocation(
+			new Log\DirectoryLocation(__DIR__ . '/../Log')
+		)
+	);
 	$configuration = (new Ini\Valid(
 		CONFIGURATION,
 		new Ini\Typed(CONFIGURATION)
@@ -25,11 +30,6 @@ try {
 	foreach($configuration['HEADERS'] as $field => $value)
 		header(sprintf('%s:%s', $field, $value));
 	Tracy\Debugger::enable();
-	$logs = new Log\FilesystemLogs(
-		new Log\DynamicLocation(
-			new Log\DirectoryLocation(__DIR__ . '/../Log')
-		)
-	);
 	$url = new Uri\BaseUrl($_SERVER['SCRIPT_NAME'], $_SERVER['REQUEST_URI']);
 	$path = explode('/', $url->path());
 	$page = isset($path[0]) && $path[0] ? ucfirst($path[0]) : 'Default';
