@@ -32,6 +32,10 @@ final class HtmlPart implements Part {
 		);
 	}
 
+	public function refresh(): Part {
+		return new self($this->expression, $this->page->refresh());
+	}
+
 	/**
 	 * Html without tabs and new lines (CR and LF)
 	 * @param string $html
@@ -39,9 +43,5 @@ final class HtmlPart implements Part {
 	 */
 	private function withoutWhiteSpaces(string $html): string {
 		return preg_replace('~[\t\r\n]+~', '', $html);
-	}
-
-	public function refresh(): Part {
-		return new self($this->expression, $this->page->refresh());
 	}
 }

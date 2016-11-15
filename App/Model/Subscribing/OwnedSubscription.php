@@ -35,20 +35,6 @@ final class OwnedSubscription implements Subscription {
 		$this->origin->cancel();
 	}
 
-	/**
-	 * Is the current subscriber owner of the subscription?
-	 * @return bool
-	 */
-	private function owned(): bool {
-		return (bool)$this->database->fetchColumn(
-			'SELECT 1
-            FROM subscriptions
-            WHERE id = ?
-            AND user_id = ?',
-			[$this->id, $this->owner->id()]
-		);
-	}
-
 	public function edit(Time\Interval $interval): void {
 		if(!$this->owned()) {
 			throw new NotFoundException(
@@ -65,5 +51,19 @@ final class OwnedSubscription implements Subscription {
 			);
 		}
 		$this->origin->notify();
+	}
+
+	/**
+	 * Is the current subscriber owner of the subscription?
+	 * @return bool
+	 */
+	private function owned(): bool {
+		return (bool)$this->database->fetchColumn(
+			'SELECT 1
+            FROM subscriptions
+            WHERE id = ?
+            AND user_id = ?',
+			[$this->id, $this->owner->id()]
+		);
 	}
 }
