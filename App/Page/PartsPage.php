@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Page;
 
 use Klapuch\Output;
+use Mockery\CountValidator\Exception;
 use Remembrall\Exception\NotFoundException;
 use Remembrall\Model\Subscribing;
 
@@ -30,6 +31,7 @@ final class PartsPage extends BasePage {
 
 	public function renderDelete(array $parameters) {
 		try {
+			$this->protect();
 			['id' => $id] = $parameters;
 			(new Subscribing\OwnedSubscription(
 				new Subscribing\PostgresSubscription((int)$id, $this->database),
@@ -39,7 +41,7 @@ final class PartsPage extends BasePage {
 			))->cancel();
 			$this->flashMessage('Subscription has been deleted', 'success');
 			$this->redirect('parts');
-		} catch(NotFoundException $ex) {
+		} catch(\Exception | NotFoundException $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
 			$this->redirect('parts');
 		}

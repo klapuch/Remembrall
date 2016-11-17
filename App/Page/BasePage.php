@@ -2,7 +2,7 @@
 namespace Remembrall\Page;
 
 use Klapuch\{
-	Storage, Uri, Encryption, FlashMessage
+	Storage, Uri, Encryption, FlashMessage, Csrf
 };
 use Remembrall\Model\Access;
 use Tracy;
@@ -19,6 +19,8 @@ abstract class BasePage {
 	protected $logger;
 	/** @var \Klapuch\Encryption\Cipher */
 	protected $cipher;
+	/** @var \Klapuch\Csrf\Csrf */
+	protected $csrf;
 
 	public function __construct(
 		Uri\Uri $url,
@@ -30,6 +32,7 @@ abstract class BasePage {
 		$this->logger = $logger;
 		$this->url = $url;
 		$this->cipher = $cipher;
+		$this->csrf = new Csrf\StoredCsrf($_SESSION, $_POST, $_GET);
 	}
 
 	public function startup() {
@@ -61,6 +64,12 @@ abstract class BasePage {
 			new \SimpleXMLElement(
 				(new FlashMessage\XmlMessage($_SESSION))->print()
 			),
+			new \SimpleXMLElement(
+				sprintf(
+					'<csrf><link>%s</link></csrf>',
+					(new Csrf\CsrfLink($this->csrf))->protection()
+				)
+			),
 		];
 	}
 
@@ -82,5 +91,14 @@ abstract class BasePage {
 	final protected function redirect(string $url): void {
 		header(sprintf('Location: %s', $this->url->reference() . $url));
 		exit;
+	}
+
+	/**
+	 * Protect against CSRF
+	 * @throws \Exception
+	 */
+	final protected function protect(): void {
+		if($this->csrf->abused())
+			throw new \Exception('Timeout');
 	}
 }

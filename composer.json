@@ -26,7 +26,8 @@
 	"klapuch/http": "^1.0.0",
 	"klapuch/access": "^1.0.0",
 	"klapuch/log": "^1.0.0",
-	"klapuch/flash-message": "^1.0.0"
+	"klapuch/flash-message": "^1.0.0",
+	"klapuch/csrf": "@dev"
   },
   "require-dev": {
 	"nette/tester": "^1.7",
