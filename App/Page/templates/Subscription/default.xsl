@@ -21,6 +21,7 @@
     <xsl:template match="subscribing">
         <form action="subscribe" class="form-horizontal" role="form"
               method="POST">
+            <xsl:copy-of select="//csrf/input/*"/>
             <div class="form-group">
                 <div class="col-sm-5">
                     <label><xsl:value-of select="label/url"/></label>

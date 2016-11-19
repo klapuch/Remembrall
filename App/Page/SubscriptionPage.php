@@ -20,6 +20,7 @@ final class SubscriptionPage extends BasePage {
 
 	public function actionSubscribe(array $subscription) {
 		try {
+			$this->protect();
 			$url = new Uri\NormalizedUrl(
 				new Uri\ReachableUrl(
 					new Uri\SchemeForcedUrl(

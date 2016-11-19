@@ -66,8 +66,9 @@ abstract class BasePage {
 			),
 			new \SimpleXMLElement(
 				sprintf(
-					'<csrf><link>%s</link></csrf>',
-					(new Csrf\CsrfLink($this->csrf))->protection()
+					'<csrf><link>%s</link><input>%s</input></csrf>',
+					(new Csrf\CsrfLink($this->csrf))->protection(),
+					(new Csrf\CsrfInput($this->csrf))->protection()
 				)
 			),
 		];
