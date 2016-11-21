@@ -36,7 +36,13 @@
   "autoload": {
 	"psr-4": {
 	  "Remembrall\\": [
-		"App/",
+		"App/"
+	  ]
+	}
+  },
+  "autoload-dev": {
+	"psr-4": {
+	  "Remembrall\\": [
 		"Tests/"
 	  ]
 	}
