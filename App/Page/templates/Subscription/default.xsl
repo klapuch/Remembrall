@@ -7,52 +7,15 @@
     <xsl:param name="description" select="template/default/description"/>
 
     <xsl:template match="template">
-        <xsl:apply-templates select="default"/>
-    </xsl:template>
-
-    <xsl:template match="default">
-       <xsl:apply-templates select="forms"/>
+        <xsl:apply-templates select="forms"/>
     </xsl:template>
 
     <xsl:template match="forms">
-        <xsl:apply-templates/>
+        <xsl:apply-templates select="subscribing"/>
     </xsl:template>
 
-    <xsl:template match="subscribing">
-        <form action="subscribe" class="form-horizontal" role="form"
-              method="POST">
-            <xsl:copy-of select="//csrf/input/*"/>
-            <div class="form-group">
-                <div class="col-sm-5">
-                    <label><xsl:value-of select="label/url"/></label>
-                    <input type="text" required="required" name="url"
-                           class="form-control"
-                           placeholder="{placeholder/url}"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-5">
-                    <label><xsl:value-of select="label/expression"/></label>
-                    <input type="text" required="required" name="expression"
-                           class="form-control"
-                           placeholder="{placeholder/expression}"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-5">
-                    <label><xsl:value-of select="label/interval"/></label>
-                    <input type="number" required="required" min="30"
-                           name="interval" class="form-control"
-                           placeholder="{placeholder/interval}"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-5">
-                    <input type="submit" name="act" class="form-control"
-                           value="{submit/act}"/>
-                </div>
-            </div>
-        </form>
+	<xsl:template match="subscribing">
+		<xsl:copy-of select="./*"/>
     </xsl:template>
 
 </xsl:stylesheet>
