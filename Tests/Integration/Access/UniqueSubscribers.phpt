@@ -31,7 +31,7 @@ final class UniqueSubscribers extends TestCase\Database {
 		Assert::same(1, $subscribers[0]['id']);
 	}
 
-	public function testRegisteringDuplicatedEmail() {
+	public function testRegisteringWithDuplicatedEmail() {
 		$this->database->query(
 			"INSERT INTO users (email, password) VALUES
 			('foo@bar.cz', 'secret')"
