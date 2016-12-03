@@ -24,9 +24,9 @@ interface Subscriptions {
 
 	/**
 	 * Go through all the subscriptions
-	 * @return \Iterator
+	 * @return iterable
 	 */
-	public function iterate(): \Iterator;
+	public function iterate(): iterable;
 
 	/**
 	 * Print itself

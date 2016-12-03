@@ -16,7 +16,7 @@ interface Parts {
 
 	/**
 	 * Go through all the parts
-	 * @return \Iterator
+	 * @return iterable
 	 */
-	public function iterate(): \Iterator;
+	public function iterate(): iterable;
 }

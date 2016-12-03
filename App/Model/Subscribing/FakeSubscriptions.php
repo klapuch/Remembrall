@@ -22,7 +22,7 @@ final class FakeSubscriptions implements Subscriptions {
 			throw $this->exception;
 	}
 
-	public function iterate(): \Iterator {
+	public function iterate(): iterable {
 		if($this->exception)
 			throw $this->exception;
 		return new \ArrayIterator();

@@ -34,7 +34,7 @@ final class ChangedSubscriptions implements Subscriptions {
 		$this->origin->subscribe($url, $expression, $interval);
 	}
 
-	public function iterate(): \Iterator {
+	public function iterate(): iterable {
 		$subscriptions = $this->database->fetchAll(
 			"SELECT subscriptions.id, page_url AS url, expression, content, email
 			FROM parts

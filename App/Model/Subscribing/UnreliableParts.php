@@ -23,7 +23,7 @@ final class UnreliableParts implements Parts {
 		$this->origin->add($part, $uri, $expression);
 	}
 
-	public function iterate(): \Iterator {
+	public function iterate(): iterable {
 		$rows = $this->database->fetchAll(
 			"SELECT page_url AS url, expression, parts.id, content, snapshot
 				FROM parts

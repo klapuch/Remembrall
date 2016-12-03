@@ -42,7 +42,7 @@ final class LimitedSubscriptions implements Subscriptions {
 		$this->origin->subscribe($uri, $expression, $interval);
 	}
 
-	public function iterate(): \Iterator {
+	public function iterate(): iterable {
 		return $this->origin->iterate();
 	}
 

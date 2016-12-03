@@ -31,7 +31,7 @@ final class CollectiveParts implements Parts {
 		);
 	}
 
-	public function iterate(): \Iterator {
+	public function iterate(): iterable {
 		$rows = $this->database->fetchAll(
 			'SELECT page_url AS url, snapshot, content, id, expression
 			FROM parts'
