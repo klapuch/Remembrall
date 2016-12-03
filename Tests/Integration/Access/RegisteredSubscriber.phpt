@@ -30,6 +30,13 @@ final class RegisteredSubscriber extends TestCase\Database {
 		);
 	}
 
+	public function testUnknownEmail() {
+		Assert::same(
+			'',
+			(new Access\RegisteredSubscriber(666, $this->database))->email()
+		);
+	}
+
 	protected function prepareDatabase() {
 		$this->purge(['users']);
 	}
