@@ -59,7 +59,7 @@ final class OwnedSubscriptions implements Subscriptions {
 		}
 	}
 
-	public function iterate(): iterable {
+	public function iterate(): \Iterator {
 		$rows = $this->database->fetchAll(
 			'SELECT id
 			FROM subscriptions

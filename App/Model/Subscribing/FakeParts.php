@@ -19,7 +19,7 @@ final class FakeParts implements Parts {
 			throw $this->exception;
 	}
 
-	public function iterate(): iterable {
+	public function iterate(): \Iterator {
 		if($this->exception)
 			throw $this->exception;
 		return new \ArrayIterator();

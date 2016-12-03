@@ -38,7 +38,7 @@ final class LoggedSubscriptions implements Subscriptions {
 		}
 	}
 
-	public function iterate(): iterable {
+	public function iterate(): \Iterator {
 		try {
 			return $this->origin->iterate();
 		} catch(\Throwable $ex) {
