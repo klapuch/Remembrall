@@ -75,10 +75,10 @@ final class ChangedSubscriptions implements Subscriptions {
 			visited_at, last_update
 			FROM parts
 			INNER JOIN (
-                SELECT part_id, MAX(visited_at) AS visited_at
-                FROM part_visits
-                GROUP BY part_id
-            ) AS part_visits ON parts.id = part_visits.part_id
+				SELECT part_id, MAX(visited_at) AS visited_at
+				FROM part_visits
+				GROUP BY part_id
+			) AS part_visits ON parts.id = part_visits.part_id
 			INNER JOIN subscriptions ON subscriptions.part_id = parts.id
 			WHERE parts.snapshot != subscriptions.snapshot
 			AND last_update + INTERVAL '1 SECOND' * SUBSTRING(interval FROM '[0-9]+')::INT < NOW()

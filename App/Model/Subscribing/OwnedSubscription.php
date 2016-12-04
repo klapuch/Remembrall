@@ -63,9 +63,9 @@ final class OwnedSubscription implements Subscription {
 	private function owned(): bool {
 		return (bool)$this->database->fetchColumn(
 			'SELECT 1
-            FROM subscriptions
-            WHERE id = ?
-            AND user_id = ?',
+			FROM subscriptions
+			WHERE id = ?
+			AND user_id = ?',
 			[$this->id, $this->owner->id()]
 		);
 	}

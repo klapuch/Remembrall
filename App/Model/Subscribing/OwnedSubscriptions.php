@@ -74,15 +74,15 @@ final class OwnedSubscriptions implements Subscriptions {
 		$rows = $this->database->fetchAll(
 			'SELECT subscriptions.id, expression, page_url AS url, interval,
 			visited_at, last_update
-            FROM parts
-            INNER JOIN (
-                SELECT part_id, MAX(visited_at) AS visited_at
-                FROM part_visits
-                GROUP BY part_id
-            ) AS part_visits ON parts.id = part_visits.part_id
-            INNER JOIN subscriptions ON subscriptions.part_id = parts.id
-            WHERE subscriptions.user_id IS NOT DISTINCT FROM ?
-            ORDER BY visited_at DESC',
+			FROM parts
+			INNER JOIN (
+				SELECT part_id, MAX(visited_at) AS visited_at
+				FROM part_visits
+				GROUP BY part_id
+			) AS part_visits ON parts.id = part_visits.part_id
+			INNER JOIN subscriptions ON subscriptions.part_id = parts.id
+			WHERE subscriptions.user_id IS NOT DISTINCT FROM ?
+			ORDER BY visited_at DESC',
 			[$this->owner->id()]
 		);
 		return array_reduce(

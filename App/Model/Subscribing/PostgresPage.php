@@ -29,8 +29,8 @@ final class PostgresPage implements Page {
 		$content->loadHTML(
 			$this->database->fetchColumn(
 				'SELECT content
-                FROM pages
-                WHERE url IS NOT DISTINCT FROM ?',
+				FROM pages
+				WHERE url IS NOT DISTINCT FROM ?',
 				[$this->url->reference()]
 			)
 		);
@@ -41,8 +41,8 @@ final class PostgresPage implements Page {
 		$refreshedPage = $this->origin->refresh();
 		$this->database->query(
 			'UPDATE pages
-            SET content = ?
-            WHERE url IS NOT DISTINCT FROM ?',
+			SET content = ?
+			WHERE url IS NOT DISTINCT FROM ?',
 			[$refreshedPage->content()->saveHTML(), $this->url->reference()]
 		);
 		return $this;
