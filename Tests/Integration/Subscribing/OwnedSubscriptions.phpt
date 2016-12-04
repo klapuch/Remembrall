@@ -27,9 +27,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 			'//google',
 			new Time\FakeInterval(null, null, 'PT120S')
 		);
-		$subscriptions = $this->database->fetchAll(
-			'SELECT * FROM subscriptions'
-		);
+		$subscriptions = $this->database->fetchAll('SELECT * FROM subscriptions');
 		Assert::count(1, $subscriptions);
 		Assert::same(1, $subscriptions[0]['id']);
 		Assert::same(666, $subscriptions[0]['user_id']);

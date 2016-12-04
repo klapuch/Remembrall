@@ -34,7 +34,7 @@ final class PostgresPart extends TestCase\Database {
 		);
 	}
 
-	public function testRefreshingPartWithNewContent() {
+	public function testRefreshingWithNewContent() {
 		(new Subscribing\PostgresPart(
 			new Subscribing\FakePart('NEW_CONTENT', null, 'NEW_SNAP'),
 			1,
@@ -45,7 +45,7 @@ final class PostgresPart extends TestCase\Database {
 		Assert::same('NEW_SNAP', $part['snapshot']);
 	}
 
-	public function testRefreshingPartWithRecordedVisitation() {
+	public function testRefreshingWithRecordedVisitation() {
 		$this->purge(['part_visits']);
 		(new Subscribing\PostgresPart(
 			new Subscribing\FakePart('NEW_CONTENT', null, 'NEW_SNAP'),
@@ -62,7 +62,7 @@ final class PostgresPart extends TestCase\Database {
 		);
 	}
 
-	public function testRefreshingPartWithoutAffectingOthers() {
+	public function testRefreshingWithoutAffectingOthers() {
 		(new Subscribing\PostgresPart(
 			new Subscribing\FakePart('NEW_CONTENT', null, 'NEW_SNAP'),
 			1,

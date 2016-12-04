@@ -15,12 +15,18 @@ require __DIR__ . '/../../bootstrap.php';
 final class PostgresSubscription extends TestCase\Database {
 	public function testCancelingWithoutAffectingOthers() {
 		(new Subscribing\PostgresSubscription(1, $this->database))->cancel();
-		$subscriptions = $this->database->fetchAll(
-			'SELECT * FROM subscriptions'
-		);
+		$subscriptions = $this->database->fetchAll('SELECT * FROM subscriptions');
 		Assert::count(1, $subscriptions);
 		Assert::same(2, $subscriptions[0]['id']);
 	}
+
+	public function testCancelingUnknown() {
+		$before = $this->database->fetchAll('SELECT * FROM subscriptions');
+		(new Subscribing\PostgresSubscription(666, $this->database))->cancel();
+		$after = $this->database->fetchAll('SELECT * FROM subscriptions');
+		Assert::same($before, $after);
+	}
+
 
 	public function testEditingIntervalWithoutChangingLastUpdate() {
 		(new Subscribing\PostgresSubscription(
@@ -34,7 +40,7 @@ final class PostgresSubscription extends TestCase\Database {
 		Assert::same('2000-01-01 00:00:00', $subscription['last_update']);
 	}
 
-	public function testAddedNewNotification() {
+	public function testNotifying() {
 		(new Subscribing\PostgresSubscription(
 			1,
 			$this->database

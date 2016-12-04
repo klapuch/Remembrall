@@ -13,7 +13,7 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class WebPages extends TestCase\Database {
-	public function testAddingSinglePage() {
+	public function testAddingBrandNew() {
 		$url = new Uri\FakeUri('www.facedown.cz');
 		$dom = new \DOMDocument();
 		$dom->loadHTML('content');
@@ -48,12 +48,12 @@ final class WebPages extends TestCase\Database {
 		);
 	}
 
-	public function testAddingMultipleDifferentPages() {
+	public function testAddingToOthers() {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('content');
-		(new Subscribing\WebPages($this->database))->add(
-			new Uri\FakeUri('www.facedown.cz'),
-			new Subscribing\FakePage($dom)
+		$this->database->query(
+			"INSERT INTO pages (url, content) VALUES
+			('www.facedown.cz', '<p>facedown</p>')"
 		);
 		(new Subscribing\WebPages($this->database))->add(
 			new Uri\FakeUri('www.google.com'),
@@ -62,7 +62,7 @@ final class WebPages extends TestCase\Database {
 		Assert::count(2, $this->database->fetchAll('SELECT * FROM pages'));
 	}
 
-	public function testUpdatingPageAsDuplication() {
+	public function testUpdatingAsDuplication() {
 		$this->database->query(
 			"INSERT INTO pages (url, content) VALUES
 			('www.facedown.cz', '<p>facedown</p>')"
@@ -83,7 +83,7 @@ final class WebPages extends TestCase\Database {
 		Assert::contains('content', $pages[0]['content']);
 	}
 
-	public function testUpdatingPageAsDuplicationWithRecordedVisitation() {
+	public function testUpdatingAsDuplicationWithRecordedVisitation() {
 		$this->database->query(
 			"INSERT INTO pages (url, content) VALUES
 			('www.facedown.cz', '<p>facedown</p>')"

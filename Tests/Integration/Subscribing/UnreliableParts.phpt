@@ -12,7 +12,7 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class UnreliableParts extends TestCase\Database {
-	public function testIteratingUnreliableParts() {
+	public function testIterating() {
 		$this->database->query(
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
 			('www.google.com', '//a', 'a', ''),

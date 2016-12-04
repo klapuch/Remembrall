@@ -14,15 +14,18 @@ final class ChangedSubscriptions implements Subscriptions {
 	private const EMPTY_FORMAT = [];
 	private $origin;
 	private $mailer;
+	private $message;
 	private $database;
 
 	public function __construct(
 		Subscriptions $origin,
 		Mail\IMailer $mailer,
+		Mail\Message $message,
 		Storage\Database $database
 	) {
 		$this->origin = $origin;
 		$this->mailer = $mailer;
+		$this->message = $message;
 		$this->database = $database;
 	}
 
@@ -47,8 +50,7 @@ final class ChangedSubscriptions implements Subscriptions {
 			yield new EmailSubscription(
 				new PostgresSubscription($subscription['id'], $this->database),
 				$this->mailer,
-				(new Mail\Message())
-					->setFrom('Remembrall <remembrall@remembrall.org>')
+				$this->message
 					->addTo($subscription['email'])
 					->setSubject(
 						sprintf(

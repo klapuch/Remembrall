@@ -17,37 +17,31 @@ final class ChangedSubscriptions extends TestCase\Database {
 	public function testChangedSnapshotAndPastDate() {
 		$subscriptions = (new Subscribing\ChangedSubscriptions(
 			new Subscribing\FakeSubscriptions(),
-			new Mail\SendmailMailer(),
+			new class implements Mail\IMailer {
+				public function send(Mail\Message $message) {
+					printf(
+						'To: %s',
+						implode(array_keys($message->getHeader('To')))
+					);
+					printf('Subject: %s', $message->getSubject());
+					printf('Body: %s', $message->getHtmlBody());
+				}
+			},
+			new Mail\Message(),
 			$this->database
 		))->iterate();
 		$subscription = $subscriptions->current();
-		Assert::equal(
-			new Subscribing\EmailSubscription(
-				new Subscribing\PostgresSubscription(2, $this->database),
-				new Mail\SendmailMailer(),
-				(new Mail\Message())
-					->setFrom('Remembrall <remembrall@remembrall.org>')
-					->addTo('b@b.cz')
-					->setSubject(
-						'Changes occurred on b page with //b expression'
-					)
-					->setHtmlBody(
-						'<html lang="cs-cz"><body>
-<p>
-            Hi, there are some changes on
-            b
-            website with
-            //b expression
-        </p>
-<p>
-            Check it out bellow this text
-        </p>
-<p>bc</p>
-</body></html>
-'
-					)
-			),
-			$subscription
+		ob_start();
+		$subscription->notify();
+		$output = ob_get_clean();
+		Assert::contains('To: b@b.cz', $output);
+		Assert::contains(
+			'Subject: Changes occurred on www.matched.com page with //matched expression',
+			$output
+		);
+		Assert::contains(
+			'some changes on            www.matched.com            website with            //matched expression',
+			preg_replace('~[\r\n\t]~', '', $output)
 		);
 		$subscriptions->next();
 		Assert::null($subscriptions->current());
@@ -58,6 +52,7 @@ final class ChangedSubscriptions extends TestCase\Database {
 		$subscriptions = (new Subscribing\ChangedSubscriptions(
 			new Subscribing\FakeSubscriptions(),
 			new Mail\SendmailMailer(),
+			new Mail\Message(),
 			$this->database
 		))->iterate();
 		Assert::null($subscriptions->current());
@@ -67,9 +62,10 @@ final class ChangedSubscriptions extends TestCase\Database {
 		$subscriptions = (new Subscribing\ChangedSubscriptions(
 			new Subscribing\FakeSubscriptions(),
 			new Mail\SendmailMailer(),
+			new Mail\Message(),
 			$this->database
 		))->print(new Output\FakeFormat());
-		Assert::contains('//b', (string)$subscriptions[0]);
+		Assert::contains('//matched', (string)$subscriptions[0]);
 	}
 
 	public function testEmptyPrinting() {
@@ -77,6 +73,7 @@ final class ChangedSubscriptions extends TestCase\Database {
 		$subscriptions = (new Subscribing\ChangedSubscriptions(
 			new Subscribing\FakeSubscriptions(),
 			new Mail\SendmailMailer(),
+			new Mail\Message(),
 			$this->database
 		))->print(new Output\FakeFormat());
 		Assert::count(0, $subscriptions);
@@ -87,7 +84,7 @@ final class ChangedSubscriptions extends TestCase\Database {
 		$this->database->query(
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES 
 			('a', '//a', 'ac', 'as'),
-			('b', '//b', 'bc', 'bs'),
+			('www.matched.com', '//matched', 'bc', 'bs'),
 			('c', '//c', 'cc', 'cs'),
 			('d', '//d', 'dc', 'ds'),
 			('e', '//e', 'ec', 'es')"

@@ -26,7 +26,7 @@ final class FrugalPage implements Page {
 	}
 
 	public function content(): \DOMDocument {
-		if(!$this->exists($this->uri))
+		if(!$this->recorded($this->uri))
 			return $this->origin->content();
 		elseif($this->outdated($this->uri))
 			return $this->refresh()->content();
@@ -65,11 +65,11 @@ final class FrugalPage implements Page {
 	}
 
 	/**
-	 * Does the url exist in the database?
+	 * Is the uri already recorded in the database?
 	 * @param Uri\Uri $uri
 	 * @return bool
 	 */
-	private function exists(Uri\Uri $uri): bool {
+	private function recorded(Uri\Uri $uri): bool {
 		return (bool)$this->database->fetchColumn(
 			'SELECT 1
 			FROM pages

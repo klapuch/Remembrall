@@ -13,7 +13,7 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class CollectiveParts extends TestCase\Database {
-	public function testAddingBrandNewPart() {
+	public function testAddingBrandNew() {
 		(new Subscribing\CollectiveParts(
 			$this->database
 		))->add(
@@ -29,12 +29,10 @@ final class CollectiveParts extends TestCase\Database {
 		Assert::same('//p', $parts[0]['expression']);
 	}
 
-	public function testAddingMultipleParts() {
-		(new Subscribing\CollectiveParts(
-			$this->database
-		))->add(new Subscribing\FakePart('google content', null, 'google snap'),
-			new Uri\FakeUri('www.google.com'),
-			'//google'
+	public function testAddingToOthers() {
+		$this->database->query(
+			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
+			('www.google.com', '//google', 'google content', 'google snap')"
 		);
 		(new Subscribing\CollectiveParts(
 			$this->database
@@ -55,7 +53,7 @@ final class CollectiveParts extends TestCase\Database {
 		Assert::same('//facedown', $parts[1]['expression']);
 	}
 
-	public function testAddingPartWithRecordedVisitation() {
+	public function testAddingWithRecordedVisitation() {
 		$this->truncate(['part_visits']);
 		(new Subscribing\CollectiveParts(
 			$this->database
@@ -74,7 +72,7 @@ final class CollectiveParts extends TestCase\Database {
 		);
 	}
 
-	public function testUpdatingPartAsDuplication() {
+	public function testUpdatingAsDuplication() {
 		$oldPart = new Subscribing\FakePart('Content', null, 'OLD_SNAP');
 		(new Subscribing\CollectiveParts(
 			$this->database
@@ -89,7 +87,7 @@ final class CollectiveParts extends TestCase\Database {
 		Assert::same('NEW_SNAP', $parts[0]['snapshot']);
 	}
 
-	public function testUpdatingPartAsDuplicationWithAllRecordedVisitation() {
+	public function testUpdatingAsDuplicationWithAllRecordedVisitation() {
 		$this->truncate(['part_visits']);
 		$part = new Subscribing\FakePart('<p>Content</p>', null, 'snap');
 		(new Subscribing\CollectiveParts(
@@ -101,7 +99,7 @@ final class CollectiveParts extends TestCase\Database {
 		Assert::count(2, $this->database->fetchAll('SELECT * FROM part_visits'));
 	}
 
-	public function testIteratingOverAllPages() {
+	public function testIterating() {
 		$this->database->query(
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
 			('www.google.com', '//a', 'a', ''),

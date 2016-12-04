@@ -31,6 +31,29 @@ final class UniqueSubscribers extends TestCase\Database {
 		Assert::same(1, $subscribers[0]['id']);
 	}
 
+	public function testRegisteringToOthers() {
+		$this->database->query(
+			"INSERT INTO users (email, password) VALUES
+			('foo@bar.cz', 'secret')"
+		);
+		$subscriber = (new Access\UniqueSubscribers(
+			$this->database,
+			new Encryption\FakeCipher()
+		))->register('bar@foo.cz', 'passw0rt');
+		$subscribers = $this->database->fetchAll('SELECT * FROM users');
+		Assert::equal(
+			new Access\RegisteredSubscriber(2, $this->database),
+			$subscriber
+		);
+		Assert::count(2, $subscribers);
+		Assert::same('foo@bar.cz', $subscribers[0]['email']);
+		Assert::same('secret', $subscribers[0]['password']);
+		Assert::same(1, $subscribers[0]['id']);
+		Assert::same('bar@foo.cz', $subscribers[1]['email']);
+		Assert::same('secret', $subscribers[1]['password']);
+		Assert::same(2, $subscribers[1]['id']);
+	}
+
 	public function testRegisteringWithDuplicatedEmail() {
 		$this->database->query(
 			"INSERT INTO users (email, password) VALUES

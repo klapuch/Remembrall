@@ -8,6 +8,9 @@ use Klapuch\{
 use Remembrall\Exception\NotFoundException;
 use Remembrall\Model\Access;
 
+/**
+ * Subscription owned by one particular subscriber
+ */
 final class OwnedSubscription implements Subscription {
 	private $origin;
 	private $id;

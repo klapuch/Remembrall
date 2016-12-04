@@ -46,6 +46,10 @@ final class LimitedSubscriptions implements Subscriptions {
 		return $this->origin->iterate();
 	}
 
+	public function print(Output\Format $format): array {
+		return $this->origin->print($format);
+	}
+
 	/**
 	 * Has the subscriber subscribed more than X parts and overstepped the limit?
 	 * @return bool
@@ -59,9 +63,5 @@ final class LimitedSubscriptions implements Subscriptions {
 			HAVING COUNT(parts.id) >= ?',
 			[$this->subscriber->id(), self::LIMIT]
 		);
-	}
-
-	public function print(Output\Format $format): array {
-		return $this->origin->print($format);
 	}
 }
