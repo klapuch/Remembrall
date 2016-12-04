@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 /**
- * UTF-8 aware extension of classic DOMDocument
+ * UTF-8 aware and fail-safe extension of classic DOMDocument
  */
 final class DOM extends \DOMDocument {
 	public function __construct($version = '1.0', $encoding = 'UTF-8') {

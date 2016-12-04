@@ -21,7 +21,7 @@ final class DOM extends Tester\TestCase {
 		);
 	}
 
-	public function testSuppressedWarningOnInvalidHtml() {
+	public function testSuppressingWarningOnInvalidHtml() {
 		Assert::noError(
 			function() {
 				(new Subscribing\DOM())->loadHTML(

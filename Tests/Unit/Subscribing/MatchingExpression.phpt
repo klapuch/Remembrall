@@ -23,7 +23,7 @@ final class MatchingExpression extends Tester\TestCase {
 		))->matches();
 	}
 
-	public function testMatchedNodes() {
+	public function testMatches() {
 		Assert::noError(
 			function() {
 				$dom = new \DOMDocument();

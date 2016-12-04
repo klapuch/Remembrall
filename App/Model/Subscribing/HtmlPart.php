@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 /**
- * Part in html format
+ * Part in HTML format
  */
 final class HtmlPart implements Part {
 	private const EMPTY_PART = '';
@@ -22,11 +22,11 @@ final class HtmlPart implements Part {
 	public function content(): string {
 		return array_reduce(
 			iterator_to_array($this->expression->matches()),
-			function($previous, \DOMNode $node) {
-				$previous .= $this->withoutWhiteSpaces(
-					$node->ownerDocument->saveHTML($node)
+			function(string $parts, \DOMNode $part) {
+				$parts .= $this->withoutWhiteSpaces(
+					$part->ownerDocument->saveHTML($part)
 				);
-				return $previous;
+				return $parts;
 			},
 			self::EMPTY_PART
 		);
@@ -37,7 +37,7 @@ final class HtmlPart implements Part {
 	}
 
 	/**
-	 * Html without tabs and new lines (CR and LF)
+	 * HTML without tabs and new lines (CR and LF)
 	 * @param string $html
 	 * @return string
 	 */

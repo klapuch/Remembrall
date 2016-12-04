@@ -87,7 +87,6 @@ final class HtmlPart extends Tester\TestCase {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>XXX</p>');
 		$refreshedPart = new Subscribing\FakePage($dom);
-		$fakePage = new Subscribing\FakePage(null, $refreshedPart);
 		Assert::equal(
 			new Subscribing\HtmlPart(
 				new Subscribing\FakeExpression('//p'),
@@ -95,7 +94,7 @@ final class HtmlPart extends Tester\TestCase {
 			),
 			(new Subscribing\HtmlPart(
 				new Subscribing\FakeExpression('//p'),
-				$fakePage
+				new Subscribing\FakePage(null, $refreshedPart)
 			))->refresh()
 		);
 	}

@@ -15,9 +15,9 @@ final class MatchingExpression implements Expression {
 	}
 
 	public function matches(): \DOMNodeList {
-		$nodes = $this->origin->matches();
-		if($nodes->length > 0)
-			return $nodes;
+		$matches = $this->origin->matches();
+		if($matches->length > 0)
+			return $matches;
 		throw new NotFoundException(
 			'For the given expression there are no matches'
 		);

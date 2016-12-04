@@ -6,7 +6,7 @@ use Klapuch\Http;
 use Remembrall\Exception\NotFoundException;
 
 /**
- * Html web page downloaded from the internet
+ * HTML web page downloaded from the internet
  */
 final class HtmlWebPage implements Page {
 	private const CONTENT_TYPE = 'text/html';

@@ -12,7 +12,7 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class TextPart extends Tester\TestCase {
-	public function testRemovedHtmlTags() {
+	public function testRemovingHtmlTags() {
 		$part = new Subscribing\FakePart(
 			'<p>Hi <span>there</span></p><div id="x"> Foo</div>'
 		);

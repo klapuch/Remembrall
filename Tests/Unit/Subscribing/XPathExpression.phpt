@@ -32,7 +32,7 @@ final class XPathExpression extends Tester\TestCase {
 		);
 	}
 
-	public function testMatching() {
+	public function testMatch() {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>Hi there</p>');
 		$page = new Subscribing\FakePage($dom);
@@ -41,6 +41,20 @@ final class XPathExpression extends Tester\TestCase {
 		Assert::same(1, $match->length);
 		Assert::same($match->item(0)->nodeValue, 'Hi there');
 		Assert::same($match->item(0)->nodeName, 'p');
+	}
+
+	public function testMatches() {
+		$dom = new \DOMDocument();
+		$dom->loadHTML('<p>Hi</p><p>there</p>');
+		$page = new Subscribing\FakePage($dom);
+		$expression = new Subscribing\XPathExpression($page, '//p');
+		$match = $expression->matches();
+		Assert::same(2, $match->length);
+		Assert::same($match->item(0)->nodeValue, 'Hi');
+		Assert::same($match->item(0)->nodeName, 'p');
+		Assert::same($match->item(1)->nodeValue, 'there');
+		Assert::same($match->item(1)->nodeName, 'p');
+
 	}
 
 	public function testNoMatch() {
