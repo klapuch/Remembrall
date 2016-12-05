@@ -8,7 +8,7 @@ use Remembrall\Model\Access;
 
 abstract class BasePage {
 	protected const TEMPLATES = __DIR__ . '/templates';
-	/** @var Uri\BaseUrl */
+	/** @var \Klapuch\Uri\Uri */
 	private $url;
 	/** @var \Remembrall\Model\Access\Subscriber */
 	protected $subscriber;
