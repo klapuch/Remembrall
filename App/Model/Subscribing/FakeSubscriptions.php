@@ -33,5 +33,4 @@ final class FakeSubscriptions implements Subscriptions {
 			throw $this->exception;
 		return [];
 	}
-
 }

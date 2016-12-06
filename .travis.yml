@@ -1,10 +1,10 @@
+sudo: required
+
 services:
   - postgresql
 
 addons:
   postgresql: 9.5
-
-dist: trusty
 
 language: php
 
@@ -12,6 +12,7 @@ php:
   - 7.1
 
 env:
+  - PHP_BIN="php"
   - PHP_BIN="php-cgi"
 
 matrix:
