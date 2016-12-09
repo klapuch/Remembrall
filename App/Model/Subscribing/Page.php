@@ -2,12 +2,10 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Remembrall\Exception\NotFoundException;
-
 interface Page {
 	/**
 	 * Content of the page
-	 * @throws NotFoundException
+	 * @throws \Remembrall\Exception\NotFoundException
 	 * @return \DOMDocument
 	 */
 	public function content(): \DOMDocument;
