@@ -57,14 +57,16 @@
 		"phpcpd": "phpcpd App",
 		"phpstan": "phpstan analyze -l 4 -c phpstan.neon App Tests",
 		"phpcs": "phpcs --standard=ruleset.xml --extensions=php,phpt --encoding=utf-8 --tab-width=4 -sp App",
-		"test": "tester -o console -s -p php-cgi -c Tests/php.ini Tests/",
+		"test": "tester -o console -s -p php -c Tests/php.ini Tests/",
+		"test-cgi": "tester -o console -s -p php-cgi -c Tests/php.ini Tests/",
 		"bfc": [
 			"@composer update",
 			"@lint",
 			"@phpcpd",
 			"@phpstan",
 			"@phpcs",
-			"@test"
+			"@test",
+			"@test-cgi"
 		]
 	}
 }
