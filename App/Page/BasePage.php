@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace Remembrall\Page;
 
 use Klapuch\{
@@ -20,8 +21,8 @@ abstract class BasePage {
 	protected $cipher;
 	/** @var \Klapuch\Csrf\Csrf */
 	protected $csrf;
-	/** @var \Klapuch\Form\Backup */
-	protected $backup;
+	/** @var \Klapuch\Form\Storage */
+	protected $storage;
 
 	public function __construct(
 		Uri\Uri $url,
@@ -34,7 +35,7 @@ abstract class BasePage {
 		$this->url = $url;
 		$this->cipher = $cipher;
 		$this->csrf = new Csrf\StoredCsrf($_SESSION, $_POST, $_GET);
-		$this->backup = new Form\Backup($_SESSION);
+		$this->storage = new Form\Storage($_SESSION, $_POST);
 	}
 
 	public function startup() {

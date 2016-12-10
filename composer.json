@@ -27,7 +27,7 @@
 		"klapuch/log": "^1.0.0",
 		"klapuch/flash-message": "^1.0.0",
 		"klapuch/csrf": "^1.0.0",
-		"klapuch/form": "^1.0.0"
+		"klapuch/form": "^2.0.0"
 	},
 	"require-dev": {
 		"nette/tester": "^1.7",

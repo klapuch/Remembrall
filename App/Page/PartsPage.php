@@ -41,7 +41,7 @@ final class PartsPage extends BasePage {
 			))->cancel();
 			$this->flashMessage('Subscription has been deleted', 'success');
 			$this->redirect('parts');
-		} catch(\Exception | NotFoundException $ex) {
+		} catch(\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
 			$this->redirect('parts');
 		}
