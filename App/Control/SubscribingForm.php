@@ -23,7 +23,12 @@ final class SubscribingForm extends Control {
 							'required' => 'required',
 						],
 						$this->storage,
-						new Validation\FakeRule()
+						new Validation\FriendlyRule(
+							new Validation\NegateRule(
+								new Validation\EmptyRule()
+							),
+							'Url must be filled'
+						)
 					),
 					new Form\LinkedLabel('Url', 'url')
 				),
@@ -39,7 +44,12 @@ final class SubscribingForm extends Control {
 							'required' => 'required',
 						],
 						$this->storage,
-						new Validation\FakeRule()
+						new Validation\FriendlyRule(
+							new Validation\NegateRule(
+								new Validation\EmptyRule()
+							),
+							'Expression must be filled'
+						)
 					),
 					new Form\LinkedLabel('Expression', 'expression')
 				),
@@ -56,8 +66,18 @@ final class SubscribingForm extends Control {
 							'required' => 'required',
 						],
 						$this->storage,
-
-						new Validation\FakeRule()
+						new Validation\ChainedRule(
+							new Validation\FriendlyRule(
+								new Validation\RangeRule(30, 9000),
+								'Interval must be greater than 30'
+							),
+							new Validation\FriendlyRule(
+								new Validation\NegateRule(
+									new Validation\EmptyRule()
+								),
+								'Interval must be filled'
+							)
+						)
 					),
 					new Form\LinkedLabel('Interval', 'interval')
 				),
@@ -72,7 +92,6 @@ final class SubscribingForm extends Control {
 						'value' => 'Subscribe',
 					],
 					$this->storage,
-
 					new Validation\FakeRule()
 				),
 				self::COLUMNS

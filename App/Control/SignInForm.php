@@ -23,7 +23,12 @@ final class SignInForm extends Control {
 							'required' => 'required',
 						],
 						$this->storage,
-						new Validation\FakeRule()
+						new Validation\FriendlyRule(
+							new Validation\NegateRule(
+								new Validation\EmptyRule()
+							),
+							'Email must be filled'
+						)
 					),
 					new Form\LinkedLabel('Email', 'email')
 				),
@@ -39,7 +44,12 @@ final class SignInForm extends Control {
 							'required' => 'required',
 						],
 						$this->storage,
-						new Validation\FakeRule()
+						new Validation\FriendlyRule(
+							new Validation\NegateRule(
+								new Validation\EmptyRule()
+							),
+							'Password must be filled'
+						)
 					),
 					new Form\LinkedLabel('Password', 'password')
 				),
