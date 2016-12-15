@@ -23,11 +23,17 @@ final class SignInForm extends Control {
 							'required' => 'required',
 						],
 						$this->storage,
-						new Validation\FriendlyRule(
-							new Validation\NegateRule(
-								new Validation\EmptyRule()
+						new Validation\ChainedRule(
+							new Validation\FriendlyRule(
+								new Validation\EmailRule(),
+								'Email must be valid'
 							),
-							'Email must be filled'
+							new Validation\FriendlyRule(
+								new Validation\NegateRule(
+									new Validation\EmptyRule()
+								),
+								'Email must be filled'
+							)
 						)
 					),
 					new Form\LinkedLabel('Email', 'email')
