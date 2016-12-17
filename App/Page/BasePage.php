@@ -105,4 +105,20 @@ abstract class BasePage {
 		if($this->csrf->abused())
 			throw new \Exception('Timeout');
 	}
+
+	/**
+	 * Log the exception
+	 * @param \Throwable $ex
+	 * @return void
+	 */
+	final protected function log(\Throwable $ex): void {
+		$this->logs->put(
+			new Log\PrettyLog(
+				$ex,
+				new Log\PrettySeverity(
+					new Log\JustifiedSeverity(Log\Severity::ERROR)
+				)
+			)
+		);
+	}
 }

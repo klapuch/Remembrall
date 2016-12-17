@@ -15,9 +15,14 @@ final class CronPage extends BasePage {
 				),
 				$this->logs
 			))->iterate();
-			/** @var Subscribing\Part $part */
-			foreach($parts as $part)
-				$part->refresh();
+			/** @var \Remembrall\Model\Subscribing\Part $part */
+			foreach($parts as $part) {
+				try {
+					$part->refresh();
+				} catch(\Throwable $ex) {
+					$this->log($ex);
+				}
+			}
 			$subscriptions = (new Subscribing\LoggedSubscriptions(
 				new Subscribing\ChangedSubscriptions(
 					new Subscribing\FakeSubscriptions(),
@@ -27,12 +32,17 @@ final class CronPage extends BasePage {
 				),
 				$this->logs
 			))->iterate();
-			/** @var Subscribing\Subscription $subscription */
-			foreach($subscriptions as $subscription)
-				$subscription->notify();
+			/** @var \Remembrall\Model\Subscribing\Subscription $subscription */
+			foreach($subscriptions as $subscription) {
+				try {
+					$subscription->notify();
+				} catch(\Throwable $ex) {
+					$this->log($ex);
+				}
+			}
 			echo 'OK';
 		} catch(\Throwable $ex) {
-			echo $ex->getMessage();
+			throw $ex;
 		}
 	}
 }
