@@ -86,7 +86,7 @@ final class OwnedSubscriptions implements Subscriptions {
 			[$this->owner->id()]
 		);
 		return array_map(
-			function(array $row) use ($format) {
+			function(array $row) use ($format): Output\Format {
 				return $format->with('expression', $row['expression'])
 					->with('id', $row['id'])
 					->with('url', $row['url'])

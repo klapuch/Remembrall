@@ -85,7 +85,7 @@ final class ChangedSubscriptions implements Subscriptions {
 			ORDER BY visited_at DESC"
 		);
 		return array_map(
-			function(array $row) use ($format) {
+			function(array $row) use ($format): Output\Format {
 				return $format->with('expression', $row['expression'])
 					->with('id', $row['id'])
 					->with('url', $row['url'])
