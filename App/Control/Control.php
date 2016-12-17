@@ -3,14 +3,20 @@ declare(strict_types = 1);
 namespace Remembrall\Control;
 
 use Klapuch\{
-	Form, Csrf
+	Form, Csrf, Uri
 };
 
 abstract class Control implements Form\Control {
+	protected $url;
 	protected $csrf;
 	protected $storage;
 
-	final public function __construct(Csrf\Csrf $csrf, Form\Storage $storage) {
+	final public function __construct(
+		Uri\Uri $url,
+		Csrf\Csrf $csrf,
+		Form\Storage $storage
+	) {
+		$this->url = $url;
 		$this->csrf = $csrf;
 		$this->storage = $storage;
 	}

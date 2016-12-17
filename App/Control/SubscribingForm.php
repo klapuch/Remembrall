@@ -8,10 +8,16 @@ use Klapuch\{
 
 final class SubscribingForm extends Control {
 	private const COLUMNS = 5;
+	private const ACTION = 'subscription/subscribe';
 
 	protected function create(): Form\Control {
 		return new Form\RawForm(
-			['method' => 'POST', 'action' => 'subscribe', 'role' => 'form', 'class' => 'form-horizontal'],
+			[
+				'method' => 'POST',
+				'action' => $this->url->reference() . self::ACTION,
+				'role' => 'form',
+				'class' => 'form-horizontal',
+			],
 			new Form\CsrfInput($this->csrf),
 			new Form\BootstrapInput(
 				new Form\BoundControl(

@@ -20,7 +20,11 @@ final class SubscriptionPage extends BasePage {
 				new \SimpleXMLElement(
 					sprintf(
 						'<forms><subscribing>%s</subscribing></forms>',
-						(new Control\SubscribingForm($this->csrf, $this->storage))->render()
+						(new Control\SubscribingForm(
+							$this->url,
+							$this->csrf,
+							$this->storage
+						))->render()
 					)
 				),
 				...$this->layout()
@@ -30,7 +34,11 @@ final class SubscriptionPage extends BasePage {
 
 	public function actionSubscribe(array $subscription) {
 		try {
-			(new Control\SubscribingForm($this->csrf, $this->storage))->validate();
+			(new Control\SubscribingForm(
+				$this->url,
+				$this->csrf,
+				$this->storage
+			))->validate();
 			$url = new Uri\NormalizedUrl(
 				new Uri\ReachableUrl(
 					new Uri\SchemeForcedUrl(

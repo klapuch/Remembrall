@@ -8,10 +8,16 @@ use Klapuch\{
 
 final class SignInForm extends Control {
 	private const COLUMNS = 4;
+	private const ACTION = 'sign/in';
 
 	protected function create(): Form\Control {
 		return new Form\RawForm(
-			['method' => 'POST', 'action' => 'in', 'role' => 'form', 'class' => 'form-horizontal'],
+			[
+				'method' => 'POST',
+				'action' => $this->url->reference() . self::ACTION,
+				'role' => 'form',
+				'class' => 'form-horizontal',
+			],
 			new Form\CsrfInput($this->csrf),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
