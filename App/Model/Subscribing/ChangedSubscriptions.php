@@ -84,28 +84,21 @@ final class ChangedSubscriptions implements Subscriptions {
 			AND last_update + INTERVAL '1 SECOND' * SUBSTRING(interval FROM '[0-9]+')::INT < NOW()
 			ORDER BY visited_at DESC"
 		);
-		return array_reduce(
-			array_map(
-				function(array $row) use ($format) {
-					return $format->with('expression', $row['expression'])
-						->with('id', $row['id'])
-						->with('url', $row['url'])
-						->with(
-							'interval',
-							new Time\TimeInterval(
-								new \DateTimeImmutable($row['visited_at']),
-								new \DateInterval($row['interval'])
-							)
+		return array_map(
+			function(array $row) use ($format) {
+				return $format->with('expression', $row['expression'])
+					->with('id', $row['id'])
+					->with('url', $row['url'])
+					->with(
+						'interval',
+						new Time\TimeInterval(
+							new \DateTimeImmutable($row['visited_at']),
+							new \DateInterval($row['interval'])
 						)
-						->with('lastUpdate', $row['last_update']);
-				},
-				$rows
-			),
-			function($formats, $format) {
-				$formats[] = $format;
-				return $formats;
+					)
+					->with('lastUpdate', $row['last_update']);
 			},
-			self::EMPTY_FORMAT
+			$rows
 		);
 	}
 }
