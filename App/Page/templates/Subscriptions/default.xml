@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <template>
     <default>
-        <title>Parts</title>
-        <description>All the parts owned by you</description>
+        <title>Subscriptions</title>
+        <description>All the subscriptions owned by you</description>
         <confirmations>
             <confirmation>
                 <message>Are you sure you want to cancel the subscription?
                 </message>
                 <title>Cancel</title>
-                <href>parts/delete</href>
+                <href>subscriptions/delete</href>
                 <glyphicon>remove</glyphicon>
             </confirmation>
         </confirmations>

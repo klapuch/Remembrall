@@ -7,12 +7,12 @@ use Mockery\CountValidator\Exception;
 use Remembrall\Exception\NotFoundException;
 use Remembrall\Model\Subscribing;
 
-final class PartsPage extends BasePage {
+final class SubscriptionsPage extends BasePage {
 	public function renderDefault() {
 		$xml = new \DOMDocument();
-		$xml->load(self::TEMPLATES . '/Parts/default.xml');
+		$xml->load(self::TEMPLATES . '/Subscriptions/default.xml');
 		echo (new Output\XsltTemplate(
-			self::TEMPLATES . '/Parts/default.xsl',
+			self::TEMPLATES . '/Subscriptions/default.xsl',
 			new Output\MergedXml(
 				$xml,
 				new \SimpleXMLElement(
@@ -40,10 +40,10 @@ final class PartsPage extends BasePage {
 				$this->database
 			))->cancel();
 			$this->flashMessage('Subscription has been deleted', 'success');
-			$this->redirect('parts');
+			$this->redirect('subscriptions');
 		} catch(\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
-			$this->redirect('parts');
+			$this->redirect('subscriptions');
 		}
 	}
 }

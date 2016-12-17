@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <links>
     <link>
-        <href>parts/</href>
-        <title>Parts</title>
+        <href>subscriptions/</href>
+        <title>Subscriptions</title>
     </link>
     <link>
         <href>subscription/</href>
