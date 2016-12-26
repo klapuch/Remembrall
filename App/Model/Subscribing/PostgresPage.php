@@ -14,11 +14,7 @@ final class PostgresPage implements Page {
 	private $url;
 	private $database;
 
-	public function __construct(
-		Page $origin,
-		Uri\Uri $url,
-		\PDO $database
-	) {
+	public function __construct(Page $origin, Uri\Uri $url, \PDO $database) {
 		$this->origin = $origin;
 		$this->url = $url;
 		$this->database = $database;

@@ -15,11 +15,7 @@ final class FrugalPage implements Page {
 	private $origin;
 	private $database;
 
-	public function __construct(
-		Uri\Uri $uri,
-		Page $origin,
-		\PDO $database
-	) {
+	public function __construct(Uri\Uri $uri, Page $origin, \PDO $database) {
 		$this->uri = $uri;
 		$this->origin = $origin;
 		$this->database = $database;

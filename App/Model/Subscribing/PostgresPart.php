@@ -12,11 +12,7 @@ final class PostgresPart implements Part {
 	private $id;
 	private $database;
 
-	public function __construct(
-		Part $origin,
-		int $id,
-		\PDO $database
-	) {
+	public function __construct(Part $origin, int $id, \PDO $database) {
 		$this->origin = $origin;
 		$this->id = $id;
 		$this->database = $database;
