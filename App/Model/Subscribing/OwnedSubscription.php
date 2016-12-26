@@ -21,7 +21,7 @@ final class OwnedSubscription implements Subscription {
 		Subscription $origin,
 		int $id,
 		Access\Subscriber $owner,
-		Storage\Database $database
+		\PDO $database
 	) {
 		$this->origin = $origin;
 		$this->id = $id;
@@ -61,12 +61,13 @@ final class OwnedSubscription implements Subscription {
 	 * @return bool
 	 */
 	private function owned(): bool {
-		return (bool)$this->database->fetchColumn(
+		return (bool)(new Storage\ParameterizedQuery(
+			$this->database,
 			'SELECT 1
 			FROM subscriptions
 			WHERE id = ?
 			AND user_id = ?',
 			[$this->id, $this->owner->id()]
-		);
+		))->field();
 	}
 }

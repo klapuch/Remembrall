@@ -15,7 +15,7 @@ final class UniqueSubscribers implements Subscribers {
 	private $cipher;
 
 	public function __construct(
-		Storage\Database $database,
+		\PDO $database,
 		Encryption\Cipher $cipher
 	) {
 		$this->database = $database;
@@ -24,11 +24,12 @@ final class UniqueSubscribers implements Subscribers {
 
 	public function register(string $email, string $password): Subscriber {
 		try {
-			$id = $this->database->fetchColumn(
+			$id = (new Storage\ParameterizedQuery(
+				$this->database,
 				'INSERT INTO users(email, password) VALUES
 				(?, ?) RETURNING id',
 				[$email, $this->cipher->encrypt($password)]
-			);
+			))->field();
 			return new RegisteredSubscriber($id, $this->database);
 		} catch(Storage\UniqueConstraint $ex) {
 			throw new DuplicateException(

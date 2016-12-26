@@ -16,10 +16,7 @@ final class OwnedSubscriptions implements Subscriptions {
 	private $owner;
 	private $database;
 
-	public function __construct(
-		Access\Subscriber $owner,
-		Storage\Database $database
-	) {
+	public function __construct(Access\Subscriber $owner, \PDO $database) {
 		$this->owner = $owner;
 		$this->database = $database;
 	}
@@ -30,7 +27,8 @@ final class OwnedSubscriptions implements Subscriptions {
 		Time\Interval $interval
 	): void {
 		try {
-			$this->database->query(
+			(new Storage\ParameterizedQuery(
+				$this->database,
 				'INSERT INTO subscriptions
 				(part_id, user_id, interval, last_update, snapshot)
 				(
@@ -45,7 +43,7 @@ final class OwnedSubscriptions implements Subscriptions {
 					$expression,
 					$url->reference(),
 				]
-			);
+			))->execute();
 		} catch(Storage\UniqueConstraint $ex) {
 			throw new DuplicateException(
 				sprintf(
@@ -60,18 +58,20 @@ final class OwnedSubscriptions implements Subscriptions {
 	}
 
 	public function iterate(): \Iterator {
-		$rows = $this->database->fetchAll(
+		$rows = (new Storage\ParameterizedQuery(
+			$this->database,
 			'SELECT id
 			FROM subscriptions
 			WHERE user_id IS NOT DISTINCT FROM ?',
 			[$this->owner->id()]
-		);
+		))->rows();
 		foreach($rows as ['id' => $id])
 			yield new PostgresSubscription($id, $this->database);
 	}
 
 	public function print(Output\Format $format): array {
-		$rows = $this->database->fetchAll(
+		$rows = (new Storage\ParameterizedQuery(
+			$this->database,
 			'SELECT subscriptions.id, expression, page_url AS url, interval,
 			visited_at, last_update
 			FROM parts
@@ -84,7 +84,7 @@ final class OwnedSubscriptions implements Subscriptions {
 			WHERE subscriptions.user_id IS NOT DISTINCT FROM ?
 			ORDER BY visited_at DESC',
 			[$this->owner->id()]
-		);
+		))->rows();
 		return array_map(
 			function(array $row) use ($format): Output\Format {
 				return $format->with('expression', $row['expression'])

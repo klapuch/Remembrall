@@ -40,8 +40,8 @@ final class ChangedSubscriptions extends TestCase\Database {
 			$output
 		);
 		Assert::contains(
-			'some changes on            www.matched.com            website with            //matched expression',
-			preg_replace('~[\r\n\t]~', '', $output)
+			'some changes on www.matched.com website with //matched expression',
+			preg_replace('~\s+~', ' ', $output)
 		);
 		$subscriptions->next();
 		Assert::null($subscriptions->current());
@@ -81,7 +81,7 @@ final class ChangedSubscriptions extends TestCase\Database {
 
 	protected function prepareDatabase() {
 		$this->purge(['parts', 'subscriptions', 'users', 'part_visits']);
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES 
 			('a', '//a', 'ac', 'as'),
 			('www.matched.com', '//matched', 'bc', 'bs'),
@@ -89,7 +89,7 @@ final class ChangedSubscriptions extends TestCase\Database {
 			('d', '//d', 'dc', 'ds'),
 			('e', '//e', 'ec', 'es')"
 		);
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES 
 			(1, 1, 'PT10S', '2000-01-01', 'as'),
 			(2, 2, 'PT10S', '2002-01-01', 'changed'),
@@ -97,7 +97,7 @@ final class ChangedSubscriptions extends TestCase\Database {
 			(4, 4, 'PT10S', NOW(), 'ds'),
 			(5, 5, 'PT10S', '2001-01-01', 'es')"
 		);
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO users (id, email, password) VALUES 
 			(1, 'a@a.cz', 'a'),
 			(2, 'b@b.cz', 'b'),

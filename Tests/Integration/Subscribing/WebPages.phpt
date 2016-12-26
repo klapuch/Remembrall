@@ -24,7 +24,9 @@ final class WebPages extends TestCase\Database {
 				$this->database
 			))->add($url, $page)
 		);
-		$pages = $this->database->fetchAll("SELECT * FROM pages");
+		$statement = $this->database->prepare('SELECT * FROM pages');
+		$statement->execute();
+		$pages = $statement->fetchAll();
 		Assert::count(1, $pages);
 		Assert::contains('content', $pages[0]['content']);
 		Assert::same('www.facedown.cz', $pages[0]['url']);
@@ -38,14 +40,13 @@ final class WebPages extends TestCase\Database {
 			new Uri\FakeUri('www.facedown.cz'),
 			new Subscribing\FakePage($dom)
 		);
-		Assert::count(
-			1,
-			$this->database->fetchAll(
-				"SELECT *
-				FROM page_visits
-				WHERE visited_at >= NOW() - INTERVAL '1 MINUTE'"
-			)
+		$statement = $this->database->prepare(
+			"SELECT *
+			FROM page_visits
+			WHERE visited_at >= NOW() - INTERVAL '1 MINUTE'"
 		);
+		$statement->execute();
+		Assert::count(1, $statement->fetchAll());
 	}
 
 	public function testAddingToOthers() {
@@ -59,7 +60,9 @@ final class WebPages extends TestCase\Database {
 			new Uri\FakeUri('www.google.com'),
 			new Subscribing\FakePage($dom)
 		);
-		Assert::count(2, $this->database->fetchAll('SELECT * FROM pages'));
+		$statement = $this->database->prepare('SELECT * FROM pages');
+		$statement->execute();
+		Assert::count(2, $statement->fetchAll());
 	}
 
 	public function testUpdatingAsDuplication() {
@@ -78,13 +81,15 @@ final class WebPages extends TestCase\Database {
 			new Subscribing\PostgresPage($page, $url, $this->database),
 			$addedPage
 		);
-		$pages = $this->database->fetchAll('SELECT * FROM pages');
+		$statement = $this->database->prepare('SELECT * FROM pages');
+		$statement->execute();
+		$pages = $statement->fetchAll();
 		Assert::count(1, $pages);
 		Assert::contains('content', $pages[0]['content']);
 	}
 
 	public function testUpdatingAsDuplicationWithRecordedVisitation() {
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO pages (url, content) VALUES
 			('www.facedown.cz', '<p>facedown</p>')"
 		);
@@ -95,11 +100,13 @@ final class WebPages extends TestCase\Database {
 		(new Subscribing\WebPages(
 			$this->database
 		))->add(new Uri\FakeUri('www.facedown.cz'), $page);
-		Assert::count(1, $this->database->fetchAll('SELECT * FROM page_visits'));
+		$statement = $this->database->prepare('SELECT * FROM page_visits');
+		$statement->execute();
+		Assert::count(1, $statement->fetchAll());
 	}
 
 	protected function prepareDatabase() {
-		$this->truncate(['pages']);
+		$this->truncate(['pages', 'page_visits']);
 	}
 }
 

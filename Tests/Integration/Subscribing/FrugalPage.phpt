@@ -14,7 +14,7 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class FrugalPage extends TestCase\Database {
 	public function testFrugalPage() {
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO page_visits (page_url, visited_at) VALUES
 			('www.google.com', NOW())"
 		);
@@ -29,7 +29,7 @@ final class FrugalPage extends TestCase\Database {
 	}
 
 	public function testFrugalPageWithMultipleVisitation() {
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO page_visits (page_url, visited_at) VALUES
 			('www.google.com', NOW() - INTERVAL '70 MINUTE'),
 			('www.google.com', NOW()),
@@ -46,7 +46,7 @@ final class FrugalPage extends TestCase\Database {
 	}
 
 	public function testOutdatedPage() {
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO page_visits (page_url, visited_at) VALUES
 			('www.google.com', NOW() - INTERVAL '11 MINUTE')"
 		);
@@ -66,7 +66,7 @@ final class FrugalPage extends TestCase\Database {
 	}
 
 	public function testOutdatedPageWithMultipleVisitation() {
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO page_visits (page_url, visited_at) VALUES
 			('www.google.com', NOW() - INTERVAL '11 MINUTE'),
 			('www.google.com', NOW() - INTERVAL '20 MINUTE'),
@@ -106,7 +106,7 @@ final class FrugalPage extends TestCase\Database {
 
 	protected function prepareDatabase() {
 		$this->truncate(['pages']);
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO pages (url, content) VALUES
 			('www.google.com', 'google')"
 		);

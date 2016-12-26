@@ -14,7 +14,7 @@ final class UnreliableParts implements Parts {
 	private $origin;
 	private $database;
 
-	public function __construct(Parts $origin, Storage\Database $database) {
+	public function __construct(Parts $origin, \PDO $database) {
 		$this->origin = $origin;
 		$this->database = $database;
 	}
@@ -24,7 +24,8 @@ final class UnreliableParts implements Parts {
 	}
 
 	public function iterate(): \Iterator {
-		$rows = $this->database->fetchAll(
+		$rows = (new Storage\ParameterizedQuery(
+			$this->database,
 			"SELECT page_url AS url, expression, parts.id, content, snapshot
 				FROM parts
 				RIGHT JOIN (
@@ -40,7 +41,7 @@ final class UnreliableParts implements Parts {
 				) AS part_visits ON part_visits.part_id = parts.id
 				WHERE visited_at + INTERVAL '1 SECOND' * interval < NOW()
 				ORDER BY visited_at ASC"
-		);
+		))->rows();
 		foreach($rows as $row) {
 			$url = new Uri\ReachableUrl(new Uri\ValidUrl($row['url']));
 			$page = new CachedPage(

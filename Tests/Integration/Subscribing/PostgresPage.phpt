@@ -35,10 +35,9 @@ final class PostgresPage extends TestCase\Database {
 			new Uri\FakeUri('www.facedown.cz'),
 			$this->database
 		))->refresh();
-		$page = $this->database->fetch(
-			"SELECT * FROM pages WHERE url = 'www.facedown.cz'"
-		);
-		Assert::contains('NEW_CONTENT', $page['content']);
+		$statement = $this->database->prepare("SELECT * FROM pages WHERE url = 'www.facedown.cz'");
+		$statement->execute();
+		Assert::contains('NEW_CONTENT', $statement->fetch()['content']);
 	}
 
 	public function testRefreshingWithoutAffectingOthers() {
@@ -52,7 +51,9 @@ final class PostgresPage extends TestCase\Database {
 			new Uri\FakeUri('www.facedown.cz'),
 			$this->database
 		))->refresh();
-		$pages = $this->database->fetchAll('SELECT * FROM pages');
+		$statement = $this->database->prepare('SELECT * FROM pages');
+		$statement->execute();
+		$pages = $statement->fetchAll();
 		Assert::count(2, $pages);
 		Assert::contains('google content', $pages[0]['content']);
 		Assert::contains('NEW_CONTENT', $pages[1]['content']);
@@ -70,17 +71,18 @@ final class PostgresPage extends TestCase\Database {
 			new Uri\FakeUri('www.facedown.cz'),
 			$this->database
 		))->refresh();
-		$pages = $this->database->fetchAll(
+		$statement = $this->database->prepare(
 			"SELECT *
 			FROM page_visits
 			WHERE visited_at >= NOW() - INTERVAL '1 MINUTE'"
 		);
-		Assert::count(1, $pages);
+		$statement->execute();
+		Assert::count(1, $statement->fetchAll());
 	}
 
 	protected function prepareDatabase() {
 		$this->truncate(['pages']);
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO pages (url, content) VALUES
 			('www.facedown.cz', 'facedown content'),
 			('www.google.com', 'google content')"

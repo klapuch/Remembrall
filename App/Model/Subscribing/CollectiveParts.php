@@ -12,30 +12,31 @@ use Klapuch\{
 final class CollectiveParts implements Parts {
 	private $database;
 
-	public function __construct(Storage\Database $database) {
+	public function __construct(\PDO $database) {
 		$this->database = $database;
 	}
 
 	public function add(Part $part, Uri\Uri $url, string $expression): void {
-		$this->database->query(
+		(new Storage\ParameterizedQuery(
+			$this->database,
 			'INSERT INTO parts (page_url, expression, content, snapshot) VALUES
 			(:url, :expression, :content, :snapshot)
 			ON CONFLICT (page_url, expression)
 			DO UPDATE SET content = :content, snapshot = :snapshot',
 			[
-				':url' => $url->reference(),
-				':expression' => $expression,
-				':content' => $part->content(),
-				':snapshot' => $part->snapshot(),
+				'url' => $url->reference(),
+				'expression' => $expression,
+				'content' => $part->content(),
+				'snapshot' => $part->snapshot(),
 			]
-		);
+		))->execute();
 	}
 
 	public function iterate(): \Iterator {
-		$rows = $this->database->fetchAll(
-			'SELECT page_url AS url, snapshot, content, id, expression
-			FROM parts'
-		);
+		$rows = (new Storage\ParameterizedQuery(
+			$this->database,
+			'SELECT page_url AS url, snapshot, content, id, expression FROM parts'
+		))->rows();
 		foreach($rows as $row) {
 			$url = new Uri\ReachableUrl(new Uri\ValidUrl($row['url']));
 			$page = new FrugalPage(

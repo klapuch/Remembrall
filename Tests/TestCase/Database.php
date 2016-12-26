@@ -6,14 +6,14 @@ use Klapuch\Storage;
 use Tester;
 
 abstract class Database extends Mockery {
-	/** @var Storage\Database */
+	/** @var \PDO */
 	protected $database;
 
 	protected function setUp() {
 		parent::setUp();
 		Tester\Environment::lock('database', __DIR__ . '/../Temporary');
 		$credentials = parse_ini_file(__DIR__ . '/.database.ini');
-		$this->database = new Storage\PDODatabase(
+		$this->database = new Storage\SafePDO(
 			$credentials['dsn'],
 			$credentials['user'],
 			$credentials['password']

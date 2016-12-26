@@ -40,7 +40,7 @@ try {
 	/** @var \Remembrall\Page\BasePage $target */
 	$target = new $class(
 		$url,
-		new Storage\PDODatabase(
+		new Storage\SafePDO(
 			$configuration['DATABASE']['dsn'],
 			$configuration['DATABASE']['username'],
 			$configuration['DATABASE']['password']

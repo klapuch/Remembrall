@@ -40,7 +40,9 @@ final class PostgresPart extends TestCase\Database {
 			1,
 			$this->database
 		))->refresh();
-		$part = $this->database->fetch('SELECT * FROM parts WHERE id = 1');
+		$statement = $this->database->prepare('SELECT * FROM parts WHERE id = 1');
+		$statement->execute();
+		$part = $statement->fetch();
 		Assert::same('NEW_CONTENT', $part['content']);
 		Assert::same('NEW_SNAP', $part['snapshot']);
 	}
@@ -52,14 +54,13 @@ final class PostgresPart extends TestCase\Database {
 			1,
 			$this->database
 		))->refresh();
-		Assert::count(
-			1,
-			$this->database->fetchAll(
-				"SELECT *
-				FROM part_visits
-				WHERE visited_at >= NOW() - INTERVAL '1 MINUTE'"
-			)
+		$statement = $this->database->prepare(
+			"SELECT *
+			FROM part_visits
+			WHERE visited_at >= NOW() - INTERVAL '1 MINUTE'"
 		);
+		$statement->execute();
+		Assert::count(1, $statement->fetchAll());
 	}
 
 	public function testRefreshingWithoutAffectingOthers() {
@@ -68,7 +69,9 @@ final class PostgresPart extends TestCase\Database {
 			1,
 			$this->database
 		))->refresh();
-		$parts = $this->database->fetchAll('SELECT * FROM parts');
+		$statement = $this->database->prepare('SELECT * FROM parts');
+		$statement->execute();
+		$parts = $statement->fetchAll();
 		Assert::count(2, $parts);
 		Assert::same(2, $parts[0]['id']);
 		Assert::same('google content', $parts[0]['content']);
@@ -80,7 +83,7 @@ final class PostgresPart extends TestCase\Database {
 
 	protected function prepareDatabase() {
 		$this->purge(['parts']);
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
 			('www.facedown.cz', '//facedown', 'facedown content', 'face snap'),
 			('www.google.com', '//google', 'google content', 'google snap')"

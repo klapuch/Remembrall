@@ -27,7 +27,9 @@ final class OwnedSubscriptions extends TestCase\Database {
 			'//google',
 			new Time\FakeInterval(null, null, 'PT120S')
 		);
-		$subscriptions = $this->database->fetchAll('SELECT * FROM subscriptions');
+		$statement = $this->database->prepare('SELECT * FROM subscriptions');
+		$statement->execute();
+		$subscriptions = $statement->fetchAll();
 		Assert::count(1, $subscriptions);
 		Assert::same(1, $subscriptions[0]['id']);
 		Assert::same(666, $subscriptions[0]['user_id']);
@@ -54,18 +56,20 @@ final class OwnedSubscriptions extends TestCase\Database {
 			'"//google" expression on "www.google.com" page is already subscribed by you'
 		);
 		Assert::type(UniqueConstraint::class, $ex->getPrevious());
-		Assert::count(1, $this->database->fetchAll('SELECT * FROM subscriptions'));
+		$statement = $this->database->prepare('SELECT * FROM subscriptions');
+		$statement->execute();
+		Assert::count(1, $statement->fetchAll());
 	}
 
 	public function testPrinting() {
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
 			('https://www.google.com', '//a', 'a', ''),
 			('http://www.facedown.cz', '//b', 'b', ''),
 			('http://www.facedown.cz', '//c', 'c', ''),
 			('https://www.google.com', '//d', 'd', '')"
 		);
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO subscriptions (part_id, user_id, interval, last_update, snapshot) VALUES
 			(1, 1, 'PT1M', '1993-01-01', ''),
 			(2, 2, 'PT2M', '1994-01-01', ''),
@@ -73,7 +77,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 			(4, 1, 'PT4M', '1997-01-01', '')"
 		);
 		$this->truncate(['part_visits']);
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO part_visits (part_id, visited_at) VALUES
 			(1, '2000-01-01 01:01:01'),
 			(1, '2008-01-01 01:01:01'),
@@ -110,7 +114,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 	}
 
 	public function testIteratingOwned() {
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO subscriptions (part_id, user_id, interval, last_update, snapshot) VALUES
 			(1, 4, 'PT1M', NOW(), ''),
 			(2, 2, 'PT2M', NOW(), ''),
@@ -139,12 +143,12 @@ final class OwnedSubscriptions extends TestCase\Database {
 	protected function prepareDatabase() {
 		$this->truncate(['parts', 'pages', 'subscriptions']);
 		$this->restartSequence(['parts', 'subscriptions']);
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO pages (url, content) VALUES
 			('www.google.com', '<p>google</p>'),
 			('www.facedown.cz', '<p>facedown</p>')"
 		);
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
 			('www.google.com', '//google', 'google content', 'google snap')"
 		);

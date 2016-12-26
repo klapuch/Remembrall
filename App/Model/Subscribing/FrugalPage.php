@@ -18,7 +18,7 @@ final class FrugalPage implements Page {
 	public function __construct(
 		Uri\Uri $uri,
 		Page $origin,
-		Storage\Database $database
+		\PDO $database
 	) {
 		$this->uri = $uri;
 		$this->origin = $origin;
@@ -32,12 +32,13 @@ final class FrugalPage implements Page {
 			return $this->refresh()->content();
 		$dom = new DOM();
 		$dom->loadHTML(
-			$this->database->fetchColumn(
+			(new Storage\ParameterizedQuery(
+				$this->database,
 				'SELECT content
 				FROM pages
 				WHERE url IS NOT DISTINCT FROM ?',
 				[$this->uri->reference()]
-			)
+			))->field()
 		);
 		return $dom;
 	}
@@ -52,7 +53,8 @@ final class FrugalPage implements Page {
 	 * @return bool
 	 */
 	private function outdated(Uri\Uri $uri): bool {
-		return (bool)$this->database->fetchColumn(
+		return (bool)(new Storage\ParameterizedQuery(
+			$this->database,
 			"SELECT 1
 			FROM pages
 			WHERE (
@@ -61,7 +63,7 @@ final class FrugalPage implements Page {
 				WHERE page_url IS NOT DISTINCT FROM ?
 			) + INTERVAL '1 MINUTE' * ? < NOW()",
 			[$uri->reference(), (new \DateInterval(self::EXPIRATION))->i]
-		);
+		))->field();
 	}
 
 	/**
@@ -70,11 +72,12 @@ final class FrugalPage implements Page {
 	 * @return bool
 	 */
 	private function recorded(Uri\Uri $uri): bool {
-		return (bool)$this->database->fetchColumn(
+		return (bool)(new Storage\ParameterizedQuery(
+			$this->database,
 			'SELECT 1
 			FROM pages
 			WHERE url IS NOT DISTINCT FROM ?',
 			[$uri->reference()]
-		);
+		))->field();
 	}
 }

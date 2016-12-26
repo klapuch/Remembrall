@@ -15,7 +15,7 @@ final class PostgresPart implements Part {
 	public function __construct(
 		Part $origin,
 		int $id,
-		Storage\Database $database
+		\PDO $database
 	) {
 		$this->origin = $origin;
 		$this->id = $id;
@@ -23,31 +23,34 @@ final class PostgresPart implements Part {
 	}
 
 	public function content(): string {
-		return $this->database->fetchColumn(
+		return (new Storage\ParameterizedQuery(
+			$this->database,
 			'SELECT content
 			FROM parts
 			WHERE id IS NOT DISTINCT FROM ?',
 			[$this->id]
-		);
+		))->field();
 	}
 
 	public function snapshot(): string {
-		return $this->database->fetchColumn(
+		return (new Storage\ParameterizedQuery(
+			$this->database,
 			'SELECT snapshot
 			FROM parts
 			WHERE id IS NOT DISTINCT FROM ?',
 			[$this->id]
-		);
+		))->field();
 	}
 
 	public function refresh(): Part {
 		$refreshedPart = $this->origin->refresh();
-		$this->database->query(
+		(new Storage\ParameterizedQuery(
+			$this->database,
 			'UPDATE parts
 			SET content = ?, snapshot = ?
 			WHERE id IS NOT DISTINCT FROM ?',
 			[$refreshedPart->content(), $refreshedPart->snapshot(), $this->id]
-		);
+		))->execute();
 		return $this;
 	}
 }

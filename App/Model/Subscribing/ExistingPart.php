@@ -16,7 +16,7 @@ final class ExistingPart implements Part {
 	public function __construct(
 		Part $origin,
 		int $id,
-		Storage\Database $database
+		\PDO $database
 	) {
 		$this->origin = $origin;
 		$this->id = $id;
@@ -46,11 +46,12 @@ final class ExistingPart implements Part {
 	 * @return bool
 	 */
 	private function exists(): bool {
-		return (bool)$this->database->fetchColumn(
+		return (bool)(new Storage\ParameterizedQuery(
+			$this->database,
 			'SELECT 1
 			FROM parts
 			WHERE id IS NOT DISTINCT FROM ?',
 			[$this->id]
-		);
+		))->field();
 	}
 }

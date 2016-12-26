@@ -10,36 +10,40 @@ final class PostgresSubscription implements Subscription {
 	private $id;
 	private $database;
 
-	public function __construct(int $id, Storage\Database $database) {
+	public function __construct(int $id, \PDO $database) {
 		$this->id = $id;
 		$this->database = $database;
 	}
 
 	public function cancel(): void {
-		$this->database->query(
+		(new Storage\ParameterizedQuery(
+			$this->database,
 			'DELETE FROM subscriptions
 			WHERE id IS NOT DISTINCT FROM ?',
 			[$this->id]
-		);
+		))->execute();
 	}
 
 	public function edit(Time\Interval $interval): void {
-		$this->database->query(
+		(new Storage\ParameterizedQuery(
+			$this->database,
 			'UPDATE subscriptions
 			SET interval = ?
 			WHERE id IS NOT DISTINCT FROM ?',
 			[$interval->iso(), $this->id]
-		);
+		))->execute();
 	}
 
 	public function notify(): void {
-		(new Storage\PostgresTransaction($this->database))->start(function() {
-			$this->database->query(
+		(new Storage\Transaction($this->database))->start(function() {
+			(new Storage\ParameterizedQuery(
+				$this->database,
 				'INSERT INTO notifications (subscription_id, notified_at) VALUES
 				(?, NOW())',
 				[$this->id]
-			);
-			$this->database->query(
+			))->execute();
+			(new Storage\ParameterizedQuery(
+				$this->database,
 				'UPDATE subscriptions
 				SET snapshot = (
 					SELECT snapshot
@@ -51,8 +55,8 @@ final class PostgresSubscription implements Subscription {
 					)
 				)
 				WHERE id IS NOT DISTINCT FROM :id',
-				[':id' => $this->id]
-			);
+				['id' => $this->id]
+			))->execute();
 		});
 	}
 }

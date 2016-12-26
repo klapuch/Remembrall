@@ -20,19 +20,21 @@ final class UniqueSubscribers extends TestCase\Database {
 			$this->database,
 			new Encryption\FakeCipher()
 		))->register('foo@bar.cz', 'passw0rt');
-		$subscribers = $this->database->fetchAll('SELECT * FROM users');
 		Assert::equal(
 			new Access\RegisteredSubscriber(1, $this->database),
 			$subscriber
 		);
-		Assert::count(1, $subscribers);
-		Assert::same('foo@bar.cz', $subscribers[0]['email']);
-		Assert::same('secret', $subscribers[0]['password']);
-		Assert::same(1, $subscribers[0]['id']);
+		$statement = $this->database->prepare('SELECT * FROM users');
+		$statement->execute();
+		$users = $statement->fetchAll();
+		Assert::count(1, $users);
+		Assert::same('foo@bar.cz', $users[0]['email']);
+		Assert::same('secret', $users[0]['password']);
+		Assert::same(1, $users[0]['id']);
 	}
 
 	public function testRegisteringToOthers() {
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO users (email, password) VALUES
 			('foo@bar.cz', 'secret')"
 		);
@@ -40,22 +42,24 @@ final class UniqueSubscribers extends TestCase\Database {
 			$this->database,
 			new Encryption\FakeCipher()
 		))->register('bar@foo.cz', 'passw0rt');
-		$subscribers = $this->database->fetchAll('SELECT * FROM users');
 		Assert::equal(
 			new Access\RegisteredSubscriber(2, $this->database),
 			$subscriber
 		);
-		Assert::count(2, $subscribers);
-		Assert::same('foo@bar.cz', $subscribers[0]['email']);
-		Assert::same('secret', $subscribers[0]['password']);
-		Assert::same(1, $subscribers[0]['id']);
-		Assert::same('bar@foo.cz', $subscribers[1]['email']);
-		Assert::same('secret', $subscribers[1]['password']);
-		Assert::same(2, $subscribers[1]['id']);
+		$statement = $this->database->prepare('SELECT * FROM users');
+		$statement->execute();
+		$users = $statement->fetchAll();
+		Assert::count(2, $users);
+		Assert::same('foo@bar.cz', $users[0]['email']);
+		Assert::same('secret', $users[0]['password']);
+		Assert::same(1, $users[0]['id']);
+		Assert::same('bar@foo.cz', $users[1]['email']);
+		Assert::same('secret', $users[1]['password']);
+		Assert::same(2, $users[1]['id']);
 	}
 
 	public function testRegisteringWithDuplicatedEmail() {
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO users (email, password) VALUES
 			('foo@bar.cz', 'secret')"
 		);

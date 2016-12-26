@@ -12,18 +12,19 @@ final class RegisteredSubscriber implements Subscriber {
 	private $id;
 	private $database;
 
-	public function __construct(int $id, Storage\Database $database) {
+	public function __construct(int $id, \PDO $database) {
 		$this->id = $id;
 		$this->database = $database;
 	}
 
 	public function email(): string {
-		return (string)$this->database->fetchColumn(
+		return (string)(new Storage\ParameterizedQuery(
+			$this->database,
 			'SELECT email
 			FROM users
 			WHERE id IS NOT DISTINCT FROM ?',
 			[$this->id()]
-		);
+		))->field();
 	}
 
 	public function id(): int {
@@ -40,11 +41,12 @@ final class RegisteredSubscriber implements Subscriber {
 	 * @return bool
 	 */
 	private function registered(int $id): bool {
-		return (bool)$this->database->fetchColumn(
+		return (bool)(new Storage\ParameterizedQuery(
+			$this->database,
 			'SELECT 1
 			FROM users
 			WHERE id IS NOT DISTINCT FROM ?',
 			[$id]
-		);
+		))->field();
 	}
 }

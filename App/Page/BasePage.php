@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Page;
 
 use Klapuch\{
-	Storage, Uri, Encryption, FlashMessage, Csrf, Form, Log
+	Uri, Encryption, FlashMessage, Csrf, Form, Log
 };
 use Remembrall\Model\Access;
 
@@ -13,7 +13,7 @@ abstract class BasePage {
 	protected $url;
 	/** @var \Remembrall\Model\Access\Subscriber */
 	protected $subscriber;
-	/** @var \Klapuch\Storage\Database */
+	/** @var \PDO */
 	protected $database;
 	/** @var \Klapuch\Log\Logs */
 	protected $logs;
@@ -26,7 +26,7 @@ abstract class BasePage {
 
 	public function __construct(
 		Uri\Uri $url,
-		Storage\Database $database,
+		\PDO $database,
 		Log\Logs $logs,
 		Encryption\Cipher $cipher
 	) {

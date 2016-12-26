@@ -21,7 +21,9 @@ final class CollectiveParts extends TestCase\Database {
 			new Uri\FakeUri('www.google.com'),
 			'//p'
 		);
-		$parts = $this->database->fetchAll('SELECT * FROM parts');
+		$statement = $this->database->prepare('SELECT * FROM parts');
+		$statement->execute();
+		$parts = $statement->fetchAll();
 		Assert::count(1, $parts);
 		Assert::same('www.google.com', $parts[0]['page_url']);
 		Assert::same('google content', $parts[0]['content']);
@@ -30,7 +32,7 @@ final class CollectiveParts extends TestCase\Database {
 	}
 
 	public function testAddingToOthers() {
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
 			('www.google.com', '//google', 'google content', 'google snap')"
 		);
@@ -41,7 +43,9 @@ final class CollectiveParts extends TestCase\Database {
 			new Uri\FakeUri('www.facedown.cz'),
 			'//facedown'
 		);
-		$parts = $this->database->fetchAll('SELECT * FROM parts');
+		$statement = $this->database->prepare('SELECT * FROM parts');
+		$statement->execute();
+		$parts = $statement->fetchAll();
 		Assert::count(2, $parts);
 		Assert::same('www.google.com', $parts[0]['page_url']);
 		Assert::same('google content', $parts[0]['content']);
@@ -62,14 +66,13 @@ final class CollectiveParts extends TestCase\Database {
 			new Uri\FakeUri('www.google.com'),
 			'//p'
 		);
-		Assert::count(
-			1,
-			$this->database->fetchAll(
-				"SELECT *
-				FROM part_visits
-				WHERE visited_at >= NOW() - INTERVAL '1 MINUTE'"
-			)
+		$statement = $this->database->prepare(
+			"SELECT *
+			FROM part_visits
+			WHERE visited_at >= NOW() - INTERVAL '1 MINUTE'"
 		);
+		$statement->execute();
+		Assert::count(1, $statement->fetchAll());
 	}
 
 	public function testUpdatingAsDuplication() {
@@ -81,7 +84,9 @@ final class CollectiveParts extends TestCase\Database {
 		(new Subscribing\CollectiveParts(
 			$this->database
 		))->add($newPart, new Uri\FakeUri('www.google.com'), '//p');
-		$parts = $this->database->fetchAll('SELECT * FROM parts');
+		$statement = $this->database->prepare('SELECT * FROM parts');
+		$statement->execute();
+		$parts = $statement->fetchAll();
 		Assert::count(1, $parts);
 		Assert::same('NEW_CONTENT', $parts[0]['content']);
 		Assert::same('NEW_SNAP', $parts[0]['snapshot']);
@@ -96,11 +101,13 @@ final class CollectiveParts extends TestCase\Database {
 		(new Subscribing\CollectiveParts(
 			$this->database
 		))->add($part, new Uri\FakeUri('www.google.com'), '//p');
-		Assert::count(2, $this->database->fetchAll('SELECT * FROM part_visits'));
+		$statement = $this->database->prepare('SELECT * FROM part_visits');
+		$statement->execute();
+		Assert::count(2, $statement->fetchAll());
 	}
 
 	public function testIterating() {
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
 			('www.google.com', '//a', 'a', ''),
 			('www.facedown.cz', '//c', 'c', '')"

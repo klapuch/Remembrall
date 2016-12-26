@@ -13,7 +13,7 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class UnreliableParts extends TestCase\Database {
 	public function testIterating() {
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
 			('www.google.com', '//a', 'a', ''),
 			('www.facedown.cz', '//b', 'b', ''),
@@ -22,7 +22,7 @@ final class UnreliableParts extends TestCase\Database {
 			('www.new.cz', '//e', 'e', '')"
 		);
 		$this->truncate(['part_visits']);
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO part_visits (part_id, visited_at) VALUES
 			(1, NOW() - INTERVAL '50 SECOND'),
 			(1, NOW() - INTERVAL '10 SECOND'),
@@ -31,7 +31,7 @@ final class UnreliableParts extends TestCase\Database {
 			(2, NOW() - INTERVAL '5 SECOND'),
 			(4, NOW() - INTERVAL '45 SECOND')"
 		);
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO subscriptions (part_id, user_id, interval, last_update, snapshot) VALUES
 			(1, 1, 'PT10S', NOW(), ''),
 			(1, 2, 'PT50S', NOW(), ''),

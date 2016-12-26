@@ -20,7 +20,7 @@ final class RegisteredSubscriber extends TestCase\Database {
 	}
 
 	public function testKnownUserId() {
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO users (id, email, password) VALUES
 			(666, 'foo@bar.cz', 'password')"
 		);
@@ -31,7 +31,7 @@ final class RegisteredSubscriber extends TestCase\Database {
 	}
 
 	public function testExistingEmail() {
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO users (id, email, password) VALUES
 			(666, 'foo@bar.cz', 'password')"
 		);

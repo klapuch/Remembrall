@@ -21,7 +21,7 @@ final class ChangedSubscriptions implements Subscriptions {
 		Subscriptions $origin,
 		Mail\IMailer $mailer,
 		Mail\Message $message,
-		Storage\Database $database
+		\PDO $database
 	) {
 		$this->origin = $origin;
 		$this->mailer = $mailer;
@@ -38,14 +38,15 @@ final class ChangedSubscriptions implements Subscriptions {
 	}
 
 	public function iterate(): \Iterator {
-		$subscriptions = $this->database->fetchAll(
+		$subscriptions = (new Storage\ParameterizedQuery(
+			$this->database,
 			"SELECT subscriptions.id, page_url AS url, expression, content, email
 			FROM parts
 			INNER JOIN subscriptions ON subscriptions.part_id = parts.id
 			INNER JOIN users ON users.id = subscriptions.user_id
 			WHERE parts.snapshot != subscriptions.snapshot
 			AND last_update + INTERVAL '1 SECOND' * SUBSTRING(interval FROM '[0-9]+')::INT < NOW()"
-		);
+		))->rows();
 		foreach($subscriptions as $subscription) {
 			yield new EmailSubscription(
 				new PostgresSubscription($subscription['id'], $this->database),
@@ -70,7 +71,8 @@ final class ChangedSubscriptions implements Subscriptions {
 	}
 
 	public function print(Output\Format $format): array {
-		$rows = $this->database->fetchAll(
+		$rows = (new Storage\ParameterizedQuery(
+			$this->database,
 			"SELECT subscriptions.id, expression, page_url AS url, interval,
 			visited_at, last_update
 			FROM parts
@@ -83,7 +85,7 @@ final class ChangedSubscriptions implements Subscriptions {
 			WHERE parts.snapshot != subscriptions.snapshot
 			AND last_update + INTERVAL '1 SECOND' * SUBSTRING(interval FROM '[0-9]+')::INT < NOW()
 			ORDER BY visited_at DESC"
-		);
+		))->rows();
 		return array_map(
 			function(array $row) use ($format): Output\Format {
 				return $format->with('expression', $row['expression'])

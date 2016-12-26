@@ -92,7 +92,7 @@ final class OwnedSubscription extends TestCase\Database {
 
 	protected function prepareDatabase() {
 		$this->purge(['subscriptions']);
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES
 			(111, 3, 'PT2M', NOW(), ''),
 			(666, 4, 'PT3M', NOW(), '')"

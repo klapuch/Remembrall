@@ -50,7 +50,7 @@ final class ExistingPart extends TestCase\Database {
 	}
 
 	public function testExistingPart() {
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
 			('www.facedown.cz', '//d', 'd', '')"
 		);

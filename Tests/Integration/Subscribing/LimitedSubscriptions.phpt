@@ -37,7 +37,7 @@ final class LimitedSubscriptions extends TestCase\Database {
 	 * @throws \OverflowException You have reached the limit of 5 subscribed parts
 	 */
 	public function testSubscribingOverLimit() {
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
 			('www.google.com', '//a', 'a', ''),
 			('www.facedown.cz', '//b', 'b', ''),
@@ -45,7 +45,7 @@ final class LimitedSubscriptions extends TestCase\Database {
 			('www.google.com', '//d', 'd', ''),
 			('www.facedown.cz', '//d', 'd', '')"
 		);
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO subscriptions (part_id, user_id, interval, last_update, snapshot) VALUES
 			(1, 666, 'PT1M', NOW(), ''),
 			(2, 666, 'PT2M', NOW(), ''),

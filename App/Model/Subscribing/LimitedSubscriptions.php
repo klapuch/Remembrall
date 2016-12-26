@@ -19,7 +19,7 @@ final class LimitedSubscriptions implements Subscriptions {
 	public function __construct(
 		Subscriptions $origin,
 		Access\Subscriber $subscriber,
-		Storage\Database $database
+		\PDO $database
 	) {
 		$this->origin = $origin;
 		$this->subscriber = $subscriber;
@@ -55,13 +55,14 @@ final class LimitedSubscriptions implements Subscriptions {
 	 * @return bool
 	 */
 	private function overstepped(): bool {
-		return (bool)$this->database->fetchColumn(
+		return (bool)(new Storage\ParameterizedQuery(
+			$this->database,
 			'SELECT 1
 			FROM parts
 			INNER JOIN subscriptions ON subscriptions.part_id = parts.id 
 			WHERE user_id IS NOT DISTINCT FROM ?
 			HAVING COUNT(parts.id) >= ?',
 			[$this->subscriber->id(), self::LIMIT]
-		);
+		))->field();
 	}
 }

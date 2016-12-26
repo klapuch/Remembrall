@@ -9,21 +9,22 @@ use Klapuch\{
 final class WebPages implements Pages {
 	private $database;
 
-	public function __construct(Storage\Database $database) {
+	public function __construct(\PDO $database) {
 		$this->database = $database;
 	}
 
 	public function add(Uri\Uri $url, Page $page): Page {
-		$this->database->query(
+		(new Storage\ParameterizedQuery(
+			$this->database,
 			'INSERT INTO pages (url, content)
 			VALUES (:url, :content)
 			ON CONFLICT (url) DO UPDATE
 			SET content = :content',
 			[
-				':url' => $url->reference(),
-				':content' => $page->content()->saveHTML(),
+				'url' => $url->reference(),
+				'content' => $page->content()->saveHTML(),
 			]
-		);
+		))->execute();
 		return new PostgresPage($page, $url, $this->database);
 	}
 }
