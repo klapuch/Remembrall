@@ -34,39 +34,38 @@ final class PostgresPart extends TestCase\Database {
 		);
 	}
 
-	public function testRefreshingWithNewContent() {
+	public function testRefreshingToNewContent() {
+		$id = 1;
 		(new Subscribing\PostgresPart(
 			new Subscribing\FakePart('NEW_CONTENT', null, 'NEW_SNAP'),
-			1,
+			$id,
 			$this->database
 		))->refresh();
-		$statement = $this->database->prepare('SELECT * FROM parts WHERE id = 1');
-		$statement->execute();
+		$statement = $this->database->prepare('SELECT * FROM parts WHERE id = ?');
+		$statement->execute([$id]);
 		$part = $statement->fetch();
 		Assert::same('NEW_CONTENT', $part['content']);
 		Assert::same('NEW_SNAP', $part['snapshot']);
 	}
 
 	public function testRefreshingWithRecordedVisitation() {
+		$id = 1;
 		$this->purge(['part_visits']);
 		(new Subscribing\PostgresPart(
 			new Subscribing\FakePart('NEW_CONTENT', null, 'NEW_SNAP'),
-			1,
+			$id,
 			$this->database
 		))->refresh();
-		$statement = $this->database->prepare(
-			"SELECT *
-			FROM part_visits
-			WHERE visited_at >= NOW() - INTERVAL '1 MINUTE'"
-		);
+		$statement = $this->database->prepare('SELECT * FROM part_visits');
 		$statement->execute();
 		Assert::count(1, $statement->fetchAll());
 	}
 
 	public function testRefreshingWithoutAffectingOthers() {
+		$id = 1;
 		(new Subscribing\PostgresPart(
 			new Subscribing\FakePart('NEW_CONTENT', null, 'NEW_SNAP'),
-			1,
+			$id,
 			$this->database
 		))->refresh();
 		$statement = $this->database->prepare('SELECT * FROM parts');
@@ -76,7 +75,7 @@ final class PostgresPart extends TestCase\Database {
 		Assert::same(2, $parts[0]['id']);
 		Assert::same('google content', $parts[0]['content']);
 		Assert::same('google snap', $parts[0]['snapshot']);
-		Assert::same(1, $parts[1]['id']);
+		Assert::same($id, $parts[1]['id']);
 		Assert::same('NEW_CONTENT', $parts[1]['content']);
 		Assert::same('NEW_SNAP', $parts[1]['snapshot']);
 	}

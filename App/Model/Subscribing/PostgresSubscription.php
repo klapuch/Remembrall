@@ -6,6 +6,9 @@ use Klapuch\{
 	Storage, Time
 };
 
+/**
+ * Subscription stored in the Postgres database
+ */
 final class PostgresSubscription implements Subscription {
 	private $id;
 	private $database;

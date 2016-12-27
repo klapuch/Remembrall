@@ -49,7 +49,7 @@ final class SubscriptionPage extends BasePage {
 			);
 			(new Storage\Transaction($this->database))->start(
 				function() use ($url, $subscription) {
-					$page = (new Subscribing\WebPages($this->database))->add(
+					$page = (new Subscribing\UniquePages($this->database))->add(
 						$url,
 						new Subscribing\LoggedPage(
 							new Subscribing\FrugalPage(

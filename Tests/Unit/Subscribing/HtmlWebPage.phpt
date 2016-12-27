@@ -29,7 +29,7 @@ final class HtmlWebPage extends Tester\TestCase {
 		);
 	}
 
-	public function testInvalidHtml() {
+	public function testAllowingInvalidHtml() {
 		Assert::contains(
 			'Hi, there!',
 			(new Subscribing\HtmlWebPage(
@@ -44,7 +44,7 @@ final class HtmlWebPage extends Tester\TestCase {
 		);
 	}
 
-	public function testNonHtmlContentType() {
+	public function testThrowingOnNonHtmlContentType() {
 		$ex = Assert::exception(
 			function() {
 				(new Subscribing\HtmlWebPage(
@@ -63,7 +63,7 @@ final class HtmlWebPage extends Tester\TestCase {
 		Assert::type(\Exception::class, $ex->getPrevious());
 	}
 
-	public function testHttpError() {
+	public function testThrowingOnHttpError() {
 		$ex = Assert::exception(
 			function() {
 				(new Subscribing\HtmlWebPage(

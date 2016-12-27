@@ -18,7 +18,7 @@ final class OwnedSubscription extends TestCase\Database {
 	/**
 	 * @throws \Remembrall\Exception\NotFoundException You can not cancel foreign subscription
 	 */
-	public function testCancelingForeign() {
+	public function testThrowingOnCancelingForeign() {
 		(new Subscribing\OwnedSubscription(
 			new Subscribing\FakeSubscription(),
 			1,
@@ -43,7 +43,7 @@ final class OwnedSubscription extends TestCase\Database {
 	/**
 	 * @throws \Remembrall\Exception\NotFoundException You can not edit foreign subscription
 	 */
-	public function testEditingForeign() {
+	public function testThrowingOnEditingForeign() {
 		(new Subscribing\OwnedSubscription(
 			new Subscribing\FakeSubscription(),
 			1,
@@ -68,7 +68,7 @@ final class OwnedSubscription extends TestCase\Database {
 	/**
 	 * @throws \Remembrall\Exception\NotFoundException You can not be notified on foreign subscription
 	 */
-	public function testNotifyingForeign() {
+	public function testThrowingOnNotifyingForeign() {
 		(new Subscribing\OwnedSubscription(
 			new Subscribing\FakeSubscription(),
 			1,

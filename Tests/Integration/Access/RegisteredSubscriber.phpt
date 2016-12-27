@@ -15,36 +15,40 @@ final class RegisteredSubscriber extends TestCase\Database {
 	/**
 	 * @throws Remembrall\Exception\NotFoundException User id "666" does not exist
 	 */
-	public function testUnknownUserId() {
+	public function testThrowingOnUnknownId() {
 		(new Access\RegisteredSubscriber(666, $this->database))->id();
 	}
 
 	public function testKnownUserId() {
-		$this->database->exec(
+		$id = 666;
+		$statement = $this->database->prepare(
 			"INSERT INTO users (id, email, password) VALUES
-			(666, 'foo@bar.cz', 'password')"
+			(?, 'foo@bar.cz', 'password')"
 		);
+		$statement->execute([$id]);
 		Assert::same(
-			666,
-			(new Access\RegisteredSubscriber(666, $this->database))->id()
+			$id,
+			(new Access\RegisteredSubscriber($id, $this->database))->id()
 		);
 	}
 
 	public function testExistingEmail() {
-		$this->database->exec(
+		$id = 666;
+		$statement = $this->database->prepare(
 			"INSERT INTO users (id, email, password) VALUES
-			(666, 'foo@bar.cz', 'password')"
+			(?, 'foo@bar.cz', 'password')"
 		);
+		$statement->execute([$id]);
 		Assert::same(
 			'foo@bar.cz',
-			(new Access\RegisteredSubscriber(666, $this->database))->email()
+			(new Access\RegisteredSubscriber($id, $this->database))->email()
 		);
 	}
 
 	/**
 	 * @throws Remembrall\Exception\NotFoundException User id "666" does not exist
 	 */
-	public function testUnknownEmail() {
+	public function testThrowingOnUnknownEmail() {
 		(new Access\RegisteredSubscriber(666, $this->database))->email();
 	}
 

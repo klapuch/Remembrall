@@ -12,7 +12,7 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class WebPages extends TestCase\Database {
+final class UniquePages extends TestCase\Database {
 	public function testAddingBrandNew() {
 		$url = new Uri\FakeUri('www.facedown.cz');
 		$dom = new \DOMDocument();
@@ -20,7 +20,7 @@ final class WebPages extends TestCase\Database {
 		$page = new Subscribing\FakePage($dom);
 		Assert::equal(
 			new Subscribing\PostgresPage($page, $url, $this->database),
-			(new Subscribing\WebPages(
+			(new Subscribing\UniquePages(
 				$this->database
 			))->add($url, $page)
 		);
@@ -36,15 +36,11 @@ final class WebPages extends TestCase\Database {
 		$this->truncate(['page_visits']);
 		$dom = new \DOMDocument();
 		$dom->loadHTML('content');
-		(new Subscribing\WebPages($this->database))->add(
+		(new Subscribing\UniquePages($this->database))->add(
 			new Uri\FakeUri('www.facedown.cz'),
 			new Subscribing\FakePage($dom)
 		);
-		$statement = $this->database->prepare(
-			"SELECT *
-			FROM page_visits
-			WHERE visited_at >= NOW() - INTERVAL '1 MINUTE'"
-		);
+		$statement = $this->database->prepare('SELECT * FROM page_visits');
 		$statement->execute();
 		Assert::count(1, $statement->fetchAll());
 	}
@@ -52,29 +48,31 @@ final class WebPages extends TestCase\Database {
 	public function testAddingToOthers() {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('content');
-		$this->database->query(
+		$this->database->exec(
 			"INSERT INTO pages (url, content) VALUES
 			('www.facedown.cz', '<p>facedown</p>')"
 		);
-		(new Subscribing\WebPages($this->database))->add(
+		(new Subscribing\UniquePages($this->database))->add(
 			new Uri\FakeUri('www.google.com'),
 			new Subscribing\FakePage($dom)
 		);
 		$statement = $this->database->prepare('SELECT * FROM pages');
 		$statement->execute();
-		Assert::count(2, $statement->fetchAll());
+		$pages = $statement->fetchAll();
+		Assert::count(2, $pages);
+		Assert::notSame($pages[0], $pages[1]);
 	}
 
-	public function testUpdatingAsDuplication() {
-		$this->database->query(
+	public function testUpdatingDuplication() {
+		$this->database->exec(
 			"INSERT INTO pages (url, content) VALUES
 			('www.facedown.cz', '<p>facedown</p>')"
 		);
 		$dom = new \DOMDocument();
-		$dom->loadHTML('content');
+		$dom->loadHTML('new content');
 		$url = new Uri\FakeUri('www.facedown.cz');
 		$page = new Subscribing\FakePage($dom);
-		$addedPage = (new Subscribing\WebPages(
+		$addedPage = (new Subscribing\UniquePages(
 			$this->database
 		))->add($url, $page);
 		Assert::equal(
@@ -85,10 +83,10 @@ final class WebPages extends TestCase\Database {
 		$statement->execute();
 		$pages = $statement->fetchAll();
 		Assert::count(1, $pages);
-		Assert::contains('content', $pages[0]['content']);
+		Assert::contains('new content', $pages[0]['content']);
 	}
 
-	public function testUpdatingAsDuplicationWithRecordedVisitation() {
+	public function testUpdatingDuplicationWithRecordedVisitation() {
 		$this->database->exec(
 			"INSERT INTO pages (url, content) VALUES
 			('www.facedown.cz', '<p>facedown</p>')"
@@ -97,7 +95,7 @@ final class WebPages extends TestCase\Database {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('content');
 		$page = new Subscribing\FakePage($dom);
-		(new Subscribing\WebPages(
+		(new Subscribing\UniquePages(
 			$this->database
 		))->add(new Uri\FakeUri('www.facedown.cz'), $page);
 		$statement = $this->database->prepare('SELECT * FROM page_visits');
@@ -110,4 +108,4 @@ final class WebPages extends TestCase\Database {
 	}
 }
 
-(new WebPages)->run();
+(new UniquePages)->run();

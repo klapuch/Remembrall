@@ -24,9 +24,9 @@ final class UnreliableParts implements Parts {
 	}
 
 	public function iterate(): \Iterator {
-		$rows = (new Storage\ParameterizedQuery(
+		$parts = (new Storage\ParameterizedQuery(
 			$this->database,
-			"SELECT page_url AS url, expression, parts.id, content, snapshot
+			"SELECT page_url, expression, parts.id, content, snapshot
 				FROM parts
 				RIGHT JOIN (
 					SELECT MIN(SUBSTRING(interval FROM '[0-9]+')::INT) AS interval,
@@ -42,8 +42,8 @@ final class UnreliableParts implements Parts {
 				WHERE visited_at + INTERVAL '1 SECOND' * interval < NOW()
 				ORDER BY visited_at ASC"
 		))->rows();
-		foreach($rows as $row) {
-			$url = new Uri\ReachableUrl(new Uri\ValidUrl($row['url']));
+		foreach($parts as $part) {
+			$url = new Uri\ReachableUrl(new Uri\ValidUrl($part['page_url']));
 			$page = new CachedPage(
 				new FrugalPage(
 					$url,
@@ -60,15 +60,15 @@ final class UnreliableParts implements Parts {
 				new PostgresPart(
 					new HtmlPart(
 						new MatchingExpression(
-							new XPathExpression($page, $row['expression'])
+							new XPathExpression($page, $part['expression'])
 						),
 						$page
 					),
-					$row['id'],
+					$part['id'],
 					$this->database
 				),
-				$row['content'],
-				$row['snapshot']
+				$part['content'],
+				$part['snapshot']
 			);
 		}
 	}

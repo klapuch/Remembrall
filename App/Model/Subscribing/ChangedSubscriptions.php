@@ -71,9 +71,9 @@ final class ChangedSubscriptions implements Subscriptions {
 	}
 
 	public function print(Output\Format $format): array {
-		$rows = (new Storage\ParameterizedQuery(
+		$subscriptions = (new Storage\ParameterizedQuery(
 			$this->database,
-			"SELECT subscriptions.id, expression, page_url AS url, interval,
+			"SELECT subscriptions.id, expression, page_url, interval,
 			visited_at, last_update
 			FROM parts
 			INNER JOIN (
@@ -87,20 +87,20 @@ final class ChangedSubscriptions implements Subscriptions {
 			ORDER BY visited_at DESC"
 		))->rows();
 		return array_map(
-			function(array $row) use ($format): Output\Format {
-				return $format->with('expression', $row['expression'])
-					->with('id', $row['id'])
-					->with('url', $row['url'])
+			function(array $subscription) use ($format): Output\Format {
+				return $format->with('expression', $subscription['expression'])
+					->with('id', $subscription['id'])
+					->with('url', $subscription['page_url'])
 					->with(
 						'interval',
 						new Time\TimeInterval(
-							new \DateTimeImmutable($row['visited_at']),
-							new \DateInterval($row['interval'])
+							new \DateTimeImmutable($subscription['visited_at']),
+							new \DateInterval($subscription['interval'])
 						)
 					)
-					->with('lastUpdate', $row['last_update']);
+					->with('lastUpdate', $subscription['last_update']);
 			},
-			$rows
+			$subscriptions
 		);
 	}
 }

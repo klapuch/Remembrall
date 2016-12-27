@@ -14,10 +14,7 @@ final class UniqueSubscribers implements Subscribers {
 	private $database;
 	private $cipher;
 
-	public function __construct(
-		\PDO $database,
-		Encryption\Cipher $cipher
-	) {
+	public function __construct(\PDO $database, Encryption\Cipher $cipher) {
 		$this->database = $database;
 		$this->cipher = $cipher;
 	}

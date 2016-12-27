@@ -5,6 +5,9 @@ namespace Remembrall\Model\Subscribing;
 use Klapuch\Time;
 use Nette\Mail;
 
+/**
+ * Subscriptions sending to an email
+ */
 final class EmailSubscription implements Subscription {
 	private $origin;
 	private $mailer;

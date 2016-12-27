@@ -22,7 +22,7 @@ final class PostgresSubscription extends TestCase\Database {
 		Assert::same(2, $subscriptions[0]['id']);
 	}
 
-	public function testCancelingUnknown() {
+	public function testCancelingUnknownWithoutEffect() {
 		$statement = $this->database->prepare('SELECT * FROM subscriptions');
 		$statement->execute();
 		$before = $statement->fetchAll();
@@ -34,36 +34,39 @@ final class PostgresSubscription extends TestCase\Database {
 
 
 	public function testEditingIntervalWithoutChangingLastUpdate() {
+		$id = 1;
 		(new Subscribing\PostgresSubscription(
-			1,
+			$id,
 			$this->database
 		))->edit(new Time\FakeInterval(null, null, 'PT10M'));
-		$statement = $this->database->prepare('SELECT * FROM subscriptions WHERE id = 1');
-		$statement->execute();
+		$statement = $this->database->prepare('SELECT * FROM subscriptions WHERE id = ?');
+		$statement->execute([$id]);
 		$subscription = $statement->fetch();
 		Assert::same('PT10M', $subscription['interval']);
 		Assert::same('2000-01-01 00:00:00', $subscription['last_update']);
 	}
 
 	public function testNotifying() {
+		$id = 1;
 		(new Subscribing\PostgresSubscription(
-			1,
+			$id,
 			$this->database
 		))->notify();
 		$statement = $this->database->prepare('SELECT * FROM notifications');
 		$statement->execute();
 		$notifications = $statement->fetchAll();
 		Assert::count(1, $notifications);
-		Assert::same(1, $notifications[0]['subscription_id']);
+		Assert::same($id, $notifications[0]['subscription_id']);
 	}
 
 	public function testNotifyingWithUpdatedSnapshot() {
+		$id = 1;
 		(new Subscribing\PostgresSubscription(
-			1,
+			$id,
 			$this->database
 		))->notify();
-		$statement = $this->database->prepare('SELECT * FROM subscriptions WHERE id = 1');
-		$statement->execute();
+		$statement = $this->database->prepare('SELECT * FROM subscriptions WHERE id = ?');
+		$statement->execute([$id]);
 		Assert::same('facedown snap', $statement->fetch()['snapshot']);
 	}
 

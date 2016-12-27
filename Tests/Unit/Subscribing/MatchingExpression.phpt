@@ -15,7 +15,7 @@ final class MatchingExpression extends Tester\TestCase {
 	/**
 	 * @throws \Remembrall\Exception\NotFoundException For the given expression there are no matches
 	 */
-	public function testNoMatch() {
+	public function testThrowingOnNoMatch() {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>Hi there!</p>');
 		(new Subscribing\MatchingExpression(
@@ -24,16 +24,15 @@ final class MatchingExpression extends Tester\TestCase {
 	}
 
 	public function testMatches() {
-		Assert::noError(
-			function() {
-				$dom = new \DOMDocument();
-				$dom->loadHTML('<p>Hi there!</p>');
-				$nodeList = (new \DOMXPath($dom))->query('//p');
-				(new Subscribing\MatchingExpression(
-					new Subscribing\FakeExpression('//p', $nodeList)
-				))->matches();
-			}
-		);
+		$dom = new \DOMDocument();
+		$dom->loadHTML('<p>Hi there!</p>');
+		Assert::noError(function() use($dom) {
+			$expression = '//p';
+			$nodeList = (new \DOMXPath($dom))->query($expression);
+			(new Subscribing\MatchingExpression(
+				new Subscribing\FakeExpression($expression, $nodeList)
+			))->matches();
+		});
 	}
 }
 

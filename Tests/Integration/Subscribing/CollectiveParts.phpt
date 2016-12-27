@@ -75,7 +75,7 @@ final class CollectiveParts extends TestCase\Database {
 		Assert::count(1, $statement->fetchAll());
 	}
 
-	public function testUpdatingAsDuplication() {
+	public function testUpdatingDuplication() {
 		$oldPart = new Subscribing\FakePart('Content', null, 'OLD_SNAP');
 		(new Subscribing\CollectiveParts(
 			$this->database
@@ -92,7 +92,7 @@ final class CollectiveParts extends TestCase\Database {
 		Assert::same('NEW_SNAP', $parts[0]['snapshot']);
 	}
 
-	public function testUpdatingAsDuplicationWithAllRecordedVisitation() {
+	public function testUpdatingDuplicationWithAllRecordedVisitation() {
 		$this->truncate(['part_visits']);
 		$part = new Subscribing\FakePart('<p>Content</p>', null, 'snap');
 		(new Subscribing\CollectiveParts(

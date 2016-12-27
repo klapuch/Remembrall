@@ -58,11 +58,13 @@ final class UniqueSubscribers extends TestCase\Database {
 		Assert::same(2, $users[1]['id']);
 	}
 
-	public function testRegisteringWithDuplicatedEmail() {
-		$this->database->exec(
+	public function testThrowingOnEmailDuplication() {
+		$email = 'foo@bar.cz';
+		$statement = $this->database->prepare(
 			"INSERT INTO users (email, password) VALUES
-			('foo@bar.cz', 'secret')"
+			(?, 'secret')"
 		);
+		$statement->execute([$email]);
 		$ex = Assert::exception(
 			function() {
 				(new Access\UniqueSubscribers(

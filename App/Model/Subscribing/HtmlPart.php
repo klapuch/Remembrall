@@ -22,8 +22,8 @@ final class HtmlPart implements Part {
 	public function content(): string {
 		return array_reduce(
 			iterator_to_array($this->expression->matches()),
-			function(string $parts, \DOMNode $part) {
-				$parts .= $this->withoutWhiteSpaces(
+			function(string $parts, \DOMNode $part): string {
+				$parts .= $this->unify(
 					$part->ownerDocument->saveHTML($part)
 				);
 				return $parts;
@@ -41,7 +41,7 @@ final class HtmlPart implements Part {
 	 * @param string $html
 	 * @return string
 	 */
-	private function withoutWhiteSpaces(string $html): string {
+	private function unify(string $html): string {
 		return preg_replace('~[\t\r\n]+~', '', $html);
 	}
 }

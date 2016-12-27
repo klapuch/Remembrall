@@ -6,7 +6,10 @@ use Klapuch\{
 	Storage, Uri
 };
 
-final class WebPages implements Pages {
+/**
+ * Unique pages
+ */
+final class UniquePages implements Pages {
 	private $database;
 
 	public function __construct(\PDO $database) {

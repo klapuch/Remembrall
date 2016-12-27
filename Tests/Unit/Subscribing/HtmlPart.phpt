@@ -24,27 +24,29 @@ final class HtmlPart extends Tester\TestCase {
 			</div>
 			'
 		);
+		$expression = '//p';
 		Assert::same(
 			'<p>Hi<span>John</span>How are <span>you</span></p><p><span>I am</span>thank<span>you</span></p><p class="blank">Blank</p><p>Invalid</p><p></p>',
 			(new Subscribing\HtmlPart(
 				new Subscribing\FakeExpression(
-					'//p',
-					(new \DOMXPath($dom))->query('//p')
+					$expression,
+					(new \DOMXPath($dom))->query($expression)
 				),
 				new Subscribing\FakePage()
 			))->content()
 		);
 	}
 
-	public function testEmptyPart() {
+	public function testAllowedEmptyPart() {
+		$expression = '//invalid';
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<div><p>Blank</p></div>');
 		Assert::same(
 			'',
 			(new Subscribing\HtmlPart(
 				new Subscribing\FakeExpression(
-					'//invalid',
-					(new \DOMXPath($dom))->query('//invalid')
+					$expression,
+					(new \DOMXPath($dom))->query($expression)
 				),
 				new Subscribing\FakePage()
 			))->content()
@@ -52,14 +54,15 @@ final class HtmlPart extends Tester\TestCase {
 	}
 
 	public function testSnapshotHash() {
+		$expression = '//p';
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<div><p>SNAPSHOT</p></div>');
 		Assert::same(
 			sha1('<p>SNAPSHOT</p>'),
 			(new Subscribing\HtmlPart(
 				new Subscribing\FakeExpression(
-					'//p',
-					(new \DOMXPath($dom))->query('//p')
+					$expression,
+					(new \DOMXPath($dom))->query($expression)
 				),
 				new Subscribing\FakePage()
 			))->snapshot()
@@ -67,6 +70,7 @@ final class HtmlPart extends Tester\TestCase {
 	}
 
 	public function testSnapshotLength() {
+		$expression = '//p';
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<div><p>Blank</p></div>');
 		Assert::same(
@@ -74,8 +78,8 @@ final class HtmlPart extends Tester\TestCase {
 			strlen(
 				(new Subscribing\HtmlPart(
 					new Subscribing\FakeExpression(
-						'//p',
-						(new \DOMXPath($dom))->query('//p')
+						$expression,
+						(new \DOMXPath($dom))->query($expression)
 					),
 					new Subscribing\FakePage()
 				))->snapshot()
@@ -84,16 +88,17 @@ final class HtmlPart extends Tester\TestCase {
 	}
 
 	public function testRefreshingWithPage() {
+		$expression = '//p';
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>XXX</p>');
 		$refreshedPart = new Subscribing\FakePage($dom);
 		Assert::equal(
 			new Subscribing\HtmlPart(
-				new Subscribing\FakeExpression('//p'),
+				new Subscribing\FakeExpression($expression),
 				$refreshedPart
 			),
 			(new Subscribing\HtmlPart(
-				new Subscribing\FakeExpression('//p'),
+				new Subscribing\FakeExpression($expression),
 				new Subscribing\FakePage(null, $refreshedPart)
 			))->refresh()
 		);

@@ -13,7 +13,7 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class ExistingPart extends TestCase\Database {
-	public function testUnknownPart() {
+	public function testThrowingOnUnknownPart() {
 		Assert::exception(
 			function() {
 				(new Subscribing\ExistingPart(

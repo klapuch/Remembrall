@@ -37,7 +37,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 		Assert::same('google snap', $subscriptions[0]['snapshot']);
 	}
 
-	public function testSubscribingDuplication() {
+	public function testThrowingOnDuplication() {
 		$subscriptions = new Subscribing\OwnedSubscriptions(
 			new Access\FakeSubscriber(666),
 			$this->database

@@ -35,10 +35,10 @@ final class CollectiveParts implements Parts {
 	public function iterate(): \Iterator {
 		$rows = (new Storage\ParameterizedQuery(
 			$this->database,
-			'SELECT page_url AS url, snapshot, content, id, expression FROM parts'
+			'SELECT id, page_url, snapshot, content, expression FROM parts'
 		))->rows();
 		foreach($rows as $row) {
-			$url = new Uri\ReachableUrl(new Uri\ValidUrl($row['url']));
+			$url = new Uri\ReachableUrl(new Uri\ValidUrl($row['page_url']));
 			$page = new FrugalPage(
 				$url,
 				new PostgresPage(

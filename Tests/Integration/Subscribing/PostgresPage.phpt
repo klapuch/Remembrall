@@ -24,7 +24,8 @@ final class PostgresPage extends TestCase\Database {
 		);
 	}
 
-	public function testRefreshingWithNewContent() {
+	public function testRefreshingToNewContent() {
+		$url = 'www.facedown.cz';
 		$content = new \DOMDocument();
 		$content->loadHTML('NEW_CONTENT');
 		(new Subscribing\PostgresPage(
@@ -32,11 +33,11 @@ final class PostgresPage extends TestCase\Database {
 				new \DOMDocument(),
 				new Subscribing\FakePage($content)
 			),
-			new Uri\FakeUri('www.facedown.cz'),
+			new Uri\FakeUri($url),
 			$this->database
 		))->refresh();
-		$statement = $this->database->prepare("SELECT * FROM pages WHERE url = 'www.facedown.cz'");
-		$statement->execute();
+		$statement = $this->database->prepare('SELECT * FROM pages WHERE url = ?');
+		$statement->execute([$url]);
 		Assert::contains('NEW_CONTENT', $statement->fetch()['content']);
 	}
 
@@ -71,11 +72,7 @@ final class PostgresPage extends TestCase\Database {
 			new Uri\FakeUri('www.facedown.cz'),
 			$this->database
 		))->refresh();
-		$statement = $this->database->prepare(
-			"SELECT *
-			FROM page_visits
-			WHERE visited_at >= NOW() - INTERVAL '1 MINUTE'"
-		);
+		$statement = $this->database->prepare('SELECT * FROM page_visits');
 		$statement->execute();
 		Assert::count(1, $statement->fetchAll());
 	}

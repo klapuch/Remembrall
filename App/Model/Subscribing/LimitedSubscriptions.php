@@ -8,7 +8,7 @@ use Klapuch\{
 use Remembrall\Model\Access;
 
 /**
- * Disallow subscribing after more than X subscriptions
+ * Disallowing subscribing after more than X subscriptions
  */
 final class LimitedSubscriptions implements Subscriptions {
 	private const LIMIT = 5;

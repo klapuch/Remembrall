@@ -13,22 +13,24 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class XPathExpression extends Tester\TestCase {
 	public function testValidExpression() {
+		$expression = '//p';
 		Assert::same(
 			(string)new Subscribing\XPathExpression(
 				new Subscribing\FakePage,
-				'//p'
+				$expression
 			),
-			'//p'
+			$expression
 		);
 	}
 
-	public function testInvalidExpression() {
+	public function testAllowingInvalidExpression() {
+		$expression = '123';
 		Assert::same(
 			(string)new Subscribing\XPathExpression(
 				new Subscribing\FakePage,
-				'123'
+				$expression
 			),
-			'123'
+			$expression
 		);
 	}
 
@@ -43,7 +45,7 @@ final class XPathExpression extends Tester\TestCase {
 		Assert::same($match->item(0)->nodeName, 'p');
 	}
 
-	public function testMatches() {
+	public function testMultipleMatches() {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>Hi</p><p>there</p>');
 		$page = new Subscribing\FakePage($dom);
