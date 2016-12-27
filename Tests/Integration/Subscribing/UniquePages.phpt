@@ -19,7 +19,7 @@ final class UniquePages extends TestCase\Database {
 		$dom->loadHTML('content');
 		$page = new Subscribing\FakePage($dom);
 		Assert::equal(
-			new Subscribing\PostgresPage($page, $url, $this->database),
+			new Subscribing\StoredPage($page, $url, $this->database),
 			(new Subscribing\UniquePages(
 				$this->database
 			))->add($url, $page)
@@ -76,7 +76,7 @@ final class UniquePages extends TestCase\Database {
 			$this->database
 		))->add($url, $page);
 		Assert::equal(
-			new Subscribing\PostgresPage($page, $url, $this->database),
+			new Subscribing\StoredPage($page, $url, $this->database),
 			$addedPage
 		);
 		$statement = $this->database->prepare('SELECT * FROM pages');

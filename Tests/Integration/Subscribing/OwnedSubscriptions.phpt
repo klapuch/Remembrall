@@ -127,13 +127,13 @@ final class OwnedSubscriptions extends TestCase\Database {
 		))->iterate();
 		$subscription = $subscriptions->current();
 		Assert::equal(
-			new Subscribing\PostgresSubscription(3, $this->database),
+			new Subscribing\StoredSubscription(3, $this->database),
 			$subscription
 		);
 		$subscriptions->next();
 		$subscription = $subscriptions->current();
 		Assert::equal(
-			new Subscribing\PostgresSubscription(4, $this->database),
+			new Subscribing\StoredSubscription(4, $this->database),
 			$subscription
 		);
 		$subscriptions->next();

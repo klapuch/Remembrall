@@ -7,9 +7,9 @@ use Klapuch\{
 };
 
 /**
- * Page stored in the Postgres database
+ * Page stored in the database
  */
-final class PostgresPage implements Page {
+final class StoredPage implements Page {
 	private $origin;
 	private $url;
 	private $database;

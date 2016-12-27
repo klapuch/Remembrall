@@ -28,6 +28,6 @@ final class UniquePages implements Pages {
 				'content' => $page->content()->saveHTML(),
 			]
 		))->execute();
-		return new PostgresPage($page, $url, $this->database);
+		return new StoredPage($page, $url, $this->database);
 	}
 }

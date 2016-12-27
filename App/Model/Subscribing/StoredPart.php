@@ -5,9 +5,9 @@ namespace Remembrall\Model\Subscribing;
 use Klapuch\Storage;
 
 /**
- * Part stored in the Postgres database
+ * Part stored in the database
  */
-final class PostgresPart implements Part {
+final class StoredPart implements Part {
 	private $origin;
 	private $id;
 	private $database;

@@ -66,7 +66,7 @@ final class OwnedSubscriptions implements Subscriptions {
 			[$this->owner->id()]
 		))->rows();
 		foreach($subscriptions as ['id' => $id])
-			yield new PostgresSubscription($id, $this->database);
+			yield new StoredSubscription($id, $this->database);
 	}
 
 	public function print(Output\Format $format): array {

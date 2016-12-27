@@ -34,7 +34,7 @@ final class SubscriptionsPage extends BasePage {
 			$this->protect();
 			['id' => $id] = $parameters;
 			(new Subscribing\OwnedSubscription(
-				new Subscribing\PostgresSubscription((int)$id, $this->database),
+				new Subscribing\StoredSubscription((int)$id, $this->database),
 				(int)$id,
 				$this->subscriber,
 				$this->database

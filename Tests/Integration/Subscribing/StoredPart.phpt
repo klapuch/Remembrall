@@ -11,11 +11,11 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class PostgresPart extends TestCase\Database {
+final class StoredPart extends TestCase\Database {
 	public function testContent() {
 		Assert::same(
 			'facedown content',
-			(new Subscribing\PostgresPart(
+			(new Subscribing\StoredPart(
 				new Subscribing\FakePart(),
 				1,
 				$this->database
@@ -26,7 +26,7 @@ final class PostgresPart extends TestCase\Database {
 	public function testSnapshot() {
 		Assert::same(
 			'face snap',
-			(new Subscribing\PostgresPart(
+			(new Subscribing\StoredPart(
 				new Subscribing\FakePart(),
 				1,
 				$this->database
@@ -36,7 +36,7 @@ final class PostgresPart extends TestCase\Database {
 
 	public function testRefreshingToNewContent() {
 		$id = 1;
-		(new Subscribing\PostgresPart(
+		(new Subscribing\StoredPart(
 			new Subscribing\FakePart('NEW_CONTENT', null, 'NEW_SNAP'),
 			$id,
 			$this->database
@@ -51,7 +51,7 @@ final class PostgresPart extends TestCase\Database {
 	public function testRefreshingWithRecordedVisitation() {
 		$id = 1;
 		$this->purge(['part_visits']);
-		(new Subscribing\PostgresPart(
+		(new Subscribing\StoredPart(
 			new Subscribing\FakePart('NEW_CONTENT', null, 'NEW_SNAP'),
 			$id,
 			$this->database
@@ -63,7 +63,7 @@ final class PostgresPart extends TestCase\Database {
 
 	public function testRefreshingWithoutAffectingOthers() {
 		$id = 1;
-		(new Subscribing\PostgresPart(
+		(new Subscribing\StoredPart(
 			new Subscribing\FakePart('NEW_CONTENT', null, 'NEW_SNAP'),
 			$id,
 			$this->database
@@ -90,4 +90,4 @@ final class PostgresPart extends TestCase\Database {
 	}
 }
 
-(new PostgresPart)->run();
+(new StoredPart)->run();

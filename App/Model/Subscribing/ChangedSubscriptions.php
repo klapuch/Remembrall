@@ -49,7 +49,7 @@ final class ChangedSubscriptions implements Subscriptions {
 		))->rows();
 		foreach($subscriptions as $subscription) {
 			yield new EmailSubscription(
-				new PostgresSubscription($subscription['id'], $this->database),
+				new StoredSubscription($subscription['id'], $this->database),
 				$this->mailer,
 				$this->message
 					->addTo($subscription['email'])

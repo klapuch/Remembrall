@@ -12,9 +12,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class PostgresSubscription extends TestCase\Database {
+final class StoredSubscription extends TestCase\Database {
 	public function testCancelingWithoutAffectingOthers() {
-		(new Subscribing\PostgresSubscription(1, $this->database))->cancel();
+		(new Subscribing\StoredSubscription(1, $this->database))->cancel();
 		$statement = $this->database->prepare('SELECT * FROM subscriptions');
 		$statement->execute();
 		$subscriptions = $statement->fetchAll();
@@ -26,7 +26,7 @@ final class PostgresSubscription extends TestCase\Database {
 		$statement = $this->database->prepare('SELECT * FROM subscriptions');
 		$statement->execute();
 		$before = $statement->fetchAll();
-		(new Subscribing\PostgresSubscription(666, $this->database))->cancel();
+		(new Subscribing\StoredSubscription(666, $this->database))->cancel();
 		$statement->execute();
 		$after = $statement->fetchAll();
 		Assert::same($before, $after);
@@ -35,7 +35,7 @@ final class PostgresSubscription extends TestCase\Database {
 
 	public function testEditingIntervalWithoutChangingLastUpdate() {
 		$id = 1;
-		(new Subscribing\PostgresSubscription(
+		(new Subscribing\StoredSubscription(
 			$id,
 			$this->database
 		))->edit(new Time\FakeInterval(null, null, 'PT10M'));
@@ -48,7 +48,7 @@ final class PostgresSubscription extends TestCase\Database {
 
 	public function testNotifying() {
 		$id = 1;
-		(new Subscribing\PostgresSubscription(
+		(new Subscribing\StoredSubscription(
 			$id,
 			$this->database
 		))->notify();
@@ -61,7 +61,7 @@ final class PostgresSubscription extends TestCase\Database {
 
 	public function testNotifyingWithUpdatedSnapshot() {
 		$id = 1;
-		(new Subscribing\PostgresSubscription(
+		(new Subscribing\StoredSubscription(
 			$id,
 			$this->database
 		))->notify();
@@ -85,4 +85,4 @@ final class PostgresSubscription extends TestCase\Database {
 	}
 }
 
-(new PostgresSubscription)->run();
+(new StoredSubscription)->run();

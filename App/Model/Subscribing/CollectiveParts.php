@@ -41,7 +41,7 @@ final class CollectiveParts implements Parts {
 			$url = new Uri\ReachableUrl(new Uri\ValidUrl($row['page_url']));
 			$page = new FrugalPage(
 				$url,
-				new PostgresPage(
+				new StoredPage(
 					new HtmlWebPage(new Http\BasicRequest('GET', $url)),
 					$url,
 					$this->database
@@ -49,7 +49,7 @@ final class CollectiveParts implements Parts {
 				$this->database
 			);
 			yield new ConstantPart(
-				new PostgresPart(
+				new StoredPart(
 					new HtmlPart(
 						new MatchingExpression(
 							new XPathExpression($page, $row['expression'])

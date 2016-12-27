@@ -47,7 +47,7 @@ final class UnreliableParts implements Parts {
 			$page = new CachedPage(
 				new FrugalPage(
 					$url,
-					new PostgresPage(
+					new StoredPage(
 						new HtmlWebPage(new Http\BasicRequest('GET', $url)),
 						$url,
 						$this->database
@@ -57,7 +57,7 @@ final class UnreliableParts implements Parts {
 				new Storages\MemoryStorage()
 			);
 			yield new ConstantPart(
-				new PostgresPart(
+				new StoredPart(
 					new HtmlPart(
 						new MatchingExpression(
 							new XPathExpression($page, $part['expression'])

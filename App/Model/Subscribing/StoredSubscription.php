@@ -7,9 +7,9 @@ use Klapuch\{
 };
 
 /**
- * Subscription stored in the Postgres database
+ * Subscription stored in the database
  */
-final class PostgresSubscription implements Subscription {
+final class StoredSubscription implements Subscription {
 	private $id;
 	private $database;
 

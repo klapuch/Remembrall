@@ -12,11 +12,11 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class PostgresPage extends TestCase\Database {
+final class StoredPage extends TestCase\Database {
 	public function testHtmlContent() {
 		Assert::contains(
 			'facedown content',
-			(new Subscribing\PostgresPage(
+			(new Subscribing\StoredPage(
 				new Subscribing\FakePage(),
 				new Uri\FakeUri('www.facedown.cz'),
 				$this->database
@@ -28,7 +28,7 @@ final class PostgresPage extends TestCase\Database {
 		$url = 'www.facedown.cz';
 		$content = new \DOMDocument();
 		$content->loadHTML('NEW_CONTENT');
-		(new Subscribing\PostgresPage(
+		(new Subscribing\StoredPage(
 			new Subscribing\FakePage(
 				new \DOMDocument(),
 				new Subscribing\FakePage($content)
@@ -44,7 +44,7 @@ final class PostgresPage extends TestCase\Database {
 	public function testRefreshingWithoutAffectingOthers() {
 		$content = new \DOMDocument();
 		$content->loadHTML('NEW_CONTENT');
-		(new Subscribing\PostgresPage(
+		(new Subscribing\StoredPage(
 			new Subscribing\FakePage(
 				new \DOMDocument(),
 				new Subscribing\FakePage($content)
@@ -64,7 +64,7 @@ final class PostgresPage extends TestCase\Database {
 		$this->truncate(['page_visits']);
 		$content = new \DOMDocument();
 		$content->loadHTML('NEW_CONTENT');
-		(new Subscribing\PostgresPage(
+		(new Subscribing\StoredPage(
 			new Subscribing\FakePage(
 				new \DOMDocument(),
 				new Subscribing\FakePage($content)
@@ -87,4 +87,4 @@ final class PostgresPage extends TestCase\Database {
 	}
 }
 
-(new PostgresPage)->run();
+(new StoredPage)->run();
