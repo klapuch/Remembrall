@@ -69,19 +69,20 @@ final class SubscribingForm extends Control {
 							'name' => 'interval',
 							'class' => 'form-control',
 							'min' => '30',
+							'max' => '9000',
 							'required' => 'required',
 						],
 						$this->storage,
 						new Validation\ChainedRule(
 							new Validation\FriendlyRule(
-								new Validation\RangeRule(30, 9000),
-								'Interval must be greater than 30'
-							),
-							new Validation\FriendlyRule(
 								new Validation\NegateRule(
 									new Validation\EmptyRule()
 								),
 								'Interval must be filled'
+							),
+							new Validation\FriendlyRule(
+								new Validation\RangeRule(30, 9000),
+								'Interval must be greater than 30'
 							)
 						)
 					),

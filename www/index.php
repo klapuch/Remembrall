@@ -32,11 +32,8 @@ try {
 	$url = new Uri\BaseUrl($_SERVER['SCRIPT_NAME'], $_SERVER['REQUEST_URI']);
 	$path = explode('/', $url->path());
 	$page = isset($path[0]) && $path[0] ? ucfirst($path[0]) : 'Default';
-	$action = isset($path[1]) && $path[1] ? ucfirst($path[1]) : 'Default';
+	$resource = isset($path[1]) && $path[1] ? ucfirst($path[1]) : 'Default';
 	$class = 'Remembrall\\Page\\' . $page . 'Page';
-	$method = $_SERVER['REQUEST_METHOD'] === 'POST'
-		? 'action' . $action
-		: 'render' . $action;
 	/** @var \Remembrall\Page\BasePage $target */
 	$target = new $class(
 		$url,
@@ -48,8 +45,17 @@ try {
 		$logs,
 		new Encryption\AES256CBC($configuration['KEYS']['password'])
 	);
+	[$action, $render, $submit] = [
+		'action' . $resource,
+		'render' . $resource,
+		'submit' . $resource,
+	];
 	$target->startup();
-	$target->$method($_SERVER['REQUEST_METHOD'] === 'GET' ? $_GET : $_POST);
+	if(method_exists($target, $action))
+		$target->$action($_SERVER['REQUEST_METHOD'] === 'GET' ? $_GET : $_POST);
+	if($_SERVER['REQUEST_METHOD'] === 'POST' && method_exists($target, $submit))
+		$target->$submit($_POST);
+	echo $target->render($page, lcfirst($resource), $_GET);
 } catch(Throwable $ex) {
 	$logs->put(
 		new Log\PrettyLog(

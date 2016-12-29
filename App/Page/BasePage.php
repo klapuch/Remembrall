@@ -3,12 +3,12 @@ declare(strict_types = 1);
 namespace Remembrall\Page;
 
 use Klapuch\{
-	Uri, Encryption, FlashMessage, Csrf, Form, Log
+	Uri, Encryption, FlashMessage, Csrf, Form, Log, Output
 };
 use Remembrall\Model\Access;
 
 abstract class BasePage {
-	protected const TEMPLATES = __DIR__ . '/templates';
+	private const TEMPLATES = __DIR__ . '/templates';
 	/** @var \Klapuch\Uri\Uri */
 	protected $url;
 	/** @var \Remembrall\Model\Access\Subscriber */
@@ -38,7 +38,7 @@ abstract class BasePage {
 		$this->storage = new Form\Storage($_SESSION, $_POST);
 	}
 
-	public function startup() {
+	public function startup(): void {
 		$this->subscriber = new Access\FakeSubscriber(0, 'NoOne');
 		if(isset($_SESSION['id'])) {
 			$this->subscriber = new Access\RegisteredSubscriber(
@@ -46,6 +46,31 @@ abstract class BasePage {
 				$this->database
 			);
 		}
+	}
+
+	/**
+	 * Render the template
+	 * @param string $page
+	 * @param string $action
+	 * @param array $parameters
+	 * @return string
+	 */
+	final public function render(
+		string $page,
+		string $action,
+		array $parameters
+	): string {
+		$method = 'render' . $action;
+		$xml = new \DOMDocument();
+		$xml->load(self::TEMPLATES . sprintf('/%s/%s.xml', $page, $action));
+		return (new Output\XsltTemplate(
+			self::TEMPLATES . sprintf('/%s/%s.xsl', $page, $action),
+			new Output\MergedXml(
+				$xml,
+				$this->$method($parameters),
+				...$this->layout()
+			)
+		))->render();
 	}
 
 	/**

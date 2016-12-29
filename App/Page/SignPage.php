@@ -8,29 +8,20 @@ use Klapuch\{
 use Remembrall\Control;
 
 final class SignPage extends BasePage {
-	public function renderIn() {
-		$xml = new \DOMDocument();
-		$xml->load(self::TEMPLATES . '/Sign/in.xml');
-		echo (new Output\XsltTemplate(
-			self::TEMPLATES . '/Sign/in.xsl',
-			new Output\MergedXml(
-				$xml,
-				new \SimpleXMLElement(
-					sprintf(
-						'<forms><in>%s</in></forms>',
-						(new Control\SignInForm(
-							$this->url,
-							$this->csrf,
-							$this->storage
-						))->render()
-					)
-				),
-				...$this->layout()
+	public function renderIn(): \SimpleXMLElement {
+		return new \SimpleXMLElement(
+			sprintf(
+				'<forms><in>%s</in></forms>',
+				(new Control\SignInForm(
+					$this->url,
+					$this->csrf,
+					$this->storage
+				))->render()
 			)
-		))->render();
+		);
 	}
 
-	public function actionIn(array $credentials) {
+	public function submitIn(array $credentials): void {
 		try {
 			(new Control\SignInForm(
 				$this->url,
@@ -50,7 +41,7 @@ final class SignPage extends BasePage {
 		}
 	}
 
-	public function renderOut() {
+	public function actionOut(): void {
 		try {
 			if(!isset($_SESSION['id']))
 				throw new \Exception('You are not logged in');

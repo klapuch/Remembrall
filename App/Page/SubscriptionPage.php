@@ -10,29 +10,20 @@ use Remembrall\Control;
 use Remembrall\Model\Subscribing;
 
 final class SubscriptionPage extends BasePage {
-	public function renderDefault() {
-		$xml = new \DOMDocument();
-		$xml->load(self::TEMPLATES . '/Subscription/default.xml');
-		echo (new Output\XsltTemplate(
-			self::TEMPLATES . '/Subscription/default.xsl',
-			new Output\MergedXml(
-				$xml,
-				new \SimpleXMLElement(
-					sprintf(
-						'<forms><subscribing>%s</subscribing></forms>',
-						(new Control\SubscribingForm(
-							$this->url,
-							$this->csrf,
-							$this->storage
-						))->render()
-					)
-				),
-				...$this->layout()
+	public function renderDefault(): \SimpleXMLElement {
+		return new \SimpleXMLElement(
+			sprintf(
+				'<forms><subscribing>%s</subscribing></forms>',
+				(new Control\SubscribingForm(
+					$this->url,
+					$this->csrf,
+					$this->storage
+				))->render()
 			)
-		))->render();
+		);
 	}
 
-	public function actionSubscribe(array $subscription) {
+	public function submitSubscribe(array $subscription): void {
 		try {
 			(new Control\SubscribingForm(
 				$this->url,
