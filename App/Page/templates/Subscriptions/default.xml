@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<template>
-    <default>
-        <title>Subscriptions</title>
-        <description>All the subscriptions owned by you</description>
-        <confirmations>
-            <confirmation>
-                <message>Are you sure you want to cancel the subscription?
-                </message>
-                <title>Cancel</title>
-                <href>subscriptions/delete</href>
-                <glyphicon>remove</glyphicon>
-            </confirmation>
-        </confirmations>
-        <tables>
-            <subscription>
-                <headings>
-                    <heading>#</heading>
-                    <heading>Last update</heading>
-                    <heading>Interval</heading>
-                    <heading>Expression</heading>
-                    <heading>URL</heading>
-                    <heading>Options</heading>
-                </headings>
-            </subscription>
-        </tables>
-    </default>
-</template>
+<body>
+	<head>
+		<title>Subscriptions</title>
+		<description>All the subscriptions owned by you</description>
+	</head>
+	<confirmations>
+		<confirmation>
+			<message>Are you sure you want to cancel the subscription?</message>
+			<title>Cancel</title>
+			<href>subscriptions/delete</href>
+			<glyphicon>remove</glyphicon>
+		</confirmation>
+	</confirmations>
+	<tables>
+		<subscription>
+			<headings>
+				<heading>#</heading>
+				<heading>Last update</heading>
+				<heading>Interval</heading>
+				<heading>Expression</heading>
+				<heading>URL</heading>
+				<heading>Options</heading>
+			</headings>
+		</subscription>
+	</tables>
+</body>

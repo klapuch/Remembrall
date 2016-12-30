@@ -3,10 +3,10 @@
 
     <xsl:import href="../@layout.xsl"/>
 
-    <xsl:param name="title" select="template/default/title"/>
-    <xsl:param name="description" select="template/default/description"/>
+    <xsl:param name="title" select="body/head/title"/>
+    <xsl:param name="description" select="body/head/description"/>
 
-    <xsl:template match="template">
+    <xsl:template match="body">
         <xsl:apply-templates select="subscriptions"/>
     </xsl:template>
 
