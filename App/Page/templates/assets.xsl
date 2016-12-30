@@ -13,45 +13,49 @@
         <xsl:apply-templates select="$assets/styles/style"/>
     </xsl:template>
 
+	<xsl:template name="scripts">
+		<xsl:apply-templates select="$assets/scripts/script"/>
+	</xsl:template>
+
     <xsl:template match="style">
         <xsl:element name="link">
             <xsl:attribute name="rel">stylesheet</xsl:attribute>
             <xsl:attribute name="href">
-                <xsl:value-of select="normalize-space(href)"/>
+				<xsl:apply-templates select="href"/>
             </xsl:attribute>
             <xsl:if test="integrity">
                 <xsl:attribute name="integrity">
-                    <xsl:value-of select="normalize-space(integrity)"/>
+					<xsl:apply-templates select="integrity"/>
                 </xsl:attribute>
             </xsl:if>
             <xsl:if test="crossorigin">
-                <xsl:attribute name="crossorigin">
-                    <xsl:value-of select="crossorigin"/>
+				<xsl:attribute name="crossorigin">
+					<xsl:apply-templates select="crossorigin"/>
                 </xsl:attribute>
             </xsl:if>
         </xsl:element>
-    </xsl:template>
-
-    <xsl:template name="scripts">
-        <xsl:apply-templates select="$assets/scripts/script"/>
     </xsl:template>
 
     <xsl:template match="script">
         <xsl:element name="script">
             <xsl:attribute name="src">
-                <xsl:value-of select="normalize-space(src)"/>
+				<xsl:apply-templates select="src"/>
             </xsl:attribute>
             <xsl:if test="integrity">
-                <xsl:attribute name="integrity">
-                    <xsl:value-of select="normalize-space(integrity)"/>
+				<xsl:attribute name="integrity">
+					<xsl:apply-templates select="integrity"/>
                 </xsl:attribute>
             </xsl:if>
             <xsl:if test="crossorigin">
                 <xsl:attribute name="crossorigin">
-                    <xsl:value-of select="crossorigin"/>
+					<xsl:apply-templates select="crossorigin"/>
                 </xsl:attribute>
             </xsl:if>
         </xsl:element>
-    </xsl:template>
+	</xsl:template>
+
+	<xsl:template match="text()">
+		<xsl:value-of select="normalize-space(.)"/>
+	</xsl:template>
 
 </xsl:stylesheet>
