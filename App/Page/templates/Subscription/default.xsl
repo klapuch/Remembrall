@@ -3,9 +3,6 @@
 
     <xsl:import href="../@layout.xsl"/>
 
-    <xsl:param name="title" select="body/head/title"/>
-    <xsl:param name="description" select="body/head/description"/>
-
     <xsl:template match="body">
         <xsl:apply-templates select="forms"/>
     </xsl:template>

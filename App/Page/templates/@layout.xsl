@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+
     <xsl:import href="head.xsl"/>
 
     <xsl:output method="html" encoding="utf-8"/>
 
     <xsl:template name="additionalStyles"/>
-    <xsl:template name="additionalScripts"/>
+	<xsl:template name="additionalScripts"/>
+
+	<xsl:param name="title" select="body/head/title"/>
+	<xsl:param name="description" select="body/head/description"/>
 
     <xsl:template match="/">
         <html lang="cs-cz">
@@ -45,7 +49,7 @@
                         </div>
                     </nav>
                     <div class="container">
-                        <xsl:apply-templates select="//flashMessage"/>
+						<xsl:apply-templates select="//flashMessages/flashMessage"/>
                         <xsl:apply-templates/>
                     </div>
                 </div>
