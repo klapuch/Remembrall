@@ -45,7 +45,7 @@
 		<xsl:param name="id"/>
 		<a
 			role="button"
-			href="{concat(//baseUrl, concat(concat(concat(href, concat('?id=', $id)), '&amp;'), /body/csrf/link))}"
+			href="{concat(/body/baseUrl, concat(concat(concat(href, concat('?id=', $id)), '&amp;'), /body/csrf/link))}"
 			onclick="return confirm('{normalize-space(message)}')"
 			title="{title}" type="button" class="btn btn-danger btn-sm">
 			<span class="glyphicon glyphicon-{glyphicon}" aria-hidden="true"/>
