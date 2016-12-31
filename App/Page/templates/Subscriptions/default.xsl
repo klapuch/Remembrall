@@ -20,7 +20,7 @@
 
 	<xsl:template match="subscription">
 		<tr>
-			<td><xsl:number value="position()" format="1. "/></td>
+			<td><xsl:number format="1. "/></td>
 			<td><xsl:value-of select="lastUpdate"/></td>
 			<td><xsl:value-of select="interval"/></td>
 			<td><xsl:value-of select="expression"/></td>
