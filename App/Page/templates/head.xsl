@@ -5,6 +5,10 @@
 
 	<xsl:template name="meta">
 		<xsl:param name="description"/>
+		<xsl:param name="title"/>
+		<xsl:if test="$title != ''">
+			<title><xsl:value-of select="normalize-space($title)"/></title>
+		</xsl:if>
 		<xsl:if test="$description != ''">
 			<meta name="description" content="{substring($description, 1, 150)}"/>
 		</xsl:if>
