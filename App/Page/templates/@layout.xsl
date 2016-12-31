@@ -5,13 +5,12 @@
 
     <xsl:output method="html" encoding="utf-8"/>
 
-    <xsl:template name="additionalStyles"/>
 	<xsl:template name="additionalScripts"/>
 
     <xsl:template match="/">
         <html lang="cs-cz">
             <head>
-				<xsl:call-template name="meta">
+				<xsl:call-template name="head">
 					<xsl:with-param name="description">
 						<xsl:value-of select="body/head/description"/>
 					</xsl:with-param>
@@ -19,8 +18,6 @@
 						<xsl:value-of select="body/head/title"/>
 					</xsl:with-param>
 				</xsl:call-template>
-                <xsl:call-template name="styles"/>
-                <xsl:call-template name="additionalStyles"/>
             </head>
             <body>
                 <div id="wrap">

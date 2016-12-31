@@ -6,9 +6,9 @@
 	<!-- To be overridden !-->
     <xsl:template name="additionalStyles"/>
 
-	<xsl:template name="meta">
-		<xsl:param name="description"/>
+	<xsl:template name="head">
 		<xsl:param name="title"/>
+		<xsl:param name="description"/>
 		<title>
 			<xsl:choose>
 				<xsl:when test="normalize-space($title) = ''">
@@ -19,6 +19,15 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</title>
+		<xsl:call-template name="meta" mode="head">
+			<xsl:with-param name="description" select="$description"/>
+		</xsl:call-template>
+		<xsl:call-template name="styles"/>
+		<xsl:call-template name="additionalStyles"/>
+	</xsl:template>
+
+	<xsl:template name="meta" mode="head">
+		<xsl:param name="description"/>
 		<xsl:if test="$description != ''">
 			<meta
 				name="description"
@@ -27,8 +36,6 @@
 		</xsl:if>
 		<meta name="robots" content="index, follow"/>
 		<meta name="author" content="Dominik Klapuch"/>
-		<xsl:call-template name="styles"/>
-		<xsl:call-template name="additionalStyles"/>
 	</xsl:template>
 
 </xsl:stylesheet>
