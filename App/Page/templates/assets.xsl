@@ -3,12 +3,6 @@
 
     <xsl:param name="assets" select="document('assets.xml')/assets"/>
 
-    <xsl:template name="meta">
-        <meta name="description" content="{substring($description, 1, 150)}"/>
-        <meta name="robots" content="index, follow"/>
-        <meta name="author" content="Dominik Klapuch"/>
-    </xsl:template>
-
     <xsl:template name="styles">
         <xsl:apply-templates select="$assets/styles/style"/>
     </xsl:template>
