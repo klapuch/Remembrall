@@ -20,7 +20,10 @@
 			</xsl:choose>
 		</title>
 		<xsl:if test="$description != ''">
-			<meta name="description" content="{substring($description, 1, 150)}"/>
+			<meta
+				name="description"
+				content="{substring(normalize-space($description), 1, 150)}"
+			/>
 		</xsl:if>
 		<meta name="robots" content="index, follow"/>
 		<meta name="author" content="Dominik Klapuch"/>
