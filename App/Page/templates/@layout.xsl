@@ -9,13 +9,16 @@
 	<xsl:template name="additionalScripts"/>
 
 	<xsl:param name="title" select="body/head/title"/>
-	<xsl:param name="description" select="body/head/description"/>
 
     <xsl:template match="/">
         <html lang="cs-cz">
             <head>
                 <title><xsl:value-of select="normalize-space($title)"/></title>
-                <xsl:call-template name="meta"/>
+				<xsl:call-template name="meta">
+					<xsl:with-param name="description">
+						<xsl:value-of select="body/head/description"/>
+					</xsl:with-param>
+				</xsl:call-template>
                 <xsl:call-template name="styles"/>
                 <xsl:call-template name="additionalStyles"/>
             </head>
