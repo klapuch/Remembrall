@@ -41,7 +41,7 @@ final class ChangedSubscriptions extends TestCase\Database {
 		);
 		Assert::contains(
 			'some changes on www.matched.com website with //matched expression',
-			preg_replace('~\s+~', ' ', $output)
+			$output
 		);
 		$subscriptions->next();
 		Assert::null($subscriptions->current());

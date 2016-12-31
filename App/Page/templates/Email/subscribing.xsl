@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<html xmlns:xsl="http://www.w3.org/1999/XSL/Transform" lang="cs-cz"
-      xsl:version='1.0'>
+<html xmlns:xsl="http://www.w3.org/1999/XSL/Transform" lang="cs-cz" xsl:version='1.0'>
     <body>
 
         <xsl:element name="p">
-            Hi, there are some changes on
+			<xsl:text>Hi, there are some changes on </xsl:text>
             <xsl:value-of select="/part/url"/>
-            website with
-            <xsl:value-of select="/part/expression"/> expression
+			<xsl:text> website with </xsl:text>
+			<xsl:value-of select="/part/expression"/>
+			<xsl:text> expression</xsl:text>
         </xsl:element>
 
-        <xsl:element name="p">
-            Check it out bellow this text
-        </xsl:element>
-
-        <xsl:element name="p">
-            <xsl:value-of select="/part/content"/>
-        </xsl:element>
+		<p>Check it out bellow this text</p>
+		<br/>
+		<p><xsl:value-of select="/part/content"/></p>
 
     </body>
 </html>
