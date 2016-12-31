@@ -3,6 +3,9 @@
 
 	<xsl:import href="assets.xsl"/>
 
+	<!-- To be overridden !-->
+    <xsl:template name="additionalStyles"/>
+
 	<xsl:template name="meta">
 		<xsl:param name="description"/>
 		<xsl:param name="title"/>
@@ -21,6 +24,8 @@
 		</xsl:if>
 		<meta name="robots" content="index, follow"/>
 		<meta name="author" content="Dominik Klapuch"/>
+		<xsl:call-template name="styles"/>
+		<xsl:call-template name="additionalStyles"/>
 	</xsl:template>
 
 </xsl:stylesheet>
