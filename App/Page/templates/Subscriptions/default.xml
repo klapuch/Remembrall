@@ -5,15 +5,15 @@
 		<description>All the subscriptions owned by you</description>
 	</head>
 	<confirmations>
-		<confirmation>
+		<cancel>
 			<message>Are you sure you want to cancel the subscription?</message>
 			<title>Cancel</title>
 			<href>subscriptions/delete</href>
 			<glyphicon>remove</glyphicon>
-		</confirmation>
+		</cancel>
 	</confirmations>
 	<tables>
-		<subscription>
+		<overview>
 			<headings>
 				<heading>#</heading>
 				<heading>Last update</heading>
@@ -22,6 +22,6 @@
 				<heading>URL</heading>
 				<heading>Options</heading>
 			</headings>
-		</subscription>
+		</overview>
 	</tables>
 </body>
