@@ -9,6 +9,7 @@
 	<xsl:template name="additionalScripts"/>
 
 	<xsl:template match="/">
+		<xsl:text disable-output-escaping="yes">&lt;!DOCTYPE html&gt;</xsl:text>
 		<html lang="cs-cz">
 			<head>
 				<xsl:call-template name="head">
