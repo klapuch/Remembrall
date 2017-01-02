@@ -38,14 +38,14 @@ final class CollectiveParts implements Parts {
 			'SELECT id, page_url, snapshot, content, expression FROM parts'
 		))->rows();
 		foreach($parts as $part) {
-			$url = new Uri\ReachableUrl(new Uri\ValidUrl($part['page_url']));
-			$page = new FrugalPage(
-				$url,
-				new StoredPage(
-					new HtmlWebPage(new Http\BasicRequest('GET', $url)),
-					$url,
-					$this->database
+			$page = new StoredPage(
+				new HtmlWebPage(
+					new Http\BasicRequest(
+						'GET',
+						new Uri\ReachableUrl(new Uri\ValidUrl($part['page_url']))
+					)
 				),
+				new Uri\ValidUrl($part['page_url']),
 				$this->database
 			);
 			yield new ConstantPart(
