@@ -33,12 +33,12 @@ final class CollectiveParts implements Parts {
 	}
 
 	public function iterate(): \Iterator {
-		$rows = (new Storage\ParameterizedQuery(
+		$parts = (new Storage\ParameterizedQuery(
 			$this->database,
 			'SELECT id, page_url, snapshot, content, expression FROM parts'
 		))->rows();
-		foreach($rows as $row) {
-			$url = new Uri\ReachableUrl(new Uri\ValidUrl($row['page_url']));
+		foreach($parts as $part) {
+			$url = new Uri\ReachableUrl(new Uri\ValidUrl($part['page_url']));
 			$page = new FrugalPage(
 				$url,
 				new StoredPage(
@@ -52,15 +52,15 @@ final class CollectiveParts implements Parts {
 				new StoredPart(
 					new HtmlPart(
 						new MatchingExpression(
-							new XPathExpression($page, $row['expression'])
+							new XPathExpression($page, $part['expression'])
 						),
 						$page
 					),
-					$row['id'],
+					$part['id'],
 					$this->database
 				),
-				$row['content'],
-				$row['snapshot']
+				$part['content'],
+				$part['snapshot']
 			);
 		}
 	}
