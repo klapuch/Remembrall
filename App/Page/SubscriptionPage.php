@@ -57,17 +57,14 @@ final class SubscriptionPage extends BasePage {
 						new Subscribing\CollectiveParts($this->database),
 						$this->logs
 					))->add(
-						new Subscribing\CachedPart(
-							new Subscribing\HtmlPart(
-								new Subscribing\MatchingExpression(
-									new Subscribing\XPathExpression(
-										$page,
-										$subscription['expression']
-									)
-								),
-								$page
+						new Subscribing\HtmlPart(
+							new Subscribing\MatchingExpression(
+								new Subscribing\XPathExpression(
+									$page,
+									$subscription['expression']
+								)
 							),
-							new Storages\MemoryStorage()
+							$page
 						),
 						$url,
 						$subscription['expression']
