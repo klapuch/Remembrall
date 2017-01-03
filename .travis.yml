@@ -40,7 +40,7 @@ after_script:
 script:
   - ./vendor/bin/parallel-lint -e php,phpt App Tests
   - ./vendor/bin/phpcpd App
-  - ./vendor/bin/phpstan analyze -l 4 -c phpstan.neon App Tests 
+  - ./vendor/bin/phpstan analyze -l 5 -c phpstan.neon App Tests 
   - ./vendor/bin/phpcs --standard=ruleset.xml --extensions=php,phpt --encoding=utf-8 --tab-width=4 -sp App
   - ./vendor/bin/tester -p $PHP_BIN -c Tests/php.ini -o console -s $coverage ./Tests/
 

@@ -92,7 +92,7 @@ final class OwnedSubscriptions implements Subscriptions {
 					->with('url', $subscription['page_url'])
 					->with(
 						'interval',
-						new Time\TimeInterval(
+						(string)new Time\TimeInterval(
 							new \DateTimeImmutable($subscription['visited_at']),
 							new \DateInterval($subscription['interval'])
 						)
