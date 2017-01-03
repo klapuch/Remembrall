@@ -43,11 +43,13 @@ final class UnreliableParts implements Parts {
 				ORDER BY visited_at ASC"
 		))->rows();
 		foreach($parts as $part) {
-			$url = new Uri\ReachableUrl(new Uri\ValidUrl($part['page_url']));
+			$url = new Uri\ValidUrl($part['page_url']);
 			$page = new FrugalPage(
 				$url,
 				new StoredPage(
-					new HtmlWebPage(new Http\BasicRequest('GET', $url)),
+					new HtmlWebPage(
+						new Http\BasicRequest('GET', new Uri\ReachableUrl($url))
+					),
 					$url,
 					$this->database
 				),
