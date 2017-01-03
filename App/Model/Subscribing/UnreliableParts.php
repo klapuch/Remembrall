@@ -44,17 +44,14 @@ final class UnreliableParts implements Parts {
 		))->rows();
 		foreach($parts as $part) {
 			$url = new Uri\ReachableUrl(new Uri\ValidUrl($part['page_url']));
-			$page = new CachedPage(
-				new FrugalPage(
+			$page = new FrugalPage(
+				$url,
+				new StoredPage(
+					new HtmlWebPage(new Http\BasicRequest('GET', $url)),
 					$url,
-					new StoredPage(
-						new HtmlWebPage(new Http\BasicRequest('GET', $url)),
-						$url,
-						$this->database
-					),
 					$this->database
 				),
-				new Storages\MemoryStorage()
+				$this->database
 			);
 			yield new ConstantPart(
 				new StoredPart(
