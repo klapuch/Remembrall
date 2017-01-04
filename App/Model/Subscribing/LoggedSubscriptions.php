@@ -5,68 +5,25 @@ namespace Remembrall\Model\Subscribing;
 use Klapuch\{
 	Output, Time, Uri, Log
 };
+use Remembrall\Model\Misc;
 
 /**
  * Log every error action
  */
-final class LoggedSubscriptions implements Subscriptions {
-	private $origin;
-	private $logs;
-
-	public function __construct(Subscriptions $origin, Log\Logs $logs) {
-		$this->origin = $origin;
-		$this->logs = $logs;
-	}
-
+final class LoggedSubscriptions extends Misc\LoggingObject implements Subscriptions {
 	public function subscribe(
 		Uri\Uri $uri,
 		string $expression,
 		Time\Interval $interval
 	): void {
-		try {
-			$this->origin->subscribe($uri, $expression, $interval);
-		} catch(\Throwable $ex) {
-			$this->logs->put(
-				new Log\PrettyLog(
-					$ex,
-					new Log\PrettySeverity(
-						new Log\JustifiedSeverity(Log\Severity::WARNING)
-					)
-				)
-			);
-			throw $ex;
-		}
+		$this->observe(__FUNCTION__, $uri, $expression, $interval);
 	}
 
 	public function iterate(): \Iterator {
-		try {
-			return $this->origin->iterate();
-		} catch(\Throwable $ex) {
-			$this->logs->put(
-				new Log\PrettyLog(
-					$ex,
-					new Log\PrettySeverity(
-						new Log\JustifiedSeverity(Log\Severity::WARNING)
-					)
-				)
-			);
-			throw $ex;
-		}
+		return $this->observe(__FUNCTION__);
 	}
 
 	public function print(Output\Format $format): array {
-		try {
-			return $this->origin->print($format);
-		} catch(\Throwable $ex) {
-			$this->logs->put(
-				new Log\PrettyLog(
-					$ex,
-					new Log\PrettySeverity(
-						new Log\JustifiedSeverity(Log\Severity::WARNING)
-					)
-				)
-			);
-			throw $ex;
-		}
+		return $this->observe(__FUNCTION__, $format);
 	}
 }
