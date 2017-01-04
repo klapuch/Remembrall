@@ -16,10 +16,10 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class LoggedSubscriptions extends TestCase\Mockery {
 	/**
-	 * @throws \Exception exceptionMessage
+	 * @throws \DomainException exceptionMessage
 	 */
 	public function testLoggedExceptionDuringSubscribing() {
-		$ex = new \Exception('exceptionMessage');
+		$ex = new \DomainException('exceptionMessage');
 		$logs = $this->mock(Log\Logs::class);
 		$logs->shouldReceive('put')->once();
 		(new Subscribing\LoggedSubscriptions(
@@ -48,10 +48,10 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 	}
 
 	/**
-	 * @throws \Exception exceptionMessage
+	 * @throws \DomainException exceptionMessage
 	 */
 	public function testLoggedExceptionDuringPrinting() {
-		$ex = new \Exception('exceptionMessage');
+		$ex = new \DomainException('exceptionMessage');
 		$logs = $this->mock(Log\Logs::class);
 		$logs->shouldReceive('put')->once();
 		(new Subscribing\LoggedSubscriptions(
@@ -72,10 +72,10 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 	}
 
 	/**
-	 * @throws \Exception exceptionMessage
+	 * @throws \DomainException exceptionMessage
 	 */
 	public function testLoggedExceptionDuringIterating() {
-		$ex = new \Exception('exceptionMessage');
+		$ex = new \DomainException('exceptionMessage');
 		$logs = $this->mock(Log\Logs::class);
 		$logs->shouldReceive('put')->once();
 		(new Subscribing\LoggedSubscriptions(

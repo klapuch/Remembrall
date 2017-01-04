@@ -16,10 +16,10 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class LoggedParts extends TestCase\Mockery {
 	/**
-	 * @throws \Exception exceptionMessage
+	 * @throws \DomainException exceptionMessage
 	 */
 	public function testLoggedExceptionDuringAdding() {
-		$ex = new \Exception('exceptionMessage');
+		$ex = new \DomainException('exceptionMessage');
 		$parts = new Subscribing\FakeParts($ex);
 		$logs = $this->mock(Log\Logs::class);
 		$logs->shouldReceive('put')->once();
@@ -44,10 +44,10 @@ final class LoggedParts extends TestCase\Mockery {
 	}
 
 	/**
-	 * @throws \Exception exceptionMessage
+	 * @throws \DomainException exceptionMessage
 	 */
 	public function testLoggedExceptionDuringIterating() {
-		$ex = new \Exception('exceptionMessage');
+		$ex = new \DomainException('exceptionMessage');
 		$parts = new Subscribing\FakeParts($ex);
 		$logs = $this->mock(Log\Logs::class);
 		$logs->shouldReceive('put')->once();

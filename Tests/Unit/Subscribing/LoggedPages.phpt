@@ -16,10 +16,10 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class LoggedPages extends TestCase\Mockery {
 	/**
-	 * @throws \Exception exceptionMessage
+	 * @throws \DomainException exceptionMessage
 	 */
 	public function testLoggedExceptionDuringAdding() {
-		$ex = new \Exception('exceptionMessage');
+		$ex = new \DomainException('exceptionMessage');
 		$pages = $this->mock(Subscribing\Pages::class);
 		$pages->shouldReceive('add')->andThrowExceptions([$ex]);
 		$logs = $this->mock(Log\Logs::class);
