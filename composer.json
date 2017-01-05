@@ -22,7 +22,7 @@
 		"klapuch/output": "^1.0.0",
 		"klapuch/ini": "^1.0.0",
 		"klapuch/uri": "^1.0.0",
-		"klapuch/time": "^2.0.0",
+		"klapuch/time": "^3.0.0",
 		"klapuch/http": "^1.0.0",
 		"klapuch/log": "^1.0.0",
 		"klapuch/flash-message": "^1.0.0",
