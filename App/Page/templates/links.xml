@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <links>
-    <link>
-        <href>subscriptions/</href>
-        <title>Subscriptions</title>
-    </link>
-    <link>
-        <href>subscription/</href>
-        <title>Subscription</title>
-    </link>
-    <link>
-        <href>sign/in/</href>
-        <title>Sign in</title>
-    </link>
+	<link href="subscriptions">Subscriptions</link>
+	<link href="subscription">Subscription</link>
+	<link href="sign/in">Sign in</link>
 </links>

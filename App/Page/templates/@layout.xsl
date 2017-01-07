@@ -99,8 +99,8 @@
 			<xsl:for-each select="document('links.xml')/links/link">
 				<li>
 					<xsl:call-template name="links">
-						<xsl:with-param name="href" select="href"/>
-						<xsl:with-param name="title" select="title"/>
+						<xsl:with-param name="href" select="@href"/>
+						<xsl:with-param name="title" select="."/>
 						<xsl:with-param name="baseUrl" select="$baseUrl"/>
 					</xsl:call-template>
 				</li>
