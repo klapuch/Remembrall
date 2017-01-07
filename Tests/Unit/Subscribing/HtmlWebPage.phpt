@@ -14,7 +14,7 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class HtmlWebPage extends Tester\TestCase {
-	public function testValidHtml() {
+	public function testNonProblematicHtml() {
 		Assert::contains(
 			'Hi, there!',
 			(new Subscribing\HtmlWebPage(
@@ -44,7 +44,7 @@ final class HtmlWebPage extends Tester\TestCase {
 		);
 	}
 
-	public function testThrowingOnNonHtmlContentType() {
+	public function testThrowingOnNonHtmlMediaType() {
 		$ex = Assert::exception(
 			function() {
 				(new Subscribing\HtmlWebPage(
@@ -82,9 +82,10 @@ final class HtmlWebPage extends Tester\TestCase {
 		Assert::type(\Exception::class, $ex->getPrevious());
 	}
 
-	public function testRefreshing() {
+	public function testRefreshingGivingSamePage() {
 		$page = new Subscribing\HtmlWebPage(new Http\FakeRequest());
 		Assert::equal($page, $page->refresh());
+		Assert::notSame($page, $page->refresh());
 	}
 }
 

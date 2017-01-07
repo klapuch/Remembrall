@@ -15,54 +15,35 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class LoggedParts extends TestCase\Mockery {
-	/**
-	 * @throws \DomainException exceptionMessage
-	 */
-	public function testLoggedExceptionDuringAdding() {
-		$ex = new \DomainException('exceptionMessage');
-		$parts = new Subscribing\FakeParts($ex);
+	public function testLoggingException() {
 		$logs = $this->mock(Log\Logs::class);
-		$logs->shouldReceive('put')->once();
-		(new Subscribing\LoggedParts(
-			$parts, $logs
-		))->add(new Subscribing\FakePart(), new Uri\FakeUri('url'), '//p');
-	}
-
-	public function testNoExceptionDuringAdding() {
-		Assert::noError(
-			function() {
-				(new Subscribing\LoggedParts(
-					new Subscribing\FakeParts(),
-					new Log\FakeLogs()
-				))->add(
-					new Subscribing\FakePart(),
-					new Uri\FakeUri('url'),
-					'//p'
-				);
-			}
+		$logs->shouldReceive('put')->twice();
+		$parts = new Subscribing\LoggedParts(
+			new Subscribing\FakeParts(new \DomainException('fooMessage')), $logs
 		);
+		Assert::exception(function() use($parts) {
+			$parts->add(new Subscribing\FakePart(), new Uri\FakeUri('url'), '//p');
+		}, \DomainException::class, 'fooMessage');
+		Assert::exception(function() use($parts) {
+			$parts->getIterator();
+		}, \DomainException::class, 'fooMessage');
 	}
 
-	/**
-	 * @throws \DomainException exceptionMessage
-	 */
-	public function testLoggedExceptionDuringIterating() {
-		$ex = new \DomainException('exceptionMessage');
-		$parts = new Subscribing\FakeParts($ex);
-		$logs = $this->mock(Log\Logs::class);
-		$logs->shouldReceive('put')->once();
-		(new Subscribing\LoggedParts($parts, $logs))->getIterator();
-	}
-
-	public function testNoExceptionDuringIterating() {
-		Assert::noError(
-			function() {
-				(new Subscribing\LoggedParts(
-					new Subscribing\FakeParts(),
-					new Log\FakeLogs()
-				))->getIterator();
-			}
+	public function testNoExceptionWithoutLogging() {
+		$parts = new Subscribing\LoggedParts(
+			new Subscribing\FakeParts(),
+			$this->mock(Log\Logs::class)
 		);
+		Assert::noError(function() use($parts) {
+			$parts->add(
+				new Subscribing\FakePart(),
+				new Uri\FakeUri('url'),
+				'//p'
+			);
+		});
+		Assert::noError(function() use($parts) {
+			$parts->getIterator();
+		});
 	}
 }
 

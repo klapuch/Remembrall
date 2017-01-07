@@ -37,7 +37,7 @@ final class HtmlPart extends Tester\TestCase {
 		);
 	}
 
-	public function testAllowedEmptyPart() {
+	public function testAllowingEmptyPart() {
 		$expression = '//invalid';
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<div><p>Blank</p></div>');

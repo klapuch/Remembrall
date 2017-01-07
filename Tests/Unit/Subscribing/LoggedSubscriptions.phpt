@@ -15,84 +15,46 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class LoggedSubscriptions extends TestCase\Mockery {
-	/**
-	 * @throws \DomainException exceptionMessage
-	 */
-	public function testLoggedExceptionDuringSubscribing() {
-		$ex = new \DomainException('exceptionMessage');
+	public function testLoggingException() {
 		$logs = $this->mock(Log\Logs::class);
-		$logs->shouldReceive('put')->once();
-		(new Subscribing\LoggedSubscriptions(
-			new Subscribing\FakeSubscriptions($ex),
+		$logs->shouldReceive('put')->times(3);
+		$subscriptions = new Subscribing\LoggedSubscriptions(
+			new Subscribing\FakeSubscriptions(new \DomainException('fooMessage')),
 			$logs
-		))->subscribe(
-			new Uri\FakeUri('url'),
-			'//p',
-			new Time\FakeInterval()
 		);
+		Assert::exception(function() use($subscriptions) {
+			$subscriptions->subscribe(
+				new Uri\FakeUri('url'),
+				'//p',
+				new Time\FakeInterval()
+			);
+		}, \DomainException::class, 'fooMessage');
+		Assert::exception(function() use($subscriptions) {
+			$subscriptions->print(new Output\FakeFormat());
+		}, \DomainException::class, 'fooMessage');
+		Assert::exception(function() use($subscriptions) {
+			$subscriptions->getIterator();
+		}, \DomainException::class, 'fooMessage');
 	}
 
-	public function testNoExceptionDuringSubscribing() {
-		Assert::noError(
-			function() {
-				(new Subscribing\LoggedSubscriptions(
-					new Subscribing\FakeSubscriptions(),
-					new Log\FakeLogs()
-				))->subscribe(
-					new Uri\FakeUri('url'),
-					'//p',
-					new Time\FakeInterval()
-				);
-			}
+	public function testNoExceptionWithoutLogging() {
+		$subscriptions = new Subscribing\LoggedSubscriptions(
+			new Subscribing\FakeSubscriptions(),
+			$this->mock(Log\Logs::class)
 		);
-	}
-
-	/**
-	 * @throws \DomainException exceptionMessage
-	 */
-	public function testLoggedExceptionDuringPrinting() {
-		$ex = new \DomainException('exceptionMessage');
-		$logs = $this->mock(Log\Logs::class);
-		$logs->shouldReceive('put')->once();
-		(new Subscribing\LoggedSubscriptions(
-			new Subscribing\FakeSubscriptions($ex),
-			$logs
-		))->print(new Output\FakeFormat());
-	}
-
-	public function testNoExceptionDuringPrinting() {
-		Assert::noError(
-			function() {
-				(new Subscribing\LoggedSubscriptions(
-					new Subscribing\FakeSubscriptions(),
-					new Log\FakeLogs()
-				))->print(new Output\FakeFormat());
-			}
-		);
-	}
-
-	/**
-	 * @throws \DomainException exceptionMessage
-	 */
-	public function testLoggedExceptionDuringIterating() {
-		$ex = new \DomainException('exceptionMessage');
-		$logs = $this->mock(Log\Logs::class);
-		$logs->shouldReceive('put')->once();
-		(new Subscribing\LoggedSubscriptions(
-			new Subscribing\FakeSubscriptions($ex),
-			$logs
-		))->getIterator();
-	}
-
-	public function testNoExceptionDuringIterating() {
-		Assert::noError(
-			function() {
-				(new Subscribing\LoggedSubscriptions(
-					new Subscribing\FakeSubscriptions(),
-					new Log\FakeLogs()
-				))->getIterator();
-			}
-		);
+		Assert::noError(function() use($subscriptions) {
+			$subscriptions->subscribe(
+				new Uri\FakeUri('url'),
+				'//p',
+				new Time\FakeInterval()
+			);
+		});
+		Assert::noError(function() use($subscriptions) {
+			$subscriptions->print(new Output\FakeFormat());
+		});
+		Assert::noError(function() use($subscriptions) {
+			$subscriptions->getIterator();
+		});
 	}
 }
 

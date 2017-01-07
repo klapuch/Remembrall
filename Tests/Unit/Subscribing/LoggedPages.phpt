@@ -16,12 +16,13 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class LoggedPages extends TestCase\Mockery {
 	/**
-	 * @throws \DomainException exceptionMessage
+	 * @throws \DomainException fooMessage
 	 */
-	public function testLoggedExceptionDuringAdding() {
-		$ex = new \DomainException('exceptionMessage');
+	public function testLoggingException() {
 		$pages = $this->mock(Subscribing\Pages::class);
-		$pages->shouldReceive('add')->andThrowExceptions([$ex]);
+		$pages->shouldReceive('add')->andThrowExceptions(
+			[new \DomainException('fooMessage')]
+		);
 		$logs = $this->mock(Log\Logs::class);
 		$logs->shouldReceive('put')->once();
 		(new Subscribing\LoggedPages($pages, $logs))->add(
@@ -30,15 +31,13 @@ final class LoggedPages extends TestCase\Mockery {
 		);
 	}
 
-	public function testNoExceptionDuringAdding() {
-		Assert::noError(
-			function() {
-				(new Subscribing\LoggedPages(
-					new Subscribing\FakePages(),
-					new Log\FakeLogs()
-				))->add(new Uri\FakeUri(), new Subscribing\FakePage());
-			}
-		);
+	public function testNoExceptionWithoutLogging() {
+		Assert::noError(function() {
+			(new Subscribing\LoggedPages(
+				new Subscribing\FakePages(),
+				$this->mock(Log\Logs::class)
+			))->add(new Uri\FakeUri(), new Subscribing\FakePage());
+		});
 	}
 }
 
