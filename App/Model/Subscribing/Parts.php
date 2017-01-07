@@ -4,7 +4,7 @@ namespace Remembrall\Model\Subscribing;
 
 use Klapuch\Uri;
 
-interface Parts {
+interface Parts extends \IteratorAggregate {
 	/**
 	 * Add a new part to the parts
 	 * @param Part $part
@@ -18,5 +18,5 @@ interface Parts {
 	 * Go through all the parts
 	 * @return \Iterator
 	 */
-	public function iterate(): \Iterator;
+	public function getIterator(): \Iterator;
 }

@@ -109,7 +109,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 		$subscriptions = (new Subscribing\OwnedSubscriptions(
 			new Access\FakeSubscriber(1),
 			$this->database
-		))->iterate();
+		))->getIterator();
 		Assert::null($subscriptions->current());
 	}
 
@@ -124,7 +124,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 		$subscriptions = (new Subscribing\OwnedSubscriptions(
 			new Access\FakeSubscriber(1),
 			$this->database
-		))->iterate();
+		))->getIterator();
 		$subscription = $subscriptions->current();
 		Assert::equal(
 			new Subscribing\StoredSubscription(3, $this->database),

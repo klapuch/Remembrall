@@ -19,7 +19,7 @@ final class ChangedSubscriptions extends TestCase\Database {
 			new Subscribing\FakeSubscriptions(),
 			new Mail\SendmailMailer(),
 			$this->database
-		))->iterate();
+		))->getIterator();
 		$subscription = $subscriptions->current();
 		Assert::equal(
 			new Subscribing\EmailSubscription(
@@ -54,7 +54,7 @@ final class ChangedSubscriptions extends TestCase\Database {
 				}
 			},
 			$this->database
-		))->iterate();
+		))->getIterator();
 		$subscription = $subscriptions->current();
 		ob_start();
 		$subscription->notify();
@@ -70,7 +70,7 @@ final class ChangedSubscriptions extends TestCase\Database {
 			new Subscribing\FakeSubscriptions(),
 			new Mail\SendmailMailer(),
 			$this->database
-		))->iterate();
+		))->getIterator();
 		Assert::null($subscriptions->current());
 	}
 

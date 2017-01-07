@@ -15,7 +15,7 @@ final class LoggedParts extends Misc\LoggingObject implements Parts {
 		$this->observe(__FUNCTION__, $part, $uri, $expression);
 	}
 
-	public function iterate(): \Iterator {
+	public function getIterator(): \Iterator {
 		return $this->observe(__FUNCTION__);
 	}
 }

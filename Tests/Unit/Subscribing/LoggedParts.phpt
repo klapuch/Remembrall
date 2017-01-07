@@ -51,7 +51,7 @@ final class LoggedParts extends TestCase\Mockery {
 		$parts = new Subscribing\FakeParts($ex);
 		$logs = $this->mock(Log\Logs::class);
 		$logs->shouldReceive('put')->once();
-		(new Subscribing\LoggedParts($parts, $logs))->iterate();
+		(new Subscribing\LoggedParts($parts, $logs))->getIterator();
 	}
 
 	public function testNoExceptionDuringIterating() {
@@ -60,7 +60,7 @@ final class LoggedParts extends TestCase\Mockery {
 				(new Subscribing\LoggedParts(
 					new Subscribing\FakeParts(),
 					new Log\FakeLogs()
-				))->iterate();
+				))->getIterator();
 			}
 		);
 	}

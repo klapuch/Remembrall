@@ -6,7 +6,7 @@ use Klapuch\{
 	Output, Time, Uri
 };
 
-interface Subscriptions {
+interface Subscriptions extends \IteratorAggregate {
 	/**
 	 * Subscribe to a new part
 	 * @param \Klapuch\Uri\Uri $uri
@@ -25,7 +25,7 @@ interface Subscriptions {
 	 * Go through all the subscriptions
 	 * @return \Iterator
 	 */
-	public function iterate(): \Iterator;
+	public function getIterator(): \Iterator;
 
 	/**
 	 * Print itself

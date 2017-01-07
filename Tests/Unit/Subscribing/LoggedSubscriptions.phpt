@@ -81,7 +81,7 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 		(new Subscribing\LoggedSubscriptions(
 			new Subscribing\FakeSubscriptions($ex),
 			$logs
-		))->iterate();
+		))->getIterator();
 	}
 
 	public function testNoExceptionDuringIterating() {
@@ -90,7 +90,7 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 				(new Subscribing\LoggedSubscriptions(
 					new Subscribing\FakeSubscriptions(),
 					new Log\FakeLogs()
-				))->iterate();
+				))->getIterator();
 			}
 		);
 	}

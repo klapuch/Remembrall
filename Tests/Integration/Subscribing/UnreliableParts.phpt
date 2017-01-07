@@ -43,7 +43,7 @@ final class UnreliableParts extends TestCase\Database {
 		$parts = (new Subscribing\UnreliableParts(
 			new Subscribing\FakeParts(),
 			$this->database
-		))->iterate();
+		))->getIterator();
 		$part = $parts->current();
 		Assert::equal('d', $part->content());
 		$parts->next();
@@ -57,7 +57,7 @@ final class UnreliableParts extends TestCase\Database {
 		$parts = (new Subscribing\UnreliableParts(
 			new Subscribing\FakeParts(),
 			$this->database
-		))->iterate();
+		))->getIterator();;
 		Assert::null($parts->current());
 	}
 

@@ -23,7 +23,7 @@ final class UnreliableParts implements Parts {
 		$this->origin->add($part, $uri, $expression);
 	}
 
-	public function iterate(): \Iterator {
+	public function getIterator(): \Iterator {
 		$parts = (new Storage\ParameterizedQuery(
 			$this->database,
 			"SELECT page_url, expression, parts.id, content, snapshot

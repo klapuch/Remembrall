@@ -112,7 +112,7 @@ final class CollectiveParts extends TestCase\Database {
 			('www.google.com', '//a', 'a', ''),
 			('www.facedown.cz', '//c', 'c', '')"
 		);
-		$parts = (new Subscribing\CollectiveParts($this->database))->iterate();
+		$parts = (new Subscribing\CollectiveParts($this->database))->getIterator();
 		$part = $parts->current();
 		Assert::equal('a', $part->content());
 		$parts->next();
@@ -123,7 +123,7 @@ final class CollectiveParts extends TestCase\Database {
 	}
 
 	public function testIteratingEmptyParts() {
-		$parts = (new Subscribing\CollectiveParts($this->database))->iterate();
+		$parts = (new Subscribing\CollectiveParts($this->database))->getIterator();
 		Assert::null($parts->current());
 	}
 

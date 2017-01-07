@@ -19,7 +19,7 @@ final class LoggedSubscriptions extends Misc\LoggingObject implements Subscripti
 		$this->observe(__FUNCTION__, $uri, $expression, $interval);
 	}
 
-	public function iterate(): \Iterator {
+	public function getIterator(): \Iterator {
 		return $this->observe(__FUNCTION__);
 	}
 
