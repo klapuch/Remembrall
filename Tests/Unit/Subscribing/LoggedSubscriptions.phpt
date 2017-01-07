@@ -15,7 +15,7 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class LoggedSubscriptions extends TestCase\Mockery {
-	public function testLoggingException() {
+	public function testLoggingOnThrowing() {
 		$logs = $this->mock(Log\Logs::class);
 		$logs->shouldReceive('put')->times(3);
 		$subscriptions = new Subscribing\LoggedSubscriptions(

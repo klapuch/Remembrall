@@ -18,7 +18,7 @@ final class LoggedPages extends TestCase\Mockery {
 	/**
 	 * @throws \DomainException fooMessage
 	 */
-	public function testLoggingException() {
+	public function testLoggingOnThrowing() {
 		$pages = $this->mock(Subscribing\Pages::class);
 		$pages->shouldReceive('add')->andThrowExceptions(
 			[new \DomainException('fooMessage')]

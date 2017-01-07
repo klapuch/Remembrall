@@ -15,7 +15,7 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class LoggedParts extends TestCase\Mockery {
-	public function testLoggingException() {
+	public function testLoggingOnThrowing() {
 		$logs = $this->mock(Log\Logs::class);
 		$logs->shouldReceive('put')->twice();
 		$parts = new Subscribing\LoggedParts(
