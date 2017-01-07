@@ -15,7 +15,7 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class UniqueSubscribers extends TestCase\Database {
-	public function testRegisteringBrandNewSubscriber() {
+	public function testRegisteringBrandNew() {
 		$subscriber = (new Access\UniqueSubscribers(
 			$this->database,
 			new Encryption\FakeCipher()

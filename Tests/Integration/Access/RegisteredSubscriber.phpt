@@ -19,7 +19,7 @@ final class RegisteredSubscriber extends TestCase\Database {
 		(new Access\RegisteredSubscriber(666, $this->database))->id();
 	}
 
-	public function testKnownUserId() {
+	public function testGatheringKnownUserId() {
 		$id = 666;
 		$statement = $this->database->prepare(
 			"INSERT INTO users (id, email, password) VALUES
@@ -32,7 +32,7 @@ final class RegisteredSubscriber extends TestCase\Database {
 		);
 	}
 
-	public function testExistingEmail() {
+	public function testGatheringExistingEmail() {
 		$id = 666;
 		$statement = $this->database->prepare(
 			"INSERT INTO users (id, email, password) VALUES

@@ -14,7 +14,7 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class ChangedSubscriptions extends TestCase\Database {
-	public function testChangingSnapshotAndPastDate() {
+	public function testChangedSnapshotAndPastDate() {
 		$subscriptions = (new Subscribing\ChangedSubscriptions(
 			new Subscribing\FakeSubscriptions(),
 			new Mail\SendmailMailer(),
