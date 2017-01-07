@@ -77,20 +77,9 @@
 
 	<xsl:template name="logo">
 		<xsl:param name="baseUrl"/>
-		<xsl:element name="a">
-			<xsl:attribute name="href">
-				<xsl:value-of select="$baseUrl"/>
-			</xsl:attribute>
-			<xsl:attribute name="class">
-				<xsl:text>navbar-brand</xsl:text>
-			</xsl:attribute>
-			<xsl:attribute name="title">
-				<xsl:text>Remembrall</xsl:text>
-			</xsl:attribute>
-			<xsl:element name="strong">
-				<xsl:text>Remembrall</xsl:text>
-			</xsl:element>
-		</xsl:element>
+		<a href="{$baseUrl}" class="navbar-brand" title="Remembrall">
+			<strong>Remembrall</strong>
+		</a>
 	</xsl:template>
 
 	<xsl:template name="link-bar">
@@ -112,15 +101,9 @@
 		<xsl:param name="href"/>
 		<xsl:param name="title"/>
 		<xsl:param name="baseUrl"/>
-		<xsl:element name="a">
-			<xsl:attribute name="href">
-				<xsl:value-of select="concat($baseUrl, $href)"/>
-			</xsl:attribute>
-			<xsl:attribute name="title">
-				<xsl:value-of select="$title"/>
-			</xsl:attribute>
+		<a href="{concat($baseUrl, $href)}" title="{$title}">
 			<xsl:value-of select="$title"/>
-		</xsl:element>
+		</a>
 	</xsl:template>
 
 	<xsl:template match="flashMessage">
@@ -130,7 +113,7 @@
 					<xsl:text>alert alert-</xsl:text>
 					<xsl:value-of select="type"/>
 				</xsl:attribute>
-				<xsl:value-of select="content" />
+				<xsl:value-of select="content"/>
 			</xsl:element>
 		</xsl:if>
 	</xsl:template>
