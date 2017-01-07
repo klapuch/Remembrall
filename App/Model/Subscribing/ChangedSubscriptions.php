@@ -11,21 +11,17 @@ use Nette\Mail;
  * All the subscriptions owned by one particular subscriber
  */
 final class ChangedSubscriptions implements Subscriptions {
-	private const EMPTY_FORMAT = [];
 	private $origin;
 	private $mailer;
-	private $message;
 	private $database;
 
 	public function __construct(
 		Subscriptions $origin,
 		Mail\IMailer $mailer,
-		Mail\Message $message,
 		\PDO $database
 	) {
 		$this->origin = $origin;
 		$this->mailer = $mailer;
-		$this->message = $message;
 		$this->database = $database;
 	}
 
@@ -51,21 +47,8 @@ final class ChangedSubscriptions implements Subscriptions {
 			yield new EmailSubscription(
 				new StoredSubscription($subscription['id'], $this->database),
 				$this->mailer,
-				$this->message
-					->addTo($subscription['email'])
-					->setSubject(
-						sprintf(
-							'Changes occurred on %s page with %s expression',
-							$subscription['url'],
-							$subscription['expression']
-						)
-					)
-					->setHtmlBody(
-						(new Output\XsltTemplate(
-							__DIR__ . '/../../Page/templates/Email/subscribing.xsl',
-							new Output\Xml($subscription, 'part')
-						))->render()
-					)
+				$subscription['email'],
+				$subscription
 			);
 		}
 	}

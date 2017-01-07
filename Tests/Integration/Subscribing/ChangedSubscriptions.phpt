@@ -17,6 +17,32 @@ final class ChangedSubscriptions extends TestCase\Database {
 	public function testChangingSnapshotAndPastDate() {
 		$subscriptions = (new Subscribing\ChangedSubscriptions(
 			new Subscribing\FakeSubscriptions(),
+			new Mail\SendmailMailer(),
+			$this->database
+		))->iterate();
+		$subscription = $subscriptions->current();
+		Assert::equal(
+			new Subscribing\EmailSubscription(
+				new Subscribing\StoredSubscription(2, $this->database),
+				new Mail\SendmailMailer(),
+				'b@b.cz',
+				[
+					'id' => 2,
+					'url' => 'www.matched.com',
+					'expression' => '//matched',
+					'content' => 'bc',
+					'email' => 'b@b.cz',
+				]
+			),
+			$subscription
+		);
+		$subscriptions->next();
+		Assert::null($subscriptions->current());
+	}
+
+	public function testTemplateFields() {
+		$subscriptions = (new Subscribing\ChangedSubscriptions(
+			new Subscribing\FakeSubscriptions(),
 			new class implements Mail\IMailer {
 				public function send(Mail\Message $message) {
 					printf(
@@ -27,24 +53,15 @@ final class ChangedSubscriptions extends TestCase\Database {
 					printf('Body: %s', $message->getHtmlBody());
 				}
 			},
-			new Mail\Message(),
 			$this->database
 		))->iterate();
 		$subscription = $subscriptions->current();
 		ob_start();
 		$subscription->notify();
 		$output = ob_get_clean();
-		Assert::contains('To: b@b.cz', $output);
-		Assert::contains(
-			'Subject: Changes occurred on www.matched.com page with //matched expression',
-			$output
-		);
-		Assert::contains(
-			'some changes on www.matched.com website with //matched expression',
-			$output
-		);
-		$subscriptions->next();
-		Assert::null($subscriptions->current());
+		Assert::contains('www.matched.com', $output);
+		Assert::contains('//matched', $output);
+		Assert::contains('bc', $output);
 	}
 
 	public function testEmptyIterating() {
@@ -52,7 +69,6 @@ final class ChangedSubscriptions extends TestCase\Database {
 		$subscriptions = (new Subscribing\ChangedSubscriptions(
 			new Subscribing\FakeSubscriptions(),
 			new Mail\SendmailMailer(),
-			new Mail\Message(),
 			$this->database
 		))->iterate();
 		Assert::null($subscriptions->current());
@@ -62,7 +78,6 @@ final class ChangedSubscriptions extends TestCase\Database {
 		$subscriptions = (new Subscribing\ChangedSubscriptions(
 			new Subscribing\FakeSubscriptions(),
 			new Mail\SendmailMailer(),
-			new Mail\Message(),
 			$this->database
 		))->print(new Output\FakeFormat());
 		Assert::contains('//matched', (string)$subscriptions[0]);
@@ -73,7 +88,6 @@ final class ChangedSubscriptions extends TestCase\Database {
 		$subscriptions = (new Subscribing\ChangedSubscriptions(
 			new Subscribing\FakeSubscriptions(),
 			new Mail\SendmailMailer(),
-			new Mail\Message(),
 			$this->database
 		))->print(new Output\FakeFormat());
 		Assert::count(0, $subscriptions);

@@ -21,7 +21,8 @@ final class EmailSubscription extends TestCase\Mockery {
 				(new Subscribing\EmailSubscription(
 					new Subscribing\FakeSubscription(new \Exception('foo')),
 					$mailer,
-					new Mail\Message()
+					'recipient@foo.cz',
+					[]
 				))->notify();
 			},
 			\Exception::class,
@@ -29,21 +30,30 @@ final class EmailSubscription extends TestCase\Mockery {
 		);
 	}
 
-	public function testSendingWithoutModifyingMessage() {
-		Assert::noError(
-			function() {
-				$message = new Mail\Message();
-				$mailer = $this->mock(Mail\IMailer::class);
-				$mailer->shouldReceive('send')
-					->with($message)
-					->once();
-				(new Subscribing\EmailSubscription(
-					new Subscribing\FakeSubscription(),
-					$mailer,
-					$message
-				))->notify();
-			}
-		);
+	public function testTemplateOutput() {
+		ob_start();
+		(new Subscribing\EmailSubscription(
+			new Subscribing\FakeSubscription(),
+			new class implements Mail\IMailer {
+					public function send(Mail\Message $message) {
+						printf(
+							'To: %s',
+							implode(array_keys($message->getHeader('To')))
+						);
+						printf('Subject: %s', $message->getSubject());
+						printf('Body: %s', $message->getHtmlBody());
+					}
+			},
+			'recipient@foo.cz',
+			['url' => 'www.google.com', 'expression' => '//p', 'content' => 'FooBar']
+		))->notify();
+		$output = ob_get_clean();
+		Assert::contains('To: recipient@foo.cz', $output);
+		Assert::contains('Subject: Changes occurred on www.google.com page with //p expression', $output);
+		Assert::contains('<p>Hi, there are some changes on www.google.com website with //p expression</p>', $output);
+		Assert::contains('<p>Check it out bellow this text</p>', $output);
+		Assert::contains('<br><p>FooBar</p>', $output);
+		Assert::notContains('<?xml', $output);
 	}
 }
 

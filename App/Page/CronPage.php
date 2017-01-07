@@ -27,7 +27,6 @@ final class CronPage extends BasePage {
 				new Subscribing\ChangedSubscriptions(
 					new Subscribing\FakeSubscriptions(),
 					new Mail\SendmailMailer(),
-					(new Mail\Message())->setFrom('Remembrall <remembrall@remembrall.org>'),
 					$this->database
 				),
 				$this->logs

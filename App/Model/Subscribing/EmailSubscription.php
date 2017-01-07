@@ -2,25 +2,34 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\Time;
+use Klapuch\{
+	Time, Output
+};
 use Nette\Mail;
 
 /**
  * Subscriptions sending to an email
  */
 final class EmailSubscription implements Subscription {
+	private const SENDER = 'Remembrall <remembrall@remembrall.org>';
+	private const TEMPLATES = __DIR__ . '/../../Page/templates/Email/Subscribing',
+		SUBJECT = self::TEMPLATES . '/subject.xsl',
+		CONTENT = self::TEMPLATES . '/content.xsl';
 	private $origin;
 	private $mailer;
-	private $message;
+	private $recipient;
+	private $subscription;
 
 	public function __construct(
 		Subscription $origin,
 		Mail\IMailer $mailer,
-		Mail\Message $message
+		string $recipient,
+		array $subscription
 	) {
 		$this->origin = $origin;
 		$this->mailer = $mailer;
-		$this->message = $message;
+		$this->recipient = $recipient;
+		$this->subscription = $subscription;
 	}
 
 	public function cancel(): void {
@@ -33,6 +42,20 @@ final class EmailSubscription implements Subscription {
 
 	public function notify(): void {
 		$this->origin->notify();
-		$this->mailer->send($this->message);
+		$this->mailer->send(
+			(new Mail\Message())
+			->setFrom(self::SENDER)
+			->addTo($this->recipient)
+			->setSubject(
+				(new Output\XsltTemplate(
+					self::SUBJECT, new Output\Xml($this->subscription, 'part')
+				))->render()
+			)
+			->setHtmlBody(
+				(new Output\XsltTemplate(
+					self::CONTENT, new Output\Xml($this->subscription, 'part')
+				))->render()
+			)
+		);
 	}
 }
