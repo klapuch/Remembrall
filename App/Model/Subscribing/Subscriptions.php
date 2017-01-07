@@ -22,12 +22,6 @@ interface Subscriptions extends \IteratorAggregate {
 	): void;
 
 	/**
-	 * Go through all the subscriptions
-	 * @return \Iterator
-	 */
-	public function getIterator(): \Iterator;
-
-	/**
 	 * Print itself
 	 * @param \Klapuch\Output\Format $format
 	 * @return Output\Format[]

@@ -13,10 +13,4 @@ interface Parts extends \IteratorAggregate {
 	 * @return void
 	 */
 	public function add(Part $part, Uri\Uri $uri, string $expression): void;
-
-	/**
-	 * Go through all the parts
-	 * @return \Iterator
-	 */
-	public function getIterator(): \Iterator;
 }
