@@ -3,7 +3,7 @@
 
 	<xsl:import href="assets.xsl"/>
 
-	<!-- To be overridden !-->
+	<!-- To be overridden -->
     <xsl:template name="additionalStyles"/>
 
 	<xsl:template name="head">

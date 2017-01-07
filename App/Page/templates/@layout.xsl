@@ -5,7 +5,7 @@
 
 	<xsl:output method="html" encoding="utf-8"/>
 
-	<!-- To be overridden !-->
+	<!-- To be overridden -->
 	<xsl:template name="additionalScripts"/>
 
 	<xsl:template match="/">
