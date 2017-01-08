@@ -64,7 +64,6 @@
 		</xsl:call-template>
 	</xsl:template>
 
-
 	<xsl:template name="footer">
 		<div id="footer">
 			<div class="container">

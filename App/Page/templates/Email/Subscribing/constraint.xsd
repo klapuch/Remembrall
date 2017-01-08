@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+	<xsd:simpleType name="content">
+		<xsd:restriction base="xsd:string">
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="expression">
+		<xsd:restriction base="xsd:string">
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="url">
+		<xsd:restriction base="xsd:anyURI"/>
+	</xsd:simpleType>
+
+	<xsd:complexType name="part">
+		<xsd:all>
+			<xsd:element name="content" type="content"/>
+			<xsd:element name="expression" type="expression"/>
+			<xsd:element name="url" type="url"/>
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:element name="part" type="part"/>
+
+</xsd:schema>
