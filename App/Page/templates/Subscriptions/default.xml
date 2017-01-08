@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<body>
+<page>
 	<head>
 		<title>Subscriptions</title>
 		<description>All the subscriptions owned by you</description>
 	</head>
-	<confirmations>
-		<confirmation purpose="cancellation">
-			<message>Are you sure you want to cancel the subscription?</message>
-			<title>Cancel</title>
-			<href>subscriptions/delete</href>
-			<glyphicon>remove</glyphicon>
-		</confirmation>
-	</confirmations>
-	<tables>
-		<table purpose="overview">
-			<headings>
-				<heading>#</heading>
-				<heading>Last update</heading>
-				<heading>Interval</heading>
-				<heading>Expression</heading>
-				<heading>URL</heading>
-				<heading>Options</heading>
-			</headings>
-		</table>
-	</tables>
-</body>
+	<body>
+		<confirmations>
+			<confirmation purpose="cancellation">
+				<message>Are you sure you want to cancel the subscription?</message>
+				<title>Cancel</title>
+				<href>subscriptions/delete</href>
+				<glyphicon>remove</glyphicon>
+			</confirmation>
+		</confirmations>
+		<tables>
+			<table purpose="overview">
+				<headings>
+					<heading>#</heading>
+					<heading>Last update</heading>
+					<heading>Interval</heading>
+					<heading>Expression</heading>
+					<heading>URL</heading>
+					<heading>Options</heading>
+				</headings>
+			</table>
+		</tables>
+	</body>
+</page>

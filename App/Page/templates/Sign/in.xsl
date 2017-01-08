@@ -3,7 +3,7 @@
 
     <xsl:import href="../@layout.xsl"/>
 
-    <xsl:template match="body">
+    <xsl:template match="page">
         <xsl:apply-templates select="forms"/>
     </xsl:template>
 

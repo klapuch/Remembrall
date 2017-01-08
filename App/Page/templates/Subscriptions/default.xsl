@@ -3,13 +3,13 @@
 
 	<xsl:import href="../@layout.xsl"/>
 
-	<xsl:template match="body">
+	<xsl:template match="page">
 		<xsl:apply-templates select="subscriptions"/>
 	</xsl:template>
 
 	<xsl:template match="subscriptions">
 		<table class="table table-hover">
-			<xsl:apply-templates select="/body/tables/table[@purpose='overview']"/>
+			<xsl:apply-templates select="/page/body/tables/table[@purpose='overview']"/>
 			<tbody>
 				<xsl:apply-templates select="subscription">
 					<xsl:sort select="lastUpdate" order="descending"/>
@@ -26,7 +26,7 @@
 			<td><xsl:value-of select="expression"/></td>
 			<td><xsl:value-of select="url"/></td>
 			<td>
-				<xsl:apply-templates select="/body/confirmations">
+				<xsl:apply-templates select="/page/body/confirmations">
 					<xsl:with-param name="id" select="id"/>
 				</xsl:apply-templates>
 			</td>
@@ -45,7 +45,7 @@
 		<xsl:param name="id"/>
 		<a
 			role="button"
-			href="{/body/baseUrl}{href}?id={$id}&amp;{/body/csrf/link}"
+			href="{/page/baseUrl}{href}?id={$id}&amp;{/page/csrf/link}"
 			onclick="return confirm('{normalize-space(message)}')"
 			title="{title}" type="button" class="btn btn-danger btn-sm">
 			<span class="glyphicon glyphicon-{glyphicon}" aria-hidden="true"/>

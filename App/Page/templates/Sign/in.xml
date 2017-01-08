@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<body>
+<page>
     <head>
         <title>Sign in</title>
         <description>Sign in via existing account</description>
     </head>
-</body>
+</page>

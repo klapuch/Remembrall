@@ -12,7 +12,7 @@
 		<xsl:text disable-output-escaping="yes">&lt;!DOCTYPE html&gt;</xsl:text>
 		<html lang="cs-cz">
 			<head>
-				<xsl:apply-templates select="body/head" mode="layout"/>
+				<xsl:apply-templates select="page/head" mode="layout"/>
 			</head>
 			<body>
 				<div id="wrap">
@@ -31,18 +31,18 @@
 									<span class="icon-bar"/>
 								</button>
 								<xsl:call-template name="logo">
-									<xsl:with-param name="baseUrl" select="body/baseUrl"/>
+									<xsl:with-param name="baseUrl" select="page/baseUrl"/>
 								</xsl:call-template>
 							</div>
 							<div id="navbar" class="navbar-collapse collapse">
 								<xsl:call-template name="link-bar">
-									<xsl:with-param name="baseUrl" select="body/baseUrl"/>
+									<xsl:with-param name="baseUrl" select="page/baseUrl"/>
 								</xsl:call-template>
 							</div>
 						</div>
 					</nav>
 					<div class="container">
-						<xsl:apply-templates select="body/flashMessages/flashMessage"/>
+						<xsl:apply-templates select="page/flashMessages/flashMessage"/>
 						<xsl:apply-templates/>
 					</div>
 				</div>
