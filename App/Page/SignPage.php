@@ -11,7 +11,7 @@ final class SignPage extends BasePage {
 	public function renderIn(): \SimpleXMLElement {
 		return new \SimpleXMLElement(
 			sprintf(
-				'<forms><in>%s</in></forms>',
+				'<forms><form name="in">%s</form></forms>',
 				(new Control\SignInForm(
 					$this->url,
 					$this->csrf,

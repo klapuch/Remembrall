@@ -9,15 +9,14 @@
 			<body>
 				<xsl:element name="p">
 					<xsl:text>Hi, there are some changes on </xsl:text>
-					<xsl:value-of select="url"/>
+					<xsl:apply-templates select="url"/>
 					<xsl:text> website with </xsl:text>
-					<xsl:value-of select="expression"/>
+					<xsl:apply-templates select="expression"/>
 					<xsl:text> expression</xsl:text>
 				</xsl:element>
-
 				<p>Check it out bellow this text</p>
 				<br/>
-				<p><xsl:value-of select="content"/></p>
+				<p><xsl:apply-templates select="content"/></p>
 			</body>
 		</html>
 	</xsl:template>

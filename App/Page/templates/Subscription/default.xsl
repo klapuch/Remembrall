@@ -8,11 +8,11 @@
     </xsl:template>
 
     <xsl:template match="forms">
-        <xsl:apply-templates select="subscribing"/>
+        <xsl:apply-templates select="*"/>
     </xsl:template>
 
-	<xsl:template match="subscribing">
-		<xsl:copy-of select="./*"/>
+	<xsl:template match="form">
+		<xsl:copy-of select="*"/>
     </xsl:template>
 
 </xsl:stylesheet>

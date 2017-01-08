@@ -13,7 +13,7 @@ final class SubscriptionPage extends BasePage {
 	public function renderDefault(): \SimpleXMLElement {
 		return new \SimpleXMLElement(
 			sprintf(
-				'<forms><subscribing>%s</subscribing></forms>',
+				'<forms><form name="subscribing">%s</form></forms>',
 				(new Control\SubscribingForm(
 					$this->url,
 					$this->csrf,

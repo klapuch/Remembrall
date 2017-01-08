@@ -9,7 +9,7 @@
 
 	<xsl:template match="subscriptions">
 		<table class="table table-hover">
-			<xsl:apply-templates select="/body/tables/overview/headings"/>
+			<xsl:apply-templates select="/body/tables/table[@purpose='overview']"/>
 			<tbody>
 				<xsl:apply-templates select="subscription">
 					<xsl:sort select="lastUpdate" order="descending"/>
@@ -26,7 +26,7 @@
 			<td><xsl:value-of select="expression"/></td>
 			<td><xsl:value-of select="url"/></td>
 			<td>
-				<xsl:apply-templates select="/body/confirmations/cancel">
+				<xsl:apply-templates select="/body/confirmations">
 					<xsl:with-param name="id" select="id"/>
 				</xsl:apply-templates>
 			</td>
@@ -38,10 +38,10 @@
 	</xsl:template>
 
 	<xsl:template match="heading">
-		<th><p><xsl:value-of select="."/></p></th>
+		<th><p><xsl:apply-templates/></p></th>
 	</xsl:template>
 
-	<xsl:template match="confirmations/*">
+	<xsl:template match="confirmation">
 		<xsl:param name="id"/>
 		<a
 			role="button"

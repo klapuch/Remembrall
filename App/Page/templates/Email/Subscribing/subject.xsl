@@ -5,9 +5,9 @@
 
 	<xsl:template match="part">
 		<xsl:text>Changes occurred on </xsl:text>
-		<xsl:value-of select="url"/>
+		<xsl:apply-templates select="url"/>
 		<xsl:text> page with </xsl:text>
-		<xsl:value-of select="expression"/>
+		<xsl:apply-templates select="expression"/>
 		<xsl:text> expression</xsl:text>
 	</xsl:template>
 

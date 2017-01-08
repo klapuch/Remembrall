@@ -15,16 +15,16 @@
         <xsl:element name="link">
             <xsl:attribute name="rel">stylesheet</xsl:attribute>
             <xsl:attribute name="href">
-				<xsl:apply-templates select="href"/>
+				<xsl:apply-templates select="href" mode="assets"/>
             </xsl:attribute>
             <xsl:if test="integrity">
                 <xsl:attribute name="integrity">
-					<xsl:apply-templates select="integrity"/>
+					<xsl:apply-templates select="integrity" mode="assets"/>
                 </xsl:attribute>
             </xsl:if>
             <xsl:if test="crossorigin">
 				<xsl:attribute name="crossorigin">
-					<xsl:apply-templates select="crossorigin"/>
+					<xsl:apply-templates select="crossorigin" mode="assets"/>
                 </xsl:attribute>
             </xsl:if>
         </xsl:element>
@@ -33,22 +33,22 @@
     <xsl:template match="script">
         <xsl:element name="script">
             <xsl:attribute name="src">
-				<xsl:apply-templates select="src"/>
+				<xsl:apply-templates select="src" mode="assets"/>
             </xsl:attribute>
             <xsl:if test="integrity">
 				<xsl:attribute name="integrity">
-					<xsl:apply-templates select="integrity"/>
+					<xsl:apply-templates select="integrity" mode="assets"/>
                 </xsl:attribute>
             </xsl:if>
             <xsl:if test="crossorigin">
                 <xsl:attribute name="crossorigin">
-					<xsl:apply-templates select="crossorigin"/>
+					<xsl:apply-templates select="crossorigin" mode="assets"/>
                 </xsl:attribute>
             </xsl:if>
         </xsl:element>
 	</xsl:template>
 
-	<xsl:template match="text()">
+	<xsl:template match="text()" mode="assets">
 		<xsl:value-of select="normalize-space(.)"/>
 	</xsl:template>
 
