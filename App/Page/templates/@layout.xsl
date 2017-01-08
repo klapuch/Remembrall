@@ -12,14 +12,7 @@
 		<xsl:text disable-output-escaping="yes">&lt;!DOCTYPE html&gt;</xsl:text>
 		<html lang="cs-cz">
 			<head>
-				<xsl:call-template name="head">
-					<xsl:with-param name="description">
-						<xsl:value-of select="body/head/description"/>
-					</xsl:with-param>
-					<xsl:with-param name="title">
-						<xsl:value-of select="body/head/title"/>
-					</xsl:with-param>
-				</xsl:call-template>
+				<xsl:apply-templates select="body/head" mode="layout"/>
 			</head>
 			<body>
 				<div id="wrap">
@@ -59,6 +52,18 @@
 			</body>
 		</html>
 	</xsl:template>
+
+	<xsl:template match="head" mode="layout">
+		<xsl:call-template name="head">
+			<xsl:with-param name="description">
+				<xsl:apply-templates select="description"/>
+			</xsl:with-param>
+			<xsl:with-param name="title">
+				<xsl:apply-templates select="title"/>
+			</xsl:with-param>
+		</xsl:call-template>
+	</xsl:template>
+
 
 	<xsl:template name="footer">
 		<div id="footer">
