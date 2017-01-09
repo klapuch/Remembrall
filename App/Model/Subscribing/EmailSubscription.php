@@ -14,7 +14,8 @@ final class EmailSubscription implements Subscription {
 	private const SENDER = 'Remembrall <remembrall@remembrall.org>';
 	private const TEMPLATES = __DIR__ . '/../../Page/templates/Email/Subscribing',
 		SUBJECT = self::TEMPLATES . '/subject.xsl',
-		CONTENT = self::TEMPLATES . '/content.xsl';
+		CONTENT = self::TEMPLATES . '/content.xsl',
+		SCHEMA = self::TEMPLATES . '/constraint.xsd';
 	private $origin;
 	private $mailer;
 	private $recipient;
@@ -48,12 +49,20 @@ final class EmailSubscription implements Subscription {
 			->addTo($this->recipient)
 			->setSubject(
 				(new Output\XsltTemplate(
-					self::SUBJECT, new Output\Xml($this->subscription, 'part')
+					self::SUBJECT,
+					new Output\ValidXml(
+						new Output\Xml($this->subscription, 'part'),
+						self::SCHEMA
+					)
 				))->render()
 			)
 			->setHtmlBody(
 				(new Output\XsltTemplate(
-					self::CONTENT, new Output\Xml($this->subscription, 'part')
+					self::CONTENT,
+					new Output\ValidXml(
+						new Output\Xml($this->subscription, 'part'),
+						self::SCHEMA
+					)
 				))->render()
 			)
 		);
