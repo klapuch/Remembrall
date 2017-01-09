@@ -19,7 +19,7 @@
 		"klapuch/encryption": "^1.0.0",
 		"klapuch/access": "^2.0.0",
 		"klapuch/storage": "^2.0.0",
-		"klapuch/output": "^1.0.0",
+		"klapuch/output": "^2.0.0",
 		"klapuch/ini": "^1.0.0",
 		"klapuch/uri": "^1.0.0",
 		"klapuch/time": "^3.0.0",

@@ -80,7 +80,7 @@ final class ChangedSubscriptions extends TestCase\Database {
 			new Mail\SendmailMailer(),
 			$this->database
 		))->print(new Output\FakeFormat());
-		Assert::contains('//matched', (string)$subscriptions[0]);
+		Assert::contains('//matched', $subscriptions[0]->serialize());
 	}
 
 	public function testEmptyPrinting() {

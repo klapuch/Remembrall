@@ -90,9 +90,9 @@ final class OwnedSubscriptions extends TestCase\Database {
 			$this->database
 		))->print(new Output\FakeFormat(''));
 		Assert::count(3, $subscriptions);
-		Assert::contains('1993-01-01', (string)$subscriptions[0]);
-		Assert::contains('1997-01-01', (string)$subscriptions[1]);
-		Assert::contains('1996-01-01', (string)$subscriptions[2]);
+		Assert::contains('1993-01-01', $subscriptions[0]->serialize());
+		Assert::contains('1997-01-01', $subscriptions[1]->serialize());
+		Assert::contains('1996-01-01', $subscriptions[2]->serialize());
 	}
 
 	public function testEmptyPrinting() {
