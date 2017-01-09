@@ -4,28 +4,33 @@
 	<xsl:import href="assets.xsl"/>
 
 	<!-- To be overridden -->
-    <xsl:template name="additionalStyles"/>
+	<xsl:template name="additionalStyles"/>
 
-	<xsl:template name="head">
-		<xsl:param name="title"/>
-		<xsl:param name="description"/>
+	<xsl:template match="head">
+		<xsl:call-template name="styles"/>
+		<xsl:apply-templates/>
+	</xsl:template>
+
+	<xsl:template match="title">
 		<title>
 			<xsl:choose>
-				<xsl:when test="normalize-space($title) = ''">
+				<xsl:when test="normalize-space(.) = ''">
 					<xsl:text>Remembrall</xsl:text>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="normalize-space($title)"/>
+					<xsl:value-of select="normalize-space(.)"/>
 				</xsl:otherwise>
 			</xsl:choose>
 		</title>
-		<xsl:call-template name="meta" mode="head">
-			<xsl:with-param name="description" select="$description"/>
-		</xsl:call-template>
-		<xsl:call-template name="styles"/>
-		<xsl:call-template name="additionalStyles"/>
 	</xsl:template>
 
+	<xsl:template match="description">
+		<xsl:call-template name="meta" mode="head">
+			<xsl:with-param name="description" select="."/>
+		</xsl:call-template>
+	</xsl:template>
+
+	<!-- Todo: Separate to meta headers  -->
 	<xsl:template name="meta" mode="head">
 		<xsl:param name="description"/>
 		<xsl:if test="$description != ''">

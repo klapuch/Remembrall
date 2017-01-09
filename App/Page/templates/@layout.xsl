@@ -12,7 +12,7 @@
 		<xsl:text disable-output-escaping="yes">&lt;!DOCTYPE html&gt;</xsl:text>
 		<html lang="cs-cz">
 			<head>
-				<xsl:apply-templates select="page/head" mode="layout"/>
+				<xsl:apply-templates select="page/head"/>
 			</head>
 			<body>
 				<div id="wrap">
@@ -30,14 +30,10 @@
 									<span class="icon-bar"/>
 									<span class="icon-bar"/>
 								</button>
-								<xsl:call-template name="logo">
-									<xsl:with-param name="baseUrl" select="page/baseUrl"/>
-								</xsl:call-template>
+								<xsl:call-template name="logo"/>
 							</div>
 							<div id="navbar" class="navbar-collapse collapse">
-								<xsl:call-template name="link-bar">
-									<xsl:with-param name="baseUrl" select="page/baseUrl"/>
-								</xsl:call-template>
+								<xsl:call-template name="link-bar"/>
 							</div>
 						</div>
 					</nav>
@@ -51,17 +47,6 @@
 				<xsl:call-template name="additionalScripts"/>
 			</body>
 		</html>
-	</xsl:template>
-
-	<xsl:template match="head" mode="layout">
-		<xsl:call-template name="head">
-			<xsl:with-param name="description">
-				<xsl:apply-templates select="description"/>
-			</xsl:with-param>
-			<xsl:with-param name="title">
-				<xsl:apply-templates select="title"/>
-			</xsl:with-param>
-		</xsl:call-template>
 	</xsl:template>
 
 	<xsl:template name="footer">
@@ -80,14 +65,18 @@
 	</xsl:template>
 
 	<xsl:template name="logo">
-		<xsl:param name="baseUrl"/>
+		<xsl:param name="baseUrl">
+			<xsl:apply-templates select="page/baseUrl"/>
+		</xsl:param>
 		<a href="{$baseUrl}" class="navbar-brand" title="Remembrall">
 			<strong>Remembrall</strong>
 		</a>
 	</xsl:template>
 
 	<xsl:template name="link-bar">
-		<xsl:param name="baseUrl"/>
+		<xsl:param name="baseUrl">
+			<xsl:apply-templates select="page/baseUrl"/>
+		</xsl:param>
 		<ul class="nav navbar-nav">
 			<xsl:for-each select="document('links.xml')/links/link">
 				<li>
