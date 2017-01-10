@@ -7,17 +7,14 @@
 
 	<xsl:template match="meta">
 		<xsl:element name="meta">
-			<xsl:attribute name="name">
-				<xsl:apply-templates select="@name" mode="head"/>
-			</xsl:attribute>
-			<xsl:attribute name="content">
-				<xsl:apply-templates select="@content" mode="head"/>
-			</xsl:attribute>
+			<xsl:apply-templates select="@*" mode="head"/>
 		</xsl:element>
 	</xsl:template>
 
 	<xsl:template match="@*" mode="head">
-		<xsl:value-of select="normalize-space(.)"/>
+		<xsl:attribute name="{name()}">
+			<xsl:value-of select="normalize-space(.)"/>
+		</xsl:attribute>
 	</xsl:template>
 
 </xsl:stylesheet>
