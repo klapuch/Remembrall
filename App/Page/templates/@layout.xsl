@@ -2,10 +2,14 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
 	<xsl:import href="head.xsl"/>
+	<xsl:import href="assets.xsl"/>
 
 	<xsl:param name="layout" select="document('layout.xml')"/>
 
 	<xsl:output method="html" encoding="utf-8"/>
+
+	<!-- To be overridden -->
+	<xsl:template name="additionalStyles"/>
 
 	<!-- To be overridden -->
 	<xsl:template name="additionalScripts"/>
@@ -14,6 +18,7 @@
 		<xsl:text disable-output-escaping="yes">&lt;!DOCTYPE html&gt;</xsl:text>
 		<html lang="cs-cz">
 			<head>
+				<xsl:call-template name="styles"/>
 				<xsl:apply-templates select="page/head"/>
 				<xsl:apply-templates select="$layout/page/head"/>
 			</head>
