@@ -3,6 +3,8 @@
 
 	<xsl:import href="head.xsl"/>
 
+	<xsl:param name="layout" select="document('layout.xml')"/>
+
 	<xsl:output method="html" encoding="utf-8"/>
 
 	<!-- To be overridden -->
@@ -13,6 +15,7 @@
 		<html lang="cs-cz">
 			<head>
 				<xsl:apply-templates select="page/head"/>
+				<xsl:apply-templates select="$layout/page/head"/>
 			</head>
 			<body>
 				<div id="wrap">

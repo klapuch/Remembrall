@@ -9,8 +9,6 @@
 	<xsl:template match="head">
 		<xsl:call-template name="styles"/>
 		<xsl:apply-templates/>
-		<meta name="robots" content="index, follow"/>
-		<meta name="author" content="Dominik Klapuch"/>
 	</xsl:template>
 
 	<xsl:template match="title">
