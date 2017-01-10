@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <page>
     <head>
-        <title>Subscription</title>
-        <description>Subscribe a new part</description>
+		<title>Subscription</title>
+		<meta name="description" content="Subscribe a new part"/>
     </head>
 </page>

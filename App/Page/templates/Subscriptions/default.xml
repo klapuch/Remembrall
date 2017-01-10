@@ -2,7 +2,7 @@
 <page>
 	<head>
 		<title>Subscriptions</title>
-		<description>All the subscriptions owned by you</description>
+		<meta name="description" content="All the subscriptions owned by you"/>
 	</head>
 	<body>
 		<confirmations>

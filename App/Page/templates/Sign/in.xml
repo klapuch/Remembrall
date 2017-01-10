@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <page>
     <head>
-        <title>Sign in</title>
-        <description>Sign in via existing account</description>
+		<title>Sign in</title>
+		<meta name="description" content="Sign in via existing account"/>
     </head>
 </page>

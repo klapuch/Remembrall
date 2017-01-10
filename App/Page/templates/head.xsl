@@ -9,38 +9,27 @@
 	<xsl:template match="head">
 		<xsl:call-template name="styles"/>
 		<xsl:apply-templates/>
+		<meta name="robots" content="index, follow"/>
+		<meta name="author" content="Dominik Klapuch"/>
 	</xsl:template>
 
 	<xsl:template match="title">
-		<title>
-			<xsl:choose>
-				<xsl:when test="normalize-space(.) = ''">
-					<xsl:text>Remembrall</xsl:text>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="normalize-space(.)"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</title>
+		<title><xsl:apply-templates/></title>
 	</xsl:template>
 
-	<xsl:template match="description">
-		<xsl:call-template name="meta" mode="head">
-			<xsl:with-param name="description" select="."/>
-		</xsl:call-template>
+	<xsl:template match="meta">
+		<xsl:element name="meta">
+			<xsl:attribute name="name">
+				<xsl:apply-templates select="@name" mode="head"/>
+			</xsl:attribute>
+			<xsl:attribute name="content">
+				<xsl:apply-templates select="@content" mode="head"/>
+			</xsl:attribute>
+		</xsl:element>
 	</xsl:template>
 
-	<!-- Todo: Separate to meta headers  -->
-	<xsl:template name="meta" mode="head">
-		<xsl:param name="description"/>
-		<xsl:if test="$description != ''">
-			<meta
-				name="description"
-				content="{substring(normalize-space($description), 1, 150)}"
-			/>
-		</xsl:if>
-		<meta name="robots" content="index, follow"/>
-		<meta name="author" content="Dominik Klapuch"/>
+	<xsl:template match="@*" mode="head">
+		<xsl:value-of select="normalize-space(.)"/>
 	</xsl:template>
 
 </xsl:stylesheet>
