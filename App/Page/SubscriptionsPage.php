@@ -15,7 +15,7 @@ final class SubscriptionsPage extends BasePage {
 					$this->subscriber,
 					$this->database
 				))->print(new Output\Xml([], 'subscription'))
-			))->serialize()
+			))->serialization()
 		);
 	}
 
