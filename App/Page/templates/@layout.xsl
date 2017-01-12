@@ -17,11 +17,7 @@
 	<xsl:template match="/">
 		<xsl:text disable-output-escaping="yes">&lt;!DOCTYPE html&gt;</xsl:text>
 		<html lang="cs-cz">
-			<head>
-				<xsl:call-template name="styles"/>
-				<xsl:apply-templates select="page/head"/>
-				<xsl:apply-templates select="$layout/page/head"/>
-			</head>
+			<xsl:apply-templates select="page/head" mode="layout"/>
 			<body>
 				<div id="wrap">
 					<nav class="navbar navbar-default navbar-static-top">
@@ -55,6 +51,14 @@
 				<xsl:call-template name="additionalScripts"/>
 			</body>
 		</html>
+	</xsl:template>
+
+	<xsl:template match="head" mode="layout">
+		<head>
+			<xsl:call-template name="styles"/>
+			<xsl:apply-templates/>
+			<xsl:apply-templates select="$layout/page/head"/>
+		</head>
 	</xsl:template>
 
 	<xsl:template name="footer">
