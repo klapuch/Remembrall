@@ -81,9 +81,9 @@ abstract class BasePage {
 		return [
 			new \SimpleXMLElement(
 				sprintf(
-					'<subscriber><email>%s</email><id>%d</id></subscriber>',
-					$this->subscriber->email(),
-					$this->subscriber->id()
+					'<subscriber id="%d" email="%s"/>',
+					$this->subscriber->id(),
+					$this->subscriber->email()
 				)
 			),
 			new \SimpleXMLElement(
