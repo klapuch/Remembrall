@@ -14,7 +14,9 @@
 	</xsd:simpleType>
 
 	<xsd:simpleType name="id">
-		<xsd:restriction base="xsd:int"/>
+		<xsd:restriction base="xsd:unsignedInt">
+			<xsd:minInclusive value="1"/>
+		</xsd:restriction>
 	</xsd:simpleType>
 
 	<xsd:simpleType name="email">
