@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+	<xsd:simpleType name="id">
+		<xsd:restriction base="xsd:unsignedInt">
+			<xsd:minInclusive value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="expression">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="url">
+		<xsd:restriction base="xsd:anyURI"/>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="lastUpdate">
+		<!-- TODO -->
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="interval">
+		<xsd:restriction base="xsd:string">
+			<!-- TODO -->
+			<xsd:pattern value="\d{1,2}\s\w+"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:complexType name="subscription">
+		<xsd:all>
+			<xsd:element name="id" type="id"/>
+			<xsd:element name="expression" type="expression"/>
+			<xsd:element name="url" type="url"/>
+			<xsd:element name="lastUpdate" type="lastUpdate"/>
+			<xsd:element name="interval" type="interval"/>
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="subscriptions">
+		<xsd:sequence>
+			<xsd:element
+				name="subscription"
+				type="subscription"
+				minOccurs="0"
+				maxOccurs="unbounded"
+			/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:element name="subscriptions" type="subscriptions"/>
+
+</xsd:schema>

@@ -9,12 +9,15 @@ use Remembrall\Model\Subscribing;
 final class SubscriptionsPage extends BasePage {
 	public function renderDefault(): \SimpleXMLElement {
 		return new \SimpleXMLElement(
-			(new Output\WrappedXml(
-				'subscriptions',
-				...(new Subscribing\OwnedSubscriptions(
-					$this->subscriber,
-					$this->database
-				))->print(new Output\Xml([], 'subscription'))
+			(new Output\ValidXml(
+				new Output\WrappedXml(
+					'subscriptions',
+					...(new Subscribing\OwnedSubscriptions(
+						$this->subscriber,
+						$this->database
+					))->print(new Output\Xml([], 'subscription'))
+				),
+				__DIR__ . '/templates/Subscriptions/constraint.xsd'
 			))->serialization()
 		);
 	}
