@@ -38,7 +38,7 @@ final class StoredSubscription implements Subscription {
 	}
 
 	public function notify(): void {
-		(new Storage\Transaction($this->database))->start(function() {
+		(new Storage\Transaction($this->database))->start(function(): void {
 			(new Storage\ParameterizedQuery(
 				$this->database,
 				'INSERT INTO notifications (subscription_id, notified_at) VALUES

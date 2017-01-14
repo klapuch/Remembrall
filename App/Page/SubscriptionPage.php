@@ -39,7 +39,7 @@ final class SubscriptionPage extends BasePage {
 				)
 			);
 			(new Storage\Transaction($this->database))->start(
-				function() use ($url, $subscription) {
+				function() use ($url, $subscription): void {
 					$page = (new Subscribing\LoggedPages(
 						new Subscribing\UniquePages($this->database),
 						$this->logs
