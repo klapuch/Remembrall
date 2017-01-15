@@ -11,11 +11,6 @@ language: php
 php:
   - 7.1
 
-matrix:
-    include:
-        - php: 7.1
-          env: coverage="--coverage ./coverage.xml --coverage-src ./App" PHP_BIN=phpdbg
-
 before_install:
   - composer self-update
 
@@ -24,7 +19,7 @@ install:
 
 before_script:
   - psql -c 'CREATE DATABASE remembrall_test;' -U postgres
-  - psql -U postgres remembrall_test < ./Tests/TestCase/schema.sql
+  - psql -U postgres remembrall_test < Tests/TestCase/schema.sql
 
 after_script:
     - >
@@ -35,6 +30,7 @@ after_script:
 
 script:
   - ./vendor/bin/phing
+  - ./vendor/bin/tester -p phpdbg -c Tests/php.ini -o console -s --coverage coverage.xml --coverage-src App Tests
 
 after_failure:
   - for i in $(find Tests -name \*.actual); do echo "--- $i"; cat $i; echo; echo; done
