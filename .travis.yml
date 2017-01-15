@@ -23,10 +23,9 @@ before_script:
 
 after_script:
     - >
-      if [ "$coverage" != "" ]; then
       wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar
       && php coveralls.phar --verbose --config Tests/.coveralls.yml
-      || true; fi
+      || true;
 
 script:
   - ./vendor/bin/phing
