@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="Remembrall" default="check">
+
+	<target name="check" depends="composer, lint, phpcpd, phpstan, phpcs, tests, cgi-tests"/>
+
+	<target name="composer">
+		<exec executable="composer" logoutput="true" passthru="true" checkreturn="true">
+			<arg value="update"/>
+		</exec>
+	</target>
+
+	<target name="lint">
+		<exec executable="vendor/bin/parallel-lint" logoutput="true" passthru="true" checkreturn="true">
+			<arg value="-e"/>
+			<arg value="php,phpt"/>
+			<arg path="App" />
+			<arg path="Tests" />
+		</exec>
+	</target>
+
+	<target name="phpcpd">
+		<exec executable="vendor/bin/phpcpd" logoutput="true" passthru="true" checkreturn="true">
+			<arg path="App"/>
+		</exec>
+	</target>
+
+	<target name="phpstan">
+		<exec executable="vendor/bin/phpstan" logoutput="true" passthru="true" checkreturn="true">
+			<arg value="analyse"/>
+			<arg value="-l"/>
+			<arg value="5"/>
+			<arg value="-c"/>
+			<arg path="phpstan.neon"/>
+			<arg path="App"/>
+			<arg path="Tests"/>
+		</exec>
+	</target>
+
+	<target name="phpcs">
+		<exec executable="vendor/bin/phpcs" logoutput="true" passthru="true" checkreturn="true">
+			<arg value="--standard=ruleset.xml"/>
+			<arg value="--extensions=php,phpt"/>
+			<arg value="--encoding=utf-8"/>
+			<arg value="--tab-width=4"/>
+			<arg value="-sp"/>
+			<arg path="App"/>
+		</exec>
+	</target>
+
+	<target name="tests">
+		<exec executable="vendor/bin/tester" logoutput="true" passthru="true" checkreturn="true">
+			<arg value="-o"/>
+			<arg value="console"/>
+			<arg value="-s"/>
+			<arg value="-p"/>
+			<arg value="php"/>
+			<arg value="-c"/>
+			<arg path="Tests/php.ini"/>
+			<arg path="Tests/"/>
+		</exec>
+	</target>
+
+	<target name="cgi-tests">
+		<exec executable="vendor/bin/tester" logoutput="true" passthru="true" checkreturn="true">
+			<arg value="-o"/>
+			<arg value="console"/>
+			<arg value="-s"/>
+			<arg value="-p"/>
+			<arg value="php-cgi"/>
+			<arg value="-c"/>
+			<arg path="Tests/php.ini"/>
+			<arg path="Tests/"/>
+		</exec>
+	</target>
+
+</project>
