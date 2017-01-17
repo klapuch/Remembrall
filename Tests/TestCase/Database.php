@@ -39,9 +39,7 @@ abstract class Database extends Mockery {
 	 * @param array $tables
 	 */
 	final protected function truncate(array $tables) {
-		$this->database->exec(
-			sprintf('TRUNCATE %s', implode(',', $tables))
-		);
+		$this->database->exec(sprintf('TRUNCATE %s', implode(',', $tables)));
 	}
 
 	/**
