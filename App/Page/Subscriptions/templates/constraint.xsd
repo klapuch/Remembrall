@@ -23,7 +23,7 @@
 	<xsd:simpleType name="interval">
 		<xsd:restriction base="xsd:string">
 			<!-- TODO -->
-			<xsd:pattern value="\d{1,2}\s\w+"/>
+			<xsd:pattern value=".+"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 

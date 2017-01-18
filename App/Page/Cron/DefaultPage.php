@@ -1,12 +1,13 @@
 <?php
 declare(strict_types = 1);
-namespace Remembrall\Page;
+namespace Remembrall\Page\Cron;
 
 use Nette\Mail;
 use Remembrall\Model\Subscribing;
+use Remembrall\Page;
 
-final class CronPage extends BasePage {
-	public function actionDefault(): void {
+final class DefaultPage extends Page\BasePage {
+	public function render(): \SimpleXMLElement {
 		try {
 			$parts = new Subscribing\LoggedParts(
 				new Subscribing\UnreliableParts(

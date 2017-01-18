@@ -1,14 +1,15 @@
 <?php
 declare(strict_types = 1);
-namespace Remembrall\Page;
+namespace Remembrall\Page\Sign;
 
 use Klapuch\{
-	Access, Output
+	Access, Output, Form
 };
 use Remembrall\Control;
+use Remembrall\Page;
 
-final class SignPage extends BasePage {
-	public function renderIn(): \SimpleXMLElement {
+final class InPage extends Page\BasePage {
+	public function render(): \SimpleXMLElement {
 		return new \SimpleXMLElement(
 			sprintf(
 				'<forms><form name="in">%s</form></forms>',
@@ -35,19 +36,6 @@ final class SignPage extends BasePage {
 			$_SESSION['id'] = $user->id();
 			$this->flashMessage('You have been logged in', 'success');
 			$this->redirect('subscriptions');
-		} catch(\Throwable $ex) {
-			$this->flashMessage($ex->getMessage(), 'danger');
-			$this->redirect('sign/in');
-		}
-	}
-
-	public function actionOut(): void {
-		try {
-			if(!isset($_SESSION['id']))
-				throw new \Exception('You are not logged in');
-			unset($_SESSION['id']);
-			$this->flashMessage('You have been logged out', 'success');
-			$this->redirect('sign/in');
 		} catch(\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
 			$this->redirect('sign/in');

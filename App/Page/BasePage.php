@@ -8,7 +8,6 @@ use Klapuch\{
 use Remembrall\Model\Access;
 
 abstract class BasePage {
-	private const TEMPLATES = __DIR__ . '/templates';
 	/** @var \Klapuch\Uri\Uri */
 	protected $url;
 	/** @var \Remembrall\Model\Access\Subscriber */
@@ -49,35 +48,10 @@ abstract class BasePage {
 	}
 
 	/**
-	 * Render the template
-	 * @param string $page
-	 * @param string $action
-	 * @param array $parameters
-	 * @return string
-	 */
-	final public function render(
-		string $page,
-		string $action,
-		array $parameters
-	): string {
-		$method = 'render' . $action;
-		$xml = new \DOMDocument();
-		$xml->load(self::TEMPLATES . sprintf('/%s/%s.xml', $page, $action));
-		return (new Output\XsltTemplate(
-			self::TEMPLATES . sprintf('/%s/%s.xsl', $page, $action),
-			new Output\MergedXml(
-				$xml,
-				$this->$method($parameters),
-				...$this->layout()
-			)
-		))->render();
-	}
-
-	/**
 	 * XML for layout
 	 * @return array
 	 */
-	final protected function layout(): array {
+	final public function template(array $parameters): array {
 		return [
 			new \SimpleXMLElement(
 				sprintf(
@@ -99,6 +73,7 @@ abstract class BasePage {
 					(new Csrf\CsrfInput($this->csrf))->protection()
 				)
 			),
+			$this->render($parameters),
 		];
 	}
 

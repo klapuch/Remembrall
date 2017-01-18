@@ -2,11 +2,12 @@
 declare(strict_types = 1);
 require __DIR__ . '/../vendor/autoload.php';
 use Klapuch\{
-	Ini, Storage, Uri, Log, Encryption
+	Ini, Storage, Uri, Log, Encryption, Output
 };
 const CONFIGURATION = __DIR__ . '/../App/Configuration/.config.ini';
 const TIMER = 'timer';
 const ELAPSE = 20;
+const TEMPLATES = __DIR__ . '/../App/Page/templates';
 try {
 	mb_internal_encoding('UTF-8');
 	$logs = new Log\FilesystemLogs(
@@ -33,7 +34,7 @@ try {
 	$path = explode('/', $url->path());
 	$page = isset($path[0]) && $path[0] ? ucfirst($path[0]) : 'Default';
 	$resource = isset($path[1]) && $path[1] ? ucfirst($path[1]) : 'Default';
-	$class = 'Remembrall\\Page\\' . $page . 'Page';
+	$class = sprintf('Remembrall\\Page\\%s\%sPage', $page, $resource);
 	/** @var \Remembrall\Page\BasePage $target */
 	$target = new $class(
 		$url,
@@ -45,17 +46,19 @@ try {
 		$logs,
 		new Encryption\AES256CBC($configuration['KEYS']['password'])
 	);
-	[$action, $render, $submit] = [
-		'action' . $resource,
-		'render' . $resource,
-		'submit' . $resource,
-	];
+	[$submit] = ['submit' . $resource];
 	$target->startup();
-	if(method_exists($target, $action))
-		$target->$action($_SERVER['REQUEST_METHOD'] === 'GET' ? $_GET : $_POST);
 	if($_SERVER['REQUEST_METHOD'] === 'POST' && method_exists($target, $submit))
 		$target->$submit($_POST);
-	echo $target->render($page, lcfirst($resource), $_GET);
+	$xml = new \DOMDocument();
+	$xml->load(TEMPLATES . sprintf('/../%s/templates/%s.xml', $page, lcfirst($resource)));
+	echo (new Output\XsltTemplate(
+		TEMPLATES . sprintf('/../%s/templates/%s.xsl', $page, lcfirst($resource)),
+		new Output\MergedXml(
+			$xml,
+			...$target->template($_GET)
+		)
+	))->render();
 } catch(Throwable $ex) {
 	$logs->put(
 		new Log\PrettyLog(

@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace Remembrall\Page;
+namespace Remembrall\Page\Subscription;
 
 use Klapuch\{
 	Http, Output, Storage, Time, Uri
@@ -8,9 +8,10 @@ use Klapuch\{
 use Nette\Caching\Storages;
 use Remembrall\Control;
 use Remembrall\Model\Subscribing;
+use Remembrall\Page;
 
-final class SubscriptionPage extends BasePage {
-	public function renderDefault(): \SimpleXMLElement {
+final class DefaultPage extends Page\BasePage {
+	public function render(): \SimpleXMLElement {
 		return new \SimpleXMLElement(
 			sprintf(
 				'<forms><form name="subscribing">%s</form></forms>',
@@ -23,7 +24,7 @@ final class SubscriptionPage extends BasePage {
 		);
 	}
 
-	public function submitSubscribe(array $subscription): void {
+	public function submitDefault(array $subscription): void {
 		try {
 			(new Control\SubscribingForm(
 				$this->url,

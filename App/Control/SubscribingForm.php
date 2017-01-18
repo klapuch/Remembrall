@@ -8,7 +8,7 @@ use Klapuch\{
 
 final class SubscribingForm extends Control {
 	private const COLUMNS = 5;
-	private const ACTION = 'subscription/subscribe';
+	private const ACTION = 'subscription/default';
 
 	protected function create(): Form\Control {
 		return new Form\RawForm(

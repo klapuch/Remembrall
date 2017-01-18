@@ -1,28 +1,14 @@
 <?php
 declare(strict_types = 1);
-namespace Remembrall\Page;
+namespace Remembrall\Page\Subscriptions;
 
 use Klapuch\Output;
 use Remembrall\Exception\NotFoundException;
 use Remembrall\Model\Subscribing;
+use Remembrall\Page;
 
-final class SubscriptionsPage extends BasePage {
-	public function renderDefault(): \SimpleXMLElement {
-		return new \SimpleXMLElement(
-			(new Output\ValidXml(
-				new Output\WrappedXml(
-					'subscriptions',
-					...(new Subscribing\OwnedSubscriptions(
-						$this->subscriber,
-						$this->database
-					))->print(new Output\Xml([], 'subscription'))
-				),
-				__DIR__ . '/templates/Subscriptions/constraint.xsd'
-			))->serialization()
-		);
-	}
-
-	public function actionDelete(array $parameters): void {
+final class DeletePage extends Page\BasePage {
+	public function render(array $parameters): \SimpleXMLElement {
 		try {
 			$this->protect();
 			['id' => $id] = $parameters;
