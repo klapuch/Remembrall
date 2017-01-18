@@ -13,20 +13,17 @@ use Remembrall\{
 final class DefaultPage extends Page\BasePage {
 	public function render(array $parameters): Output\Format {
 		$dom = new \DOMDocument();
-		$dom->appendChild($dom->createElement('forms'));
-		return new Output\MergedXml(
-			$dom,
-			new \SimpleXMLElement(
-				sprintf(
-					'<form name="subscribing">%s</form>',
-					(new Control\SubscribingForm(
-						$this->url,
-						$this->csrf,
-						$this->storage
-					))->render()
-				)
+		$dom->loadXML(
+			sprintf(
+				'<forms><form name="subscribing">%s</form></forms>',
+				(new Control\SubscribingForm(
+					$this->url,
+					$this->csrf,
+					$this->storage
+				))->render()
 			)
 		);
+		return new Output\DomFormat($dom, 'xml');
 	}
 
 	public function submitDefault(array $subscription): void {

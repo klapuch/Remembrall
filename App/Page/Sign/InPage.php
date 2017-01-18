@@ -12,20 +12,17 @@ use Remembrall\{
 final class InPage extends Page\BasePage {
 	public function render(array $parameters): Output\Format {
 		$dom = new \DOMDocument();
-		$dom->appendChild($dom->createElement('forms'));
-		return new Output\MergedXml(
-			$dom,
-			new \SimpleXMLElement(
-				sprintf(
-					'<form name="in">%s</form>',
-					(new Control\SignInForm(
-						$this->url,
-						$this->csrf,
-						$this->storage
-					))->render()
-				)
+		$dom->loadXML(
+			sprintf(
+				'<forms><form name="in">%s</form></forms>',
+				(new Control\SignInForm(
+					$this->url,
+					$this->csrf,
+					$this->storage
+				))->render()
 			)
 		);
+		return new Output\DomFormat($dom, 'xml');
 	}
 
 	public function submitIn(array $credentials): void {
