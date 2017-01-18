@@ -47,7 +47,7 @@ abstract class BasePage {
 		}
 	}
 
-	abstract public function render(array $parameters): \SimpleXMLElement;
+	abstract public function render(array $parameters): Output\Format;
 
 	/**
 	 * XML for layout
@@ -75,7 +75,7 @@ abstract class BasePage {
 					(new Csrf\CsrfInput($this->csrf))->protection()
 				)
 			),
-			$this->render($parameters),
+			new \SimpleXMLElement($this->render($parameters)->serialization()),
 		];
 	}
 

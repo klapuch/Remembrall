@@ -3,12 +3,11 @@ declare(strict_types = 1);
 namespace Remembrall\Page\Subscriptions;
 
 use Klapuch\Output;
-use Remembrall\Exception\NotFoundException;
 use Remembrall\Model\Subscribing;
 use Remembrall\Page;
 
 final class DeletePage extends Page\BasePage {
-	public function render(array $parameters): \SimpleXMLElement {
+	public function render(array $parameters): Output\Format {
 		try {
 			$this->protect();
 			['id' => $id] = $parameters;

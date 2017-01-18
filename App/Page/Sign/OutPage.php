@@ -9,7 +9,7 @@ use Remembrall\Control;
 use Remembrall\Page;
 
 final class OutPage extends Page\BasePage {
-	public function render(array $parameters): \SimpleXMLElement {
+	public function render(array $parameters): Output\Format {
 		try {
 			if(!isset($_SESSION['id']))
 				throw new \Exception('You are not logged in');

@@ -9,15 +9,20 @@ use Remembrall\Control;
 use Remembrall\Page;
 
 final class InPage extends Page\BasePage {
-	public function render(array $parameters): \SimpleXMLElement {
-		return new \SimpleXMLElement(
-			sprintf(
-				'<forms><form name="in">%s</form></forms>',
-				(new Control\SignInForm(
-					$this->url,
-					$this->csrf,
-					$this->storage
-				))->render()
+	public function render(array $parameters): Output\Format {
+		$dom = new \DOMDocument();
+		$dom->appendChild($dom->createElement('forms'));
+		return new Output\MergedXml(
+			$dom,
+			new \SimpleXMLElement(
+				sprintf(
+					'<form name="in">%s</form>',
+					(new Control\SignInForm(
+						$this->url,
+						$this->csrf,
+						$this->storage
+					))->render()
+				)
 			)
 		);
 	}

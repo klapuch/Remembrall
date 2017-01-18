@@ -5,21 +5,25 @@ namespace Remembrall\Page\Subscription;
 use Klapuch\{
 	Http, Output, Storage, Time, Uri
 };
-use Nette\Caching\Storages;
 use Remembrall\Control;
 use Remembrall\Model\Subscribing;
 use Remembrall\Page;
 
 final class DefaultPage extends Page\BasePage {
-	public function render(array $parameters): \SimpleXMLElement {
-		return new \SimpleXMLElement(
-			sprintf(
-				'<forms><form name="subscribing">%s</form></forms>',
-				(new Control\SubscribingForm(
-					$this->url,
-					$this->csrf,
-					$this->storage
-				))->render()
+	public function render(array $parameters): Output\Format {
+		$dom = new \DOMDocument();
+		$dom->appendChild($dom->createElement('forms'));
+		return new Output\MergedXml(
+			$dom,
+			new \SimpleXMLElement(
+				sprintf(
+					'<form name="subscribing">%s</form>',
+					(new Control\SubscribingForm(
+						$this->url,
+						$this->csrf,
+						$this->storage
+					))->render()
+				)
 			)
 		);
 	}
