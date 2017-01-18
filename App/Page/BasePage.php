@@ -47,6 +47,8 @@ abstract class BasePage {
 		}
 	}
 
+	abstract public function render(array $parameters): \SimpleXMLElement;
+
 	/**
 	 * XML for layout
 	 * @return array

@@ -9,7 +9,7 @@ use Remembrall\Control;
 use Remembrall\Page;
 
 final class InPage extends Page\BasePage {
-	public function render(): \SimpleXMLElement {
+	public function render(array $parameters): \SimpleXMLElement {
 		return new \SimpleXMLElement(
 			sprintf(
 				'<forms><form name="in">%s</form></forms>',

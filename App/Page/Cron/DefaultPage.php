@@ -7,7 +7,7 @@ use Remembrall\Model\Subscribing;
 use Remembrall\Page;
 
 final class DefaultPage extends Page\BasePage {
-	public function render(): \SimpleXMLElement {
+	public function render(array $parameters): \SimpleXMLElement {
 		try {
 			$parts = new Subscribing\LoggedParts(
 				new Subscribing\UnreliableParts(
