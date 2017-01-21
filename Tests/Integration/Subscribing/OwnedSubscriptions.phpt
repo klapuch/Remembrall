@@ -19,7 +19,7 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class OwnedSubscriptions extends TestCase\Database {
-	public function testSubscribingBrandNew() {
+	public function testSubscribingBrandNewOne() {
 		(new Subscribing\OwnedSubscriptions(
 			new Access\FakeSubscriber(666),
 			$this->database
@@ -43,23 +43,20 @@ final class OwnedSubscriptions extends TestCase\Database {
 			new Access\FakeSubscriber(666),
 			$this->database
 		);
-		$subscription = [
-			new Uri\FakeUri('www.google.com'),
-			'//google',
-			new Time\FakeInterval(null, null, 'PT120S'),
-		];
-		$subscriptions->subscribe(...$subscription);
+		$subscribe = function() use($subscriptions) {
+			$subscriptions->subscribe(
+				new Uri\FakeUri('www.google.com'),
+				'//google',
+				new Time\FakeInterval(null, null, 'PT120S')
+			);
+		}; 
+		$subscribe();
 		$ex = Assert::exception(
-			function() use ($subscription, $subscriptions) {
-				$subscriptions->subscribe(...$subscription);
-			},
+			$subscribe,
 			DuplicateException::class,
 			'"//google" expression on "www.google.com" page is already subscribed by you'
 		);
-		Assert::type(UniqueConstraint::class, $ex->getPrevious());
-		$statement = $this->database->prepare('SELECT * FROM subscriptions');
-		$statement->execute();
-		Assert::count(1, $statement->fetchAll());
+		Assert::type(\Throwable::class, $ex->getPrevious());
 	}
 
 	public function testPrinting() {

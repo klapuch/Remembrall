@@ -16,7 +16,7 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class UniqueSubscribers extends TestCase\Database {
-	public function testRegisteringBrandNew() {
+	public function testRegisteringBrandNewOne() {
 		$subscriber = (new Access\UniqueSubscribers(
 			$this->database,
 			new Encryption\FakeCipher()
@@ -34,19 +34,13 @@ final class UniqueSubscribers extends TestCase\Database {
 		Assert::same(1, $users[0]['id']);
 	}
 
-	public function testRegisteringToOthers() {
-		$this->database->exec(
-			"INSERT INTO users (email, password) VALUES
-			('foo@bar.cz', 'secret')"
-		);
-		$subscriber = (new Access\UniqueSubscribers(
+	public function testRegisteringMultipleDifferentEmails() {
+		$subscribers = new Access\UniqueSubscribers(
 			$this->database,
 			new Encryption\FakeCipher()
-		))->register('bar@foo.cz', 'passw0rt');
-		Assert::equal(
-			new Access\RegisteredSubscriber(2, $this->database),
-			$subscriber
 		);
+		$subscribers->register('foo@bar.cz', 'ultra secret password');
+		$subscribers->register('bar@foo.cz', 'weak password');
 		$statement = $this->database->prepare('SELECT * FROM users');
 		$statement->execute();
 		$users = $statement->fetchAll();
@@ -59,24 +53,21 @@ final class UniqueSubscribers extends TestCase\Database {
 		Assert::same(2, $users[1]['id']);
 	}
 
-	public function testThrowingOnEmailDuplication() {
-		$email = 'foo@bar.cz';
-		$statement = $this->database->prepare(
-			"INSERT INTO users (email, password) VALUES
-			(?, 'secret')"
+	public function testThrowingOnDuplicatedEmail() {
+		$subscribers = new Access\UniqueSubscribers(
+			$this->database,
+			new Encryption\FakeCipher()
 		);
-		$statement->execute([$email]);
+		$register = function() use($subscribers) {
+			$subscribers->register('foo@bar.cz', 'password');
+		};
+		$register();
 		$ex = Assert::exception(
-			function() {
-				(new Access\UniqueSubscribers(
-					$this->database,
-					new Encryption\FakeCipher()
-				))->register('foo@bar.cz', 'passw0rt');
-			},
+			$register,
 			\Remembrall\Exception\DuplicateException::class,
 			'Email "foo@bar.cz" already exists'
 		);
-		Assert::type(Storage\UniqueConstraint::class, $ex->getPrevious());
+		Assert::type(\Throwable::class, $ex->getPrevious());
 	}
 
 	protected function prepareDatabase() {

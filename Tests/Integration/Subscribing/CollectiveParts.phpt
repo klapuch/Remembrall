@@ -16,7 +16,7 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class CollectiveParts extends TestCase\Database {
-	public function testAddingBrandNew() {
+	public function testAddingBrandNewOne() {
 		(new Subscribing\CollectiveParts(
 			$this->database
 		))->add(
@@ -35,13 +35,15 @@ final class CollectiveParts extends TestCase\Database {
 	}
 
 	public function testAddingToOthers() {
-		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.google.com', '//google', 'google content', 'google snap')"
-		);
-		(new Subscribing\CollectiveParts(
+		$parts = new Subscribing\CollectiveParts(
 			$this->database
-		))->add(
+		);
+		$parts->add(
+			new Subscribing\FakePart('google content', null, 'google snap'),
+			new Uri\FakeUri('www.google.com'),
+			'//google'
+		);
+		$parts->add(
 			new Subscribing\FakePart('facedown content', null, 'facedown snap'),
 			new Uri\FakeUri('www.facedown.cz'),
 			'//facedown'
@@ -69,24 +71,17 @@ final class CollectiveParts extends TestCase\Database {
 			new Uri\FakeUri('www.google.com'),
 			'//p'
 		);
-		$statement = $this->database->prepare(
-			"SELECT *
-			FROM part_visits
-			WHERE visited_at >= NOW() - INTERVAL '1 MINUTE'"
-		);
+		$statement = $this->database->prepare("SELECT * FROM part_visits");
 		$statement->execute();
 		Assert::count(1, $statement->fetchAll());
 	}
 
 	public function testUpdatingDuplication() {
 		$oldPart = new Subscribing\FakePart('Content', null, 'OLD_SNAP');
-		(new Subscribing\CollectiveParts(
-			$this->database
-		))->add($oldPart, new Uri\FakeUri('www.google.com'), '//p');
 		$newPart = new Subscribing\FakePart('NEW_CONTENT', null, 'NEW_SNAP');
-		(new Subscribing\CollectiveParts(
-			$this->database
-		))->add($newPart, new Uri\FakeUri('www.google.com'), '//p');
+		$parts = new Subscribing\CollectiveParts($this->database);
+		$parts->add($oldPart, new Uri\FakeUri('www.google.com'), '//p');
+		$parts->add($newPart, new Uri\FakeUri('www.google.com'), '//p');
 		$statement = $this->database->prepare('SELECT * FROM parts');
 		$statement->execute();
 		$parts = $statement->fetchAll();
@@ -97,13 +92,11 @@ final class CollectiveParts extends TestCase\Database {
 
 	public function testUpdatingDuplicationWithAllRecordedVisitation() {
 		$this->truncate(['part_visits']);
-		$part = new Subscribing\FakePart('<p>Content</p>', null, 'snap');
-		(new Subscribing\CollectiveParts(
-			$this->database
-		))->add($part, new Uri\FakeUri('www.google.com'), '//p');
-		(new Subscribing\CollectiveParts(
-			$this->database
-		))->add($part, new Uri\FakeUri('www.google.com'), '//p');
+		$oldPart = new Subscribing\FakePart('Content', null, 'OLD_SNAP');
+		$newPart = new Subscribing\FakePart('NEW_CONTENT', null, 'NEW_SNAP');
+		$parts = new Subscribing\CollectiveParts($this->database);
+		$parts->add($oldPart, new Uri\FakeUri('www.google.com'), '//p');
+		$parts->add($newPart, new Uri\FakeUri('www.google.com'), '//p');
 		$statement = $this->database->prepare('SELECT * FROM part_visits');
 		$statement->execute();
 		Assert::count(2, $statement->fetchAll());
