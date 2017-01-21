@@ -13,7 +13,7 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class LoggedPages extends TestCase\Mockery {
+final class DirectedPages extends TestCase\Mockery {
 	public function testThroughCallback() {
 		$uri = new Uri\FakeUri();
 		$page = new Subscribing\FakePage();
@@ -25,9 +25,9 @@ final class LoggedPages extends TestCase\Mockery {
 			->with([$origin, 'add'], [$uri, $page])
 			->andReturn($addedPage);
 		Assert::noError(function() use($origin, $callback, $uri, $page) {
-			(new Subscribing\LoggedPages($origin, $callback))->add($uri, $page);
+			(new Subscribing\DirectedPages($origin, $callback))->add($uri, $page);
 		});
 	}
 }
 
-(new LoggedPages())->run();
+(new DirectedPages())->run();

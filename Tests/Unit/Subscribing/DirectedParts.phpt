@@ -15,7 +15,7 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class LoggedParts extends TestCase\Mockery {
+final class DirectedParts extends TestCase\Mockery {
 	public function testThroughCallback() {
 		$uri = new Uri\FakeUri();
 		$part = new Subscribing\FakePart();
@@ -28,7 +28,7 @@ final class LoggedParts extends TestCase\Mockery {
 			->once()
 			->with([$origin, 'add'], [$part, $uri, $expression]);
 		Assert::noError(function() use($origin, $callback, $uri, $part, $expression) {
-			(new Subscribing\LoggedParts(
+			(new Subscribing\DirectedParts(
 				$origin,
 				$callback
 			))->add($part, $uri, $expression);
@@ -38,16 +38,16 @@ final class LoggedParts extends TestCase\Mockery {
 			->with([$origin, 'getIterator'], [])
 			->andReturn($iterator);
 		Assert::noError(function() use($origin, $callback) {
-			(new Subscribing\LoggedParts($origin, $callback))->getIterator();
+			(new Subscribing\DirectedParts($origin, $callback))->getIterator();
 		});
 		$callback->shouldReceive('invoke')
 			->once()
 			->with([$origin, 'print'], [$format])
 			->andReturn([$format]);
 		Assert::noError(function() use($origin, $callback, $format) {
-			(new Subscribing\LoggedParts($origin, $callback))->print($format);
+			(new Subscribing\DirectedParts($origin, $callback))->print($format);
 		});
 	}
 }
 
-(new LoggedParts())->run();
+(new DirectedParts())->run();

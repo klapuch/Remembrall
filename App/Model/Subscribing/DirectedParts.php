@@ -8,9 +8,9 @@ use Klapuch\{
 use Remembrall\Model\Misc;
 
 /**
- * Log every error action
+ * Parts directed by callback
  */
-final class LoggedParts extends Parts {
+final class DirectedParts extends Parts {
 	private $origin;
 	private $callback;
 

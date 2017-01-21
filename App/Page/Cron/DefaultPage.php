@@ -12,7 +12,7 @@ use Remembrall\Page;
 final class DefaultPage extends Page\BasePage {
 	public function render(array $parameters): Output\Format {
 		try {
-			$parts = new Subscribing\LoggedParts(
+			$parts = new Subscribing\DirectedParts(
 				new Subscribing\UnreliableParts(
 					new Subscribing\CollectiveParts($this->database),
 					$this->database
@@ -27,7 +27,7 @@ final class DefaultPage extends Page\BasePage {
 					$this->log($ex);
 				}
 			}
-			$subscriptions = new Subscribing\LoggedSubscriptions(
+			$subscriptions = new Subscribing\DirectedSubscriptions(
 				new Subscribing\ChangedSubscriptions(
 					new Subscribing\FakeSubscriptions(),
 					new Mail\SendmailMailer(),

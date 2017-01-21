@@ -15,7 +15,7 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class LoggedSubscriptions extends TestCase\Mockery {
+final class DirectedSubscriptions extends TestCase\Mockery {
 	public function testThroughCallback() {
 		$uri = new Uri\FakeUri();
 		$interval = new Time\FakeInterval();
@@ -28,7 +28,7 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 			->once()
 			->with([$origin, 'subscribe'], [$uri, $expression, $interval]);
 		Assert::noError(function() use($origin, $callback, $uri, $interval, $expression) {
-			(new Subscribing\LoggedSubscriptions(
+			(new Subscribing\DirectedSubscriptions(
 				$origin,
 				$callback
 			))->subscribe($uri, $expression, $interval);
@@ -38,7 +38,7 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 			->with([$origin, 'getIterator'], [])
 			->andReturn($iterator);
 		Assert::noError(function() use($origin, $callback) {
-			(new Subscribing\LoggedSubscriptions(
+			(new Subscribing\DirectedSubscriptions(
 				$origin,
 				$callback
 			))->getIterator();
@@ -48,7 +48,7 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 			->with([$origin, 'print'], [$format])
 			->andReturn([$format]);
 		Assert::noError(function() use($origin, $callback, $format) {
-			(new Subscribing\LoggedSubscriptions(
+			(new Subscribing\DirectedSubscriptions(
 				$origin,
 				$callback
 			))->print($format);
@@ -56,4 +56,4 @@ final class LoggedSubscriptions extends TestCase\Mockery {
 	}
 }
 
-(new LoggedSubscriptions())->run();
+(new DirectedSubscriptions())->run();

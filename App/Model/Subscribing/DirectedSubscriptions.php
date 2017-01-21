@@ -8,9 +8,9 @@ use Klapuch\{
 use Remembrall\Model\Misc;
 
 /**
- * Log every error action
+ * Subscriptions directed by callback
  */
-final class LoggedSubscriptions implements Subscriptions {
+final class DirectedSubscriptions implements Subscriptions {
 	private $origin;
 	private $callback;
 

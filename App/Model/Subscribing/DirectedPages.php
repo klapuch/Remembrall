@@ -6,9 +6,9 @@ use Klapuch\Uri;
 use Remembrall\Model\Misc;
 
 /**
- * Log every error action
+ * Pages directed by callback
  */
-final class LoggedPages implements Pages {
+final class DirectedPages implements Pages {
 	private $origin;
 	private $callback;
 
