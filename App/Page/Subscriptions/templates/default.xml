@@ -5,6 +5,7 @@
 		<meta name="description" content="All the subscriptions owned by you"/>
 	</head>
 	<body>
+		<header level="1">Subscriptions</header>
 		<confirmations>
 			<confirmation purpose="cancellation">
 				<message>Are you sure you want to cancel the subscription?</message>

@@ -3,5 +3,8 @@
     <head>
 		<title>Subscription</title>
 		<meta name="description" content="Subscribe a new part"/>
-    </head>
+	</head>
+	<body>
+		<header level="1">Subscription</header>
+	</body>
 </page>

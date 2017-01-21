@@ -5,6 +5,7 @@
 		<meta name="description" content="The most popular parts"/>
 	</head>
 	<body>
+		<header level="1">Popular parts</header>
 		<tables>
 			<table purpose="overview">
 				<headings>

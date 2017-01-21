@@ -3,5 +3,8 @@
     <head>
 		<title>Sign in</title>
 		<meta name="description" content="Sign in via existing account"/>
-    </head>
+	</head>
+	<body>
+		<header level="1">Sign in</header>
+	</body>
 </page>
