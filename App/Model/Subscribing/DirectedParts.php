@@ -10,7 +10,7 @@ use Remembrall\Model\Misc;
 /**
  * Parts directed by callback
  */
-final class DirectedParts extends Parts {
+final class DirectedParts implements Parts {
 	private $origin;
 	private $callback;
 
@@ -38,8 +38,5 @@ final class DirectedParts extends Parts {
 			[$this->origin, __FUNCTION__],
 			func_get_args()
 		);
-	}
-
-	protected function rows(): array {
 	}
 }

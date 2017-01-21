@@ -3,13 +3,13 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Http, Storage, Uri
+	Http, Storage, Uri, Output
 };
 
 /**
  * The most subscribed and therefore the most popular parts
  */
-final class PopularParts extends Parts {
+final class PopularParts implements Parts {
 	private $origin;
 	private $database;
 
@@ -52,16 +52,29 @@ final class PopularParts extends Parts {
 		}
 	}
 
-	protected function rows(): array {
+	public function print(Output\Format $format): array {
+		return array_map(
+			function(array $part) use ($format): Output\Format {
+				return $format->with('id', $part['id'])
+					->with('url', $part['url'])
+					->with('expression', $part['expression'])
+					->with('content', $part['content'])
+					->with('occurrences', $part['occurrences']);
+			},
+			$this->rows()
+		);
+	}
+
+	private function rows(): array {
 		return (new Storage\ParameterizedQuery(
 			$this->database,
-			'SELECT id, page_url AS url, expression, content, snapshot
+			'SELECT id, page_url AS url, expression, content, snapshot, occurrences
 			FROM parts
 			INNER JOIN (
-				SELECT part_id, COUNT(*) AS popularity
+				SELECT part_id, COUNT(*) AS occurrences
 				FROM subscriptions
 				GROUP BY part_id
-				ORDER BY popularity DESC
+				ORDER BY occurrences DESC
 			) AS subscriptions ON subscriptions.part_id = parts.id'
 		))->rows();
 	}

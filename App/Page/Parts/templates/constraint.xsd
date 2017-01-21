@@ -19,12 +19,19 @@
 		<xsd:restriction base="xsd:string"/>
 	</xsd:simpleType>
 
+	<xsd:simpleType name="occurrences">
+		<xsd:restriction base="xsd:unsignedInt">
+			<xsd:minInclusive value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
 	<xsd:complexType name="part">
 		<xsd:all>
 			<xsd:element name="id" type="id"/>
 			<xsd:element name="url" type="url"/>
 			<xsd:element name="expression" type="expression"/>
 			<xsd:element name="content" type="content"/>
+			<xsd:element name="occurrences" type="occurrences" minOccurs="0"/>
 		</xsd:all>
 	</xsd:complexType>
 

@@ -3,13 +3,13 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Http, Storage, Uri
+	Http, Storage, Uri, Output
 };
 
 /**
  * All parts stored in the database shared with everyone
  */
-final class CollectiveParts extends Parts {
+final class CollectiveParts implements Parts {
 	private $database;
 
 	public function __construct(\PDO $database) {
@@ -61,7 +61,19 @@ final class CollectiveParts extends Parts {
 		}
 	}
 
-	protected function rows(): array {
+	public function print(Output\Format $format): array {
+		return array_map(
+			function(array $part) use ($format): Output\Format {
+				return $format->with('id', $part['id'])
+					->with('url', $part['url'])
+					->with('expression', $part['expression'])
+					->with('content', $part['content']);
+			},
+			$this->rows()
+		);
+	}
+
+	private function rows(): array {
 		return (new Storage\ParameterizedQuery(
 			$this->database,
 			'SELECT id, page_url AS url, snapshot, content, expression FROM parts'
