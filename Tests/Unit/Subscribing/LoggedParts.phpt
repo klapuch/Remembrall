@@ -6,49 +6,46 @@
 namespace Remembrall\Unit\Subscribing;
 
 use Klapuch\{
-	Uri, Log, Output
+	Uri, Output
 };
 use Remembrall\Model\Subscribing;
+use Remembrall\Model\Misc;
 use Remembrall\TestCase;
 use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
 final class LoggedParts extends TestCase\Mockery {
-	public function testLoggingOnThrowing() {
-		$logs = $this->mock(Log\Logs::class);
-		$logs->shouldReceive('put')->times(3);
-		$parts = new Subscribing\LoggedParts(
-			new Subscribing\FakeParts(new \DomainException('fooMessage')), $logs
-		);
-		Assert::exception(function() use($parts) {
-			$parts->add(new Subscribing\FakePart(), new Uri\FakeUri('url'), '//p');
-		}, \DomainException::class, 'fooMessage');
-		Assert::exception(function() use($parts) {
-			$parts->getIterator();
-		}, \DomainException::class, 'fooMessage');
-		Assert::exception(function() use($parts) {
-			$parts->print(new Output\FakeFormat());
-		}, \DomainException::class, 'fooMessage');
-	}
-
-	public function testNoExceptionWithoutLogging() {
-		$parts = new Subscribing\LoggedParts(
-			new Subscribing\FakeParts(),
-			$this->mock(Log\Logs::class)
-		);
-		Assert::noError(function() use($parts) {
-			$parts->add(
-				new Subscribing\FakePart(),
-				new Uri\FakeUri('url'),
-				'//p'
-			);
+	public function testThroughCallback() {
+		$uri = new Uri\FakeUri();
+		$part = new Subscribing\FakePart();
+		$iterator = new \ArrayIterator([]);
+		$format = new Output\FakeFormat();
+		$expression = '//p';
+		$origin = $this->mock(Subscribing\Parts::class);
+		$callback = $this->mock(Misc\Callback::class);
+		$callback->shouldReceive('invoke')
+			->once()
+			->with([$origin, 'add'], [$part, $uri, $expression]);
+		Assert::noError(function() use($origin, $callback, $uri, $part, $expression) {
+			(new Subscribing\LoggedParts(
+				$origin,
+				$callback
+			))->add($part, $uri, $expression);
 		});
-		Assert::noError(function() use($parts) {
-			$parts->getIterator();
+		$callback->shouldReceive('invoke')
+			->once()
+			->with([$origin, 'getIterator'], [])
+			->andReturn($iterator);
+		Assert::noError(function() use($origin, $callback) {
+			(new Subscribing\LoggedParts($origin, $callback))->getIterator();
 		});
-		Assert::noError(function() use($parts) {
-			$parts->print(new Output\FakeFormat());
+		$callback->shouldReceive('invoke')
+			->once()
+			->with([$origin, 'print'], [$format])
+			->andReturn([$format]);
+		Assert::noError(function() use($origin, $callback, $format) {
+			(new Subscribing\LoggedParts($origin, $callback))->print($format);
 		});
 	}
 }

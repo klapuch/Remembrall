@@ -4,7 +4,9 @@ namespace Remembrall\Page\Cron;
 
 use Klapuch\Output;
 use Nette\Mail;
-use Remembrall\Model\Subscribing;
+use Remembrall\Model\{
+	Subscribing, Misc
+};
 use Remembrall\Page;
 
 final class DefaultPage extends Page\BasePage {
@@ -15,7 +17,7 @@ final class DefaultPage extends Page\BasePage {
 					new Subscribing\CollectiveParts($this->database),
 					$this->database
 				),
-				$this->logs
+				new Misc\LoggingCallback($this->logs)
 			);
 			/** @var \Remembrall\Model\Subscribing\Part $part */
 			foreach($parts as $part) {
@@ -31,7 +33,7 @@ final class DefaultPage extends Page\BasePage {
 					new Mail\SendmailMailer(),
 					$this->database
 				),
-				$this->logs
+				new Misc\LoggingCallback($this->logs)
 			);
 			/** @var \Remembrall\Model\Subscribing\Subscription $subscription */
 			foreach($subscriptions as $subscription) {

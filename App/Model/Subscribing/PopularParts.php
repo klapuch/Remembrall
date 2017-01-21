@@ -7,38 +7,29 @@ use Klapuch\{
 };
 
 /**
- * All parts stored in the database shared with everyone
+ * The most subscribed and therefore the most popular parts
  */
-final class CollectiveParts extends Parts {
+final class PopularParts extends Parts {
+	private $origin;
 	private $database;
 
-	public function __construct(\PDO $database) {
+	public function __construct(Parts $origin, \PDO $database) {
+		$this->origin = $origin;
 		$this->database = $database;
 	}
 
 	public function add(Part $part, Uri\Uri $url, string $expression): void {
-		(new Storage\ParameterizedQuery(
-			$this->database,
-			'INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			(:url, :expression, :content, :snapshot)
-			ON CONFLICT (page_url, expression)
-			DO UPDATE SET content = :content, snapshot = :snapshot',
-			[
-				'url' => $url->reference(),
-				'expression' => $expression,
-				'content' => $part->content(),
-				'snapshot' => $part->snapshot(),
-			]
-		))->execute();
+		$this->origin->add($part, $url, $expression);
 	}
 
+	// TODO: Not definite
 	public function getIterator(): \Iterator {
 		foreach($this->rows() as $part) {
 			$page = new StoredPage(
 				new HtmlWebPage(
 					new Http\BasicRequest(
 						'GET',
-						new Uri\ReachableUrl(new Uri\ValidUrl($part['url']))
+						new Uri\ValidUrl($part['url'])
 					)
 				),
 				new Uri\ValidUrl($part['url']),
@@ -64,7 +55,14 @@ final class CollectiveParts extends Parts {
 	protected function rows(): array {
 		return (new Storage\ParameterizedQuery(
 			$this->database,
-			'SELECT id, page_url AS url, snapshot, content, expression FROM parts'
+			'SELECT id, page_url AS url, expression, content, snapshot
+			FROM parts
+			INNER JOIN (
+				SELECT part_id, COUNT(*) AS popularity
+				FROM subscriptions
+				GROUP BY part_id
+				ORDER BY popularity DESC
+			) AS subscriptions ON subscriptions.part_id = parts.id'
 		))->rows();
 	}
 }

@@ -3,23 +3,43 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Uri, Log, Output
+	Uri, Output
 };
 use Remembrall\Model\Misc;
 
 /**
  * Log every error action
  */
-final class LoggedParts extends Misc\LoggingObject implements Parts {
+final class LoggedParts extends Parts {
+	private $origin;
+	private $callback;
+
+	public function __construct(Parts $origin, Misc\Callback $callback) {
+		$this->origin = $origin;
+		$this->callback = $callback;
+	}
+
 	public function add(Part $part, Uri\Uri $uri, string $expression): void {
-		$this->observe(__FUNCTION__, $part, $uri, $expression);
+		$this->callback->invoke(
+			[$this->origin, __FUNCTION__],
+			func_get_args()
+		);
 	}
 
 	public function getIterator(): \Iterator {
-		return $this->observe(__FUNCTION__);
+		return $this->callback->invoke(
+			[$this->origin, __FUNCTION__],
+			func_get_args()
+		);
 	}
 
 	public function print(Output\Format $format): array {
-		return $this->observe(__FUNCTION__, $format);
+		return $this->callback->invoke(
+			[$this->origin, __FUNCTION__],
+			func_get_args()
+		);
+	}
+
+	protected function rows(): array {
 	}
 }

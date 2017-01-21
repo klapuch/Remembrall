@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page>
+	<head>
+		<title>Popular parts</title>
+		<meta name="description" content="The most popular parts"/>
+	</head>
+	<body>
+		<tables>
+			<table purpose="overview">
+				<headings>
+					<heading>#</heading>
+					<heading>URL</heading>
+					<heading>Expression</heading>
+				</headings>
+			</table>
+		</tables>
+	</body>
+</page>

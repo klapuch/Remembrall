@@ -5,7 +5,9 @@ namespace Remembrall\Page\Subscription;
 use Klapuch\{
 	Http, Output, Storage, Time, Uri
 };
-use Remembrall\Model\Subscribing;
+use Remembrall\Model\{
+	Subscribing, Misc
+};
 use Remembrall\{
 	Control, Page
 };
@@ -45,7 +47,7 @@ final class DefaultPage extends Page\BasePage {
 				function() use ($url, $subscription): void {
 					$page = (new Subscribing\LoggedPages(
 						new Subscribing\UniquePages($this->database),
-						$this->logs
+						new Misc\LoggingCallback($this->logs)
 					))->add(
 						$url,
 						new Subscribing\FrugalPage(
@@ -58,7 +60,7 @@ final class DefaultPage extends Page\BasePage {
 					);
 					(new Subscribing\LoggedParts(
 						new Subscribing\CollectiveParts($this->database),
-						$this->logs
+						new Misc\LoggingCallback($this->logs)
 					))->add(
 						new Subscribing\HtmlPart(
 							new Subscribing\MatchingExpression(
@@ -81,7 +83,7 @@ final class DefaultPage extends Page\BasePage {
 							$this->subscriber,
 							$this->database
 						),
-						$this->logs
+						new Misc\LoggingCallback($this->logs)
 					))->subscribe(
 						$url,
 						$subscription['expression'],

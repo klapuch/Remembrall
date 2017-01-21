@@ -9,7 +9,7 @@ use Klapuch\{
 /**
  * Fake
  */
-final class FakeParts implements Parts {
+final class FakeParts extends Parts {
 	private $exception;
 
 	public function __construct(\Throwable $exception = null) {
@@ -30,6 +30,10 @@ final class FakeParts implements Parts {
 	public function print(Output\Format $format): array {
 		if($this->exception)
 			throw $this->exception;
+		return [];
+	}
+
+	protected function rows(): array {
 		return [];
 	}
 }

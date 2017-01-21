@@ -10,7 +10,7 @@ use Nette\Caching\Storages;
 /**
  * All the parts which are no longer trusted as reliable and need to be reloaded
  */
-final class UnreliableParts implements Parts {
+final class UnreliableParts extends Parts {
 	private $origin;
 	private $database;
 
@@ -54,19 +54,7 @@ final class UnreliableParts implements Parts {
 		}
 	}
 
-	public function print(Output\Format $format): array {
-		return array_map(
-			function(array $part) use ($format): Output\Format {
-				return $format->with('id', $part['id'])
-					->with('url', $part['url'])
-					->with('expression', $part['expression'])
-					->with('content', $part['content']);
-			},
-			$this->rows()
-		);
-	}
-
-	private function rows(): array {
+	protected function rows(): array {
 		return (new Storage\ParameterizedQuery(
 			$this->database,
 			"SELECT page_url AS url, expression, parts.id, content, snapshot
