@@ -5,7 +5,9 @@
  */
 namespace Remembrall\Integration\Subscribing;
 
-use Klapuch\Uri;
+use Klapuch\{
+	Uri, Output
+};
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -122,7 +124,26 @@ final class CollectiveParts extends TestCase\Database {
 		Assert::null($parts->current());
 	}
 
-	public function testIteratingEmptyParts() {
+	public function testPrinting() {
+		$this->database->exec(
+			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
+			('www.google.com', '//a', 'a', ''),
+			('www.facedown.cz', '//c', 'c', '')"
+		);
+		$parts = (new Subscribing\CollectiveParts(
+			$this->database
+		))->print(new Output\FakeFormat(''));
+		Assert::count(2, $parts);
+	}
+
+	public function testEmptyPrinting() {
+		$parts = (new Subscribing\CollectiveParts(
+			$this->database
+		))->print(new Output\FakeFormat(''));
+		Assert::count(0, $parts);
+	}
+
+	public function testEmptyIterating() {
 		$parts = (new Subscribing\CollectiveParts($this->database))->getIterator();
 		Assert::null($parts->current());
 	}

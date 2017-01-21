@@ -6,7 +6,7 @@
 namespace Remembrall\Unit\Subscribing;
 
 use Klapuch\{
-	Uri, Log
+	Uri, Log, Output
 };
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
@@ -17,7 +17,7 @@ require __DIR__ . '/../../bootstrap.php';
 final class LoggedParts extends TestCase\Mockery {
 	public function testLoggingOnThrowing() {
 		$logs = $this->mock(Log\Logs::class);
-		$logs->shouldReceive('put')->twice();
+		$logs->shouldReceive('put')->times(3);
 		$parts = new Subscribing\LoggedParts(
 			new Subscribing\FakeParts(new \DomainException('fooMessage')), $logs
 		);
@@ -26,6 +26,9 @@ final class LoggedParts extends TestCase\Mockery {
 		}, \DomainException::class, 'fooMessage');
 		Assert::exception(function() use($parts) {
 			$parts->getIterator();
+		}, \DomainException::class, 'fooMessage');
+		Assert::exception(function() use($parts) {
+			$parts->print(new Output\FakeFormat());
 		}, \DomainException::class, 'fooMessage');
 	}
 
@@ -43,6 +46,9 @@ final class LoggedParts extends TestCase\Mockery {
 		});
 		Assert::noError(function() use($parts) {
 			$parts->getIterator();
+		});
+		Assert::noError(function() use($parts) {
+			$parts->print(new Output\FakeFormat());
 		});
 	}
 }

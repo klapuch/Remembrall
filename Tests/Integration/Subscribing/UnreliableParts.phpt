@@ -5,6 +5,7 @@
  */
 namespace Remembrall\Integration\Subscribing;
 
+use Klapuch\Output;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -13,6 +14,50 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class UnreliableParts extends TestCase\Database {
 	public function testIterating() {
+		$parts = (new Subscribing\UnreliableParts(
+			new Subscribing\FakeParts(),
+			$this->database
+		))->getIterator();
+		$part = $parts->current();
+		Assert::equal('d', $part->content());
+		$parts->next();
+		$part = $parts->current();
+		Assert::equal('a', $part->content());
+		$parts->next();
+		Assert::null($parts->current());
+	}
+
+	public function testEmptyIterating() {
+		$this->truncate(['parts', 'part_visits', 'subscriptions']);
+		$parts = (new Subscribing\UnreliableParts(
+			new Subscribing\FakeParts(),
+			$this->database
+		))->getIterator();
+		Assert::null($parts->current());
+	}
+
+	public function testPrinting() {
+		$parts = (new Subscribing\UnreliableParts(
+			new Subscribing\FakeParts(),
+			$this->database
+		))->print(new Output\FakeFormat(''));
+		Assert::count(2, $parts);
+		Assert::contains('//d', $parts[0]->serialization());
+		Assert::contains('//a', $parts[1]->serialization());
+	}
+
+	public function testEmptyPrinting() {
+		$this->truncate(['parts', 'part_visits', 'subscriptions']);
+		$parts = (new Subscribing\UnreliableParts(
+			new Subscribing\FakeParts(),
+			$this->database
+		))->print(new Output\FakeFormat(''));
+		Assert::count(0, $parts);
+	}
+
+	protected function prepareDatabase() {
+		$this->truncate(['parts', 'part_visits', 'subscriptions']);
+		$this->restartSequence(['parts', 'subscriptions']);
 		$this->database->exec(
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
 			('www.google.com', '//a', 'a', ''),
@@ -40,30 +85,6 @@ final class UnreliableParts extends TestCase\Database {
 			(2, 4, 'PT50S', NOW(), ''),
 			(4, 1, 'PT10S', NOW(), '')"
 		);
-		$parts = (new Subscribing\UnreliableParts(
-			new Subscribing\FakeParts(),
-			$this->database
-		))->getIterator();
-		$part = $parts->current();
-		Assert::equal('d', $part->content());
-		$parts->next();
-		$part = $parts->current();
-		Assert::equal('a', $part->content());
-		$parts->next();
-		Assert::null($parts->current());
-	}
-
-	public function testEmptyIterating() {
-		$parts = (new Subscribing\UnreliableParts(
-			new Subscribing\FakeParts(),
-			$this->database
-		))->getIterator();;
-		Assert::null($parts->current());
-	}
-
-	protected function prepareDatabase() {
-		$this->truncate(['parts', 'part_visits', 'subscriptions']);
-		$this->restartSequence(['parts', 'subscriptions']);
 	}
 }
 

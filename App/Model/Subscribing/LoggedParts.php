@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Uri, Log
+	Uri, Log, Output
 };
 use Remembrall\Model\Misc;
 
@@ -17,5 +17,9 @@ final class LoggedParts extends Misc\LoggingObject implements Parts {
 
 	public function getIterator(): \Iterator {
 		return $this->observe(__FUNCTION__);
+	}
+
+	public function print(Output\Format $format): array {
+		return $this->observe(__FUNCTION__, $format);
 	}
 }

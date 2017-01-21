@@ -2,7 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\Uri;
+use Klapuch\{
+	Uri, Output
+};
 
 /**
  * Fake
@@ -23,5 +25,11 @@ final class FakeParts implements Parts {
 		if($this->exception)
 			throw $this->exception;
 		return new \ArrayIterator();
+	}
+
+	public function print(Output\Format $format): array {
+		if($this->exception)
+			throw $this->exception;
+		return [];
 	}
 }

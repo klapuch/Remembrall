@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Http, Storage, Uri
+	Http, Storage, Uri, Output
 };
 use Nette\Caching\Storages;
 
@@ -24,26 +24,8 @@ final class UnreliableParts implements Parts {
 	}
 
 	public function getIterator(): \Iterator {
-		$parts = (new Storage\ParameterizedQuery(
-			$this->database,
-			"SELECT page_url, expression, parts.id, content, snapshot
-				FROM parts
-				RIGHT JOIN (
-					SELECT MIN(SUBSTRING(interval FROM '[0-9]+')::INT) AS interval,
-					part_id
-					FROM subscriptions
-					GROUP BY part_id
-				) AS subscriptions ON subscriptions.part_id = parts.id 
-				LEFT JOIN (
-					SELECT MAX(visited_at) AS visited_at, part_id
-					FROM part_visits
-					GROUP BY part_id
-				) AS part_visits ON part_visits.part_id = parts.id
-				WHERE visited_at + INTERVAL '1 SECOND' * interval < NOW()
-				ORDER BY visited_at ASC"
-		))->rows();
-		foreach($parts as $part) {
-			$url = new Uri\ValidUrl($part['page_url']);
+		foreach($this->rows() as $part) {
+			$url = new Uri\ValidUrl($part['url']);
 			$page = new FrugalPage(
 				$url,
 				new StoredPage(
@@ -70,5 +52,38 @@ final class UnreliableParts implements Parts {
 				$part['snapshot']
 			);
 		}
+	}
+
+	public function print(Output\Format $format): array {
+		return array_map(
+			function(array $part) use ($format): Output\Format {
+				return $format->with('id', $part['id'])
+					->with('url', $part['url'])
+					->with('expression', $part['expression'])
+					->with('content', $part['content']);
+			},
+			$this->rows()
+		);
+	}
+
+	private function rows(): array {
+		return (new Storage\ParameterizedQuery(
+			$this->database,
+			"SELECT page_url AS url, expression, parts.id, content, snapshot
+				FROM parts
+				RIGHT JOIN (
+					SELECT MIN(SUBSTRING(interval FROM '[0-9]+')::INT) AS interval,
+					part_id
+					FROM subscriptions
+					GROUP BY part_id
+				) AS subscriptions ON subscriptions.part_id = parts.id 
+				LEFT JOIN (
+					SELECT MAX(visited_at) AS visited_at, part_id
+					FROM part_visits
+					GROUP BY part_id
+				) AS part_visits ON part_visits.part_id = parts.id
+				WHERE visited_at + INTERVAL '1 SECOND' * interval < NOW()
+				ORDER BY visited_at ASC"
+		))->rows();
 	}
 }

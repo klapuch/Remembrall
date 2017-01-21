@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Http, Storage, Uri
+	Http, Storage, Uri, Output
 };
 
 /**
@@ -33,19 +33,15 @@ final class CollectiveParts implements Parts {
 	}
 
 	public function getIterator(): \Iterator {
-		$parts = (new Storage\ParameterizedQuery(
-			$this->database,
-			'SELECT id, page_url, snapshot, content, expression FROM parts'
-		))->rows();
-		foreach($parts as $part) {
+		foreach($this->rows() as $part) {
 			$page = new StoredPage(
 				new HtmlWebPage(
 					new Http\BasicRequest(
 						'GET',
-						new Uri\ReachableUrl(new Uri\ValidUrl($part['page_url']))
+						new Uri\ReachableUrl(new Uri\ValidUrl($part['url']))
 					)
 				),
-				new Uri\ValidUrl($part['page_url']),
+				new Uri\ValidUrl($part['url']),
 				$this->database
 			);
 			yield new ConstantPart(
@@ -63,5 +59,24 @@ final class CollectiveParts implements Parts {
 				$part['snapshot']
 			);
 		}
+	}
+
+	public function print(Output\Format $format): array {
+		return array_map(
+			function(array $part) use ($format): Output\Format {
+				return $format->with('id', $part['id'])
+					->with('url', $part['url'])
+					->with('expression', $part['expression'])
+					->with('content', $part['content']);
+			},
+			$this->rows()
+		);
+	}
+
+	private function rows(): array {
+		return (new Storage\ParameterizedQuery(
+			$this->database,
+			'SELECT id, page_url AS url, snapshot, content, expression FROM parts'
+		))->rows();
 	}
 }
