@@ -43,7 +43,7 @@ final class LimitedSubscriptions implements Subscriptions {
 	}
 
 	public function getIterator(): \Iterator {
-		return $this->origin->iterate();
+		return $this->origin->getIterator();
 	}
 
 	public function print(Output\Format $format): array {

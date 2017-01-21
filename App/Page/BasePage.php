@@ -51,6 +51,7 @@ abstract class BasePage {
 
 	/**
 	 * XML for layout
+	 * @param array $parameters
 	 * @return array
 	 */
 	final public function template(array $parameters): array {

@@ -14,7 +14,7 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class RegisteredSubscriber extends TestCase\Database {
 	/**
-	 * @throws Remembrall\Exception\NotFoundException User id "666" does not exist
+	 * @throws \Remembrall\Exception\NotFoundException User id "666" does not exist
 	 */
 	public function testThrowingOnUnknownId() {
 		(new Access\RegisteredSubscriber(666, $this->database))->id();
@@ -47,7 +47,7 @@ final class RegisteredSubscriber extends TestCase\Database {
 	}
 
 	/**
-	 * @throws Remembrall\Exception\NotFoundException User id "666" does not exist
+	 * @throws \Remembrall\Exception\NotFoundException User id "666" does not exist
 	 */
 	public function testThrowingOnUnknownEmail() {
 		(new Access\RegisteredSubscriber(666, $this->database))->email();

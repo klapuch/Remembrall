@@ -3,9 +3,8 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Http, Storage, Uri, Output
+	Http, Storage, Uri
 };
-use Nette\Caching\Storages;
 
 /**
  * All the parts which are no longer trusted as reliable and need to be reloaded

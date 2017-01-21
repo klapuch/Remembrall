@@ -12,7 +12,6 @@ use Remembrall\Model\Access;
  * All the subscriptions owned by one particular subscriber
  */
 final class OwnedSubscriptions implements Subscriptions {
-	private const EMPTY_FORMAT = [];
 	private $owner;
 	private $database;
 
