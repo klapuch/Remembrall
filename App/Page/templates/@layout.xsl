@@ -4,15 +4,9 @@
 	<xsl:import href="head.xsl"/>
 	<xsl:import href="assets.xsl"/>
 
-	<xsl:param name="layout" select="document('layout.xml')"/>
+	<xsl:param name="layout" select="document('layout.xml')/page"/>
 
 	<xsl:output method="html" encoding="utf-8"/>
-
-	<!-- To be overridden -->
-	<xsl:template name="additionalStyles"/>
-
-	<!-- To be overridden -->
-	<xsl:template name="additionalScripts"/>
 
 	<xsl:template match="/">
 		<xsl:text disable-output-escaping="yes">&lt;!DOCTYPE html&gt;</xsl:text>
@@ -20,7 +14,7 @@
 			<xsl:apply-templates select="page/head" mode="layout"/>
 			<body>
 				<div id="wrap">
-					<xsl:apply-templates select="$layout/page/body/menu[@name = 'main']">
+					<xsl:apply-templates select="$layout/body/menu[@name = 'main']">
 						<xsl:with-param name="baseUrl" select="page/baseUrl"/>
 					</xsl:apply-templates>
 					<div class="container">
@@ -29,20 +23,17 @@
 					</div>
 				</div>
 				<xsl:call-template name="footer"/>
-				<xsl:call-template name="scripts"/>
-				<xsl:call-template name="additionalScripts"/>
+				<xsl:apply-templates select="$layout/body/assets"/>
 			</body>
 		</html>
 	</xsl:template>
 
 	<xsl:template match="head" mode="layout">
 		<head>
-			<xsl:call-template name="styles"/>
 			<xsl:apply-templates/>
-			<xsl:apply-templates select="$layout/page/head"/>
+			<xsl:apply-templates select="$layout/head"/>
 		</head>
 	</xsl:template>
-
 
 	<xsl:template match="menu[@name = 'main']">
 		<xsl:param name="baseUrl"/>
