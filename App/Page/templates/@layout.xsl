@@ -20,27 +20,9 @@
 			<xsl:apply-templates select="page/head" mode="layout"/>
 			<body>
 				<div id="wrap">
-					<nav class="navbar navbar-default navbar-static-top">
-						<div class="container">
-							<div class="navbar-header">
-								<button type="button"
-									class="navbar-toggle collapsed"
-									data-toggle="collapse"
-									data-target="#navbar"
-									aria-expanded="false"
-									aria-controls="navbar">
-									<span class="sr-only">Toggle navigation</span>
-									<span class="icon-bar"/>
-									<span class="icon-bar"/>
-									<span class="icon-bar"/>
-								</button>
-								<xsl:call-template name="logo"/>
-							</div>
-							<div id="navbar" class="navbar-collapse collapse">
-								<xsl:call-template name="link-bar"/>
-							</div>
-						</div>
-					</nav>
+					<xsl:apply-templates select="$layout/page/body/menu[@name = 'main']">
+						<xsl:with-param name="baseUrl" select="page/baseUrl"/>
+					</xsl:apply-templates>
 					<div class="container">
 						<xsl:apply-templates select="page/flashMessages/flashMessage"/>
 						<xsl:apply-templates/>
@@ -61,6 +43,61 @@
 		</head>
 	</xsl:template>
 
+
+	<xsl:template match="menu[@name = 'main']">
+		<xsl:param name="baseUrl"/>
+		<nav class="navbar navbar-default navbar-static-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button"
+						class="navbar-toggle collapsed"
+						data-toggle="collapse"
+						data-target="#navbar"
+						aria-expanded="false"
+						aria-controls="navbar">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"/>
+						<span class="icon-bar"/>
+						<span class="icon-bar"/>
+					</button>
+					<xsl:call-template name="logo">
+						<xsl:with-param name="baseUrl" select="$baseUrl"/>
+					</xsl:call-template>
+				</div>
+				<div id="navbar" class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">
+						<xsl:apply-templates match="item">
+							<xsl:with-param name="baseUrl" select="$baseUrl"/>
+						</xsl:apply-templates>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</xsl:template>
+
+	<xsl:template name="logo">
+		<xsl:param name="baseUrl"/>
+		<a href="{$baseUrl}" class="navbar-brand" title="Remembrall">
+			<strong>Remembrall</strong>
+		</a>
+	</xsl:template>
+
+	<xsl:template match="item">
+		<xsl:param name="baseUrl"/>
+		<li>
+			<xsl:apply-templates>
+				<xsl:with-param name="baseUrl" select="$baseUrl"/>
+			</xsl:apply-templates>
+		</li>
+	</xsl:template>
+
+	<xsl:template match="link">
+		<xsl:param name="baseUrl"/>
+		<a href="{concat($baseUrl, @href)}" title="{.}">
+			<xsl:value-of select="."/>
+		</a>
+	</xsl:template>
+
 	<xsl:template name="footer">
 		<div id="footer">
 			<div class="container">
@@ -74,41 +111,6 @@
 				</p>
 			</div>
 		</div>
-	</xsl:template>
-
-	<xsl:template name="logo">
-		<xsl:param name="baseUrl">
-			<xsl:apply-templates select="page/baseUrl"/>
-		</xsl:param>
-		<a href="{$baseUrl}" class="navbar-brand" title="Remembrall">
-			<strong>Remembrall</strong>
-		</a>
-	</xsl:template>
-
-	<xsl:template name="link-bar">
-		<xsl:param name="baseUrl">
-			<xsl:apply-templates select="page/baseUrl"/>
-		</xsl:param>
-		<ul class="nav navbar-nav">
-			<xsl:for-each select="document('links.xml')/links/link">
-				<li>
-					<xsl:call-template name="links">
-						<xsl:with-param name="href" select="@href"/>
-						<xsl:with-param name="title" select="."/>
-						<xsl:with-param name="baseUrl" select="$baseUrl"/>
-					</xsl:call-template>
-				</li>
-			</xsl:for-each>
-		</ul>
-	</xsl:template>
-
-	<xsl:template name="links">
-		<xsl:param name="href"/>
-		<xsl:param name="title"/>
-		<xsl:param name="baseUrl"/>
-		<a href="{concat($baseUrl, $href)}" title="{$title}">
-			<xsl:value-of select="$title"/>
-		</a>
 	</xsl:template>
 
 	<xsl:template match="flashMessage">

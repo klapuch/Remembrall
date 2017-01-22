@@ -4,4 +4,20 @@
 		<meta name="robots" content="index, follow"/>
 		<meta name="author" content="Dominik Klapuch"/>
 	</head>
+	<body>
+		<menu name="main">
+			<item>
+				<link href="parts/popular">Popular parts</link>
+			</item>
+			<item>
+				<link href="subscriptions">Subscriptions</link>
+			</item>
+			<item>
+				<link href="subscription">Subscription</link>
+			</item>
+			<item>
+				<link href="sign/in">Sign in</link>
+			</item>
+		</menu>
+	</body>
 </page>
