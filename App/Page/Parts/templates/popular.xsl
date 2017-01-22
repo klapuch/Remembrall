@@ -22,6 +22,7 @@
 			<td><xsl:number format="1. "/></td>
 			<td><xsl:value-of select="url"/></td>
 			<td><xsl:value-of select="expression"/></td>
+			<td><xsl:value-of select="content"/></td>
 			<td><xsl:value-of select="occurrences"/></td>
 		</tr>
 	</xsl:template>

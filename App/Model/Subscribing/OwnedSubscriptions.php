@@ -72,7 +72,7 @@ final class OwnedSubscriptions implements Subscriptions {
 		$subscriptions = (new Storage\ParameterizedQuery(
 			$this->database,
 			'SELECT subscriptions.id, expression, page_url, interval,
-			visited_at, last_update
+			visited_at, last_update, content
 			FROM parts
 			INNER JOIN (
 				SELECT part_id, MAX(visited_at) AS visited_at
@@ -88,6 +88,7 @@ final class OwnedSubscriptions implements Subscriptions {
 			function(array $subscription) use ($format): Output\Format {
 				return $format->with('expression', $subscription['expression'])
 					->with('id', $subscription['id'])
+					->with('content', $subscription['content'])
 					->with('url', $subscription['page_url'])
 					->with(
 						'interval',

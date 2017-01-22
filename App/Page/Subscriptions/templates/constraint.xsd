@@ -27,6 +27,10 @@
 		</xsd:restriction>
 	</xsd:simpleType>
 
+	<xsd:simpleType name="content">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+
 	<xsd:complexType name="subscription">
 		<xsd:all>
 			<xsd:element name="id" type="id"/>
@@ -34,6 +38,7 @@
 			<xsd:element name="url" type="url"/>
 			<xsd:element name="lastUpdate" type="lastUpdate"/>
 			<xsd:element name="interval" type="interval"/>
+			<xsd:element name="content" type="content" minOccurs="0"/>
 		</xsd:all>
 	</xsd:complexType>
 

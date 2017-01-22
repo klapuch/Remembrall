@@ -26,6 +26,7 @@
 			<td><xsl:value-of select="interval"/></td>
 			<td><xsl:value-of select="expression"/></td>
 			<td><xsl:value-of select="url"/></td>
+			<td><xsl:value-of select="content"/></td>
 			<td>
 				<xsl:apply-templates select="/page/body/confirmations">
 					<xsl:with-param name="id" select="id"/>
