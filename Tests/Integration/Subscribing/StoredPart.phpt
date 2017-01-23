@@ -14,6 +14,11 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class StoredPart extends TestCase\Database {
 	public function testContent() {
+		$this->database->exec(
+			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
+			('www.facedown.cz', '//facedown', 'facedown content', 'face snap'),
+			('www.google.com', '//google', 'google content', 'google snap')"
+		);
 		Assert::same(
 			'facedown content',
 			(new Subscribing\StoredPart(
@@ -25,6 +30,11 @@ final class StoredPart extends TestCase\Database {
 	}
 
 	public function testSnapshot() {
+		$this->database->exec(
+			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
+			('www.facedown.cz', '//facedown', 'facedown content', 'face snap'),
+			('www.google.com', '//google', 'google content', 'google snap')"
+		);
 		Assert::same(
 			'face snap',
 			(new Subscribing\StoredPart(
@@ -36,6 +46,11 @@ final class StoredPart extends TestCase\Database {
 	}
 
 	public function testRefreshingToNewContent() {
+		$this->database->exec(
+			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
+			('www.facedown.cz', '//facedown', 'facedown content', 'face snap'),
+			('www.google.com', '//google', 'google content', 'google snap')"
+		);
 		$id = 1;
 		(new Subscribing\StoredPart(
 			new Subscribing\FakePart('NEW_CONTENT', null, 'NEW_SNAP'),
@@ -50,6 +65,11 @@ final class StoredPart extends TestCase\Database {
 	}
 
 	public function testRefreshingWithRecordedVisitation() {
+		$this->database->exec(
+			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
+			('www.facedown.cz', '//facedown', 'facedown content', 'face snap'),
+			('www.google.com', '//google', 'google content', 'google snap')"
+		);
 		$id = 1;
 		$this->purge(['part_visits']);
 		(new Subscribing\StoredPart(
@@ -63,6 +83,11 @@ final class StoredPart extends TestCase\Database {
 	}
 
 	public function testRefreshingWithoutAffectingOthers() {
+		$this->database->exec(
+			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
+			('www.facedown.cz', '//facedown', 'facedown content', 'face snap'),
+			('www.google.com', '//google', 'google content', 'google snap')"
+		);
 		$id = 1;
 		(new Subscribing\StoredPart(
 			new Subscribing\FakePart('NEW_CONTENT', null, 'NEW_SNAP'),
@@ -83,11 +108,6 @@ final class StoredPart extends TestCase\Database {
 
 	protected function prepareDatabase() {
 		$this->purge(['parts']);
-		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.facedown.cz', '//facedown', 'facedown content', 'face snap'),
-			('www.google.com', '//google', 'google content', 'google snap')"
-		);
 	}
 }
 

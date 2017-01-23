@@ -15,6 +15,16 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class StoredSubscription extends TestCase\Database {
 	public function testCancelingWithoutAffectingOthers() {
+		$this->database->exec(
+			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
+			(1, 111, 3, 'PT2M', '2000-01-01', ''),
+			(2, 666, 4, 'PT3M', '2000-01-01', '')"
+		);
+		$this->database->exec(
+			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
+			(3, 'www.facedown.cz', '//p', 'facedown content', 'facedown snap'),
+			(4, 'www.google.com', '//p', 'google content', 'google snap')"
+		);
 		(new Subscribing\StoredSubscription(1, $this->database))->cancel();
 		$statement = $this->database->prepare('SELECT * FROM subscriptions');
 		$statement->execute();
@@ -24,6 +34,16 @@ final class StoredSubscription extends TestCase\Database {
 	}
 
 	public function testCancelingUnknownWithoutEffect() {
+		$this->database->exec(
+			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
+			(1, 111, 3, 'PT2M', '2000-01-01', ''),
+			(2, 666, 4, 'PT3M', '2000-01-01', '')"
+		);
+		$this->database->exec(
+			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
+			(3, 'www.facedown.cz', '//p', 'facedown content', 'facedown snap'),
+			(4, 'www.google.com', '//p', 'google content', 'google snap')"
+		);
 		$statement = $this->database->prepare('SELECT * FROM subscriptions');
 		$statement->execute();
 		$before = $statement->fetchAll();
@@ -35,6 +55,16 @@ final class StoredSubscription extends TestCase\Database {
 
 
 	public function testEditingIntervalWithoutChangingLastUpdate() {
+		$this->database->exec(
+			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
+			(1, 111, 3, 'PT2M', '2000-01-01', ''),
+			(2, 666, 4, 'PT3M', '2000-01-01', '')"
+		);
+		$this->database->exec(
+			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
+			(3, 'www.facedown.cz', '//p', 'facedown content', 'facedown snap'),
+			(4, 'www.google.com', '//p', 'google content', 'google snap')"
+		);
 		$id = 1;
 		(new Subscribing\StoredSubscription(
 			$id,
@@ -48,11 +78,18 @@ final class StoredSubscription extends TestCase\Database {
 	}
 
 	public function testNotifying() {
+		$this->database->exec(
+			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
+			(1, 111, 3, 'PT2M', '2000-01-01', ''),
+			(2, 666, 4, 'PT3M', '2000-01-01', '')"
+		);
+		$this->database->exec(
+			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
+			(3, 'www.facedown.cz', '//p', 'facedown content', 'facedown snap'),
+			(4, 'www.google.com', '//p', 'google content', 'google snap')"
+		);
 		$id = 1;
-		(new Subscribing\StoredSubscription(
-			$id,
-			$this->database
-		))->notify();
+		(new Subscribing\StoredSubscription($id, $this->database))->notify();
 		$statement = $this->database->prepare('SELECT * FROM notifications');
 		$statement->execute();
 		$notifications = $statement->fetchAll();
@@ -61,6 +98,16 @@ final class StoredSubscription extends TestCase\Database {
 	}
 
 	public function testNotifyingWithUpdatedSnapshot() {
+		$this->database->exec(
+			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
+			(1, 111, 3, 'PT2M', '2000-01-01', ''),
+			(2, 666, 4, 'PT3M', '2000-01-01', '')"
+		);
+		$this->database->exec(
+			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
+			(3, 'www.facedown.cz', '//p', 'facedown content', 'facedown snap'),
+			(4, 'www.google.com', '//p', 'google content', 'google snap')"
+		);
 		$id = 1;
 		(new Subscribing\StoredSubscription(
 			$id,
@@ -73,16 +120,6 @@ final class StoredSubscription extends TestCase\Database {
 
 	protected function prepareDatabase() {
 		$this->purge(['subscriptions', 'notifications', 'parts']);
-		$this->database->exec(
-			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
-			(1, 111, 3, 'PT2M', '2000-01-01', ''),
-			(2, 666, 4, 'PT3M', '2000-01-01', '')"
-		);
-		$this->database->exec(
-			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(3, 'www.facedown.cz', '//p', 'facedown content', 'facedown snap'),
-			(4, 'www.google.com', '//p', 'google content', 'google snap')"
-		);
 	}
 }
 

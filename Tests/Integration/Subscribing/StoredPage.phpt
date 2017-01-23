@@ -15,6 +15,11 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class StoredPage extends TestCase\Database {
 	public function testHtmlContent() {
+		$this->database->exec(
+			"INSERT INTO pages (url, content) VALUES
+			('www.facedown.cz', 'facedown content'),
+			('www.google.com', 'google content')"
+		);
 		Assert::contains(
 			'facedown content',
 			(new Subscribing\StoredPage(
@@ -26,6 +31,11 @@ final class StoredPage extends TestCase\Database {
 	}
 
 	public function testRefreshingToNewContent() {
+		$this->database->exec(
+			"INSERT INTO pages (url, content) VALUES
+			('www.facedown.cz', 'facedown content'),
+			('www.google.com', 'google content')"
+		);
 		$url = 'www.facedown.cz';
 		$content = new \DOMDocument();
 		$content->loadHTML('NEW_CONTENT');
@@ -43,6 +53,11 @@ final class StoredPage extends TestCase\Database {
 	}
 
 	public function testRefreshingWithoutAffectingOthers() {
+		$this->database->exec(
+			"INSERT INTO pages (url, content) VALUES
+			('www.facedown.cz', 'facedown content'),
+			('www.google.com', 'google content')"
+		);
 		$content = new \DOMDocument();
 		$content->loadHTML('NEW_CONTENT');
 		(new Subscribing\StoredPage(
@@ -62,6 +77,11 @@ final class StoredPage extends TestCase\Database {
 	}
 
 	public function testRecordingVisitation() {
+		$this->database->exec(
+			"INSERT INTO pages (url, content) VALUES
+			('www.facedown.cz', 'facedown content'),
+			('www.google.com', 'google content')"
+		);
 		$this->truncate(['page_visits']);
 		$content = new \DOMDocument();
 		$content->loadHTML('NEW_CONTENT');
@@ -79,12 +99,7 @@ final class StoredPage extends TestCase\Database {
 	}
 
 	protected function prepareDatabase() {
-		$this->truncate(['pages']);
-		$this->database->exec(
-			"INSERT INTO pages (url, content) VALUES
-			('www.facedown.cz', 'facedown content'),
-			('www.google.com', 'google content')"
-		);
+		$this->truncate(['pages', 'page_visits']);
 	}
 }
 

@@ -35,9 +35,7 @@ final class CollectiveParts extends TestCase\Database {
 	}
 
 	public function testAddingToOthers() {
-		$parts = new Subscribing\CollectiveParts(
-			$this->database
-		);
+		$parts = new Subscribing\CollectiveParts($this->database);
 		$parts->add(
 			new Subscribing\FakePart('google content', null, 'google snap'),
 			new Uri\FakeUri('www.google.com'),

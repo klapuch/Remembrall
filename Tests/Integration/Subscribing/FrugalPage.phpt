@@ -16,8 +16,8 @@ require __DIR__ . '/../../bootstrap.php';
 final class FrugalPage extends TestCase\Database {
 	public function testFrugalPage() {
 		$this->database->exec(
-			"INSERT INTO page_visits (page_url, visited_at) VALUES
-			('www.google.com', NOW())"
+			"INSERT INTO pages (url, content) VALUES
+			('www.google.com', 'google')"
 		);
 		Assert::contains(
 			'google',
@@ -33,8 +33,11 @@ final class FrugalPage extends TestCase\Database {
 		$this->database->exec(
 			"INSERT INTO page_visits (page_url, visited_at) VALUES
 			('www.google.com', NOW() - INTERVAL '70 MINUTE'),
-			('www.google.com', NOW()),
 			('www.google.com', NOW() - INTERVAL '20 MINUTE')"
+		);
+		$this->database->exec(
+			"INSERT INTO pages (url, content) VALUES
+			('www.google.com', 'google')"
 		);
 		Assert::contains(
 			'google',
@@ -47,6 +50,11 @@ final class FrugalPage extends TestCase\Database {
 	}
 
 	public function testOutdatedPage() {
+		$this->database->exec(
+			"INSERT INTO pages (url, content) VALUES
+			('www.google.com', 'google')"
+		);
+		$this->truncate(['page_visits']);
 		$this->database->exec(
 			"INSERT INTO page_visits (page_url, visited_at) VALUES
 			('www.google.com', NOW() - INTERVAL '11 MINUTE')"
@@ -67,6 +75,11 @@ final class FrugalPage extends TestCase\Database {
 	}
 
 	public function testOutdatedPageWithMultipleVisitation() {
+		$this->database->exec(
+			"INSERT INTO pages (url, content) VALUES
+			('www.google.com', 'google')"
+		);
+		$this->truncate(['page_visits']);
 		$this->database->exec(
 			"INSERT INTO page_visits (page_url, visited_at) VALUES
 			('www.google.com', NOW() - INTERVAL '11 MINUTE'),
@@ -89,7 +102,6 @@ final class FrugalPage extends TestCase\Database {
 	}
 
 	public function testOriginContentAsFirstVisit() {
-		$this->truncate(['pages']);
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>Google</p>');
 		Assert::contains(
@@ -106,12 +118,7 @@ final class FrugalPage extends TestCase\Database {
 	}
 
 	protected function prepareDatabase() {
-		$this->truncate(['pages']);
-		$this->database->exec(
-			"INSERT INTO pages (url, content) VALUES
-			('www.google.com', 'google')"
-		);
-		$this->purge(['page_visits']);
+		$this->truncate(['pages', 'page_visits']);
 	}
 }
 

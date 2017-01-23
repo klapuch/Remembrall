@@ -20,6 +20,10 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class OwnedSubscriptions extends TestCase\Database {
 	public function testSubscribingBrandNewOne() {
+		$this->database->exec(
+			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
+			('www.google.com', '//google', 'google content', 'google snap')"
+		);
 		(new Subscribing\OwnedSubscriptions(
 			new Access\FakeSubscriber(666),
 			$this->database
@@ -39,6 +43,10 @@ final class OwnedSubscriptions extends TestCase\Database {
 	}
 
 	public function testThrowingOnDuplication() {
+		$this->database->exec(
+			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
+			('www.google.com', '//google', 'google content', 'google snap')"
+		);
 		$subscriptions = new Subscribing\OwnedSubscriptions(
 			new Access\FakeSubscriber(666),
 			$this->database
@@ -82,6 +90,10 @@ final class OwnedSubscriptions extends TestCase\Database {
 			(2, '2001-01-01 01:01:01'),
 			(3, '2002-01-01 01:01:01'),
 			(4, '2003-01-01 01:01:01')"
+		);
+		$this->database->exec(
+			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
+			('www.google.com', '//google', 'google content', 'google snap')"
 		);
 		$subscriptions = (new Subscribing\OwnedSubscriptions(
 			new Access\FakeSubscriber(1, 'idk@email.cz'),
@@ -139,17 +151,8 @@ final class OwnedSubscriptions extends TestCase\Database {
 	}
 
 	protected function prepareDatabase() {
-		$this->truncate(['parts', 'pages', 'subscriptions']);
+		$this->truncate(['parts', 'subscriptions']);
 		$this->restartSequence(['parts', 'subscriptions']);
-		$this->database->exec(
-			"INSERT INTO pages (url, content) VALUES
-			('www.google.com', '<p>google</p>'),
-			('www.facedown.cz', '<p>facedown</p>')"
-		);
-		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.google.com', '//google', 'google content', 'google snap')"
-		);
 	}
 }
 

@@ -16,19 +16,38 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class OwnedSubscription extends TestCase\Database {
-	/**
-	 * @throws \Remembrall\Exception\NotFoundException You can not cancel foreign subscription
-	 */
-	public function testThrowingOnCancelingForeign() {
-		(new Subscribing\OwnedSubscription(
-			new Subscribing\FakeSubscription(),
-			1,
-			new Access\FakeSubscriber(666),
-			$this->database
-		))->cancel();
+	public function testThrowinOnHandlingForeign() {
+		Assert::exception(function() {
+			(new Subscribing\OwnedSubscription(
+				new Subscribing\FakeSubscription(),
+				1,
+				new Access\FakeSubscriber(666),
+				$this->database
+			))->cancel();
+		}, \Remembrall\Exception\NotFoundException::class);
+		Assert::exception(function() {
+			(new Subscribing\OwnedSubscription(
+				new Subscribing\FakeSubscription(),
+				1,
+				new Access\FakeSubscriber(666),
+				$this->database
+			))->edit(new Time\FakeInterval(null, null, 'PT10M'));
+		}, \Remembrall\Exception\NotFoundException::class);
+		Assert::exception(function() {
+			(new Subscribing\OwnedSubscription(
+				new Subscribing\FakeSubscription(),
+				1,
+				new Access\FakeSubscriber(666),
+				$this->database
+			))->notify();
+		}, \Remembrall\Exception\NotFoundException::class);
 	}
 
-	public function testCancelingOwned() {
+	public function testHandlingOwned() {
+		$this->database->exec(
+			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
+			(2, 666, 4, 'PT3M', NOW(), '')"
+		);
 		Assert::noError(
 			function() {
 				(new Subscribing\OwnedSubscription(
@@ -39,21 +58,6 @@ final class OwnedSubscription extends TestCase\Database {
 				))->cancel();
 			}
 		);
-	}
-
-	/**
-	 * @throws \Remembrall\Exception\NotFoundException You can not edit foreign subscription
-	 */
-	public function testThrowingOnEditingForeign() {
-		(new Subscribing\OwnedSubscription(
-			new Subscribing\FakeSubscription(),
-			1,
-			new Access\FakeSubscriber(666),
-			$this->database
-		))->edit(new Time\FakeInterval(null, null, 'PT10M'));
-	}
-
-	public function testEditingOwned() {
 		Assert::noError(
 			function() {
 				(new Subscribing\OwnedSubscription(
@@ -64,21 +68,6 @@ final class OwnedSubscription extends TestCase\Database {
 				))->edit(new Time\FakeInterval(null, null, 'PT10M'));
 			}
 		);
-	}
-
-	/**
-	 * @throws \Remembrall\Exception\NotFoundException You can not be notified on foreign subscription
-	 */
-	public function testThrowingOnNotifyingForeign() {
-		(new Subscribing\OwnedSubscription(
-			new Subscribing\FakeSubscription(),
-			1,
-			new Access\FakeSubscriber(666),
-			$this->database
-		))->notify();
-	}
-
-	public function testNotifyingOwned() {
 		Assert::noError(
 			function() {
 				(new Subscribing\OwnedSubscription(
@@ -93,11 +82,6 @@ final class OwnedSubscription extends TestCase\Database {
 
 	protected function prepareDatabase() {
 		$this->purge(['subscriptions']);
-		$this->database->exec(
-			"INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES
-			(111, 3, 'PT2M', NOW(), ''),
-			(666, 4, 'PT3M', NOW(), '')"
-		);
 	}
 }
 
