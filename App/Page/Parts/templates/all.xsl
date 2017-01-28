@@ -3,6 +3,7 @@
 
 	<xsl:import href="../../templates/@layout.xsl"/>
 	<xsl:import href="tabs.xsl"/>
+	<xsl:import href="../components/content-modal.xsl"/>
 
 	<xsl:template match="page">
 		<xsl:apply-templates select="body/tabs" mode="parts">
@@ -26,7 +27,12 @@
 			<td><xsl:number format="1. "/></td>
 			<td><xsl:value-of select="url"/></td>
 			<td><xsl:value-of select="expression"/></td>
-			<td><xsl:value-of select="content"/></td>
+			<td>
+				<xsl:call-template name="modal" mode="content">
+					<xsl:with-param name="id" select="id"/>
+					<xsl:with-param name="content" select="content"/>
+				</xsl:call-template>
+			</td>
 			<td><xsl:value-of select="occurrences"/></td>
 		</tr>
 	</xsl:template>

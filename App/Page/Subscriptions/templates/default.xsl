@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
 	<xsl:import href="../../templates/@layout.xsl"/>
+	<xsl:import href="../../Parts/components/content-modal.xsl"/>
 
 	<xsl:template match="page">
 		<h1><xsl:apply-templates select="body/header[@level = 1]"/></h1>
@@ -26,7 +27,12 @@
 			<td><xsl:value-of select="interval"/></td>
 			<td><xsl:value-of select="expression"/></td>
 			<td><xsl:value-of select="url"/></td>
-			<td><xsl:value-of select="content"/></td>
+			<td>
+				<xsl:call-template name="modal" mode="content">
+					<xsl:with-param name="id" select="id"/>
+					<xsl:with-param name="content" select="content"/>
+				</xsl:call-template>
+			</td>
 			<td>
 				<xsl:apply-templates select="/page/body/confirmations">
 					<xsl:with-param name="id" select="id"/>
