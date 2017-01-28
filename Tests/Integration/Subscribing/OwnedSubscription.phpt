@@ -6,10 +6,10 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Integration\Subscribing;
 
-use Klapuch\Time;
-use Remembrall\Model\{
-	Access, Subscribing
+use Klapuch\{
+	Time, Access
 };
+use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
 
@@ -21,7 +21,7 @@ final class OwnedSubscription extends TestCase\Database {
 			(new Subscribing\OwnedSubscription(
 				new Subscribing\FakeSubscription(),
 				1,
-				new Access\FakeSubscriber(666),
+				new Access\FakeUser(666),
 				$this->database
 			))->cancel();
 		}, \Remembrall\Exception\NotFoundException::class);
@@ -29,7 +29,7 @@ final class OwnedSubscription extends TestCase\Database {
 			(new Subscribing\OwnedSubscription(
 				new Subscribing\FakeSubscription(),
 				1,
-				new Access\FakeSubscriber(666),
+				new Access\FakeUser(666),
 				$this->database
 			))->edit(new Time\FakeInterval(null, null, 'PT10M'));
 		}, \Remembrall\Exception\NotFoundException::class);
@@ -37,7 +37,7 @@ final class OwnedSubscription extends TestCase\Database {
 			(new Subscribing\OwnedSubscription(
 				new Subscribing\FakeSubscription(),
 				1,
-				new Access\FakeSubscriber(666),
+				new Access\FakeUser(666),
 				$this->database
 			))->notify();
 		}, \Remembrall\Exception\NotFoundException::class);
@@ -53,7 +53,7 @@ final class OwnedSubscription extends TestCase\Database {
 				(new Subscribing\OwnedSubscription(
 					new Subscribing\FakeSubscription(),
 					2,
-					new Access\FakeSubscriber(666),
+					new Access\FakeUser(666),
 					$this->database
 				))->cancel();
 			}
@@ -63,7 +63,7 @@ final class OwnedSubscription extends TestCase\Database {
 				(new Subscribing\OwnedSubscription(
 					new Subscribing\FakeSubscription(),
 					2,
-					new Access\FakeSubscriber(666),
+					new Access\FakeUser(666),
 					$this->database
 				))->edit(new Time\FakeInterval(null, null, 'PT10M'));
 			}
@@ -73,7 +73,7 @@ final class OwnedSubscription extends TestCase\Database {
 				(new Subscribing\OwnedSubscription(
 					new Subscribing\FakeSubscription(),
 					2,
-					new Access\FakeSubscriber(666),
+					new Access\FakeUser(666),
 					$this->database
 				))->notify();
 			}

@@ -77,10 +77,10 @@ final class DefaultPage extends Page\BasePage {
 					(new Subscribing\DirectedSubscriptions(
 						new Subscribing\LimitedSubscriptions(
 							new Subscribing\OwnedSubscriptions(
-								$this->subscriber,
+								$this->user,
 								$this->database
 							),
-							$this->subscriber,
+							$this->user,
 							$this->database
 						),
 						new Misc\LoggingCallback($this->logs)

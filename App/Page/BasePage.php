@@ -3,15 +3,14 @@ declare(strict_types = 1);
 namespace Remembrall\Page;
 
 use Klapuch\{
-	Uri, Encryption, FlashMessage, Csrf, Form, Log, Output
+	Uri, Encryption, FlashMessage, Csrf, Form, Log, Output, Access, Markup
 };
-use Remembrall\Model\Access;
 
 abstract class BasePage {
 	/** @var \Klapuch\Uri\Uri */
 	protected $url;
-	/** @var \Remembrall\Model\Access\Subscriber */
-	protected $subscriber;
+	/** @var \Klapuch\Access\User */
+	protected $user;
 	/** @var \PDO */
 	protected $database;
 	/** @var \Klapuch\Log\Logs */
@@ -38,9 +37,9 @@ abstract class BasePage {
 	}
 
 	public function startup(): void {
-		$this->subscriber = new Access\FakeSubscriber(0, 'NoOne');
+		$this->user = new Access\FakeUser(0, ['role' => 'guest']);
 		if(isset($_SESSION['id'])) {
-			$this->subscriber = new Access\RegisteredSubscriber(
+			$this->user = new Access\RegisteredUser(
 				$_SESSION['id'],
 				$this->database
 			);
@@ -55,12 +54,20 @@ abstract class BasePage {
 	 * @return array
 	 */
 	final public function template(array $parameters): array {
+		$properties = $this->user->properties();
 		return [
 			new \SimpleXMLElement(
 				sprintf(
-					'<subscriber id="%d" email="%s"/>',
-					$this->subscriber->id(),
-					$this->subscriber->email()
+					'<subscriber id="%d" %s/>',
+					$this->user->id(),
+					(new Markup\HtmlAttributes(
+						...array_map(
+							function(string $attribute, string $value) {
+								return new Markup\HtmlAttribute($attribute, $value);
+							},
+							array_keys($properties), $properties
+						)
+					))->pairs()
 				)
 			),
 			new \SimpleXMLElement(

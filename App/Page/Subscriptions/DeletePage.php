@@ -14,7 +14,7 @@ final class DeletePage extends Page\BasePage {
 			(new Subscribing\OwnedSubscription(
 				new Subscribing\StoredSubscription((int)$id, $this->database),
 				(int)$id,
-				$this->subscriber,
+				$this->user,
 				$this->database
 			))->cancel();
 			$this->flashMessage('Subscription has been deleted', 'success');

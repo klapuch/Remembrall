@@ -3,10 +3,9 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Output, Storage, Time, Uri
+	Output, Storage, Time, Uri, Access
 };
 use Remembrall\Exception\DuplicateException;
-use Remembrall\Model\Access;
 
 /**
  * All the subscriptions owned by one particular subscriber
@@ -15,7 +14,7 @@ final class OwnedSubscriptions implements Subscriptions {
 	private $owner;
 	private $database;
 
-	public function __construct(Access\Subscriber $owner, \PDO $database) {
+	public function __construct(Access\User $owner, \PDO $database) {
 		$this->owner = $owner;
 		$this->database = $database;
 	}

@@ -3,9 +3,8 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Output, Storage, Time, Uri
+	Output, Storage, Time, Uri, Access
 };
-use Remembrall\Model\Access;
 
 /**
  * Disallowing subscribing after more than X subscriptions
@@ -13,16 +12,16 @@ use Remembrall\Model\Access;
 final class LimitedSubscriptions implements Subscriptions {
 	private const LIMIT = 5;
 	private $origin;
-	private $subscriber;
+	private $user;
 	private $database;
 
 	public function __construct(
 		Subscriptions $origin,
-		Access\Subscriber $subscriber,
+		Access\User $user,
 		\PDO $database
 	) {
 		$this->origin = $origin;
-		$this->subscriber = $subscriber;
+		$this->user = $user;
 		$this->database = $database;
 	}
 
@@ -51,7 +50,7 @@ final class LimitedSubscriptions implements Subscriptions {
 	}
 
 	/**
-	 * Has the subscriber subscribed more than X parts and overstepped the limit?
+	 * Has the user subscribed more than X parts and overstepped the limit?
 	 * @return bool
 	 */
 	private function overstepped(): bool {
@@ -62,7 +61,7 @@ final class LimitedSubscriptions implements Subscriptions {
 			INNER JOIN subscriptions ON subscriptions.part_id = parts.id 
 			WHERE user_id IS NOT DISTINCT FROM ?
 			HAVING COUNT(parts.id) >= ?',
-			[$this->subscriber->id(), self::LIMIT]
+			[$this->user->id(), self::LIMIT]
 		))->field();
 	}
 }

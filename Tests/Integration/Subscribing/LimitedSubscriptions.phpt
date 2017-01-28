@@ -7,11 +7,9 @@ declare(strict_types = 1);
 namespace Remembrall\Integration\Subscribing;
 
 use Klapuch\{
-	Time, Uri
+	Time, Uri, Access
 };
-use Remembrall\Model\{
-	Access, Subscribing
-};
+use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
 
@@ -23,7 +21,7 @@ final class LimitedSubscriptions extends TestCase\Database {
 			function() {
 				(new Subscribing\LimitedSubscriptions(
 					new Subscribing\FakeSubscriptions(),
-					new Access\FakeSubscriber(666),
+					new Access\FakeUser(666),
 					$this->database
 				))->subscribe(
 					new Uri\FakeUri('url'),
@@ -56,7 +54,7 @@ final class LimitedSubscriptions extends TestCase\Database {
 		);
 		(new Subscribing\LimitedSubscriptions(
 			new Subscribing\FakeSubscriptions(),
-			new Access\FakeSubscriber(666),
+			new Access\FakeUser(666),
 			$this->database
 		))->subscribe(new Uri\FakeUri('url'), '//p', new Time\FakeInterval());
 	}

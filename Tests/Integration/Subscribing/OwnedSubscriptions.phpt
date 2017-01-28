@@ -7,12 +7,10 @@ declare(strict_types = 1);
 namespace Remembrall\Integration\Subscribing;
 
 use Klapuch\{
-	Output, Storage\UniqueConstraint, Time, Uri
+	Output, Storage\UniqueConstraint, Time, Uri, Access
 };
 use Remembrall\Exception\DuplicateException;
-use Remembrall\Model\{
-	Access, Subscribing
-};
+use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
 
@@ -25,7 +23,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 			('www.google.com', '//google', 'google content', 'google snap')"
 		);
 		(new Subscribing\OwnedSubscriptions(
-			new Access\FakeSubscriber(666),
+			new Access\FakeUser(666),
 			$this->database
 		))->subscribe(
 			new Uri\FakeUri('www.google.com'),
@@ -48,7 +46,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 			('www.google.com', '//google', 'google content', 'google snap')"
 		);
 		$subscriptions = new Subscribing\OwnedSubscriptions(
-			new Access\FakeSubscriber(666),
+			new Access\FakeUser(666),
 			$this->database
 		);
 		$subscribe = function() use($subscriptions) {
@@ -96,7 +94,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 			('www.google.com', '//google', 'google content', 'google snap')"
 		);
 		$subscriptions = (new Subscribing\OwnedSubscriptions(
-			new Access\FakeSubscriber(1, 'idk@email.cz'),
+			new Access\FakeUser(1),
 			$this->database
 		))->print(new Output\FakeFormat(''));
 		Assert::count(3, $subscriptions);
@@ -109,7 +107,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 		Assert::same(
 			[],
 			(new Subscribing\OwnedSubscriptions(
-				new Access\FakeSubscriber(1),
+				new Access\FakeUser(1),
 				$this->database
 			))->print(new Output\FakeFormat(''))
 		);
@@ -117,7 +115,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 
 	public function testEmptyIterating() {
 		$subscriptions = (new Subscribing\OwnedSubscriptions(
-			new Access\FakeSubscriber(1),
+			new Access\FakeUser(1),
 			$this->database
 		))->getIterator();
 		Assert::null($subscriptions->current());
@@ -132,7 +130,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 			(4, 1, 'PT4M', NOW(), '')"
 		);
 		$subscriptions = (new Subscribing\OwnedSubscriptions(
-			new Access\FakeSubscriber(1),
+			new Access\FakeUser(1),
 			$this->database
 		))->getIterator();
 		$subscription = $subscriptions->current();

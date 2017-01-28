@@ -3,10 +3,9 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Storage, Time
+	Storage, Time, Access
 };
 use Remembrall\Exception\NotFoundException;
-use Remembrall\Model\Access;
 
 /**
  * Subscription owned by one particular subscriber
@@ -20,7 +19,7 @@ final class OwnedSubscription implements Subscription {
 	public function __construct(
 		Subscription $origin,
 		int $id,
-		Access\Subscriber $owner,
+		Access\User $owner,
 		\PDO $database
 	) {
 		$this->origin = $origin;
