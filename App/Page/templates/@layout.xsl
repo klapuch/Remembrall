@@ -14,8 +14,9 @@
 			<xsl:apply-templates select="page/head" mode="layout"/>
 			<body>
 				<div id="wrap">
-					<xsl:apply-templates select="$layout/body/menu[@name = 'main']">
+					<xsl:apply-templates select="$layout/body/menu[@name='main']">
 						<xsl:with-param name="baseUrl" select="page/baseUrl"/>
+						<xsl:with-param name="subscriber" select="page/subscriber"/>
 					</xsl:apply-templates>
 					<div class="container">
 						<xsl:apply-templates select="page/flashMessages/flashMessage"/>
@@ -35,8 +36,9 @@
 		</head>
 	</xsl:template>
 
-	<xsl:template match="menu[@name = 'main']">
+	<xsl:template match="menu[@name='main']">
 		<xsl:param name="baseUrl"/>
+		<xsl:param name="subscriber"/>
 		<nav class="navbar navbar-default navbar-static-top">
 			<div class="container">
 				<div class="navbar-header">
@@ -57,9 +59,18 @@
 				</div>
 				<div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
-						<xsl:apply-templates match="item">
-							<xsl:with-param name="baseUrl" select="$baseUrl"/>
-						</xsl:apply-templates>
+						<xsl:choose>
+							<xsl:when test="$subscriber/@id = 0">
+								<xsl:apply-templates select="item[@visibility='all']|item[@visibility='guest']">
+									<xsl:with-param name="baseUrl" select="$baseUrl"/>
+								</xsl:apply-templates>
+							</xsl:when>
+							<xsl:when test="$subscriber/@id != 0">
+								<xsl:apply-templates select="item[@visibility='all']|item[@visibility='login']">
+									<xsl:with-param name="baseUrl" select="$baseUrl"/>
+								</xsl:apply-templates>
+							</xsl:when>
+						</xsl:choose>
 					</ul>
 				</div>
 			</div>

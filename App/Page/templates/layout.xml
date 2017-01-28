@@ -15,17 +15,20 @@
 	</head>
 	<body>
 		<menu name="main">
-			<item>
+			<item visibility="all">
 				<link href="parts/all">Parts</link>
 			</item>
-			<item>
+			<item visibility="login">
 				<link href="subscriptions">Subscriptions</link>
 			</item>
-			<item>
+			<item visibility="login">
 				<link href="subscription">Subscription</link>
 			</item>
-			<item>
+			<item visibility="guest">
 				<link href="sign/in">Sign in</link>
+			</item>
+			<item visibility="login">
+				<link href="sign/out">Sign out</link>
 			</item>
 		</menu>
 		<assets>
