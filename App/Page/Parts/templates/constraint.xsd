@@ -20,9 +20,7 @@
 	</xsd:simpleType>
 
 	<xsd:simpleType name="occurrences">
-		<xsd:restriction base="xsd:unsignedInt">
-			<xsd:minInclusive value="1"/>
-		</xsd:restriction>
+		<xsd:restriction base="xsd:unsignedInt"/>
 	</xsd:simpleType>
 
 	<xsd:complexType name="part">
@@ -31,7 +29,7 @@
 			<xsd:element name="url" type="url"/>
 			<xsd:element name="expression" type="expression"/>
 			<xsd:element name="content" type="content"/>
-			<xsd:element name="occurrences" type="occurrences" minOccurs="0"/>
+			<xsd:element name="occurrences" type="occurrences"/>
 		</xsd:all>
 	</xsd:complexType>
 

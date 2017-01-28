@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <page>
 	<head>
-		<title>Popular parts</title>
-		<meta name="description" content="The most popular parts"/>
+		<title>Unrealiable parts</title>
+		<meta name="description" content="Unreliable parts"/>
 	</head>
 	<body>
-		<header level="1">Popular parts</header>
+		<header level="1">Unrealiable parts</header>
 		<tables>
 			<table purpose="overview">
 				<headings>
@@ -19,8 +19,8 @@
 		</tables>
 		<tabs>
 			<tab href="all">All</tab>
-			<tab href="popular" state="active">Popular</tab>
-			<tab href="unreliable">Unreliable</tab>
+			<tab href="popular">Popular</tab>
+			<tab href="unreliable" state="active">Unreliable</tab>
 		</tabs>
 	</body>
 </page>

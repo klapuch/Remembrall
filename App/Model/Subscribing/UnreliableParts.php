@@ -23,7 +23,25 @@ final class UnreliableParts implements Parts {
 	}
 
 	public function getIterator(): \Iterator {
-		foreach($this->rows() as $part) {
+		$parts = (new Storage\ParameterizedQuery(
+			$this->database,
+			"SELECT page_url AS url, expression, parts.id, content, snapshot
+				FROM parts
+				RIGHT JOIN (
+					SELECT MIN(SUBSTRING(interval FROM '[0-9]+')::INT) AS interval,
+					part_id
+					FROM subscriptions
+					GROUP BY part_id
+				) AS subscriptions ON subscriptions.part_id = parts.id 
+				LEFT JOIN (
+					SELECT MAX(visited_at) AS visited_at, part_id
+					FROM part_visits
+					GROUP BY part_id
+				) AS part_visits ON part_visits.part_id = parts.id
+				WHERE visited_at + INTERVAL '1 SECOND' * interval < NOW()
+				ORDER BY visited_at ASC"
+		))->rows();
+		foreach($parts as $part) {
 			$url = new Uri\ValidUrl($part['url']);
 			$page = new FrugalPage(
 				$url,
@@ -54,25 +72,13 @@ final class UnreliableParts implements Parts {
 	}
 
 	public function print(Output\Format $format): array {
-		return array_map(
-			function(array $part) use ($format): Output\Format {
-				return $format->with('id', $part['id'])
-					->with('url', $part['url'])
-					->with('expression', $part['expression'])
-					->with('content', $part['content']);
-			},
-			$this->rows()
-		);
-	}
-
-	private function rows(): array {
-		return (new Storage\ParameterizedQuery(
+		$parts = (new Storage\ParameterizedQuery(
 			$this->database,
-			"SELECT page_url AS url, expression, parts.id, content, snapshot
+			"SELECT page_url AS url, expression, parts.id, content, occurrences
 				FROM parts
 				RIGHT JOIN (
 					SELECT MIN(SUBSTRING(interval FROM '[0-9]+')::INT) AS interval,
-					part_id
+					part_id, COUNT(*) AS occurrences
 					FROM subscriptions
 					GROUP BY part_id
 				) AS subscriptions ON subscriptions.part_id = parts.id 
@@ -81,8 +87,17 @@ final class UnreliableParts implements Parts {
 					FROM part_visits
 					GROUP BY part_id
 				) AS part_visits ON part_visits.part_id = parts.id
-				WHERE visited_at + INTERVAL '1 SECOND' * interval < NOW()
-				ORDER BY visited_at ASC"
+				WHERE visited_at + INTERVAL '1 SECOND' * interval < NOW()"
 		))->rows();
+		return array_map(
+			function(array $part) use ($format): Output\Format {
+				return $format->with('id', $part['id'])
+					->with('url', $part['url'])
+					->with('expression', $part['expression'])
+					->with('content', $part['content'])
+					->with('occurrences', $part['occurrences']);
+			},
+			$parts
+		);
 	}
 }

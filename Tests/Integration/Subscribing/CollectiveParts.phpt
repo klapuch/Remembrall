@@ -120,12 +120,29 @@ final class CollectiveParts extends TestCase\Database {
 		$this->database->exec(
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
 			('www.google.com', '//a', 'a', ''),
+			('www.seznam.cz', '//b', 'b', ''),
 			('www.facedown.cz', '//c', 'c', '')"
+		);
+		$this->database->exec(
+			"INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES
+			(1, 1, 'PT1M', NOW(), md5(random()::text)),
+			(2, 1, 'PT1M', NOW(), md5(random()::text)),
+			(3, 2, 'PT1M', NOW(), md5(random()::text)),
+			(4, 4, 'PT1M', NOW(), md5(random()::text))"
 		);
 		$parts = (new Subscribing\CollectiveParts(
 			$this->database
 		))->print(new Output\FakeFormat(''));
-		Assert::count(2, $parts);
+		Assert::count(3, $parts);
+		$part = $parts[0]->serialization();
+		Assert::contains('|id|1|', $part);
+		Assert::contains('|occurrences|2|', $part);
+		$part = $parts[1]->serialization();
+		Assert::contains('|id|2|', $part);
+		Assert::contains('|occurrences|1|', $part);
+		$part = $parts[2]->serialization();
+		Assert::contains('|id|3|', $part);
+		Assert::contains('|occurrences|0|', $part);
 	}
 
 	public function testEmptyPrinting() {
@@ -141,7 +158,7 @@ final class CollectiveParts extends TestCase\Database {
 	}
 
 	protected function prepareDatabase() {
-		$this->purge(['parts']);
+		$this->purge(['parts', 'subscriptions']);
 	}
 }
 

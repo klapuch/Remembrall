@@ -22,37 +22,22 @@ final class PopularParts implements Parts {
 		$this->origin->add($part, $url, $expression);
 	}
 
-	// TODO: Not definite
 	public function getIterator(): \Iterator {
-		foreach($this->rows() as $part) {
-			$page = new StoredPage(
-				new HtmlWebPage(
-					new Http\BasicRequest(
-						'GET',
-						new Uri\ValidUrl($part['url'])
-					)
-				),
-				new Uri\ValidUrl($part['url']),
-				$this->database
-			);
-			yield new ConstantPart(
-				new StoredPart(
-					new HtmlPart(
-						new MatchingExpression(
-							new XPathExpression($page, $part['expression'])
-						),
-						$page
-					),
-					$part['id'],
-					$this->database
-				),
-				$part['content'],
-				$part['snapshot']
-			);
-		}
+		return $this->origin->getIterator();
 	}
 
 	public function print(Output\Format $format): array {
+		$parts = (new Storage\ParameterizedQuery(
+			$this->database,
+			'SELECT id, page_url AS url, expression, content, occurrences
+			FROM parts
+			INNER JOIN (
+				SELECT part_id, COUNT(*) AS occurrences
+				FROM subscriptions
+				GROUP BY part_id
+			) AS subscriptions ON subscriptions.part_id = parts.id
+			ORDER BY occurrences DESC'
+		))->rows();
 		return array_map(
 			function(array $part) use ($format): Output\Format {
 				return $format->with('id', $part['id'])
@@ -61,21 +46,7 @@ final class PopularParts implements Parts {
 					->with('content', $part['content'])
 					->with('occurrences', $part['occurrences']);
 			},
-			$this->rows()
+			$parts
 		);
-	}
-
-	private function rows(): array {
-		return (new Storage\ParameterizedQuery(
-			$this->database,
-			'SELECT id, page_url AS url, expression, content, snapshot, occurrences
-			FROM parts
-			INNER JOIN (
-				SELECT part_id, COUNT(*) AS occurrences
-				FROM subscriptions
-				GROUP BY part_id
-				ORDER BY occurrences DESC
-			) AS subscriptions ON subscriptions.part_id = parts.id'
-		))->rows();
 	}
 }

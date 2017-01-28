@@ -96,8 +96,10 @@ final class UnreliableParts extends TestCase\Database {
 			$this->database
 		))->print(new Output\FakeFormat(''));
 		Assert::count(2, $parts);
-		Assert::contains('//d', $parts[0]->serialization());
-		Assert::contains('//a', $parts[1]->serialization());
+		Assert::contains('|expression|//d|', $parts[0]->serialization());
+		Assert::contains('|occurrences|1|', $parts[0]->serialization());
+		Assert::contains('|expression|//a|', $parts[1]->serialization());
+		Assert::contains('|occurrences|3|', $parts[1]->serialization());
 	}
 
 	public function testEmptyPrinting() {
