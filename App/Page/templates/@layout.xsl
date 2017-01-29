@@ -59,18 +59,9 @@
 				</div>
 				<div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
-						<xsl:choose>
-							<xsl:when test="$subscriber/@id = 0">
-								<xsl:apply-templates select="item[@visibility='all']|item[@visibility='guest']">
-									<xsl:with-param name="baseUrl" select="$baseUrl"/>
-								</xsl:apply-templates>
-							</xsl:when>
-							<xsl:when test="$subscriber/@id != 0">
-								<xsl:apply-templates select="item[@visibility='all']|item[@visibility='login']">
-									<xsl:with-param name="baseUrl" select="$baseUrl"/>
-								</xsl:apply-templates>
-							</xsl:when>
-						</xsl:choose>
+						<xsl:apply-templates select="item[@visibility='all']|item[@visibility=$subscriber/@role]">
+							<xsl:with-param name="baseUrl" select="$baseUrl"/>
+						</xsl:apply-templates>
 					</ul>
 				</div>
 			</div>
