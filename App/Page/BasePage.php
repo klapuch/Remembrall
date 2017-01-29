@@ -54,10 +54,13 @@ abstract class BasePage {
 	 */
 	final public function template(array $parameters): array {
 		$properties = $this->user->properties();
-		$dom = new \DOMDocument();
-		$dom->load(__DIR__ . '/templates/layout.xml');
+		$layout = new \DOMDocument();
+		$layout->load(__DIR__ . '/templates/layout.xml');
+		$permission = new \DOMDocument();
+		$permission->load(__DIR__ . '/templates/permission.xml');
 		return array_merge(
-			simplexml_import_dom($dom)->xpath('child::*'),
+			simplexml_import_dom($layout)->xpath('child::*'),
+			[simplexml_import_dom($permission)],
 			[
 				new \SimpleXMLElement(
 					sprintf(

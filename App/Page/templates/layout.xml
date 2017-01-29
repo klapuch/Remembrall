@@ -13,14 +13,6 @@
 			</styles>
 		</assets>
 	</head>
-	<permissions>
-		<permission href="parts/all" role="guest"/>
-		<permission href="parts/all" role="member"/>
-		<permission href="subscriptions" role="member"/>
-		<permission href="subscription" role="member"/>
-		<permission href="sign/in" role="guest"/>
-		<permission href="sign/out" role="member"/>
-	</permissions>
 	<body>
 		<menu name="main">
 			<item>
