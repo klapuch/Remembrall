@@ -4,8 +4,6 @@
 	<xsl:import href="head.xsl"/>
 	<xsl:import href="assets.xsl"/>
 
-	<xsl:param name="layout" select="document('layout.xml')/page"/>
-
 	<xsl:key name="permissionByRole" match="permission" use="@role"/>
 	<xsl:key name="linkByHref" match="link" use="@href"/>
 
@@ -17,7 +15,7 @@
 			<xsl:apply-templates select="page/head" mode="layout"/>
 			<body>
 				<div id="wrap">
-					<xsl:apply-templates select="$layout/body/menu[@name='main']">
+					<xsl:apply-templates select="page/body/menu[@name='main']">
 						<xsl:with-param name="baseUrl" select="page/baseUrl"/>
 						<xsl:with-param name="subscriber" select="page/subscriber"/>
 					</xsl:apply-templates>
@@ -27,7 +25,7 @@
 					</div>
 				</div>
 				<xsl:call-template name="footer"/>
-				<xsl:apply-templates select="$layout/body/assets"/>
+				<xsl:apply-templates select="page/body/assets"/>
 			</body>
 		</html>
 	</xsl:template>
@@ -35,7 +33,7 @@
 	<xsl:template match="head" mode="layout">
 		<head>
 			<xsl:apply-templates/>
-			<xsl:apply-templates select="$layout/head"/>
+			<xsl:apply-templates select="page/head"/>
 		</head>
 	</xsl:template>
 

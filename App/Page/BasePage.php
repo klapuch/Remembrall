@@ -54,36 +54,41 @@ abstract class BasePage {
 	 */
 	final public function template(array $parameters): array {
 		$properties = $this->user->properties();
-		return [
-			new \SimpleXMLElement(
-				sprintf(
-					'<subscriber id="%d" %s/>',
-					$this->user->id(),
-					(new Markup\HtmlAttributes(
-						...array_map(
-							function(string $attribute, string $value) {
-								return new Markup\HtmlAttribute($attribute, $value);
-							},
-							array_keys($properties), $properties
-						)
-					))->pairs()
-				)
-			),
-			new \SimpleXMLElement(
-				sprintf('<baseUrl>%s</baseUrl>', $this->url->reference())
-			),
-			new \SimpleXMLElement(
-				(new FlashMessage\XmlMessage($_SESSION))->print()
-			),
-			new \SimpleXMLElement(
-				sprintf(
-					'<csrf><link>%s</link><input>%s</input></csrf>',
-					(new Csrf\CsrfLink($this->csrf))->protection(),
-					(new Csrf\CsrfInput($this->csrf))->protection()
-				)
-			),
-			new \SimpleXMLElement($this->render($parameters)->serialization()),
-		];
+		$dom = new \DOMDocument();
+		$dom->load(__DIR__ . '/templates/layout.xml');
+		return array_merge(
+			simplexml_import_dom($dom)->xpath('child::*'),
+			[
+				new \SimpleXMLElement(
+					sprintf(
+						'<subscriber id="%d" %s/>',
+						$this->user->id(),
+						(new Markup\HtmlAttributes(
+							...array_map(
+								function(string $attribute, string $value) {
+									return new Markup\HtmlAttribute($attribute, $value);
+								},
+								array_keys($properties), $properties
+							)
+						))->pairs()
+					)
+				),
+				new \SimpleXMLElement(
+					sprintf('<baseUrl>%s</baseUrl>', $this->url->reference())
+				),
+				new \SimpleXMLElement(
+					(new FlashMessage\XmlMessage($_SESSION))->print()
+				),
+				new \SimpleXMLElement(
+					sprintf(
+						'<csrf><link>%s</link><input>%s</input></csrf>',
+						(new Csrf\CsrfLink($this->csrf))->protection(),
+						(new Csrf\CsrfInput($this->csrf))->protection()
+					)
+				),
+				new \SimpleXMLElement($this->render($parameters)->serialization()),
+			]
+		);
 	}
 
 	/**
