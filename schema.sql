@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.4
--- Dumped by pg_dump version 9.5.4
+-- Dumped from database version 9.5.5
+-- Dumped by pg_dump version 9.5.5
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -294,7 +294,8 @@ ALTER SEQUENCE subscriptions_id_seq OWNED BY subscriptions.id;
 
 CREATE TABLE users (
     id integer NOT NULL,
-    email character varying NOT NULL,
+    email text NOT NULL,
+    role character varying NOT NULL,
     password character varying(255) NOT NULL
 );
 
@@ -487,14 +488,6 @@ ALTER TABLE ONLY subscriptions
 
 
 --
--- Name: users_email; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY users
-    ADD CONSTRAINT users_email UNIQUE (email);
-
-
---
 -- Name: users_id; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -526,6 +519,13 @@ CREATE INDEX forgotten_passwords_user_id ON forgotten_passwords USING btree (use
 
 
 --
+-- Name: notifications_subscription_id; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX notifications_subscription_id ON notifications USING btree (subscription_id);
+
+
+--
 -- Name: page_visits_page_url; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -540,10 +540,10 @@ CREATE INDEX part_visits_part_id ON part_visits USING btree (part_id);
 
 
 --
--- Name: parts_snapshot; Type: INDEX; Schema: public; Owner: postgres
+-- Name: parts_page_url; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX parts_snapshot ON parts USING btree (snapshot);
+CREATE INDEX parts_page_url ON parts USING btree (page_url);
 
 
 --
@@ -554,10 +554,17 @@ CREATE INDEX subscribed_parts_part_id ON subscriptions USING btree (part_id);
 
 
 --
--- Name: subscriptions_snaphost; Type: INDEX; Schema: public; Owner: postgres
+-- Name: subscriptions_user_id; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX subscriptions_snaphost ON subscriptions USING btree (snapshot);
+CREATE INDEX subscriptions_user_id ON subscriptions USING btree (user_id);
+
+
+--
+-- Name: users_email_unique_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX users_email_unique_idx ON users USING btree (lower(email));
 
 
 --
