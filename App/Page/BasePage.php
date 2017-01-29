@@ -39,9 +39,8 @@ abstract class BasePage {
 	public function startup(): void {
 		$this->user = new Access\FakeUser(0, ['role' => 'guest']);
 		if(isset($_SESSION['id'])) {
-			$this->user = new Access\RegisteredUser(
-				$_SESSION['id'],
-				$this->database
+			$this->user = new Access\CachedUser(
+				new Access\RegisteredUser($_SESSION['id'], $this->database)
 			);
 		}
 	}
