@@ -64,7 +64,7 @@ abstract class BasePage {
 			[
 				new \SimpleXMLElement(
 					sprintf(
-						'<subscriber id="%d" %s/>',
+						'<user id="%d" %s/>',
 						$this->user->id(),
 						(new Markup\HtmlAttributes(
 							...array_map(
