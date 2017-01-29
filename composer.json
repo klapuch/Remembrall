@@ -16,7 +16,6 @@
 		"ext-dom": "*",
 		"nette/caching": "^2.5.0",
 		"nette/mail": "^2.4.0",
-		"klapuch/encryption": "^1.0.0",
 		"klapuch/access": "^2.0.0",
 		"klapuch/storage": "^2.0.0",
 		"klapuch/output": "^2.0.0",
