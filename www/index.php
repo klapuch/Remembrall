@@ -54,10 +54,7 @@ try {
 	$xml->load(TEMPLATES . sprintf('/../%s/templates/%s.xml', $page, lcfirst($resource)));
 	echo (new Output\XsltTemplate(
 		TEMPLATES . sprintf('/../%s/templates/%s.xsl', $page, lcfirst($resource)),
-		new Output\MergedXml(
-			$xml,
-			...$target->template($_GET)
-		)
+		new Output\MergedXml($xml, ...$target->template($_GET))
 	))->render();
 } catch(Throwable $ex) {
 	$logs->put(

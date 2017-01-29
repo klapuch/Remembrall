@@ -13,21 +13,29 @@
 			</styles>
 		</assets>
 	</head>
+	<permissions>
+		<permission href="parts/all" role="guest"/>
+		<permission href="parts/all" role="member"/>
+		<permission href="subscriptions" role="member"/>
+		<permission href="subscription" role="member"/>
+		<permission href="sign/in" role="guest"/>
+		<permission href="sign/out" role="member"/>
+	</permissions>
 	<body>
 		<menu name="main">
-			<item visibility="all">
+			<item>
 				<link href="parts/all">Parts</link>
 			</item>
-			<item visibility="member">
+			<item>
 				<link href="subscriptions">Subscriptions</link>
 			</item>
-			<item visibility="member">
+			<item>
 				<link href="subscription">Subscription</link>
 			</item>
-			<item visibility="guest">
+			<item>
 				<link href="sign/in">Sign in</link>
 			</item>
-			<item visibility="member">
+			<item>
 				<link href="sign/out">Sign out</link>
 			</item>
 		</menu>

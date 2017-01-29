@@ -6,6 +6,9 @@
 
 	<xsl:param name="layout" select="document('layout.xml')/page"/>
 
+	<xsl:key name="permissionByRole" match="permission" use="@role"/>
+	<xsl:key name="linkByHref" match="link" use="@href"/>
+
 	<xsl:output method="html" encoding="utf-8"/>
 
 	<xsl:template match="/">
@@ -59,8 +62,9 @@
 				</div>
 				<div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
-						<xsl:apply-templates select="item[@visibility='all']|item[@visibility=$subscriber/@role]">
+						<xsl:apply-templates select="key('linkByHref', key('permissionByRole', $subscriber/@role)/@href)/..">
 							<xsl:with-param name="baseUrl" select="$baseUrl"/>
+							<xsl:with-param name="subscriber" select="$subscriber"/>
 						</xsl:apply-templates>
 					</ul>
 				</div>
@@ -77,6 +81,7 @@
 
 	<xsl:template match="item">
 		<xsl:param name="baseUrl"/>
+		<xsl:param name="subscriber"/>
 		<li>
 			<xsl:apply-templates>
 				<xsl:with-param name="baseUrl" select="$baseUrl"/>
