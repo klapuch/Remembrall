@@ -3,13 +3,14 @@
 	<permission resource="parts/all" role="guest"/>
 	<permission resource="parts/all" role="member"/>
 
-	<permission resource="parts/popular" role="member"/>
 	<permission resource="parts/popular" role="guest"/>
+	<permission resource="parts/popular" role="member"/>
 
 	<permission resource="parts/unreliable" role="guest"/>
 	<permission resource="parts/unreliable" role="member"/>
 
 	<permission resource="subscriptions" role="member"/>
+
 	<permission resource="subscription" role="member"/>
 
 	<permission resource="sign/in" role="guest"/>
