@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <permissions>
-	<permission href="parts/all" role="guest"/>
-	<permission href="parts/all" role="member"/>
-	<permission href="subscriptions" role="member"/>
-	<permission href="subscription" role="member"/>
-	<permission href="sign/in" role="guest"/>
-	<permission href="sign/out" role="member"/>
+	<permission resource="parts/all" role="guest"/>
+	<permission resource="parts/all" role="member"/>
+
+	<permission resource="parts/popular" role="member"/>
+	<permission resource="parts/popular" role="guest"/>
+
+	<permission resource="parts/unreliable" role="guest"/>
+	<permission resource="parts/unreliable" role="member"/>
+
+	<permission resource="subscriptions" role="member"/>
+	<permission resource="subscription" role="member"/>
+
+	<permission resource="sign/in" role="guest"/>
+
+	<permission resource="sign/out" role="member"/>
 </permissions>

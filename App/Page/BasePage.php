@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Page;
 
 use Klapuch\{
-	Uri, Encryption, FlashMessage, Csrf, Form, Log, Output, Access, Markup
+	Uri, Encryption, FlashMessage, Csrf, Form, Log, Output, Access, Markup, Authorization
 };
 
 abstract class BasePage {
@@ -42,6 +42,16 @@ abstract class BasePage {
 			$this->user = new Access\CachedUser(
 				new Access\RegisteredUser($_SESSION['id'], $this->database)
 			);
+		}
+		$role = new Authorization\HttpRole(
+			$this->user->properties()['role'],
+			new Authorization\XmlPermissions(
+				__DIR__ . '/templates/permission.xml'
+			)
+		);
+		if(!$role->allowed($this->url->path())) {
+			$this->flashMessage('You don\'t have a permission to request the page', 'danger');
+			$this->redirect('sign/in');
 		}
 	}
 

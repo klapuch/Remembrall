@@ -60,7 +60,7 @@
 				</div>
 				<div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
-						<xsl:apply-templates select="key('linkByHref', key('permissionByRole', $user/@role)/@href)/..">
+						<xsl:apply-templates select="key('linkByHref', key('permissionByRole', $user/@role)/@resource)/..">
 							<xsl:with-param name="baseUrl" select="$baseUrl"/>
 							<xsl:with-param name="user" select="$user"/>
 						</xsl:apply-templates>
