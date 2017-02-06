@@ -44,9 +44,11 @@ abstract class BasePage {
 			);
 		}
 		$role = new Authorization\HttpRole(
-			$this->user->properties()['role'],
-			new Authorization\XmlPermissions(
-				__DIR__ . '/templates/permission.xml'
+			new Authorization\RolePermissions(
+				$this->user->properties()['role'],
+				new Authorization\XmlPermissions(
+					__DIR__ . '/templates/permission.xml'
+				)
 			)
 		);
 		if(!$role->allowed($this->url->path())) {
