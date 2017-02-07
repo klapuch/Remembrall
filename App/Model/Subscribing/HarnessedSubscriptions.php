@@ -8,9 +8,9 @@ use Klapuch\{
 use Remembrall\Model\Misc;
 
 /**
- * Subscriptions directed by callback
+ * Subscriptions harnessed by callback
  */
-final class DirectedSubscriptions implements Subscriptions {
+final class HarnessedSubscriptions implements Subscriptions {
 	private $origin;
 	private $callback;
 

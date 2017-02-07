@@ -8,9 +8,9 @@ use Klapuch\{
 use Remembrall\Model\Misc;
 
 /**
- * Parts directed by callback
+ * Parts harnessed by callback
  */
-final class DirectedParts implements Parts {
+final class HarnessedParts implements Parts {
 	private $origin;
 	private $callback;
 

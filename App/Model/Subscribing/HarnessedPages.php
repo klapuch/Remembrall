@@ -6,9 +6,9 @@ use Klapuch\Uri;
 use Remembrall\Model\Misc;
 
 /**
- * Pages directed by callback
+ * Pages harnessed by callback
  */
-final class DirectedPages implements Pages {
+final class HarnessedPages implements Pages {
 	private $origin;
 	private $callback;
 

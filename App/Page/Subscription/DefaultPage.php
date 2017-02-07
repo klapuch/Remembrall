@@ -45,7 +45,7 @@ final class DefaultPage extends Page\BasePage {
 			);
 			(new Storage\Transaction($this->database))->start(
 				function() use ($url, $subscription): void {
-					$page = (new Subscribing\DirectedPages(
+					$page = (new Subscribing\HarnessedPages(
 						new Subscribing\UniquePages($this->database),
 						new Misc\LoggingCallback($this->logs)
 					))->add(
@@ -58,7 +58,7 @@ final class DefaultPage extends Page\BasePage {
 							$this->database
 						)
 					);
-					(new Subscribing\DirectedParts(
+					(new Subscribing\HarnessedParts(
 						new Subscribing\CollectiveParts($this->database),
 						new Misc\LoggingCallback($this->logs)
 					))->add(
@@ -74,7 +74,7 @@ final class DefaultPage extends Page\BasePage {
 						$url,
 						$subscription['expression']
 					);
-					(new Subscribing\DirectedSubscriptions(
+					(new Subscribing\HarnessedSubscriptions(
 						new Subscribing\LimitedSubscriptions(
 							new Subscribing\OwnedSubscriptions(
 								$this->user,
