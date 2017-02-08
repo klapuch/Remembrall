@@ -30,7 +30,7 @@ final class HarnessedSubscriptions implements Subscriptions {
 		);
 	}
 
-	public function getIterator(): \Iterator {
+	public function getIterator(): \Traversable {
 		return $this->callback->invoke(
 			[$this->origin, __FUNCTION__],
 			func_get_args()

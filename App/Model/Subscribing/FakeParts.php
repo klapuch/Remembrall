@@ -21,7 +21,7 @@ final class FakeParts implements Parts {
 			throw $this->exception;
 	}
 
-	public function getIterator(): \Iterator {
+	public function getIterator(): \Traversable {
 		if($this->exception)
 			throw $this->exception;
 		return new \ArrayIterator();

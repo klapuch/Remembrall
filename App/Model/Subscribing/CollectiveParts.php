@@ -32,7 +32,7 @@ final class CollectiveParts implements Parts {
 		))->execute();
 	}
 
-	public function getIterator(): \Iterator {
+	public function getIterator(): \Traversable {
 		$parts = (new Storage\ParameterizedQuery(
 			$this->database,
 			'SELECT id, page_url AS url, snapshot, content, expression

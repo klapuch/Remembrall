@@ -41,7 +41,7 @@ final class LimitedSubscriptions implements Subscriptions {
 		$this->origin->subscribe($uri, $expression, $interval);
 	}
 
-	public function getIterator(): \Iterator {
+	public function getIterator(): \Traversable {
 		return $this->origin->getIterator();
 	}
 

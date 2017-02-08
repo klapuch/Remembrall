@@ -22,7 +22,7 @@ final class PopularParts implements Parts {
 		$this->origin->add($part, $url, $expression);
 	}
 
-	public function getIterator(): \Iterator {
+	public function getIterator(): \Traversable {
 		return $this->origin->getIterator();
 	}
 

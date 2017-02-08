@@ -33,7 +33,7 @@ final class ChangedSubscriptions implements Subscriptions {
 		$this->origin->subscribe($url, $expression, $interval);
 	}
 
-	public function getIterator(): \Iterator {
+	public function getIterator(): \Traversable {
 		$subscriptions = (new Storage\ParameterizedQuery(
 			$this->database,
 			"SELECT subscriptions.id, page_url AS url, expression, content, email

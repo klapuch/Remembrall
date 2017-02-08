@@ -55,7 +55,7 @@ final class OwnedSubscriptions implements Subscriptions {
 		}
 	}
 
-	public function getIterator(): \Iterator {
+	public function getIterator(): \Traversable {
 		$subscriptions = (new Storage\ParameterizedQuery(
 			$this->database,
 			'SELECT id
