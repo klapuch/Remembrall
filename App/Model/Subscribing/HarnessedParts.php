@@ -2,10 +2,10 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+use Remembrall\Model\Misc;
 use Klapuch\{
 	Uri, Output
 };
-use Remembrall\Model\Misc;
 
 /**
  * Parts harnessed by callback

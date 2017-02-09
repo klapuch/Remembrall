@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <ruleset name="Project">
-	<rule ref="vendor/consistence/coding-standard/Consistence/ruleset.xml">
-		<exclude name="PSR2" />
+	<rule ref="vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Squiz">
+		<exclude name="Squiz"/>
 	</rule>
 	<rule ref="vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Generic">
 		<exclude name="Generic.Functions" />       
@@ -32,7 +32,15 @@
 		<exclude name="Squiz.ControlStructures.InlineIfDeclaration.NoBrackets" />       
 	</rule>
 	<rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml">
+		<exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint" />
+		<exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint" />
+		<exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingTraversableParameterTypeHintSpecification" />
+		<exclude name="SlevomatCodingStandard.Namespaces.DisallowGroupUse.DisallowedGroupUse" />
+		<exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingTraversableReturnTypeHintSpecification" />
 		<exclude name="SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces" />
+		<exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingPropertyTypeHint" />
+		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameInAnnotation.NonFullyQualifiedClassName" />
+		<exclude name="SlevomatCodingStandard.TypeHints.DeclareStrictTypes.IncorrectWhitespaceBetweenOpenTagAndDeclare" />
 		<exclude name="SlevomatCodingStandard.Types.EmptyLinesAroundTypeBraces" />
 		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword.NonFullyQualifiedImplements" />
 		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword.NonFullyQualifiedExtends" />
@@ -44,6 +52,7 @@
 	<rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
 		<properties>
 			<property name="rootNamespaces" type="array" value="App=>Remembrall,Tests=>Remembrall"/>
+			<property name="extensions" type="array" value="php,phpt"/>
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword">

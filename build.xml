@@ -41,6 +41,17 @@
 		</exec>
 	</target>
 
+	<target name="phpcbf">
+		<exec executable="vendor/bin/phpcbf" logoutput="true" passthru="true" checkreturn="true">
+			<arg value="--standard=ruleset.xml"/>
+			<arg value="--extensions=php,phpt"/>
+			<arg value="--encoding=utf-8"/>
+			<arg value="--tab-width=4"/>
+			<arg value="-sp"/>
+			<arg path="App"/>
+		</exec>
+	</target>
+
 	<target name="tests">
 		<exec executable="vendor/bin/tester" logoutput="true" passthru="true" checkreturn="true">
 			<arg value="-o"/>
