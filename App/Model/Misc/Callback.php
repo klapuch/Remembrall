@@ -6,8 +6,8 @@ interface Callback {
 	/**
 	 * Invoke the given callback
 	 * @param callable $callback
-	 * @param array ...$args
+	 * @param array $args
 	 * @return mixed
 	 */
-	public function invoke(callable $callback, ...$args);
+	public function invoke(callable $callback, array $args = []);
 }

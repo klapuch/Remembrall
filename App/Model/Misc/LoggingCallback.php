@@ -14,7 +14,7 @@ final class LoggingCallback implements Callback {
 		$this->logs = $logs;
 	}
 
-	public function invoke(callable $callback, ...$args) {
+	public function invoke(callable $callback, array $args = []) {
 		try {
 			return call_user_func_array($callback, $args);
 		} catch(\Throwable $ex) {

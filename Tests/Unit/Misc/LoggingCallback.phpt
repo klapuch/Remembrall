@@ -30,7 +30,7 @@ final class LoggingCallback extends TestCase\Mockery {
 		Assert::noError(function() {
 			(new Misc\LoggingCallback(
 				$this->mock(Log\Logs::class)
-			))->invoke('strlen', 'abc');
+			))->invoke('strlen', ['abc']);
 		});
 	}
 
@@ -39,7 +39,7 @@ final class LoggingCallback extends TestCase\Mockery {
 			strlen('abc'),
 			(new Misc\LoggingCallback(
 				$this->mock(Log\Logs::class)
-			))->invoke('strlen', 'abc')
+			))->invoke('strlen', ['abc'])
 		);
 	}
 }
