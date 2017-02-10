@@ -12,6 +12,7 @@
 	<permission resource="subscriptions" role="member"/>
 
 	<permission resource="subscription" role="member"/>
+	<permission resource="subscription/default" role="member"/>
 
 	<permission resource="sign/in" role="guest"/>
 
