@@ -46,27 +46,8 @@ final class CollectiveParts implements Parts {
 			ORDER BY id ASC'
 		))->rows();
 		foreach($parts as $part) {
-			$page = new StoredPage(
-				new HtmlWebPage(
-					new Http\BasicRequest(
-						'GET',
-						new Uri\ReachableUrl(new Uri\ValidUrl($part['url']))
-					)
-				),
-				new Uri\ValidUrl($part['url']),
-				$this->database
-			);
 			yield new ConstantPart(
-				new StoredPart(
-					new HtmlPart(
-						new MatchingExpression(
-							new XPathExpression($page, $part['expression'])
-						),
-						$page
-					),
-					$part['id'],
-					$this->database
-				),
+				new FakePart(),
 				$part['content'],
 				$part['snapshot'],
 				$part
