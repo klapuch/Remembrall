@@ -2,6 +2,8 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+use Klapuch\Output;
+
 /**
  * Fake
  */
@@ -30,5 +32,9 @@ final class FakePart implements Part {
 
 	public function refresh(): Part {
 		return $this->refreshedPart ?? $this;
+	}
+
+	public function print(Output\Format $format): Output\Format {
+		return $format;
 	}
 }

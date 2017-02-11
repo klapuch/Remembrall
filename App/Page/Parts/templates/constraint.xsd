@@ -19,6 +19,11 @@
 		<xsd:restriction base="xsd:string"/>
 	</xsd:simpleType>
 
+	<!-- TODO SHA1 -->
+	<xsd:simpleType name="snapshot">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+
 	<xsd:simpleType name="occurrences">
 		<xsd:restriction base="xsd:unsignedInt"/>
 	</xsd:simpleType>
@@ -30,6 +35,7 @@
 			<xsd:element name="expression" type="expression"/>
 			<xsd:element name="content" type="content"/>
 			<xsd:element name="occurrences" type="occurrences"/>
+			<xsd:element name="snapshot" type="snapshot"/>
 		</xsd:all>
 	</xsd:complexType>
 

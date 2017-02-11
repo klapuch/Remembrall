@@ -63,53 +63,6 @@ final class UnreliableParts extends TestCase\Database {
 		Assert::null($parts->current());
 	}
 
-	public function testPrinting() {
-		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.google.com', '//a', 'a', ''),
-			('www.facedown.cz', '//b', 'b', ''),
-			('www.google.com', '//c', 'c', ''),
-			('www.facedown.cz', '//d', 'd', ''),
-			('www.new.cz', '//e', 'e', '')"
-		);
-		$this->truncate(['part_visits']);
-		$this->database->exec(
-			"INSERT INTO part_visits (part_id, visited_at) VALUES
-			(1, NOW() - INTERVAL '50 SECOND'),
-			(1, NOW() - INTERVAL '10 SECOND'),
-			(1, NOW() - INTERVAL '20 SECOND'),
-			(2, NOW()),
-			(2, NOW() - INTERVAL '5 SECOND'),
-			(4, NOW() - INTERVAL '45 SECOND')"
-		);
-		$this->database->exec(
-			"INSERT INTO subscriptions (part_id, user_id, interval, last_update, snapshot) VALUES
-			(1, 1, 'PT10S', NOW(), ''),
-			(1, 2, 'PT50S', NOW(), ''),
-			(1, 3, 'PT5S', NOW(), ''),
-			(2, 3, 'PT10S', NOW(), ''),
-			(2, 4, 'PT50S', NOW(), ''),
-			(4, 1, 'PT10S', NOW(), '')"
-		);
-		$parts = (new Subscribing\UnreliableParts(
-			new Subscribing\FakeParts(),
-			$this->database
-		))->print(new Output\FakeFormat(''));
-		Assert::count(2, $parts);
-		Assert::contains('|expression|//d|', $parts[0]->serialization());
-		Assert::contains('|occurrences|1|', $parts[0]->serialization());
-		Assert::contains('|expression|//a|', $parts[1]->serialization());
-		Assert::contains('|occurrences|3|', $parts[1]->serialization());
-	}
-
-	public function testEmptyPrinting() {
-		$parts = (new Subscribing\UnreliableParts(
-			new Subscribing\FakeParts(),
-			$this->database
-		))->print(new Output\FakeFormat(''));
-		Assert::count(0, $parts);
-	}
-
 	protected function prepareDatabase() {
 		$this->truncate(['parts', 'part_visits', 'subscriptions']);
 		$this->restartSequence(['parts', 'subscriptions']);

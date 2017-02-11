@@ -6,6 +6,7 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Integration\Subscribing;
 
+use Klapuch\Output;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -105,6 +106,18 @@ final class StoredPart extends TestCase\Database {
 		Assert::same('NEW_CONTENT', $parts[1]['content']);
 		Assert::same('NEW_SNAP', $parts[1]['snapshot']);
 	}
+
+	public function testPrintingWithoutOrigin() {
+		Assert::same(
+			'|id|1|',
+			(new Subscribing\StoredPart(
+				new Subscribing\FakePart(),
+				1,
+				$this->database
+			))->print(new Output\FakeFormat(''))->serialization()
+		);
+	}
+
 
 	protected function prepareDatabase() {
 		$this->purge(['parts']);

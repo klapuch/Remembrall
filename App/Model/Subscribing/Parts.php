@@ -15,11 +15,4 @@ interface Parts extends \IteratorAggregate {
 	 * @return void
 	 */
 	public function add(Part $part, Uri\Uri $uri, string $expression): void;
-
-	/**
-	 * Print itself
-	 * @param \Klapuch\Output\Format $format
-	 * @return \Klapuch\Output\Format[]
-	 */
-	public function print(Output\Format $format): array;
 }

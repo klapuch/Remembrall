@@ -104,22 +104,6 @@ final class CollectiveParts extends TestCase\Database {
 		$this->database->exec(
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
 			('www.google.com', '//a', 'a', ''),
-			('www.facedown.cz', '//c', 'c', '')"
-		);
-		$parts = (new Subscribing\CollectiveParts($this->database))->getIterator();
-		$part = $parts->current();
-		Assert::equal('a', $part->content());
-		$parts->next();
-		$part = $parts->current();
-		Assert::equal('c', $part->content());
-		$parts->next();
-		Assert::null($parts->current());
-	}
-
-	public function testPrinting() {
-		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.google.com', '//a', 'a', ''),
 			('www.seznam.cz', '//b', 'b', ''),
 			('www.facedown.cz', '//c', 'c', '')"
 		);
@@ -132,28 +116,23 @@ final class CollectiveParts extends TestCase\Database {
 		);
 		$parts = (new Subscribing\CollectiveParts(
 			$this->database
-		))->print(new Output\FakeFormat(''));
-		Assert::count(3, $parts);
-		$part = $parts[0]->serialization();
-		Assert::contains('|id|1|', $part);
-		Assert::contains('|occurrences|2|', $part);
-		$part = $parts[1]->serialization();
-		Assert::contains('|id|2|', $part);
-		Assert::contains('|occurrences|1|', $part);
-		$part = $parts[2]->serialization();
-		Assert::contains('|id|3|', $part);
-		Assert::contains('|occurrences|0|', $part);
+		))->getIterator();
+		$part = $parts->current();
+		Assert::same('a', $part->content());
+		$parts->next();
+		$part = $parts->current();
+		Assert::same('b', $part->content());
+		$parts->next();
+		$part = $parts->current();
+		Assert::same('c', $part->content());
+		$parts->next();
+		Assert::null($parts->current());
 	}
 
-	public function testEmptyPrinting() {
+	public function testIteratingPrinting() {
 		$parts = (new Subscribing\CollectiveParts(
 			$this->database
-		))->print(new Output\FakeFormat(''));
-		Assert::count(0, $parts);
-	}
-
-	public function testEmptyIterating() {
-		$parts = (new Subscribing\CollectiveParts($this->database))->getIterator();
+		))->getIterator();
 		Assert::null($parts->current());
 	}
 

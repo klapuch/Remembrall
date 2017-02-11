@@ -2,7 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\Storage;
+use Klapuch\{
+	Storage, Output
+};
 
 /**
  * Part stored in the database
@@ -48,5 +50,9 @@ final class StoredPart implements Part {
 			[$refreshedPart->content(), $refreshedPart->snapshot(), $this->id]
 		))->execute();
 		return $this;
+	}
+
+	public function print(Output\Format $format): Output\Format {
+		return $format->with('id', $this->id);
 	}
 }

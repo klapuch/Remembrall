@@ -14,7 +14,7 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class PopularParts extends TestCase\Database {
-	public function testPrinting() {
+	public function testIterating() {
 		$this->database->exec(
 			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
 			(1, 'foo.cz', '//foo', 'foo', 'fooSnap'),
@@ -34,19 +34,25 @@ final class PopularParts extends TestCase\Database {
 		$parts = (new Subscribing\PopularParts(
 			new Subscribing\FakeParts(),
 			$this->database
-		))->print(new Output\FakeFormat(''));
-		Assert::count(3, $parts);
-		Assert::contains('bar.cz', $parts[0]->serialization());
-		Assert::contains('baz.cz', $parts[1]->serialization());
-		Assert::contains('kar.cz', $parts[2]->serialization());
+		))->getIterator();
+		$part = $parts->current();
+		Assert::same('bar', $part->content());
+		$parts->next();
+		$part = $parts->current();
+		Assert::same('baz', $part->content());
+		$parts->next();
+		$part = $parts->current();
+		Assert::same('kar', $part->content());
+		$parts->next();
+		Assert::null($parts->current());
 	}
 
-	public function testEmptyPrinting() {
+	public function testEmptyIterating() {
 		$parts = (new Subscribing\PopularParts(
 			new Subscribing\FakeParts(),
 			$this->database
-		))->print(new Output\FakeFormat(''));
-		Assert::count(0, $parts);
+		))->getIterator();
+		Assert::null($parts->current());
 	}
 
 	protected function prepareDatabase() {

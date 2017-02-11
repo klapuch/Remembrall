@@ -2,7 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\Storage;
+use Klapuch\{
+	Storage, Output
+};
 use Remembrall\Exception\NotFoundException;
 
 /**
@@ -35,6 +37,10 @@ final class ExistingPart implements Part {
 		if(!$this->exists())
 			throw new NotFoundException('The part does not exist');
 		return $this->origin->refresh();
+	}
+
+	public function print(Output\Format $format): Output\Format {
+		return $this->origin->print($format);
 	}
 
 	/**

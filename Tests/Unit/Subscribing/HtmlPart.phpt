@@ -6,6 +6,7 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Unit\Subscribing;
 
+use Klapuch\Output;
 use Remembrall\Model\Subscribing;
 use Tester;
 use Tester\Assert;
@@ -102,6 +103,16 @@ final class HtmlPart extends Tester\TestCase {
 				new Subscribing\FakeExpression($expression),
 				new Subscribing\FakePage(null, $refreshedPart)
 			))->refresh()
+		);
+	}
+
+	public function testPrintingPassedFormat() {
+		Assert::same(
+			'foo',
+			(new Subscribing\HtmlPart(
+				new Subscribing\FakeExpression(),
+				new Subscribing\FakePage()
+			))->print(new Output\FakeFormat('foo'))->serialization()
 		);
 	}
 }

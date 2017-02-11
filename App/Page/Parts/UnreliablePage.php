@@ -11,10 +11,17 @@ final class UnreliablePage extends Page\BasePage {
 		return new Output\ValidXml(
 			new Output\WrappedXml(
 				'parts',
-				...(new Subscribing\UnreliableParts(
-					new Subscribing\CollectiveParts($this->database),
-					$this->database
-				))->print(new Output\Xml([], 'part'))
+				...array_map(
+					function(Subscribing\Part $part): Output\Format {
+						return $part->print(new Output\Xml([], 'part'));
+					},
+					iterator_to_array(
+						new Subscribing\UnreliableParts(
+							new Subscribing\CollectiveParts($this->database),
+							$this->database
+						)
+					)
+				)
 			),
 			__DIR__ . '/templates/constraint.xsd'
 		);

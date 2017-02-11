@@ -23,13 +23,10 @@ final class PopularParts implements Parts {
 	}
 
 	public function getIterator(): \Traversable {
-		return $this->origin->getIterator();
-	}
-
-	public function print(Output\Format $format): array {
 		$parts = (new Storage\ParameterizedQuery(
 			$this->database,
-			'SELECT id, page_url AS url, expression, content, occurrences
+			'SELECT id, page_url AS url, expression, content, snapshot,
+			occurrences
 			FROM parts
 			INNER JOIN (
 				SELECT part_id, COUNT(*) AS occurrences
@@ -38,15 +35,13 @@ final class PopularParts implements Parts {
 			) AS subscriptions ON subscriptions.part_id = parts.id
 			ORDER BY occurrences DESC'
 		))->rows();
-		return array_map(
-			function(array $part) use ($format): Output\Format {
-				return $format->with('id', $part['id'])
-					->with('url', $part['url'])
-					->with('expression', $part['expression'])
-					->with('content', $part['content'])
-					->with('occurrences', $part['occurrences']);
-			},
-			$parts
-		);
+		foreach($parts as $part) {
+			yield new ConstantPart(
+				new FakePart(),
+				$part['content'],
+				$part['snapshot'],
+				$part
+			);
+		}
 	}
 }

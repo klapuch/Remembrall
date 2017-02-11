@@ -11,9 +11,14 @@ final class AllPage extends Page\BasePage {
 		return new Output\ValidXml(
 			new Output\WrappedXml(
 				'parts',
-				...(new Subscribing\CollectiveParts(
-					$this->database
-				))->print(new Output\Xml([], 'part'))
+				...array_map(
+					function(Subscribing\Part $part): Output\Format {
+						return $part->print(new Output\Xml([], 'part'));
+					},
+					iterator_to_array(
+						new Subscribing\CollectiveParts($this->database)
+					)
+				)
 			),
 			__DIR__ . '/templates/constraint.xsd'
 		);
