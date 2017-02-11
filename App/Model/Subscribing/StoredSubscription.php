@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Storage, Time
+	Storage, Time, Output
 };
 
 /**
@@ -61,5 +61,9 @@ final class StoredSubscription implements Subscription {
 				['id' => $this->id]
 			))->execute();
 		});
+	}
+
+	public function print(Output\Format $format): Output\Format {
+		return $format->with('id', $this->id);
 	}
 }

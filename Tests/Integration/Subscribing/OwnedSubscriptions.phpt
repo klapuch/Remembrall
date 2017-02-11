@@ -65,7 +65,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 		Assert::type(\Throwable::class, $ex->getPrevious());
 	}
 
-	public function testPrinting() {
+	public function testIteratingOwned() {
 		$this->database->exec(
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
 			('https://www.google.com', '//a', 'a', ''),
@@ -96,21 +96,26 @@ final class OwnedSubscriptions extends TestCase\Database {
 		$subscriptions = (new Subscribing\OwnedSubscriptions(
 			new Access\FakeUser(1),
 			$this->database
-		))->print(new Output\FakeFormat(''));
-		Assert::count(3, $subscriptions);
-		Assert::contains('1993-01-01', $subscriptions[0]->serialization());
-		Assert::contains('1997-01-01', $subscriptions[1]->serialization());
-		Assert::contains('1996-01-01', $subscriptions[2]->serialization());
-	}
-
-	public function testEmptyPrinting() {
-		Assert::same(
-			[],
-			(new Subscribing\OwnedSubscriptions(
-				new Access\FakeUser(1),
-				$this->database
-			))->print(new Output\FakeFormat(''))
+		))->getIterator();
+		$subscription = $subscriptions->current();
+		Assert::contains(
+			'1993-01-01',
+			$subscription->print(new Output\FakeFormat(''))->serialization()
 		);
+		$subscriptions->next();
+		$subscription = $subscriptions->current();
+		Assert::contains(
+			'1997-01-01',
+			$subscription->print(new Output\FakeFormat(''))->serialization()
+		);
+		$subscriptions->next();
+		$subscription = $subscriptions->current();
+		Assert::contains(
+			'1996-01-01',
+			$subscription->print(new Output\FakeFormat(''))->serialization()
+		);
+		$subscriptions->next();
+		Assert::null($subscriptions->current());
 	}
 
 	public function testEmptyIterating() {
@@ -118,33 +123,6 @@ final class OwnedSubscriptions extends TestCase\Database {
 			new Access\FakeUser(1),
 			$this->database
 		))->getIterator();
-		Assert::null($subscriptions->current());
-	}
-
-	public function testIteratingOwned() {
-		$this->database->exec(
-			"INSERT INTO subscriptions (part_id, user_id, interval, last_update, snapshot) VALUES
-			(1, 4, 'PT1M', NOW(), ''),
-			(2, 2, 'PT2M', NOW(), ''),
-			(3, 1, 'PT3M', NOW(), ''),
-			(4, 1, 'PT4M', NOW(), '')"
-		);
-		$subscriptions = (new Subscribing\OwnedSubscriptions(
-			new Access\FakeUser(1),
-			$this->database
-		))->getIterator();
-		$subscription = $subscriptions->current();
-		Assert::equal(
-			new Subscribing\StoredSubscription(3, $this->database),
-			$subscription
-		);
-		$subscriptions->next();
-		$subscription = $subscriptions->current();
-		Assert::equal(
-			new Subscribing\StoredSubscription(4, $this->database),
-			$subscription
-		);
-		$subscriptions->next();
 		Assert::null($subscriptions->current());
 	}
 

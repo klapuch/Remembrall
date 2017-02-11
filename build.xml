@@ -78,4 +78,21 @@
 		</exec>
 	</target>
 
+	<target name="coverage">
+		<exec executable="vendor/bin/tester" logoutput="true" passthru="true" checkreturn="true">
+			<arg value="-o"/>
+			<arg value="console"/>
+			<arg value="-s"/>
+			<arg value="-p"/>
+			<arg value="phpdbg"/>
+			<arg value="-c"/>
+			<arg path="Tests/php.ini"/>
+			<arg path="Tests/"/>
+			<arg value="--coverage"/>
+			<arg value="coverage.html"/>
+			<arg value="--coverage-src"/>
+			<arg path="App/Model/"/>
+		</exec>
+	</target>
+
 </project>

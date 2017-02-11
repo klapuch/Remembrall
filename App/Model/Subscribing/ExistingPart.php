@@ -2,10 +2,10 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+use Remembrall\Exception\NotFoundException;
 use Klapuch\{
 	Storage, Output
 };
-use Remembrall\Exception\NotFoundException;
 
 /**
  * Part which will always exists

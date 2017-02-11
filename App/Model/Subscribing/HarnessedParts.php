@@ -32,11 +32,4 @@ final class HarnessedParts implements Parts {
 			func_get_args()
 		);
 	}
-
-	public function print(Output\Format $format): array {
-		return $this->callback->invoke(
-			[$this->origin, __FUNCTION__],
-			func_get_args()
-		);
-	}
 }

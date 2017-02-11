@@ -58,19 +58,7 @@ final class OwnedSubscriptions implements Subscriptions {
 	public function getIterator(): \Traversable {
 		$subscriptions = (new Storage\ParameterizedQuery(
 			$this->database,
-			'SELECT id
-			FROM subscriptions
-			WHERE user_id IS NOT DISTINCT FROM ?',
-			[$this->owner->id()]
-		))->rows();
-		foreach($subscriptions as ['id' => $id])
-			yield new StoredSubscription($id, $this->database);
-	}
-
-	public function print(Output\Format $format): array {
-		$subscriptions = (new Storage\ParameterizedQuery(
-			$this->database,
-			'SELECT subscriptions.id, expression, page_url, interval,
+			'SELECT subscriptions.id, expression, page_url AS url, interval,
 			visited_at, last_update, content
 			FROM parts
 			INNER JOIN (
@@ -83,22 +71,11 @@ final class OwnedSubscriptions implements Subscriptions {
 			ORDER BY visited_at DESC',
 			[$this->owner->id()]
 		))->rows();
-		return array_map(
-			function(array $subscription) use ($format): Output\Format {
-				return $format->with('expression', $subscription['expression'])
-					->with('id', $subscription['id'])
-					->with('content', $subscription['content'])
-					->with('url', $subscription['page_url'])
-					->with(
-						'interval',
-						(string)new Time\TimeInterval(
-							new \DateTimeImmutable($subscription['visited_at']),
-							new \DateInterval($subscription['interval'])
-						)
-					)
-					->with('lastUpdate', $subscription['last_update']);
-			},
-			$subscriptions
-		);
+		foreach($subscriptions as $subscription) {
+			yield new ConstantSubscription(
+				new StoredSubscription($subscription['id'], $this->database),
+				$subscription
+			);
+		}
 	}
 }

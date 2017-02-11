@@ -67,4 +67,8 @@ final class EmailSubscription implements Subscription {
 			)
 		);
 	}
+
+	public function print(Output\Format $format): Output\Format {
+		return $this->origin->print($format);
+	}
 }

@@ -27,10 +27,4 @@ final class FakeSubscriptions implements Subscriptions {
 			throw $this->exception;
 		return new \ArrayIterator();
 	}
-
-	public function print(Output\Format $format): array {
-		if($this->exception)
-			throw $this->exception;
-		return [];
-	}
 }

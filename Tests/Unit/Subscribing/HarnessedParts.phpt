@@ -41,13 +41,6 @@ final class HarnessedParts extends TestCase\Mockery {
 		Assert::noError(function() use($origin, $callback) {
 			(new Subscribing\HarnessedParts($origin, $callback))->getIterator();
 		});
-		$callback->shouldReceive('invoke')
-			->once()
-			->with([$origin, 'print'], [$format])
-			->andReturn([$format]);
-		Assert::noError(function() use($origin, $callback, $format) {
-			(new Subscribing\HarnessedParts($origin, $callback))->print($format);
-		});
 	}
 }
 

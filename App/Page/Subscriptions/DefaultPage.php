@@ -11,10 +11,17 @@ final class DefaultPage extends Page\BasePage {
 		return new Output\ValidXml(
 			new Output\WrappedXml(
 				'subscriptions',
-				...(new Subscribing\OwnedSubscriptions(
-					$this->user,
-					$this->database
-				))->print(new Output\Xml([], 'subscription'))
+				...array_map(
+					function(Subscribing\Subscription $part): Output\Format {
+						return $part->print(new Output\Xml([], 'subscription'));
+					},
+					iterator_to_array(
+						new Subscribing\OwnedSubscriptions(
+							$this->user,
+							$this->database
+						)
+					)
+				)
 			),
 			__DIR__ . '/templates/constraint.xsd'
 		);

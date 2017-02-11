@@ -7,7 +7,7 @@ declare(strict_types = 1);
 namespace Remembrall\Integration\Subscribing;
 
 use Klapuch\{
-	Time, Access
+	Time, Access, Output
 };
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
@@ -40,6 +40,14 @@ final class OwnedSubscription extends TestCase\Database {
 				new Access\FakeUser(666),
 				$this->database
 			))->notify();
+		}, \Remembrall\Exception\NotFoundException::class);
+		Assert::exception(function() {
+			(new Subscribing\OwnedSubscription(
+				new Subscribing\FakeSubscription(),
+				1,
+				new Access\FakeUser(666),
+				$this->database
+			))->print(new Output\FakeFormat(''));
 		}, \Remembrall\Exception\NotFoundException::class);
 	}
 
@@ -76,6 +84,16 @@ final class OwnedSubscription extends TestCase\Database {
 					new Access\FakeUser(666),
 					$this->database
 				))->notify();
+			}
+		);
+		Assert::noError(
+			function() {
+				(new Subscribing\OwnedSubscription(
+					new Subscribing\FakeSubscription(),
+					2,
+					new Access\FakeUser(666),
+					$this->database
+				))->print(new Output\FakeFormat(''));
 			}
 		);
 	}

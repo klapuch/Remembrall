@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Output, Time, Uri
+	Time, Uri
 };
 
 interface Subscriptions extends \IteratorAggregate {
@@ -20,11 +20,4 @@ interface Subscriptions extends \IteratorAggregate {
 		string $expression,
 		Time\Interval $interval
 	): void;
-
-	/**
-	 * Print itself
-	 * @param \Klapuch\Output\Format $format
-	 * @return Output\Format[]
-	 */
-	public function print(Output\Format $format): array;
 }

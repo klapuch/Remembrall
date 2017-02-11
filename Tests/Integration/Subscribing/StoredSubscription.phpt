@@ -6,7 +6,9 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Integration\Subscribing;
 
-use Klapuch\Time;
+use Klapuch\{
+	Time, Output
+};
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -116,6 +118,14 @@ final class StoredSubscription extends TestCase\Database {
 		$statement = $this->database->prepare('SELECT * FROM subscriptions WHERE id = ?');
 		$statement->execute([$id]);
 		Assert::same('facedown snap', $statement->fetch()['snapshot']);
+	}
+
+	public function testPrintingId() {
+		$subscription = new Subscribing\StoredSubscription(1, $this->database);
+		Assert::same(
+			'|id|1|',
+			$subscription->print(new Output\FakeFormat(''))->serialization()
+		);
 	}
 
 	protected function prepareDatabase() {

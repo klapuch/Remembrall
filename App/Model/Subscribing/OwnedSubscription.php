@@ -4,7 +4,7 @@ namespace Remembrall\Model\Subscribing;
 
 use Remembrall\Exception\NotFoundException;
 use Klapuch\{
-	Storage, Time, Access
+	Storage, Time, Access, Output
 };
 
 /**
@@ -53,6 +53,15 @@ final class OwnedSubscription implements Subscription {
 			);
 		}
 		$this->origin->notify();
+	}
+
+	public function print(Output\Format $format): Output\Format {
+		if(!$this->owned()) {
+			throw new NotFoundException(
+				'You can not see foreign subscription'
+			);
+		}
+		return $this->origin->print($format);
 	}
 
 	/**

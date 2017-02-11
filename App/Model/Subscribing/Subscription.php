@@ -2,7 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\Time;
+use Klapuch\{
+	Time, Output
+};
 
 interface Subscription {
 	/**
@@ -27,4 +29,11 @@ interface Subscription {
 	 * @return void
 	 */
 	public function notify(): void;
+
+	/**
+	 * Print itself
+	 * @param \Klapuch\Output\Format $format
+	 * @return \Klapuch\Output\Format
+	 */
+	public function print(Output\Format $format): Output\Format;
 }

@@ -44,16 +44,6 @@ final class HarnessedSubscriptions extends TestCase\Mockery {
 				$callback
 			))->getIterator();
 		});
-		$callback->shouldReceive('invoke')
-			->once()
-			->with([$origin, 'print'], [$format])
-			->andReturn([$format]);
-		Assert::noError(function() use($origin, $callback, $format) {
-			(new Subscribing\HarnessedSubscriptions(
-				$origin,
-				$callback
-			))->print($format);
-		});
 	}
 }
 
