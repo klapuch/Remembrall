@@ -33,6 +33,7 @@
 	</rule>
 	<rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml">
 		<exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint" />
+		<exclude name="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses.IncorrectlyOrderedUses" />
 		<exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint" />
 		<exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingTraversableParameterTypeHintSpecification" />
 		<exclude name="SlevomatCodingStandard.Namespaces.DisallowGroupUse.DisallowedGroupUse" />
