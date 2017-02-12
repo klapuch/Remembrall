@@ -43,6 +43,13 @@ final class XmlPrintedObjects extends Tester\TestCase {
 	public function testDisabledWithMethod() {
 		(new Misc\XmlPrintedObjects('', []))->with('foo', 'bar');
 	}
+
+	/**
+	 * @throws \Exception Not implemented
+	 */
+	public function testDisabledAdjustedMethod() {
+		(new Misc\XmlPrintedObjects('', []))->adjusted('foo', 'trim');
+	}
 }
 
 (new XmlPrintedObjects())->run();
