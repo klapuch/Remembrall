@@ -12,7 +12,7 @@ use Klapuch\{
 final class FakeParts implements Parts {
 	private $exception;
 
-	public function __construct(\Throwable $exception = null) {
+	public function __construct(?\Throwable $exception = null) {
 		$this->exception = $exception;
 	}
 

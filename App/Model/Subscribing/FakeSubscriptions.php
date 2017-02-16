@@ -9,7 +9,7 @@ use Klapuch\{
 final class FakeSubscriptions implements Subscriptions {
 	private $exception;
 
-	public function __construct(\Throwable $exception = null) {
+	public function __construct(?\Throwable $exception = null) {
 		$this->exception = $exception;
 	}
 

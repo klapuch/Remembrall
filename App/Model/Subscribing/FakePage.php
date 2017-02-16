@@ -10,8 +10,8 @@ final class FakePage implements Page {
 	private $refreshedPage;
 
 	public function __construct(
-		\DOMDocument $content = null,
-		Page $refreshedPage = null
+		?\DOMDocument $content = null,
+		?Page $refreshedPage = null
 	) {
 		$this->content = $content;
 		$this->refreshedPage = $refreshedPage;
