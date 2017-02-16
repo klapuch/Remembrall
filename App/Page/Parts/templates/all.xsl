@@ -4,6 +4,7 @@
 	<xsl:import href="../../templates/@layout.xsl"/>
 	<xsl:import href="tabs.xsl"/>
 	<xsl:import href="../components/content-modal.xsl"/>
+	<xsl:import href="../../templates/direction.xsl"/>
 
 	<xsl:template match="page">
 		<xsl:apply-templates select="body/tabs" mode="parts">
@@ -42,7 +43,12 @@
 	</xsl:template>
 
 	<xsl:template match="heading">
-		<th><p><xsl:apply-templates/></p></th>
+		<th>
+			<xsl:call-template name="direction">
+				<xsl:with-param name="sort" select="@sort"/>
+				<xsl:with-param name="current" select="/page/request/get/sort"/>
+			</xsl:call-template>
+		</th>
 	</xsl:template>
 
 </xsl:stylesheet>

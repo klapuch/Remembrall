@@ -28,7 +28,8 @@
 		"klapuch/csrf": "^1.0.0",
 		"klapuch/form": "^3.0.0",
 		"klapuch/validation": "^2.0.0",
-		"klapuch/authorization": "^1.0.0"
+		"klapuch/authorization": "^1.0.0",
+		"klapuch/dataset": "@dev"
 	},
 	"require-dev": {
 		"nette/tester": "^1.7",

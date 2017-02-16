@@ -92,6 +92,11 @@ abstract class BasePage {
 					sprintf('<baseUrl>%s</baseUrl>', $this->url->reference())
 				),
 				new \SimpleXMLElement(
+					(new Output\Xml([], 'request'))
+					->with('get', $_GET)
+					->serialization()
+				),
+				new \SimpleXMLElement(
 					(new FlashMessage\XmlMessage($_SESSION))->print()
 				),
 				new \SimpleXMLElement(

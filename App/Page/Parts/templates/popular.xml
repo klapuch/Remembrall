@@ -10,10 +10,10 @@
 			<table purpose="overview">
 				<headings>
 					<heading>#</heading>
-					<heading>URL</heading>
-					<heading>Expression</heading>
+					<heading sort="url">URL</heading>
+					<heading sort="expression">Expression</heading>
 					<heading>Content</heading>
-					<heading>Occurrences</heading>
+					<heading sort="occurrences">Occurrences</heading>
 				</headings>
 			</table>
 		</tables>
