@@ -19,7 +19,11 @@ final class AllPage extends Page\BasePage {
 					iterator_to_array(
 						(new Subscribing\CollectiveParts(
 							$this->database
-						))->iterate(new Dataset\FakeSelection(''))
+						))->iterate(
+							new Dataset\CombinedSelection(
+								new Dataset\SqlRestSort($_GET['sort'] ?? '')
+							)
+						)
 					),
 				]
 			),

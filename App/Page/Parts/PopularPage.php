@@ -20,7 +20,11 @@ final class PopularPage extends Page\BasePage {
 						(new Subscribing\PopularParts(
 							new Subscribing\CollectiveParts($this->database),
 							$this->database
-						))->iterate(new Dataset\FakeSelection(''))
+						))->iterate(
+							new Dataset\CombinedSelection(
+								new Dataset\SqlRestSort($_GET['sort'] ?? '')
+							)
+						)
 					),
 				]
 			),

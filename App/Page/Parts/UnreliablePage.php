@@ -20,7 +20,11 @@ final class UnreliablePage extends Page\BasePage {
 						(new Subscribing\UnreliableParts(
 							new Subscribing\CollectiveParts($this->database),
 							$this->database
-						))->iterate(new Dataset\FakeSelection(''))
+						))->iterate(
+							new Dataset\CombinedSelection(
+								new Dataset\SqlRestSort($_GET['sort'] ?? '')
+							)
+						)
 					),
 				]
 			),
