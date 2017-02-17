@@ -7,7 +7,7 @@ declare(strict_types = 1);
 namespace Remembrall\Integration\Subscribing;
 
 use Klapuch\{
-	Uri, Output
+	Uri, Output, Dataset
 };
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
@@ -116,7 +116,7 @@ final class CollectiveParts extends TestCase\Database {
 		);
 		$parts = (new Subscribing\CollectiveParts(
 			$this->database
-		))->getIterator();
+		))->iterate(new Dataset\FakeSelection(''));
 		$part = $parts->current();
 		Assert::same('a', $part->content());
 		$parts->next();
@@ -132,7 +132,7 @@ final class CollectiveParts extends TestCase\Database {
 	public function testIteratingPrinting() {
 		$parts = (new Subscribing\CollectiveParts(
 			$this->database
-		))->getIterator();
+		))->iterate(new Dataset\FakeSelection(''));
 		Assert::null($parts->current());
 	}
 

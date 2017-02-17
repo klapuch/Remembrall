@@ -6,7 +6,9 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Integration\Subscribing;
 
-use Klapuch\Output;
+use Klapuch\{
+	Output, Dataset
+};
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -34,7 +36,7 @@ final class PopularParts extends TestCase\Database {
 		$parts = (new Subscribing\PopularParts(
 			new Subscribing\FakeParts(),
 			$this->database
-		))->getIterator();
+		))->iterate(new Dataset\FakeSelection(''));
 		$part = $parts->current();
 		Assert::same('bar', $part->content());
 		$parts->next();
@@ -51,7 +53,7 @@ final class PopularParts extends TestCase\Database {
 		$parts = (new Subscribing\PopularParts(
 			new Subscribing\FakeParts(),
 			$this->database
-		))->getIterator();
+		))->iterate(new Dataset\FakeSelection(''));
 		Assert::null($parts->current());
 	}
 

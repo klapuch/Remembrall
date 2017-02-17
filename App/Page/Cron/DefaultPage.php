@@ -2,7 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Page\Cron;
 
-use Klapuch\Output;
+use Klapuch\{
+	Output, Dataset
+};
 use Nette\Mail;
 use Remembrall\Page;
 use Remembrall\Model\{
@@ -20,7 +22,7 @@ final class DefaultPage extends Page\BasePage {
 				new Misc\LoggingCallback($this->logs)
 			);
 			/** @var \Remembrall\Model\Subscribing\Part $part */
-			foreach($parts as $part) {
+			foreach($parts->iterate(new Dataset\FakeSelection('')) as $part) {
 				try {
 					$part->refresh();
 				} catch(\Throwable $ex) {

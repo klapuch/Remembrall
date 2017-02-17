@@ -3,10 +3,10 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Uri, Output
+	Uri, Output, Dataset
 };
 
-interface Parts extends \IteratorAggregate {
+interface Parts {
 	/**
 	 * Add a new part to the parts
 	 * @param Part $part
@@ -15,4 +15,11 @@ interface Parts extends \IteratorAggregate {
 	 * @return void
 	 */
 	public function add(Part $part, Uri\Uri $uri, string $expression): void;
+
+	/**
+	 * Go through all the parts
+	 * @param \Klapuch\Dataset\Selection $selection
+	 * @return \Traversable
+	 */
+	public function iterate(Dataset\Selection $selection): \Traversable;
 }

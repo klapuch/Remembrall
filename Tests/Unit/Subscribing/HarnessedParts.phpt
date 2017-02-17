@@ -7,7 +7,7 @@ declare(strict_types = 1);
 namespace Remembrall\Unit\Subscribing;
 
 use Klapuch\{
-	Uri, Output
+	Uri, Output, Dataset
 };
 use Remembrall\Model\Subscribing;
 use Remembrall\Model\Misc;
@@ -34,12 +34,15 @@ final class HarnessedParts extends TestCase\Mockery {
 				$callback
 			))->add($part, $uri, $expression);
 		});
+		$selection = new Dataset\FakeSelection();
 		$callback->shouldReceive('invoke')
 			->once()
-			->with([$origin, 'getIterator'], [])
+			->with([$origin, 'iterate'], [$selection])
 			->andReturn($iterator);
-		Assert::noError(function() use($origin, $callback) {
-			(new Subscribing\HarnessedParts($origin, $callback))->getIterator();
+		Assert::noError(function() use($origin, $callback, $selection) {
+			(new Subscribing\HarnessedParts(
+				$origin, $callback
+			))->iterate($selection);
 		});
 	}
 }

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Uri, Output
+	Uri, Output, Dataset
 };
 
 /**
@@ -21,7 +21,7 @@ final class FakeParts implements Parts {
 			throw $this->exception;
 	}
 
-	public function getIterator(): \Traversable {
+	public function iterate(Dataset\Selection $selection): \Traversable {
 		if($this->exception)
 			throw $this->exception;
 		return new \ArrayIterator();

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Http, Storage, Uri, Output
+	Http, Storage, Uri, Output, Dataset
 };
 
 /**
@@ -32,18 +32,20 @@ final class CollectiveParts implements Parts {
 		))->execute();
 	}
 
-	public function getIterator(): \Traversable {
+	public function iterate(Dataset\Selection $selection): \Traversable {
 		$parts = (new Storage\ParameterizedQuery(
 			$this->database,
-			'SELECT id, page_url AS url, content, expression, snapshot,
-			COALESCE(occurrences, 0) AS occurrences
-			FROM parts
-			LEFT JOIN (
-				SELECT part_id, COUNT(*) AS occurrences
-				FROM subscriptions
-				GROUP BY part_id
-			) AS subscriptions ON subscriptions.part_id = parts.id
-			ORDER BY id ASC'
+			$selection->expression(
+				'SELECT id, page_url AS url, content, expression, snapshot,
+				COALESCE(occurrences, 0) AS occurrences
+				FROM parts
+				LEFT JOIN (
+					SELECT part_id, COUNT(*) AS occurrences
+					FROM subscriptions
+					GROUP BY part_id
+				) AS subscriptions ON subscriptions.part_id = parts.id
+				ORDER BY id ASC'
+			)
 		))->rows();
 		foreach($parts as $part) {
 			yield new ConstantPart(

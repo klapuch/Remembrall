@@ -2,7 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Page\Parts;
 
-use Klapuch\Output;
+use Klapuch\{
+	Output, Dataset
+};
 use Remembrall\Model\{
 	Subscribing, Misc
 };
@@ -15,7 +17,9 @@ final class AllPage extends Page\BasePage {
 				'parts',
 				['part' =>
 					iterator_to_array(
-						new Subscribing\CollectiveParts($this->database)
+						(new Subscribing\CollectiveParts(
+							$this->database
+						))->iterate(new Dataset\FakeSelection(''))
 					),
 				]
 			),

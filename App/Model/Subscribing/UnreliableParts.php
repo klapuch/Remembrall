@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Http, Storage, Uri, Output
+	Http, Storage, Uri, Output, Dataset
 };
 
 /**
@@ -22,11 +22,12 @@ final class UnreliableParts implements Parts {
 		$this->origin->add($part, $uri, $expression);
 	}
 
-	public function getIterator(): \Traversable {
+	public function iterate(Dataset\Selection $selection): \Traversable {
 		$parts = (new Storage\ParameterizedQuery(
 			$this->database,
-			"SELECT page_url AS url, expression, parts.id, content, snapshot,
-			occurrences
+			$selection->expression(
+				"SELECT page_url AS url, expression, parts.id, content, snapshot,
+				occurrences
 				FROM parts
 				RIGHT JOIN (
 					SELECT MIN(SUBSTRING(interval FROM '[0-9]+')::INT) AS interval,
@@ -41,6 +42,7 @@ final class UnreliableParts implements Parts {
 				) AS part_visits ON part_visits.part_id = parts.id
 				WHERE visited_at + INTERVAL '1 SECOND' * interval < NOW()
 				ORDER BY visited_at ASC"
+			)
 		))->rows();
 		foreach($parts as $part) {
 			$url = new Uri\ValidUrl($part['url']);

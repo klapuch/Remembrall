@@ -4,7 +4,7 @@ namespace Remembrall\Model\Subscribing;
 
 use Remembrall\Model\Misc;
 use Klapuch\{
-	Uri, Output
+	Uri, Output, Dataset
 };
 
 /**
@@ -26,7 +26,7 @@ final class HarnessedParts implements Parts {
 		);
 	}
 
-	public function getIterator(): \Traversable {
+	public function iterate(Dataset\Selection $selection): \Traversable {
 		return $this->callback->invoke(
 			[$this->origin, __FUNCTION__],
 			func_get_args()

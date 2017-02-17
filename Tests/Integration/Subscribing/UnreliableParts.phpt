@@ -6,7 +6,9 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Integration\Subscribing;
 
-use Klapuch\Output;
+use Klapuch\{
+	Output, Dataset
+};
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -45,7 +47,7 @@ final class UnreliableParts extends TestCase\Database {
 		$parts = (new Subscribing\UnreliableParts(
 			new Subscribing\FakeParts(),
 			$this->database
-		))->getIterator();
+		))->iterate(new Dataset\FakeSelection(''));
 		$part = $parts->current();
 		Assert::equal('d', $part->content());
 		$parts->next();
@@ -59,7 +61,7 @@ final class UnreliableParts extends TestCase\Database {
 		$parts = (new Subscribing\UnreliableParts(
 			new Subscribing\FakeParts(),
 			$this->database
-		))->getIterator();
+		))->iterate(new Dataset\FakeSelection(''));
 		Assert::null($parts->current());
 	}
 
