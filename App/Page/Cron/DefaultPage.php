@@ -38,7 +38,7 @@ final class DefaultPage extends Page\BasePage {
 				new Misc\LoggingCallback($this->logs)
 			);
 			/** @var \Remembrall\Model\Subscribing\Subscription $subscription */
-			foreach($subscriptions as $subscription) {
+			foreach($subscriptions->iterate(new Dataset\FakeSelection('', [])) as $subscription) {
 				try {
 					$subscription->notify();
 				} catch(\Throwable $ex) {

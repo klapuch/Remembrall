@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Output, Time, Uri
+	Output, Time, Uri, Dataset
 };
 use Remembrall\Model\Misc;
 
@@ -30,7 +30,7 @@ final class HarnessedSubscriptions implements Subscriptions {
 		);
 	}
 
-	public function getIterator(): \Traversable {
+	public function iterate(Dataset\Selection $selection): \Traversable {
 		return $this->callback->invoke(
 			[$this->origin, __FUNCTION__],
 			func_get_args()

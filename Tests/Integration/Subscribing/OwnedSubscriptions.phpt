@@ -7,7 +7,7 @@ declare(strict_types = 1);
 namespace Remembrall\Integration\Subscribing;
 
 use Klapuch\{
-	Output, Storage\UniqueConstraint, Time, Uri, Access
+	Output, Storage\UniqueConstraint, Time, Uri, Access, Dataset
 };
 use Remembrall\Exception\DuplicateException;
 use Remembrall\Model\Subscribing;
@@ -96,7 +96,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 		$subscriptions = (new Subscribing\OwnedSubscriptions(
 			new Access\FakeUser(1),
 			$this->database
-		))->getIterator();
+		))->iterate(new Dataset\FakeSelection('', []));
 		$subscription = $subscriptions->current();
 		Assert::contains(
 			'1993-01-01',
@@ -122,7 +122,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 		$subscriptions = (new Subscribing\OwnedSubscriptions(
 			new Access\FakeUser(1),
 			$this->database
-		))->getIterator();
+		))->iterate(new Dataset\FakeSelection('', []));
 		Assert::null($subscriptions->current());
 	}
 

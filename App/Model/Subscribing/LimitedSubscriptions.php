@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Storage, Time, Uri, Access
+	Storage, Time, Uri, Access, Dataset
 };
 
 /**
@@ -41,8 +41,8 @@ final class LimitedSubscriptions implements Subscriptions {
 		$this->origin->subscribe($uri, $expression, $interval);
 	}
 
-	public function getIterator(): \Traversable {
-		return $this->origin->getIterator();
+	public function iterate(Dataset\Selection $selection): \Traversable {
+		return $this->origin->iterate($selection);
 	}
 
 	/**

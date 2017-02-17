@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\{
-	Output, Storage, Time, Uri, Access
+	Output, Storage, Time, Uri, Access, Dataset
 };
 use Remembrall\Exception\DuplicateException;
 
@@ -55,21 +55,23 @@ final class OwnedSubscriptions implements Subscriptions {
 		}
 	}
 
-	public function getIterator(): \Traversable {
+	public function iterate(Dataset\Selection $selection): \Traversable {
 		$subscriptions = (new Storage\ParameterizedQuery(
 			$this->database,
-			'SELECT subscriptions.id, expression, page_url AS url, interval,
-			visited_at, last_update, content
-			FROM parts
-			INNER JOIN (
-				SELECT part_id, MAX(visited_at) AS visited_at
-				FROM part_visits
-				GROUP BY part_id
-			) AS part_visits ON parts.id = part_visits.part_id
-			INNER JOIN subscriptions ON subscriptions.part_id = parts.id
-			WHERE subscriptions.user_id IS NOT DISTINCT FROM ?
-			ORDER BY visited_at DESC',
-			[$this->owner->id()]
+			$selection->expression(
+				'SELECT subscriptions.id, expression, page_url AS url, interval,
+				visited_at, last_update, content
+				FROM parts
+				INNER JOIN (
+					SELECT part_id, MAX(visited_at) AS visited_at
+					FROM part_visits
+					GROUP BY part_id
+				) AS part_visits ON parts.id = part_visits.part_id
+				INNER JOIN subscriptions ON subscriptions.part_id = parts.id
+				WHERE subscriptions.user_id IS NOT DISTINCT FROM ?
+				ORDER BY visited_at DESC'
+			),
+			$selection->criteria([$this->owner->id()])
 		))->rows();
 		foreach($subscriptions as $subscription) {
 			yield new ConstantSubscription(

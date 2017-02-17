@@ -4,7 +4,7 @@ namespace Remembrall\Model\Subscribing;
 
 use Nette\Mail;
 use Klapuch\{
-	Storage, Time, Uri
+	Storage, Time, Uri, Dataset
 };
 
 /**
@@ -33,15 +33,17 @@ final class ChangedSubscriptions implements Subscriptions {
 		$this->origin->subscribe($url, $expression, $interval);
 	}
 
-	public function getIterator(): \Traversable {
+	public function iterate(Dataset\Selection $selection): \Traversable {
 		$subscriptions = (new Storage\ParameterizedQuery(
 			$this->database,
-			"SELECT subscriptions.id, page_url AS url, expression, content, email
-			FROM parts
-			INNER JOIN subscriptions ON subscriptions.part_id = parts.id
-			INNER JOIN users ON users.id = subscriptions.user_id
-			WHERE parts.snapshot != subscriptions.snapshot
-			AND last_update + INTERVAL '1 SECOND' * SUBSTRING(interval FROM '[0-9]+')::INT < NOW()"
+			$selection->expression(
+				"SELECT subscriptions.id, page_url AS url, expression, content, email
+				FROM parts
+				INNER JOIN subscriptions ON subscriptions.part_id = parts.id
+				INNER JOIN users ON users.id = subscriptions.user_id
+				WHERE parts.snapshot != subscriptions.snapshot
+				AND last_update + INTERVAL '1 SECOND' * SUBSTRING(interval FROM '[0-9]+')::INT < NOW()"
+			)
 		))->rows();
 		foreach($subscriptions as $subscription) {
 			yield new EmailSubscription(

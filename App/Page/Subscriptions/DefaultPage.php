@@ -2,7 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Page\Subscriptions;
 
-use Klapuch\Output;
+use Klapuch\{
+	Output, Dataset
+};
 use Remembrall\Model\{
 	Subscribing, Misc
 };
@@ -15,10 +17,10 @@ final class DefaultPage extends Page\BasePage {
 				'subscriptions',
 				['subscription' => 
 					iterator_to_array(
-						new Subscribing\OwnedSubscriptions(
+						(new Subscribing\OwnedSubscriptions(
 							$this->user,
 							$this->database
-						)
+						))->iterate(new Dataset\FakeSelection('', []))
 					),
 				]
 			),

@@ -7,7 +7,7 @@ declare(strict_types = 1);
 namespace Remembrall\Unit\Subscribing;
 
 use Klapuch\{
-	Output, Time, Uri
+	Output, Time, Uri, Dataset
 };
 use Remembrall\Model\Subscribing;
 use Remembrall\Model\Misc;
@@ -34,15 +34,16 @@ final class HarnessedSubscriptions extends TestCase\Mockery {
 				$callback
 			))->subscribe($uri, $expression, $interval);
 		});
+		$selection = new Dataset\FakeSelection();
 		$callback->shouldReceive('invoke')
 			->once()
-			->with([$origin, 'getIterator'], [])
+			->with([$origin, 'iterate'], [$selection])
 			->andReturn($iterator);
-		Assert::noError(function() use($origin, $callback) {
+		Assert::noError(function() use($origin, $callback, $selection) {
 			(new Subscribing\HarnessedSubscriptions(
 				$origin,
 				$callback
-			))->getIterator();
+			))->iterate($selection);
 		});
 	}
 }

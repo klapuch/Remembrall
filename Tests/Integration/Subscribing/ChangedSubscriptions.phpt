@@ -6,7 +6,9 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Integration\Subscribing;
 
-use Klapuch\Output;
+use Klapuch\{
+	Output, Dataset
+};
 use Nette\Mail;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
@@ -44,7 +46,7 @@ final class ChangedSubscriptions extends TestCase\Database {
 			new Subscribing\FakeSubscriptions(),
 			new Mail\SendmailMailer(),
 			$this->database
-		))->getIterator();
+		))->iterate(new Dataset\FakeSelection(''));
 		$subscription = $subscriptions->current();
 		Assert::equal(
 			new Subscribing\EmailSubscription(
@@ -91,7 +93,7 @@ final class ChangedSubscriptions extends TestCase\Database {
 				}
 			},
 			$this->database
-		))->getIterator();
+		))->iterate(new Dataset\FakeSelection(''));
 		$subscription = $subscriptions->current();
 		ob_start();
 		$subscription->notify();
@@ -106,7 +108,7 @@ final class ChangedSubscriptions extends TestCase\Database {
 			new Subscribing\FakeSubscriptions(),
 			new Mail\SendmailMailer(),
 			$this->database
-		))->getIterator();
+		))->iterate(new Dataset\FakeSelection(''));
 		Assert::null($subscriptions->current());
 	}
 
