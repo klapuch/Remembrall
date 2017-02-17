@@ -3,6 +3,7 @@
 
 	<xsl:import href="../../templates/@layout.xsl"/>
 	<xsl:import href="../../Parts/components/content-modal.xsl"/>
+	<xsl:import href="../../templates/direction.xsl"/>
 
 	<xsl:template match="page">
 		<h1><xsl:apply-templates select="body/header[@level = 1]"/></h1>
@@ -13,9 +14,7 @@
 		<table class="table table-hover">
 			<xsl:apply-templates select="/page/body/tables/table[@purpose='overview']"/>
 			<tbody>
-				<xsl:apply-templates select="subscription">
-					<xsl:sort select="last_update" order="descending"/>
-				</xsl:apply-templates>
+				<xsl:apply-templates select="subscription"/>
 			</tbody>
 		</table>
 	</xsl:template>
@@ -46,7 +45,12 @@
 	</xsl:template>
 
 	<xsl:template match="heading">
-		<th><p><xsl:apply-templates/></p></th>
+		<th>
+			<xsl:call-template name="direction">
+				<xsl:with-param name="sort" select="@sort"/>
+				<xsl:with-param name="current" select="/page/request/get/sort"/>
+			</xsl:call-template>
+		</th>
 	</xsl:template>
 
 	<xsl:template match="confirmation">

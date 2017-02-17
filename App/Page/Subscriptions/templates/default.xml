@@ -18,10 +18,10 @@
 			<table purpose="overview">
 				<headings>
 					<heading>#</heading>
-					<heading>Last update</heading>
-					<heading>Interval</heading>
-					<heading>Expression</heading>
-					<heading>URL</heading>
+					<heading sort="last_update">Last update</heading>
+					<heading sort="interval">Interval</heading>
+					<heading sort="expression">Expression</heading>
+					<heading sort="url">URL</heading>
 					<heading>Content</heading>
 					<heading>Options</heading>
 				</headings>

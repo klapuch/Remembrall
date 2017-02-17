@@ -20,7 +20,11 @@ final class DefaultPage extends Page\BasePage {
 						(new Subscribing\OwnedSubscriptions(
 							$this->user,
 							$this->database
-						))->iterate(new Dataset\FakeSelection('', []))
+						))->iterate(
+							new Dataset\CombinedSelection(
+								new Dataset\SqlRestSort($_GET['sort'] ?? '')
+							)
+						)
 					),
 				]
 			),
