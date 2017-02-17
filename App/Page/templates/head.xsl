@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
 	<xsl:template match="title">
-		<title><xsl:apply-templates/></title>
+		<title><xsl:apply-templates mode="head"/></title>
 	</xsl:template>
 
 	<xsl:template match="meta">
@@ -13,8 +13,12 @@
 
 	<xsl:template match="@*" mode="head">
 		<xsl:attribute name="{name()}">
-			<xsl:value-of select="normalize-space(.)"/>
+			<xsl:apply-templates mode="head"/>
 		</xsl:attribute>
+	</xsl:template>
+
+	<xsl:template match="text()" mode="head">
+		<xsl:value-of select="normalize-space(.)"/>
 	</xsl:template>
 
 </xsl:stylesheet>
