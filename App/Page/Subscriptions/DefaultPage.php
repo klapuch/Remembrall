@@ -9,13 +9,19 @@ use Remembrall\Model\{
 	Subscribing, Misc
 };
 use Remembrall\Page;
+use Texy;
 
 final class DefaultPage extends Page\BasePage {
 	public function render(array $parameters): Output\Format {
 		return new Output\ValidXml(
 			new Misc\XmlPrintedObjects(
 				'subscriptions',
-				['subscription' => 
+				['subscription' => array_map(
+					function(Subscribing\Subscription $origin): Subscribing\Subscription {
+						return new Subscribing\FormattedSubscription(
+							$origin, new Texy\Texy()
+						);
+					},
 					iterator_to_array(
 						(new Subscribing\OwnedSubscriptions(
 							$this->user,
@@ -25,10 +31,11 @@ final class DefaultPage extends Page\BasePage {
 								new Dataset\SqlRestSort($_GET['sort'] ?? '')
 							)
 						)
-					),
-				]
-			),
-			__DIR__ . '/templates/constraint.xsd'
-		);
+					)
+				),
+			]
+		),
+		__DIR__ . '/templates/constraint.xsd'
+	);
 	}
 }

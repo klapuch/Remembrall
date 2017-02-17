@@ -19,7 +19,7 @@
 						</h4>
 					</div>
 					<div class="modal-body">
-						<xsl:value-of select="$content"/>
+						<xsl:value-of disable-output-escaping="yes" select="$content"/>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">
