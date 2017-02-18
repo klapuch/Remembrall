@@ -6,7 +6,6 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Integration\Subscribing;
 
-use Klapuch\Output;
 use Klapuch\Dataset;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;

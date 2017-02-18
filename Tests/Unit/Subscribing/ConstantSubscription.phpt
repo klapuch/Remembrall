@@ -22,7 +22,7 @@ final class ConstantSubscription extends Tester\TestCase {
 				[
 					'visited_at' => '2015-01-01',
 					'interval' => 'PT5M',
-					'expression' => '//p'
+					'expression' => '//p',
 				]
 			))->print(new Output\FakeFormat('|prev|xxx|'))->serialization()
 		);

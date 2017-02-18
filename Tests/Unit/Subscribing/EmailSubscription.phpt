@@ -20,13 +20,13 @@ final class EmailSubscription extends TestCase\Mockery {
 				$mailer = $this->mock(Mail\IMailer::class);
 				$mailer->shouldReceive('send')->never();
 				(new Subscribing\EmailSubscription(
-					new Subscribing\FakeSubscription(new \Exception('foo')),
+					new Subscribing\FakeSubscription(new \DomainException('foo')),
 					$mailer,
 					'recipient@foo.cz',
 					[]
 				))->notify();
 			},
-			\Exception::class,
+			\DomainException::class,
 			'foo'
 		);
 	}

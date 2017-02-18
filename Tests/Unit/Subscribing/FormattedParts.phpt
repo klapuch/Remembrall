@@ -6,12 +6,10 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Unit\Subscribing;
 
-use Klapuch\Output;
 use Klapuch\Dataset;
 use Remembrall\Model\Subscribing;
-use Remembrall\TestCase;
-use Tester\Assert;
 use Tester;
+use Tester\Assert;
 use Texy;
 
 require __DIR__ . '/../../bootstrap.php';

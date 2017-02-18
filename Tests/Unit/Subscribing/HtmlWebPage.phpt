@@ -60,7 +60,7 @@ final class HtmlWebPage extends Tester\TestCase {
 			\Remembrall\Exception\NotFoundException::class,
 			'Page is unreachable. Does the URL exist?'
 		);
-		Assert::type(\Exception::class, $ex->getPrevious());
+		Assert::type(\Throwable::class, $ex->getPrevious());
 	}
 
 	public function testThrowingOnHttpError() {
@@ -79,7 +79,7 @@ final class HtmlWebPage extends Tester\TestCase {
 			\Remembrall\Exception\NotFoundException::class,
 			'Page is unreachable. Does the URL exist?'
 		);
-		Assert::type(\Exception::class, $ex->getPrevious());
+		Assert::type(\Throwable::class, $ex->getPrevious());
 	}
 
 	public function testRefreshingGivingSamePage() {

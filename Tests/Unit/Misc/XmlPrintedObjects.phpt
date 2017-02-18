@@ -30,8 +30,8 @@ final class XmlPrintedObjects extends Tester\TestCase {
 							function print(Output\Format $format) {
 								return $format->with('bar', 'foo');
 							}
-						}
-					]
+						},
+					],
 				]
 			))->serialization()
 		);

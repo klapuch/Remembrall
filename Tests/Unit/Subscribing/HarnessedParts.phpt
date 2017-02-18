@@ -6,11 +6,11 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Unit\Subscribing;
 
-use Klapuch\Output;
 use Klapuch\Dataset;
+use Klapuch\Output;
 use Klapuch\Uri;
-use Remembrall\Model\Subscribing;
 use Remembrall\Model\Misc;
+use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
 
