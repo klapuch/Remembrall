@@ -9,7 +9,7 @@ namespace Remembrall\UI;
 use Tester;
 use Tester\Assert;
 
-require __DIR__ . '/../bootstrap.php';
+require __DIR__ . '/../../bootstrap.php';
 
 final class Direction extends Tester\TestCase {
 	/**

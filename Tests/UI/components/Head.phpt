@@ -9,7 +9,7 @@ namespace Remembrall\UI;
 use Tester;
 use Tester\Assert;
 
-require __DIR__ . '/../bootstrap.php';
+require __DIR__ . '/../../bootstrap.php';
 
 final class Head extends Tester\TestCase {
 	/**
@@ -17,7 +17,7 @@ final class Head extends Tester\TestCase {
 	 */
 	public function testMatches(string $input, string $xpath) {
 		$xsl = new \DOMDocument();
-		$xsl->load(__DIR__ . '/../../App/Page/templates/head.xsl');
+		$xsl->load(__DIR__ . '/../../../App/Page/components/head.xsl');
 		$xslt = new \XSLTProcessor();
 		$xslt->importStylesheet($xsl);
 		$xml = new \DOMDocument();

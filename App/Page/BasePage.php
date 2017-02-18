@@ -54,7 +54,7 @@ abstract class BasePage {
 			new Authorization\RolePermissions(
 				$this->user->properties()['role'],
 				new Authorization\XmlPermissions(
-					__DIR__ . '/templates/permission.xml'
+					__DIR__ . '/components/permission.xml'
 				)
 			)
 		);
@@ -76,7 +76,7 @@ abstract class BasePage {
 		$layout = new \DOMDocument();
 		$layout->load(__DIR__ . '/templates/layout.xml');
 		$permission = new \DOMDocument();
-		$permission->load(__DIR__ . '/templates/permission.xml');
+		$permission->load(__DIR__ . '/components/permission.xml');
 		return array_merge(
 			simplexml_import_dom($layout)->xpath('child::*'),
 			[simplexml_import_dom($permission)],

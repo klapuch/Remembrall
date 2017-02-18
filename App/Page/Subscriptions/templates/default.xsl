@@ -3,7 +3,7 @@
 
 	<xsl:import href="../../templates/@layout.xsl"/>
 	<xsl:import href="../../Parts/components/content-modal.xsl"/>
-	<xsl:import href="../../templates/direction.xsl"/>
+	<xsl:import href="../../components/direction.xsl"/>
 
 	<xsl:template match="page">
 		<h1><xsl:apply-templates select="body/header[@level = 1]"/></h1>

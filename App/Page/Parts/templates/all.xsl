@@ -4,7 +4,7 @@
 	<xsl:import href="../../templates/@layout.xsl"/>
 	<xsl:import href="tabs.xsl"/>
 	<xsl:import href="../components/content-modal.xsl"/>
-	<xsl:import href="../../templates/direction.xsl"/>
+	<xsl:import href="../../components/direction.xsl"/>
 
 	<xsl:template match="page">
 		<xsl:apply-templates select="body/tabs" mode="parts">
