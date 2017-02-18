@@ -8,9 +8,14 @@ use Klapuch\Uri;
 
 final class FakeSubscriptions implements Subscriptions {
 	private $exception;
+	private $subscriptions;
 
-	public function __construct(?\Throwable $exception = null) {
+	public function __construct(
+		?\Throwable $exception = null,
+		Subscription ...$subscriptions
+	) {
 		$this->exception = $exception;
+		$this->subscriptions = $subscriptions;
 	}
 
 	public function subscribe(
@@ -25,6 +30,6 @@ final class FakeSubscriptions implements Subscriptions {
 	public function iterate(Dataset\Selection $selection): \Traversable {
 		if($this->exception)
 			throw $this->exception;
-		return new \ArrayIterator();
+		return new \ArrayIterator($this->subscriptions);
 	}
 }

@@ -17,25 +17,25 @@ use Texy;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class FormattedParts extends Tester\TestCase {
+final class FormattedSubscriptions extends Tester\TestCase {
 	public function testApplyingToAllDuringIterating() {
 		Assert::equal(
 			[
-				new Subscribing\FormattedPart(
-					new Subscribing\FakePart('foo'),
+				new Subscribing\FormattedSubscription(
+					new Subscribing\FakeSubscription(null),
 					new Texy\Texy()
 				),
-				new Subscribing\FormattedPart(
-					new Subscribing\FakePart('bar'),
+				new Subscribing\FormattedSubscription(
+					new Subscribing\FakeSubscription(null),
 					new Texy\Texy()
 				),
 			],
 			iterator_to_array(
-				(new Subscribing\FormattedParts(
-					new Subscribing\FakeParts(
+				(new Subscribing\FormattedSubscriptions(
+					new Subscribing\FakeSubscriptions(
 						null,
-						new Subscribing\FakePart('foo'),
-						new Subscribing\FakePart('bar')
+						new Subscribing\FakeSubscription(null),
+						new Subscribing\FakeSubscription(null)
 					),
 					new Texy\Texy()
 				))->iterate(new Dataset\FakeSelection())
@@ -44,4 +44,4 @@ final class FormattedParts extends Tester\TestCase {
 	}
 }
 
-(new FormattedParts())->run();
+(new FormattedSubscriptions())->run();

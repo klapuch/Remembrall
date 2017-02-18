@@ -14,26 +14,23 @@ final class DefaultPage extends Page\BasePage {
 		return new Output\ValidXml(
 			new Misc\XmlPrintedObjects(
 				'subscriptions',
-				['subscription' => array_map(
-					function(Subscribing\Subscription $origin): Subscribing\Subscription {
-						return new Subscribing\FormattedSubscription(
-							$origin, new Texy\Texy()
-						);
-					},
-					iterator_to_array(
-						(new Subscribing\OwnedSubscriptions(
-							$this->user,
-							$this->database
+				[
+					'subscription' => iterator_to_array(
+						(new Subscribing\FormattedSubscriptions(
+							new Subscribing\OwnedSubscriptions(
+								$this->user,
+								$this->database
+							),
+							new Texy\Texy()
 						))->iterate(
 							new Dataset\CombinedSelection(
 								new Dataset\SqlRestSort($_GET['sort'] ?? '')
 							)
 						)
-					)
-				),
-			]
-		),
-		__DIR__ . '/templates/constraint.xsd'
-	);
+					),
+				]
+			),
+			__DIR__ . '/templates/constraint.xsd'
+		);
 	}
 }
