@@ -6,9 +6,8 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Integration\Subscribing;
 
-use Klapuch\{
-	Time, Output
-};
+use Klapuch\Time;
+use Klapuch\Output;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;

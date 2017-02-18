@@ -4,7 +4,7 @@ declare(strict_types = 1);
  * @testCase
  * @phpVersion > 7.1
  */
-namespace Remembrall\UI;
+namespace Remembrall\UI\Components;
 
 use Tester;
 use Tester\Assert;

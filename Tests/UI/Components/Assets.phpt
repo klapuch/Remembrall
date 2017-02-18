@@ -4,14 +4,14 @@ declare(strict_types = 1);
  * @testCase
  * @phpVersion > 7.1
  */
-namespace Remembrall\UI;
+namespace Remembrall\UI\Components;
 
 use Tester;
 use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class Head extends Tester\TestCase {
+final class Assets extends Tester\TestCase {
 	/**
 	 * @dataProvider matches
 	 */
@@ -40,4 +40,4 @@ final class Head extends Tester\TestCase {
 	}
 }
 
-(new Head())->run();
+(new Assets())->run();

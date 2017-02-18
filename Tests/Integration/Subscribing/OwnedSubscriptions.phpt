@@ -6,9 +6,11 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Integration\Subscribing;
 
-use Klapuch\{
-	Output, Storage\UniqueConstraint, Time, Uri, Access, Dataset
-};
+use Klapuch\Output;
+use Klapuch\Uri;
+use Klapuch\Time;
+use Klapuch\Access;
+use Klapuch\Dataset;
 use Remembrall\Exception\DuplicateException;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
