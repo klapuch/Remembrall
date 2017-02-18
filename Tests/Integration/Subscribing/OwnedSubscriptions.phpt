@@ -11,7 +11,6 @@ use Klapuch\Uri;
 use Klapuch\Time;
 use Klapuch\Access;
 use Klapuch\Dataset;
-use Remembrall\Exception\DuplicateException;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -61,7 +60,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 		$subscribe();
 		$ex = Assert::exception(
 			$subscribe,
-			DuplicateException::class,
+			\Remembrall\Exception\DuplicateException::class,
 			'"//google" expression on "www.google.com" page is already subscribed by you'
 		);
 		Assert::type(\Throwable::class, $ex->getPrevious());

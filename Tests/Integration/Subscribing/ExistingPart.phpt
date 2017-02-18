@@ -6,7 +6,6 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Integration\Subscribing;
 
-use Remembrall\Exception\NotFoundException;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -23,7 +22,7 @@ final class ExistingPart extends TestCase\Database {
 					$this->database
 				))->content();
 			},
-			NotFoundException::class,
+			\Remembrall\Exception\NotFoundException::class,
 			'The part does not exist'
 		);
 		Assert::exception(
@@ -34,7 +33,7 @@ final class ExistingPart extends TestCase\Database {
 					$this->database
 				))->refresh();
 			},
-			NotFoundException::class,
+			\Remembrall\Exception\NotFoundException::class,
 			'The part does not exist'
 		);
 		Assert::exception(
@@ -45,7 +44,7 @@ final class ExistingPart extends TestCase\Database {
 					$this->database
 				))->snapshot();
 			},
-			NotFoundException::class,
+			\Remembrall\Exception\NotFoundException::class,
 			'The part does not exist'
 		);
 	}

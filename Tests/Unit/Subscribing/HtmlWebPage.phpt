@@ -7,7 +7,6 @@ declare(strict_types = 1);
 namespace Remembrall\Unit\Subscribing;
 
 use Klapuch\Http;
-use Remembrall\Exception\NotFoundException;
 use Remembrall\Model\Subscribing;
 use Tester;
 use Tester\Assert;
@@ -58,7 +57,7 @@ final class HtmlWebPage extends Tester\TestCase {
 					)
 				))->content();
 			},
-			NotFoundException::class,
+			\Remembrall\Exception\NotFoundException::class,
 			'Page is unreachable. Does the URL exist?'
 		);
 		Assert::type(\Exception::class, $ex->getPrevious());
@@ -77,7 +76,7 @@ final class HtmlWebPage extends Tester\TestCase {
 					)
 				))->content();
 			},
-			NotFoundException::class,
+			\Remembrall\Exception\NotFoundException::class,
 			'Page is unreachable. Does the URL exist?'
 		);
 		Assert::type(\Exception::class, $ex->getPrevious());
