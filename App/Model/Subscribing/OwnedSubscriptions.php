@@ -7,7 +7,6 @@ use Klapuch\Dataset;
 use Klapuch\Storage;
 use Klapuch\Time;
 use Klapuch\Uri;
-use Remembrall\Exception\DuplicateException;
 
 /**
  * All the subscriptions owned by one particular subscriber
@@ -44,8 +43,8 @@ final class OwnedSubscriptions implements Subscriptions {
 					$url->reference(),
 				]
 			))->execute();
-		} catch(Storage\UniqueConstraint $ex) {
-			throw new DuplicateException(
+		} catch(\Klapuch\Storage\UniqueConstraint $ex) {
+			throw new \Remembrall\Exception\DuplicateException(
 				sprintf(
 					'"%s" expression on "%s" page is already subscribed by you',
 					$expression,

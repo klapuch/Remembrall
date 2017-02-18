@@ -4,7 +4,6 @@ namespace Remembrall\Model\Subscribing;
 
 use Klapuch\Output;
 use Klapuch\Storage;
-use Remembrall\Exception\NotFoundException;
 
 /**
  * Part which will always exists
@@ -22,19 +21,19 @@ final class ExistingPart implements Part {
 
 	public function content(): string {
 		if(!$this->exists())
-			throw new NotFoundException('The part does not exist');
+			throw new \Remembrall\Exception\NotFoundException('The part does not exist');
 		return $this->origin->content();
 	}
 
 	public function snapshot(): string {
 		if(!$this->exists())
-			throw new NotFoundException('The part does not exist');
+			throw new \Remembrall\Exception\NotFoundException('The part does not exist');
 		return $this->origin->snapshot();
 	}
 
 	public function refresh(): Part {
 		if(!$this->exists())
-			throw new NotFoundException('The part does not exist');
+			throw new \Remembrall\Exception\NotFoundException('The part does not exist');
 		return $this->origin->refresh();
 	}
 

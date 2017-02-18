@@ -3,7 +3,6 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\Http;
-use Remembrall\Exception\NotFoundException;
 
 /**
  * HTML web page downloaded from the internet
@@ -26,7 +25,7 @@ final class HtmlWebPage implements Page {
 			$dom->loadHTML($response->body());
 			return $dom;
 		} catch(\Throwable $ex) {
-			throw new NotFoundException(
+			throw new \Remembrall\Exception\NotFoundException(
 				'Page is unreachable. Does the URL exist?',
 				$ex->getCode(),
 				$ex

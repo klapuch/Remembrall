@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Remembrall\Exception\NotFoundException;
-
 /**
  * Expression with always matching nodes
  */
@@ -18,7 +16,7 @@ final class MatchingExpression implements Expression {
 		$matches = $this->origin->matches();
 		if($matches->length > 0)
 			return $matches;
-		throw new NotFoundException(
+		throw new \Remembrall\Exception\NotFoundException(
 			'For the given expression there are no matches'
 		);
 	}
