@@ -4,7 +4,6 @@ namespace Remembrall\Model\Subscribing;
 
 use Klapuch\Dataset;
 use Klapuch\Http;
-use Klapuch\Output;
 use Klapuch\Storage;
 use Klapuch\Uri;
 

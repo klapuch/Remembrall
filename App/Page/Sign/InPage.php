@@ -4,7 +4,6 @@ namespace Remembrall\Page\Sign;
 
 use Klapuch\Access;
 use Klapuch\Output;
-use Klapuch\Form;
 use Remembrall\Control;
 use Remembrall\Page;
 

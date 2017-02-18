@@ -3,7 +3,6 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\Uri;
-use Klapuch\Output;
 use Klapuch\Dataset;
 use Remembrall\Model\Misc;
 
