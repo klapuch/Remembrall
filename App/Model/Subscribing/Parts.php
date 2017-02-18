@@ -8,8 +8,8 @@ use Klapuch\Dataset;
 interface Parts {
 	/**
 	 * Add a new part to the parts
-	 * @param Part $part
-	 * @param Uri\Uri $uri
+	 * @param \Remembrall\Model\Subscribing\Part $part
+	 * @param \Klapuch\Uri\Uri $uri
 	 * @param string $expression
 	 * @return void
 	 */

@@ -44,7 +44,7 @@ final class FrugalPage implements Page {
 
 	/**
 	 * Is the url outdated and needs to be loaded from the original source?
-	 * @param Uri\Uri $uri
+	 * @param \Klapuch\Uri\Uri $uri
 	 * @return bool
 	 */
 	private function outdated(Uri\Uri $uri): bool {
@@ -63,7 +63,7 @@ final class FrugalPage implements Page {
 
 	/**
 	 * Is the uri already recorded in the database?
-	 * @param Uri\Uri $uri
+	 * @param \Klapuch\Uri\Uri $uri
 	 * @return bool
 	 */
 	private function recorded(Uri\Uri $uri): bool {

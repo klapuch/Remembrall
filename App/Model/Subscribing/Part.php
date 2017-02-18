@@ -20,7 +20,7 @@ interface Part {
 
 	/**
 	 * Refreshed part
-	 * @return Part
+	 * @return \Remembrall\Model\Subscribing\Part
 	 */
 	public function refresh(): self;
 
