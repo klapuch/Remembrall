@@ -29,6 +29,7 @@
 		"klapuch/form": "^3.0.0",
 		"klapuch/validation": "^2.0.0",
 		"klapuch/authorization": "^1.0.0",
+		"klapuch/iterator": "^1.1.0",
 		"klapuch/dataset": "@dev",
 		"texy/texy": "^2.9"
 	},

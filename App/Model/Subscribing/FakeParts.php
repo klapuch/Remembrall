@@ -3,7 +3,6 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\Dataset;
-use Klapuch\Output;
 use Klapuch\Uri;
 
 /**
@@ -11,9 +10,11 @@ use Klapuch\Uri;
  */
 final class FakeParts implements Parts {
 	private $exception;
+	private $parts;
 
-	public function __construct(?\Throwable $exception = null) {
+	public function __construct(?\Throwable $exception = null, Part ...$parts) {
 		$this->exception = $exception;
+		$this->parts = $parts;
 	}
 
 	public function add(Part $part, Uri\Uri $uri, string $expression): void {
@@ -24,12 +25,6 @@ final class FakeParts implements Parts {
 	public function iterate(Dataset\Selection $selection): \Traversable {
 		if($this->exception)
 			throw $this->exception;
-		return new \ArrayIterator();
-	}
-
-	public function print(Output\Format $format): array {
-		if($this->exception)
-			throw $this->exception;
-		return [];
+		return new \ArrayIterator($this->parts);
 	}
 }
