@@ -17,22 +17,22 @@ require __DIR__ . '/../../bootstrap.php';
 final class FormattedSubscription extends Tester\TestCase {
 	public function testFormattingHtmlContent() {
 		Assert::same(
-			'<content>&lt;pre class=&quot;html&quot;&gt;&lt;code&gt;&amp;lt;h1&amp;gt;FOO&amp;lt;/h1&amp;gt;&lt;/code&gt;&lt;/pre&gt;
-</content>',
+			'<pre class="html"><code>&lt;h1&gt;FOO&lt;/h1&gt;</code></pre>
+',
 			(new Subscribing\FormattedSubscription(
 				new Subscribing\FakeSubscription(),
 				new Texy\Texy()
-			))->print(new Output\Xml(['content' => '<h1>FOO</h1>']))->serialization()
+			))->print(new Output\ArrayFormat(['content' => '<h1>FOO</h1>']))->serialization()
 		);
 	}
 
 	public function testFormattingToHumanReadableDateTime() {
 		Assert::same(
-			'<last_update>2017-07-04 12:22</last_update>',
+			'2017-07-04 12:22',
 			(new Subscribing\FormattedSubscription(
 				new Subscribing\FakeSubscription(),
 				new Texy\Texy()
-			))->print(new Output\Xml(['last_update' => '2017-07-04 12:22:40.533306']))->serialization()
+			))->print(new Output\ArrayFormat(['last_update' => '2017-07-04 12:22:40.533306']))->serialization()
 		);
 	}
 }

@@ -17,12 +17,12 @@ require __DIR__ . '/../../bootstrap.php';
 final class FormattedPart extends Tester\TestCase {
 	public function testFormattingHtmlContent() {
 		Assert::same(
-			'<content>&lt;pre class=&quot;html&quot;&gt;&lt;code&gt;&amp;lt;h1&amp;gt;FOO&amp;lt;/h1&amp;gt;&lt;/code&gt;&lt;/pre&gt;
-</content>',
+			'<pre class="html"><code>&lt;h1&gt;FOO&lt;/h1&gt;</code></pre>
+',
 			(new Subscribing\FormattedPart(
 				new Subscribing\FakePart(),
 				new Texy\Texy()
-			))->print(new Output\Xml(['content' => '<h1>FOO</h1>']))->serialization()
+			))->print(new Output\ArrayFormat(['content' => '<h1>FOO</h1>']))->serialization()
 		);
 	}
 }
