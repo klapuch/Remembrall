@@ -2,9 +2,10 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\{
-	Output, Time, Uri, Dataset
-};
+use Klapuch\Time;
+use Klapuch\Output;
+use Klapuch\Uri;
+use Klapuch\Dataset;
 
 final class FakeSubscriptions implements Subscriptions {
 	private $exception;

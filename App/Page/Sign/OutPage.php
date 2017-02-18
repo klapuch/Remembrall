@@ -2,12 +2,10 @@
 declare(strict_types = 1);
 namespace Remembrall\Page\Sign;
 
-use Klapuch\{
-	Access, Output
-};
-use Remembrall\{
-	Control, Page
-};
+use Klapuch\Access;;
+use Klapuch\Output;
+use Remembrall\Control;
+use Remembrall\Page;
 
 final class OutPage extends Page\BasePage {
 	public function render(array $parameters): Output\Format {

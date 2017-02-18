@@ -2,14 +2,12 @@
 declare(strict_types = 1);
 namespace Remembrall\Page\Cron;
 
-use Klapuch\{
-	Output, Dataset
-};
+use Klapuch\Output;
+use Klapuch\Dataset;
 use Nette\Mail;
 use Remembrall\Page;
-use Remembrall\Model\{
-	Subscribing, Misc
-};
+use Remembrall\Model\Subscribing;
+use Remembrall\Model\Misc;
 
 final class DefaultPage extends Page\BasePage {
 	public function render(array $parameters): Output\Format {

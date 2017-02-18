@@ -2,12 +2,11 @@
 declare(strict_types = 1);
 namespace Remembrall\Page\Sign;
 
-use Klapuch\{
-	Access, Output, Form
-};
-use Remembrall\{
-	Control, Page
-};
+use Klapuch\Access;
+use Klapuch\Output;
+use Klapuch\Form;
+use Remembrall\Control;
+use Remembrall\Page;
 
 final class InPage extends Page\BasePage {
 	public function render(array $parameters): Output\Format {

@@ -2,9 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Control;
 
-use Klapuch\{
-	Form, Csrf, Uri
-};
+use Klapuch\Form;
+use Klapuch\Csrf;
+use Klapuch\Uri;
 
 abstract class Control implements Form\Control {
 	protected $url;

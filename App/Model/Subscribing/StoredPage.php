@@ -2,9 +2,8 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\{
-	Storage, Uri
-};
+use Klapuch\Storage;
+use Klapuch\Uri;
 
 /**
  * Page stored in the database

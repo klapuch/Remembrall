@@ -2,9 +2,11 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\{
-	Storage, Time, Uri, Access, Dataset
-};
+use Klapuch\Storage;
+use Klapuch\Time;
+use Klapuch\Uri;
+use Klapuch\Access;
+use Klapuch\Dataset;
 
 /**
  * Disallowing subscribing after more than X subscriptions

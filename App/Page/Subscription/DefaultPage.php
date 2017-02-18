@@ -2,15 +2,15 @@
 declare(strict_types = 1);
 namespace Remembrall\Page\Subscription;
 
-use Klapuch\{
-	Http, Output, Storage, Time, Uri
-};
-use Remembrall\Model\{
-	Misc, Subscribing
-};
-use Remembrall\{
-	Page, Control
-};
+use Klapuch\Http;
+use Klapuch\Output;
+use Klapuch\Storage;
+use Klapuch\Time;
+use Klapuch\Uri;
+use Remembrall\Model\Misc;
+use Remembrall\Model\Subscribing;
+use Remembrall\Page;
+use Remembrall\Control;
 
 final class DefaultPage extends Page\BasePage {
 	public function render(array $parameters): Output\Format {

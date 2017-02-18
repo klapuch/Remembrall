@@ -46,7 +46,6 @@
 		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword.NonFullyQualifiedImplements" />
 		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword.NonFullyQualifiedExtends" />
 		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedExceptions.NonFullyQualifiedException" />
-		<exclude name="SlevomatCodingStandard.Namespaces.MultipleUsesPerLine.MultipleUsesPerLine" />
 		<exclude name="SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse" />
 	</rule>
 

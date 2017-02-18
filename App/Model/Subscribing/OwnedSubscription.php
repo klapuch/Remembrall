@@ -2,10 +2,11 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+use Klapuch\Storage;
+use Klapuch\Time;
+use Klapuch\Access;
+use Klapuch\Output;
 use Remembrall\Exception\NotFoundException;
-use Klapuch\{
-	Storage, Time, Access, Output
-};
 
 /**
  * Subscription owned by one particular subscriber

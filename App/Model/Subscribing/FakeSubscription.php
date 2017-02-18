@@ -2,9 +2,8 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\{
-	Time, Output
-};
+use Klapuch\Time;
+use Klapuch\Output;
 
 final class FakeSubscription implements Subscription {
 	private $exception;

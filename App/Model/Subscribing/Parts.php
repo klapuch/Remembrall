@@ -2,9 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\{
-	Uri, Output, Dataset
-};
+use Klapuch\Uri;
+use Klapuch\Output;
+use Klapuch\Dataset;
 
 interface Parts {
 	/**

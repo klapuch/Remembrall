@@ -2,9 +2,11 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\{
-	Http, Storage, Uri, Output, Dataset
-};
+use Klapuch\Http;
+use Klapuch\Storage;
+use Klapuch\Uri;
+use Klapuch\Output;
+use Klapuch\Dataset;
 
 /**
  * All parts stored in the database shared with everyone

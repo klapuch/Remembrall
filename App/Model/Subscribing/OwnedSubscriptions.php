@@ -2,9 +2,13 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\{
-	Output, Storage, Time, Uri, Access, Dataset
-};
+use Klapuch\Output;
+use Klapuch\Storage;
+use Klapuch\Time;
+use Klapuch\Uri;
+use Klapuch\Access;
+use Klapuch\Dataset;
+
 use Remembrall\Exception\DuplicateException;
 
 /**

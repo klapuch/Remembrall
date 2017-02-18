@@ -2,10 +2,11 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+use Klapuch\Dataset;
+use Klapuch\Storage;
+use Klapuch\Time;
+use Klapuch\Uri;
 use Nette\Mail;
-use Klapuch\{
-	Storage, Time, Uri, Dataset
-};
 
 /**
  * All the subscriptions owned by one particular subscriber

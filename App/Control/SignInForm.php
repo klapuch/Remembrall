@@ -2,9 +2,8 @@
 declare(strict_types = 1);
 namespace Remembrall\Control;
 
-use Klapuch\{
-	Form, Validation
-};
+use Klapuch\Form;
+use Klapuch\Validation;
 
 final class SignInForm extends Control {
 	private const COLUMNS = 4;

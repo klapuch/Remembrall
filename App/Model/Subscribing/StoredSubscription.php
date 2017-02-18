@@ -2,9 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\{
-	Storage, Time, Output
-};
+use Klapuch\Storage;
+use Klapuch\Output;
+use Klapuch\Time;
 
 /**
  * Subscription stored in the database

@@ -2,9 +2,8 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\{
-	Output, Time
-};
+use Klapuch\Output;
+use Klapuch\Time;
 use Texy\Texy;
 
 final class FormattedSubscription implements Subscription {

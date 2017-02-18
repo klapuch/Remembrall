@@ -2,10 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+use Klapuch\Time;
+use Klapuch\Output;
 use Nette\Mail;
-use Klapuch\{
-	Time, Output
-};
 
 /**
  * Subscriptions sending to an email

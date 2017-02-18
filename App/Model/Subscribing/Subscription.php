@@ -2,9 +2,8 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\{
-	Time, Output
-};
+use Klapuch\Output;
+use Klapuch\Time;
 
 interface Subscription {
 	/**
