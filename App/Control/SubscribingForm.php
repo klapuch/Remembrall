@@ -2,8 +2,8 @@
 declare(strict_types = 1);
 namespace Remembrall\Control;
 
-use Klapuch\Validation;
 use Klapuch\Form;
+use Klapuch\Validation;
 
 final class SubscribingForm extends Control {
 	private const COLUMNS = 5;

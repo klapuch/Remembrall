@@ -7,10 +7,10 @@ use Klapuch\Output;
 use Klapuch\Storage;
 use Klapuch\Time;
 use Klapuch\Uri;
+use Remembrall\Control;
 use Remembrall\Model\Misc;
 use Remembrall\Model\Subscribing;
 use Remembrall\Page;
-use Remembrall\Control;
 
 final class DefaultPage extends Page\BasePage {
 	public function render(array $parameters): Output\Format {

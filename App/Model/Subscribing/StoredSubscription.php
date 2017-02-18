@@ -2,8 +2,8 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\Storage;
 use Klapuch\Output;
+use Klapuch\Storage;
 use Klapuch\Time;
 
 /**

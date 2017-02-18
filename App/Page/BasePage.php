@@ -2,16 +2,16 @@
 declare(strict_types = 1);
 namespace Remembrall\Page;
 
-use Klapuch\Uri;
+use Klapuch\Access;
+use Klapuch\Authorization;
+use Klapuch\Csrf;
 use Klapuch\Encryption;
 use Klapuch\FlashMessage;
-use Klapuch\Csrf;
 use Klapuch\Form;
 use Klapuch\Log;
-use Klapuch\Output;
-use Klapuch\Access;
 use Klapuch\Markup;
-use Klapuch\Authorization;
+use Klapuch\Output;
+use Klapuch\Uri;
 
 abstract class BasePage {
 	/** @var \Klapuch\Uri\Uri */

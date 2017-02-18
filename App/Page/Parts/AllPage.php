@@ -2,10 +2,10 @@
 declare(strict_types = 1);
 namespace Remembrall\Page\Parts;
 
-use Klapuch\Output;
 use Klapuch\Dataset;
-use Remembrall\Model\Subscribing;
+use Klapuch\Output;
 use Remembrall\Model\Misc;
+use Remembrall\Model\Subscribing;
 use Remembrall\Page;
 use Texy;
 
