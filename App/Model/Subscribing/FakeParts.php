@@ -12,7 +12,7 @@ final class FakeParts implements Parts {
 	private $exception;
 	private $parts;
 
-	public function __construct(?\Throwable $exception = null, Part ...$parts) {
+	public function __construct(\Throwable $exception = null, Part ...$parts) {
 		$this->exception = $exception;
 		$this->parts = $parts;
 	}

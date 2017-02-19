@@ -13,9 +13,9 @@ final class FakePart implements Part {
 	private $snapshot;
 
 	public function __construct(
-		?string $content = null,
-		?self $refreshedPart = null,
-		?string $snapshot = null
+		string $content = null,
+		self $refreshedPart = null,
+		string $snapshot = null
 	) {
 		$this->content = $content;
 		$this->refreshedPart = $refreshedPart;

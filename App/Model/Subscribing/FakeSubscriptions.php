@@ -11,7 +11,7 @@ final class FakeSubscriptions implements Subscriptions {
 	private $subscriptions;
 
 	public function __construct(
-		?\Throwable $exception = null,
+		\Throwable $exception = null,
 		Subscription ...$subscriptions
 	) {
 		$this->exception = $exception;
