@@ -3,6 +3,7 @@
 	<rule ref="vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Squiz">
 		<exclude name="Squiz"/>
 	</rule>
+
 	<rule ref="vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Generic">
 		<exclude name="Generic.Functions" />       
 		<exclude name="Generic.CodeAnalysis" />       
@@ -15,9 +16,11 @@
 		<exclude name="Generic.WhiteSpace" /> 
 		<exclude name="Generic.Arrays" /> 
 	</rule>
+
 	<rule ref="vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/PEAR">
 		<exclude name="PEAR" />       
 	</rule>
+
 	<rule ref="vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Squiz">
 		<exclude name="Squiz.WhiteSpace" />       
 		<exclude name="Squiz.Objects" />       
@@ -31,6 +34,7 @@
 		<exclude name="Squiz.PHP.DisallowInlineIf.Found" />       
 		<exclude name="Squiz.ControlStructures.InlineIfDeclaration.NoBrackets" />       
 	</rule>
+
 	<rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml">
 		<exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint" />
 		<exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint" />
@@ -52,11 +56,13 @@
 			<property name="extensions" type="array" value="php,phpt"/>
 		</properties>
 	</rule>
+
 	<rule ref="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword">
 		<properties>
 			<property name="keywordsToCheck" type="array" value="T_EXTENDS,T_IMPLEMENTS"/>
 		</properties>
 	</rule>
+
 	<rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly">
 		<properties>
 			<property name="namespacesRequiredToUse" type="array" value="Remembrall"/>
