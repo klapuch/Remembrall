@@ -1,50 +1,19 @@
 <?xml version="1.0"?>
 <ruleset name="Project">
+
 	<rule ref="vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Squiz">
 		<exclude name="Squiz"/>
 	</rule>
 
-	<rule ref="vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Generic">
-		<exclude name="Generic.Functions" />       
-		<exclude name="Generic.CodeAnalysis" />       
-		<exclude name="Generic.Commenting" /> 
-		<exclude name="Generic.Files" /> 
-		<exclude name="Generic.Formatting" /> 
-		<exclude name="Generic.NamingConventions" /> 
-		<exclude name="Generic.PHP" /> 
-		<exclude name="Generic.VersionControl" /> 
-		<exclude name="Generic.WhiteSpace" /> 
-		<exclude name="Generic.Arrays" /> 
-	</rule>
-
-	<rule ref="vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/PEAR">
-		<exclude name="PEAR" />       
-	</rule>
-
-	<rule ref="vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Squiz">
-		<exclude name="Squiz.WhiteSpace" />       
-		<exclude name="Squiz.Objects" />       
-		<exclude name="Squiz.Classes" />       
-		<exclude name="Squiz.NamingConventions" />       
-		<exclude name="Squiz.Files" />       
-		<exclude name="Squiz.Operators" />       
-		<exclude name="Squiz.Commenting" />       
-		<exclude name="Squiz.ControlStructures.ElseIfDeclaration.NotAllowed" />       
-		<exclude name="Squiz.Formatting.OperatorBracket.MissingBrackets" />       
-		<exclude name="Squiz.PHP.DisallowInlineIf.Found" />       
-		<exclude name="Squiz.ControlStructures.InlineIfDeclaration.NoBrackets" />       
-	</rule>
-
 	<rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml">
+		<exclude name="SlevomatCodingStandard.TypeHints.DeclareStrictTypes.IncorrectWhitespaceBetweenOpenTagAndDeclare" />
 		<exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint" />
 		<exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint" />
 		<exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingTraversableParameterTypeHintSpecification" />
 		<exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingPropertyTypeHint" />
-		<exclude name="SlevomatCodingStandard.TypeHints.DeclareStrictTypes.IncorrectWhitespaceBetweenOpenTagAndDeclare" />
 		<exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingTraversableReturnTypeHintSpecification" />
 		<exclude name="SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces" />
-		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword.NonFullyQualifiedImplements" />
-		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword.NonFullyQualifiedExtends" />
+		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword" />
 		<exclude name="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly.ReferenceViaFullyQualifiedName" />
 		<exclude name="SlevomatCodingStandard.Types.EmptyLinesAroundTypeBraces" />
 	</rule>
@@ -62,17 +31,10 @@
 		</properties>
 	</rule>
 
-	<rule ref="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword">
-		<properties>
-			<property name="keywordsToCheck" type="array" value="T_EXTENDS,T_IMPLEMENTS"/>
-		</properties>
-	</rule>
-
 	<rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly">
 		<properties>
 			<property name="namespacesRequiredToUse" type="array" value="Remembrall"/>
-			<property name="allowFullyQualifiedExceptions" value="false"/>
-			<property name="allowPartialUses" value="true"/>
 		</properties>
 	</rule>
+
 </ruleset>
