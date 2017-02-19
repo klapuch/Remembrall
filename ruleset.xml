@@ -42,12 +42,17 @@
 		<exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingPropertyTypeHint" />
 		<exclude name="SlevomatCodingStandard.TypeHints.DeclareStrictTypes.IncorrectWhitespaceBetweenOpenTagAndDeclare" />
 		<exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingTraversableReturnTypeHintSpecification" />
-		<exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.UselessDocComment" />
 		<exclude name="SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces" />
 		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword.NonFullyQualifiedImplements" />
 		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword.NonFullyQualifiedExtends" />
 		<exclude name="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly.ReferenceViaFullyQualifiedName" />
 		<exclude name="SlevomatCodingStandard.Types.EmptyLinesAroundTypeBraces" />
+	</rule>
+
+	<rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration">
+		<properties>
+			<property name="usefulAnnotations" type="array" value="@dataProvider,@throws"/>
+		</properties>
 	</rule>
 
 	<rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
