@@ -50,6 +50,7 @@
 			<arg value="--tab-width=4"/>
 			<arg value="-sp"/>
 			<arg path="App"/>
+			<arg path="Tests"/>
 		</exec>
 	</target>
 
