@@ -11,11 +11,11 @@ use Remembrall\Page;
 use Texy;
 
 final class AllPage extends Page\BasePage {
-	private const MAX_PER_PAGE = 100;
+	private const DEFAULT_PER_PAGE = 100;
 
 	public function render(array $parameters): Output\Format {
-		$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-		$perPage = isset($_GET['per_page']) ? (int)$_GET['per_page'] : 10;
+		$page = intval($_GET['page'] ?? 1);
+		$perPage = intval($_GET['per_page'] ?? self::DEFAULT_PER_PAGE);
 		$parts = new Subscribing\FormattedParts(
 			new Subscribing\CollectiveParts($this->database),
 			new Texy\Texy()
@@ -29,7 +29,7 @@ final class AllPage extends Page\BasePage {
 							$parts->iterate(
 								new Dataset\CombinedSelection(
 									new Dataset\SqlRestSort($_GET['sort'] ?? ''),
-									new Dataset\SqlPaging($page, $perPage, self::MAX_PER_PAGE)
+									new Dataset\SqlPaging($page, $perPage, self::DEFAULT_PER_PAGE)
 								)
 							)
 						),
@@ -38,7 +38,7 @@ final class AllPage extends Page\BasePage {
 				__DIR__ . '/templates/constraint.xsd'
 			),
 			(new UI\AttainablePagination(
-				$page, $perPage, $parts->count()
+				$page, $perPage, $parts->count(), self::DEFAULT_PER_PAGE
 			))->print(new Output\Xml([], 'pagination'))
 		);
 	}
