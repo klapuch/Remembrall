@@ -4,32 +4,34 @@
 	<xsl:template match="pagination">
 		<xsl:param name="per_page"/>
 		<nav aria-label="pager">
-			<ul class="pager">
-				<xsl:if test="first!=current">
-					<li class="previous">
-						<xsl:call-template name="link" mode="pager">
-							<xsl:with-param name="per_page" select="$per_page"/>
-							<xsl:with-param name="step" select="previous"/>
-							<xsl:with-param name="content">
-								<span aria-hidden="true">←</span>
-								Previous
-							</xsl:with-param>
-						</xsl:call-template>
-					</li>
-				</xsl:if>
-				<xsl:if test="last!=current">
-					<li class="next">
-						<xsl:call-template name="link" mode="pager">
-							<xsl:with-param name="per_page" select="$per_page"/>
-							<xsl:with-param name="step" select="next"/>
-							<xsl:with-param name="content">
-								Next
-								<span aria-hidden="true">→</span>
-							</xsl:with-param>
-						</xsl:call-template>
-					</li>
-				</xsl:if>
-			</ul>
+			<xsl:if test="first!=last">
+				<ul class="pager">
+					<xsl:if test="first!=current">
+						<li class="previous">
+							<xsl:call-template name="link" mode="pager">
+								<xsl:with-param name="per_page" select="$per_page"/>
+								<xsl:with-param name="step" select="previous"/>
+								<xsl:with-param name="content">
+									<span aria-hidden="true">←</span>
+									Previous
+								</xsl:with-param>
+							</xsl:call-template>
+						</li>
+					</xsl:if>
+					<xsl:if test="last!=current">
+						<li class="next">
+							<xsl:call-template name="link" mode="pager">
+								<xsl:with-param name="per_page" select="$per_page"/>
+								<xsl:with-param name="step" select="next"/>
+								<xsl:with-param name="content">
+									Next
+									<span aria-hidden="true">→</span>
+								</xsl:with-param>
+							</xsl:call-template>
+						</li>
+					</xsl:if>
+				</ul>
+			</xsl:if>
 		</nav>
 	</xsl:template>
 

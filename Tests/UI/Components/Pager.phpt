@@ -23,13 +23,19 @@ final class Pager extends Tester\TestCase {
 		$xml = new \DOMDocument();
 		$xml->loadXML($input);
 		$output = new \DOMDocument();
-		$output->loadXML($xslt->transformToXml($xml));
-		var_dump($output->saveXML());
+		$output->loadXML((string)$xslt->transformToXml($xml));
 		Assert::true((new \DOMXPath($output))->evaluate($xpath));
 	}
 
 	protected function matches(): array {
 		return [
+			[
+				'<pagination>
+					<first>1</first>
+					<last>1</last>
+				</pagination>',
+				'count(//ul[@class="pager"])=0',
+			],
 			[
 				'<pagination>
 					<first>1</first>
@@ -49,11 +55,13 @@ final class Pager extends Tester\TestCase {
 					<first>1</first>
 					<previous>2</previous>
 					<current>3</current>
+					<last>4</last>
 				</pagination>',
 				'count(//li[@class="previous"]/a[@href="?page=2"])=1',
 			],
 			[
 				'<pagination>
+					<first>1</first>
 					<last>3</last>
 					<next>2</next>
 					<current>1</current>
