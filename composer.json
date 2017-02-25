@@ -31,7 +31,8 @@
 		"klapuch/authorization": "^1.0.0",
 		"klapuch/iterator": "^1.1.0",
 		"klapuch/dataset": "@dev",
-		"texy/texy": "^2.9"
+		"texy/texy": "^2.9",
+		"klapuch/ui": "@dev"
 	},
 	"require-dev": {
 		"nette/tester": "^1.7",

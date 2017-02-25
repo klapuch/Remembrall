@@ -113,8 +113,12 @@ abstract class BasePage {
 						(new Csrf\CsrfInput($this->csrf))->protection()
 					)
 				),
-				new \SimpleXMLElement($this->render($parameters)->serialization()),
-			]
+			],
+			(new \SimpleXMLElement(
+				(new Output\WrappedXml(
+					'page', $this->render($parameters)
+				))->serialization()
+			))->xpath('child::*')
 		);
 	}
 

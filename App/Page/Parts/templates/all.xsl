@@ -5,6 +5,7 @@
 	<xsl:import href="tabs.xsl"/>
 	<xsl:import href="../components/content-modal.xsl"/>
 	<xsl:import href="../../components/direction.xsl"/>
+	<xsl:import href="../../components/pager.xsl"/>
 
 	<xsl:template match="page">
 		<xsl:apply-templates select="body/tabs" mode="parts">
@@ -12,6 +13,9 @@
 		</xsl:apply-templates>
 		<h1><xsl:apply-templates select="body/header[@level = 1]"/></h1>
 		<xsl:apply-templates select="parts"/>
+		<xsl:apply-templates select="pagination">
+			<xsl:with-param name="per_page" select="request/get/per_page"/>
+		</xsl:apply-templates>
 	</xsl:template>
 
 	<xsl:template match="parts">
