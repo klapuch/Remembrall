@@ -46,4 +46,11 @@ final class PopularParts implements Parts {
 			);
 		}
 	}
+
+	public function count(): int {
+		return (new Storage\ParameterizedQuery(
+			$this->database,
+			'SELECT COUNT(*) FROM parts'
+		))->field();
+	}
 }

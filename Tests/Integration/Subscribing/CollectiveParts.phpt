@@ -128,6 +128,17 @@ final class CollectiveParts extends TestCase\Database {
 		Assert::null($parts->current());
 	}
 
+	public function testCounting() {
+		$this->database->exec(
+			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
+			('www.google.com', '//a', 'a', ''),
+			('www.seznam.cz', '//b', 'b', ''),
+			('www.facedown.cz', '//c', 'c', '')"
+		);
+		$parts = new Subscribing\CollectiveParts($this->database);
+		Assert::same(3, $parts->count());
+	}
+
 	public function testIteratingPrinting() {
 		$parts = (new Subscribing\CollectiveParts(
 			$this->database

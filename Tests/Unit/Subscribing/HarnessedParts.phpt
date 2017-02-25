@@ -21,6 +21,7 @@ final class HarnessedParts extends TestCase\Mockery {
 		$uri = new Uri\FakeUri();
 		$part = new Subscribing\FakePart();
 		$iterator = new \ArrayIterator([]);
+		$count = 3;
 		$format = new Output\FakeFormat();
 		$expression = '//p';
 		$origin = $this->mock(Subscribing\Parts::class);
@@ -43,6 +44,15 @@ final class HarnessedParts extends TestCase\Mockery {
 			(new Subscribing\HarnessedParts(
 				$origin, $callback
 			))->iterate($selection);
+		});
+		$callback->shouldReceive('invoke')
+			->once()
+			->with([$origin, 'count'], [])
+			->andReturn($count);
+		Assert::noError(function() use($origin, $callback) {
+			(new Subscribing\HarnessedParts(
+				$origin, $callback
+			))->count();
 		});
 	}
 }

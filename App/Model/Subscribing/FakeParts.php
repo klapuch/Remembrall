@@ -27,4 +27,8 @@ final class FakeParts implements Parts {
 			throw $this->exception;
 		return new \ArrayIterator($this->parts);
 	}
+
+	public function count(): int {
+		return count($this->parts);
+	}
 }

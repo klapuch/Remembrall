@@ -75,4 +75,24 @@ final class UnreliableParts implements Parts {
 			);
 		}
 	}
+
+	public function count(): int {
+		return (new Storage\ParameterizedQuery(
+			$this->database,
+			"SELECT COUNT(*)
+			FROM parts
+			RIGHT JOIN (
+				SELECT MIN(SUBSTRING(interval FROM '[0-9]+')::INT) AS interval,
+				part_id
+				FROM subscriptions
+				GROUP BY part_id
+			) AS subscriptions ON subscriptions.part_id = parts.id 
+			LEFT JOIN (
+				SELECT MAX(visited_at) AS visited_at, part_id
+				FROM part_visits
+				GROUP BY part_id
+			) AS part_visits ON part_visits.part_id = parts.id
+			WHERE visited_at + INTERVAL '1 SECOND' * interval < NOW()"
+		))->field();
+	}
 }

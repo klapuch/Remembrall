@@ -31,4 +31,8 @@ final class FormattedParts implements Parts {
 			}
 		);
 	}
+
+	public function count(): int {
+		return $this->origin->count();
+	}
 }

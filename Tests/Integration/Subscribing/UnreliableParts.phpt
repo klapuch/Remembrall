@@ -55,6 +55,34 @@ final class UnreliableParts extends TestCase\Database {
 		Assert::null($parts->current());
 	}
 
+	public function testCounting() {
+		$this->database->exec(
+			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
+			('www.google.com', '//a', 'a', ''),
+			('www.facedown.cz', '//d', 'd', '')"
+		);
+		$this->truncate(['part_visits']);
+		$this->database->exec(
+			"INSERT INTO part_visits (part_id, visited_at) VALUES
+			(1, NOW() - INTERVAL '50 SECOND'),
+			(2, NOW() - INTERVAL '45 SECOND')"
+		);
+		$this->database->exec(
+			"INSERT INTO subscriptions (part_id, user_id, interval, last_update, snapshot) VALUES
+			(1, 1, 'PT10S', NOW(), ''),
+			(2, 1, 'PT10S', NOW(), '')"
+		);
+		$parts = new Subscribing\UnreliableParts(
+			new Subscribing\FakeParts(), $this->database
+		);
+		$count = 2;
+		Assert::same($count, $parts->count());
+		Assert::same(
+			$count,
+			iterator_count($parts->iterate(new Dataset\FakeSelection('')))
+		);
+	}
+
 	public function testEmptyIterating() {
 		$parts = (new Subscribing\UnreliableParts(
 			new Subscribing\FakeParts(),

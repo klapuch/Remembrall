@@ -47,6 +47,19 @@ final class PopularParts extends TestCase\Database {
 		Assert::null($parts->current());
 	}
 
+	public function testCounting() {
+		$this->database->exec(
+			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
+			(2, 'bar.cz', '//bar', 'bar', 'barSnap'),
+			(4, 'baz.cz', '//baz', 'baz', 'bazSnap')"
+		);
+		$parts = new Subscribing\PopularParts(
+			new Subscribing\FakeParts(),
+			$this->database
+		);
+		Assert::same(2, $parts->count());
+	}
+
 	public function testEmptyIterating() {
 		$parts = (new Subscribing\PopularParts(
 			new Subscribing\FakeParts(),

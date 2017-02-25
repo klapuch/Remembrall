@@ -21,4 +21,10 @@ interface Parts {
 	 * @return \Traversable
 	 */
 	public function iterate(Dataset\Selection $selection): \Traversable;
+
+	/**
+	 * Counted parts
+	 * @return int
+	 */
+	public function count(): int;
 }
