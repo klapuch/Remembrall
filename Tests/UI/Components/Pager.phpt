@@ -19,6 +19,7 @@ final class Pager extends Tester\TestCase {
 		$xsl = new \DOMDocument();
 		$xsl->load(__DIR__ . '/../../../App/Page/components/pager.xsl');
 		$xslt = new \XSLTProcessor();
+		$xslt->registerPHPFunctions();
 		$xslt->importStylesheet($xsl);
 		$xml = new \DOMDocument();
 		$xml->loadXML($input);

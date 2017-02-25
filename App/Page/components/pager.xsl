@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:php="http://php.net/xsl">
 
 	<xsl:template match="pagination">
 		<xsl:param name="per_page"/>
@@ -41,12 +41,15 @@
 		<xsl:param name="per_page"/>
 		<xsl:element name="a">
 			<xsl:attribute name="href">
-				<xsl:text>?page=</xsl:text>
-				<xsl:value-of select="$step"/>
-				<xsl:if test="$per_page">
-					<xsl:text>&amp;per_page=</xsl:text>
-					<xsl:value-of select="$per_page"/>
-				</xsl:if>
+				<xsl:variable name="query">
+					<xsl:text>page=</xsl:text>
+					<xsl:value-of select="$step"/>
+					<xsl:if test="$per_page">
+						<xsl:text>&amp;per_page=</xsl:text>
+						<xsl:value-of select="$per_page"/>
+					</xsl:if>
+				</xsl:variable>
+				<xsl:value-of select="php:function('target', $query)"/>
 			</xsl:attribute>
 			<xsl:copy-of select="$content"/>
 		</xsl:element>

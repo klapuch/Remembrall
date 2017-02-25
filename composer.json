@@ -48,7 +48,8 @@
 			"Remembrall\\": [
 				"App/"
 			]
-		}
+		},
+		"files": ["App/Page/functions.php"]
 	},
 	"autoload-dev": {
 		"psr-4": {
