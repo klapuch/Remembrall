@@ -12,10 +12,11 @@ use Texy;
 
 final class AllPage extends Page\BasePage {
 	private const DEFAULT_PER_PAGE = 100;
+	private const START_PER_PAGE = 10;
 
 	public function render(array $parameters): Output\Format {
 		$page = intval($_GET['page'] ?? 1);
-		$perPage = intval($_GET['per_page'] ?? self::DEFAULT_PER_PAGE);
+		$perPage = intval($_GET['per_page'] ?? self::START_PER_PAGE);
 		$parts = new Subscribing\FormattedParts(
 			new Subscribing\CollectiveParts($this->database),
 			new Texy\Texy()
