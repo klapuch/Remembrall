@@ -36,26 +36,26 @@ final class PerPageSelect extends Tester\TestCase {
 					<option>1</option>
 					<option>2</option>
 				</select>',
-				'count(//select/option)=2'
+				'count(//select/option)=2',
 			],
 			[
 				'<select>
 					<option label="Prompt">1</option>
 					<option label="2">2</option>
 				</select>',
-				'//option[1]/text()="Prompt" and //option[2]/text()="2"'
+				'//option[1]/text()="Prompt" and //option[2]/text()="2"',
 			],
 			[
 				'<select>
 					<option label="Foo">20</option>
 				</select>',
-				'contains(//option[1]/@value, "?page=1&per_page=20")'
+				'contains(//option[1]/@value, "?page=1&per_page=20")',
 			],
 			[
 				'<select>
 					<option label="Foo">20</option>
 				</select>',
-				'count(//option/@selected)=0'
+				'count(//option/@selected)=0',
 			],
 		];
 	}
