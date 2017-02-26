@@ -26,6 +26,7 @@ final class SubscribingForm extends HarnessedForm {
 							'name' => 'url',
 							'class' => 'form-control',
 							'required' => 'required',
+							'value' => $_GET['url'] ?? '',
 						],
 						$this->backup,
 						new Validation\FriendlyRule(
@@ -47,6 +48,7 @@ final class SubscribingForm extends HarnessedForm {
 							'name' => 'expression',
 							'class' => 'form-control',
 							'required' => 'required',
+							'value' => $_GET['expression'] ?? '',
 						],
 						$this->backup,
 						new Validation\FriendlyRule(

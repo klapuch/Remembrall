@@ -16,22 +16,28 @@
 		<xsl:apply-templates select="body/selects/select[@purpose='pagination']" mode="pagination">
 			<xsl:with-param name="per_page" select="request/get/per_page"/>
 		</xsl:apply-templates>
-		<xsl:apply-templates select="parts"/>
+		<xsl:apply-templates select="parts">
+			<xsl:with-param name="baseUrl" select="baseUrl"/>
+		</xsl:apply-templates>
 		<xsl:apply-templates select="pagination">
 			<xsl:with-param name="per_page" select="request/get/per_page"/>
 		</xsl:apply-templates>
 	</xsl:template>
 
 	<xsl:template match="parts">
+		<xsl:param name="baseUrl"/>
 		<table class="table table-hover">
 			<xsl:apply-templates select="/page/body/tables/table[@purpose='overview']"/>
 			<tbody>
-				<xsl:apply-templates select="part"/>
+				<xsl:apply-templates select="part">
+					<xsl:with-param name="baseUrl" select="$baseUrl"/>
+				</xsl:apply-templates>
 			</tbody>
 		</table>
 	</xsl:template>
 
 	<xsl:template match="part">
+		<xsl:param name="baseUrl"/>
 		<tr>
 			<td><xsl:number format="1. "/></td>
 			<td><xsl:value-of select="url"/></td>
@@ -46,6 +52,11 @@
 				</xsl:call-template>
 			</td>
 			<td><xsl:value-of select="occurrences"/></td>
+			<td>
+				<a href="{$baseUrl}subscription?url={url}&amp;expression={expression}" class="btn btn-primary btn-sm" role="button" title="Acquire">
+					<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"/>
+				</a>
+			</td>
 		</tr>
 	</xsl:template>
 
