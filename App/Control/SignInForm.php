@@ -5,7 +5,7 @@ namespace Remembrall\Control;
 use Klapuch\Form;
 use Klapuch\Validation;
 
-final class SignInForm extends Control {
+final class SignInForm extends HarnessedForm {
 	private const COLUMNS = 4;
 	private const ACTION = 'sign/in';
 
@@ -20,14 +20,14 @@ final class SignInForm extends Control {
 			new Form\CsrfInput($this->csrf),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
-					new Form\SafeInput(
+					new Form\PersistentInput(
 						[
 							'type' => 'email',
 							'name' => 'email',
 							'class' => 'form-control',
 							'required' => 'required',
 						],
-						$this->storage,
+						$this->backup,
 						new Validation\ChainedRule(
 							new Validation\FriendlyRule(
 								new Validation\EmailRule(),
@@ -47,14 +47,14 @@ final class SignInForm extends Control {
 			),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
-					new Form\SafeInput(
+					new Form\PersistentInput(
 						[
 							'type' => 'password',
 							'name' => 'password',
 							'class' => 'form-control',
 							'required' => 'required',
 						],
-						$this->storage,
+						$this->backup,
 						new Validation\FriendlyRule(
 							new Validation\NegateRule(
 								new Validation\EmptyRule()
@@ -67,14 +67,14 @@ final class SignInForm extends Control {
 				self::COLUMNS
 			),
 			new Form\BootstrapInput(
-				new Form\SafeInput(
+				new Form\PersistentInput(
 					[
 						'type' => 'submit',
 						'name' => 'act',
 						'class' => 'form-control',
 						'value' => 'Login',
 					],
-					$this->storage,
+					$this->backup,
 					new Validation\FakeRule()
 				),
 				self::COLUMNS

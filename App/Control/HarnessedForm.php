@@ -6,27 +6,33 @@ use Klapuch\Csrf;
 use Klapuch\Form;
 use Klapuch\Uri;
 
-abstract class Control implements Form\Control {
+abstract class HarnessedForm {
 	protected $url;
 	protected $csrf;
-	protected $storage;
+	protected $backup;
 
 	final public function __construct(
 		Uri\Uri $url,
 		Csrf\Csrf $csrf,
-		Form\Storage $storage
+		Form\Backup $backup
 	) {
 		$this->url = $url;
 		$this->csrf = $csrf;
-		$this->storage = $storage;
+		$this->backup = $backup;
 	}
 
 	final public function render(): string {
 		return $this->create()->render();
 	}
 
-	final public function validate(): void {
+	/**
+	 * @return mixed
+	 */
+	final public function submit(callable $onSuccess) {
 		$this->create()->validate();
+		$result = $onSuccess();
+		$this->backup->drop();
+		return $result;
 	}
 
 	abstract protected function create(): Form\Control;

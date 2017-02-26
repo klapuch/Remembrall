@@ -16,7 +16,7 @@ final class InPage extends Page\BasePage {
 				(new Control\SignInForm(
 					$this->url,
 					$this->csrf,
-					$this->storage
+					$this->backup
 				))->render()
 			)
 		);
@@ -25,15 +25,16 @@ final class InPage extends Page\BasePage {
 
 	public function submitIn(array $credentials): void {
 		try {
-			(new Control\SignInForm(
+			$user = (new Control\SignInForm(
 				$this->url,
 				$this->csrf,
-				$this->storage
-			))->validate();
-			$user = (new Access\SecureEntrance(
-				$this->database,
-				$this->cipher
-			))->enter([$credentials['email'], $credentials['password']]);
+				$this->backup
+			))->submit(function() use($credentials) {
+				return (new Access\SecureEntrance(
+					$this->database,
+					$this->cipher
+				))->enter([$credentials['email'], $credentials['password']]);
+			});
 			session_regenerate_id(true);
 			$_SESSION['id'] = $user->id();
 			$this->flashMessage('You have been logged in', 'success');

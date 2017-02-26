@@ -5,7 +5,7 @@ namespace Remembrall\Control;
 use Klapuch\Form;
 use Klapuch\Validation;
 
-final class SubscribingForm extends Control {
+final class SubscribingForm extends HarnessedForm {
 	private const COLUMNS = 5;
 	private const ACTION = 'subscription/default';
 
@@ -20,14 +20,14 @@ final class SubscribingForm extends Control {
 			new Form\CsrfInput($this->csrf),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
-					new Form\SafeInput(
+					new Form\PersistentInput(
 						[
 							'type' => 'text',
 							'name' => 'url',
 							'class' => 'form-control',
 							'required' => 'required',
 						],
-						$this->storage,
+						$this->backup,
 						new Validation\FriendlyRule(
 							new Validation\NegateRule(
 								new Validation\EmptyRule()
@@ -41,14 +41,14 @@ final class SubscribingForm extends Control {
 			),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
-					new Form\SafeInput(
+					new Form\PersistentInput(
 						[
 							'type' => 'text',
 							'name' => 'expression',
 							'class' => 'form-control',
 							'required' => 'required',
 						],
-						$this->storage,
+						$this->backup,
 						new Validation\FriendlyRule(
 							new Validation\NegateRule(
 								new Validation\EmptyRule()
@@ -62,7 +62,7 @@ final class SubscribingForm extends Control {
 			),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
-					new Form\SafeInput(
+					new Form\PersistentInput(
 						[
 							'type' => 'number',
 							'name' => 'interval',
@@ -71,7 +71,7 @@ final class SubscribingForm extends Control {
 							'max' => '1439',
 							'required' => 'required',
 						],
-						$this->storage,
+						$this->backup,
 						new Validation\ChainedRule(
 							new Validation\FriendlyRule(
 								new Validation\NegateRule(
@@ -90,14 +90,14 @@ final class SubscribingForm extends Control {
 				self::COLUMNS
 			),
 			new Form\BootstrapInput(
-				new Form\SafeInput(
+				new Form\PersistentInput(
 					[
 						'type' => 'submit',
 						'name' => 'act',
 						'class' => 'form-control',
 						'value' => 'Subscribe',
 					],
-					$this->storage,
+					$this->backup,
 					new Validation\FakeRule()
 				),
 				self::COLUMNS

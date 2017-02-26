@@ -26,8 +26,8 @@ abstract class BasePage {
 	protected $cipher;
 	/** @var \Klapuch\Csrf\Csrf */
 	protected $csrf;
-	/** @var \Klapuch\Form\Storage */
-	protected $storage;
+	/** @var \Klapuch\Form\Backup */
+	protected $backup;
 
 	public function __construct(
 		Uri\Uri $url,
@@ -40,7 +40,7 @@ abstract class BasePage {
 		$this->url = $url;
 		$this->cipher = $cipher;
 		$this->csrf = new Csrf\StoredCsrf($_SESSION, $_POST, $_GET);
-		$this->storage = new Form\Storage($_SESSION, $_POST);
+		$this->backup = new Form\Backup($_SESSION, $_POST);
 	}
 
 	public function startup(): void {
