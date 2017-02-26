@@ -10,6 +10,7 @@
 	<permission resource="parts/unreliable" role="member"/>
 
 	<permission resource="subscriptions" role="member"/>
+	<permission resource="subscriptions/delete" role="member"/>
 
 	<permission resource="subscription" role="member"/>
 	<permission resource="subscription/default" role="member"/>
