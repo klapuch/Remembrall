@@ -25,7 +25,6 @@ final class PerPageSelect extends Tester\TestCase {
 		$xml->loadXML($input);
 		$output = new \DOMDocument();
 		$output->loadXML($xslt->transformToXml($xml));
-		var_dump($output->saveXML());
 		Assert::true((new \DOMXPath($output))->evaluate($xpath));
 	}
 
@@ -49,7 +48,7 @@ final class PerPageSelect extends Tester\TestCase {
 				'<select>
 					<option label="Foo">20</option>
 				</select>',
-				'contains(//option[1]/@value, "?page=1&per_page=20")',
+				'//option[1]/@value="?page=1&per_page=20"',
 			],
 			[
 				'<select>
