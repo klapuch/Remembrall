@@ -4,9 +4,6 @@
 	<xsl:template name="modal" mode="content">
 		<xsl:param name="id"/>
 		<xsl:param name="content"/>
-		<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#content-{$id}">
-			<span class="glyphicon glyphicon-eye-open" aria-hidden="true"/>
-		</button>
 		<div class="modal fade" id="content-{$id}" tabindex="-1" role="dialog" aria-labelledby="content-label-{$id}">
 			<div class="modal-dialog modal-lg" role="document">
 				<div class="modal-content">

@@ -37,6 +37,9 @@
 			<td><xsl:value-of select="url"/></td>
 			<td><xsl:value-of select="expression"/></td>
 			<td>
+				<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#content-{id}">
+					<span class="glyphicon glyphicon-eye-open" aria-hidden="true"/>
+				</button>
 				<xsl:call-template name="modal" mode="content">
 					<xsl:with-param name="id" select="id"/>
 					<xsl:with-param name="content" select="content"/>
