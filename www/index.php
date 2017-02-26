@@ -5,8 +5,8 @@ use Klapuch\{
 	Ini, Storage, Uri, Log, Encryption, Output
 };
 const CONFIGURATION = __DIR__ . '/../App/Configuration/.config.ini';
-const TIMER = 'timer';
-const ELAPSE = 20;
+const TIMER = 'timer',
+	ELAPSE = 20;
 const TEMPLATES = __DIR__ . '/../App/Page/templates';
 try {
 	mb_internal_encoding('UTF-8');
