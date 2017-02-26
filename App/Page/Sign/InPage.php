@@ -34,6 +34,7 @@ final class InPage extends Page\BasePage {
 				$this->database,
 				$this->cipher
 			))->enter([$credentials['email'], $credentials['password']]);
+			session_regenerate_id(true);
 			$_SESSION['id'] = $user->id();
 			$this->flashMessage('You have been logged in', 'success');
 			$this->redirect('subscriptions');
