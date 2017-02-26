@@ -6,12 +6,16 @@
 	<xsl:import href="../components/content-modal.xsl"/>
 	<xsl:import href="../../components/direction.xsl"/>
 	<xsl:import href="../../components/pager.xsl"/>
+	<xsl:import href="../../components/per_page_select.xsl"/>
 
 	<xsl:template match="page">
 		<xsl:apply-templates select="body/tabs" mode="parts">
 			<xsl:with-param name="baseUrl" select="baseUrl"/>
 		</xsl:apply-templates>
 		<h1><xsl:apply-templates select="body/header[@level = 1]"/></h1>
+		<xsl:apply-templates select="body/selects/select[@purpose='pagination']" mode="pagination">
+			<xsl:with-param name="per_page" select="request/get/per_page"/>
+		</xsl:apply-templates>
 		<xsl:apply-templates select="parts"/>
 		<xsl:apply-templates select="pagination">
 			<xsl:with-param name="per_page" select="request/get/per_page"/>

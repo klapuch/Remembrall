@@ -22,5 +22,13 @@
 			<tab href="popular" state="active">Popular</tab>
 			<tab href="unreliable">Unreliable</tab>
 		</tabs>
+		<selects>
+			<select purpose="pagination">
+				<option label="Parts per page">10</option>
+				<option label="10">10</option>
+				<option label="50">50</option>
+				<option label="100">100</option>
+			</select>
+		</selects>
 	</body>
 </page>
