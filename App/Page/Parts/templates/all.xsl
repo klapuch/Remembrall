@@ -45,7 +45,7 @@
 			</td>
 			<td><xsl:value-of select="occurrences"/></td>
 			<td>
-				<a href="{$base_url}subscription?url={url}&amp;expression={expression}" class="btn btn-primary btn-sm" role="button" title="Acquire">
+				<a href="{$base_url}/subscription?url={url}&amp;expression={expression}" class="btn btn-primary btn-sm" role="button" title="Acquire">
 					<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"/>
 				</a>
 			</td>

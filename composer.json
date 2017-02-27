@@ -20,7 +20,7 @@
 		"klapuch/storage": "^2.0.0",
 		"klapuch/output": "^2.0.0",
 		"klapuch/ini": "^1.0.0",
-		"klapuch/uri": "^1.0.0",
+		"klapuch/uri": "^2.0.0",
 		"klapuch/time": "^3.0.0",
 		"klapuch/http": "^1.0.0",
 		"klapuch/log": "^1.0.0",

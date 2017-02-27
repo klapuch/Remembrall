@@ -80,7 +80,7 @@
 	</xsl:template>
 
 	<xsl:template match="link">
-		<a href="{concat($base_url, @href)}" title="{.}">
+		<a href="{$base_url}/{@href}" title="{.}">
 			<xsl:value-of select="."/>
 		</a>
 	</xsl:template>

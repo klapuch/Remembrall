@@ -60,7 +60,7 @@
 		<xsl:param name="id"/>
 		<a
 			role="button"
-			href="{$base_url}{href}?id={$id}&amp;{/page/csrf/link}"
+			href="{$base_url}/{href}?id={$id}&amp;{/page/csrf/link}"
 			onclick="return confirm('{normalize-space(message)}')"
 			title="{title}" type="button" class="btn btn-danger btn-sm">
 			<span class="glyphicon glyphicon-{glyphicon}" aria-hidden="true"/>

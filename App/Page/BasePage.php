@@ -135,7 +135,7 @@ abstract class BasePage {
 	 * @return void
 	 */
 	final protected function redirect(string $url): void {
-		header(sprintf('Location: %s', $this->url->reference() . $url));
+		header(sprintf('Location: %s/%s', $this->url->reference(), $url));
 		exit;
 	}
 

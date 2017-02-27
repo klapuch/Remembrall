@@ -7,7 +7,7 @@ use Klapuch\Validation;
 
 final class SubscribingForm extends HarnessedForm {
 	private const COLUMNS = 5;
-	private const ACTION = 'subscription/default';
+	private const ACTION = '/subscription/default';
 
 	protected function create(): Form\Control {
 		return new Form\RawForm(

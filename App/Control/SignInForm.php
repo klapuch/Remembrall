@@ -7,7 +7,7 @@ use Klapuch\Validation;
 
 final class SignInForm extends HarnessedForm {
 	private const COLUMNS = 4;
-	private const ACTION = 'sign/in';
+	private const ACTION = '/sign/in';
 
 	protected function create(): Form\Control {
 		return new Form\RawForm(
