@@ -9,35 +9,27 @@
 	<xsl:import href="../../components/per_page_select.xsl"/>
 
 	<xsl:template match="page">
-		<xsl:apply-templates select="body/tabs" mode="parts">
-			<xsl:with-param name="baseUrl" select="baseUrl"/>
-		</xsl:apply-templates>
+		<xsl:apply-templates select="body/tabs" mode="parts"/>
 		<h1><xsl:apply-templates select="body/header[@level = 1]"/></h1>
 		<xsl:apply-templates select="body/selects/select[@purpose='pagination']" mode="pagination">
 			<xsl:with-param name="per_page" select="request/get/per_page"/>
 		</xsl:apply-templates>
-		<xsl:apply-templates select="parts">
-			<xsl:with-param name="baseUrl" select="baseUrl"/>
-		</xsl:apply-templates>
+		<xsl:apply-templates select="parts"/>
 		<xsl:apply-templates select="pagination">
 			<xsl:with-param name="per_page" select="request/get/per_page"/>
 		</xsl:apply-templates>
 	</xsl:template>
 
 	<xsl:template match="parts">
-		<xsl:param name="baseUrl"/>
 		<table class="table table-hover">
 			<xsl:apply-templates select="/page/body/tables/table[@purpose='overview']"/>
 			<tbody>
-				<xsl:apply-templates select="part">
-					<xsl:with-param name="baseUrl" select="$baseUrl"/>
-				</xsl:apply-templates>
+				<xsl:apply-templates select="part"/>
 			</tbody>
 		</table>
 	</xsl:template>
 
 	<xsl:template match="part">
-		<xsl:param name="baseUrl"/>
 		<tr>
 			<td><xsl:number format="1. "/></td>
 			<td><xsl:value-of select="url"/></td>

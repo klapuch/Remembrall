@@ -16,7 +16,6 @@
 			<body>
 				<div id="wrap">
 					<xsl:apply-templates select="page/body/menu[@name='main']">
-						<xsl:with-param name="baseUrl" select="page/baseUrl"/>
 						<xsl:with-param name="user" select="page/user"/>
 					</xsl:apply-templates>
 					<div class="container">
@@ -39,7 +38,6 @@
 	</xsl:template>
 
 	<xsl:template match="menu[@name='main']">
-		<xsl:param name="baseUrl"/>
 		<xsl:param name="user"/>
 		<nav class="navbar navbar-default navbar-static-top">
 			<div class="container">
@@ -55,14 +53,11 @@
 						<span class="icon-bar"/>
 						<span class="icon-bar"/>
 					</button>
-					<xsl:call-template name="logo">
-						<xsl:with-param name="baseUrl" select="$baseUrl"/>
-					</xsl:call-template>
+					<xsl:call-template name="logo"/>
 				</div>
 				<div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
 						<xsl:apply-templates select="key('linkByHref', key('permissionByRole', $user/@role)/@resource)/..">
-							<xsl:with-param name="baseUrl" select="$baseUrl"/>
 							<xsl:with-param name="user" select="$user"/>
 						</xsl:apply-templates>
 					</ul>
@@ -72,24 +67,19 @@
 	</xsl:template>
 
 	<xsl:template name="logo">
-		<xsl:param name="baseUrl"/>
 		<a href="{$baseUrl}" class="navbar-brand" title="Remembrall">
 			<strong>Remembrall</strong>
 		</a>
 	</xsl:template>
 
 	<xsl:template match="item">
-		<xsl:param name="baseUrl"/>
 		<xsl:param name="user"/>
 		<li>
-			<xsl:apply-templates>
-				<xsl:with-param name="baseUrl" select="$baseUrl"/>
-			</xsl:apply-templates>
+			<xsl:apply-templates/>
 		</li>
 	</xsl:template>
 
 	<xsl:template match="link">
-		<xsl:param name="baseUrl"/>
 		<a href="{concat($baseUrl, @href)}" title="{.}">
 			<xsl:value-of select="."/>
 		</a>
