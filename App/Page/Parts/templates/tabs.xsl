@@ -15,7 +15,7 @@
 					<xsl:value-of select="@state"/>
 				</xsl:attribute>
 			</xsl:if>
-			<a href="{$baseUrl}parts/{@href}"><xsl:value-of select="."/></a>
+			<a href="{$base_url}parts/{@href}"><xsl:value-of select="."/></a>
 		</xsl:element>
 	</xsl:template>
 

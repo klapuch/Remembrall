@@ -67,7 +67,7 @@
 	</xsl:template>
 
 	<xsl:template name="logo">
-		<a href="{$baseUrl}" class="navbar-brand" title="Remembrall">
+		<a href="{$base_url}" class="navbar-brand" title="Remembrall">
 			<strong>Remembrall</strong>
 		</a>
 	</xsl:template>
@@ -80,7 +80,7 @@
 	</xsl:template>
 
 	<xsl:template match="link">
-		<a href="{concat($baseUrl, @href)}" title="{.}">
+		<a href="{concat($base_url, @href)}" title="{.}">
 			<xsl:value-of select="."/>
 		</a>
 	</xsl:template>
