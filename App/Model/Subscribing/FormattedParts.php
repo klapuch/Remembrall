@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+use Gajus\Dindent;
 use Klapuch\Dataset;
 use Klapuch\Iterator;
 use Klapuch\Uri;
@@ -13,10 +14,16 @@ use Texy;
 final class FormattedParts implements Parts {
 	private $origin;
 	private $texy;
+	private $indenter;
 
-	public function __construct(Parts $origin, Texy\Texy $texy) {
+	public function __construct(
+		Parts $origin,
+		Texy\Texy $texy,
+		Dindent\Indenter $indenter
+	) {
 		$this->origin = $origin;
 		$this->texy = $texy;
+		$this->indenter = $indenter;
 	}
 
 	public function add(Part $part, Uri\Uri $uri, string $expression): void {
@@ -27,7 +34,7 @@ final class FormattedParts implements Parts {
 		return new Iterator\MappedIterator(
 			$this->origin->iterate($selection),
 			function(Part $part): Part {
-				return new FormattedPart($part, $this->texy);
+				return new FormattedPart($part, $this->texy, $this->indenter);
 			}
 		);
 	}

@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Page\Parts;
 
+use Gajus\Dindent;
 use Klapuch\Dataset;
 use Klapuch\Output;
 use Klapuch\UI;
@@ -19,7 +20,8 @@ final class AllPage extends Page\BasePage {
 		$perPage = intval($_GET['per_page'] ?? self::START_PER_PAGE);
 		$parts = new Subscribing\FormattedParts(
 			new Subscribing\CollectiveParts($this->database),
-			new Texy\Texy()
+			new Texy\Texy(),
+			new Dindent\Indenter()
 		);
 		return new Output\CombinedFormat(
 			new Output\ValidXml(

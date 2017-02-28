@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Page\Parts;
 
+use Gajus\Dindent;
 use Klapuch\Dataset;
 use Klapuch\Output;
 use Klapuch\UI;
@@ -22,7 +23,8 @@ final class PopularPage extends Page\BasePage {
 				new Subscribing\CollectiveParts($this->database),
 				$this->database
 			),
-			new Texy\Texy()
+			new Texy\Texy(),
+			new Dindent\Indenter()
 		);
 		return new Output\CombinedFormat(
 			new Output\ValidXml(

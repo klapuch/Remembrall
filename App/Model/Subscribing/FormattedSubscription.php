@@ -2,17 +2,24 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+use Gajus\Dindent;
 use Klapuch\Output;
 use Klapuch\Time;
-use Texy\Texy;
+use Texy;
 
 final class FormattedSubscription implements Subscription {
 	private $origin;
 	private $texy;
+	private $indenter;
 
-	public function __construct(Subscription $origin, Texy $texy) {
+	public function __construct(
+		Subscription $origin,
+		Texy\Texy $texy,
+		Dindent\Indenter $indenter
+	) {
 		$this->origin = $origin;
 		$this->texy = $texy;
+		$this->indenter = $indenter;
 	}
 
 	public function cancel(): void {
@@ -31,7 +38,10 @@ final class FormattedSubscription implements Subscription {
 		return $this->origin->print($format)
 			->adjusted('content', function(string $content): string {
 				return $this->texy->process(
-					sprintf("/---code html \n %s", $content)
+					sprintf(
+						"/---code html \n %s",
+						$this->indenter->indent($content)
+					)
 				);
 			})
 			->adjusted('last_update', function(string $lastUpdate): string {

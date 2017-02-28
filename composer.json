@@ -32,7 +32,8 @@
 		"klapuch/iterator": "^1.1.0",
 		"klapuch/dataset": "@dev",
 		"texy/texy": "^2.9",
-		"klapuch/ui": "@dev"
+		"klapuch/ui": "@dev",
+		"gajus/dindent": "^2.0"
 	},
 	"require-dev": {
 		"nette/tester": "^1.7",

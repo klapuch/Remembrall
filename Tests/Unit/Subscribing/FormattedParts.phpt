@@ -6,6 +6,7 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Unit\Subscribing;
 
+use Gajus\Dindent;
 use Klapuch\Dataset;
 use Remembrall\Model\Subscribing;
 use Tester;
@@ -20,11 +21,13 @@ final class FormattedParts extends Tester\TestCase {
 			[
 				new Subscribing\FormattedPart(
 					new Subscribing\FakePart('foo'),
-					new Texy\Texy()
+					new Texy\Texy(),
+					new Dindent\Indenter()
 				),
 				new Subscribing\FormattedPart(
 					new Subscribing\FakePart('bar'),
-					new Texy\Texy()
+					new Texy\Texy(),
+					new Dindent\Indenter()
 				),
 			],
 			iterator_to_array(
@@ -34,7 +37,8 @@ final class FormattedParts extends Tester\TestCase {
 						new Subscribing\FakePart('foo'),
 						new Subscribing\FakePart('bar')
 					),
-					new Texy\Texy()
+					new Texy\Texy(),
+					new Dindent\Indenter()
 				))->iterate(new Dataset\FakeSelection())
 			)
 		);
