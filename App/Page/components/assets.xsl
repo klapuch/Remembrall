@@ -16,8 +16,20 @@
 
 	<xsl:template match="@*" mode="assets">
 		<xsl:attribute name="{name()}">
-			<xsl:value-of select="normalize-space(.)"/>
+			<xsl:choose>
+				<xsl:when test="starts-with(normalize-space(.), 'http')">
+					<xsl:apply-templates mode="assets"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="concat($base_url, '/')"/>
+					<xsl:apply-templates mode="assets"/>
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:attribute>
+	</xsl:template>
+
+	<xsl:template match="node()" mode="assets">
+		<xsl:value-of select="normalize-space(.)"/>
 	</xsl:template>
 
 </xsl:stylesheet>

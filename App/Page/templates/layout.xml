@@ -13,6 +13,7 @@
 				<style
 					href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/default.min.css"
 				/>
+				<style href="styles/style.css"/>
 			</styles>
 		</assets>
 	</head>

@@ -20,6 +20,7 @@ final class Assets extends Tester\TestCase {
 		$xsl->load(__DIR__ . '/../../../App/Page/components/assets.xsl');
 		$xslt = new \XSLTProcessor();
 		$xslt->importStylesheet($xsl);
+		$xslt->setParameter('', 'base_url', '/var/www');
 		$xml = new \DOMDocument();
 		$xml->loadXML($input);
 		$output = new \DOMDocument();
@@ -29,13 +30,14 @@ final class Assets extends Tester\TestCase {
 
 	protected function matches(): array {
 		return [
-			['<style href="foo.cz"/>', 'count(//link[@rel="stylesheet"])=1'],
-			['<style href="foo.cz"/>', 'count(//link[@href="foo.cz"])=1'],
-			['<style href=" foo.cz "/>', 'count(//link[@href="foo.cz"])=1'],
-			['<style foo="bar"/>', 'count(//link[@foo="bar"])=1'],
-			['<script href="foo.cz"/>', 'count(//script[@href="foo.cz"])=1'],
-			['<script href=" foo.cz "/>', 'count(//script[@href="foo.cz"])=1'],
-			['<script foo="bar"/>', 'count(//script[@foo="bar"])=1'],
+			['<style href="http://foo.cz"/>', 'count(//link[@rel="stylesheet"])=1'],
+			['<style href="http://foo.cz"/>', 'count(//link[@href="http://foo.cz"])=1'],
+			['<style href=" http://foo.cz "/>', 'count(//link[@href="http://foo.cz"])=1'],
+			['<style foo="http://bar"/>', 'count(//link[@foo="http://bar"])=1'],
+			['<script href="http://foo.cz"/>', 'count(//script[@href="http://foo.cz"])=1'],
+			['<script href=" http://foo.cz "/>', 'count(//script[@href="http://foo.cz"])=1'],
+			['<script foo="http://bar"/>', 'count(//script[@foo="http://bar"])=1'],
+			['<style href="foo.css"/>', 'count(//link[@href="/var/www/foo.css"])=1'],
 		];
 	}
 }
