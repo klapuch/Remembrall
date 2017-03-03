@@ -11,6 +11,8 @@ use Remembrall\Page;
 use Texy;
 
 final class DefaultPage extends Page\BasePage {
+	private const FIELDS = ['last_update', 'interval', 'expression', 'url'];
+
 	public function render(array $parameters): Output\Format {
 		return new Output\ValidXml(
 			new Misc\XmlPrintedObjects(
@@ -26,7 +28,7 @@ final class DefaultPage extends Page\BasePage {
 							new Dindent\Indenter()
 						))->iterate(
 							new Dataset\CombinedSelection(
-								new Dataset\SqlRestSort($_GET['sort'] ?? '')
+								new Dataset\SqlRestSort($_GET['sort'] ?? '', self::FIELDS)
 							)
 						)
 					),
