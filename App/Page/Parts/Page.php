@@ -6,7 +6,7 @@ use Klapuch\Dataset;
 use Klapuch\Output;
 use Klapuch\UI;
 use Remembrall\Model\Misc;
-use Remembrall\Model\Subscribing;
+use Remembrall\Model\Web;
 use Remembrall\Page\BasePage;
 
 abstract class Page extends BasePage {
@@ -14,7 +14,7 @@ abstract class Page extends BasePage {
 	private const DEFAULT_PER_PAGE = 100;
 	private const START_PER_PAGE = 10;
 
-	abstract protected function parts(): Subscribing\Parts;
+	abstract protected function parts(): Web\Parts;
 
 	final public function render(array $parameters): Output\Format {
 		$page = intval($_GET['page'] ?? 1);

@@ -3,14 +3,14 @@ declare(strict_types = 1);
 namespace Remembrall\Page\Parts;
 
 use Gajus\Dindent;
-use Remembrall\Model\Subscribing;
+use Remembrall\Model\Web;
 use Texy;
 
 final class PopularPage extends Page {
-	protected function parts(): Subscribing\Parts {
-		return new Subscribing\FormattedParts(
-			new Subscribing\PopularParts(
-				new Subscribing\CollectiveParts($this->database),
+	protected function parts(): Web\Parts {
+		return new Web\FormattedParts(
+			new Web\PopularParts(
+				new Web\CollectiveParts($this->database),
 				$this->database
 			),
 			new Texy\Texy(),

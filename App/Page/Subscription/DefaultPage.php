@@ -10,6 +10,7 @@ use Klapuch\Uri;
 use Remembrall\Control\Subscription;
 use Remembrall\Model\Misc;
 use Remembrall\Model\Subscribing;
+use Remembrall\Model\Web;
 use Remembrall\Page;
 
 final class DefaultPage extends Page\BasePage {
@@ -45,26 +46,26 @@ final class DefaultPage extends Page\BasePage {
 				);
 				(new Storage\Transaction($this->database))->start(
 					function() use ($url, $subscription): void {
-						$page = (new Subscribing\HarnessedPages(
-							new Subscribing\UniquePages($this->database),
+						$page = (new Web\HarnessedPages(
+							new Web\UniquePages($this->database),
 							new Misc\LoggingCallback($this->logs)
 						))->add(
 							$url,
-							new Subscribing\FrugalPage(
+							new Web\FrugalPage(
 								$url,
-								new Subscribing\HtmlWebPage(
+								new Web\HtmlWebPage(
 									new Http\BasicRequest('GET', $url)
 								),
 								$this->database
 							)
 						);
-						(new Subscribing\HarnessedParts(
-							new Subscribing\CollectiveParts($this->database),
+						(new Web\HarnessedParts(
+							new Web\CollectiveParts($this->database),
 							new Misc\LoggingCallback($this->logs)
 						))->add(
-							new Subscribing\HtmlPart(
-								new Subscribing\MatchingExpression(
-									new Subscribing\XPathExpression(
+							new Web\HtmlPart(
+								new Web\MatchingExpression(
+									new Web\XPathExpression(
 										$page,
 										$subscription['expression']
 									)

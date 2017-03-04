@@ -7,19 +7,20 @@ use Klapuch\Output;
 use Nette\Mail;
 use Remembrall\Model\Misc;
 use Remembrall\Model\Subscribing;
+use Remembrall\Model\Web;
 use Remembrall\Page;
 
 final class DefaultPage extends Page\BasePage {
 	public function render(array $parameters): Output\Format {
 		try {
-			$parts = new Subscribing\HarnessedParts(
-				new Subscribing\UnreliableParts(
-					new Subscribing\CollectiveParts($this->database),
+			$parts = new Web\HarnessedParts(
+				new Web\UnreliableParts(
+					new Web\CollectiveParts($this->database),
 					$this->database
 				),
 				new Misc\LoggingCallback($this->logs)
 			);
-			/** @var \Remembrall\Model\Subscribing\Part $part */
+			/** @var \Remembrall\Model\Web\Part $part */
 			foreach($parts->iterate(new Dataset\FakeSelection('')) as $part) {
 				try {
 					$part->refresh();
