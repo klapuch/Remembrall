@@ -30,7 +30,7 @@ final class DefaultPage extends Page\BasePage {
 
 	public function submitDefault(array $subscription): void {
 		try {
-			(new Control\SubscribingForm(
+			(new Subscription\NewForm(
 				$this->url,
 				$this->csrf,
 				$this->backup
