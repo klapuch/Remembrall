@@ -10,7 +10,7 @@
 
 	<permission resource="subscriptions/delete" role="member"/>
 
-	<permission resource="subscriptions/edit/&lt;var&gt;" role="member"/>
+	<permission resource="subscription/edit/&lt;var&gt;" role="member"/>
 
 	<permission resource="subscription" role="member"/>
 	<permission resource="subscription/default" role="member"/>
