@@ -7,8 +7,8 @@
 		<exec executable="vendor/bin/parallel-lint" logoutput="true" passthru="true" checkreturn="true">
 			<arg value="-e"/>
 			<arg value="php,phpt"/>
-			<arg path="App" />
-			<arg path="Tests" />
+			<arg path="App"/>
+			<arg path="Tests"/>
 		</exec>
 	</target>
 
