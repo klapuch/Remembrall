@@ -11,7 +11,7 @@ use Nette\Mail;
  */
 final class EmailSubscription implements Subscription {
 	private const SENDER = 'Remembrall <remembrall@remembrall.org>';
-	private const TEMPLATES = __DIR__ . '/../../Messages/Subscribing',
+	private const TEMPLATES = __DIR__ . '/../../Messages/Subscription',
 		SUBJECT = self::TEMPLATES . '/subject.xsl',
 		CONTENT = self::TEMPLATES . '/content.xsl',
 		SCHEMA = self::TEMPLATES . '/constraint.xsd';
