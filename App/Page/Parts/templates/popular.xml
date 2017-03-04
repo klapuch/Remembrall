@@ -19,7 +19,6 @@
 			</table>
 		</tables>
 		<tabs>
-			<tab href="all">All</tab>
 			<tab href="popular" state="active">Popular</tab>
 			<tab href="unreliable">Unreliable</tab>
 		</tabs>

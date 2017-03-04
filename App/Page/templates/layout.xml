@@ -20,7 +20,7 @@
 	<body>
 		<menu name="main">
 			<item>
-				<link href="parts/all">Parts</link>
+				<link href="parts/popular">Parts</link>
 			</item>
 			<item>
 				<link href="subscriptions">Subscriptions</link>
