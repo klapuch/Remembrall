@@ -69,6 +69,15 @@ final class Pager extends Tester\TestCase {
 				</pagination>',
 				'count(//li[@class="next"]/a[@href="?page=2"])=1',
 			],
+			[
+				'<pagination>
+					<first>1</first>
+					<last>3</last>
+					<next>3</next>
+					<current>2</current>
+				</pagination>',
+				'count(//li[@class="next"])=0',
+			],
 		];
 	}
 }

@@ -18,7 +18,7 @@
 							</xsl:call-template>
 						</li>
 					</xsl:if>
-					<xsl:if test="last!=current">
+					<xsl:if test="last!=next">
 						<li class="next">
 							<xsl:call-template name="link" mode="pager">
 								<xsl:with-param name="per_page" select="$per_page"/>
