@@ -7,7 +7,7 @@ use Klapuch\Output;
 use Klapuch\Storage;
 use Klapuch\Time;
 use Klapuch\Uri;
-use Remembrall\Control;
+use Remembrall\Control\Subscription;
 use Remembrall\Model\Misc;
 use Remembrall\Model\Subscribing;
 use Remembrall\Page;
@@ -18,7 +18,7 @@ final class DefaultPage extends Page\BasePage {
 		$dom->loadXML(
 			sprintf(
 				'<forms><form name="subscribing">%s</form></forms>',
-				(new Control\SubscribingForm(
+				(new Subscription\NewForm(
 					$this->url,
 					$this->csrf,
 					$this->backup

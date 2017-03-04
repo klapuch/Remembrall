@@ -4,7 +4,7 @@ namespace Remembrall\Page\Sign;
 
 use Klapuch\Access;
 use Klapuch\Output;
-use Remembrall\Control;
+use Remembrall\Control\Sign;
 use Remembrall\Page;
 
 final class InPage extends Page\BasePage {
@@ -13,7 +13,7 @@ final class InPage extends Page\BasePage {
 		$dom->loadXML(
 			sprintf(
 				'<forms><form name="in">%s</form></forms>',
-				(new Control\SignInForm(
+				(new Sign\InForm(
 					$this->url,
 					$this->csrf,
 					$this->backup
@@ -25,7 +25,7 @@ final class InPage extends Page\BasePage {
 
 	public function submitIn(array $credentials): void {
 		try {
-			$user = (new Control\SignInForm(
+			$user = (new Sign\InForm(
 				$this->url,
 				$this->csrf,
 				$this->backup

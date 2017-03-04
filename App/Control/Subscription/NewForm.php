@@ -1,11 +1,12 @@
 <?php
 declare(strict_types = 1);
-namespace Remembrall\Control;
+namespace Remembrall\Control\Subscription;
 
+use Remembrall\Control;
 use Klapuch\Form;
 use Klapuch\Validation;
 
-final class SubscribingForm extends HarnessedForm {
+final class NewForm extends Control\HarnessedForm {
 	private const COLUMNS = 5;
 	private const ACTION = '/subscription/default';
 

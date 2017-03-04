@@ -11,7 +11,7 @@ abstract class HarnessedForm {
 	protected $csrf;
 	protected $backup;
 
-	final public function __construct(
+	public function __construct(
 		Uri\Uri $url,
 		Csrf\Csrf $csrf,
 		Form\Backup $backup

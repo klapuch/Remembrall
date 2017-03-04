@@ -1,11 +1,12 @@
 <?php
 declare(strict_types = 1);
-namespace Remembrall\Control;
+namespace Remembrall\Control\Sign;
 
+use Remembrall\Control;
 use Klapuch\Form;
 use Klapuch\Validation;
 
-final class SignInForm extends HarnessedForm {
+final class InForm extends Control\HarnessedForm {
 	private const COLUMNS = 4;
 	private const ACTION = '/sign/in';
 

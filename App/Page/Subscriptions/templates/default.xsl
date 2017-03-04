@@ -39,6 +39,9 @@
 				<xsl:apply-templates select="/page/body/confirmations">
 					<xsl:with-param name="id" select="id"/>
 				</xsl:apply-templates>
+				<a href="{$base_url}/subscription/edit/{id}" class="btn btn-primary btn-sm" role="button" title="Edit">
+					<span class="glyphicon glyphicon-edit" aria-hidden="true"/>
+				</a>
 			</td>
 		</tr>
 	</xsl:template>
