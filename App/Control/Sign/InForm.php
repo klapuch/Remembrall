@@ -13,6 +13,7 @@ final class InForm extends Control\HarnessedForm {
 	protected function create(): Form\Control {
 		return new Form\RawForm(
 			[
+				'name' => 'in',
 				'method' => 'POST',
 				'action' => $this->url->reference() . self::ACTION,
 				'role' => 'form',

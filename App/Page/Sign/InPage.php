@@ -12,7 +12,7 @@ final class InPage extends Page\BasePage {
 		$dom = new \DOMDocument();
 		$dom->loadXML(
 			sprintf(
-				'<forms><form name="in">%s</form></forms>',
+				'<forms>%s</forms>',
 				(new Sign\InForm(
 					$this->url,
 					$this->csrf,

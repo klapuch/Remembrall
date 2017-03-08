@@ -18,7 +18,7 @@ final class DefaultPage extends Page\BasePage {
 		$dom = new \DOMDocument();
 		$dom->loadXML(
 			sprintf(
-				'<forms><form name="subscribing">%s</form></forms>',
+				'<forms>%s</forms>',
 				(new Subscription\NewForm(
 					$this->url,
 					$this->csrf,
