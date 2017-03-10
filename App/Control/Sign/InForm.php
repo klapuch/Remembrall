@@ -8,12 +8,13 @@ use Remembrall\Control;
 
 final class InForm extends Control\HarnessedForm {
 	private const COLUMNS = 4;
-	private const ACTION = '/sign/in';
+	private const ACTION = '/sign/in',
+		NAME = 'in';
 
 	protected function create(): Form\Control {
 		return new Form\RawForm(
 			[
-				'name' => 'in',
+				'name' => self::NAME,
 				'method' => 'POST',
 				'action' => $this->url->reference() . self::ACTION,
 				'role' => 'form',
