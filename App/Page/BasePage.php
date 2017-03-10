@@ -85,14 +85,14 @@ abstract class BasePage {
 					sprintf(
 						'<user id="%d" %s/>',
 						$this->user->id(),
-						(new Markup\HtmlAttributes(
+						(new Markup\ConcatenatedAttribute(
 							...array_map(
 								function(string $attribute, string $value) {
-									return new Markup\HtmlAttribute($attribute, $value);
+									return new Markup\SafeAttribute($attribute, $value);
 								},
 								array_keys($properties), $properties
 							)
-						))->pairs()
+						))->pair()
 					)
 				),
 				new \SimpleXMLElement(
