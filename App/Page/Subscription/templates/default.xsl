@@ -6,7 +6,7 @@
 
 	<xsl:template match="page">
 		<h1><xsl:apply-templates select="body/header[@level = 1]"/></h1>
-		<xsl:apply-templates select="forms/form[@name='subscribing']"/>
+		<xsl:apply-templates select="forms/form[@name='new']"/>
 	</xsl:template>
 
 </xsl:stylesheet>
