@@ -24,7 +24,7 @@ final class NewForm extends Control\HarnessedForm {
 		parent::__construct($backup);
 	}
 
-	protected function create(): Form\Control {
+	protected function form(): Form\Control {
 		return new Form\RawForm(
 			[
 				'name' => self::NAME,

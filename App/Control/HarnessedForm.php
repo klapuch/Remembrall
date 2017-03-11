@@ -14,18 +14,18 @@ abstract class HarnessedForm {
 	}
 
 	final public function render(): string {
-		return $this->create()->render();
+		return $this->form()->render();
 	}
 
 	/**
 	 * @return mixed
 	 */
 	final public function submit(callable $onSuccess) {
-		$this->create()->validate();
+		$this->form()->validate();
 		$result = $onSuccess();
 		$this->backup->drop();
 		return $result;
 	}
 
-	abstract protected function create(): Form\Control;
+	abstract protected function form(): Form\Control;
 }
