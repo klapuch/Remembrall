@@ -7,17 +7,9 @@ use Klapuch\Form;
 use Klapuch\Uri;
 
 abstract class HarnessedForm {
-	protected $url;
-	protected $csrf;
 	protected $backup;
 
-	final public function __construct(
-		Uri\Uri $url,
-		Csrf\Csrf $csrf,
-		Form\Backup $backup
-	) {
-		$this->url = $url;
-		$this->csrf = $csrf;
+	public function __construct(Form\Backup $backup) {
 		$this->backup = $backup;
 	}
 
