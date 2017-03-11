@@ -64,6 +64,17 @@ final class StoredSubscription implements Subscription {
 	}
 
 	public function print(Output\Format $format): Output\Format {
-		return $format->with('id', $this->id);
+		$subscription = (new Storage\ParameterizedQuery(
+			$this->database,
+			"SELECT subscriptions.id, SUBSTRING(interval FROM '[0-9]+')::INT / 60 AS interval, page_url AS url, expression
+			FROM subscriptions
+			INNER JOIN parts ON subscriptions.part_id = parts.id
+			WHERE subscriptions.id IS NOT DISTINCT FROM ?",
+			[$this->id]
+		))->row();
+		return $format->with('id', $subscription['id'])
+			->with('interval', $subscription['interval'])
+			->with('url', $subscription['url'])
+			->with('expression', $subscription['expression']);
 	}
 }

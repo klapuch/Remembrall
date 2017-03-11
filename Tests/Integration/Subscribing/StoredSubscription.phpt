@@ -119,10 +119,18 @@ final class StoredSubscription extends TestCase\Database {
 		Assert::same('facedown snap', $statement->fetch()['snapshot']);
 	}
 
-	public function testPrintingId() {
+	public function testPrintingAll() {
+		$this->database->exec(
+			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
+			(1, 111, 3, 'PT1980S', '2000-01-01', 'abc_snap')"
+		);
+		$this->database->exec(
+			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
+			(3, 'www.google.com', '//p', 'google content', 'google snap')"
+		);
 		$subscription = new Subscribing\StoredSubscription(1, $this->database);
 		Assert::same(
-			'|id|1|',
+			'|id|1||interval|33||url|www.google.com||expression|//p|',
 			$subscription->print(new Output\FakeFormat(''))->serialization()
 		);
 	}
