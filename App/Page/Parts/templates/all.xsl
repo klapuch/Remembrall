@@ -10,7 +10,7 @@
 
 	<xsl:template match="page">
 		<xsl:apply-templates select="body/tabs" mode="parts"/>
-		<h1><xsl:apply-templates select="body/header[@level = 1]"/></h1>
+		<h1><xsl:apply-templates select="body/header[@level=1]"/></h1>
 		<xsl:apply-templates select="body/selects/select[@purpose='pagination']" mode="pagination">
 			<xsl:with-param name="per_page" select="request/get/per_page"/>
 		</xsl:apply-templates>

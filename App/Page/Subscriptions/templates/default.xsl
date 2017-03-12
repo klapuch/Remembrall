@@ -6,7 +6,7 @@
 	<xsl:import href="../../components/direction.xsl"/>
 
 	<xsl:template match="page">
-		<h1><xsl:apply-templates select="body/header[@level = 1]"/></h1>
+		<h1><xsl:apply-templates select="body/header[@level=1]"/></h1>
 		<xsl:apply-templates select="subscriptions"/>
 	</xsl:template>
 
