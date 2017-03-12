@@ -58,6 +58,7 @@ try {
 		new Output\MergedXml($xml, ...$target->template($parameters))
 	))->render(['base_url' => $url->reference()]);
 } catch(Throwable $ex) {
+	throw $ex;
 	$logs->put(
 		new Log\PrettyLog(
 			$ex,
