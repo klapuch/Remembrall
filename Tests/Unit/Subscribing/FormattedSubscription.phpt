@@ -40,6 +40,17 @@ final class FormattedSubscription extends Tester\TestCase {
 			))->print(new Output\ArrayFormat(['last_update' => '2017-07-04 12:22:40.533306']))->serialization()
 		);
 	}
+
+	public function testFormattingIntervalToHumanReadableForm() {
+		Assert::same(
+			'33 minutes',
+			(new Subscribing\FormattedSubscription(
+				new Subscribing\FakeSubscription(),
+				new Texy\Texy(),
+				new Dindent\Indenter()
+			))->print(new Output\ArrayFormat(['interval' => 'PT1980S']))->serialization()
+		);
+	}
 }
 
 (new FormattedSubscription())->run();
