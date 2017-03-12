@@ -32,13 +32,7 @@ final class ConstantSubscription implements Subscription {
 			function(Output\Format $format, string $name): Output\Format {
 				return $format->with($name, $this->subscription[$name]);
 			},
-			$format->with(
-				'interval',
-				new Time\TimeInterval(
-					new \DateTimeImmutable($this->subscription['visited_at']),
-					new \DateInterval($this->subscription['interval'])
-				)
-			)
+			$format
 		);
 	}
 }

@@ -16,7 +16,7 @@ require __DIR__ . '/../../bootstrap.php';
 final class ConstantSubscription extends Tester\TestCase {
 	public function testPrintingFromPassedPart() {
 		Assert::same(
-			'|prev|xxx||interval|5 minutes||visited_at|2015-01-01||interval|PT5M||expression|//p|',
+			'|prev|xxx||visited_at|2015-01-01||interval|PT5M||expression|//p|',
 			(new Subscribing\ConstantSubscription(
 				new Subscribing\FakeSubscription(),
 				[
