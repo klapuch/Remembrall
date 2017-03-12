@@ -2,6 +2,7 @@
 <project name="Remembrall" default="check">
 
 	<target name="check" depends="lint, phpcpd, phpstan, phpcs, tests, cgi-tests"/>
+	<target name="ci" depends="lint, phpcpd, phpstan, phpcs, tests, cgi-tests, coverage"/>
 
 	<target name="lint">
 		<exec executable="vendor/bin/parallel-lint" logoutput="true" passthru="true" checkreturn="true">
@@ -91,9 +92,9 @@
 			<arg path="Tests/php.ini"/>
 			<arg path="Tests/"/>
 			<arg value="--coverage"/>
-			<arg value="coverage.html"/>
+			<arg value="coverage.xml"/>
 			<arg value="--coverage-src"/>
-			<arg path="App/Model/"/>
+			<arg path="App/"/>
 		</exec>
 	</target>
 

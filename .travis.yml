@@ -27,8 +27,7 @@ after_script:
       && php coveralls.phar --verbose --config Tests/.coveralls.yml
 
 script:
-  - ./vendor/bin/phing
-  - ./vendor/bin/tester -p phpdbg -c Tests/php.ini -o console -s --coverage coverage.xml --coverage-src App Tests
+  - ./vendor/bin/phing ci
 
 after_failure:
   - for i in $(find Tests -name \*.actual); do echo "--- $i"; cat $i; echo; echo; done
