@@ -46,14 +46,14 @@ final class InForm extends Control\HarnessedForm {
 						$this->backup,
 						new Validation\ChainedRule(
 							new Validation\FriendlyRule(
-								new Validation\EmailRule(),
-								'Email must be valid'
-							),
-							new Validation\FriendlyRule(
 								new Validation\NegateRule(
 									new Validation\EmptyRule()
 								),
 								'Email must be filled'
+							),
+							new Validation\FriendlyRule(
+								new Validation\EmailRule(),
+								'Email must be valid'
 							)
 						)
 					),
