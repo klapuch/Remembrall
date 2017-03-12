@@ -21,10 +21,10 @@ final class EditForm extends BootstrapForm {
 		Csrf\Csrf $csrf,
 		Form\Backup $backup
 	) {
+		parent::__construct($backup);
 		$this->subscription = $subscription;
 		$this->url = $url;
 		$this->csrf = $csrf;
-		parent::__construct($backup);
 	}
 
 	protected function form(): Form\Control {

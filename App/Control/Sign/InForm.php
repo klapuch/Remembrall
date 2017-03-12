@@ -19,9 +19,9 @@ final class InForm extends Control\HarnessedForm {
 		Csrf\Csrf $csrf,
 		Form\Backup $backup
 	) {
+		parent::__construct($backup);
 		$this->url = $url;
 		$this->csrf = $csrf;
-		parent::__construct($backup);
 	}
 
 	protected function form(): Form\Control {
