@@ -6,7 +6,6 @@
 	</rule>
 
 	<rule ref="Squiz.ControlStructures.ControlSignature.SpaceAfterKeyword"/>
-	<rule name="Generic.Formatting.SpaceAfterCast.NoSpace"/>
 
 	<rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml">
 		<exclude name="SlevomatCodingStandard.TypeHints.DeclareStrictTypes.IncorrectWhitespaceBetweenOpenTagAndDeclare"/>
