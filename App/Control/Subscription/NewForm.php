@@ -36,7 +36,7 @@ final class NewForm extends Control\HarnessedForm {
 			new Form\CsrfInput($this->csrf),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
-					new Form\PersistentInput(
+					new Form\DefaultInput(
 						[
 							'type' => 'text',
 							'name' => 'url',
@@ -58,7 +58,7 @@ final class NewForm extends Control\HarnessedForm {
 			),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
-					new Form\PersistentInput(
+					new Form\DefaultInput(
 						[
 							'type' => 'text',
 							'name' => 'expression',
@@ -80,7 +80,7 @@ final class NewForm extends Control\HarnessedForm {
 			),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
-					new Form\PersistentInput(
+					new Form\DefaultInput(
 						[
 							'type' => 'number',
 							'name' => 'interval',
@@ -108,7 +108,7 @@ final class NewForm extends Control\HarnessedForm {
 				self::COLUMNS
 			),
 			new Form\BootstrapInput(
-				new Form\PersistentInput(
+				new Form\DefaultInput(
 					[
 						'type' => 'submit',
 						'name' => 'act',

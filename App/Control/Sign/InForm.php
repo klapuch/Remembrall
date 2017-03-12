@@ -36,7 +36,7 @@ final class InForm extends Control\HarnessedForm {
 			new Form\CsrfInput($this->csrf),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
-					new Form\PersistentInput(
+					new Form\DefaultInput(
 						[
 							'type' => 'email',
 							'name' => 'email',
@@ -63,7 +63,7 @@ final class InForm extends Control\HarnessedForm {
 			),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
-					new Form\PersistentInput(
+					new Form\DefaultInput(
 						[
 							'type' => 'password',
 							'name' => 'password',
@@ -83,7 +83,7 @@ final class InForm extends Control\HarnessedForm {
 				self::COLUMNS
 			),
 			new Form\BootstrapInput(
-				new Form\PersistentInput(
+				new Form\DefaultInput(
 					[
 						'type' => 'submit',
 						'name' => 'act',
