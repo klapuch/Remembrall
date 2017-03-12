@@ -22,6 +22,6 @@ final class MatchingExpression implements Expression {
 	}
 
 	public function __toString(): string {
-		return (string)$this->origin;
+		return (string) $this->origin;
 	}
 }

@@ -48,7 +48,7 @@ final class FrugalPage implements Page {
 	 * @return bool
 	 */
 	private function outdated(Uri\Uri $uri): bool {
-		return (bool)(new Storage\ParameterizedQuery(
+		return (bool) (new Storage\ParameterizedQuery(
 			$this->database,
 			"SELECT 1
 			FROM pages
@@ -67,7 +67,7 @@ final class FrugalPage implements Page {
 	 * @return bool
 	 */
 	private function recorded(Uri\Uri $uri): bool {
-		return (bool)(new Storage\ParameterizedQuery(
+		return (bool) (new Storage\ParameterizedQuery(
 			$this->database,
 			'SELECT 1
 			FROM pages

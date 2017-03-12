@@ -46,7 +46,7 @@ final class ExistingPart implements Part {
 	 * @return bool
 	 */
 	private function exists(): bool {
-		return (bool)(new Storage\ParameterizedQuery(
+		return (bool) (new Storage\ParameterizedQuery(
 			$this->database,
 			'SELECT 1
 			FROM parts

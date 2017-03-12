@@ -48,7 +48,7 @@ final class FormattedSubscription implements Subscription {
 				return (new \DateTime($lastUpdate))->format('Y-m-d H:i');
 			})
 			->adjusted('interval', function(string $interval): string {
-				return (string)new Time\TimeInterval(
+				return (string) new Time\TimeInterval(
 					new \DateTimeImmutable(), new \DateInterval($interval)
 				);
 			});

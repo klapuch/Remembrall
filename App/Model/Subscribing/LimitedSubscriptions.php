@@ -52,7 +52,7 @@ final class LimitedSubscriptions implements Subscriptions {
 	 * @return bool
 	 */
 	private function overstepped(): bool {
-		return (bool)(new Storage\ParameterizedQuery(
+		return (bool) (new Storage\ParameterizedQuery(
 			$this->database,
 			'SELECT 1
 			FROM parts

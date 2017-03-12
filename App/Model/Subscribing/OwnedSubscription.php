@@ -69,7 +69,7 @@ final class OwnedSubscription implements Subscription {
 	 * @return bool
 	 */
 	private function owned(): bool {
-		return (bool)(new Storage\ParameterizedQuery(
+		return (bool) (new Storage\ParameterizedQuery(
 			$this->database,
 			'SELECT 1
 			FROM subscriptions

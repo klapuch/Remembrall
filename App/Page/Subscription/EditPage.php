@@ -10,7 +10,7 @@ use Remembrall\Page;
 
 final class EditPage extends Page\BasePage {
 	public function render(array $parameters): Output\Format {
-		$id = (int)$parameters[0];
+		$id = (int) $parameters[0];
 		$dom = new \DOMDocument();
 		$dom->loadXML(
 			sprintf(
@@ -28,7 +28,7 @@ final class EditPage extends Page\BasePage {
 
 	public function submitEdit(array $subscription, array $parameters): void {
 		try {
-			$id = (int)$parameters[0];
+			$id = (int) $parameters[0];
 			(new Subscription\EditForm(
 				$this->subscription($id),
 				$this->url,

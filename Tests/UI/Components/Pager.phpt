@@ -24,7 +24,7 @@ final class Pager extends Tester\TestCase {
 		$xml = new \DOMDocument();
 		$xml->loadXML($input);
 		$output = new \DOMDocument();
-		$output->loadXML((string)$xslt->transformToXml($xml));
+		$output->loadXML((string) $xslt->transformToXml($xml));
 		Assert::true((new \DOMXPath($output))->evaluate($xpath));
 	}
 

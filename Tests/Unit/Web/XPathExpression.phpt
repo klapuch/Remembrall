@@ -16,7 +16,7 @@ final class XPathExpression extends Tester\TestCase {
 	public function testValidExpression() {
 		$expression = '//p';
 		Assert::same(
-			(string)new Web\XPathExpression(
+			(string) new Web\XPathExpression(
 				new Web\FakePage,
 				$expression
 			),
@@ -27,7 +27,7 @@ final class XPathExpression extends Tester\TestCase {
 	public function testAllowingInvalidExpression() {
 		$expression = '123';
 		Assert::same(
-			(string)new Web\XPathExpression(
+			(string) new Web\XPathExpression(
 				new Web\FakePage,
 				$expression
 			),
