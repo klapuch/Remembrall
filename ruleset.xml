@@ -21,9 +21,9 @@
 	</rule>
 
 	<rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint">
-		<exclude-pattern>*/Tests/Unit</exclude-pattern>
-		<exclude-pattern>*/Tests/Integration</exclude-pattern>
-		<exclude-pattern>*/Tests/UI</exclude-pattern>
+		<exclude-pattern>Tests/Unit</exclude-pattern>
+		<exclude-pattern>Tests/Integration</exclude-pattern>
+		<exclude-pattern>Tests/UI</exclude-pattern>
 	</rule>
 
 	<rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration">
