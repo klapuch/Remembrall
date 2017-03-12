@@ -2,9 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Control;
 
-use Klapuch\Csrf;
 use Klapuch\Form;
-use Klapuch\Uri;
 
 abstract class HarnessedForm {
 	protected $backup;

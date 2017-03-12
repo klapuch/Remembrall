@@ -6,7 +6,6 @@ use Klapuch\Csrf;
 use Klapuch\Form;
 use Klapuch\Uri;
 use Klapuch\Validation;
-use Remembrall\Control;
 
 final class NewForm extends Control\HarnessedForm {
 	private const COLUMNS = 5;
