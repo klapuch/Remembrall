@@ -88,27 +88,10 @@ final class DefaultPage extends Page\BasePage {
 						))->subscribe(
 							$url,
 							$subscription['expression'],
-							new Time\FutureInterval(
-								new Time\LimitedInterval(
-									new Time\TimeInterval(
-										new \DateTimeImmutable(),
-										new \DateInterval(
-											sprintf(
-												'PT%dM',
-												$subscription['interval']
-											)
-										)
-									),
-									[
-										new Time\TimeInterval(
-											new \DateTimeImmutable(),
-											new \DateInterval('PT30M')
-										),
-										new Time\TimeInterval(
-											new \DateTimeImmutable(),
-											new \DateInterval('PT9000M')
-										),
-									]
+							new Time\TimeInterval(
+								new \DateTimeImmutable(),
+								new \DateInterval(
+									sprintf('PT%dM', $subscription['interval'])
 								)
 							)
 						);
