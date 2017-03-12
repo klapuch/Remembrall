@@ -10,8 +10,8 @@ final class FakeExpression implements Expression {
 	private $match;
 
 	public function __construct(
-		?string $expression = null,
-		?\DOMNodeList $match = null
+		string $expression = null,
+		\DOMNodeList $match = null
 	) {
 		$this->expression = $expression;
 		$this->match = $match;
