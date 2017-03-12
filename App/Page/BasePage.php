@@ -64,8 +64,6 @@ abstract class BasePage {
 		}
 	}
 
-	abstract public function render(array $parameters): Output\Format;
-
 	/**
 	 * XML for layout
 	 * @param array $parameters
@@ -163,4 +161,6 @@ abstract class BasePage {
 			)
 		);
 	}
+
+	abstract public function render(array $parameters): Output\Format;
 }

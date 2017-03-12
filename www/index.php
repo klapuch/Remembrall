@@ -34,6 +34,7 @@ try {
 	$path = explode('/', $url->path());
 	$page = isset($path[0]) && $path[0] ? ucfirst($path[0]) : 'Default';
 	$resource = isset($path[1]) && $path[1] ? ucfirst($path[1]) : 'Default';
+	$parameters = array_slice($path, 2);
 	$class = sprintf('Remembrall\\Page\\%s\%sPage', $page, $resource);
 	/** @var \Remembrall\Page\BasePage $target */
 	$target = new $class(
@@ -49,12 +50,12 @@ try {
 	[$submit] = ['submit' . $resource];
 	$target->startup();
 	if($_SERVER['REQUEST_METHOD'] === 'POST' && method_exists($target, $submit))
-		$target->$submit($_POST);
+		$target->$submit($_POST, $parameters);
 	$xml = new \DOMDocument();
 	$xml->load(TEMPLATES . sprintf('/../%s/templates/%s.xml', $page, lcfirst($resource)));
 	echo (new Output\XsltTemplate(
 		TEMPLATES . sprintf('/../%s/templates/%s.xsl', $page, lcfirst($resource)),
-		new Output\MergedXml($xml, ...$target->template($_GET))
+		new Output\MergedXml($xml, ...$target->template($parameters))
 	))->render(['base_url' => $url->reference()]);
 } catch(Throwable $ex) {
 	$logs->put(
