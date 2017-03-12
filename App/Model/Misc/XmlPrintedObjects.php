@@ -28,10 +28,18 @@ final class XmlPrintedObjects implements Output\Format {
 		))->serialization();
 	}
 
+	/**
+	 * @param mixed $tag
+	 * @param mixed $content
+	 */
 	public function with($tag, $content = null): Output\Format {
 		throw new \Exception('Not implemented');
 	}
 
+	/**
+	 * @param mixed $tag
+	 * @param callable $content
+	 */
 	public function adjusted($tag, callable $adjustment): Output\Format {
 		throw new \Exception('Not implemented');
 	}

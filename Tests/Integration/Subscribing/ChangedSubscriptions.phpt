@@ -110,7 +110,7 @@ final class ChangedSubscriptions extends TestCase\Database {
 		Assert::null($subscriptions->current());
 	}
 
-	protected function prepareDatabase() {
+	protected function prepareDatabase(): void {
 		$this->purge(['parts', 'subscriptions', 'users', 'part_visits']);
 	}
 }

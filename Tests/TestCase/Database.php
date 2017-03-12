@@ -9,7 +9,7 @@ abstract class Database extends Mockery {
 	/** @var \PDO */
 	protected $database;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 		Tester\Environment::lock('database', __DIR__ . '/../Temporary');
 		$credentials = parse_ini_file(__DIR__ . '/.database.ini');
@@ -21,7 +21,7 @@ abstract class Database extends Mockery {
 		$this->prepareDatabase();
 	}
 
-	protected function prepareDatabase() {
+	protected function prepareDatabase(): void {
 		/** Template method, suitable for overriding */
 	}
 
@@ -29,7 +29,7 @@ abstract class Database extends Mockery {
 	 * Truncate and restart sequences to the given tables
 	 * @param array $tables
 	 */
-	protected function purge(array $tables) {
+	protected function purge(array $tables): void {
 		$this->truncate($tables);
 		$this->restartSequence($tables);
 	}
@@ -38,7 +38,7 @@ abstract class Database extends Mockery {
 	 * Truncate the tables
 	 * @param array $tables
 	 */
-	final protected function truncate(array $tables) {
+	final protected function truncate(array $tables): void {
 		$this->database->exec(sprintf('TRUNCATE %s', implode(',', $tables)));
 	}
 
@@ -46,7 +46,7 @@ abstract class Database extends Mockery {
 	 * Restart sequences to the given tables
 	 * @param array $tables
 	 */
-	final protected function restartSequence(array $tables) {
+	final protected function restartSequence(array $tables): void {
 		foreach($tables as $table) {
 			$this->database->exec(
 				sprintf('ALTER SEQUENCE %s_id_seq RESTART', $table)

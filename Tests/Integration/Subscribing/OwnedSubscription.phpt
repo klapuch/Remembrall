@@ -98,7 +98,7 @@ final class OwnedSubscription extends TestCase\Database {
 		);
 	}
 
-	protected function prepareDatabase() {
+	protected function prepareDatabase(): void {
 		$this->purge(['subscriptions']);
 	}
 }

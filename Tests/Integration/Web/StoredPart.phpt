@@ -119,7 +119,7 @@ final class StoredPart extends TestCase\Database {
 	}
 
 
-	protected function prepareDatabase() {
+	protected function prepareDatabase(): void {
 		$this->purge(['parts']);
 	}
 }

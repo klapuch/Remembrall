@@ -91,7 +91,7 @@ final class UnreliableParts extends TestCase\Database {
 		Assert::null($parts->current());
 	}
 
-	protected function prepareDatabase() {
+	protected function prepareDatabase(): void {
 		$this->truncate(['parts', 'part_visits', 'subscriptions']);
 		$this->restartSequence(['parts', 'subscriptions']);
 	}

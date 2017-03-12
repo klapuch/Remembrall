@@ -117,7 +117,7 @@ final class FrugalPage extends TestCase\Database {
 		);
 	}
 
-	protected function prepareDatabase() {
+	protected function prepareDatabase(): void {
 		$this->truncate(['pages', 'page_visits']);
 	}
 }

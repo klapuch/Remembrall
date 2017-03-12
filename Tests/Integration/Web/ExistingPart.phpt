@@ -83,7 +83,7 @@ final class ExistingPart extends TestCase\Database {
 		);
 	}
 
-	protected function prepareDatabase() {
+	protected function prepareDatabase(): void {
 		$this->purge(['parts']);
 	}
 }

@@ -135,7 +135,7 @@ final class StoredSubscription extends TestCase\Database {
 		);
 	}
 
-	protected function prepareDatabase() {
+	protected function prepareDatabase(): void {
 		$this->purge(['subscriptions', 'notifications', 'parts']);
 	}
 }

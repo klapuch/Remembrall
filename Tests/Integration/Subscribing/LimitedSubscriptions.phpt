@@ -59,7 +59,7 @@ final class LimitedSubscriptions extends TestCase\Database {
 		))->subscribe(new Uri\FakeUri('url'), '//p', new Time\FakeInterval());
 	}
 
-	protected function prepareDatabase() {
+	protected function prepareDatabase(): void {
 		$this->purge(['parts', 'subscriptions']);
 	}
 }

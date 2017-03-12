@@ -68,7 +68,7 @@ final class PopularParts extends TestCase\Database {
 		Assert::null($parts->current());
 	}
 
-	protected function prepareDatabase() {
+	protected function prepareDatabase(): void {
 		$this->purge(['parts', 'subscriptions']);
 	}
 }

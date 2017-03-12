@@ -127,7 +127,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 		Assert::null($subscriptions->current());
 	}
 
-	protected function prepareDatabase() {
+	protected function prepareDatabase(): void {
 		$this->truncate(['parts', 'subscriptions']);
 		$this->restartSequence(['parts', 'subscriptions']);
 	}
