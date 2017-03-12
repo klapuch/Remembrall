@@ -19,7 +19,7 @@ final class DeletePage extends Page\BasePage {
 			))->cancel();
 			$this->flashMessage('Subscription has been deleted', 'success');
 			$this->redirect('subscriptions');
-		} catch(\Throwable $ex) {
+		} catch (\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
 			$this->redirect('subscriptions');
 		}

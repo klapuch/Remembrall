@@ -18,12 +18,12 @@ final class FakeParts implements Parts {
 	}
 
 	public function add(Part $part, Uri\Uri $uri, string $expression): void {
-		if($this->exception)
+		if ($this->exception)
 			throw $this->exception;
 	}
 
 	public function iterate(Dataset\Selection $selection): \Traversable {
-		if($this->exception)
+		if ($this->exception)
 			throw $this->exception;
 		return new \ArrayIterator($this->parts);
 	}

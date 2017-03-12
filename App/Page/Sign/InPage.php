@@ -39,7 +39,7 @@ final class InPage extends Page\BasePage {
 			$_SESSION['id'] = $user->id();
 			$this->flashMessage('You have been logged in', 'success');
 			$this->redirect('subscriptions');
-		} catch(\Throwable $ex) {
+		} catch (\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
 			$this->redirect('sign/in');
 		}

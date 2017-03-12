@@ -45,7 +45,7 @@ final class UnreliableParts implements Parts {
 				ORDER BY visited_at ASC"
 			)
 		))->rows();
-		foreach($parts as $part) {
+		foreach ($parts as $part) {
 			$url = new Uri\ValidUrl($part['url']);
 			$page = new FrugalPage(
 				$url,

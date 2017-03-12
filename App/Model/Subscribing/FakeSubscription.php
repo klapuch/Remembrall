@@ -13,17 +13,17 @@ final class FakeSubscription implements Subscription {
 	}
 
 	public function cancel(): void {
-		if($this->exception)
+		if ($this->exception)
 			throw $this->exception;
 	}
 
 	public function edit(Time\Interval $interval): void {
-		if($this->exception)
+		if ($this->exception)
 			throw $this->exception;
 	}
 
 	public function notify(): void {
-		if($this->exception)
+		if ($this->exception)
 			throw $this->exception;
 	}
 

@@ -20,19 +20,19 @@ final class ExistingPart implements Part {
 	}
 
 	public function content(): string {
-		if(!$this->exists())
+		if (!$this->exists())
 			throw new \Remembrall\Exception\NotFoundException('The part does not exist');
 		return $this->origin->content();
 	}
 
 	public function snapshot(): string {
-		if(!$this->exists())
+		if (!$this->exists())
 			throw new \Remembrall\Exception\NotFoundException('The part does not exist');
 		return $this->origin->snapshot();
 	}
 
 	public function refresh(): Part {
-		if(!$this->exists())
+		if (!$this->exists())
 			throw new \Remembrall\Exception\NotFoundException('The part does not exist');
 		return $this->origin->refresh();
 	}

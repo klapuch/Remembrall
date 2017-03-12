@@ -20,7 +20,7 @@ final class LoggingCallback implements Callback {
 	public function invoke(callable $callback, array $args = []) {
 		try {
 			return call_user_func_array($callback, $args);
-		} catch(\Throwable $ex) {
+		} catch (\Throwable $ex) {
 			$this->logs->put(
 				new Log\PrettyLog(
 					$ex,

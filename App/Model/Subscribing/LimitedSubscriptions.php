@@ -32,7 +32,7 @@ final class LimitedSubscriptions implements Subscriptions {
 		string $expression,
 		Time\Interval $interval
 	): void {
-		if($this->overstepped()) {
+		if ($this->overstepped()) {
 			throw new \OverflowException(
 				sprintf(
 					'You have reached the limit of %d subscribed parts',

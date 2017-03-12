@@ -45,7 +45,7 @@ abstract class BasePage {
 
 	public function startup(): void {
 		$this->user = new Access\FakeUser(0, ['role' => 'guest']);
-		if(isset($_SESSION['id'])) {
+		if (isset($_SESSION['id'])) {
 			$this->user = new Access\CachedUser(
 				new Access\RegisteredUser($_SESSION['id'], $this->database)
 			);
@@ -58,7 +58,7 @@ abstract class BasePage {
 				)
 			)
 		);
-		if(!$role->allowed($this->url->path())) {
+		if (!$role->allowed($this->url->path())) {
 			$this->flashMessage('You don\'t have a permission to request the page', 'danger');
 			$this->redirect('sign/in');
 		}
@@ -142,7 +142,7 @@ abstract class BasePage {
 	 * @throws \Exception
 	 */
 	final protected function protect(): void {
-		if($this->csrf->abused())
+		if ($this->csrf->abused())
 			throw new \Exception('Timeout');
 	}
 

@@ -21,9 +21,9 @@ final class FrugalPage implements Page {
 	}
 
 	public function content(): \DOMDocument {
-		if(!$this->recorded($this->uri))
+		if (!$this->recorded($this->uri))
 			return $this->origin->content();
-		elseif($this->outdated($this->uri))
+		elseif ($this->outdated($this->uri))
 			return $this->refresh()->content();
 		$dom = new DOM();
 		$dom->loadHTML(

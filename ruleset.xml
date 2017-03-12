@@ -5,6 +5,7 @@
 		<exclude name="Squiz.Commenting"/>
 	</rule>
 
+	<rule ref="Squiz.ControlStructures.ControlSignature.SpaceAfterKeyword"/>
 	<rule name="Generic.Formatting.SpaceAfterCast.NoSpace"/>
 
 	<rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml">

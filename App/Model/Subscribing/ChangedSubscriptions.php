@@ -46,7 +46,7 @@ final class ChangedSubscriptions implements Subscriptions {
 				AND last_update + INTERVAL '1 SECOND' * SUBSTRING(interval FROM '[0-9]+')::INT < NOW()"
 			)
 		))->rows();
-		foreach($subscriptions as $subscription) {
+		foreach ($subscriptions as $subscription) {
 			yield new EmailSubscription(
 				new StoredSubscription($subscription['id'], $this->database),
 				$this->mailer,

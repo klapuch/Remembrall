@@ -47,7 +47,7 @@ final class CollectiveParts implements Parts {
 				ORDER BY id ASC'
 			)
 		))->rows();
-		foreach($parts as $part) {
+		foreach ($parts as $part) {
 			yield new ConstantPart(
 				new FakePart(),
 				$part['content'],

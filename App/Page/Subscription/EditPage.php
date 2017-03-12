@@ -48,7 +48,7 @@ final class EditPage extends Page\BasePage {
 			});
 			$this->flashMessage('Subscription has been edited', 'success');
 			$this->redirect('subscriptions');
-		} catch(\Throwable $ex) {
+		} catch (\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
 			$this->redirect($this->url->path());
 		}

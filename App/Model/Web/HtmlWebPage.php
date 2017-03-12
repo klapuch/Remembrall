@@ -24,7 +24,7 @@ final class HtmlWebPage implements Page {
 			$dom = new DOM();
 			$dom->loadHTML($response->body());
 			return $dom;
-		} catch(\Throwable $ex) {
+		} catch (\Throwable $ex) {
 			throw new \Remembrall\Exception\NotFoundException(
 				'Page is unreachable. Does the URL exist?',
 				$ex->getCode(),

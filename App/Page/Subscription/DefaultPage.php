@@ -100,7 +100,7 @@ final class DefaultPage extends Page\BasePage {
 			});
 			$this->flashMessage('Subscription has been added', 'success');
 			$this->redirect('subscriptions');
-		} catch(\Throwable $ex) {
+		} catch (\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
 			$this->redirect('subscription');
 		}

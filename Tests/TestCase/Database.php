@@ -47,7 +47,7 @@ abstract class Database extends Mockery {
 	 * @param array $tables
 	 */
 	final protected function restartSequence(array $tables): void {
-		foreach($tables as $table) {
+		foreach ($tables as $table) {
 			$this->database->exec(
 				sprintf('ALTER SEQUENCE %s_id_seq RESTART', $table)
 			);

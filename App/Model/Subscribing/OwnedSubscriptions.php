@@ -43,7 +43,7 @@ final class OwnedSubscriptions implements Subscriptions {
 					$url->reference(),
 				]
 			))->execute();
-		} catch(\Klapuch\Storage\UniqueConstraint $ex) {
+		} catch (\Klapuch\Storage\UniqueConstraint $ex) {
 			throw new \Remembrall\Exception\DuplicateException(
 				sprintf(
 					'"%s" expression on "%s" page is already subscribed by you',
@@ -74,7 +74,7 @@ final class OwnedSubscriptions implements Subscriptions {
 			),
 			$selection->criteria([$this->owner->id()])
 		))->rows();
-		foreach($subscriptions as $subscription) {
+		foreach ($subscriptions as $subscription) {
 			yield new ConstantSubscription(
 				new StoredSubscription($subscription['id'], $this->database),
 				$subscription
