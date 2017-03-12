@@ -2,44 +2,49 @@
 declare(strict_types = 1);
 namespace Remembrall\Control\Subscription;
 
-use Remembrall\Subscribing;
-use Remembrall\Control;
-use Klapuch\Markup;
+use Klapuch\Csrf;
 use Klapuch\Form;
+use Klapuch\Output;
+use Klapuch\Uri;
 use Klapuch\Validation;
+use Remembrall\Model\Subscribing;
 
-final class EditForm extends Control\HarnessedForm {
-	private const COLUMNS = 5;
-	private const ACTION = '/subscription/edit',
-		NAME = 'edit';
+final class EditForm extends BootstrapForm {
+	private const NAME = 'edit';
+	private $url;
+	private $csrf;
+	private $subscription;
 
-	protected function create(): Form\Control {
+	public function __construct(
+		Subscribing\Subscription $subscription,
+		Uri\Uri $url,
+		Csrf\Csrf $csrf,
+		Form\Backup $backup
+	) {
+		$this->subscription = $subscription;
+		$this->url = $url;
+		$this->csrf = $csrf;
+		parent::__construct($backup);
+	}
+
+	protected function form(): Form\Control {
+		$xml = new \DOMDocument();
+		$xml->loadXML($this->subscription->print(new Output\Xml([], self::NAME))->serialization());
 		return new Form\RawForm(
-			new Markup\ConcatenatedAttribute(
-				new Markup\SafeAttribute('name', self::NAME),
-				new Markup\SafeAttribute('method', 'POST'),
-				new Markup\SafeAttribute('action', $this->url->reference() . self::ACTION),
-				new Markup\SafeAttribute('role', 'form'),
-				new Markup\SafeAttribute('class', 'form-horizontal')
-			),
+			self::ATTRIBUTES + [
+				'name' => self::NAME,
+				'action' => $this->url->reference() . '/' . $this->url->path(),
+			],
 			new Form\CsrfInput($this->csrf),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
-					new Form\PersistentInput(
-						[
-							'type' => 'text',
-							'name' => 'url',
-							'class' => 'form-control',
-							'required' => 'required',
-							'value' => $_GET['url'] ?? '',
+					new Form\XmlReloadedInput(
+						self::URL_ATTRIBUTES + [
+							'disabled' => 'true',
 						],
+						$xml,
 						$this->backup,
-						new Validation\FriendlyRule(
-							new Validation\NegateRule(
-								new Validation\EmptyRule()
-							),
-							'Url must be filled'
-						)
+						$this->urlRule()
 					),
 					new Form\LinkedLabel('Url', 'url')
 				),
@@ -47,21 +52,13 @@ final class EditForm extends Control\HarnessedForm {
 			),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
-					new Form\PersistentInput(
-						[
-							'type' => 'text',
-							'name' => 'expression',
-							'class' => 'form-control',
-							'required' => 'required',
-							'value' => $_GET['expression'] ?? '',
+					new Form\XmlReloadedInput(
+						self::EXPRESSION_ATTRIBUTES + [
+							'disabled' => 'true',
 						],
+						$xml,
 						$this->backup,
-						new Validation\FriendlyRule(
-							new Validation\NegateRule(
-								new Validation\EmptyRule()
-							),
-							'Expression must be filled'
-						)
+						$this->expressionRule()
 					),
 					new Form\LinkedLabel('Expression', 'expression')
 				),
@@ -69,40 +66,24 @@ final class EditForm extends Control\HarnessedForm {
 			),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
-					new Form\PersistentInput(
-						[
-							'type' => 'number',
-							'name' => 'interval',
-							'class' => 'form-control',
-							'min' => '30',
-							'max' => '1439',
-							'required' => 'required',
-						],
+					new Form\XmlReloadedInput(
+						self::INTERVAL_ATTRIBUTES,
+						$xml,
 						$this->backup,
-						new Validation\ChainedRule(
-							new Validation\FriendlyRule(
-								new Validation\NegateRule(
-									new Validation\EmptyRule()
-								),
-								'Interval must be filled'
-							),
-							new Validation\FriendlyRule(
-								new Validation\RangeRule(30, 1439),
-								'Interval must be greater than 30'
-							)
-						)
+						$this->intervalRule()
 					),
 					new Form\LinkedLabel('Interval', 'interval')
 				),
 				self::COLUMNS
 			),
 			new Form\BootstrapInput(
-				new Form\XslInput([
-					new Form\StaticXslAttribute('type', 'submit'),
-					new Form\StaticXslAttribute('name', 'act'),
-					new Form\StaticXslAttribute('class', 'form-control'),
-					new Form\DynamicXslAttribute('value', '/page/head/title')
-				]),
+				new Form\DefaultInput(
+					self::SUBMIT_ATTRIBUTES + [
+						'value' => 'Edit',
+					],
+					$this->backup,
+					new Validation\PassiveRule()
+				),
 				self::COLUMNS
 			)
 		);

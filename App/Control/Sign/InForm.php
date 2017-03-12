@@ -91,7 +91,7 @@ final class InForm extends Control\HarnessedForm {
 						'value' => 'Login',
 					],
 					$this->backup,
-					new Validation\FakeRule()
+					new Validation\PassiveRule()
 				),
 				self::COLUMNS
 			)

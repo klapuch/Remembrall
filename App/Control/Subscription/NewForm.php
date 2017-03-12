@@ -7,8 +7,7 @@ use Klapuch\Form;
 use Klapuch\Uri;
 use Klapuch\Validation;
 
-final class NewForm extends Control\HarnessedForm {
-	private const COLUMNS = 5;
+final class NewForm extends BootstrapForm {
 	private const ACTION = '/subscription/default', NAME = 'new';
 	private $url;
 	private $csrf;
@@ -25,31 +24,19 @@ final class NewForm extends Control\HarnessedForm {
 
 	protected function form(): Form\Control {
 		return new Form\RawForm(
-			[
+			self::ATTRIBUTES + [
 				'name' => self::NAME,
-				'method' => 'POST',
 				'action' => $this->url->reference() . self::ACTION,
-				'role' => 'form',
-				'class' => 'form-horizontal',
 			],
 			new Form\CsrfInput($this->csrf),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
 					new Form\DefaultInput(
-						[
-							'type' => 'text',
-							'name' => 'url',
-							'class' => 'form-control',
-							'required' => 'required',
+						self::URL_ATTRIBUTES + [
 							'value' => $_GET['url'] ?? '',
 						],
 						$this->backup,
-						new Validation\FriendlyRule(
-							new Validation\NegateRule(
-								new Validation\EmptyRule()
-							),
-							'Url must be filled'
-						)
+						$this->urlRule()
 					),
 					new Form\LinkedLabel('Url', 'url')
 				),
@@ -58,20 +45,11 @@ final class NewForm extends Control\HarnessedForm {
 			new Form\BootstrapInput(
 				new Form\BoundControl(
 					new Form\DefaultInput(
-						[
-							'type' => 'text',
-							'name' => 'expression',
-							'class' => 'form-control',
-							'required' => 'required',
+						self::EXPRESSION_ATTRIBUTES + [
 							'value' => $_GET['expression'] ?? '',
 						],
 						$this->backup,
-						new Validation\FriendlyRule(
-							new Validation\NegateRule(
-								new Validation\EmptyRule()
-							),
-							'Expression must be filled'
-						)
+						$this->expressionRule()
 					),
 					new Form\LinkedLabel('Expression', 'expression')
 				),
@@ -80,27 +58,9 @@ final class NewForm extends Control\HarnessedForm {
 			new Form\BootstrapInput(
 				new Form\BoundControl(
 					new Form\DefaultInput(
-						[
-							'type' => 'number',
-							'name' => 'interval',
-							'class' => 'form-control',
-							'min' => '30',
-							'max' => '1439',
-							'required' => 'required',
-						],
+						self::INTERVAL_ATTRIBUTES,
 						$this->backup,
-						new Validation\ChainedRule(
-							new Validation\FriendlyRule(
-								new Validation\NegateRule(
-									new Validation\EmptyRule()
-								),
-								'Interval must be filled'
-							),
-							new Validation\FriendlyRule(
-								new Validation\RangeRule(30, 1439),
-								'Interval must be greater than 30'
-							)
-						)
+						$this->intervalRule()
 					),
 					new Form\LinkedLabel('Interval', 'interval')
 				),
@@ -108,14 +68,11 @@ final class NewForm extends Control\HarnessedForm {
 			),
 			new Form\BootstrapInput(
 				new Form\DefaultInput(
-					[
-						'type' => 'submit',
-						'name' => 'act',
-						'class' => 'form-control',
+					self::SUBMIT_ATTRIBUTES + [
 						'value' => 'Subscribe',
 					],
 					$this->backup,
-					new Validation\FakeRule()
+					new Validation\PassiveRule()
 				),
 				self::COLUMNS
 			)
