@@ -19,7 +19,7 @@
 						<xsl:with-param name="user" select="page/user"/>
 					</xsl:apply-templates>
 					<div class="container">
-						<xsl:apply-templates select="page/flashMessages/flashMessage"/>
+						<xsl:apply-templates select="page/flashMessage"/>
 						<xsl:apply-templates/>
 					</div>
 				</div>

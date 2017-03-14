@@ -6,11 +6,11 @@ use Klapuch\Access;
 use Klapuch\Authorization;
 use Klapuch\Csrf;
 use Klapuch\Encryption;
-use Klapuch\FlashMessage;
 use Klapuch\Form;
 use Klapuch\Log;
 use Klapuch\Markup;
 use Klapuch\Output;
+use Klapuch\UI;
 use Klapuch\Uri;
 
 abstract class BasePage {
@@ -99,7 +99,9 @@ abstract class BasePage {
 					->serialization()
 				),
 				new \SimpleXMLElement(
-					(new FlashMessage\XmlMessage($_SESSION))->print()
+					(new UI\PersistentFlashMessage(
+						$_SESSION
+					))->print(new Output\Xml([], 'flashMessage'))->serialization()
 				),
 				new \SimpleXMLElement(
 					sprintf(
@@ -124,7 +126,7 @@ abstract class BasePage {
 	 * @return void
 	 */
 	final protected function flashMessage(string $content, string $type): void {
-		(new FlashMessage\XmlMessage($_SESSION))->flash($content, $type);
+		(new UI\PersistentFlashMessage($_SESSION))->flash($content, $type);
 	}
 
 	/**

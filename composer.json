@@ -18,7 +18,6 @@
 		"klapuch/authorization": "^1.0.0",
 		"klapuch/csrf": "^1.0.0",
 		"klapuch/dataset": "@dev",
-		"klapuch/flash-message": "^1.0.0",
 		"klapuch/form": "^5.0.0",
 		"klapuch/http": "^1.0.0",
 		"klapuch/ini": "^1.0.0",
