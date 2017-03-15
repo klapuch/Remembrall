@@ -99,9 +99,12 @@ abstract class BasePage {
 					->serialization()
 				),
 				new \SimpleXMLElement(
-					(new UI\PersistentFlashMessage(
-						$_SESSION
-					))->print(new Output\Xml([], 'flashMessage'))->serialization()
+					(new Output\WrappedXml(
+						'flashMessages',
+						(new UI\FlashMessages(
+							new UI\PersistentFlashMessage($_SESSION)
+						))->print(new Output\Xml([], 'flashMessage'))
+					))->serialization()
 				),
 				new \SimpleXMLElement(
 					sprintf(
