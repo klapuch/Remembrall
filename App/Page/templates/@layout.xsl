@@ -57,9 +57,7 @@
 				</div>
 				<div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
-						<xsl:apply-templates select="key('linkByHref', key('permissionByRole', $user/@role)/@resource)/..">
-							<xsl:with-param name="user" select="$user"/>
-						</xsl:apply-templates>
+						<xsl:apply-templates select="key('linkByHref', key('permissionByRole', $user/@role)/@resource)/.."/>
 					</ul>
 				</div>
 			</div>
@@ -73,7 +71,6 @@
 	</xsl:template>
 
 	<xsl:template match="item">
-		<xsl:param name="user"/>
 		<li>
 			<xsl:apply-templates/>
 		</li>
