@@ -1,0 +1,53 @@
+build: off
+cache:
+    - c:\php -> appveyor.yml
+    - '%LOCALAPPDATA%\Composer\files -> appveyor.yml'
+
+clone_folder: c:\projects\project
+
+services:
+  - postgresql95
+
+environment:
+    POSTGRES_PATH: C:\Program Files\PostgreSQL\9.5
+    PGUSER: postgres
+    PGPASSWORD: Password12!
+
+init:
+    - SET PATH=c:\php\71;%PATH%
+    - SET ANSICON=121x90 (121x90)
+    - SET PATH=%POSTGRES_PATH%\bin;%PATH%
+
+build_script:
+    - echo password="Password12!" >> .\Tests\TestCase\.database.ini
+    - createdb remembrall_test
+    - psql remembrall_test < .\Tests\TestCase\schema.sql
+
+install:
+    - IF EXIST c:\php\71 (SET PHP=0) ELSE (SET PHP=1)
+    - IF %PHP%==1 mkdir c:\php\71
+    - IF %PHP%==1 cd c:\php\71
+    - IF %PHP%==1 appveyor DownloadFile http://windows.php.net/downloads/releases/archives/php-7.1.0-Win32-VC14-x64.zip
+    - IF %PHP%==1 7z x php-7.1.0-Win32-VC14-x64.zip >nul
+    - IF %PHP%==1 echo extension_dir=ext >> php.ini
+    - IF %PHP%==1 echo extension=php_openssl.dll >> php.ini
+    - IF %PHP%==1 echo extension=php_mbstring.dll >> php.ini
+    - IF %PHP%==1 del /Q *.zip
+
+    - cd c:\projects\project
+    - echo extension_dir=ext >> c:\php\php.ini
+    - echo extension=php_pdo.dll >> c:\php\php.ini
+    - echo extension=php_pdo_pgsql.dll >> c:\php\php.ini
+    - echo extension=php_dom.dll >> c:\php\php.ini
+    - echo extension=php_xml.dll >> c:\php\php.ini
+    - echo extension=php_simplexml.dll >> c:\php\php.ini
+    - echo extension=php_xsl.dll >> c:\php\php.ini
+    - echo extension=php_iconv.dll >> c:\php\php.ini
+    - echo extension=php_curl.dll >> c:\php\php.ini
+
+    - appveyor DownloadFile https://getcomposer.org/composer.phar
+    - php composer.phar install --no-interaction --prefer-dist --no-scripts --no-progress --no-suggest --optimize-autoloader --classmap-authoritative --ignore-platform-reqs
+
+test_script:
+    - vendor/bin/tester -o console -s -c c:\php\php.ini -p c:\php\71\php Tests
+    - vendor/bin/tester -o console -s -c c:\php\php.ini -p c:\php\71\php-cgi Tests
