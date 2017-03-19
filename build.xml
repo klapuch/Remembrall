@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project name="Remembrall" default="check">
 
+	<resolvepath propertyName="base_path" file="."/>
+
 	<target name="check" depends="lint, phpcpd, phpstan, phpcs, tests, cgi-tests"/>
-	<target name="ci" depends="lint, phpcpd, phpstan, phpcs, tests, cgi-tests, coverage"/>
+	<target name="ci" depends="check, coverage"/>
+	<target name="build" depends="check, assets"/>
 
 	<target name="lint">
 		<exec executable="vendor/bin/parallel-lint" logoutput="true" passthru="true" checkreturn="true">
@@ -96,6 +99,12 @@
 			<arg value="--coverage-src"/>
 			<arg path="App/"/>
 		</exec>
+	</target>
+
+	<target name="assets">
+		<exec command="yarn install" dir="assets" logoutput="true" passthru="true" checkreturn="true"/>
+		<exec command="gulp build" dir="assets" logoutput="true" passthru="true" checkreturn="true"/>
+		<symlink target="${base_path}/assets/dist" link="${base_path}/www/dist" overwrite="true" />
 	</target>
 
 </project>
