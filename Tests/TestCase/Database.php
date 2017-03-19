@@ -11,7 +11,7 @@ abstract class Database extends Mockery {
 
 	protected function setUp(): void {
 		parent::setUp();
-		Tester\Environment::lock('database', __DIR__ . '/../Temporary');
+		Tester\Environment::lock('database', __DIR__ . '/../temp');
 		$credentials = parse_ini_file(__DIR__ . '/.database.ini', true);
 		$this->database = new Storage\SafePDO(
 			$credentials['POSTGRES']['dsn'],
