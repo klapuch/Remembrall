@@ -38,7 +38,7 @@
 				<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#content-{id}">
 					<span class="glyphicon glyphicon-eye-open" aria-hidden="true"/>
 				</button>
-				<xsl:call-template name="modal" mode="content">
+				<xsl:call-template name="modal">
 					<xsl:with-param name="id" select="id"/>
 					<xsl:with-param name="content" select="content"/>
 				</xsl:call-template>

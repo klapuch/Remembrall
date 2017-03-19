@@ -8,7 +8,7 @@
 				<ul class="pager">
 					<xsl:if test="first!=current">
 						<li class="previous">
-							<xsl:call-template name="link" mode="pager">
+							<xsl:call-template name="link">
 								<xsl:with-param name="per_page" select="$per_page"/>
 								<xsl:with-param name="step" select="previous"/>
 								<xsl:with-param name="content">
@@ -20,7 +20,7 @@
 					</xsl:if>
 					<xsl:if test="last!=next">
 						<li class="next">
-							<xsl:call-template name="link" mode="pager">
+							<xsl:call-template name="link">
 								<xsl:with-param name="per_page" select="$per_page"/>
 								<xsl:with-param name="step" select="next"/>
 								<xsl:with-param name="content">
