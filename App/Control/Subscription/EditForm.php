@@ -38,11 +38,11 @@ final class EditForm extends BootstrapForm {
 			new Form\CsrfInput($this->csrf),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
-					new Form\XmlReloadedInput(
+					new Form\DefaultInput(
 						self::URL_ATTRIBUTES + [
 							'disabled' => 'true',
+							'value' => new Form\XmlDynamicValue('url', $xml),
 						],
-						$xml,
 						$this->backup,
 						$this->urlRule()
 					),
@@ -52,11 +52,11 @@ final class EditForm extends BootstrapForm {
 			),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
-					new Form\XmlReloadedInput(
+					new Form\DefaultInput(
 						self::EXPRESSION_ATTRIBUTES + [
 							'disabled' => 'true',
+							'value' => new Form\XmlDynamicValue('expression', $xml),
 						],
-						$xml,
 						$this->backup,
 						$this->expressionRule()
 					),
@@ -66,9 +66,10 @@ final class EditForm extends BootstrapForm {
 			),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
-					new Form\XmlReloadedInput(
-						self::INTERVAL_ATTRIBUTES,
-						$xml,
+					new Form\DefaultInput(
+						self::INTERVAL_ATTRIBUTES + [
+							'value' => new Form\XmlDynamicValue('interval', $xml),
+						],
 						$this->backup,
 						$this->intervalRule()
 					),
