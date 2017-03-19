@@ -12,7 +12,7 @@ try {
 	mb_internal_encoding('UTF-8');
 	$logs = new Log\FilesystemLogs(
 		new Log\DynamicLocation(
-			new Log\DirectoryLocation(__DIR__ . '/../Log')
+			new Log\DirectoryLocation(__DIR__ . '/../log')
 		)
 	);
 	$configuration = (new Ini\Valid(
