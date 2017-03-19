@@ -12,7 +12,7 @@ interface Page {
 
 	/**
 	 * Refreshed page
-	 * @return \Remembrall\Model\Subscribing\Page
+	 * @return \Remembrall\Model\Web\Page
 	 */
 	public function refresh(): Page;
 }
