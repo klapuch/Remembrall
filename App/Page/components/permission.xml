@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <permissions>
+	<permission resource="cron" role="guest"/>
+
 	<permission resource="parts/popular" role="guest"/>
 	<permission resource="parts/popular" role="member"/>
 
