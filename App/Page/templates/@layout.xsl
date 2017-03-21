@@ -65,7 +65,7 @@
 	</xsl:template>
 
 	<xsl:template name="logo">
-		<a href="{$base_url}" class="navbar-brand" title="Remembrall">
+		<a href="{$base_url}/" class="navbar-brand" title="Remembrall">
 			<strong>Remembrall</strong>
 		</a>
 	</xsl:template>
