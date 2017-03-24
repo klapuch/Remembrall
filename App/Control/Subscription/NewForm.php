@@ -8,7 +8,7 @@ use Klapuch\Uri;
 use Klapuch\Validation;
 
 final class NewForm extends BootstrapForm {
-	private const ACTION = '/subscription/default', NAME = 'new';
+	private const ACTION = '/subscription', NAME = 'new';
 	private $url;
 	private $csrf;
 

@@ -10,10 +10,12 @@ final class DeletePage extends Page\BasePage {
 	public function render(array $parameters): Output\Format {
 		try {
 			$this->protect();
-			$id = (int) $_GET['id'];
 			(new Subscribing\OwnedSubscription(
-				new Subscribing\StoredSubscription($id, $this->database),
-				$id,
+				new Subscribing\StoredSubscription(
+					$parameters['id'],
+					$this->database
+				),
+				$parameters['id'],
 				$this->user,
 				$this->database
 			))->cancel();

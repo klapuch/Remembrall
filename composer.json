@@ -24,6 +24,7 @@
 		"klapuch/iterator": "^1.1.0",
 		"klapuch/log": "^1.0.0",
 		"klapuch/output": "^2.0.0",
+		"klapuch/routing": "@dev",
 		"klapuch/storage": "^2.0.0",
 		"klapuch/time": "^3.0.0",
 		"klapuch/ui": "@dev",

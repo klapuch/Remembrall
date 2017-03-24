@@ -2,9 +2,10 @@
 declare(strict_types = 1);
 require __DIR__ . '/../vendor/autoload.php';
 use Klapuch\{
-	Ini, Storage, Uri, Log, Encryption, Output
+	Ini, Storage, Uri, Log, Encryption, Output, Routing
 };
-const CONFIGURATION = __DIR__ . '/../App/Configuration/.config.ini';
+const CONFIGURATION = __DIR__ . '/../App/Configuration/.config.ini',
+	ROUTES = __DIR__ . '/../App/Configuration/routes.ini';
 const TIMER = 'timer',
 	ELAPSE = 20;
 const TEMPLATES = __DIR__ . '/../App/Page/templates';
@@ -31,11 +32,14 @@ try {
 	foreach($configuration['HEADERS'] as $field => $value)
 		header(sprintf('%s:%s', $field, $value));
 	$url = new Uri\BaseUrl($_SERVER['SCRIPT_NAME'], $_SERVER['REQUEST_URI']);
-	$path = explode('/', $url->path());
-	$page = isset($path[0]) && $path[0] ? ucfirst($path[0]) : 'Default';
-	$resource = isset($path[1]) && $path[1] ? ucfirst($path[1]) : 'Default';
-	$parameters = array_slice($path, 2);
-	$class = sprintf('Remembrall\\Page\\%s\%sPage', $page, $resource);
+	$route = (new Routing\HttpRoutes(
+		new Ini\Valid(
+			ROUTES,
+			new Ini\Typed(ROUTES)
+		)
+	))->match($url);
+	[$resource, $action, $parameters] = [$route->resource(), $route->action(), $route->parameters()];
+	$class = (new Routing\MappedRoute($route, 'Remembrall\Page', 'Page'))->resource();
 	/** @var \Remembrall\Page\BasePage $target */
 	$target = new $class(
 		$url,
@@ -47,14 +51,14 @@ try {
 		$logs,
 		new Encryption\AES256CBC($configuration['KEYS']['password'])
 	);
-	[$submit] = ['submit' . $resource];
+	$submit = 'submit' . $action;
 	$target->startup();
 	if($_SERVER['REQUEST_METHOD'] === 'POST' && method_exists($target, $submit))
 		$target->$submit($_POST, $parameters);
 	$xml = new \DOMDocument();
-	$xml->load(TEMPLATES . sprintf('/../%s/templates/%s.xml', $page, lcfirst($resource)));
+	$xml->load(TEMPLATES . sprintf('/../%s/templates/%s.xml', $resource, $action));
 	echo (new Output\XsltTemplate(
-		TEMPLATES . sprintf('/../%s/templates/%s.xsl', $page, lcfirst($resource)),
+		TEMPLATES . sprintf('/../%s/templates/%s.xsl', $resource, $action),
 		new Output\MergedXml($xml, ...$target->template($parameters))
 	))->render(['base_url' => $url->reference()]);
 } catch(Throwable $ex) {
