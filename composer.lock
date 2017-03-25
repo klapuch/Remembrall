@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b0157598de4cce4ae1a22906e55e95fd",
+    "content-hash": "39a3ad2eb1e13587e105707d181dfaa7",
     "packages": [
         {
             "name": "gajus/dindent",
@@ -94,6 +94,54 @@
             "description": "access, authentication, login, register",
             "homepage": "https://github.com/klapuch/Access",
             "time": "2017-01-29T09:14:59+00:00"
+        },
+        {
+            "name": "klapuch/application",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/klapuch/Application.git",
+                "reference": "e0a9211c22992c33990d2e5d05cb8c6bb9575519"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/klapuch/Application/zipball/e0a9211c22992c33990d2e5d05cb8c6bb9575519",
+                "reference": "e0a9211c22992c33990d2e5d05cb8c6bb9575519",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "consistence/coding-standard": "^0.13.0",
+                "jakub-onderka/php-parallel-lint": "^0.9.2",
+                "mockery/mockery": "^0.9.8",
+                "nette/tester": "^1.7",
+                "phing/phing": "^2.16",
+                "phpstan/phpstan": ">=0.6.0",
+                "sebastian/phpcpd": "^2.0",
+                "slevomat/coding-standard": "^2.0.0"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "Klapuch\\Application\\": [
+                        "Core/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Dominik Klapuch",
+                    "email": "klapuchdominik@gmail.com",
+                    "homepage": "https://www.github.com/klapuch",
+                    "role": "Developer"
+                }
+            ],
+            "description": "HTTP core application",
+            "homepage": "https://www.github.com/klapuch/Application",
+            "time": "2017-03-25 17:22:55"
         },
         {
             "name": "klapuch/authorization",
@@ -2637,6 +2685,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "klapuch/application": 20,
         "klapuch/dataset": 20,
         "klapuch/routing": 20,
         "klapuch/ui": 20
