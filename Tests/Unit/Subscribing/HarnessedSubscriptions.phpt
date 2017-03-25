@@ -29,7 +29,7 @@ final class HarnessedSubscriptions extends TestCase\Mockery {
 		$callback->shouldReceive('invoke')
 			->once()
 			->with([$origin, 'subscribe'], [$uri, $expression, $interval]);
-		Assert::noError(function() use($origin, $callback, $uri, $interval, $expression) {
+		Assert::noError(function() use ($origin, $callback, $uri, $interval, $expression) {
 			(new Subscribing\HarnessedSubscriptions(
 				$origin,
 				$callback
@@ -40,7 +40,7 @@ final class HarnessedSubscriptions extends TestCase\Mockery {
 			->once()
 			->with([$origin, 'iterate'], [$selection])
 			->andReturn($iterator);
-		Assert::noError(function() use($origin, $callback, $selection) {
+		Assert::noError(function() use ($origin, $callback, $selection) {
 			(new Subscribing\HarnessedSubscriptions(
 				$origin,
 				$callback

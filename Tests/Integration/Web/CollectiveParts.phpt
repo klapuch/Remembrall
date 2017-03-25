@@ -68,7 +68,7 @@ final class CollectiveParts extends TestCase\Database {
 			new Uri\FakeUri('www.google.com'),
 			'//p'
 		);
-		$statement = $this->database->prepare("SELECT * FROM part_visits");
+		$statement = $this->database->prepare('SELECT * FROM part_visits');
 		$statement->execute();
 		Assert::count(1, $statement->fetchAll());
 	}

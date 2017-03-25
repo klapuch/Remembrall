@@ -38,7 +38,10 @@ abstract class Page extends BasePage {
 				__DIR__ . '/templates/constraint.xsd'
 			),
 			(new UI\AttainablePagination(
-				$page, $perPage, $parts->count(), self::DEFAULT_PER_PAGE
+				$page,
+				$perPage,
+				$parts->count(),
+				self::DEFAULT_PER_PAGE
 			))->print(new Output\Xml([], 'pagination'))
 		);
 	}

@@ -57,7 +57,6 @@ final class XPathExpression extends Tester\TestCase {
 		Assert::same($match->item(0)->nodeName, 'p');
 		Assert::same($match->item(1)->nodeValue, 'there');
 		Assert::same($match->item(1)->nodeName, 'p');
-
 	}
 
 	public function testNoMatch() {
@@ -65,7 +64,8 @@ final class XPathExpression extends Tester\TestCase {
 		$dom->loadHTML('<p>Hi there</p>');
 		$page = new Web\FakePage($dom);
 		$expression = (new Web\XPathExpression(
-			$page, '//foo'
+			$page,
+			'//foo'
 		))->matches();
 		Assert::same(0, $expression->length);
 	}

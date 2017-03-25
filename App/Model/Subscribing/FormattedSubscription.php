@@ -49,7 +49,8 @@ final class FormattedSubscription implements Subscription {
 			})
 			->adjusted('interval', function(string $interval): string {
 				return (string) new Time\TimeInterval(
-					new \DateTimeImmutable(), new \DateInterval($interval)
+					new \DateTimeImmutable(),
+					new \DateInterval($interval)
 				);
 			});
 	}

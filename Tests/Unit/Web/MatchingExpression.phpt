@@ -27,7 +27,7 @@ final class MatchingExpression extends Tester\TestCase {
 	public function testMatches() {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>Hi there!</p>');
-		Assert::noError(function() use($dom) {
+		Assert::noError(function() use ($dom) {
 			$expression = '//p';
 			$nodeList = (new \DOMXPath($dom))->query($expression);
 			(new Web\MatchingExpression(

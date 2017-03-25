@@ -35,7 +35,7 @@ final class DefaultPage extends Page\BasePage {
 				$this->url,
 				$this->csrf,
 				$this->backup
-			))->submit(function() use($subscription) {
+			))->submit(function() use ($subscription) {
 				$url = new Uri\NormalizedUrl(
 					new Uri\ReachableUrl(
 						new Uri\SchemeForcedUrl(

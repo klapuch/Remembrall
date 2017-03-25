@@ -73,7 +73,8 @@ final class UnreliableParts extends TestCase\Database {
 			(2, 1, 'PT10S', NOW(), '')"
 		);
 		$parts = new Web\UnreliableParts(
-			new Web\FakeParts(), $this->database
+			new Web\FakeParts(),
+			$this->database
 		);
 		$count = 2;
 		Assert::same($count, $parts->count());

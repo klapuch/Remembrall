@@ -50,13 +50,13 @@ final class OwnedSubscriptions extends TestCase\Database {
 			new Access\FakeUser(666),
 			$this->database
 		);
-		$subscribe = function() use($subscriptions) {
+		$subscribe = function() use ($subscriptions) {
 			$subscriptions->subscribe(
 				new Uri\FakeUri('www.google.com'),
 				'//google',
 				new Time\FakeInterval(null, null, 'PT120S')
 			);
-		}; 
+		};
 		$subscribe();
 		$ex = Assert::exception(
 			$subscribe,

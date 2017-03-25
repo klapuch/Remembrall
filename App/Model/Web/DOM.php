@@ -6,7 +6,7 @@ namespace Remembrall\Model\Web;
  * UTF-8 aware and fail-safe extension of classic DOMDocument
  */
 final class DOM extends \DOMDocument {
-	public function __construct(string $version = '1.0',  string $encoding = 'UTF-8') {
+	public function __construct(string $version = '1.0', string $encoding = 'UTF-8') {
 		parent::__construct($version, $encoding);
 	}
 

@@ -29,7 +29,7 @@ final class HarnessedParts extends TestCase\Mockery {
 		$callback->shouldReceive('invoke')
 			->once()
 			->with([$origin, 'add'], [$part, $uri, $expression]);
-		Assert::noError(function() use($origin, $callback, $uri, $part, $expression) {
+		Assert::noError(function() use ($origin, $callback, $uri, $part, $expression) {
 			(new Web\HarnessedParts(
 				$origin,
 				$callback
@@ -40,18 +40,20 @@ final class HarnessedParts extends TestCase\Mockery {
 			->once()
 			->with([$origin, 'iterate'], [$selection])
 			->andReturn($iterator);
-		Assert::noError(function() use($origin, $callback, $selection) {
+		Assert::noError(function() use ($origin, $callback, $selection) {
 			(new Web\HarnessedParts(
-				$origin, $callback
+				$origin,
+				$callback
 			))->iterate($selection);
 		});
 		$callback->shouldReceive('invoke')
 			->once()
 			->with([$origin, 'count'], [])
 			->andReturn($count);
-		Assert::noError(function() use($origin, $callback) {
+		Assert::noError(function() use ($origin, $callback) {
 			(new Web\HarnessedParts(
-				$origin, $callback
+				$origin,
+				$callback
 			))->count();
 		});
 	}

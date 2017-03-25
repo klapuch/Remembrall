@@ -29,7 +29,7 @@ final class InPage extends Page\BasePage {
 				$this->url,
 				$this->csrf,
 				$this->backup
-			))->submit(function() use($credentials) {
+			))->submit(function() use ($credentials) {
 				return (new Access\SecureEntrance(
 					$this->database,
 					$this->cipher

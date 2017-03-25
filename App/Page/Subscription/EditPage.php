@@ -33,9 +33,10 @@ final class EditPage extends Page\BasePage {
 				$this->url,
 				$this->csrf,
 				$this->backup
-			))->submit(function() use($subscription, $id) {
+			))->submit(function() use ($subscription, $id) {
 				(new Subscribing\StoredSubscription(
-					$id, $this->database
+					$id,
+					$this->database
 				))->edit(
 					new Time\TimeInterval(
 						new \DateTimeImmutable(),

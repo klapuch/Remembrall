@@ -36,14 +36,14 @@ final class EmailSubscription extends TestCase\Mockery {
 		(new Subscribing\EmailSubscription(
 			new Subscribing\FakeSubscription(),
 			new class implements Mail\IMailer {
-					public function send(Mail\Message $message) {
-						printf(
-							'To: %s',
-							implode(array_keys($message->getHeader('To')))
-						);
-						printf('Subject: %s', $message->getSubject());
-						printf('Body: %s', $message->getHtmlBody());
-					}
+				public function send(Mail\Message $message) {
+					printf(
+						'To: %s',
+						implode(array_keys($message->getHeader('To')))
+					);
+					printf('Subject: %s', $message->getSubject());
+					printf('Body: %s', $message->getHtmlBody());
+				}
 			},
 			'recipient@foo.cz',
 			['url' => 'www.google.com', 'expression' => '//p', 'content' => 'FooBar']

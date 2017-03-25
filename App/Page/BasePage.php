@@ -88,7 +88,8 @@ abstract class BasePage {
 								function(string $attribute, string $value) {
 									return new Markup\SafeAttribute($attribute, $value);
 								},
-								array_keys($properties), $properties
+								array_keys($properties),
+								$properties
 							)
 						))->pair()
 					)
@@ -116,7 +117,8 @@ abstract class BasePage {
 			],
 			(new \SimpleXMLElement(
 				(new Output\WrappedXml(
-					'page', $this->render($parameters)
+					'page',
+					$this->render($parameters)
 				))->serialization()
 			))->xpath('child::*')
 		);

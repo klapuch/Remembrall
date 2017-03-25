@@ -5,7 +5,7 @@ namespace Remembrall\Model\Misc;
 use Klapuch\Log;
 
 /**
- * Callback with assurance that every potential error will be logged 
+ * Callback with assurance that every potential error will be logged
  */
 final class LoggingCallback implements Callback {
 	private $logs;

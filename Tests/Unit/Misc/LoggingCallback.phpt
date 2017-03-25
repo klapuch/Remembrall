@@ -18,7 +18,7 @@ final class LoggingCallback extends TestCase\Mockery {
 	public function testLoggingOnThrowing() {
 		$file = Tester\FileMock::create('');
 		$logs = new Log\FakeLogs($file);
-		Assert::exception(function() use($logs) {
+		Assert::exception(function() use ($logs) {
 			(new Misc\LoggingCallback($logs))->invoke(function() {
 				throw new \DomainException('fooMessage');
 			});

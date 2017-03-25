@@ -38,7 +38,7 @@ final class XmlPrintedObjects implements Output\Format {
 
 	/**
 	 * @param mixed $tag
-	 * @param callable $content
+	 * @param callable $adjustment
 	 */
 	public function adjusted($tag, callable $adjustment): Output\Format {
 		throw new \Exception('Not implemented');

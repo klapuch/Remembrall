@@ -1,12 +1,24 @@
 <?xml version="1.0"?>
 <ruleset name="Project">
 
-	<rule ref="Generic.Formatting.SpaceAfterCast.NoSpace">
-		<exclude name="Squiz.Commenting"/>
+	<rule ref="vendor/consistence/coding-standard/Consistence/ruleset.xml">
+		<exclude name="PSR2.Files.EndFileNewline.NoneFound"/>
+		<exclude name="PEAR.Classes.ClassDeclaration.OpenBraceNewLine"/>
+		<exclude name="Generic.Functions.OpeningFunctionBraceBsdAllman.BraceOnSameLine"/>
+		<exclude name="Generic.ControlStructures.InlineControlStructure.NotAllowed"/>
+		<exclude name="Squiz.WhiteSpace.FunctionSpacing.Before"/>
+		<exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine"/>
+		<exclude name="Squiz.Functions.MultiLineFunctionDeclaration.SpaceAfterFunction"/>
+		<exclude name="Squiz.WhiteSpace.MemberVarSpacing.Incorrect"/>
+		<exclude name="Squiz.Commenting.FunctionComment.MissingParamTag"/>
+		<exclude name="Squiz.Functions.GlobalFunction.Found"/>
 	</rule>
 
-	<rule ref="Generic.PHP.LowerCaseConstant.Found"/>
-	<rule ref="Squiz.ControlStructures.ControlSignature.SpaceAfterKeyword"/>
+	<rule ref="PSR1.Files.SideEffects.FoundWithSymbols">
+		<exclude-pattern>Tests/Unit</exclude-pattern>
+		<exclude-pattern>Tests/Integration</exclude-pattern>
+		<exclude-pattern>Tests/UI</exclude-pattern>
+	</rule>
 
 	<rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml">
 		<exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint"/>

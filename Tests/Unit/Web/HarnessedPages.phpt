@@ -25,7 +25,7 @@ final class HarnessedPages extends TestCase\Mockery {
 			->once()
 			->with([$origin, 'add'], [$uri, $page])
 			->andReturn($addedPage);
-		Assert::noError(function() use($origin, $callback, $uri, $page) {
+		Assert::noError(function() use ($origin, $callback, $uri, $page) {
 			(new Web\HarnessedPages(
 				$origin,
 				$callback
