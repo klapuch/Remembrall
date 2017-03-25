@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page>
+	<head>
+		<title>Error</title>
+		<meta name="description" content="Error"/>
+	</head>
+	<body>
+		<header level="1">Error</header>
+		<header level="2">An unexpected error has occurred.</header>
+	</body>
+</page>
