@@ -2,15 +2,12 @@
 declare(strict_types = 1);
 require __DIR__ . '/../vendor/autoload.php';
 use Klapuch\{
-	Ini, Storage, Uri, Log, Encryption, Output, Routing
+	Ini, Storage, Uri, Log, Encryption, Output, Routing, Application
 };
 const CONFIGURATION = __DIR__ . '/../App/Configuration/.config.ini',
 	ROUTES = __DIR__ . '/../App/Configuration/routes.ini';
-const TIMER = 'timer',
-	ELAPSE = 20;
 const TEMPLATES = __DIR__ . '/../App/Page/templates';
 try {
-	mb_internal_encoding('UTF-8');
 	$logs = new Log\FilesystemLogs(
 		new Log\DynamicLocation(
 			new Log\DirectoryLocation(__DIR__ . '/../log')
@@ -20,17 +17,12 @@ try {
 		CONFIGURATION,
 		new Ini\Typed(CONFIGURATION)
 	))->read();
-	foreach($configuration['INI'] as $name => $value)
-		ini_set($name, (string)$value);
-	date_default_timezone_set('Europe/Prague');
-	session_start($configuration['SESSIONS']);
-	if(isset($_SESSION[TIMER]) && (time() - $_SESSION[TIMER]) > ELAPSE) {
-		$_SESSION[TIMER] = time();
-		session_regenerate_id(true);
-	} elseif(!isset($_SESSION[TIMER]))
-		$_SESSION[TIMER] = time();
-	foreach($configuration['HEADERS'] as $field => $value)
-		header(sprintf('%s:%s', $field, $value));
+	(new Application\CombinedExtension(
+		new Application\InternationalExtension('Europe/Prague'),
+		new Application\IniSetExtension($configuration['INI']),
+		new Application\SessionExtension($configuration['SESSIONS']),
+		new Application\HeaderExtension($configuration['HEADERS'])
+	))->improve();
 	$url = new Uri\BaseUrl($_SERVER['SCRIPT_NAME'], $_SERVER['REQUEST_URI']);
 	$route = (new Routing\HttpRoutes(
 		new Ini\Valid(
