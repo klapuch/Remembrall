@@ -31,7 +31,6 @@
 		"klapuch/uri": "^2.0.0",
 		"klapuch/validation": "^2.0.0",
 		"gajus/dindent": "^2.0",
-		"nette/caching": "^2.5.0",
 		"nette/mail": "^2.4.0",
 		"texy/texy": "^2.9"
 	},
