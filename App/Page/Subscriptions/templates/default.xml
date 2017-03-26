@@ -11,6 +11,9 @@
 				<message>Are you sure you want to cancel the subscription?</message>
 				<title>Cancel</title>
 			</option>
+			<option purpose="edit">
+				<title>Edit</title>
+			</option>
 		</options>
 		<tables>
 			<table purpose="overview">

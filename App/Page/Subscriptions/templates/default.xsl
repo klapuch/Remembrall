@@ -39,9 +39,6 @@
 				<xsl:apply-templates select="/page/body/options">
 					<xsl:with-param name="id" select="id"/>
 				</xsl:apply-templates>
-				<a href="{$base_url}/subscription/edit/{id}" class="btn btn-primary btn-sm" role="button" title="Edit">
-					<span class="glyphicon glyphicon-edit" aria-hidden="true"/>
-				</a>
 			</td>
 		</tr>
 	</xsl:template>
@@ -65,6 +62,13 @@
 			<xsl:with-param name="title" select="title"/>
 			<xsl:with-param name="message" select="message"/>
 		</xsl:apply-templates>
+	</xsl:template>
+
+	<xsl:template match="option[@purpose='edit']">
+		<xsl:param name="id"/>
+		<a href="{$base_url}/subscription/edit/{id}" class="btn btn-primary btn-sm" role="button" title="{title}">
+			<span class="glyphicon glyphicon-edit" aria-hidden="true"/>
+		</a>
 	</xsl:template>
 
 </xsl:stylesheet>
