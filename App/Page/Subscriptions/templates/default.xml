@@ -6,12 +6,12 @@
 	</head>
 	<body>
 		<header level="1">Subscriptions</header>
-		<confirmations>
-			<confirmation purpose="cancellation">
+		<options>
+			<option purpose="cancel">
 				<message>Are you sure you want to cancel the subscription?</message>
 				<title>Cancel</title>
-			</confirmation>
-		</confirmations>
+			</option>
+		</options>
 		<tables>
 			<table purpose="overview">
 				<headings>

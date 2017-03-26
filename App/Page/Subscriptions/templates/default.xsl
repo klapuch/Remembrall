@@ -36,7 +36,7 @@
 				</xsl:call-template>
 			</td>
 			<td>
-				<xsl:apply-templates select="/page/body/confirmations">
+				<xsl:apply-templates select="/page/body/options">
 					<xsl:with-param name="id" select="id"/>
 				</xsl:apply-templates>
 				<a href="{$base_url}/subscription/edit/{id}" class="btn btn-primary btn-sm" role="button" title="Edit">
@@ -59,7 +59,7 @@
 		</th>
 	</xsl:template>
 
-	<xsl:template match="confirmation[@purpose='cancellation']">
+	<xsl:template match="option[@purpose='cancel']">
 		<xsl:param name="id"/>
 		<xsl:apply-templates select="/page/forms/form[@name=concat('delete-', $id)]" mode="delete">
 			<xsl:with-param name="title" select="title"/>
