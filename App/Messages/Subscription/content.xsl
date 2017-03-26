@@ -9,9 +9,9 @@
 			<body>
 				<xsl:element name="p">
 					<xsl:text>Hi, there are some changes on </xsl:text>
-					<xsl:apply-templates select="url"/>
+					<strong><xsl:apply-templates select="url"/></strong>
 					<xsl:text> website with </xsl:text>
-					<xsl:apply-templates select="expression"/>
+					<strong><xsl:apply-templates select="expression"/></strong>
 					<xsl:text> expression</xsl:text>
 				</xsl:element>
 				<p>Check it out bellow this text</p>

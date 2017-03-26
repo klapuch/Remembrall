@@ -51,7 +51,7 @@ final class EmailSubscription extends TestCase\Mockery {
 		$output = ob_get_clean();
 		Assert::contains('To: recipient@foo.cz', $output);
 		Assert::contains('Subject: Changes occurred on www.google.com page with //p expression', $output);
-		Assert::contains('<p>Hi, there are some changes on www.google.com website with //p expression</p>', $output);
+		Assert::contains('<p>Hi, there are some changes on <strong>www.google.com</strong> website with <strong>//p</strong> expression</p>', $output);
 		Assert::contains('<p>Check it out bellow this text</p>', $output);
 		Assert::contains('<br><p>FooBar</p>', $output);
 		Assert::notContains('<?xml', $output);
