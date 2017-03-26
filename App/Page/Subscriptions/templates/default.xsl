@@ -4,6 +4,7 @@
 	<xsl:import href="../../templates/@layout.xsl"/>
 	<xsl:import href="../../Parts/components/content-modal.xsl"/>
 	<xsl:import href="../../components/direction.xsl"/>
+	<xsl:import href="../../components/form.xsl"/>
 
 	<xsl:template match="page">
 		<h1><xsl:apply-templates select="body/header[@level=1]"/></h1>
@@ -35,8 +36,9 @@
 				</xsl:call-template>
 			</td>
 			<td>
-				<xsl:variable name="id" select="id"/>
-				<xsl:apply-templates select="/page/forms/form[@name=concat('delete-', $id)]"/>
+				<xsl:apply-templates select="/page/body/confirmations">
+					<xsl:with-param name="id" select="id"/>
+				</xsl:apply-templates>
 				<a href="{$base_url}/subscription/edit/{id}" class="btn btn-primary btn-sm" role="button" title="Edit">
 					<span class="glyphicon glyphicon-edit" aria-hidden="true"/>
 				</a>
@@ -57,29 +59,12 @@
 		</th>
 	</xsl:template>
 
-	<xsl:template match="form | form//*">
-		<xsl:variable name="title" select="/page/body/confirmations/confirmation[@purpose='cancellation']/title"/>
-		<xsl:variable name="message" select="/page/body/confirmations/confirmation[@purpose='cancellation']/message"/>
-		<xsl:element name="{name()}">
-			<xsl:if test="@type='submit'">
-				<xsl:attribute name="title">
-					<xsl:value-of select="$title"/>
-				</xsl:attribute>
-				<xsl:attribute name="onclick">
-					<xsl:text>return confirm('</xsl:text>
-					<xsl:value-of select="normalize-space($message)"/>
-					<xsl:text>')</xsl:text>
-				</xsl:attribute>
-				<xsl:attribute name="class">
-					<xsl:text>btn btn-danger btn-sm</xsl:text>
-				</xsl:attribute>
-				<xsl:attribute name="value">
-					<xsl:text>✖</xsl:text>
-				</xsl:attribute>
-			</xsl:if>
-			<xsl:copy-of select="@*"/>
-			<xsl:apply-templates select="node()"/>
-		</xsl:element>
+	<xsl:template match="confirmation[@purpose='cancellation']">
+		<xsl:param name="id"/>
+		<xsl:apply-templates select="/page/forms/form[@name=concat('delete-', $id)]" mode="delete">
+			<xsl:with-param name="title" select="title"/>
+			<xsl:with-param name="message" select="message"/>
+		</xsl:apply-templates>
 	</xsl:template>
 
 </xsl:stylesheet>
