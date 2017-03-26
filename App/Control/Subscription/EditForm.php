@@ -19,9 +19,9 @@ final class EditForm extends BootstrapForm {
 		Subscribing\Subscription $subscription,
 		Uri\Uri $url,
 		Csrf\Csrf $csrf,
-		Form\Backup $backup
+		Form\Storage $storage
 	) {
-		parent::__construct($backup);
+		parent::__construct($storage);
 		$this->subscription = $subscription;
 		$this->url = $url;
 		$this->csrf = $csrf;
@@ -43,7 +43,7 @@ final class EditForm extends BootstrapForm {
 							'disabled' => 'true',
 							'value' => new Form\XmlDynamicValue('url', $xml),
 						],
-						$this->backup,
+						$this->storage,
 						$this->urlRule()
 					),
 					new Form\LinkedLabel('Url', 'url')
@@ -57,7 +57,7 @@ final class EditForm extends BootstrapForm {
 							'disabled' => 'true',
 							'value' => new Form\XmlDynamicValue('expression', $xml),
 						],
-						$this->backup,
+						$this->storage,
 						$this->expressionRule()
 					),
 					new Form\LinkedLabel('Expression', 'expression')
@@ -70,7 +70,7 @@ final class EditForm extends BootstrapForm {
 						self::INTERVAL_ATTRIBUTES + [
 							'value' => new Form\XmlDynamicValue('interval', $xml),
 						],
-						$this->backup,
+						$this->storage,
 						$this->intervalRule()
 					),
 					new Form\LinkedLabel('Interval', 'interval')
@@ -82,7 +82,7 @@ final class EditForm extends BootstrapForm {
 					self::SUBMIT_ATTRIBUTES + [
 						'value' => 'Edit',
 					],
-					$this->backup,
+					$this->storage,
 					new Validation\PassiveRule()
 				),
 				self::COLUMNS

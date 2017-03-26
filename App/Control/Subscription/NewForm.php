@@ -15,9 +15,9 @@ final class NewForm extends BootstrapForm {
 	public function __construct(
 		Uri\Uri $url,
 		Csrf\Csrf $csrf,
-		Form\Backup $backup
+		Form\Storage $storage
 	) {
-		parent::__construct($backup);
+		parent::__construct($storage);
 		$this->url = $url;
 		$this->csrf = $csrf;
 	}
@@ -35,7 +35,7 @@ final class NewForm extends BootstrapForm {
 						self::URL_ATTRIBUTES + [
 							'value' => $_GET['url'] ?? '',
 						],
-						$this->backup,
+						$this->storage,
 						$this->urlRule()
 					),
 					new Form\LinkedLabel('Url', 'url')
@@ -48,7 +48,7 @@ final class NewForm extends BootstrapForm {
 						self::EXPRESSION_ATTRIBUTES + [
 							'value' => $_GET['expression'] ?? '',
 						],
-						$this->backup,
+						$this->storage,
 						$this->expressionRule()
 					),
 					new Form\LinkedLabel('Expression', 'expression')
@@ -59,7 +59,7 @@ final class NewForm extends BootstrapForm {
 				new Form\BoundControl(
 					new Form\DefaultInput(
 						self::INTERVAL_ATTRIBUTES,
-						$this->backup,
+						$this->storage,
 						$this->intervalRule()
 					),
 					new Form\LinkedLabel('Interval', 'interval')
@@ -71,7 +71,7 @@ final class NewForm extends BootstrapForm {
 					self::SUBMIT_ATTRIBUTES + [
 						'value' => 'Subscribe',
 					],
-					$this->backup,
+					$this->storage,
 					new Validation\PassiveRule()
 				),
 				self::COLUMNS
