@@ -45,9 +45,10 @@
 			</td>
 			<td><xsl:value-of select="occurrences"/></td>
 			<td>
-				<a href="{$base_url}/subscription?url={url}&amp;expression={expression}" class="btn btn-primary btn-sm" role="button" title="Acquire">
-					<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"/>
-				</a>
+				<xsl:apply-templates select="/page/body/options">
+					<xsl:with-param name="url" select="url"/>
+					<xsl:with-param name="expression" select="expression"/>
+				</xsl:apply-templates>
 			</td>
 		</tr>
 	</xsl:template>
@@ -63,6 +64,14 @@
 				<xsl:with-param name="current" select="/page/request/get/sort"/>
 			</xsl:call-template>
 		</th>
+	</xsl:template>
+
+	<xsl:template match="option[@purpose='acquire']">
+		<xsl:param name="url"/>
+		<xsl:param name="expression"/>
+		<a href="{$base_url}/subscription?url={$url}&amp;expression={$expression}" class="btn btn-primary btn-sm" role="button" title="{title}">
+			<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"/>
+		</a>
 	</xsl:template>
 
 </xsl:stylesheet>

@@ -6,6 +6,11 @@
 	</head>
 	<body>
 		<header level="1">Unrealiable parts</header>
+		<options>
+			<option purpose="acquire">
+				<title>Acquire</title>
+			</option>
+		</options>
 		<tables>
 			<table purpose="overview">
 				<headings>
