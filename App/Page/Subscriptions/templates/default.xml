@@ -10,8 +10,6 @@
 			<confirmation purpose="cancellation">
 				<message>Are you sure you want to cancel the subscription?</message>
 				<title>Cancel</title>
-				<href>subscriptions/delete</href>
-				<glyphicon>remove</glyphicon>
 			</confirmation>
 		</confirmations>
 		<tables>

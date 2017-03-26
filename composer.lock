@@ -328,16 +328,16 @@
         },
         {
             "name": "klapuch/form",
-            "version": "5.0.2",
+            "version": "5.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/Form.git",
-                "reference": "874adb6027107801a787cb0a2863a1329c640d27"
+                "reference": "2035420454d32e88c4fd71cda3996d6b1f5b1b55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klapuch/Form/zipball/874adb6027107801a787cb0a2863a1329c640d27",
-                "reference": "874adb6027107801a787cb0a2863a1329c640d27",
+                "url": "https://api.github.com/repos/klapuch/Form/zipball/2035420454d32e88c4fd71cda3996d6b1f5b1b55",
+                "reference": "2035420454d32e88c4fd71cda3996d6b1f5b1b55",
                 "shasum": ""
             },
             "require": {
@@ -372,7 +372,7 @@
             ],
             "description": "Highly customizable forms in multiple formats",
             "homepage": "https://www.github.com/klapuch/Form",
-            "time": "2017-03-19T12:59:25+00:00"
+            "time": "2017-03-25T21:31:03+00:00"
         },
         {
             "name": "klapuch/http",

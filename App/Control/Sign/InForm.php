@@ -17,9 +17,9 @@ final class InForm extends Control\HarnessedForm {
 	public function __construct(
 		Uri\Uri $url,
 		Csrf\Csrf $csrf,
-		Form\Backup $backup
+		Form\Storage $storage
 	) {
-		parent::__construct($backup);
+		parent::__construct($storage);
 		$this->url = $url;
 		$this->csrf = $csrf;
 	}
@@ -43,7 +43,7 @@ final class InForm extends Control\HarnessedForm {
 							'class' => 'form-control',
 							'required' => 'required',
 						],
-						$this->backup,
+						$this->storage,
 						new Validation\ChainedRule(
 							new Validation\FriendlyRule(
 								new Validation\NegateRule(
@@ -70,7 +70,7 @@ final class InForm extends Control\HarnessedForm {
 							'class' => 'form-control',
 							'required' => 'required',
 						],
-						$this->backup,
+						$this->storage,
 						new Validation\FriendlyRule(
 							new Validation\NegateRule(
 								new Validation\EmptyRule()
@@ -90,7 +90,7 @@ final class InForm extends Control\HarnessedForm {
 						'class' => 'form-control',
 						'value' => 'Login',
 					],
-					$this->backup,
+					$this->storage,
 					new Validation\PassiveRule()
 				),
 				self::COLUMNS

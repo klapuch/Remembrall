@@ -14,7 +14,7 @@
 
 	<permission resource="subscriptions" role="member"/>
 
-	<permission resource="subscriptions/delete/&lt;var&gt;" role="member"/>
+	<permission resource="subscription/delete" role="member"/>
 
 	<permission resource="subscription/edit/&lt;var&gt;" role="member"/>
 

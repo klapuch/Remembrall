@@ -10,8 +10,7 @@
 		<xsl:apply-templates select="subscriptions"/>
 	</xsl:template>
 
-	<xsl:template match="subscriptions">
-		<table class="table table-hover">
+	<xsl:template match="subscriptions"> <table class="table table-hover">
 			<xsl:apply-templates select="/page/body/tables/table[@purpose='overview']"/>
 			<tbody>
 				<xsl:apply-templates select="subscription"/>
@@ -36,9 +35,8 @@
 				</xsl:call-template>
 			</td>
 			<td>
-				<xsl:apply-templates select="/page/body/confirmations">
-					<xsl:with-param name="id" select="id"/>
-				</xsl:apply-templates>
+				<xsl:variable name="id" select="id"/>
+				<xsl:apply-templates select="/page/forms/form[@name=concat('delete-', $id)]"/>
 				<a href="{$base_url}/subscription/edit/{id}" class="btn btn-primary btn-sm" role="button" title="Edit">
 					<span class="glyphicon glyphicon-edit" aria-hidden="true"/>
 				</a>
@@ -59,15 +57,29 @@
 		</th>
 	</xsl:template>
 
-	<xsl:template match="confirmation">
-		<xsl:param name="id"/>
-		<a
-			role="button"
-			href="{$base_url}/{href}/{$id}?{/page/csrf/link}"
-			onclick="return confirm('{normalize-space(message)}')"
-			title="{title}" type="button" class="btn btn-danger btn-sm">
-			<span class="glyphicon glyphicon-{glyphicon}" aria-hidden="true"/>
-		</a>
+	<xsl:template match="form | form//*">
+		<xsl:variable name="title" select="/page/body/confirmations/confirmation[@purpose='cancellation']/title"/>
+		<xsl:variable name="message" select="/page/body/confirmations/confirmation[@purpose='cancellation']/message"/>
+		<xsl:element name="{name()}">
+			<xsl:if test="@type='submit'">
+				<xsl:attribute name="title">
+					<xsl:value-of select="$title"/>
+				</xsl:attribute>
+				<xsl:attribute name="onclick">
+					<xsl:text>return confirm('</xsl:text>
+					<xsl:value-of select="normalize-space($message)"/>
+					<xsl:text>')</xsl:text>
+				</xsl:attribute>
+				<xsl:attribute name="class">
+					<xsl:text>btn btn-danger btn-sm</xsl:text>
+				</xsl:attribute>
+				<xsl:attribute name="value">
+					<xsl:text>✖</xsl:text>
+				</xsl:attribute>
+			</xsl:if>
+			<xsl:copy-of select="@*"/>
+			<xsl:apply-templates select="node()"/>
+		</xsl:element>
 	</xsl:template>
 
 </xsl:stylesheet>

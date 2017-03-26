@@ -5,10 +5,10 @@ namespace Remembrall\Control;
 use Klapuch\Form;
 
 abstract class HarnessedForm {
-	protected $backup;
+	protected $storage;
 
-	public function __construct(Form\Backup $backup) {
-		$this->backup = $backup;
+	public function __construct(Form\Storage $storage) {
+		$this->storage = $storage;
 	}
 
 	final public function render(): string {
@@ -21,7 +21,7 @@ abstract class HarnessedForm {
 	final public function submit(callable $onSuccess) {
 		$this->form()->validate();
 		$result = $onSuccess();
-		$this->backup->drop();
+		$this->storage->drop();
 		return $result;
 	}
 

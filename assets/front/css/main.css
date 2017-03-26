@@ -4,3 +4,7 @@
         max-width:1200px;
     }
 }
+
+form#delete {
+	display: inline-block;
+}
