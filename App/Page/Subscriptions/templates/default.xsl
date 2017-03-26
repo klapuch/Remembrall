@@ -66,7 +66,7 @@
 
 	<xsl:template match="option[@purpose='edit']">
 		<xsl:param name="id"/>
-		<a href="{$base_url}/subscription/edit/{id}" class="btn btn-primary btn-sm" role="button" title="{title}">
+		<a href="{$base_url}/subscription/edit/{$id}" class="btn btn-primary btn-sm" role="button" title="{title}">
 			<span class="glyphicon glyphicon-edit" aria-hidden="true"/>
 		</a>
 	</xsl:template>
