@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "39a3ad2eb1e13587e105707d181dfaa7",
+    "content-hash": "4ddc9d8504dc7d83640f93c51c2b52eb",
     "packages": [
         {
             "name": "gajus/dindent",
@@ -145,16 +145,16 @@
         },
         {
             "name": "klapuch/authorization",
-            "version": "1.2.0",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/Authorization.git",
-                "reference": "50c3d8dec71f26b06b3a01dd645814d3cf9b8bcc"
+                "reference": "bb758c86b68e8face6096a358611aa6c9edb407b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klapuch/Authorization/zipball/50c3d8dec71f26b06b3a01dd645814d3cf9b8bcc",
-                "reference": "50c3d8dec71f26b06b3a01dd645814d3cf9b8bcc",
+                "url": "https://api.github.com/repos/klapuch/Authorization/zipball/bb758c86b68e8face6096a358611aa6c9edb407b",
+                "reference": "bb758c86b68e8face6096a358611aa6c9edb407b",
                 "shasum": ""
             },
             "require": {
@@ -188,7 +188,7 @@
             ],
             "description": " Http based authorization ",
             "homepage": "https://www.github.com/klapuch/Authorization",
-            "time": "2017-03-16T21:39:16+00:00"
+            "time": "2017-03-26T15:39:51+00:00"
         },
         {
             "name": "klapuch/csrf",

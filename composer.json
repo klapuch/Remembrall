@@ -15,7 +15,7 @@
 		"ext-mbstring": "*",
 		"ext-dom": "*",
 		"klapuch/access": "^2.0.0",
-		"klapuch/authorization": "^1.0.0",
+		"klapuch/authorization": "^3.0.0",
 		"klapuch/application": "@dev",
 		"klapuch/csrf": "^1.0.0",
 		"klapuch/dataset": "@dev",
