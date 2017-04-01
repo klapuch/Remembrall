@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Page\Sign;
 
 use Klapuch\Access;
+use Klapuch\Encryption;
 use Klapuch\Output;
 use Remembrall\Control\Sign;
 use Remembrall\Page;
@@ -32,7 +33,9 @@ final class InPage extends Page\BasePage {
 			))->submit(function() use ($credentials) {
 				return (new Access\SecureEntrance(
 					$this->database,
-					$this->cipher
+					new Encryption\AES256CBC(
+						$this->configuration['KEYS']['password']
+					)
 				))->enter([$credentials['email'], $credentials['password']]);
 			});
 			session_regenerate_id(true);
