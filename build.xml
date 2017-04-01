@@ -43,6 +43,7 @@
 			<arg value="-sp"/>
 			<arg path="App"/>
 			<arg path="Tests"/>
+			<arg path="www"/>
 		</exec>
 	</target>
 
@@ -55,6 +56,7 @@
 			<arg value="-sp"/>
 			<arg path="App"/>
 			<arg path="Tests"/>
+			<arg path="www"/>
 		</exec>
 	</target>
 

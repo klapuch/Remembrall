@@ -1,9 +1,17 @@
 <?php
 declare(strict_types = 1);
+
 require __DIR__ . '/../vendor/autoload.php';
-use Klapuch\{
-	Ini, Storage, Uri, Log, Encryption, Output, Routing, Application
-};
+
+use Klapuch\Application;
+use Klapuch\Encryption;
+use Klapuch\Ini;
+use Klapuch\Log;
+use Klapuch\Output;
+use Klapuch\Routing;
+use Klapuch\Storage;
+use Klapuch\Uri;
+
 const CONFIGURATION = __DIR__ . '/../App/Configuration/.config.ini',
 	ROUTES = __DIR__ . '/../App/Configuration/routes.ini';
 const TEMPLATES = __DIR__ . '/../App/Page/templates';
@@ -42,7 +50,7 @@ try {
 	);
 	$submit = 'submit' . $action;
 	$target->startup();
-	if($_SERVER['REQUEST_METHOD'] === 'POST' && method_exists($target, $submit))
+	if ($_SERVER['REQUEST_METHOD'] === 'POST' && method_exists($target, $submit))
 		$target->$submit($_POST, $parameters);
 	$xml = new \DOMDocument();
 	$xml->load(TEMPLATES . sprintf('/../%s/templates/%s.xml', $resource, $action));
@@ -50,8 +58,7 @@ try {
 		TEMPLATES . sprintf('/../%s/templates/%s.xsl', $resource, $action),
 		new Output\MergedXml($xml, ...$target->template($parameters))
 	))->render(['base_url' => $url->reference()]);
-} catch(Throwable $ex) {
-	throw $ex;
+} catch (\Throwable $ex) {
 	$logs->put(
 		new Log\PrettyLog(
 			$ex,
@@ -60,5 +67,4 @@ try {
 			)
 		)
 	);
-	echo 'Error has been logged';
 }
