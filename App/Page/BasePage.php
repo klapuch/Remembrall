@@ -53,7 +53,7 @@ abstract class BasePage extends Application\Page {
 			)
 		);
 		if (!$role->allowed($this->url->path())) {
-			$this->flashMessage('You don\'t have a permission to request the page', 'danger');
+			$this->flashMessage('You don\'t have a permission to see the page', 'danger');
 			$this->redirect($this->url->path() === 'sign/in' ? '' : 'sign/in');
 		}
 	}
