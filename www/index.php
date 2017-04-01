@@ -25,10 +25,7 @@ try {
 	))->improve();
 	$url = new Uri\BaseUrl($_SERVER['SCRIPT_NAME'], $_SERVER['REQUEST_URI']);
 	$route = (new Routing\HttpRoutes(
-		new Ini\Valid(
-			ROUTES,
-			new Ini\Typed(ROUTES)
-		)
+		new Ini\Valid(ROUTES, new Ini\Typed(ROUTES))
 	))->match($url);
 	[$resource, $action, $parameters] = [$route->resource(), $route->action(), $route->parameters()];
 	$class = (new Routing\MappedRoute($route, 'Remembrall\Page', 'Page'))->resource();
