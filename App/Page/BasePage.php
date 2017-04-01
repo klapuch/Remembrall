@@ -3,43 +3,37 @@ declare(strict_types = 1);
 namespace Remembrall\Page;
 
 use Klapuch\Access;
+use Klapuch\Application;
 use Klapuch\Authorization;
 use Klapuch\Csrf;
-use Klapuch\Encryption;
 use Klapuch\Form;
+use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Markup;
 use Klapuch\Output;
+use Klapuch\Storage;
 use Klapuch\UI;
 use Klapuch\Uri;
 
-abstract class BasePage {
-	/** @var \Klapuch\Uri\Uri */
-	protected $url;
+abstract class BasePage extends Application\Page {
 	/** @var \Klapuch\Access\User */
 	protected $user;
 	/** @var \PDO */
 	protected $database;
-	/** @var \Klapuch\Log\Logs */
-	protected $logs;
-	/** @var \Klapuch\Encryption\Cipher */
-	protected $cipher;
-	/** @var \Klapuch\Csrf\Csrf */
-	protected $csrf;
 	/** @var \Klapuch\Form\Backup */
 	protected $backup;
 
 	public function __construct(
 		Uri\Uri $url,
-		\PDO $database,
 		Log\Logs $logs,
-		Encryption\Cipher $cipher
+		Ini\Ini $configuration
 	) {
-		$this->database = $database;
-		$this->logs = $logs;
-		$this->url = $url;
-		$this->cipher = $cipher;
-		$this->csrf = new Csrf\StoredCsrf($_SESSION, $_POST, $_GET);
+		parent::__construct($url, $logs, $configuration);
+		$this->database = new Storage\SafePDO(
+			$this->configuration['DATABASE']['dsn'],
+			$this->configuration['DATABASE']['user'],
+			$this->configuration['DATABASE']['password']
+		);
 		$this->backup = new Form\Backup($_SESSION, $_POST);
 	}
 
@@ -123,51 +117,4 @@ abstract class BasePage {
 			))->xpath('child::*')
 		);
 	}
-
-	/**
-	 * Flash message to the page
-	 * @param string $content
-	 * @param string $type
-	 * @return void
-	 */
-	final protected function flashMessage(string $content, string $type): void {
-		(new UI\PersistentFlashMessage($_SESSION))->flash($content, $type);
-	}
-
-	/**
-	 * Redirect relatively to the given url
-	 * @param string $url
-	 * @return void
-	 */
-	final protected function redirect(string $url): void {
-		header(sprintf('Location: %s/%s', $this->url->reference(), $url));
-		exit;
-	}
-
-	/**
-	 * Protect against CSRF
-	 * @throws \Exception
-	 */
-	final protected function protect(): void {
-		if ($this->csrf->abused())
-			throw new \Exception('Timeout');
-	}
-
-	/**
-	 * Log the exception
-	 * @param \Throwable $ex
-	 * @return void
-	 */
-	final protected function log(\Throwable $ex): void {
-		$this->logs->put(
-			new Log\PrettyLog(
-				$ex,
-				new Log\PrettySeverity(
-					new Log\JustifiedSeverity(Log\Severity::ERROR)
-				)
-			)
-		);
-	}
-
-	abstract public function render(array $parameters): Output\Format;
 }

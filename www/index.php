@@ -2,8 +2,8 @@
 declare(strict_types = 1);
 
 require __DIR__ . '/../vendor/autoload.php';
-require __DIR__ . '/Page.php';
 
+use Klapuch\Application;
 use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Routing;
@@ -12,7 +12,7 @@ use Klapuch\Uri;
 const CONFIGURATION = __DIR__ . '/../App/Configuration/.config.ini',
 	ROUTES = __DIR__ . '/../App/Configuration/routes.ini',
 	LOGS = __DIR__ . '/../log';
-echo (new Remembrall\Page(
+echo new Application\Response(
 	new Ini\Valid(CONFIGURATION, new Ini\Typed(CONFIGURATION)),
 	new Log\FilesystemLogs(new Log\DynamicLocation(new Log\DirectoryLocation(LOGS))),
 	new Routing\HttpRoutes(new Ini\Valid(ROUTES, new Ini\Typed(ROUTES))),
@@ -21,4 +21,4 @@ echo (new Remembrall\Page(
 	in_array($_SERVER['REQUEST_METHOD'], ['GET', 'POST'], true)
 		? ${'_' . $_SERVER['REQUEST_METHOD']}
 		: []
-))->load();
+);
