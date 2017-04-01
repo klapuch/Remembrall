@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4ddc9d8504dc7d83640f93c51c2b52eb",
+    "content-hash": "aefba9f2a54e5521a51cc1bf0b88534d",
     "packages": [
         {
             "name": "gajus/dindent",
@@ -655,7 +655,7 @@
         },
         {
             "name": "klapuch/routing",
-            "version": "dev-master",
+            "version": "0.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/Routing.git",
@@ -700,7 +700,7 @@
             ],
             "description": "HTTP routing",
             "homepage": "https://www.github.com/klapuch/Routing",
-            "time": "2017-03-25 09:34:49"
+            "time": "2017-03-25T09:34:49+00:00"
         },
         {
             "name": "klapuch/storage",
@@ -795,7 +795,7 @@
         },
         {
             "name": "klapuch/ui",
-            "version": "dev-master",
+            "version": "0.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/UI.git",
@@ -839,7 +839,7 @@
             ],
             "description": "UI web components",
             "homepage": "https://www.github.com/klapuch/UI",
-            "time": "2017-03-15 19:16:21"
+            "time": "2017-03-15T19:16:21+00:00"
         },
         {
             "name": "klapuch/uri",
@@ -2693,9 +2693,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "klapuch/application": 20,
-        "klapuch/dataset": 20,
-        "klapuch/routing": 20,
-        "klapuch/ui": 20
+        "klapuch/dataset": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
