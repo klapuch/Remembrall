@@ -2,3 +2,4 @@ vendor/
 assets/node_modules
 assets/dist
 www/dist
+App/Configuration/.config.local.ini

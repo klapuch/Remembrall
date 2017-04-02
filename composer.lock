@@ -101,12 +101,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/Application.git",
-                "reference": "5e7616da47fcb82570aab929a27b8054f7c7c43d"
+                "reference": "419f703c408ea3a62c203344e12b63e1a492997e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klapuch/Application/zipball/5e7616da47fcb82570aab929a27b8054f7c7c43d",
-                "reference": "5e7616da47fcb82570aab929a27b8054f7c7c43d",
+                "url": "https://api.github.com/repos/klapuch/Application/zipball/419f703c408ea3a62c203344e12b63e1a492997e",
+                "reference": "419f703c408ea3a62c203344e12b63e1a492997e",
                 "shasum": ""
             },
             "require": {
@@ -147,7 +147,7 @@
             ],
             "description": "HTTP core application",
             "homepage": "https://www.github.com/klapuch/Application",
-            "time": "2017-04-01 14:50:26"
+            "time": "2017-04-01 15:23:29"
         },
         {
             "name": "klapuch/authorization",
@@ -425,16 +425,16 @@
         },
         {
             "name": "klapuch/ini",
-            "version": "1.0.2",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/Ini.git",
-                "reference": "6d7a739614af600f808a089d5b2e92047bb6266d"
+                "reference": "c258a4e446cc1c0f49f4ba3c376899482fb03bc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klapuch/Ini/zipball/6d7a739614af600f808a089d5b2e92047bb6266d",
-                "reference": "6d7a739614af600f808a089d5b2e92047bb6266d",
+                "url": "https://api.github.com/repos/klapuch/Ini/zipball/c258a4e446cc1c0f49f4ba3c376899482fb03bc4",
+                "reference": "c258a4e446cc1c0f49f4ba3c376899482fb03bc4",
                 "shasum": ""
             },
             "require": {
@@ -442,7 +442,6 @@
             },
             "require-dev": {
                 "nette/tester": "^1.7",
-                "object-calisthenics/phpcs-calisthenics-rules": "^2.0",
                 "sebastian/phpcpd": "*"
             },
             "type": "library",
@@ -469,7 +468,7 @@
                 "read",
                 "write"
             ],
-            "time": "2016-11-20T16:18:16+00:00"
+            "time": "2017-04-02T08:36:57+00:00"
         },
         {
             "name": "klapuch/iterator",
