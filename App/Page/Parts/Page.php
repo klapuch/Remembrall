@@ -26,7 +26,7 @@ abstract class Page extends BasePage {
 					'parts',
 					[
 						'part' => iterator_to_array(
-							$parts->iterate(
+							$parts->all(
 								new Dataset\CombinedSelection(
 									new Dataset\SqlRestSort($_GET['sort'] ?? '', self::COLUMNS),
 									new Dataset\SqlPaging($page, $perPage, self::DEFAULT_PER_PAGE)

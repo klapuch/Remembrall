@@ -25,7 +25,7 @@ final class HarnessedParts implements Parts {
 		);
 	}
 
-	public function iterate(Dataset\Selection $selection): \Traversable {
+	public function all(Dataset\Selection $selection): \Traversable {
 		return $this->callback->invoke(
 			[$this->origin, __FUNCTION__],
 			func_get_args()

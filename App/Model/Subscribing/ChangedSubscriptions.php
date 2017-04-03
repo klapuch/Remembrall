@@ -34,7 +34,7 @@ final class ChangedSubscriptions implements Subscriptions {
 		$this->origin->subscribe($url, $expression, $interval);
 	}
 
-	public function iterate(Dataset\Selection $selection): \Traversable {
+	public function all(Dataset\Selection $selection): \Traversable {
 		$subscriptions = (new Storage\ParameterizedQuery(
 			$this->database,
 			$selection->expression(

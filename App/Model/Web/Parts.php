@@ -20,7 +20,7 @@ interface Parts {
 	 * @param \Klapuch\Dataset\Selection $selection
 	 * @return \Traversable
 	 */
-	public function iterate(Dataset\Selection $selection): \Traversable;
+	public function all(Dataset\Selection $selection): \Traversable;
 
 	/**
 	 * Counted parts

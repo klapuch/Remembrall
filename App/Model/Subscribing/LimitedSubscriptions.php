@@ -43,8 +43,8 @@ final class LimitedSubscriptions implements Subscriptions {
 		$this->origin->subscribe($uri, $expression, $interval);
 	}
 
-	public function iterate(Dataset\Selection $selection): \Traversable {
-		return $this->origin->iterate($selection);
+	public function all(Dataset\Selection $selection): \Traversable {
+		return $this->origin->all($selection);
 	}
 
 	/**

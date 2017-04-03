@@ -45,7 +45,7 @@ final class UnreliableParts extends TestCase\Database {
 		$parts = (new Web\UnreliableParts(
 			new Web\FakeParts(),
 			$this->database
-		))->iterate(new Dataset\FakeSelection(''));
+		))->all(new Dataset\FakeSelection(''));
 		$part = $parts->current();
 		Assert::equal('d', $part->content());
 		$parts->next();
@@ -80,7 +80,7 @@ final class UnreliableParts extends TestCase\Database {
 		Assert::same($count, $parts->count());
 		Assert::same(
 			$count,
-			iterator_count($parts->iterate(new Dataset\FakeSelection('')))
+			iterator_count($parts->all(new Dataset\FakeSelection('')))
 		);
 	}
 
@@ -88,7 +88,7 @@ final class UnreliableParts extends TestCase\Database {
 		$parts = (new Web\UnreliableParts(
 			new Web\FakeParts(),
 			$this->database
-		))->iterate(new Dataset\FakeSelection(''));
+		))->all(new Dataset\FakeSelection(''));
 		Assert::null($parts->current());
 	}
 

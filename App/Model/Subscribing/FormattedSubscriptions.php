@@ -35,9 +35,9 @@ final class FormattedSubscriptions implements Subscriptions {
 		$this->origin->subscribe($url, $expression, $interval);
 	}
 
-	public function iterate(Dataset\Selection $selection): \Traversable {
+	public function all(Dataset\Selection $selection): \Traversable {
 		return new Iterator\MappedIterator(
-			$this->origin->iterate($selection),
+			$this->origin->all($selection),
 			function(Subscription $subscription): Subscription {
 				return new FormattedSubscription(
 					$subscription,

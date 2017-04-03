@@ -38,13 +38,13 @@ final class HarnessedParts extends TestCase\Mockery {
 		$selection = new Dataset\FakeSelection();
 		$callback->shouldReceive('invoke')
 			->once()
-			->with([$origin, 'iterate'], [$selection])
+			->with([$origin, 'all'], [$selection])
 			->andReturn($iterator);
 		Assert::noError(function() use ($origin, $callback, $selection) {
 			(new Web\HarnessedParts(
 				$origin,
 				$callback
-			))->iterate($selection);
+			))->all($selection);
 		});
 		$callback->shouldReceive('invoke')
 			->once()

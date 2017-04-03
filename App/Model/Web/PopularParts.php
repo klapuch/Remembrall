@@ -22,7 +22,7 @@ final class PopularParts implements Parts {
 		$this->origin->add($part, $url, $expression);
 	}
 
-	public function iterate(Dataset\Selection $selection): \Traversable {
+	public function all(Dataset\Selection $selection): \Traversable {
 		$parts = (new Storage\ParameterizedQuery(
 			$this->database,
 			$selection->expression(

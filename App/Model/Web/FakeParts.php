@@ -22,7 +22,7 @@ final class FakeParts implements Parts {
 			throw $this->exception;
 	}
 
-	public function iterate(Dataset\Selection $selection): \Traversable {
+	public function all(Dataset\Selection $selection): \Traversable {
 		if ($this->exception)
 			throw $this->exception;
 		return new \ArrayIterator($this->parts);

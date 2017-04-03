@@ -97,7 +97,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 		$subscriptions = (new Subscribing\OwnedSubscriptions(
 			new Access\FakeUser(1),
 			$this->database
-		))->iterate(new Dataset\FakeSelection('', []));
+		))->all(new Dataset\FakeSelection('', []));
 		$subscription = $subscriptions->current();
 		Assert::contains(
 			'1993-01-01',
@@ -123,7 +123,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 		$subscriptions = (new Subscribing\OwnedSubscriptions(
 			new Access\FakeUser(1),
 			$this->database
-		))->iterate(new Dataset\FakeSelection('', []));
+		))->all(new Dataset\FakeSelection('', []));
 		Assert::null($subscriptions->current());
 	}
 

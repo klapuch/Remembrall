@@ -115,7 +115,7 @@ final class CollectiveParts extends TestCase\Database {
 		);
 		$parts = (new Web\CollectiveParts(
 			$this->database
-		))->iterate(new Dataset\FakeSelection(''));
+		))->all(new Dataset\FakeSelection(''));
 		$part = $parts->current();
 		Assert::same('a', $part->content());
 		$parts->next();
@@ -142,7 +142,7 @@ final class CollectiveParts extends TestCase\Database {
 	public function testIteratingPrinting() {
 		$parts = (new Web\CollectiveParts(
 			$this->database
-		))->iterate(new Dataset\FakeSelection(''));
+		))->all(new Dataset\FakeSelection(''));
 		Assert::null($parts->current());
 	}
 

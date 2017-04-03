@@ -32,7 +32,7 @@ final class CollectiveParts implements Parts {
 		))->execute();
 	}
 
-	public function iterate(Dataset\Selection $selection): \Traversable {
+	public function all(Dataset\Selection $selection): \Traversable {
 		$parts = (new Storage\ParameterizedQuery(
 			$this->database,
 			$selection->expression(

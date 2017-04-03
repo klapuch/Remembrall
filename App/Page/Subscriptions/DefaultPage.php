@@ -24,7 +24,7 @@ final class DefaultPage extends Page\BasePage {
 				),
 				new Texy\Texy(),
 				new Dindent\Indenter()
-			))->iterate(
+			))->all(
 				new Dataset\CombinedSelection(
 					new Dataset\SqlRestSort($_GET['sort'] ?? '', self::FIELDS)
 				)

@@ -34,7 +34,7 @@ final class PopularParts extends TestCase\Database {
 		$parts = (new Web\PopularParts(
 			new Web\FakeParts(),
 			$this->database
-		))->iterate(new Dataset\FakeSelection(''));
+		))->all(new Dataset\FakeSelection(''));
 		$part = $parts->current();
 		Assert::same('bar', $part->content());
 		$parts->next();
@@ -64,7 +64,7 @@ final class PopularParts extends TestCase\Database {
 		$parts = (new Web\PopularParts(
 			new Web\FakeParts(),
 			$this->database
-		))->iterate(new Dataset\FakeSelection(''));
+		))->all(new Dataset\FakeSelection(''));
 		Assert::null($parts->current());
 	}
 

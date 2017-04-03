@@ -21,7 +21,7 @@ final class DefaultPage extends Page\BasePage {
 				new Misc\LoggingCallback($this->logs)
 			);
 			/** @var \Remembrall\Model\Web\Part $part */
-			foreach ($parts->iterate(new Dataset\FakeSelection('')) as $part) {
+			foreach ($parts->all(new Dataset\FakeSelection('')) as $part) {
 				try {
 					$part->refresh();
 				} catch (\Throwable $ex) {
@@ -37,7 +37,7 @@ final class DefaultPage extends Page\BasePage {
 				new Misc\LoggingCallback($this->logs)
 			);
 			/** @var \Remembrall\Model\Subscribing\Subscription $subscription */
-			foreach ($subscriptions->iterate(new Dataset\FakeSelection('', [])) as $subscription) {
+			foreach ($subscriptions->all(new Dataset\FakeSelection('', [])) as $subscription) {
 				try {
 					$subscription->notify();
 				} catch (\Throwable $ex) {

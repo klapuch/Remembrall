@@ -39,7 +39,7 @@ final class FormattedSubscriptions extends Tester\TestCase {
 					),
 					new Texy\Texy(),
 					new Dindent\Indenter()
-				))->iterate(new Dataset\FakeSelection())
+				))->all(new Dataset\FakeSelection())
 			)
 		);
 	}
