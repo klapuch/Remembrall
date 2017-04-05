@@ -21,6 +21,7 @@ final class Assets extends Tester\TestCase {
 		$xslt = new \XSLTProcessor();
 		$xslt->importStylesheet($xsl);
 		$xslt->setParameter('', 'base_url', '/var/www');
+		$xslt->setParameter('', 'nonce', 'random123');
 		$xml = new \DOMDocument();
 		$xml->loadXML($input);
 		$output = new \DOMDocument();
@@ -38,6 +39,8 @@ final class Assets extends Tester\TestCase {
 			['<script href=" http://foo.cz "/>', 'count(//script[@href="http://foo.cz"])=1'],
 			['<script foo="http://bar"/>', 'count(//script[@foo="http://bar"])=1'],
 			['<style href="foo.css"/>', 'count(//link[@href="/var/www/foo.css"])=1'],
+			['<style href="foo.css"/>', 'count(//link[@nonce="random123"])=1'],
+			['<script href="foo.css"/>', 'count(//script[@nonce="random123"])=1'],
 		];
 	}
 }
