@@ -4,12 +4,14 @@
 	<xsl:template match="style">
 		<xsl:element name="link">
             <xsl:attribute name="rel">stylesheet</xsl:attribute>
+			<xsl:attribute name="nonce"><xsl:value-of select="$nonce"/></xsl:attribute>
 			<xsl:apply-templates select="@*" mode="assets"/>
 		</xsl:element>
     </xsl:template>
 
     <xsl:template match="script">
         <xsl:element name="script">
+			<xsl:attribute name="nonce"><xsl:value-of select="$nonce"/></xsl:attribute>
 			<xsl:apply-templates select="@*" mode="assets"/>
         </xsl:element>
 	</xsl:template>

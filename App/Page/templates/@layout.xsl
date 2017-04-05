@@ -25,7 +25,7 @@
 				</div>
 				<xsl:call-template name="footer"/>
 				<xsl:apply-templates select="page/body/assets"/>
-				<script>hljs.initHighlightingOnLoad();</script>
+				<script nonce="{$nonce}">hljs.initHighlightingOnLoad();</script>
 			</body>
 		</html>
 	</xsl:template>
