@@ -7,26 +7,27 @@ use Klapuch\Output;
 use Klapuch\UI;
 use Remembrall\Model\Misc;
 use Remembrall\Model\Web;
-use Remembrall\Page\BasePage;
 
-abstract class Page extends BasePage {
+final class Page {
 	private const COLUMNS = ['url', 'expression', 'occurrences'];
 	private const DEFAULT_PER_PAGE = 100;
 	private const START_PER_PAGE = 10;
+	private $parts;
 
-	abstract protected function parts(): Web\Parts;
+	public function __construct(Web\Parts $parts) {
+		$this->parts = $parts;
+	}
 
-	final public function render(array $parameters): Output\Format {
+	public function render(): Output\Format {
 		$page = intval($_GET['page'] ?? 1);
 		$perPage = intval($_GET['per_page'] ?? self::START_PER_PAGE);
-		$parts = $this->parts();
 		return new Output\CombinedFormat(
 			new Output\ValidXml(
 				new Misc\XmlPrintedObjects(
 					'parts',
 					[
 						'part' => iterator_to_array(
-							$parts->all(
+							$this->parts->all(
 								new Dataset\CombinedSelection(
 									new Dataset\SqlRestSort($_GET['sort'] ?? '', self::COLUMNS),
 									new Dataset\SqlPaging($page, $perPage, self::DEFAULT_PER_PAGE)
@@ -40,7 +41,7 @@ abstract class Page extends BasePage {
 			(new UI\AttainablePagination(
 				$page,
 				$perPage,
-				$parts->count(),
+				$this->parts->count(),
 				self::DEFAULT_PER_PAGE
 			))->print(new Output\Xml([], 'pagination'))
 		);
