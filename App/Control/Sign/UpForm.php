@@ -7,8 +7,8 @@ use Klapuch\Form;
 use Klapuch\Uri;
 use Klapuch\Validation;
 
-final class InForm extends BootstrapForm {
-	private const ACTION = '/sign/in', NAME = 'in';
+final class UpForm extends BootstrapForm {
+	private const ACTION = '/sign/up', NAME = 'up';
 	private $url;
 	private $csrf;
 
@@ -53,7 +53,7 @@ final class InForm extends BootstrapForm {
 			),
 			new Form\BootstrapInput(
 				new Form\DefaultInput(
-					self::SUBMIT_ATTRIBUTES + ['value' => 'Login'],
+					self::SUBMIT_ATTRIBUTES + ['value' => 'Register'],
 					$this->storage,
 					new Validation\PassiveRule()
 				),

@@ -24,6 +24,9 @@
 				<link href="sign/in">Sign in</link>
 			</item>
 			<item>
+				<link href="sign/up">Sign up</link>
+			</item>
+			<item>
 				<link href="sign/out">Sign out</link>
 			</item>
 		</menu>
