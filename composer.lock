@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "aefba9f2a54e5521a51cc1bf0b88534d",
+    "content-hash": "4e6bbb1d04aa0ad444a5d0510154cf03",
     "packages": [
         {
             "name": "gajus/dindent",
@@ -53,21 +53,23 @@
         },
         {
             "name": "klapuch/access",
-            "version": "2.6.0",
+            "version": "2.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/Access.git",
-                "reference": "9fa2e20840e487199e276f31157011763b3bba79"
+                "reference": "65e2cd27f9b7de64e0a4cb43fe312ab7542a46e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klapuch/Access/zipball/9fa2e20840e487199e276f31157011763b3bba79",
-                "reference": "9fa2e20840e487199e276f31157011763b3bba79",
+                "url": "https://api.github.com/repos/klapuch/Access/zipball/65e2cd27f9b7de64e0a4cb43fe312ab7542a46e4",
+                "reference": "65e2cd27f9b7de64e0a4cb43fe312ab7542a46e4",
                 "shasum": ""
             },
             "require": {
                 "klapuch/encryption": "^2.0.0",
+                "klapuch/output": "^2.6",
                 "klapuch/storage": "^2.0.0",
+                "nette/mail": "^2.4",
                 "php": ">=7.1"
             },
             "require-dev": {
@@ -93,7 +95,7 @@
             ],
             "description": "access, authentication, login, register",
             "homepage": "https://github.com/klapuch/Access",
-            "time": "2017-01-29T09:14:59+00:00"
+            "time": "2017-04-08T17:11:00+00:00"
         },
         {
             "name": "klapuch/application",
@@ -101,12 +103,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/Application.git",
-                "reference": "2bcf279356c6f2a4b90092f0dcc4870b5255b56a"
+                "reference": "7df560aff3f5c293f930c28e4d02830676c0ad9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klapuch/Application/zipball/2bcf279356c6f2a4b90092f0dcc4870b5255b56a",
-                "reference": "2bcf279356c6f2a4b90092f0dcc4870b5255b56a",
+                "url": "https://api.github.com/repos/klapuch/Application/zipball/7df560aff3f5c293f930c28e4d02830676c0ad9f",
+                "reference": "7df560aff3f5c293f930c28e4d02830676c0ad9f",
                 "shasum": ""
             },
             "require": {
@@ -147,7 +149,7 @@
             ],
             "description": "HTTP core application",
             "homepage": "https://www.github.com/klapuch/Application",
-            "time": "2017-04-05 17:02:22"
+            "time": "2017-04-08 11:07:36"
         },
         {
             "name": "klapuch/authorization",
@@ -654,16 +656,16 @@
         },
         {
             "name": "klapuch/routing",
-            "version": "0.0.1",
+            "version": "0.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/Routing.git",
-                "reference": "661e0ad0379bf93d57a0dbf3772357883fa082be"
+                "reference": "6d4ae2a85598cd886d5dff037b906332ce3f19a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klapuch/Routing/zipball/661e0ad0379bf93d57a0dbf3772357883fa082be",
-                "reference": "661e0ad0379bf93d57a0dbf3772357883fa082be",
+                "url": "https://api.github.com/repos/klapuch/Routing/zipball/6d4ae2a85598cd886d5dff037b906332ce3f19a0",
+                "reference": "6d4ae2a85598cd886d5dff037b906332ce3f19a0",
                 "shasum": ""
             },
             "require": {
@@ -699,7 +701,7 @@
             ],
             "description": "HTTP routing",
             "homepage": "https://www.github.com/klapuch/Routing",
-            "time": "2017-03-25T09:34:49+00:00"
+            "time": "2017-04-08T08:53:38+00:00"
         },
         {
             "name": "klapuch/storage",
@@ -1058,16 +1060,16 @@
         },
         {
             "name": "texy/texy",
-            "version": "v2.9.0",
+            "version": "v2.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dg/texy.git",
-                "reference": "8ddd8e3ec6bb943e39a40d2aa353766468e0c0c0"
+                "reference": "2d25b72710e96d33da83f0e3e9f0805adef75e2f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dg/texy/zipball/8ddd8e3ec6bb943e39a40d2aa353766468e0c0c0",
-                "reference": "8ddd8e3ec6bb943e39a40d2aa353766468e0c0c0",
+                "url": "https://api.github.com/repos/dg/texy/zipball/2d25b72710e96d33da83f0e3e9f0805adef75e2f",
+                "reference": "2d25b72710e96d33da83f0e3e9f0805adef75e2f",
                 "shasum": ""
             },
             "require": {
@@ -1077,7 +1079,8 @@
                 "dg/texy": "*"
             },
             "require-dev": {
-                "nette/tester": "~1.5"
+                "nette/tester": "~1.5",
+                "tracy/tracy": "^2.4"
             },
             "type": "library",
             "autoload": {
@@ -1113,7 +1116,7 @@
                 "wiki",
                 "xhtml"
             ],
-            "time": "2016-06-08T16:16:47+00:00"
+            "time": "2017-04-08T14:57:24+00:00"
         }
     ],
     "packages-dev": [
