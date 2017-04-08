@@ -153,16 +153,16 @@
         },
         {
             "name": "klapuch/authorization",
-            "version": "3.0.0",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/Authorization.git",
-                "reference": "bb758c86b68e8face6096a358611aa6c9edb407b"
+                "reference": "4b3bbb00ada0c2e827aaf3a055b9a055159ac69e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klapuch/Authorization/zipball/bb758c86b68e8face6096a358611aa6c9edb407b",
-                "reference": "bb758c86b68e8face6096a358611aa6c9edb407b",
+                "url": "https://api.github.com/repos/klapuch/Authorization/zipball/4b3bbb00ada0c2e827aaf3a055b9a055159ac69e",
+                "reference": "4b3bbb00ada0c2e827aaf3a055b9a055159ac69e",
                 "shasum": ""
             },
             "require": {
@@ -196,7 +196,7 @@
             ],
             "description": " Http based authorization ",
             "homepage": "https://www.github.com/klapuch/Authorization",
-            "time": "2017-03-26T15:39:51+00:00"
+            "time": "2017-04-08T18:34:37+00:00"
         },
         {
             "name": "klapuch/csrf",
