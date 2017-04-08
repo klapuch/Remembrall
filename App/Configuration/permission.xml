@@ -25,4 +25,6 @@
 	<permission resource="sign/up" role="guest"/>
 
 	<permission resource="sign/out" role="member"/>
+
+    <permission resource="verification/confirm/{any}" role="guest"/>
 </permissions>

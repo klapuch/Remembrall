@@ -8,14 +8,14 @@
 		<html lang="cs-cz">
 			<body>
 				<xsl:text>Please, confirm your account via link below.</xsl:text>
-                <br/>
+				<br/>
 				<xsl:element name="a">
 					<xsl:attribute name="href">
 						<xsl:value-of select="base_url"/>
-						<xsl:text>/confirmation/</xsl:text>
+						<xsl:text>/verification/confirm/</xsl:text>
 						<xsl:value-of select="$code"/>
 					</xsl:attribute>
-                    <xsl:value-of select="$code"/>
+					<xsl:value-of select="$code"/>
 				</xsl:element>
 			</body>
 		</html>
