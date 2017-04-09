@@ -6,6 +6,7 @@ use Klapuch\Csrf;
 use Klapuch\Form;
 use Klapuch\Uri;
 use Klapuch\Validation;
+use Remembrall\Constraint;
 
 final class InForm extends BootstrapForm {
 	private const ACTION = '/sign/in', NAME = 'in';
@@ -34,7 +35,7 @@ final class InForm extends BootstrapForm {
 					new Form\DefaultInput(
 						self::EMAIL_ATTRIBUTES,
 						$this->storage,
-						$this->emailRule()
+						new Constraint\EmailRule()
 					),
 					new Form\LinkedLabel('Email', 'email')
 				),
@@ -45,7 +46,7 @@ final class InForm extends BootstrapForm {
 					new Form\DefaultInput(
 						self::PASSWORD_ATTRIBUTES,
 						$this->storage,
-						$this->passwordRule()
+						new Constraint\PasswordRule()
 					),
 					new Form\LinkedLabel('Password', 'password')
 				),

@@ -6,6 +6,7 @@ use Klapuch\Csrf;
 use Klapuch\Form;
 use Klapuch\Uri;
 use Klapuch\Validation;
+use Remembrall\Constraint;
 
 final class NewForm extends BootstrapForm {
 	private const ACTION = '/subscription', NAME = 'new';
@@ -36,7 +37,7 @@ final class NewForm extends BootstrapForm {
 							'value' => $_GET['url'] ?? '',
 						],
 						$this->storage,
-						$this->urlRule()
+						new Constraint\UrlRule()
 					),
 					new Form\LinkedLabel('Url', 'url')
 				),
@@ -49,7 +50,7 @@ final class NewForm extends BootstrapForm {
 							'value' => $_GET['expression'] ?? '',
 						],
 						$this->storage,
-						$this->expressionRule()
+						new Constraint\ExpressionRule()
 					),
 					new Form\LinkedLabel('Expression', 'expression')
 				),
@@ -60,7 +61,7 @@ final class NewForm extends BootstrapForm {
 					new Form\DefaultInput(
 						self::INTERVAL_ATTRIBUTES,
 						$this->storage,
-						$this->intervalRule()
+						new Constraint\IntervalRule()
 					),
 					new Form\LinkedLabel('Interval', 'interval')
 				),
