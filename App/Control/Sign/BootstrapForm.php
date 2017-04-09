@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Remembrall\Control\Sign;
 
-use Klapuch\Validation;
 use Remembrall\Control;
 
 abstract class BootstrapForm extends Control\HarnessedForm {
@@ -29,24 +28,4 @@ abstract class BootstrapForm extends Control\HarnessedForm {
 		'name' => 'act',
 		'class' => 'form-control',
 	];
-
-	final protected function emailRule(): Validation\Rule {
-		return new Validation\ChainedRule(
-			new Validation\FriendlyRule(
-				new Validation\NegateRule(new Validation\EmptyRule()),
-				'Email must be filled'
-			),
-			new Validation\FriendlyRule(
-				new Validation\EmailRule(),
-				'Email must be valid'
-			)
-		);
-	}
-
-	final protected function passwordRule(): Validation\Rule {
-		return new Validation\FriendlyRule(
-			new Validation\NegateRule(new Validation\EmptyRule()),
-			'Password must be filled'
-		);
-	}
 }

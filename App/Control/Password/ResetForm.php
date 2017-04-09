@@ -6,6 +6,7 @@ use Klapuch\Csrf;
 use Klapuch\Form;
 use Klapuch\Uri;
 use Klapuch\Validation;
+use Remembrall\Constraint;
 use Remembrall\Control;
 
 final class ResetForm extends Control\HarnessedForm {
@@ -47,12 +48,7 @@ final class ResetForm extends Control\HarnessedForm {
 							'required' => 'required',
 						],
 						$this->storage,
-						new Validation\FriendlyRule(
-							new Validation\NegateRule(
-								new Validation\EmptyRule()
-							),
-							'Password must be filled'
-						)
+						new Constraint\PasswordRule()
 					),
 					new Form\LinkedLabel('New password', 'password')
 				),
@@ -66,9 +62,7 @@ final class ResetForm extends Control\HarnessedForm {
 				],
 				$this->storage,
 				new Validation\FriendlyRule(
-					new Validation\NegateRule(
-						new Validation\EmptyRule()
-					),
+					new Validation\NegateRule(new Validation\EmptyRule()),
 					'Reminder must be filled'
 				)
 			),

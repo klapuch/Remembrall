@@ -7,6 +7,7 @@ use Klapuch\Form;
 use Klapuch\Output;
 use Klapuch\Uri;
 use Klapuch\Validation;
+use Remembrall\Constraint;
 use Remembrall\Model\Subscribing;
 
 final class EditForm extends BootstrapForm {
@@ -44,7 +45,7 @@ final class EditForm extends BootstrapForm {
 							'value' => new Form\XmlDynamicValue('url', $xml),
 						],
 						$this->storage,
-						$this->urlRule()
+						new Constraint\UrlRule()
 					),
 					new Form\LinkedLabel('Url', 'url')
 				),
@@ -58,7 +59,7 @@ final class EditForm extends BootstrapForm {
 							'value' => new Form\XmlDynamicValue('expression', $xml),
 						],
 						$this->storage,
-						$this->expressionRule()
+						new Constraint\ExpressionRule()
 					),
 					new Form\LinkedLabel('Expression', 'expression')
 				),
@@ -71,7 +72,7 @@ final class EditForm extends BootstrapForm {
 							'value' => new Form\XmlDynamicValue('interval', $xml),
 						],
 						$this->storage,
-						$this->intervalRule()
+						new Constraint\IntervalRule()
 					),
 					new Form\LinkedLabel('Interval', 'interval')
 				),

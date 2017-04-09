@@ -6,6 +6,7 @@ use Klapuch\Csrf;
 use Klapuch\Form;
 use Klapuch\Uri;
 use Klapuch\Validation;
+use Remembrall\Constraint;
 use Remembrall\Control;
 
 final class RemindForm extends Control\HarnessedForm {
@@ -44,18 +45,7 @@ final class RemindForm extends Control\HarnessedForm {
 							'required' => 'required',
 						],
 						$this->storage,
-						new Validation\ChainedRule(
-							new Validation\FriendlyRule(
-								new Validation\NegateRule(
-									new Validation\EmptyRule()
-								),
-								'Email must be filled'
-							),
-							new Validation\FriendlyRule(
-								new Validation\EmailRule(),
-								'Email must be valid'
-							)
-						)
+						new Constraint\EmailRule()
 					),
 					new Form\LinkedLabel('Email', 'email')
 				),
