@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page>
+    <head>
+		<title>Password reset</title>
+		<meta name="description" content="Reset your password"/>
+	</head>
+	<body>
+		<header level="1">Password reset</header>
+	</body>
+</page>

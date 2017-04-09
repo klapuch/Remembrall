@@ -30,4 +30,5 @@
     <permission resource="verification/request" role="guest"/>
 
     <permission resource="password/remind" role="guest"/>
+    <permission resource="password/reset/{any}" role="guest"/>
 </permissions>
