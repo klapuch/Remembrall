@@ -28,4 +28,6 @@
 
     <permission resource="verification/confirm/{any}" role="guest"/>
     <permission resource="verification/request" role="guest"/>
+
+    <permission resource="password/remind" role="guest"/>
 </permissions>
