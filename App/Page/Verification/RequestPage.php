@@ -4,7 +4,6 @@ namespace Remembrall\Page\Verification;
 
 use Klapuch\Access;
 use Klapuch\Output;
-use Klapuch\Uri;
 use Nette\Mail;
 use Remembrall\Control\Verification;
 use Remembrall\Page;

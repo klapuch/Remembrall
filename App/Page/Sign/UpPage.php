@@ -6,7 +6,6 @@ use Klapuch\Access;
 use Klapuch\Encryption;
 use Klapuch\Output;
 use Klapuch\Storage;
-use Klapuch\Uri;
 use Nette\Mail;
 use Remembrall\Control\Sign;
 use Remembrall\Page;

@@ -4,7 +4,6 @@ namespace Remembrall\Page\Password;
 
 use Klapuch\Access;
 use Klapuch\Output;
-use Klapuch\Uri;
 use Nette\Mail;
 use Remembrall\Control\Password;
 use Remembrall\Page;
