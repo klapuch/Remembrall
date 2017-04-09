@@ -44,12 +44,7 @@ final class RequestPage extends Page\Layout {
 					new Output\XsltTemplate(
 						self::CONTENT,
 						new Output\Xml(
-							[
-								'base_url' => (new Uri\SchemeFoistedUrl(
-									new Uri\FakeUri($_SERVER['SERVER_NAME']),
-									$_SERVER['REQUEST_SCHEME']
-								))->reference(),
-							],
+							['base_url' => $this->url->reference()],
 							'request'
 						)
 					)

@@ -20,7 +20,12 @@ echo new Application\Response(
 	),
 	new Log\FilesystemLogs(new Log\DynamicLocation(new Log\DirectoryLocation(LOGS))),
 	new Routing\HttpRoutes(new Ini\Valid(ROUTES, new Ini\Typed(ROUTES))),
-	new Uri\BaseUrl($_SERVER['SCRIPT_NAME'], $_SERVER['REQUEST_URI']),
+	new Uri\BaseUrl(
+		$_SERVER['SCRIPT_NAME'],
+		$_SERVER['REQUEST_URI'],
+		$_SERVER['SERVER_NAME'],
+		$_SERVER['HTTPS'] ?? 'http'
+	),
 	$_SERVER['REQUEST_METHOD'],
 	in_array($_SERVER['REQUEST_METHOD'], ['GET', 'POST'], true)
 		? ${'_' . $_SERVER['REQUEST_METHOD']}
