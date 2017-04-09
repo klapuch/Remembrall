@@ -8,7 +8,7 @@ use Klapuch\Output;
 use Remembrall\Control\Password;
 use Remembrall\Page;
 
-final class ResetPage extends Page\BasePage {
+final class ResetPage extends Page\Layout {
 	public function render(array $parameters): Output\Format {
 		$dom = new \DOMDocument();
 		$dom->loadXML(

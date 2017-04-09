@@ -13,7 +13,7 @@ use Remembrall\Model\Subscribing;
 use Remembrall\Model\Web;
 use Remembrall\Page;
 
-final class DefaultPage extends Page\BasePage {
+final class DefaultPage extends Page\Layout {
 	public function render(array $parameters): Output\Format {
 		$dom = new \DOMDocument();
 		$dom->loadXML(

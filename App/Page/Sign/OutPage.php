@@ -5,7 +5,7 @@ namespace Remembrall\Page\Sign;
 use Klapuch\Output;
 use Remembrall\Page;
 
-final class OutPage extends Page\BasePage {
+final class OutPage extends Page\Layout {
 	public function render(array $parameters): Output\Format {
 		try {
 			if (!isset($_SESSION['id']))

@@ -9,7 +9,7 @@ use Nette\Mail;
 use Remembrall\Control\Password;
 use Remembrall\Page;
 
-final class RemindPage extends Page\BasePage {
+final class RemindPage extends Page\Layout {
 	private const TEMPLATES = __DIR__ . '/../../Messages/Password/Remind';
 	private const SENDER = 'Remembrall <remembrall@remembrall.org>',
 		SUBJECT = 'Remembrall forgotten password',

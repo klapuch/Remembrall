@@ -6,7 +6,7 @@ use Klapuch\Output;
 use Remembrall\Model\Subscribing;
 use Remembrall\Page;
 
-final class DeletePage extends Page\BasePage {
+final class DeletePage extends Page\Layout {
 	public function render(array $parameters): Output\Format {
 		$this->redirect('error');
 	}

@@ -8,7 +8,7 @@ use Remembrall\Control\Subscription;
 use Remembrall\Model\Subscribing;
 use Remembrall\Page;
 
-final class EditPage extends Page\BasePage {
+final class EditPage extends Page\Layout {
 	public function render(array $parameters): Output\Format {
 		$dom = new \DOMDocument();
 		$dom->loadXML(

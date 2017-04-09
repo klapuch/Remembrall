@@ -6,7 +6,7 @@ use Klapuch\Access;
 use Klapuch\Output;
 use Remembrall\Page;
 
-final class ConfirmPage extends Page\BasePage {
+final class ConfirmPage extends Page\Layout {
 	public function render(array $parameters): Output\Format {
 		try {
 			(new Access\ExistingVerificationCode(

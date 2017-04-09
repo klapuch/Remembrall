@@ -8,7 +8,7 @@ use Klapuch\Output;
 use Remembrall\Control\Sign;
 use Remembrall\Page;
 
-final class InPage extends Page\BasePage {
+final class InPage extends Page\Layout {
 	public function render(array $parameters): Output\Format {
 		$dom = new \DOMDocument();
 		$dom->loadXML(

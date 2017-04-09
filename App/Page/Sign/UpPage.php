@@ -11,7 +11,7 @@ use Nette\Mail;
 use Remembrall\Control\Sign;
 use Remembrall\Page;
 
-final class UpPage extends Page\BasePage {
+final class UpPage extends Page\Layout {
 	private const ROLE = 'member';
 	private const TEMPLATES = __DIR__ . '/../../Messages/Sign/Up';
 	private const SENDER = 'Remembrall <remembrall@remembrall.org>',

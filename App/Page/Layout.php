@@ -15,7 +15,7 @@ use Klapuch\Storage;
 use Klapuch\UI;
 use Klapuch\Uri;
 
-abstract class BasePage extends Application\Page {
+abstract class Layout extends Application\Page {
 	/** @var \Klapuch\Access\User */
 	protected $user;
 	/** @var \PDO */

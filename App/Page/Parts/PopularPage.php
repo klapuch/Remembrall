@@ -5,10 +5,10 @@ namespace Remembrall\Page\Parts;
 use Gajus\Dindent;
 use Klapuch\Output;
 use Remembrall\Model\Web;
-use Remembrall\Page\BasePage;
+use Remembrall\Page\Layout;
 use Texy;
 
-final class PopularPage extends BasePage {
+final class PopularPage extends Layout {
 	public function render(array $parameters): Output\Format {
 		return (new Page(
 			new Web\FormattedParts(
