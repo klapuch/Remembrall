@@ -5,7 +5,8 @@ namespace Remembrall\Page\Password;
 use Klapuch\Access;
 use Klapuch\Encryption;
 use Klapuch\Output;
-use Remembrall\Control\Password;
+use Remembrall\Form;
+use Remembrall\Form\Password;
 use Remembrall\Page;
 
 final class ResetPage extends Page\Layout {
@@ -27,31 +28,35 @@ final class ResetPage extends Page\Layout {
 
 	public function submitReset(array $credentials): void {
 		try {
-			(new Password\ResetForm(
-				$credentials['reminder'],
-				$this->url,
-				$this->csrf,
-				$this->backup
-			))->submit(function() use ($credentials) {
-				(new Access\ExpirableRemindedPassword(
+			(new Form\HarnessedForm(
+				new Password\ResetForm(
 					$credentials['reminder'],
-					$this->database,
-					new Access\RemindedPassword(
+					$this->url,
+					$this->csrf,
+					$this->backup
+				),
+				$this->backup,
+				function() use ($credentials): void {
+					(new Access\ExpirableRemindedPassword(
 						$credentials['reminder'],
 						$this->database,
-						new Access\UserPassword(
-							new Access\ForgetfulUser(
-								$credentials['reminder'],
-								$this->database
-							),
+						new Access\RemindedPassword(
+							$credentials['reminder'],
 							$this->database,
-							new Encryption\AES256CBC(
-								$this->configuration['KEYS']['password']
+							new Access\UserPassword(
+								new Access\ForgetfulUser(
+									$credentials['reminder'],
+									$this->database
+								),
+								$this->database,
+								new Encryption\AES256CBC(
+									$this->configuration['KEYS']['password']
+								)
 							)
 						)
-					)
-				))->change($credentials['password']);
-			});
+					))->change($credentials['password']);
+				}
+			))->validate();
 			$this->flashMessage('Password has been reset', 'success');
 			$this->redirect('sign/in');
 		} catch (\Throwable $ex) {

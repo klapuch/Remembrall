@@ -1,31 +1,40 @@
 <?php
 declare(strict_types = 1);
-namespace Remembrall\Control\Verification;
+namespace Remembrall\Form\Verification;
 
 use Klapuch\Csrf;
 use Klapuch\Form;
 use Klapuch\Uri;
 use Klapuch\Validation;
 use Remembrall\Constraint;
-use Remembrall\Control;
 
-final class RequestForm extends Control\HarnessedForm {
+final class RequestForm implements Form\Control {
 	private const COLUMNS = 5;
-	private const ACTION = '/verification/request', NAME = 'request';
+	private const ACTION = '/verification/request',
+		NAME = 'request';
 	private $url;
 	private $csrf;
+	private $storage;
 
 	public function __construct(
 		Uri\Uri $url,
 		Csrf\Csrf $csrf,
 		Form\Storage $storage
 	) {
-		parent::__construct($storage);
 		$this->url = $url;
 		$this->csrf = $csrf;
+		$this->storage = $storage;
 	}
 
-	protected function form(): Form\Control {
+	public function render(): string {
+		return $this->form()->render();
+	}
+
+	public function validate(): void {
+		$this->form()->validate();
+	}
+
+	private function form(): Form\Control {
 		return new Form\RawForm(
 			[
 				'method' => 'POST',

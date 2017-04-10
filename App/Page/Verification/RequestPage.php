@@ -5,7 +5,8 @@ namespace Remembrall\Page\Verification;
 use Klapuch\Access;
 use Klapuch\Output;
 use Nette\Mail;
-use Remembrall\Control\Verification;
+use Remembrall\Form;
+use Remembrall\Form\Verification;
 use Remembrall\Page;
 
 final class RequestPage extends Page\Layout {
@@ -31,24 +32,28 @@ final class RequestPage extends Page\Layout {
 
 	public function submitRequest(array $credentials): void {
 		try {
-			(new Verification\RequestForm(
-				$this->url,
-				$this->csrf,
-				$this->backup
-			))->submit(function() use ($credentials) {
-				(new Access\ReserveVerificationCodes(
-					$this->database,
-					new Mail\SendmailMailer(),
-					(new Mail\Message())->setFrom(self::SENDER)->setSubject(self::SUBJECT),
-					new Output\XsltTemplate(
-						self::CONTENT,
-						new Output\Xml(
-							['base_url' => $this->url->reference()],
-							'request'
+			(new Form\HarnessedForm(
+				new Verification\RequestForm(
+					$this->url,
+					$this->csrf,
+					$this->backup
+				),
+				$this->backup,
+				function() use ($credentials): void {
+					(new Access\ReserveVerificationCodes(
+						$this->database,
+						new Mail\SendmailMailer(),
+						(new Mail\Message())->setFrom(self::SENDER)->setSubject(self::SUBJECT),
+						new Output\XsltTemplate(
+							self::CONTENT,
+							new Output\Xml(
+								['base_url' => $this->url->reference()],
+								'request'
+							)
 						)
-					)
-				))->generate($credentials['email']);
-			});
+					))->generate($credentials['email']);
+				}
+			))->validate();
 			$this->flashMessage('Verification code has been resent', 'success');
 		} catch (\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');

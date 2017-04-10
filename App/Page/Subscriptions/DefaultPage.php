@@ -4,9 +4,8 @@ namespace Remembrall\Page\Subscriptions;
 
 use Gajus\Dindent;
 use Klapuch\Dataset;
-use Klapuch\Form;
 use Klapuch\Output;
-use Remembrall\Control\Subscription;
+use Remembrall\Form\Subscription;
 use Remembrall\Model\Misc;
 use Remembrall\Model\Subscribing;
 use Remembrall\Page;
@@ -37,8 +36,7 @@ final class DefaultPage extends Page\Layout {
 				(new Subscription\DeleteForms(
 					$subscriptions,
 					$this->url,
-					$this->csrf,
-					new Form\EmptyStorage()
+					$this->csrf
 				))->render()
 			)
 		);

@@ -4,7 +4,8 @@ namespace Remembrall\Page\Subscription;
 
 use Klapuch\Output;
 use Klapuch\Time;
-use Remembrall\Control\Subscription;
+use Remembrall\Form;
+use Remembrall\Form\Subscription;
 use Remembrall\Model\Subscribing;
 use Remembrall\Page;
 
@@ -15,7 +16,15 @@ final class EditPage extends Page\Layout {
 			sprintf(
 				'<forms>%s</forms>',
 				(new Subscription\EditForm(
-					$this->subscription($parameters['id']),
+					new Subscribing\OwnedSubscription(
+						new Subscribing\StoredSubscription(
+							$parameters['id'],
+							$this->database
+						),
+						$parameters['id'],
+						$this->user,
+						$this->database
+					),
 					$this->url,
 					$this->csrf,
 					$this->backup
@@ -28,38 +37,33 @@ final class EditPage extends Page\Layout {
 	public function submitEdit(array $subscription, array $parameters): void {
 		try {
 			$id = $parameters['id'];
-			(new Subscription\EditForm(
-				$this->subscription($id),
-				$this->url,
-				$this->csrf,
-				$this->backup
-			))->submit(function() use ($subscription, $id) {
-				(new Subscribing\StoredSubscription(
-					$id,
-					$this->database
-				))->edit(
-					new Time\TimeInterval(
-						new \DateTimeImmutable(),
-						new \DateInterval(
-							sprintf('PT%dM', $subscription['interval'])
+			(new Form\HarnessedForm(
+				new Subscription\EditForm(
+					new Subscribing\FakeSubscription(),
+					$this->url,
+					$this->csrf,
+					$this->backup
+				),
+				$this->backup,
+				function() use ($subscription, $id): void {
+					(new Subscribing\StoredSubscription(
+						$id,
+						$this->database
+					))->edit(
+						new Time\TimeInterval(
+							new \DateTimeImmutable(),
+							new \DateInterval(
+								sprintf('PT%dM', $subscription['interval'])
+							)
 						)
-					)
-				);
-			});
+					);
+				}
+			))->validate();
 			$this->flashMessage('Subscription has been edited', 'success');
 			$this->redirect('subscriptions');
 		} catch (\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
 			$this->redirect($this->url->path());
 		}
-	}
-
-	private function subscription(int $id): Subscribing\Subscription {
-		return new Subscribing\OwnedSubscription(
-			new Subscribing\StoredSubscription($id, $this->database),
-			$id,
-			$this->user,
-			$this->database
-		);
 	}
 }

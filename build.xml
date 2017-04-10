@@ -19,7 +19,7 @@
 	<target name="phpcpd">
 		<exec executable="vendor/bin/phpcpd" logoutput="true" passthru="true" checkreturn="true">
             <arg value="--exclude"/>
-            <arg value="Control"/>
+            <arg value="Form"/>
 			<arg path="App"/>
 		</exec>
 	</target>

@@ -5,7 +5,8 @@ namespace Remembrall\Page\Sign;
 use Klapuch\Access;
 use Klapuch\Encryption;
 use Klapuch\Output;
-use Remembrall\Control\Sign;
+use Remembrall\Form;
+use Remembrall\Form\Sign;
 use Remembrall\Page;
 
 final class InPage extends Page\Layout {
@@ -26,23 +27,23 @@ final class InPage extends Page\Layout {
 
 	public function submitIn(array $credentials): void {
 		try {
-			$user = (new Sign\InForm(
-				$this->url,
-				$this->csrf,
-				$this->backup
-			))->submit(function() use ($credentials) {
-				return (new Access\VerifiedEntrance(
-					$this->database,
-					new Access\SecureEntrance(
+			(new Form\HarnessedForm(
+				new Sign\InForm($this->url, $this->csrf, $this->backup),
+				$this->backup,
+				function() use ($credentials): void {
+					$user = (new Access\VerifiedEntrance(
 						$this->database,
-						new Encryption\AES256CBC(
-							$this->configuration['KEYS']['password']
+						new Access\SecureEntrance(
+							$this->database,
+							new Encryption\AES256CBC(
+								$this->configuration['KEYS']['password']
+							)
 						)
-					)
-				))->enter([$credentials['email'], $credentials['password']]);
-			});
-			session_regenerate_id(true);
-			$_SESSION['id'] = $user->id();
+					))->enter([$credentials['email'], $credentials['password']]);
+					session_regenerate_id(true);
+					$_SESSION['id'] = $user->id();
+				}
+			))->validate();
 			$this->flashMessage('You have been logged in', 'success');
 			$this->redirect('subscriptions');
 		} catch (\Throwable $ex) {
