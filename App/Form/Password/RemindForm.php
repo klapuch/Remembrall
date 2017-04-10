@@ -1,40 +1,46 @@
 <?php
 declare(strict_types = 1);
-namespace Remembrall\Control\Password;
+namespace Remembrall\Form\Password;
 
 use Klapuch\Csrf;
 use Klapuch\Form;
 use Klapuch\Uri;
 use Klapuch\Validation;
 use Remembrall\Constraint;
-use Remembrall\Control;
 
-final class ResetForm extends Control\HarnessedForm {
+final class RemindForm implements Form\Control {
 	private const COLUMNS = 5;
-	private const NAME = 'reset';
-	private $reminder;
+	private const ACTION = '/password/remind',
+		NAME = 'remind';
 	private $url;
 	private $csrf;
+	private $storage;
 
 	public function __construct(
-		string $reminder,
 		Uri\Uri $url,
 		Csrf\Csrf $csrf,
 		Form\Storage $storage
 	) {
-		parent::__construct($storage);
-		$this->reminder = $reminder;
 		$this->url = $url;
 		$this->csrf = $csrf;
+		$this->storage = $storage;
 	}
 
-	protected function form(): Form\Control {
+	public function render(): string {
+		return $this->form()->render();
+	}
+
+	public function validate(): void {
+		$this->form()->validate();
+	}
+
+	private function form(): Form\Control {
 		return new Form\RawForm(
 			[
 				'method' => 'POST',
 				'role' => 'form',
 				'class' => 'form-horizontal',
-				'action' => $this->url->reference() . '/' . $this->url->path(),
+				'action' => $this->url->reference() . self::ACTION,
 				'name' => self::NAME,
 			],
 			new Form\CsrfInput($this->csrf),
@@ -42,29 +48,17 @@ final class ResetForm extends Control\HarnessedForm {
 				new Form\BoundControl(
 					new Form\DefaultInput(
 						[
-							'type' => 'password',
-							'name' => 'password',
+							'type' => 'email',
+							'name' => 'email',
 							'class' => 'form-control',
 							'required' => 'required',
 						],
 						$this->storage,
-						new Constraint\PasswordRule()
+						new Constraint\EmailRule()
 					),
-					new Form\LinkedLabel('New password', 'password')
+					new Form\LinkedLabel('Email', 'email')
 				),
 				self::COLUMNS
-			),
-			new Form\DefaultInput(
-				[
-					'type' => 'hidden',
-					'name' => 'reminder',
-					'value' => $this->reminder,
-				],
-				$this->storage,
-				new Validation\FriendlyRule(
-					new Validation\NegateRule(new Validation\EmptyRule()),
-					'Reminder must be filled'
-				)
 			),
 			new Form\BootstrapInput(
 				new Form\DefaultInput(
@@ -72,7 +66,7 @@ final class ResetForm extends Control\HarnessedForm {
 						'type' => 'submit',
 						'name' => 'act',
 						'class' => 'form-control',
-						'value' => 'Change',
+						'value' => 'Send',
 					],
 					$this->storage,
 					new Validation\PassiveRule()

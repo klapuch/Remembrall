@@ -7,7 +7,8 @@ use Klapuch\Encryption;
 use Klapuch\Output;
 use Klapuch\Storage;
 use Nette\Mail;
-use Remembrall\Control\Sign;
+use Remembrall\Form;
+use Remembrall\Form\Sign;
 use Remembrall\Page;
 
 final class UpPage extends Page\Layout {
@@ -34,33 +35,41 @@ final class UpPage extends Page\Layout {
 
 	public function submitUp(array $credentials): void {
 		try {
-			(new Sign\InForm(
-				$this->url,
-				$this->csrf,
-				$this->backup
-			))->submit(function() use ($credentials) {
-				(new Storage\Transaction($this->database))->start(function() use ($credentials) {
-					(new Access\UniqueUsers(
+			(new Form\HarnessedForm(
+				new Sign\InForm($this->url, $this->csrf, $this->backup),
+				$this->backup,
+				function() use ($credentials): void {
+					(new Storage\Transaction($this->database))->start(
+						function() use ($credentials) {
+							(new Access\UniqueUsers(
+								$this->database,
+								new Encryption\AES256CBC(
+									$this->configuration['KEYS']['password']
+								)
+							))->register(
+								$credentials['email'],
+								$credentials['password'],
+								self::ROLE
+							);
+							(new Access\SecureVerificationCodes(
+								$this->database
+							))->generate($credentials['email']);
+						}
+					);
+					(new Access\ReserveVerificationCodes(
 						$this->database,
-						new Encryption\AES256CBC(
-							$this->configuration['KEYS']['password']
+						new Mail\SendmailMailer(),
+						(new Mail\Message())->setFrom(self::SENDER)->setSubject(self::SUBJECT),
+						new Output\XsltTemplate(
+							self::CONTENT,
+							new Output\Xml(
+								['base_url' => $this->url->reference()],
+								'up'
+							)
 						)
-					))->register($credentials['email'], $credentials['password'], self::ROLE);
-					(new Access\SecureVerificationCodes($this->database))->generate($credentials['email']);
-				});
-				(new Access\ReserveVerificationCodes(
-					$this->database,
-					new Mail\SendmailMailer(),
-					(new Mail\Message())->setFrom(self::SENDER)->setSubject(self::SUBJECT),
-					new Output\XsltTemplate(
-						self::CONTENT,
-						new Output\Xml(
-							['base_url' => $this->url->reference()],
-							'up'
-						)
-					)
-				))->generate($credentials['email']);
-			});
+					))->generate($credentials['email']);
+				}
+			))->validate();
 			$this->flashMessage('You have been signed up', 'success');
 			$this->flashMessage('Confirm your registration in the email', 'warning');
 			$this->redirect('sign/in');

@@ -5,7 +5,8 @@ namespace Remembrall\Page\Password;
 use Klapuch\Access;
 use Klapuch\Output;
 use Nette\Mail;
-use Remembrall\Control\Password;
+use Remembrall\Form;
+use Remembrall\Form\Password;
 use Remembrall\Page;
 
 final class RemindPage extends Page\Layout {
@@ -31,28 +32,28 @@ final class RemindPage extends Page\Layout {
 
 	public function submitRemind(array $credentials): void {
 		try {
-			(new Password\RemindForm(
-				$this->url,
-				$this->csrf,
-				$this->backup
-			))->submit(function() use ($credentials) {
-				(new Access\LimitedForgottenPasswords(
-					new Access\SecureForgottenPasswords($this->database),
-					$this->database
-				))->remind($credentials['email']);
-				(new Access\EmailedForgottenPasswords(
-					$this->database,
-					new Mail\SendmailMailer(),
-					(new Mail\Message())->setFrom(self::SENDER)->setSubject(self::SUBJECT),
-					new Output\XsltTemplate(
-						self::CONTENT,
-						new Output\Xml(
-							['base_url' => $this->url->reference()],
-							'remind'
+			(new Form\HarnessedForm(
+				new Password\RemindForm($this->url, $this->csrf, $this->backup),
+				$this->backup,
+				function() use ($credentials): void {
+					(new Access\LimitedForgottenPasswords(
+						new Access\SecureForgottenPasswords($this->database),
+						$this->database
+					))->remind($credentials['email']);
+					(new Access\EmailedForgottenPasswords(
+						$this->database,
+						new Mail\SendmailMailer(),
+						(new Mail\Message())->setFrom(self::SENDER)->setSubject(self::SUBJECT),
+						new Output\XsltTemplate(
+							self::CONTENT,
+							new Output\Xml(
+								['base_url' => $this->url->reference()],
+								'remind'
+							)
 						)
-					)
-				))->remind($credentials['email']);
-			});
+					))->remind($credentials['email']);
+				}
+			))->validate();
 			$this->flashMessage('Password reset has been sent to your email', 'success');
 		} catch (\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');

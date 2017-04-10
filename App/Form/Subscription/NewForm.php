@@ -1,48 +1,58 @@
 <?php
 declare(strict_types = 1);
-namespace Remembrall\Control\Subscription;
+namespace Remembrall\Form\Subscription;
 
 use Klapuch\Csrf;
 use Klapuch\Form;
-use Klapuch\Output;
 use Klapuch\Uri;
 use Klapuch\Validation;
 use Remembrall\Constraint;
-use Remembrall\Model\Subscribing;
 
-final class EditForm extends BootstrapForm {
-	private const NAME = 'edit';
+final class NewForm implements Form\Control {
+	private const COLUMNS = 5;
+	private const ACTION = '/subscription',
+		NAME = 'new';
 	private $url;
 	private $csrf;
-	private $subscription;
+	private $storage;
 
 	public function __construct(
-		Subscribing\Subscription $subscription,
 		Uri\Uri $url,
 		Csrf\Csrf $csrf,
 		Form\Storage $storage
 	) {
-		parent::__construct($storage);
-		$this->subscription = $subscription;
 		$this->url = $url;
 		$this->csrf = $csrf;
+		$this->storage = $storage;
 	}
 
-	protected function form(): Form\Control {
-		$xml = new \DOMDocument();
-		$xml->loadXML($this->subscription->print(new Output\Xml([], self::NAME))->serialization());
+	public function render(): string {
+		return $this->form()->render();
+	}
+
+	public function validate(): void {
+		$this->form()->validate();
+	}
+
+	private function form(): Form\Control {
 		return new Form\RawForm(
-			self::ATTRIBUTES + [
+			[
+				'method' => 'POST',
+				'role' => 'form',
+				'class' => 'form-horizontal',
 				'name' => self::NAME,
-				'action' => $this->url->reference() . '/' . $this->url->path(),
+				'action' => $this->url->reference() . self::ACTION,
 			],
 			new Form\CsrfInput($this->csrf),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
 					new Form\DefaultInput(
-						self::URL_ATTRIBUTES + [
-							'disabled' => 'true',
-							'value' => new Form\XmlDynamicValue('url', $xml),
+						[
+							'type' => 'text',
+							'name' => 'url',
+							'class' => 'form-control',
+							'required' => 'required',
+							'value' => $_GET['url'] ?? '',
 						],
 						$this->storage,
 						new Constraint\UrlRule()
@@ -54,9 +64,12 @@ final class EditForm extends BootstrapForm {
 			new Form\BootstrapInput(
 				new Form\BoundControl(
 					new Form\DefaultInput(
-						self::EXPRESSION_ATTRIBUTES + [
-							'disabled' => 'true',
-							'value' => new Form\XmlDynamicValue('expression', $xml),
+						[
+							'type' => 'text',
+							'name' => 'expression',
+							'class' => 'form-control',
+							'required' => 'required',
+							'value' => $_GET['expression'] ?? '',
 						],
 						$this->storage,
 						new Constraint\ExpressionRule()
@@ -68,8 +81,13 @@ final class EditForm extends BootstrapForm {
 			new Form\BootstrapInput(
 				new Form\BoundControl(
 					new Form\DefaultInput(
-						self::INTERVAL_ATTRIBUTES + [
-							'value' => new Form\XmlDynamicValue('interval', $xml),
+						[
+							'type' => 'number',
+							'name' => 'interval',
+							'class' => 'form-control',
+							'required' => 'required',
+							'min' => Constraint\IntervalRule::MIN,
+							'max' => Constraint\IntervalRule::MAX,
 						],
 						$this->storage,
 						new Constraint\IntervalRule()
@@ -80,8 +98,11 @@ final class EditForm extends BootstrapForm {
 			),
 			new Form\BootstrapInput(
 				new Form\DefaultInput(
-					self::SUBMIT_ATTRIBUTES + [
-						'value' => 'Edit',
+					[
+						'type' => 'submit',
+						'name' => 'act',
+						'class' => 'form-control',
+						'value' => 'Subscribe',
 					],
 					$this->storage,
 					new Validation\PassiveRule()

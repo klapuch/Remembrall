@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace Remembrall\Control\Sign;
+namespace Remembrall\Form\Sign;
 
 use Klapuch\Csrf;
 use Klapuch\Form;
@@ -8,24 +8,38 @@ use Klapuch\Uri;
 use Klapuch\Validation;
 use Remembrall\Constraint;
 
-final class UpForm extends BootstrapForm {
-	private const ACTION = '/sign/up', NAME = 'up';
+final class InForm implements Form\Control {
+	private const COLUMNS = 5;
+	private const ACTION = '/sign/in',
+		NAME = 'in';
 	private $url;
 	private $csrf;
+	private $storage;
 
 	public function __construct(
 		Uri\Uri $url,
 		Csrf\Csrf $csrf,
 		Form\Storage $storage
 	) {
-		parent::__construct($storage);
 		$this->url = $url;
 		$this->csrf = $csrf;
+		$this->storage = $storage;
 	}
 
-	protected function form(): Form\Control {
+	public function render(): string {
+		return $this->form()->render();
+	}
+
+	public function validate(): void {
+		$this->form()->validate();
+	}
+
+	private function form(): Form\Control {
 		return new Form\RawForm(
-			self::ATTRIBUTES + [
+			[
+				'method' => 'POST',
+				'role' => 'form',
+				'class' => 'form-horizontal',
 				'action' => $this->url->reference() . self::ACTION,
 				'name' => self::NAME,
 			],
@@ -33,7 +47,12 @@ final class UpForm extends BootstrapForm {
 			new Form\BootstrapInput(
 				new Form\BoundControl(
 					new Form\DefaultInput(
-						self::EMAIL_ATTRIBUTES,
+						[
+							'type' => 'email',
+							'name' => 'email',
+							'class' => 'form-control',
+							'required' => 'required',
+						],
 						$this->storage,
 						new Constraint\EmailRule()
 					),
@@ -44,7 +63,12 @@ final class UpForm extends BootstrapForm {
 			new Form\BootstrapInput(
 				new Form\BoundControl(
 					new Form\DefaultInput(
-						self::PASSWORD_ATTRIBUTES,
+						[
+							'type' => 'password',
+							'name' => 'password',
+							'class' => 'form-control',
+							'required' => 'required',
+						],
 						$this->storage,
 						new Constraint\PasswordRule()
 					),
@@ -54,7 +78,12 @@ final class UpForm extends BootstrapForm {
 			),
 			new Form\BootstrapInput(
 				new Form\DefaultInput(
-					self::SUBMIT_ATTRIBUTES + ['value' => 'Register'],
+					[
+						'type' => 'submit',
+						'name' => 'act',
+						'class' => 'form-control',
+						'value' => 'Login',
+					],
 					$this->storage,
 					new Validation\PassiveRule()
 				),

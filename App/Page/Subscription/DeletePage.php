@@ -11,7 +11,7 @@ final class DeletePage extends Page\Layout {
 		$this->redirect('error');
 	}
 
-	public function submitDelete(array $subscription, array $parameters): void {
+	public function submitDelete(array $subscription): void {
 		try {
 			$this->protect();
 			(new Subscribing\OwnedSubscription(
@@ -24,9 +24,9 @@ final class DeletePage extends Page\Layout {
 				$this->database
 			))->cancel();
 			$this->flashMessage('Subscription has been deleted', 'success');
-			$this->redirect('subscriptions');
 		} catch (\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
+		} finally {
 			$this->redirect('subscriptions');
 		}
 	}
