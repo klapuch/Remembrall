@@ -27,7 +27,7 @@ final class UpForm implements Form\Control {
 	}
 
 	public function render(): string {
-		$this->form()->render();
+		return $this->form()->render();
 	}
 
 	public function validate(): void {
