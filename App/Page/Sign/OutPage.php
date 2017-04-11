@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Page\Sign;
 
+use Klapuch\Access;
 use Klapuch\Output;
 use Remembrall\Page;
 
@@ -10,7 +11,10 @@ final class OutPage extends Page\Layout {
 		try {
 			if (!isset($_SESSION['id']))
 				throw new \Exception('You are not logged in');
-			unset($_SESSION['id']);
+			(new Access\SessionEntrance(
+				new Access\FakeEntrance(new Access\FakeUser()),
+				$_SESSION
+			))->exit();
 			$this->flashMessage('You have been logged out', 'success');
 			$this->redirect('sign/in');
 		} catch (\Throwable $ex) {
