@@ -38,7 +38,7 @@ abstract class Layout extends Application\Page {
 	}
 
 	public function startup(): void {
-		$this->user = new Access\FakeUser(0, ['role' => 'guest']);
+		$this->user = new Access\Guest();
 		if (isset($_SESSION['id'])) {
 			$this->user = new Access\CachedUser(
 				new Access\RegisteredUser($_SESSION['id'], $this->database)

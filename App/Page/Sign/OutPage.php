@@ -12,7 +12,7 @@ final class OutPage extends Page\Layout {
 			if (!isset($_SESSION['id']))
 				throw new \Exception('You are not logged in');
 			(new Access\SessionEntrance(
-				new Access\FakeEntrance(new Access\FakeUser()),
+				new Access\FakeEntrance(new Access\Guest()),
 				$_SESSION
 			))->exit();
 			$this->flashMessage('You have been logged out', 'success');

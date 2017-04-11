@@ -53,16 +53,16 @@
         },
         {
             "name": "klapuch/access",
-            "version": "2.10.1",
+            "version": "2.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/Access.git",
-                "reference": "155c93a00e4f4e0e525141eaf5df04feb14791a6"
+                "reference": "21a83cd3e1c132d5aa0a5cf1a4f7237ca0db80a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klapuch/Access/zipball/155c93a00e4f4e0e525141eaf5df04feb14791a6",
-                "reference": "155c93a00e4f4e0e525141eaf5df04feb14791a6",
+                "url": "https://api.github.com/repos/klapuch/Access/zipball/21a83cd3e1c132d5aa0a5cf1a4f7237ca0db80a5",
+                "reference": "21a83cd3e1c132d5aa0a5cf1a4f7237ca0db80a5",
                 "shasum": ""
             },
             "require": {
@@ -95,7 +95,7 @@
             ],
             "description": "access, authentication, login, register",
             "homepage": "https://github.com/klapuch/Access",
-            "time": "2017-04-11T17:36:53+00:00"
+            "time": "2017-04-11T19:25:03+00:00"
         },
         {
             "name": "klapuch/application",
