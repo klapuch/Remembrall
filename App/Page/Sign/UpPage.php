@@ -13,10 +13,9 @@ use Remembrall\Page;
 
 final class UpPage extends Page\Layout {
 	private const ROLE = 'member';
-	private const TEMPLATES = __DIR__ . '/../../Messages/Sign/Up';
 	private const SENDER = 'Remembrall <remembrall@remembrall.org>',
 		SUBJECT = 'Remembrall registration verification code',
-		CONTENT = self::TEMPLATES . '/content.xsl';
+		CONTENT = __DIR__ . '/../../Messages/Sign/Up/content.xsl';
 
 	public function render(array $parameters): Output\Format {
 		$dom = new \DOMDocument();

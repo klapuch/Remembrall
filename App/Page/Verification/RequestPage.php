@@ -10,10 +10,9 @@ use Remembrall\Form\Verification;
 use Remembrall\Page;
 
 final class RequestPage extends Page\Layout {
-	private const TEMPLATES = __DIR__ . '/../../Messages/Verification/Request';
 	private const SENDER = 'Remembrall <remembrall@remembrall.org>',
 		SUBJECT = 'Remembrall registration verification code',
-		CONTENT = self::TEMPLATES . '/content.xsl';
+		CONTENT = __DIR__ . '/../../Messages/Verification/Request/content.xsl';
 
 	public function render(array $parameters): Output\Format {
 		$dom = new \DOMDocument();

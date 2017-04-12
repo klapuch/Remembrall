@@ -10,10 +10,9 @@ use Remembrall\Form\Password;
 use Remembrall\Page;
 
 final class RemindPage extends Page\Layout {
-	private const TEMPLATES = __DIR__ . '/../../Messages/Password/Remind';
 	private const SENDER = 'Remembrall <remembrall@remembrall.org>',
 		SUBJECT = 'Remembrall forgotten password',
-		CONTENT = self::TEMPLATES . '/content.xsl';
+		CONTENT = __DIR__ . '/../../Messages/Password/Remind/content.xsl';
 
 	public function render(array $parameters): Output\Format {
 		$dom = new \DOMDocument();
