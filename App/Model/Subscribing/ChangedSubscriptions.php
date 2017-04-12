@@ -9,7 +9,7 @@ use Klapuch\Uri;
 use Nette\Mail;
 
 /**
- * All the subscriptions owned by one particular subscriber
+ * All the changed subscriptions
  */
 final class ChangedSubscriptions implements Subscriptions {
 	private $origin;
