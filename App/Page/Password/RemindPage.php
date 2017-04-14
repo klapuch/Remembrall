@@ -3,37 +3,48 @@ declare(strict_types = 1);
 namespace Remembrall\Page\Password;
 
 use Klapuch\Access;
+use Klapuch\Application;
+use Klapuch\Form\Backup;
 use Klapuch\Output;
 use Nette\Mail;
 use Remembrall\Form;
 use Remembrall\Form\Password;
 use Remembrall\Page;
+use Remembrall\Response;
 
 final class RemindPage extends Page\Layout {
 	private const SENDER = 'Remembrall <remembrall@remembrall.org>',
 		SUBJECT = 'Remembrall forgotten password',
 		CONTENT = __DIR__ . '/../../Messages/Password/Remind/content.xsl';
 
-	public function render(array $parameters): Output\Format {
-		$dom = new \DOMDocument();
-		$dom->loadXML(
-			sprintf(
-				'<forms>%s</forms>',
-				(new Password\RemindForm(
-					$this->url,
-					$this->csrf,
-					$this->backup
-				))->render()
-			)
+	public function response(array $parameters): Application\Response {
+		return new Response\AuthenticatedResponse(
+			new Response\ComposedResponse(
+				new Response\CombinedResponse(
+					new Response\FormResponse(
+						new Password\RemindForm(
+							$this->url,
+							$this->csrf,
+							new Backup($_SESSION, $_POST)
+						)
+					),
+					new Response\FlashResponse(),
+					new Response\PermissionResponse(),
+					new Response\IdentifiedResponse($this->user)
+				),
+				__DIR__ . '/templates/remind.xml',
+				__DIR__ . '/../templates/layout.xml'
+			),
+			$this->user,
+			$this->url
 		);
-		return new Output\DomFormat($dom, 'xml');
 	}
 
 	public function submitRemind(array $credentials): void {
 		try {
 			(new Form\HarnessedForm(
-				new Password\RemindForm($this->url, $this->csrf, $this->backup),
-				$this->backup,
+				new Password\RemindForm($this->url, $this->csrf, new Backup($_SESSION, $_POST)),
+				new Backup($_SESSION, $_POST),
 				function() use ($credentials): void {
 					(new Access\LimitedForgottenPasswords(
 						new Access\SecureForgottenPasswords($this->database),

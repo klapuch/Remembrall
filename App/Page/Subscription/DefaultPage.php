@@ -2,8 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Page\Subscription;
 
+use Klapuch\Application;
+use Klapuch\Form\Backup;
 use Klapuch\Http;
-use Klapuch\Output;
 use Klapuch\Storage;
 use Klapuch\Time;
 use Klapuch\Uri;
@@ -13,21 +14,30 @@ use Remembrall\Model\Misc;
 use Remembrall\Model\Subscribing;
 use Remembrall\Model\Web;
 use Remembrall\Page;
+use Remembrall\Response;
 
 final class DefaultPage extends Page\Layout {
-	public function render(array $parameters): Output\Format {
-		$dom = new \DOMDocument();
-		$dom->loadXML(
-			sprintf(
-				'<forms>%s</forms>',
-				(new Subscription\NewForm(
-					$this->url,
-					$this->csrf,
-					$this->backup
-				))->render()
-			)
+	public function response(array $parameters): Application\Response {
+		return new Response\AuthenticatedResponse(
+			new Response\ComposedResponse(
+				new Response\CombinedResponse(
+					new Response\FormResponse(
+						new Subscription\NewForm(
+							$this->url,
+							$this->csrf,
+							new Backup($_SESSION, $_POST)
+						)
+					),
+					new Response\FlashResponse(),
+					new Response\PermissionResponse(),
+					new Response\IdentifiedResponse($this->user)
+				),
+				__DIR__ . '/templates/default.xml',
+				__DIR__ . '/../templates/layout.xml'
+			),
+			$this->user,
+			$this->url
 		);
-		return new Output\DomFormat($dom, 'xml');
 	}
 
 	public function submitDefault(array $subscription): void {
@@ -36,9 +46,9 @@ final class DefaultPage extends Page\Layout {
 				new Subscription\NewForm(
 					$this->url,
 					$this->csrf,
-					$this->backup
+					new Backup($_SESSION, $_POST)
 				),
-				$this->backup,
+				new Backup($_SESSION, $_POST),
 				function() use ($subscription): void {
 					$url = new Uri\NormalizedUrl(
 						new Uri\ReachableUrl(

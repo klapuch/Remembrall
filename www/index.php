@@ -13,7 +13,7 @@ const CONFIGURATION = __DIR__ . '/../App/Configuration/.config.ini',
 	LOCAL_CONFIGURATION = __DIR__ . '/../App/Configuration/.config.local.ini',
 	ROUTES = __DIR__ . '/../App/Configuration/routes.ini',
 	LOGS = __DIR__ . '/../log';
-echo new Application\Response(
+echo new Application\HtmlPage(
 	new Ini\Combined(
 		new Ini\Valid(CONFIGURATION, new Ini\Typed(CONFIGURATION)),
 		new Ini\Muted(new Ini\Valid(LOCAL_CONFIGURATION, new Ini\Typed(LOCAL_CONFIGURATION)))

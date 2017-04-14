@@ -3,11 +3,11 @@ declare(strict_types = 1);
 namespace Remembrall\Page\Verification;
 
 use Klapuch\Access;
-use Klapuch\Output;
+use Klapuch\Application;
 use Remembrall\Page;
 
 final class ConfirmPage extends Page\Layout {
-	public function render(array $parameters): Output\Format {
+	public function response(array $parameters): Application\Response {
 		try {
 			(new Access\ExistingVerificationCode(
 				new Access\ThrowawayVerificationCode(

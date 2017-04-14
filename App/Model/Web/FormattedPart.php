@@ -6,6 +6,9 @@ use Gajus\Dindent;
 use Klapuch\Output;
 use Texy;
 
+/**
+ * Formatted part
+ */
 final class FormattedPart implements Part {
 	private $origin;
 	private $texy;

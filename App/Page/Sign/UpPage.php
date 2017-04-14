@@ -3,13 +3,16 @@ declare(strict_types = 1);
 namespace Remembrall\Page\Sign;
 
 use Klapuch\Access;
+use Klapuch\Application;
 use Klapuch\Encryption;
+use Klapuch\Form\Backup;
 use Klapuch\Output;
 use Klapuch\Storage;
 use Nette\Mail;
 use Remembrall\Form;
 use Remembrall\Form\Sign;
 use Remembrall\Page;
+use Remembrall\Response;
 
 final class UpPage extends Page\Layout {
 	private const ROLE = 'member';
@@ -17,26 +20,34 @@ final class UpPage extends Page\Layout {
 		SUBJECT = 'Remembrall registration verification code',
 		CONTENT = __DIR__ . '/../../Messages/Sign/Up/content.xsl';
 
-	public function render(array $parameters): Output\Format {
-		$dom = new \DOMDocument();
-		$dom->loadXML(
-			sprintf(
-				'<forms>%s</forms>',
-				(new Sign\UpForm(
-					$this->url,
-					$this->csrf,
-					$this->backup
-				))->render()
-			)
+	public function response(array $parameters): Application\Response {
+		return new Response\AuthenticatedResponse(
+			new Response\ComposedResponse(
+				new Response\CombinedResponse(
+					new Response\FormResponse(
+						new Sign\UpForm(
+							$this->url,
+							$this->csrf,
+							new Backup($_SESSION, $_POST)
+						)
+					),
+					new Response\FlashResponse(),
+					new Response\PermissionResponse(),
+					new Response\IdentifiedResponse($this->user)
+				),
+				__DIR__ . '/templates/up.xml',
+				__DIR__ . '/../templates/layout.xml'
+			),
+			$this->user,
+			$this->url
 		);
-		return new Output\DomFormat($dom, 'xml');
 	}
 
 	public function submitUp(array $credentials): void {
 		try {
 			(new Form\HarnessedForm(
-				new Sign\InForm($this->url, $this->csrf, $this->backup),
-				$this->backup,
+				new Sign\InForm($this->url, $this->csrf, new Backup($_SESSION, $_POST)),
+				new Backup($_SESSION, $_POST),
 				function() use ($credentials): void {
 					(new Storage\Transaction($this->database))->start(
 						function() use ($credentials) {

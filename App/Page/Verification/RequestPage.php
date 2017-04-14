@@ -3,30 +3,41 @@ declare(strict_types = 1);
 namespace Remembrall\Page\Verification;
 
 use Klapuch\Access;
+use Klapuch\Application;
+use Klapuch\Form\Backup;
 use Klapuch\Output;
 use Nette\Mail;
 use Remembrall\Form;
 use Remembrall\Form\Verification;
 use Remembrall\Page;
+use Remembrall\Response;
 
 final class RequestPage extends Page\Layout {
 	private const SENDER = 'Remembrall <remembrall@remembrall.org>',
 		SUBJECT = 'Remembrall registration verification code',
 		CONTENT = __DIR__ . '/../../Messages/Verification/Request/content.xsl';
 
-	public function render(array $parameters): Output\Format {
-		$dom = new \DOMDocument();
-		$dom->loadXML(
-			sprintf(
-				'<forms>%s</forms>',
-				(new Verification\RequestForm(
-					$this->url,
-					$this->csrf,
-					$this->backup
-				))->render()
-			)
+	public function response(array $parameters): Application\Response {
+		return new Response\AuthenticatedResponse(
+			new Response\ComposedResponse(
+				new Response\CombinedResponse(
+					new Response\FormResponse(
+						new Verification\RequestForm(
+							$this->url,
+							$this->csrf,
+							new Backup($_SESSION, $_POST)
+						)
+					),
+					new Response\FlashResponse(),
+					new Response\PermissionResponse(),
+					new Response\IdentifiedResponse($this->user)
+				),
+				__DIR__ . '/templates/edit.xml',
+				__DIR__ . '/../templates/layout.xml'
+			),
+			$this->user,
+			$this->url
 		);
-		return new Output\DomFormat($dom, 'xml');
 	}
 
 	public function submitRequest(array $credentials): void {
@@ -35,9 +46,9 @@ final class RequestPage extends Page\Layout {
 				new Verification\RequestForm(
 					$this->url,
 					$this->csrf,
-					$this->backup
+					new Backup($_SESSION, $_POST)
 				),
-				$this->backup,
+				new Backup($_SESSION, $_POST),
 				function() use ($credentials): void {
 					(new Access\ReserveVerificationCodes(
 						$this->database,

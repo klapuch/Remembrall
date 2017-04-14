@@ -2,36 +2,46 @@
 declare(strict_types = 1);
 namespace Remembrall\Page\Subscription;
 
-use Klapuch\Output;
+use Klapuch\Application;
+use Klapuch\Form\Backup;
 use Klapuch\Time;
 use Remembrall\Form;
 use Remembrall\Form\Subscription;
 use Remembrall\Model\Subscribing;
 use Remembrall\Page;
+use Remembrall\Response;
 
 final class EditPage extends Page\Layout {
-	public function render(array $parameters): Output\Format {
-		$dom = new \DOMDocument();
-		$dom->loadXML(
-			sprintf(
-				'<forms>%s</forms>',
-				(new Subscription\EditForm(
-					new Subscribing\OwnedSubscription(
-						new Subscribing\StoredSubscription(
-							$parameters['id'],
-							$this->database
-						),
-						$parameters['id'],
-						$this->user,
-						$this->database
+	public function response(array $parameters): Application\Response {
+		return new Response\AuthenticatedResponse(
+			new Response\ComposedResponse(
+				new Response\CombinedResponse(
+					new Response\FormResponse(
+						new Subscription\EditForm(
+							new Subscribing\OwnedSubscription(
+								new Subscribing\StoredSubscription(
+									$parameters['id'],
+									$this->database
+								),
+								$parameters['id'],
+								$this->user,
+								$this->database
+							),
+							$this->url,
+							$this->csrf,
+							new Backup($_SESSION, $_POST)
+						)
 					),
-					$this->url,
-					$this->csrf,
-					$this->backup
-				))->render()
-			)
+					new Response\FlashResponse(),
+					new Response\PermissionResponse(),
+					new Response\IdentifiedResponse($this->user)
+				),
+				__DIR__ . '/templates/edit.xml',
+				__DIR__ . '/../templates/layout.xml'
+			),
+			$this->user,
+			$this->url
 		);
-		return new Output\DomFormat($dom, 'xml');
 	}
 
 	public function submitEdit(array $subscription, array $parameters): void {
@@ -42,9 +52,9 @@ final class EditPage extends Page\Layout {
 					new Subscribing\FakeSubscription(),
 					$this->url,
 					$this->csrf,
-					$this->backup
+					new Backup($_SESSION, $_POST)
 				),
-				$this->backup,
+				new Backup($_SESSION, $_POST),
 				function() use ($subscription, $id): void {
 					(new Subscribing\StoredSubscription(
 						$id,

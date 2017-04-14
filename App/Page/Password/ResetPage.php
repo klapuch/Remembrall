@@ -3,27 +3,37 @@ declare(strict_types = 1);
 namespace Remembrall\Page\Password;
 
 use Klapuch\Access;
+use Klapuch\Application;
 use Klapuch\Encryption;
-use Klapuch\Output;
+use Klapuch\Form\Backup;
 use Remembrall\Form;
 use Remembrall\Form\Password;
 use Remembrall\Page;
+use Remembrall\Response;
 
 final class ResetPage extends Page\Layout {
-	public function render(array $parameters): Output\Format {
-		$dom = new \DOMDocument();
-		$dom->loadXML(
-			sprintf(
-				'<forms>%s</forms>',
-				(new Password\ResetForm(
-					$parameters['reminder'],
-					$this->url,
-					$this->csrf,
-					$this->backup
-				))->render()
-			)
+	public function response(array $parameters): Application\Response {
+		return new Response\AuthenticatedResponse(
+			new Response\ComposedResponse(
+				new Response\CombinedResponse(
+					new Response\FormResponse(
+						new Password\ResetForm(
+							$parameters['reminder'],
+							$this->url,
+							$this->csrf,
+							new Backup($_SESSION, $_POST)
+						)
+					),
+					new Response\FlashResponse(),
+					new Response\PermissionResponse(),
+					new Response\IdentifiedResponse($this->user)
+				),
+				__DIR__ . '/templates/reset.xml',
+				__DIR__ . '/../templates/layout.xml'
+			),
+			$this->user,
+			$this->url
 		);
-		return new Output\DomFormat($dom, 'xml');
 	}
 
 	public function submitReset(array $credentials): void {
@@ -33,9 +43,9 @@ final class ResetPage extends Page\Layout {
 					$credentials['reminder'],
 					$this->url,
 					$this->csrf,
-					$this->backup
+					new Backup($_SESSION, $_POST)
 				),
-				$this->backup,
+				new Backup($_SESSION, $_POST),
 				function() use ($credentials): void {
 					(new Access\ExpirableRemindedPassword(
 						$credentials['reminder'],

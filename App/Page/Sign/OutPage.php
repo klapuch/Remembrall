@@ -3,11 +3,11 @@ declare(strict_types = 1);
 namespace Remembrall\Page\Sign;
 
 use Klapuch\Access;
-use Klapuch\Output;
+use Klapuch\Application;
 use Remembrall\Page;
 
 final class OutPage extends Page\Layout {
-	public function render(array $parameters): Output\Format {
+	public function response(array $parameters): Application\Response {
 		try {
 			if (!isset($_SESSION['id']))
 				throw new \Exception('You are not logged in');

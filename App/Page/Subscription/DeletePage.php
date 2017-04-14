@@ -2,12 +2,12 @@
 declare(strict_types = 1);
 namespace Remembrall\Page\Subscription;
 
-use Klapuch\Output;
+use Klapuch\Application;
 use Remembrall\Model\Subscribing;
 use Remembrall\Page;
 
 final class DeletePage extends Page\Layout {
-	public function render(array $parameters): Output\Format {
+	public function response(array $parameters): Application\Response {
 		$this->redirect('error');
 	}
 

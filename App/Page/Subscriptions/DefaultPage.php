@@ -3,18 +3,20 @@ declare(strict_types = 1);
 namespace Remembrall\Page\Subscriptions;
 
 use Gajus\Dindent;
+use Klapuch\Application;
 use Klapuch\Dataset;
 use Klapuch\Output;
 use Remembrall\Form\Subscription;
 use Remembrall\Model\Misc;
 use Remembrall\Model\Subscribing;
 use Remembrall\Page;
+use Remembrall\Response;
 use Texy;
 
 final class DefaultPage extends Page\Layout {
 	private const FIELDS = ['last_update', 'interval', 'expression', 'url'];
 
-	public function render(array $parameters): Output\Format {
+	public function response(array $parameters): Application\Response {
 		$subscriptions = iterator_to_array(
 			(new Subscribing\FormattedSubscriptions(
 				new Subscribing\OwnedSubscriptions(
@@ -29,26 +31,35 @@ final class DefaultPage extends Page\Layout {
 				)
 			)
 		);
-		$dom = new \DOMDocument();
-		$dom->loadXML(
-			sprintf(
-				'<forms>%s</forms>',
-				(new Subscription\DeleteForms(
-					$subscriptions,
-					$this->url,
-					$this->csrf
-				))->render()
-			)
-		);
-		return new Output\CombinedFormat(
-			new Output\DomFormat($dom, 'xml'),
-			new Output\ValidXml(
-				new Misc\XmlPrintedObjects(
-					'subscriptions',
-					['subscription' => $subscriptions]
+		return new Response\AuthenticatedResponse(
+			new Response\ComposedResponse(
+				new Response\CombinedResponse(
+					new Response\FormResponse(
+						new Subscription\DeleteForms(
+							$subscriptions,
+							$this->url,
+							$this->csrf
+						)
+					),
+					new Response\PlainResponse(
+						new Output\ValidXml(
+							new Misc\XmlPrintedObjects(
+								'subscriptions',
+								['subscription' => $subscriptions]
+							),
+							__DIR__ . '/templates/constraint.xsd'
+						)
+					),
+					new Response\FlashResponse(),
+					new Response\GetResponse(),
+					new Response\PermissionResponse(),
+					new Response\IdentifiedResponse($this->user)
 				),
-				__DIR__ . '/templates/constraint.xsd'
-			)
+				__DIR__ . '/templates/default.xml',
+				__DIR__ . '/../templates/layout.xml'
+			),
+			$this->user,
+			$this->url
 		);
 	}
 }
