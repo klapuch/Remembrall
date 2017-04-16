@@ -28,7 +28,7 @@
 					<xsl:text>✖</xsl:text>
 				</xsl:attribute>
 			</xsl:if>
-			<xsl:copy-of select="@*" mode="delete"/>
+			<xsl:copy-of select="@*"/>
 			<xsl:apply-templates select="node()" mode="delete">
 				<xsl:with-param name="title" select="$title"/>
 				<xsl:with-param name="message" select="$message"/>
