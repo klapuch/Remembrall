@@ -5,7 +5,7 @@
 		<xsl:param name="per_page"/>
 		<div class="row">
 			<div class="col-xs-2 col-xs-offset-10">
-				<select class="form-control" onChange="window.location = event.target.value">
+				<select id="per_page" class="form-control">
 					<xsl:apply-templates mode="pagination">
 						<xsl:with-param name="per_page" select="$per_page"/>
 					</xsl:apply-templates>
