@@ -3,12 +3,11 @@ declare(strict_types = 1);
 namespace Remembrall\Page\Subscription;
 
 use Klapuch\Application;
-use Klapuch\Form\Backup;
+use Klapuch\Form;
 use Klapuch\Http;
 use Klapuch\Storage;
 use Klapuch\Time;
 use Klapuch\Uri;
-use Remembrall\Form;
 use Remembrall\Form\Subscription;
 use Remembrall\Model\Misc;
 use Remembrall\Model\Subscribing;
@@ -25,7 +24,7 @@ final class DefaultPage extends Page\Layout {
 						new Subscription\NewForm(
 							$this->url,
 							$this->csrf,
-							new Backup($_SESSION, $_POST)
+							new Form\Backup($_SESSION, $_POST)
 						)
 					),
 					new Response\FlashResponse(),
@@ -46,9 +45,9 @@ final class DefaultPage extends Page\Layout {
 				new Subscription\NewForm(
 					$this->url,
 					$this->csrf,
-					new Backup($_SESSION, $_POST)
+					new Form\Backup($_SESSION, $_POST)
 				),
-				new Backup($_SESSION, $_POST),
+				new Form\Backup($_SESSION, $_POST),
 				function() use ($subscription): void {
 					$url = new Uri\NormalizedUrl(
 						new Uri\ReachableUrl(

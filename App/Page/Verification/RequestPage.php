@@ -4,10 +4,9 @@ namespace Remembrall\Page\Verification;
 
 use Klapuch\Access;
 use Klapuch\Application;
-use Klapuch\Form\Backup;
+use Klapuch\Form;
 use Klapuch\Output;
 use Nette\Mail;
-use Remembrall\Form;
 use Remembrall\Form\Verification;
 use Remembrall\Page;
 use Remembrall\Response;
@@ -25,7 +24,7 @@ final class RequestPage extends Page\Layout {
 						new Verification\RequestForm(
 							$this->url,
 							$this->csrf,
-							new Backup($_SESSION, $_POST)
+							new Form\Backup($_SESSION, $_POST)
 						)
 					),
 					new Response\FlashResponse(),
@@ -46,9 +45,9 @@ final class RequestPage extends Page\Layout {
 				new Verification\RequestForm(
 					$this->url,
 					$this->csrf,
-					new Backup($_SESSION, $_POST)
+					new Form\Backup($_SESSION, $_POST)
 				),
-				new Backup($_SESSION, $_POST),
+				new Form\Backup($_SESSION, $_POST),
 				function() use ($credentials): void {
 					(new Access\ReserveVerificationCodes(
 						$this->database,

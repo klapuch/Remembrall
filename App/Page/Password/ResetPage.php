@@ -5,8 +5,7 @@ namespace Remembrall\Page\Password;
 use Klapuch\Access;
 use Klapuch\Application;
 use Klapuch\Encryption;
-use Klapuch\Form\Backup;
-use Remembrall\Form;
+use Klapuch\Form;
 use Remembrall\Form\Password;
 use Remembrall\Page;
 use Remembrall\Response;
@@ -21,7 +20,7 @@ final class ResetPage extends Page\Layout {
 							$parameters['reminder'],
 							$this->url,
 							$this->csrf,
-							new Backup($_SESSION, $_POST)
+							new Form\Backup($_SESSION, $_POST)
 						)
 					),
 					new Response\FlashResponse(),
@@ -43,9 +42,9 @@ final class ResetPage extends Page\Layout {
 					$credentials['reminder'],
 					$this->url,
 					$this->csrf,
-					new Backup($_SESSION, $_POST)
+					new Form\Backup($_SESSION, $_POST)
 				),
-				new Backup($_SESSION, $_POST),
+				new Form\Backup($_SESSION, $_POST),
 				function() use ($credentials): void {
 					(new Access\ExpirableRemindedPassword(
 						$credentials['reminder'],

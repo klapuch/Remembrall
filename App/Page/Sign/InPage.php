@@ -5,8 +5,7 @@ namespace Remembrall\Page\Sign;
 use Klapuch\Access;
 use Klapuch\Application;
 use Klapuch\Encryption;
-use Klapuch\Form\Backup;
-use Remembrall\Form;
+use Klapuch\Form;
 use Remembrall\Form\Sign;
 use Remembrall\Page;
 use Remembrall\Response;
@@ -20,7 +19,7 @@ final class InPage extends Page\Layout {
 						new Sign\InForm(
 							$this->url,
 							$this->csrf,
-							new Backup($_SESSION, $_POST)
+							new Form\Backup($_SESSION, $_POST)
 						)
 					),
 					new Response\PermissionResponse(),
@@ -38,8 +37,8 @@ final class InPage extends Page\Layout {
 	public function submitIn(array $credentials): void {
 		try {
 			(new Form\HarnessedForm(
-				new Sign\InForm($this->url, $this->csrf, new Backup($_SESSION, $_POST)),
-				new Backup($_SESSION, $_POST),
+				new Sign\InForm($this->url, $this->csrf, new Form\Backup($_SESSION, $_POST)),
+				new Form\Backup($_SESSION, $_POST),
 				function() use ($credentials): void {
 					(new Access\SessionEntrance(
 						new Access\VerifiedEntrance(

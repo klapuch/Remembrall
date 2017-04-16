@@ -4,10 +4,9 @@ namespace Remembrall\Page\Password;
 
 use Klapuch\Access;
 use Klapuch\Application;
-use Klapuch\Form\Backup;
+use Klapuch\Form;
 use Klapuch\Output;
 use Nette\Mail;
-use Remembrall\Form;
 use Remembrall\Form\Password;
 use Remembrall\Page;
 use Remembrall\Response;
@@ -25,7 +24,7 @@ final class RemindPage extends Page\Layout {
 						new Password\RemindForm(
 							$this->url,
 							$this->csrf,
-							new Backup($_SESSION, $_POST)
+							new Form\Backup($_SESSION, $_POST)
 						)
 					),
 					new Response\FlashResponse(),
@@ -43,8 +42,8 @@ final class RemindPage extends Page\Layout {
 	public function submitRemind(array $credentials): void {
 		try {
 			(new Form\HarnessedForm(
-				new Password\RemindForm($this->url, $this->csrf, new Backup($_SESSION, $_POST)),
-				new Backup($_SESSION, $_POST),
+				new Password\RemindForm($this->url, $this->csrf, new Form\Backup($_SESSION, $_POST)),
+				new Form\Backup($_SESSION, $_POST),
 				function() use ($credentials): void {
 					(new Access\LimitedForgottenPasswords(
 						new Access\SecureForgottenPasswords($this->database),

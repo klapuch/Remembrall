@@ -3,9 +3,8 @@ declare(strict_types = 1);
 namespace Remembrall\Page\Subscription;
 
 use Klapuch\Application;
-use Klapuch\Form\Backup;
+use Klapuch\Form;
 use Klapuch\Time;
-use Remembrall\Form;
 use Remembrall\Form\Subscription;
 use Remembrall\Model\Subscribing;
 use Remembrall\Page;
@@ -29,7 +28,7 @@ final class EditPage extends Page\Layout {
 							),
 							$this->url,
 							$this->csrf,
-							new Backup($_SESSION, $_POST)
+							new Form\Backup($_SESSION, $_POST)
 						)
 					),
 					new Response\FlashResponse(),
@@ -52,9 +51,9 @@ final class EditPage extends Page\Layout {
 					new Subscribing\FakeSubscription(),
 					$this->url,
 					$this->csrf,
-					new Backup($_SESSION, $_POST)
+					new Form\Backup($_SESSION, $_POST)
 				),
-				new Backup($_SESSION, $_POST),
+				new Form\Backup($_SESSION, $_POST),
 				function() use ($subscription, $id): void {
 					(new Subscribing\StoredSubscription(
 						$id,

@@ -5,11 +5,10 @@ namespace Remembrall\Page\Sign;
 use Klapuch\Access;
 use Klapuch\Application;
 use Klapuch\Encryption;
-use Klapuch\Form\Backup;
+use Klapuch\Form;
 use Klapuch\Output;
 use Klapuch\Storage;
 use Nette\Mail;
-use Remembrall\Form;
 use Remembrall\Form\Sign;
 use Remembrall\Page;
 use Remembrall\Response;
@@ -28,7 +27,7 @@ final class UpPage extends Page\Layout {
 						new Sign\UpForm(
 							$this->url,
 							$this->csrf,
-							new Backup($_SESSION, $_POST)
+							new Form\Backup($_SESSION, $_POST)
 						)
 					),
 					new Response\FlashResponse(),
@@ -46,8 +45,8 @@ final class UpPage extends Page\Layout {
 	public function submitUp(array $credentials): void {
 		try {
 			(new Form\HarnessedForm(
-				new Sign\InForm($this->url, $this->csrf, new Backup($_SESSION, $_POST)),
-				new Backup($_SESSION, $_POST),
+				new Sign\InForm($this->url, $this->csrf, new Form\Backup($_SESSION, $_POST)),
+				new Form\Backup($_SESSION, $_POST),
 				function() use ($credentials): void {
 					(new Storage\Transaction($this->database))->start(
 						function() use ($credentials) {
