@@ -103,12 +103,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/Application.git",
-                "reference": "9cdc4f80e814f935e0b29ca3476fe4ac3db183dd"
+                "reference": "043cfcfed777ef3908606df2383dbbe1dd6d7028"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klapuch/Application/zipball/9cdc4f80e814f935e0b29ca3476fe4ac3db183dd",
-                "reference": "9cdc4f80e814f935e0b29ca3476fe4ac3db183dd",
+                "url": "https://api.github.com/repos/klapuch/Application/zipball/043cfcfed777ef3908606df2383dbbe1dd6d7028",
+                "reference": "043cfcfed777ef3908606df2383dbbe1dd6d7028",
                 "shasum": ""
             },
             "require": {
@@ -149,7 +149,7 @@
             ],
             "description": "HTTP core application",
             "homepage": "https://www.github.com/klapuch/Application",
-            "time": "2017-04-15 19:13:35"
+            "time": "2017-04-16 12:51:11"
         },
         {
             "name": "klapuch/authorization",
