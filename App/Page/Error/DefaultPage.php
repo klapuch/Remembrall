@@ -9,18 +9,10 @@ use Remembrall\Response;
 final class DefaultPage extends Page\Layout {
 	public function response(array $parameters): Application\Response {
 		http_response_code(500);
-		return new Response\AuthenticatedResponse(
-			new Response\CombinedResponse(
-				new Response\ComposedResponse(
-					new Response\GetResponse(),
-					__DIR__ . '/templates/default.xml',
-					__DIR__ . '/../templates/layout.xml'
-				),
-				new Response\PermissionResponse(),
-				new Response\IdentifiedResponse($this->user)
-			),
-			$this->user,
-			$this->url
+		return new Response\ComposedResponse(
+			new Response\GetResponse(),
+			__DIR__ . '/templates/default.xml',
+			__DIR__ . '/../templates/layout.xml'
 		);
 	}
 }
