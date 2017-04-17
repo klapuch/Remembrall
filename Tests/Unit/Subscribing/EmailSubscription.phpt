@@ -8,6 +8,7 @@ namespace Remembrall\Unit\Subscribing;
 
 use Nette\Mail;
 use Remembrall\Model\Subscribing;
+use Remembrall\Model\Web;
 use Remembrall\TestCase;
 use Tester\Assert;
 
@@ -23,7 +24,7 @@ final class EmailSubscription extends TestCase\Mockery {
 					new Subscribing\FakeSubscription(new \DomainException('foo')),
 					$mailer,
 					'recipient@foo.cz',
-					[]
+					new Web\FakePart()
 				))->notify();
 			},
 			\DomainException::class,
@@ -46,7 +47,12 @@ final class EmailSubscription extends TestCase\Mockery {
 				}
 			},
 			'recipient@foo.cz',
-			['url' => 'www.google.com', 'expression' => '//p', 'content' => 'FooBar']
+			new Web\ConstantPart(
+				new Web\FakePart(),
+				'',
+				'',
+				['url' => 'www.google.com', 'expression' => '//p', 'content' => 'FooBar']
+			)
 		))->notify();
 		$output = ob_get_clean();
 		Assert::contains('To: recipient@foo.cz', $output);

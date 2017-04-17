@@ -13,23 +13,11 @@
 		<xsd:restriction base="xsd:anyURI"/>
 	</xsd:simpleType>
 
-	<xsd:simpleType name="id">
-		<xsd:restriction base="xsd:unsignedInt">
-			<xsd:minInclusive value="1"/>
-		</xsd:restriction>
-	</xsd:simpleType>
-
-	<xsd:simpleType name="email">
-		<xsd:restriction base="xsd:string"/>
-	</xsd:simpleType>
-
 	<xsd:complexType name="part">
 		<xsd:all>
 			<xsd:element name="content" type="content"/>
 			<xsd:element name="expression" type="expression"/>
 			<xsd:element name="url" type="url"/>
-			<xsd:element name="id" type="id" minOccurs="0"/>
-			<xsd:element name="email" type="email" minOccurs="0"/>
 		</xsd:all>
 	</xsd:complexType>
 

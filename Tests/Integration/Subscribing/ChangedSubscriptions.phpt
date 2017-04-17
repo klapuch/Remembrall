@@ -9,6 +9,7 @@ namespace Remembrall\Integration\Subscribing;
 use Klapuch\Dataset;
 use Nette\Mail;
 use Remembrall\Model\Subscribing;
+use Remembrall\Model\Web;
 use Remembrall\TestCase;
 use Tester\Assert;
 
@@ -51,13 +52,16 @@ final class ChangedSubscriptions extends TestCase\Database {
 				new Subscribing\StoredSubscription(2, $this->database),
 				new Mail\SendmailMailer(),
 				'b@b.cz',
-				[
-					'id' => 2,
-					'url' => 'www.matched.com',
-					'expression' => '//matched',
-					'content' => 'bc',
-					'email' => 'b@b.cz',
-				]
+				new Web\ConstantPart(
+					new Web\FakePart(),
+					'bc',
+					'bs',
+					[
+						'url' => 'www.matched.com',
+						'expression' => '//matched',
+						'content' => 'bc',
+					]
+				)
 			),
 			$subscription
 		);
