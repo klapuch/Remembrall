@@ -31,7 +31,7 @@ final class RequestPage extends Page\Layout {
 					new Response\PermissionResponse(),
 					new Response\IdentifiedResponse($this->user)
 				),
-				__DIR__ . '/templates/edit.xml',
+				__DIR__ . '/templates/request.xml',
 				__DIR__ . '/../templates/layout.xml'
 			),
 			$this->user,

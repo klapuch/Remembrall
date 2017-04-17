@@ -7,6 +7,7 @@
 	<xsl:template match="page">
 		<h1><xsl:apply-templates select="body/header[@level=1]"/></h1>
 		<xsl:apply-templates select="forms/form[@name='up']"/>
+		<a href="{$base_url}/verification/request">I did not receive verification code</a>
 	</xsl:template>
 
 </xsl:stylesheet>
