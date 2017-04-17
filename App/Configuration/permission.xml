@@ -19,16 +19,18 @@
 	<permission resource="subscription/edit/{num}" role="member"/>
 
 	<permission resource="subscription" role="member"/>
-	<permission resource="subscription/default" role="member"/>
 
 	<permission resource="sign/in" role="guest"/>
+
 	<permission resource="sign/up" role="guest"/>
 
 	<permission resource="sign/out" role="member"/>
 
-    <permission resource="verification/confirm/{any}" role="guest"/>
+	<permission resource="verification/confirm/{any}" role="guest"/>
+
     <permission resource="verification/request" role="guest"/>
 
-    <permission resource="password/remind" role="guest"/>
+	<permission resource="password/remind" role="guest"/>
+
     <permission resource="password/reset/{any}" role="guest"/>
 </permissions>
