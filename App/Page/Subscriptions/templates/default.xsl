@@ -60,7 +60,6 @@
 		<xsl:param name="id"/>
 		<xsl:apply-templates select="/page/forms/form[@name=concat('delete-', $id)]" mode="delete">
 			<xsl:with-param name="title" select="title"/>
-			<xsl:with-param name="message" select="message"/>
 		</xsl:apply-templates>
 	</xsl:template>
 
