@@ -7,6 +7,7 @@
 	<xsl:template match="page">
 		<h1><xsl:apply-templates select="body/header[@level=1]"/></h1>
 		<xsl:apply-templates select="forms/form[@name='in']"/>
+		<a href="{$base_url}/password/remind">I forgot password</a>
 	</xsl:template>
 
 </xsl:stylesheet>
