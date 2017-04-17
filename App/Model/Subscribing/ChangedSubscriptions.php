@@ -2,12 +2,14 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
+use Gajus\Dindent;
 use Klapuch\Dataset;
 use Klapuch\Storage;
 use Klapuch\Time;
 use Klapuch\Uri;
 use Nette\Mail;
 use Remembrall\Model\Web;
+use Texy;
 
 /**
  * All the changed subscriptions
@@ -16,15 +18,21 @@ final class ChangedSubscriptions implements Subscriptions {
 	private $origin;
 	private $mailer;
 	private $database;
+	private $texy;
+	private $indenter;
 
 	public function __construct(
 		Subscriptions $origin,
 		Mail\IMailer $mailer,
-		\PDO $database
+		\PDO $database,
+		Texy\Texy $texy,
+		Dindent\Indenter $indenter
 	) {
 		$this->origin = $origin;
 		$this->mailer = $mailer;
 		$this->database = $database;
+		$this->texy = $texy;
+		$this->indenter = $indenter;
 	}
 
 	public function subscribe(
@@ -52,15 +60,19 @@ final class ChangedSubscriptions implements Subscriptions {
 				new StoredSubscription($subscription['id'], $this->database),
 				$this->mailer,
 				$subscription['email'],
-				new Web\ConstantPart(
-					new Web\FakePart(),
-					$subscription['content'],
-					$subscription['snapshot'],
-					[
-						'content' => $subscription['content'],
-						'expression' => $subscription['expression'],
-						'url' => $subscription['url'],
-					]
+				new Web\FormattedPart(
+					new Web\ConstantPart(
+						new Web\FakePart(),
+						$subscription['content'],
+						$subscription['snapshot'],
+						[
+							'content' => $subscription['content'],
+							'expression' => $subscription['expression'],
+							'url' => $subscription['url'],
+						]
+					),
+					$this->texy,
+					$this->indenter
 				)
 			);
 		}

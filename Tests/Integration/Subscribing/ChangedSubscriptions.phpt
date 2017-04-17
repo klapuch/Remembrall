@@ -6,12 +6,14 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Integration\Subscribing;
 
+use Gajus\Dindent;
 use Klapuch\Dataset;
 use Nette\Mail;
 use Remembrall\Model\Subscribing;
 use Remembrall\Model\Web;
 use Remembrall\TestCase;
 use Tester\Assert;
+use Texy;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -44,7 +46,9 @@ final class ChangedSubscriptions extends TestCase\Database {
 		$subscriptions = (new Subscribing\ChangedSubscriptions(
 			new Subscribing\FakeSubscriptions(),
 			new Mail\SendmailMailer(),
-			$this->database
+			$this->database,
+			new Texy\Texy(),
+			new Dindent\Indenter()
 		))->all(new Dataset\FakeSelection(''));
 		$subscription = $subscriptions->current();
 		Assert::equal(
@@ -52,15 +56,19 @@ final class ChangedSubscriptions extends TestCase\Database {
 				new Subscribing\StoredSubscription(2, $this->database),
 				new Mail\SendmailMailer(),
 				'b@b.cz',
-				new Web\ConstantPart(
-					new Web\FakePart(),
-					'bc',
-					'bs',
-					[
-						'url' => 'www.matched.com',
-						'expression' => '//matched',
-						'content' => 'bc',
-					]
+				new Web\FormattedPart(
+					new Web\ConstantPart(
+						new Web\FakePart(),
+						'bc',
+						'bs',
+						[
+							'url' => 'www.matched.com',
+							'expression' => '//matched',
+							'content' => 'bc',
+						]
+					),
+					new Texy\Texy(),
+					new Dindent\Indenter()
 				)
 			),
 			$subscription
@@ -94,7 +102,9 @@ final class ChangedSubscriptions extends TestCase\Database {
 					printf('Body: %s', $message->getHtmlBody());
 				}
 			},
-			$this->database
+			$this->database,
+			new Texy\Texy(),
+			new Dindent\Indenter()
 		))->all(new Dataset\FakeSelection(''));
 		$subscription = $subscriptions->current();
 		ob_start();
@@ -109,7 +119,9 @@ final class ChangedSubscriptions extends TestCase\Database {
 		$subscriptions = (new Subscribing\ChangedSubscriptions(
 			new Subscribing\FakeSubscriptions(),
 			new Mail\SendmailMailer(),
-			$this->database
+			$this->database,
+			new Texy\Texy(),
+			new Dindent\Indenter()
 		))->all(new Dataset\FakeSelection(''));
 		Assert::null($subscriptions->current());
 	}

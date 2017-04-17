@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\Page\Cron;
 
+use Gajus\Dindent;
 use Klapuch\Application;
 use Klapuch\Dataset;
 use Nette\Mail;
@@ -9,6 +10,7 @@ use Remembrall\Model\Misc;
 use Remembrall\Model\Subscribing;
 use Remembrall\Model\Web;
 use Remembrall\Page;
+use Texy;
 
 final class DefaultPage extends Page\Layout {
 	public function response(array $parameters): Application\Response {
@@ -32,7 +34,9 @@ final class DefaultPage extends Page\Layout {
 				new Subscribing\ChangedSubscriptions(
 					new Subscribing\FakeSubscriptions(),
 					new Mail\SendmailMailer(),
-					$this->database
+					$this->database,
+					new Texy\Texy(),
+					new Dindent\Indenter()
 				),
 				new Misc\LoggingCallback($this->logs)
 			);
