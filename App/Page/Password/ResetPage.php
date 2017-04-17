@@ -12,27 +12,35 @@ use Remembrall\Response;
 
 final class ResetPage extends Page\Layout {
 	public function response(array $parameters): Application\Response {
-		return new Response\AuthenticatedResponse(
-			new Response\ComposedResponse(
-				new Response\CombinedResponse(
-					new Response\FormResponse(
-						new Password\ResetForm(
-							$parameters['reminder'],
-							$this->url,
-							$this->csrf,
-							new Form\Backup($_SESSION, $_POST)
-						)
+		try {
+			(new Access\ValidReminderRule(
+				$this->database
+			))->apply($parameters['reminder']);
+			return new Response\AuthenticatedResponse(
+				new Response\ComposedResponse(
+					new Response\CombinedResponse(
+						new Response\FormResponse(
+							new Password\ResetForm(
+								$parameters['reminder'],
+								$this->url,
+								$this->csrf,
+								new Form\Backup($_SESSION, $_POST)
+							)
+						),
+						new Response\FlashResponse(),
+						new Response\PermissionResponse(),
+						new Response\IdentifiedResponse($this->user)
 					),
-					new Response\FlashResponse(),
-					new Response\PermissionResponse(),
-					new Response\IdentifiedResponse($this->user)
+					__DIR__ . '/templates/reset.xml',
+					__DIR__ . '/../templates/layout.xml'
 				),
-				__DIR__ . '/templates/reset.xml',
-				__DIR__ . '/../templates/layout.xml'
-			),
-			$this->user,
-			$this->url
-		);
+				$this->user,
+				$this->url
+			);
+		} catch (\UnexpectedValueException $ex) {
+			$this->flashMessage($ex->getMessage(), 'danger');
+			$this->redirect('password/remind');
+		}
 	}
 
 	public function submitReset(array $credentials): void {
