@@ -15,7 +15,7 @@ final class DeleteForms implements Form\Control {
 	public function __construct(
 		array $subscriptions,
 		Uri\Uri $url,
-		Csrf\Csrf $csrf
+		Csrf\Protection $csrf
 	) {
 		$this->subscriptions = $subscriptions;
 		$this->url = $url;

@@ -18,7 +18,7 @@ abstract class Layout implements Application\Request {
 	protected $url;
 	/** @var \Klapuch\Log\Logs */
 	protected $logs;
-	/** @var \Klapuch\Csrf\Csrf */
+	/** @var \Klapuch\Csrf\Protection */
 	protected $csrf;
 	/** @var \Klapuch\Access\User */
 	protected $user;
@@ -28,7 +28,7 @@ abstract class Layout implements Application\Request {
 	public function __construct(
 		Uri\Uri $url,
 		Log\Logs $logs,
-		Ini\Ini $configuration
+		Ini\Source $configuration
 	) {
 		$this->url = $url;
 		$this->logs = $logs;
@@ -38,7 +38,7 @@ abstract class Layout implements Application\Request {
 			$this->configuration['DATABASE']['user'],
 			$this->configuration['DATABASE']['password']
 		);
-		$this->csrf = new Csrf\StoredCsrf($_SESSION, $_POST, $_GET);
+		$this->csrf = new Csrf\Memory($_SESSION, $_POST, $_GET);
 		$this->user = new Access\Guest();
 		if (isset($_SESSION['id'])) {
 			$this->user = new Access\CachedUser(
@@ -72,7 +72,7 @@ abstract class Layout implements Application\Request {
 	 * @throws \Exception
 	 */
 	final protected function protect(): void {
-		if ($this->csrf->abused())
+		if ($this->csrf->attacked())
 			throw new \Exception('Timeout');
 	}
 

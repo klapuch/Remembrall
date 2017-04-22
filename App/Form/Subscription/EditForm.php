@@ -21,7 +21,7 @@ final class EditForm implements Form\Control {
 	public function __construct(
 		Subscribing\Subscription $subscription,
 		Uri\Uri $url,
-		Csrf\Csrf $csrf,
+		Csrf\Protection $csrf,
 		Form\Storage $storage
 	) {
 		$this->subscription = $subscription;

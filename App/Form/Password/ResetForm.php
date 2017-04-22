@@ -19,7 +19,7 @@ final class ResetForm implements Form\Control {
 	public function __construct(
 		string $reminder,
 		Uri\Uri $url,
-		Csrf\Csrf $csrf,
+		Csrf\Protection $csrf,
 		Form\Storage $storage
 	) {
 		$this->reminder = $reminder;

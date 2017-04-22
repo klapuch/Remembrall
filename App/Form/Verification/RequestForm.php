@@ -18,7 +18,7 @@ final class RequestForm implements Form\Control {
 
 	public function __construct(
 		Uri\Uri $url,
-		Csrf\Csrf $csrf,
+		Csrf\Protection $csrf,
 		Form\Storage $storage
 	) {
 		$this->url = $url;

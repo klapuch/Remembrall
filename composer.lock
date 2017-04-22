@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4e6bbb1d04aa0ad444a5d0510154cf03",
+    "content-hash": "92e7b4fd140c71209bce0ca67aeb2a52",
     "packages": [
         {
             "name": "gajus/dindent",
@@ -104,17 +104,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/Application.git",
-                "reference": "043cfcfed777ef3908606df2383dbbe1dd6d7028"
+                "reference": "da746ebd3ebfb71dc85471e6dd7e9851cd7f415c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klapuch/Application/zipball/043cfcfed777ef3908606df2383dbbe1dd6d7028",
-                "reference": "043cfcfed777ef3908606df2383dbbe1dd6d7028",
+                "url": "https://api.github.com/repos/klapuch/Application/zipball/da746ebd3ebfb71dc85471e6dd7e9851cd7f415c",
+                "reference": "da746ebd3ebfb71dc85471e6dd7e9851cd7f415c",
                 "shasum": ""
             },
             "require": {
-                "klapuch/csrf": "*",
-                "klapuch/ini": "*",
+                "klapuch/ini": "^2.0",
                 "klapuch/log": "*",
                 "klapuch/routing": "*",
                 "klapuch/ui": "*",
@@ -150,7 +149,7 @@
             ],
             "description": "HTTP core application",
             "homepage": "https://www.github.com/klapuch/Application",
-            "time": "2017-04-16 12:51:11"
+            "time": "2017-04-22 10:15:10"
         },
         {
             "name": "klapuch/authorization",
@@ -201,34 +200,37 @@
         },
         {
             "name": "klapuch/csrf",
-            "version": "1.0.1",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/Csrf.git",
-                "reference": "37b56645dfe2669cee5a6191dd61120b94cc686c"
+                "reference": "6fcbfc0ac1047cd3800756e42a7c800d66ef039e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klapuch/Csrf/zipball/37b56645dfe2669cee5a6191dd61120b94cc686c",
-                "reference": "37b56645dfe2669cee5a6191dd61120b94cc686c",
+                "url": "https://api.github.com/repos/klapuch/Csrf/zipball/6fcbfc0ac1047cd3800756e42a7c800d66ef039e",
+                "reference": "6fcbfc0ac1047cd3800756e42a7c800d66ef039e",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.1"
             },
             "require-dev": {
+                "consistence/coding-standard": "^0.13.0",
                 "ext-dom": "*",
                 "ext-simplexml": "*",
+                "jakub-onderka/php-parallel-lint": "^0.9.2",
                 "nette/tester": "^1.7",
-                "object-calisthenics/phpcs-calisthenics-rules": "^2.0",
-                "sebastian/phpcpd": "*"
+                "phing/phing": "^2.16",
+                "phpstan/phpstan": ">=0.6.0",
+                "sebastian/phpcpd": "^2.0",
+                "slevomat/coding-standard": "^2.0.0"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "Klapuch\\Csrf\\": [
-                        "Core/",
-                        "Tests/"
+                        "Core/"
                     ]
                 }
             },
@@ -243,7 +245,7 @@
             ],
             "description": "Protection against CSRF in multiple forms",
             "homepage": "https://github.com/klapuch/Csrf",
-            "time": "2016-11-19T11:23:52+00:00"
+            "time": "2017-04-22T08:43:20+00:00"
         },
         {
             "name": "klapuch/dataset",
@@ -337,20 +339,20 @@
         },
         {
             "name": "klapuch/form",
-            "version": "5.3.1",
+            "version": "5.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/Form.git",
-                "reference": "d00f2378e53f6adb8344effac4efbf8b618574f6"
+                "reference": "37621f0f32f61f5c450e88d69e9c01d55cdf3e34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klapuch/Form/zipball/d00f2378e53f6adb8344effac4efbf8b618574f6",
-                "reference": "d00f2378e53f6adb8344effac4efbf8b618574f6",
+                "url": "https://api.github.com/repos/klapuch/Form/zipball/37621f0f32f61f5c450e88d69e9c01d55cdf3e34",
+                "reference": "37621f0f32f61f5c450e88d69e9c01d55cdf3e34",
                 "shasum": ""
             },
             "require": {
-                "klapuch/csrf": "^1.0.0",
+                "klapuch/csrf": "^2.0.0",
                 "klapuch/markup": "^2.0.0",
                 "klapuch/validation": "^2.0.0",
                 "php": ">=7.1"
@@ -381,7 +383,7 @@
             ],
             "description": "Highly customizable forms in multiple formats",
             "homepage": "https://www.github.com/klapuch/Form",
-            "time": "2017-04-17T12:16:04+00:00"
+            "time": "2017-04-22T10:18:14+00:00"
         },
         {
             "name": "klapuch/http",
@@ -428,24 +430,29 @@
         },
         {
             "name": "klapuch/ini",
-            "version": "1.1.0",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/Ini.git",
-                "reference": "c258a4e446cc1c0f49f4ba3c376899482fb03bc4"
+                "reference": "f5943af8ba53e8312d4839eb76979e01cc972694"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klapuch/Ini/zipball/c258a4e446cc1c0f49f4ba3c376899482fb03bc4",
-                "reference": "c258a4e446cc1c0f49f4ba3c376899482fb03bc4",
+                "url": "https://api.github.com/repos/klapuch/Ini/zipball/f5943af8ba53e8312d4839eb76979e01cc972694",
+                "reference": "f5943af8ba53e8312d4839eb76979e01cc972694",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.0"
+                "php": ">=7.1"
             },
             "require-dev": {
+                "consistence/coding-standard": "^0.13.0",
+                "jakub-onderka/php-parallel-lint": "^0.9.2",
                 "nette/tester": "^1.7",
-                "sebastian/phpcpd": "*"
+                "phing/phing": "^2.16",
+                "phpstan/phpstan": ">=0.6.0",
+                "sebastian/phpcpd": "^2.0",
+                "slevomat/coding-standard": "^2.0.0"
             },
             "type": "library",
             "autoload": {
@@ -471,7 +478,7 @@
                 "read",
                 "write"
             ],
-            "time": "2017-04-02T08:36:57+00:00"
+            "time": "2017-04-22T09:55:18+00:00"
         },
         {
             "name": "klapuch/iterator",
@@ -657,20 +664,20 @@
         },
         {
             "name": "klapuch/routing",
-            "version": "0.0.2",
+            "version": "0.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/Routing.git",
-                "reference": "6d4ae2a85598cd886d5dff037b906332ce3f19a0"
+                "reference": "b925ab231d1e5a3605c7bd95888026d3c925f225"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klapuch/Routing/zipball/6d4ae2a85598cd886d5dff037b906332ce3f19a0",
-                "reference": "6d4ae2a85598cd886d5dff037b906332ce3f19a0",
+                "url": "https://api.github.com/repos/klapuch/Routing/zipball/b925ab231d1e5a3605c7bd95888026d3c925f225",
+                "reference": "b925ab231d1e5a3605c7bd95888026d3c925f225",
                 "shasum": ""
             },
             "require": {
-                "klapuch/ini": "^1.0",
+                "klapuch/ini": "^2.0",
                 "klapuch/uri": "^2.0",
                 "php": ">=7.1"
             },
@@ -702,7 +709,7 @@
             ],
             "description": "HTTP routing",
             "homepage": "https://www.github.com/klapuch/Routing",
-            "time": "2017-04-08T08:53:38+00:00"
+            "time": "2017-04-22T10:10:47+00:00"
         },
         {
             "name": "klapuch/storage",
@@ -2253,16 +2260,16 @@
         },
         {
             "name": "slevomat/coding-standard",
-            "version": "2.0.1",
+            "version": "2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/slevomat/coding-standard.git",
-                "reference": "2b8274dd35b90866fc628fd43779a11c27792a1c"
+                "reference": "2bcf4016c91d307e65e9ce8f855a23262e66c622"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/2b8274dd35b90866fc628fd43779a11c27792a1c",
-                "reference": "2b8274dd35b90866fc628fd43779a11c27792a1c",
+                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/2bcf4016c91d307e65e9ce8f855a23262e66c622",
+                "reference": "2bcf4016c91d307e65e9ce8f855a23262e66c622",
                 "shasum": ""
             },
             "require": {
@@ -2288,7 +2295,7 @@
                 "MIT"
             ],
             "description": "Slevomat Coding Standard for PHP_CodeSniffer extends Consistence Coding Standard by providing sniffs with additional checks.",
-            "time": "2017-03-20T13:58:26+00:00"
+            "time": "2017-04-18T07:56:33+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -2653,16 +2660,16 @@
         },
         {
             "name": "theseer/fdomdocument",
-            "version": "1.6.4",
+            "version": "1.6.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/theseer/fDOMDocument.git",
-                "reference": "cf219ede922fb47956726f35e2127277ebd302ca"
+                "reference": "8dcfd392135a5bd938c3c83ea71419501ad9855d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/theseer/fDOMDocument/zipball/cf219ede922fb47956726f35e2127277ebd302ca",
-                "reference": "cf219ede922fb47956726f35e2127277ebd302ca",
+                "url": "https://api.github.com/repos/theseer/fDOMDocument/zipball/8dcfd392135a5bd938c3c83ea71419501ad9855d",
+                "reference": "8dcfd392135a5bd938c3c83ea71419501ad9855d",
                 "shasum": ""
             },
             "require": {
@@ -2689,7 +2696,7 @@
             ],
             "description": "The classes contained within this repository extend the standard DOM to use exceptions at all occasions of errors instead of PHP warnings or notices. They also add various custom methods and shortcuts for convenience and to simplify the usage of DOM.",
             "homepage": "https://github.com/theseer/fDOMDocument",
-            "time": "2017-04-17T09:08:13+00:00"
+            "time": "2017-04-21T14:50:31+00:00"
         }
     ],
     "aliases": [],
