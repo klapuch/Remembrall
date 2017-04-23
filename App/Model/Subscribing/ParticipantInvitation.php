@@ -15,11 +15,6 @@ final class ParticipantInvitation implements Invitation {
 	}
 
 	public function accept(): void {
-		if (!$this->known($this->code) || $this->accepted($this->code)) {
-			throw new \Remembrall\Exception\NotFoundException(
-				'The invitation is accepted or does not exist'
-			);
-		}
 		(new Storage\ParameterizedQuery(
 			$this->database,
 			'UPDATE participants
@@ -30,11 +25,6 @@ final class ParticipantInvitation implements Invitation {
 	}
 
 	public function deny(): void {
-		if (!$this->known($this->code) || $this->decided($this->code)) {
-			throw new \Remembrall\Exception\NotFoundException(
-				'The invitation is denied or does not exist'
-			);
-		}
 		(new Storage\ParameterizedQuery(
 			$this->database,
 			'UPDATE participants
@@ -45,11 +35,6 @@ final class ParticipantInvitation implements Invitation {
 	}
 
 	public function print(Output\Format $format): Output\Format {
-		if (!$this->known($this->code) || $this->decided($this->code)) {
-			throw new \Remembrall\Exception\NotFoundException(
-				'The invitation is denied or does not exist'
-			);
-		}
 		$invitation = (new Storage\ParameterizedQuery(
 			$this->database,
 			'SELECT participants.email, code,
@@ -59,45 +44,13 @@ final class ParticipantInvitation implements Invitation {
 			INNER JOIN subscriptions ON subscriptions.id = participants.subscription_id
 			INNER JOIN parts ON parts.id = subscriptions.part_id
 			INNER JOIN users ON users.id = subscriptions.user_id
-			WHERE code = :code',
-			['code' => $this->code]
+			WHERE code = ?',
+			[$this->code]
 		))->row();
 		return $format->with('email', $invitation['email'])
 			->with('code', $invitation['code'])
 			->with('author', $invitation['author'])
 			->with('expression', $invitation['expression'])
 			->with('url', $invitation['url']);
-	}
-
-	private function accepted(string $code): bool {
-		return (bool) (new Storage\ParameterizedQuery(
-			$this->database,
-			'SELECT 1
-			FROM participants
-			WHERE code = ?
-			AND accepted = TRUE',
-			[$code]
-		))->field();
-	}
-
-	private function decided(string $code): bool {
-		return (bool) (new Storage\ParameterizedQuery(
-			$this->database,
-			'SELECT 1
-			FROM participants
-			WHERE code = ?
-			AND decided_at IS NOT NULL',
-			[$code]
-		))->field();
-	}
-
-	private function known(string $code): bool {
-		return (bool) (new Storage\ParameterizedQuery(
-			$this->database,
-			'SELECT 1
-			FROM participants
-			WHERE code = ?',
-			[$code]
-		))->field();
 	}
 }

@@ -32,67 +32,6 @@ final class ParticipantInvitation extends TestCase\Database {
 		);
 	}
 
-	public function testThrowingOnUnknownCode() {
-		Assert::exception(function() {
-			(new Subscribing\ParticipantInvitation(
-				'abcd',
-				$this->database
-			))->accept();
-		}, \Remembrall\Exception\NotFoundException::class, 'The invitation is accepted or does not exist');
-		Assert::exception(function() {
-			(new Subscribing\ParticipantInvitation(
-				'abcd',
-				$this->database
-			))->deny();
-		}, \Remembrall\Exception\NotFoundException::class, 'The invitation is denied or does not exist');
-		$this->database->prepare(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			('me@participant.cz', 1, 'abc', NOW(), FALSE, NULL)"
-		)->execute();
-		Assert::exception(function() {
-			(new Subscribing\ParticipantInvitation(
-				'abcd',
-				$this->database
-			))->accept();
-		}, \Remembrall\Exception\NotFoundException::class, 'The invitation is accepted or does not exist');
-		Assert::exception(function() {
-			(new Subscribing\ParticipantInvitation(
-				'abcd',
-				$this->database
-			))->deny();
-		}, \Remembrall\Exception\NotFoundException::class, 'The invitation is denied or does not exist');
-	}
-
-	/**
-	 * @throws \Remembrall\Exception\NotFoundException The invitation is accepted or does not exist
-	 */
-	public function testThrowingOnAcceptingAlreadyAcceptedCode() {
-		$code = 'abc';
-		$this->database->prepare(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			('me@participant.cz', 1, ?, NOW(), TRUE, NULL)"
-		)->execute([$code]);
-		(new Subscribing\ParticipantInvitation(
-			$code,
-			$this->database
-		))->accept();
-	}
-
-	/**
-	 * @throws \Remembrall\Exception\NotFoundException The invitation is accepted or does not exist
-	 */
-	public function testThrowingOnAcceptingCaseInsensitiveCode() {
-		$code = 'abc';
-		$this->database->prepare(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			('me@participant.cz', 1, ?, NOW(), FALSE, NULL)"
-		)->execute([$code]);
-		(new Subscribing\ParticipantInvitation(
-			strtoupper($code),
-			$this->database
-		))->accept();
-	}
-
 	public function testDenyingWithCapturedDecision() {
 		$code = 'abc';
 		$this->database->prepare(
@@ -109,36 +48,6 @@ final class ParticipantInvitation extends TestCase\Database {
 			(new \DateTime())->format('Y-m-d'),
 			(new \DateTime($participant['decided_at']))->format('Y-m-d')
 		);
-	}
-
-	/**
-	 * @throws \Remembrall\Exception\NotFoundException The invitation is denied or does not exist
-	 */
-	public function testThrowingOnDenyingCaseInsensitiveCode() {
-		$code = 'abc';
-		$this->database->prepare(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			('me@participant.cz', 1, ?, NOW(), FALSE, NULL)"
-		)->execute([$code]);
-		(new Subscribing\ParticipantInvitation(
-			strtoupper($code),
-			$this->database
-		))->deny();
-	}
-
-	/**
-	 * @throws \Remembrall\Exception\NotFoundException The invitation is denied or does not exist
-	 */
-	public function testThrowingOnDenyAlreadyDeniedCode() {
-		$code = 'abc';
-		$this->database->prepare(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			('me@participant.cz', 1, ?, NOW(), FALSE, NOW())"
-		)->execute([$code]);
-		(new Subscribing\ParticipantInvitation(
-			$code,
-			$this->database
-		))->deny();
 	}
 
 	public function testPrintingEmailableInformation() {
@@ -167,16 +76,6 @@ final class ParticipantInvitation extends TestCase\Database {
 			'|email|me@participant.cz||code|abc||author|author@participant.cz||expression|//p||url|www.me.cz|',
 			$participant
 		);
-	}
-
-	/**
-	 * @throws \Remembrall\Exception\NotFoundException The invitation is denied or does not exist
-	 */
-	public function testThrowingOnPrintingAffectedCode() {
-		(new Subscribing\ParticipantInvitation(
-			'abc',
-			$this->database
-		))->print(new Output\FakeFormat());
 	}
 
 	protected function prepareDatabase(): void {
