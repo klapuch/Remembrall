@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.4
--- Dumped by pg_dump version 9.5.4
+-- Dumped from database version 9.5.6
+-- Dumped by pg_dump version 9.5.6
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -25,6 +25,20 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+--
+-- Name: citext; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS citext WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION citext; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION citext IS 'data type for case-insensitive character strings';
 
 
 SET search_path = public, pg_catalog;
@@ -216,6 +230,44 @@ ALTER SEQUENCE part_visits_id_seq OWNED BY part_visits.id;
 
 
 --
+-- Name: participants; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE participants (
+    id integer NOT NULL,
+    email citext NOT NULL,
+    subscription_id integer NOT NULL,
+    code character varying(64) NOT NULL,
+    invited_at timestamp with time zone NOT NULL,
+    accepted boolean NOT NULL,
+    decided_at timestamp with time zone
+);
+
+
+ALTER TABLE participants OWNER TO postgres;
+
+--
+-- Name: participants_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE participants_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE participants_id_seq OWNER TO postgres;
+
+--
+-- Name: participants_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE participants_id_seq OWNED BY participants.id;
+
+
+--
 -- Name: parts; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -390,6 +442,13 @@ ALTER TABLE ONLY part_visits ALTER COLUMN id SET DEFAULT nextval('part_visits_id
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
+ALTER TABLE ONLY participants ALTER COLUMN id SET DEFAULT nextval('participants_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
 ALTER TABLE ONLY parts ALTER COLUMN id SET DEFAULT nextval('parts_id_seq'::regclass);
 
 
@@ -423,6 +482,14 @@ ALTER TABLE ONLY forgotten_passwords
 
 
 --
+-- Name: invitations_id; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY participants
+    ADD CONSTRAINT invitations_id PRIMARY KEY (id);
+
+
+--
 -- Name: notifications_id; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -452,6 +519,14 @@ ALTER TABLE ONLY pages
 
 ALTER TABLE ONLY part_visits
     ADD CONSTRAINT "part_visits_ID" PRIMARY KEY (id);
+
+
+--
+-- Name: participants_email_subscription_id; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY participants
+    ADD CONSTRAINT participants_email_subscription_id UNIQUE (email, subscription_id);
 
 
 --
