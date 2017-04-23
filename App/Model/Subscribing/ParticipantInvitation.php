@@ -52,14 +52,13 @@ final class ParticipantInvitation implements Invitation {
 		}
 		$invitation = (new Storage\ParameterizedQuery(
 			$this->database,
-			'SELECT email, code, (
-				SELECT email
-				FROM users
-				WHERE id = subscriptions.user_id
-			) AS author, expression, page_url AS url
+			'SELECT participants.email, code,
+			users.email AS author,
+			expression, page_url AS url
 			FROM participants
 			INNER JOIN subscriptions ON subscriptions.id = participants.subscription_id
 			INNER JOIN parts ON parts.id = subscriptions.part_id
+			INNER JOIN users ON users.id = subscriptions.user_id
 			WHERE code = :code',
 			['code' => $this->code]
 		))->row();
