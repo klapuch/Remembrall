@@ -115,7 +115,7 @@ final class OwnedParticipants extends TestCase\Database {
 		$print = $participants->current()->print(new Output\FakeFormat())->serialization();
 		Assert::contains('|email|owned@participant.cz||subscription_id|2|', $print);
 		Assert::contains('|invited_at|', $print);
-		Assert::contains('||accepted|||decided_at|2000-01-01 00:00:00+01|', $print);
+		Assert::contains('||accepted|||decided_at|', $print);
 		$participants->next();
 		$print = $participants->current()->print(new Output\FakeFormat())->serialization();
 		Assert::contains('|email|owned2@participant.cz||subscription_id|2|', $print);
