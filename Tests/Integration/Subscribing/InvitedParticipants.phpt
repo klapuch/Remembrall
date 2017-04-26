@@ -23,9 +23,8 @@ final class InvitedParticipants extends TestCase\Database {
 		Assert::exception(function() use ($participant, $subscription) {
 			(new Subscribing\InvitedParticipants(
 				new Subscribing\FakeParticipants(),
-				$subscription,
 				$this->database
-			))->kick($participant);
+			))->kick($subscription, $participant);
 		}, \Remembrall\Exception\NotFoundException::class, 'Email "me@participant.cz" is not your participant');
 	}
 
@@ -38,16 +37,15 @@ final class InvitedParticipants extends TestCase\Database {
 		$statement->execute([$participant, $subscription]);
 		$participants = new Subscribing\InvitedParticipants(
 			new Subscribing\FakeParticipants(),
-			$subscription,
 			$this->database
 		);
-		Assert::noError(function() use ($participant, $participants) {
-			$participants->kick(strtoupper($participant));
+		Assert::noError(function() use ($participant, $participants, $subscription) {
+			$participants->kick($subscription, strtoupper($participant));
 		});
 		$this->prepareDatabase();
 		$statement->execute([strtoupper($participant), $subscription]);
-		Assert::noError(function() use ($participant, $participants) {
-			$participants->kick($participant);
+		Assert::noError(function() use ($participant, $participants, $subscription) {
+			$participants->kick($subscription, $participant);
 		});
 	}
 
@@ -61,18 +59,16 @@ final class InvitedParticipants extends TestCase\Database {
 		Assert::exception(function() use ($subscription, $participant) {
 			(new Subscribing\InvitedParticipants(
 				new Subscribing\FakeParticipants(),
-				$subscription,
 				$this->database
-			))->invite(strtoupper($participant));
+			))->invite($subscription, strtoupper($participant));
 		}, \Remembrall\Exception\DuplicateException::class, 'Email "ME@PARTICIPANT.CZ" is already your participant');
 		$this->prepareDatabase();
 		$statement->execute([strtoupper($participant), $subscription]);
 		Assert::exception(function() use ($subscription, $participant) {
 			(new Subscribing\InvitedParticipants(
 				new Subscribing\FakeParticipants(),
-				$subscription,
 				$this->database
-			))->invite(strtolower($participant));
+			))->invite($subscription, strtolower($participant));
 		}, \Remembrall\Exception\DuplicateException::class, 'Email "me@participant.cz" is already your participant');
 	}
 
@@ -86,18 +82,16 @@ final class InvitedParticipants extends TestCase\Database {
 		Assert::exception(function() use ($subscription, $participant) {
 			(new Subscribing\InvitedParticipants(
 				new Subscribing\FakeParticipants(),
-				$subscription,
 				$this->database
-			))->invite($participant);
+			))->invite($subscription, $participant);
 		}, \Remembrall\Exception\DuplicateException::class, 'Email "me@participant.cz" is already your participant');
 		$this->prepareDatabase();
 		$statement->execute([$participant, $subscription + 1]);
 		Assert::noError(function() use ($subscription, $participant) {
 			(new Subscribing\InvitedParticipants(
 				new Subscribing\FakeParticipants(),
-				$subscription,
 				$this->database
-			))->invite($participant);
+			))->invite($subscription, $participant);
 		});
 	}
 

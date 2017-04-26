@@ -31,6 +31,10 @@ final class DefaultPage extends Page\Layout {
 				)
 			)
 		);
+		$participants = (new Subscribing\OwnedParticipants(
+			$this->user,
+			$this->database
+		))->all();
 		return new Response\AuthenticatedResponse(
 			new Response\ComposedResponse(
 				new Response\CombinedResponse(
@@ -41,13 +45,21 @@ final class DefaultPage extends Page\Layout {
 							$this->csrf
 						)
 					),
-					new Response\PlainResponse(
-						new Output\ValidXml(
+					new Response\CombinedResponse(
+						new Response\PlainResponse(
+							new Output\ValidXml(
+								new Misc\XmlPrintedObjects(
+									'subscriptions',
+									['subscription' => $subscriptions]
+								),
+								__DIR__ . '/templates/constraint.xsd'
+							)
+						),
+						new Response\PlainResponse(
 							new Misc\XmlPrintedObjects(
-								'subscriptions',
-								['subscription' => $subscriptions]
-							),
-							__DIR__ . '/templates/constraint.xsd'
+								'participants',
+								['participant' => iterator_to_array($participants)]
+							)
 						)
 					),
 					new Response\FlashResponse(),

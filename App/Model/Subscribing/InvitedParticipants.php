@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\Output;
 use Klapuch\Storage;
 
 /**
@@ -10,39 +9,33 @@ use Klapuch\Storage;
  */
 final class InvitedParticipants implements Participants {
 	private $origin;
-	private $subscription;
 	private $database;
 
-	public function __construct(
-		Participants $origin,
-		int $subscription,
-		\PDO $database
-	) {
+	public function __construct(Participants $origin, \PDO $database) {
 		$this->origin = $origin;
-		$this->subscription = $subscription;
 		$this->database = $database;
 	}
 
-	public function invite(string $email): void {
-		if ($this->accepted($email, $this->subscription)) {
+	public function invite(int $subscription, string $email): void {
+		if ($this->accepted($email, $subscription)) {
 			throw new \Remembrall\Exception\DuplicateException(
 				sprintf('Email "%s" is already your participant', $email)
 			);
 		}
-		$this->origin->invite($email);
+		$this->origin->invite($subscription, $email);
 	}
 
-	public function kick(string $email): void {
-		if (!$this->invited($email, $this->subscription)) {
+	public function kick(int $subscription, string $email): void {
+		if (!$this->invited($email, $subscription)) {
 			throw new \Remembrall\Exception\NotFoundException(
 				sprintf('Email "%s" is not your participant', $email)
 			);
 		}
-		$this->origin->kick($email);
+		$this->origin->kick($subscription, $email);
 	}
 
-	public function print(Output\Format $format): \Iterator {
-		return $this->origin->print($format);
+	public function all(): \Iterator {
+		return $this->origin->all();
 	}
 
 	private function accepted(string $email, int $subscription): bool {

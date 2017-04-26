@@ -2,27 +2,26 @@
 declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
-use Klapuch\Output;
-
 interface Participants {
 	/**
-	 * Add the new participant
+	 * Add the new participant to the subscription
+	 * @param int $subscription
 	 * @param string $email
 	 * @return void
 	 */
-	public function invite(string $email): void;
+	public function invite(int $subscription, string $email): void;
 
 	/**
-	 * Remove the participant
+	 * Remove the participant from the given subscription
+	 * @param int $subscription
 	 * @param string $email
 	 * @return void
 	 */
-	public function kick(string $email): void;
+	public function kick(int $subscription, string $email): void;
 
 	/**
-	 * Print itself
-	 * @param \Klapuch\Output\Format $format
+	 * Go thorough all the participants
 	 * @return \Iterator
 	 */
-	public function print(Output\Format $format): \Iterator;
+	public function all(): \Iterator;
 }
