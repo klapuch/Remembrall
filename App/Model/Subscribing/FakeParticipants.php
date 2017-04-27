@@ -6,7 +6,14 @@ namespace Remembrall\Model\Subscribing;
  * Fake
  */
 final class FakeParticipants implements Participants {
-	public function invite(int $subscription, string $email): void {
+	private $invitation;
+
+	public function __construct(Invitation $invitation = null) {
+	    $this->invitation = $invitation;
+	}
+
+	public function invite(int $subscription, string $email): Invitation {
+		return $this->invitation;
 	}
 
 	public function kick(int $subscription, string $email): void {

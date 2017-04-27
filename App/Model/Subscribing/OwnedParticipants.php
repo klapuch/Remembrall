@@ -17,15 +17,19 @@ final class OwnedParticipants implements Participants {
 		$this->database = $database;
 	}
 
-	public function invite(int $subscription, string $email): void {
-		(new Storage\ParameterizedQuery(
-			$this->database,
-			'INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			(?, ?, ?, NOW(), FALSE, NULL)
-			ON CONFLICT (email, subscription_id)
-			DO UPDATE SET invited_at = NOW()',
-			[$email, $subscription, bin2hex(random_bytes(32))]
-		))->execute();
+	public function invite(int $subscription, string $email): Invitation {
+		return new ParticipantInvitation(
+			(new Storage\ParameterizedQuery(
+				$this->database,
+				'INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
+				(?, ?, ?, NOW(), FALSE, NULL)
+				ON CONFLICT (email, subscription_id)
+				DO UPDATE SET invited_at = NOW()
+				RETURNING code',
+				[$email, $subscription, bin2hex(random_bytes(32))]
+			))->field(),
+			$this->database
+		);
 	}
 
 	public function kick(int $subscription, string $email): void {

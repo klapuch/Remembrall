@@ -79,6 +79,17 @@ final class OwnedParticipants extends TestCase\Database {
 		Assert::same(3, $this->database->query('SELECT subscription_id FROM participants')->fetchColumn());
 	}
 
+	public function testInvitationWithCreatedCode() {
+		$participant = 'me@participant.cz';
+		$participants = new Subscribing\OwnedParticipants(new Access\FakeUser(), $this->database);
+		$invitation = $participants->invite(2, $participant);
+		$code = $this->database->query('SELECT code FROM participants')->fetchColumn();
+		Assert::equal(
+			new Subscribing\ParticipantInvitation($code, $this->database),
+			$invitation
+		);
+	}
+
 	public function testKickingByCaseInsensitiveEmail() {
 		$participant = 'me@participant.cz';
 		$participants = new Subscribing\OwnedParticipants(new Access\FakeUser(), $this->database);

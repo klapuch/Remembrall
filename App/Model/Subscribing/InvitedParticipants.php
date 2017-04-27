@@ -16,13 +16,13 @@ final class InvitedParticipants implements Participants {
 		$this->database = $database;
 	}
 
-	public function invite(int $subscription, string $email): void {
+	public function invite(int $subscription, string $email): Invitation {
 		if ($this->accepted($email, $subscription)) {
 			throw new \Remembrall\Exception\DuplicateException(
 				sprintf('Email "%s" is already your participant', $email)
 			);
 		}
-		$this->origin->invite($subscription, $email);
+		return $this->origin->invite($subscription, $email);
 	}
 
 	public function kick(int $subscription, string $email): void {

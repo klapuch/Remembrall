@@ -33,4 +33,8 @@
 	<permission resource="password/remind" role="guest"/>
 
     <permission resource="password/reset/{any}" role="guest"/>
+
+    <permission resource="invitation/accept/{any}" role="guest"/>
+
+    <permission resource="invitation/deny/{any}" role="guest"/>
 </permissions>

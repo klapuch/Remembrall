@@ -7,9 +7,9 @@ interface Participants {
 	 * Add the new participant to the subscription
 	 * @param int $subscription
 	 * @param string $email
-	 * @return void
+	 * @return \Remembrall\Model\Subscribing\Invitation
 	 */
-	public function invite(int $subscription, string $email): void;
+	public function invite(int $subscription, string $email): Invitation;
 
 	/**
 	 * Remove the participant from the given subscription
