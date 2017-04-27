@@ -6,17 +6,24 @@
 	<xsl:import href="../../components/direction.xsl"/>
 	<xsl:import href="../../components/form.xsl"/>
 
+	<xsl:key name="participantBySubscription" match="participant" use="subscription_id"/>
+
 	<xsl:template match="page">
 		<h1><xsl:apply-templates select="body/header[@level=1]"/></h1>
 		<xsl:apply-templates select="subscriptions"/>
 	</xsl:template>
 
-	<xsl:template match="subscriptions"> <table class="table table-hover">
+	<xsl:template match="subscriptions">
+        <table class="table table-hover">
 			<xsl:apply-templates select="/page/body/tables/table[@purpose='overview']"/>
 			<tbody>
 				<xsl:apply-templates select="subscription"/>
 			</tbody>
 		</table>
+	</xsl:template>
+
+	<xsl:template match="participant">
+		<p><strong>Email: </strong> <xsl:value-of select="email"/></p>
 	</xsl:template>
 
 	<xsl:template match="subscription">
@@ -34,6 +41,11 @@
 					<xsl:with-param name="id" select="id"/>
 					<xsl:with-param name="content" select="content"/>
 				</xsl:call-template>
+			</td>
+			<td>
+				<button type="button" class="participant-modal btn btn-primary btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm">
+					<span class="glyphicon glyphicon-user" aria-hidden="true"/>
+				</button>
 			</td>
 			<td>
 				<xsl:apply-templates select="/page/body/options">

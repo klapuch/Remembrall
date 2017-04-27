@@ -31,10 +31,12 @@ final class DefaultPage extends Page\Layout {
 				)
 			)
 		);
-		$participants = (new Subscribing\OwnedParticipants(
-			$this->user,
-			$this->database
-		))->all();
+		$participants = iterator_to_array(
+			(new Subscribing\OwnedParticipants(
+				$this->user,
+				$this->database
+			))->all()
+		);
 		return new Response\AuthenticatedResponse(
 			new Response\ComposedResponse(
 				new Response\CombinedResponse(
@@ -56,9 +58,12 @@ final class DefaultPage extends Page\Layout {
 							)
 						),
 						new Response\PlainResponse(
-							new Misc\XmlPrintedObjects(
-								'participants',
-								['participant' => iterator_to_array($participants)]
+							new Output\ValidXml(
+								new Misc\XmlPrintedObjects(
+									'participants',
+									['participant' => $participants]
+								),
+								__DIR__ . '/templates/constraint.xsd'
 							)
 						)
 					),

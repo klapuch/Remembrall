@@ -48,6 +48,16 @@
 		</xsd:all>
 	</xsd:complexType>
 
+	<xsd:complexType name="participant">
+		<xsd:all>
+			<xsd:element name="subscription_id" type="xsd:string"/>
+			<xsd:element name="email" type="xsd:string"/>
+			<xsd:element name="invited_at" type="xsd:string"/> <!-- TODO -->
+			<xsd:element name="accepted" type="xsd:boolean"/>
+			<xsd:element name="decided_at" type="xsd:string"/> <!-- TODO -->
+		</xsd:all>
+	</xsd:complexType>
+
 	<xsd:complexType name="subscriptions">
 		<xsd:sequence>
 			<xsd:element
@@ -59,6 +69,18 @@
 		</xsd:sequence>
 	</xsd:complexType>
 
+	<xsd:complexType name="participants">
+		<xsd:sequence>
+			<xsd:element
+					name="participant"
+					type="participant"
+					minOccurs="0"
+					maxOccurs="unbounded"
+			/>
+		</xsd:sequence>
+	</xsd:complexType>
+
 	<xsd:element name="subscriptions" type="subscriptions"/>
+	<xsd:element name="participants" type="participants"/>
 
 </xsd:schema>
