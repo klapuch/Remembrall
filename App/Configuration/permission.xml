@@ -37,4 +37,6 @@
     <permission resource="invitation/accept/{any}" role="guest"/>
 
     <permission resource="invitation/deny/{any}" role="guest"/>
+
+    <permission resource="participants/invite" role="member"/>
 </permissions>

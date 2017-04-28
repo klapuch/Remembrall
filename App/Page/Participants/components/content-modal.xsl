@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
-	<xsl:template name="modal" mode="content">
+	<xsl:template name="content-modal">
 		<xsl:param name="id"/>
 		<xsl:param name="content"/>
 		<div class="modal fade" id="content-{$id}" tabindex="-1" role="dialog" aria-labelledby="content-label-{$id}">
@@ -16,7 +16,7 @@
 						</h4>
 					</div>
 					<div class="modal-body">
-						<xsl:value-of disable-output-escaping="yes" select="$content"/>
+						<xsl:value-of select="$content"/>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">

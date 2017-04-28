@@ -5,7 +5,7 @@ namespace Remembrall\Page\Participants;
 use Klapuch\Application;
 use Klapuch\Output;
 use Nette\Mail;
-use Remembrall\Model\Subscribing\OwnedParticipants;
+use Remembrall\Model\Subscribing;
 use Remembrall\Page;
 
 final class InvitePage extends Page\Layout {
@@ -21,7 +21,7 @@ final class InvitePage extends Page\Layout {
 	public function submitInvite(array $participant): void {
 		try {
 			$this->protect();
-			$invitation = (new OwnedParticipants(
+			$invitation = (new Subscribing\OwnedParticipants(
 				$this->user,
 				$this->database
 			))->invite($participant['subscription'], $participant['email']);
