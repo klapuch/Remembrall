@@ -6,7 +6,7 @@ use Klapuch\Application;
 use Remembrall\Model\Subscribing;
 use Remembrall\Page;
 
-final class DenyPage extends Page\Layout {
+final class DeclinePage extends Page\Layout {
 	public function response(array $parameters): Application\Response {
 		try {
 			(new Subscribing\UnusedInvitation(
@@ -16,7 +16,7 @@ final class DenyPage extends Page\Layout {
 				),
 				$parameters['code'],
 				$this->database
-			))->deny();
+			))->decline();
 			$this->flashMessage('Invitation has been denied', 'success');
 		} catch (\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');

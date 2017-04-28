@@ -24,7 +24,7 @@ final class ParticipantInvitation implements Invitation {
 		))->execute();
 	}
 
-	public function deny(): void {
+	public function decline(): void {
 		(new Storage\ParameterizedQuery(
 			$this->database,
 			'UPDATE participants

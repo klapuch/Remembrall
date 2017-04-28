@@ -12,10 +12,10 @@ interface Invitation {
 	public function accept(): void;
 
 	/**
-	 * Deny the invitation
+	 * Decline the invitation
 	 * @return void
 	 */
-	public function deny(): void;
+	public function decline(): void;
 
 	/**
 	 * Print itself

@@ -32,7 +32,7 @@ final class ParticipantInvitation extends TestCase\Database {
 		);
 	}
 
-	public function testDenyingWithCapturedDecision() {
+	public function testDecliningWithCapturedDecision() {
 		$code = 'abc';
 		$this->database->prepare(
 			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
@@ -41,7 +41,7 @@ final class ParticipantInvitation extends TestCase\Database {
 		(new Subscribing\ParticipantInvitation(
 			$code,
 			$this->database
-		))->deny();
+		))->decline();
 		$participant = $this->database->query('SELECT * FROM participants')->fetch();
 		Assert::false($participant['accepted']);
 		Assert::same(

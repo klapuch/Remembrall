@@ -28,19 +28,19 @@ final class UnusedInvitation implements Invitation {
 		$this->origin->accept();
 	}
 
-	public function deny(): void {
+	public function decline(): void {
 		if ($this->decided($this->code)) {
 			throw new \Remembrall\Exception\NotFoundException(
-				'The invitation is denied or does not exist'
+				'The invitation is declined or does not exist'
 			);
 		}
-		$this->origin->deny();
+		$this->origin->decline();
 	}
 
 	public function print(Output\Format $format): Output\Format {
 		if ($this->decided($this->code)) {
 			throw new \Remembrall\Exception\NotFoundException(
-				'The invitation is denied or does not exist'
+				'The invitation is declined or does not exist'
 			);
 		}
 		return $this->origin->print($format);

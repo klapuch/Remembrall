@@ -27,8 +27,8 @@ final class UnusedInvitation extends TestCase\Database {
 				new Subscribing\FakeInvitation(),
 				'abcd',
 				$this->database
-			))->deny();
-		}, \Remembrall\Exception\NotFoundException::class, 'The invitation is denied or does not exist');
+			))->decline();
+		}, \Remembrall\Exception\NotFoundException::class, 'The invitation is declined or does not exist');
 		$this->database->prepare(
 			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
 			('me@participant.cz', 1, 'abc', NOW(), FALSE, NULL)"
@@ -45,8 +45,8 @@ final class UnusedInvitation extends TestCase\Database {
 				new Subscribing\FakeInvitation(),
 				'abcd',
 				$this->database
-			))->deny();
-		}, \Remembrall\Exception\NotFoundException::class, 'The invitation is denied or does not exist');
+			))->decline();
+		}, \Remembrall\Exception\NotFoundException::class, 'The invitation is declined or does not exist');
 	}
 
 	/**
@@ -82,9 +82,9 @@ final class UnusedInvitation extends TestCase\Database {
 	}
 
 	/**
-	 * @throws \Remembrall\Exception\NotFoundException The invitation is denied or does not exist
+	 * @throws \Remembrall\Exception\NotFoundException The invitation is declined or does not exist
 	 */
-	public function testThrowingOnDenyingCaseInsensitiveCode() {
+	public function testThrowingOnDecliningCaseInsensitiveCode() {
 		$code = 'abc';
 		$this->database->prepare(
 			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
@@ -94,13 +94,13 @@ final class UnusedInvitation extends TestCase\Database {
 			new Subscribing\FakeInvitation(),
 			strtoupper($code),
 			$this->database
-		))->deny();
+		))->decline();
 	}
 
 	/**
-	 * @throws \Remembrall\Exception\NotFoundException The invitation is denied or does not exist
+	 * @throws \Remembrall\Exception\NotFoundException The invitation is declined or does not exist
 	 */
-	public function testThrowingOnDenyAlreadyDeniedCode() {
+	public function testThrowingOnDeclineAlreadyDeclinedCode() {
 		$code = 'abc';
 		$this->database->prepare(
 			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
@@ -110,11 +110,11 @@ final class UnusedInvitation extends TestCase\Database {
 			new Subscribing\FakeInvitation(),
 			$code,
 			$this->database
-		))->deny();
+		))->decline();
 	}
 
 	/**
-	 * @throws \Remembrall\Exception\NotFoundException The invitation is denied or does not exist
+	 * @throws \Remembrall\Exception\NotFoundException The invitation is declined or does not exist
 	 */
 	public function testThrowingOnPrintingAffectedCode() {
 		(new Subscribing\UnusedInvitation(
@@ -155,7 +155,7 @@ final class UnusedInvitation extends TestCase\Database {
 		});
 	}
 
-	public function testDenying() {
+	public function testDeclining() {
 		$code = 'abc';
 		$this->database->prepare(
 			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
@@ -166,7 +166,7 @@ final class UnusedInvitation extends TestCase\Database {
 				new Subscribing\FakeInvitation(),
 				$code,
 				$this->database
-			))->deny();
+			))->decline();
 		});
 	}
 
