@@ -14,34 +14,50 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner:
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
 --
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner:
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
--- Name: citext; Type: EXTENSION; Schema: -; Owner:
+-- Name: citext; Type: EXTENSION; Schema: -; Owner: 
 --
 
 CREATE EXTENSION IF NOT EXISTS citext WITH SCHEMA public;
 
 
 --
--- Name: EXTENSION citext; Type: COMMENT; Schema: -; Owner:
+-- Name: EXTENSION citext; Type: COMMENT; Schema: -; Owner: 
 --
 
 COMMENT ON EXTENSION citext IS 'data type for case-insensitive character strings';
 
 
 SET search_path = public, pg_catalog;
+
+--
+-- Name: record_invitation(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION record_invitation() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+begin
+    INSERT INTO invitation_attempts (participant_id, attempt_at) VALUES (NEW.id, NOW());
+    return new;
+end
+$$;
+
+
+ALTER FUNCTION public.record_invitation() OWNER TO postgres;
 
 --
 -- Name: record_page_access(); Type: FUNCTION; Schema: public; Owner: postgres
@@ -113,6 +129,40 @@ ALTER TABLE forgotten_passwords_id_seq OWNER TO postgres;
 --
 
 ALTER SEQUENCE forgotten_passwords_id_seq OWNED BY forgotten_passwords.id;
+
+
+--
+-- Name: invitation_attempts; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE invitation_attempts (
+    id integer NOT NULL,
+    attempt_at timestamp with time zone NOT NULL,
+    participant_id integer NOT NULL
+);
+
+
+ALTER TABLE invitation_attempts OWNER TO postgres;
+
+--
+-- Name: invitation_attempts_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE invitation_attempts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE invitation_attempts_id_seq OWNER TO postgres;
+
+--
+-- Name: invitation_attempts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE invitation_attempts_id_seq OWNED BY invitation_attempts.id;
 
 
 --
@@ -421,6 +471,13 @@ ALTER TABLE ONLY forgotten_passwords ALTER COLUMN id SET DEFAULT nextval('forgot
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
+ALTER TABLE ONLY invitation_attempts ALTER COLUMN id SET DEFAULT nextval('invitation_attempts_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
 ALTER TABLE ONLY notifications ALTER COLUMN id SET DEFAULT nextval('notifications_id_seq'::regclass);
 
 
@@ -482,11 +539,19 @@ ALTER TABLE ONLY forgotten_passwords
 
 
 --
--- Name: participants_id; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: invitation_attempts_id; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY invitation_attempts
+    ADD CONSTRAINT invitation_attempts_id PRIMARY KEY (id);
+
+
+--
+-- Name: invitations_id; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY participants
-    ADD CONSTRAINT participants_id PRIMARY KEY (id);
+    ADD CONSTRAINT invitations_id PRIMARY KEY (id);
 
 
 --
@@ -598,6 +663,20 @@ ALTER TABLE ONLY verification_codes
 --
 
 CREATE TRIGGER pages_aiu AFTER INSERT OR UPDATE ON pages FOR EACH ROW EXECUTE PROCEDURE record_page_access();
+
+
+--
+-- Name: participants_ai; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER participants_ai AFTER INSERT ON participants FOR EACH ROW EXECUTE PROCEDURE record_invitation();
+
+
+--
+-- Name: participants_au; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER participants_au AFTER UPDATE ON participants FOR EACH ROW EXECUTE PROCEDURE record_invitation();
 
 
 --
