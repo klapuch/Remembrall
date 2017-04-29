@@ -4,7 +4,7 @@ namespace Remembrall\Model\Subscribing;
 
 interface Participants {
 	/**
-	 * Add the new participant to the subscription
+	 * Add a new participant to the subscription
 	 * @param int $subscription
 	 * @param string $email
 	 * @return \Remembrall\Model\Subscribing\Invitation
@@ -12,7 +12,7 @@ interface Participants {
 	public function invite(int $subscription, string $email): Invitation;
 
 	/**
-	 * Remove the participant from the given subscription
+	 * Remove a participant from the given subscription
 	 * @param int $subscription
 	 * @param string $email
 	 * @return void

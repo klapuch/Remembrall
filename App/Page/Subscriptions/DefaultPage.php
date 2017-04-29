@@ -32,7 +32,7 @@ final class DefaultPage extends Page\Layout {
 			)
 		);
 		$participants = iterator_to_array(
-			(new Subscribing\OwnedParticipants(
+			(new Subscribing\NonViolentParticipants(
 				$this->user,
 				$this->database
 			))->all()

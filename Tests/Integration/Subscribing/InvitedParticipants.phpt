@@ -36,7 +36,7 @@ final class InvitedParticipants extends TestCase\Database {
 		);
 		$statement->execute([$participant, $subscription]);
 		$participants = new Subscribing\InvitedParticipants(
-			new Subscribing\FakeParticipants(),
+			new Subscribing\FakeParticipants(new Subscribing\FakeInvitation()),
 			$this->database
 		);
 		Assert::noError(function() use ($participant, $participants, $subscription) {

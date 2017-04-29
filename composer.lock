@@ -620,16 +620,16 @@
         },
         {
             "name": "klapuch/output",
-            "version": "2.6.0",
+            "version": "2.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/Output.git",
-                "reference": "0669b8c1cdcded7cedba5ab1ad128e7446485c32"
+                "reference": "c026df6dcf4fefa9619ecda9c08df11ff4b7da35"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klapuch/Output/zipball/0669b8c1cdcded7cedba5ab1ad128e7446485c32",
-                "reference": "0669b8c1cdcded7cedba5ab1ad128e7446485c32",
+                "url": "https://api.github.com/repos/klapuch/Output/zipball/c026df6dcf4fefa9619ecda9c08df11ff4b7da35",
+                "reference": "c026df6dcf4fefa9619ecda9c08df11ff4b7da35",
                 "shasum": ""
             },
             "require": {
@@ -660,7 +660,7 @@
             ],
             "description": "printers, output, xml, json",
             "homepage": "https://github.com/klapuch/Output",
-            "time": "2017-02-25T19:07:52+00:00"
+            "time": "2017-04-28T21:09:56+00:00"
         },
         {
             "name": "klapuch/routing",
@@ -2260,16 +2260,16 @@
         },
         {
             "name": "slevomat/coding-standard",
-            "version": "2.0.2",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/slevomat/coding-standard.git",
-                "reference": "2bcf4016c91d307e65e9ce8f855a23262e66c622"
+                "reference": "7f1e7eaaf37747b4b1d57d0151345ddf4cb7964f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/2bcf4016c91d307e65e9ce8f855a23262e66c622",
-                "reference": "2bcf4016c91d307e65e9ce8f855a23262e66c622",
+                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/7f1e7eaaf37747b4b1d57d0151345ddf4cb7964f",
+                "reference": "7f1e7eaaf37747b4b1d57d0151345ddf4cb7964f",
                 "shasum": ""
             },
             "require": {
@@ -2277,12 +2277,10 @@
                 "squizlabs/php_codesniffer": "^2.8.1"
             },
             "require-dev": {
-                "consistence/coding-standard": "^0.13",
-                "jakub-onderka/php-parallel-lint": "^0.9.2",
-                "phing/phing": "^2.16",
-                "phpstan/phpstan": "^0.6.3",
-                "phpunit/phpunit": "^6.0.1",
-                "satooshi/php-coveralls": "^1.0"
+                "jakub-onderka/php-parallel-lint": "0.9.2",
+                "phing/phing": "2.16",
+                "phpstan/phpstan": "0.6.4",
+                "phpunit/phpunit": "6.1.2"
             },
             "type": "library",
             "autoload": {
@@ -2295,7 +2293,7 @@
                 "MIT"
             ],
             "description": "Slevomat Coding Standard for PHP_CodeSniffer extends Consistence Coding Standard by providing sniffs with additional checks.",
-            "time": "2017-04-18T07:56:33+00:00"
+            "time": "2017-04-27T08:02:19+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",

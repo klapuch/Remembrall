@@ -14,9 +14,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class OwnedParticipants extends TestCase\Database {
+final class NonViolentParticipants extends TestCase\Database {
 	public function testInvitingBrandNewParticipant() {
-		(new Subscribing\OwnedParticipants(
+		(new Subscribing\NonViolentParticipants(
 			new Access\FakeUser(),
 			$this->database
 		))->invite(2, 'me@participant.cz');
@@ -34,7 +34,7 @@ final class OwnedParticipants extends TestCase\Database {
 	}
 
 	public function testInvitingSameParticipantLeadingToUpdate() {
-		$participants = new Subscribing\OwnedParticipants(new Access\FakeUser(), $this->database);
+		$participants = new Subscribing\NonViolentParticipants(new Access\FakeUser(), $this->database);
 		$participants->invite(2, 'me@participant.cz');
 		$statement = $this->database->prepare('SELECT * FROM participants');
 		$statement->execute();
@@ -47,7 +47,7 @@ final class OwnedParticipants extends TestCase\Database {
 	}
 
 	public function testInvitingWithCaseSensitiveEmail() {
-		$participants = new Subscribing\OwnedParticipants(new Access\FakeUser(), $this->database);
+		$participants = new Subscribing\NonViolentParticipants(new Access\FakeUser(), $this->database);
 		$participants->invite(2, 'me@participant.cz');
 		$participants->invite(2, 'ME@participant.cz');
 		$statement = $this->database->prepare('SELECT * FROM participants');
@@ -63,7 +63,7 @@ final class OwnedParticipants extends TestCase\Database {
 			(?, ?, '123', NOW(), FALSE, NOW())"
 		);
 		$statement->execute([$participant, $subscription]);
-		$participants = new Subscribing\OwnedParticipants(new Access\FakeUser(), $this->database);
+		$participants = new Subscribing\NonViolentParticipants(new Access\FakeUser(), $this->database);
 		Assert::noError(function() use ($participant, $participants, $subscription) {
 			$participants->invite($subscription, $participant);
 		});
@@ -71,7 +71,7 @@ final class OwnedParticipants extends TestCase\Database {
 
 	public function testKickingWithRemovingAllProofs() {
 		$participant = 'me@participant.cz';
-		$participants = new Subscribing\OwnedParticipants(new Access\FakeUser(), $this->database);
+		$participants = new Subscribing\NonViolentParticipants(new Access\FakeUser(), $this->database);
 		$participants->invite(2, $participant);
 		$participants->kick(2, $participant);
 		$participants->invite(3, $participant);
@@ -81,7 +81,7 @@ final class OwnedParticipants extends TestCase\Database {
 
 	public function testInvitationWithCreatedCode() {
 		$participant = 'me@participant.cz';
-		$participants = new Subscribing\OwnedParticipants(new Access\FakeUser(), $this->database);
+		$participants = new Subscribing\NonViolentParticipants(new Access\FakeUser(), $this->database);
 		$invitation = $participants->invite(2, $participant);
 		$code = $this->database->query('SELECT code FROM participants')->fetchColumn();
 		Assert::equal(
@@ -92,7 +92,7 @@ final class OwnedParticipants extends TestCase\Database {
 
 	public function testKickingByCaseInsensitiveEmail() {
 		$participant = 'me@participant.cz';
-		$participants = new Subscribing\OwnedParticipants(new Access\FakeUser(), $this->database);
+		$participants = new Subscribing\NonViolentParticipants(new Access\FakeUser(), $this->database);
 		$participants->invite(2, $participant);
 		$participants->kick(2, strtoupper($participant));
 		Assert::count(0, $this->database->query('SELECT * FROM participants')->fetchAll());
@@ -119,24 +119,59 @@ final class OwnedParticipants extends TestCase\Database {
 			(3, 'author@participant.cz', 'heslo'),
 			(2, 'foo@participant.cz', 'heslo2')"
 		);
-		$participants = (new Subscribing\OwnedParticipants(
+		$this->purge(['invitation_attempts']);
+		$this->database->exec(
+			'INSERT INTO invitation_attempts (id, participant_id, attempt_at) VALUES
+			(1, 1, NOW()), (2, 1, NOW()), (3, 1, NOW()), (4, 1, NOW()), (5, 1, NOW())'
+		);
+		$participants = (new Subscribing\NonViolentParticipants(
 			new Access\FakeUser(3),
 			$this->database
 		))->all();
 		$print = $participants->current()->print(new Output\FakeFormat())->serialization();
-		Assert::contains('|email|owned@participant.cz||subscription_id|2|', $print);
+		Assert::contains('|harassed|1||id|1||email|owned@participant.cz||subscription_id|2|', $print);
 		Assert::contains('|invited_at|', $print);
 		Assert::contains('||accepted|||decided_at|', $print);
 		$participants->next();
 		$print = $participants->current()->print(new Output\FakeFormat())->serialization();
-		Assert::contains('|email|owned2@participant.cz||subscription_id|2|', $print);
+		Assert::contains('|harassed|||id|3||email|owned2@participant.cz||subscription_id|2|', $print);
 		$participants->next();
 		Assert::null($participants->current());
 	}
 
+	public function testInvitingWithoutSpamming() {
+		[$subscription, $participant] = [2, 'me@participant.cz'];
+		$participants = new Subscribing\NonViolentParticipants(
+			new Access\FakeUser(),
+			$this->database
+		);
+		$participants->invite($subscription, $participant);
+		$participants->invite($subscription, $participant);
+		$participants->invite($subscription, $participant);
+		$participants->invite($subscription, $participant);
+		$participants->invite($subscription, $participant);
+		Assert::exception(function() use ($participant, $participants, $subscription) {
+			$participants->invite($subscription, $participant);
+		}, \OutOfRangeException::class, 'Participant declined your invitation too many times');
+		Assert::same(5, $this->database->query('SELECT COUNT(*) FROM invitation_attempts')->fetchColumn());
+		$this->database->exec("UPDATE invitation_attempts SET attempt_at = NOW() - INTERVAL '12 HOUR'");
+		$participants->invite($subscription, $participant);
+		$participants->invite($subscription, $participant);
+		$participants->invite($subscription, $participant);
+		$participants->invite($subscription, $participant);
+		$participants->invite($subscription, $participant);
+		Assert::exception(function() use ($participant, $participants, $subscription) {
+			$participants->invite($subscription, $participant);
+		}, \OutOfRangeException::class, 'Participant declined your invitation too many times');
+		Assert::noError(function() use ($subscription, $participant, $participants) {
+			$participants->invite($subscription, 'you@participant.cz');
+			$participants->invite($subscription + 1, $participant);
+		});
+	}
+
 	protected function prepareDatabase(): void {
-		$this->purge(['participants', 'subscriptions', 'users']);
+		$this->purge(['participants', 'subscriptions', 'users', 'invitation_attempts']);
 	}
 }
 
-(new OwnedParticipants)->run();
+(new NonViolentParticipants)->run();

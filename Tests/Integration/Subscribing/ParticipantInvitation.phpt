@@ -79,7 +79,7 @@ final class ParticipantInvitation extends TestCase\Database {
 	}
 
 	protected function prepareDatabase(): void {
-		$this->purge(['participants', 'subscriptions', 'users', 'parts']);
+		$this->purge(['participants', 'subscriptions', 'users', 'parts', 'invitation_attempts']);
 	}
 }
 

@@ -6,9 +6,11 @@ use Klapuch\Access;
 use Klapuch\Storage;
 
 /**
- * Participants owned by the author
+ * All the non-violent participants
  */
-final class OwnedParticipants implements Participants {
+final class NonViolentParticipants implements Participants {
+	private const ATTEMPTS = 5,
+		RELEASE = 12; // five attempts in last 12 hours
 	private $author;
 	private $database;
 
@@ -18,6 +20,11 @@ final class OwnedParticipants implements Participants {
 	}
 
 	public function invite(int $subscription, string $email): Invitation {
+		if ($this->harassed($subscription, $email)) {
+			throw new \OutOfRangeException(
+				'Participant declined your invitation too many times'
+			);
+		}
 		return new ParticipantInvitation(
 			(new Storage\ParameterizedQuery(
 				$this->database,
@@ -45,7 +52,7 @@ final class OwnedParticipants implements Participants {
 	public function all(): \Iterator {
 		$participants = (new Storage\ParameterizedQuery(
 			$this->database,
-			'SELECT participants.email, subscription_id, invited_at, accepted, decided_at
+			'SELECT participants.id, participants.email, subscription_id, invited_at, accepted, decided_at
 			FROM participants
 			INNER JOIN subscriptions ON subscriptions.id = participants.subscription_id
 			INNER JOIN users ON users.id = subscriptions.user_id
@@ -53,7 +60,38 @@ final class OwnedParticipants implements Participants {
 			ORDER BY decided_at DESC',
 			[$this->author->id()]
 		))->execute();
-		foreach ($participants as $participant)
-			yield new ConstantParticipant($participant);
+		foreach ($participants as $participant) {
+			yield new ConstantParticipant(
+				[
+					'harassed' => $this->harassed(
+						$participant['subscription_id'],
+						$participant['email']
+					),
+				] + $participant
+			);
+		}
+	}
+
+	/**
+	 * Was the participant asked too many times for invitation?
+	 * @param int $subscription
+	 * @param string $email
+	 * @return bool
+	 */
+	private function harassed(int $subscription, string $email): bool {
+		return (bool) (new Storage\ParameterizedQuery(
+			$this->database,
+			"SELECT 1
+			FROM invitation_attempts
+			WHERE participant_id = (
+				SELECT id
+				FROM participants
+				WHERE subscription_id = ?
+				AND email = ?
+			)
+			AND attempt_at + INTERVAL '1 HOUR' * ? > NOW()
+			HAVING COUNT(*) >= ?",
+			[$subscription, $email, self::RELEASE, self::ATTEMPTS]
+		))->field();
 	}
 }
