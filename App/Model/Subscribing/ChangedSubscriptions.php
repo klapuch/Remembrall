@@ -39,12 +39,21 @@ final class ChangedSubscriptions implements Subscriptions {
 		$subscriptions = (new Storage\ParameterizedQuery(
 			$this->database,
 			$selection->expression(
-				"SELECT subscriptions.id, page_url AS url, expression, content, email, parts.snapshot
-				FROM parts
-				INNER JOIN subscriptions ON subscriptions.part_id = parts.id
-				INNER JOIN users ON users.id = subscriptions.user_id
-				WHERE parts.snapshot != subscriptions.snapshot
-				AND last_update + INTERVAL '1 SECOND' * SUBSTRING(interval FROM '[0-9]+')::INT < NOW()"
+				"WITH changed_subscriptions AS (
+					SELECT subscriptions.id, page_url AS url, expression, content, email, parts.snapshot
+					FROM parts
+					INNER JOIN subscriptions ON subscriptions.part_id = parts.id
+					INNER JOIN users ON users.id = subscriptions.user_id
+					WHERE parts.snapshot != subscriptions.snapshot
+					AND last_update + INTERVAL '1 SECOND' * SUBSTRING(interval FROM '[0-9]+')::INT < NOW()
+				)
+				SELECT *
+				FROM changed_subscriptions
+				UNION
+				SELECT changed_subscriptions.id, url, expression, content, participants.email, snapshot
+				FROM changed_subscriptions
+				LEFT JOIN participants ON participants.subscription_id = changed_subscriptions.id
+				WHERE accepted = TRUE"
 			)
 		))->rows();
 		foreach ($subscriptions as $subscription) {
