@@ -21,8 +21,11 @@ final class InvitePage extends Page\Layout {
 	public function submitInvite(array $participant): void {
 		try {
 			$this->protect();
-			$invitation = (new Subscribing\NonViolentParticipants(
-				$this->user,
+			$invitation = (new Subscribing\GuestParticipants(
+				new Subscribing\NonViolentParticipants(
+					$this->user,
+					$this->database
+				),
 				$this->database
 			))->invite($participant['subscription'], $participant['email']);
 			(new Mail\SendmailMailer())->send(
