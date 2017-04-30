@@ -5,7 +5,9 @@ namespace Remembrall\Page\Subscriptions;
 use Gajus\Dindent;
 use Klapuch\Application;
 use Klapuch\Dataset;
+use Klapuch\Form;
 use Klapuch\Output;
+use Remembrall\Form\Participants;
 use Remembrall\Form\Subscription;
 use Remembrall\Model\Misc;
 use Remembrall\Model\Subscribing;
@@ -48,6 +50,14 @@ final class DefaultPage extends Page\Layout {
 						)
 					),
 					new Response\CombinedResponse(
+						new Response\FormResponse(
+							new Participants\InviteForms(
+								$subscriptions,
+								$this->url,
+								$this->csrf,
+								new Form\Backup($_SESSION, $_POST)
+							)
+						),
 						new Response\PlainResponse(
 							new Output\ValidXml(
 								new Misc\XmlPrintedObjects(

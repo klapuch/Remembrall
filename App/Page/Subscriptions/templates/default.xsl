@@ -6,7 +6,7 @@
 	<xsl:import href="../../components/direction.xsl"/>
 	<xsl:import href="../../components/form.xsl"/>
 
-	<xsl:key name="participantBySubscription" match="participant" use="subscription_id"/>
+	<xsl:key name="participantsBySubscription" match="participants" use="participant/subscription_id"/>
 
 	<xsl:template match="page">
 		<h1><xsl:apply-templates select="body/header[@level=1]"/></h1>
@@ -22,36 +22,21 @@
 		</table>
 	</xsl:template>
 
-	<xsl:template match="participant">
-		<div class="modal fade" id="content-{id}" tabindex="-1" role="dialog" aria-labelledby="content-label-{id}">
+	<xsl:template match="participants">
+		<xsl:param name="id"/>
+		<xsl:param name="subscription_id"/>
+		<div class="modal fade" id="content-{$id}" tabindex="-1" role="dialog" aria-labelledby="content-label-{$id}">
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true"/>
 						</button>
-						<h4 class="modal-title" id="content-label-{id}">Content</h4>
+						<h4 class="modal-title" id="content-label-{$id}">Content</h4>
 					</div>
 					<div class="modal-body">
-						<p>
-							<xsl:value-of select="email"/>
-							<xsl:choose>
-								<xsl:when test="accepted='true'">
-									<span class="glyphicon glyphicon-ok" aria-hidden="true"/>
-									<a href="{$base_url}/participants/kick/{id}">
-										<span class="glyphicon glyphicon-remove" aria-hidden="true"/>
-									</a>
-								</xsl:when>
-								<xsl:otherwise>
-									<span class="glyphicon glyphicon-remove" aria-hidden="true"/>
-									<xsl:if test="harassed='false'">
-										<a href="{$base_url}/participants/invite/{id}">
-											<span class="glyphicon glyphicon-repeat" aria-hidden="true"/>
-										</a>
-									</xsl:if>
-								</xsl:otherwise>
-							</xsl:choose>
-						</p>
+						<xsl:apply-templates/>
+						<xsl:apply-templates select="/page/forms/form[@name=concat('invite-', $subscription_id)]"/>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">
@@ -61,6 +46,28 @@
 				</div>
 			</div>
 		</div>
+	</xsl:template>
+
+	<xsl:template match="participant">
+		<p>
+			<xsl:value-of select="email"/>
+			<xsl:choose>
+				<xsl:when test="accepted='true'">
+					<span class="glyphicon glyphicon-ok" aria-hidden="true"/>
+					<a href="{$base_url}/participants/kick/{id}">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"/>
+					</a>
+				</xsl:when>
+				<xsl:otherwise>
+					<span class="glyphicon glyphicon-remove" aria-hidden="true"/>
+					<xsl:if test="harassed='false'">
+						<a href="{$base_url}/participants/invite/{id}">
+							<span class="glyphicon glyphicon-repeat" aria-hidden="true"/>
+						</a>
+					</xsl:if>
+				</xsl:otherwise>
+			</xsl:choose>
+		</p>
 	</xsl:template>
 
 	<xsl:template match="subscription">
@@ -80,10 +87,13 @@
 				</xsl:call-template>
 			</td>
 			<td>
-				<button type="button" class="participant-modal btn btn-primary btn-sm" data-toggle="modal" data-target="#content-{key('participantBySubscription', id)/id}">
+				<button type="button" class="participant-modal btn btn-primary btn-sm" data-toggle="modal" data-target="#content-{id}">
 					<span class="glyphicon glyphicon-user" aria-hidden="true"/>
 				</button>
-				<xsl:apply-templates select="key('participantBySubscription', id)"/>
+				<xsl:apply-templates select="key('participantsBySubscription', id)">
+					<xsl:with-param name="id" select="id"/>
+					<xsl:with-param name="subscription_id" select="id"/>
+				</xsl:apply-templates>
 			</td>
 			<td>
 				<xsl:apply-templates select="/page/body/options">

@@ -1,28 +1,34 @@
 <?php
 declare(strict_types = 1);
-namespace Remembrall\Form\Subscription;
+namespace Remembrall\Form\Participants;
 
 use Klapuch\Csrf;
 use Klapuch\Form;
 use Klapuch\Output;
 use Klapuch\Uri;
 use Klapuch\Validation;
+use Remembrall\Constraint;
 use Remembrall\Model\Subscribing;
 
-final class DeleteForm implements Form\Control {
-	private const ACTION = '/subscription/delete', NAME = 'delete';
+final class InviteForm implements Form\Control {
+	private const COLUMNS = 3;
+	private const ACTION = '/participants/invite',
+		NAME = 'invite';
 	private $subscription;
 	private $url;
 	private $csrf;
+	private $storage;
 
 	public function __construct(
 		Subscribing\Subscription $subscription,
 		Uri\Uri $url,
-		Csrf\Protection $csrf
+		Csrf\Protection $csrf,
+		Form\Storage $storage
 	) {
 		$this->subscription = $subscription;
 		$this->url = $url;
 		$this->csrf = $csrf;
+		$this->storage = $storage;
 	}
 
 	public function render(): string {
@@ -42,6 +48,8 @@ final class DeleteForm implements Form\Control {
 		return new Form\RawForm(
 			[
 				'id' => self::NAME,
+				'role' => 'form',
+				'class' => 'form-horizontal',
 				'name' => sprintf('%s-%s', self::NAME, $id),
 				'method' => 'POST',
 				'action' => $this->url->reference() . self::ACTION,
@@ -50,16 +58,40 @@ final class DeleteForm implements Form\Control {
 			new Form\DefaultInput(
 				[
 					'type' => 'hidden',
-					'name' => 'id',
+					'name' => 'subscription',
 					'value' => $id,
 				],
 				new Form\EmptyStorage(),
 				new Validation\PassiveRule()
 			),
-			new Form\DefaultInput(
-				['type' => 'submit'],
-				new Form\EmptyStorage(),
-				new Validation\PassiveRule()
+			new Form\BootstrapInput(
+				new Form\BoundControl(
+					new Form\DefaultInput(
+						[
+							'type' => 'email',
+							'name' => 'email',
+							'class' => 'form-control',
+							'required' => 'required',
+						],
+						$this->storage,
+						new Constraint\EmailRule()
+					),
+					new Form\LinkedLabel('Email', 'email')
+				),
+				self::COLUMNS
+			),
+			new Form\BootstrapInput(
+				new Form\DefaultInput(
+					[
+						'type' => 'submit',
+						'name' => 'act',
+						'class' => 'form-control',
+						'value' => 'Invite',
+					],
+					$this->storage,
+					new Validation\PassiveRule()
+				),
+				self::COLUMNS
 			)
 		);
 	}
