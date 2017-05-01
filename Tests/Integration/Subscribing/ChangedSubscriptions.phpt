@@ -41,12 +41,12 @@ final class ChangedSubscriptions extends TestCase\Database {
 			('baz@participant.cz', 3, 'abc', NOW(), TRUE, NOW())"
 		);
 		$this->database->exec(
-			"INSERT INTO users (id, email, password) VALUES 
-			(1, 'a@a.cz', 'a'),
-			(2, 'b@b.cz', 'b'),
-			(3, 'c@c.cz', 'c'),
-			(4, 'd@d.cz', 'd'),
-			(5, 'e@e.cz', 'e')"
+			"INSERT INTO users (id, email, password, role) VALUES 
+			(1, 'a@a.cz', 'a', 'member'),
+			(2, 'b@b.cz', 'b', 'member'),
+			(3, 'c@c.cz', 'c', 'member'),
+			(4, 'd@d.cz', 'd', 'member'),
+			(5, 'e@e.cz', 'e', 'member')"
 		);
 		$subscriptions = (new Subscribing\ChangedSubscriptions(
 			new Subscribing\FakeSubscriptions(),
@@ -106,8 +106,8 @@ final class ChangedSubscriptions extends TestCase\Database {
 			(1, 1, 'PT10S', '2000-01-01', 'as')"
 		);
 		$this->database->exec(
-			"INSERT INTO users (id, email, password) VALUES 
-			(1, 'a@a.cz', 'a')"
+			"INSERT INTO users (id, email, password, role) VALUES 
+			(1, 'a@a.cz', 'a', 'member')"
 		);
 		$subscriptions = (new Subscribing\ChangedSubscriptions(
 			new Subscribing\FakeSubscriptions(),

@@ -65,8 +65,8 @@ final class ParticipantInvitation extends TestCase\Database {
 			(2, 3, 4, 'PT10S', '2000-01-01', 'as')"
 		);
 		$this->database->exec(
-			"INSERT INTO users (id, email, password) VALUES 
-			(3, 'author@participant.cz', 'heslo')"
+			"INSERT INTO users (id, email, password, role) VALUES 
+			(3, 'author@participant.cz', 'heslo', 'member')"
 		);
 		$participant = (new Subscribing\ParticipantInvitation(
 			$code,

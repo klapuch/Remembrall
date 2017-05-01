@@ -115,9 +115,9 @@ final class NonViolentParticipants extends TestCase\Database {
 			(3, 2, 4, 'PT5S', '2001-01-01', 'ab')"
 		);
 		$this->database->exec(
-			"INSERT INTO users (id, email, password) VALUES 
-			(3, 'author@participant.cz', 'heslo'),
-			(2, 'foo@participant.cz', 'heslo2')"
+			"INSERT INTO users (id, email, password, role) VALUES 
+			(3, 'author@participant.cz', 'heslo', 'member'),
+			(2, 'foo@participant.cz', 'heslo2', 'member')"
 		);
 		$this->purge(['invitation_attempts']);
 		$this->database->exec(

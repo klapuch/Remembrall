@@ -48,7 +48,7 @@ final class InvitePage extends Page\Layout {
 					)
 			);
 			$this->flashMessage('Participant has been asked', 'success');
-		} catch (\Throwable $ex) {
+		} catch (\UnexpectedValueException | \OutOfRangeException $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
 		} finally {
 			$this->redirect('subscriptions');
