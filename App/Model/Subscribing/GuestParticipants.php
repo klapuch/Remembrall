@@ -46,7 +46,7 @@ final class GuestParticipants implements Participants {
 			$this->database,
 			'SELECT 1
 			FROM users
-			WHERE LOWER(email) = LOWER(?)',
+			WHERE email = ?',
 			[$email]
 		))->field();
 	}

@@ -396,7 +396,7 @@ ALTER SEQUENCE subscriptions_id_seq OWNED BY subscriptions.id;
 
 CREATE TABLE users (
     id integer NOT NULL,
-    email character varying NOT NULL,
+    email citext NOT NULL,
     password character varying(255) NOT NULL,
     role character varying NOT NULL
 );
