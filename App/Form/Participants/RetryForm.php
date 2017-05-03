@@ -7,25 +7,23 @@ use Klapuch\Form;
 use Klapuch\Output;
 use Klapuch\Uri;
 use Klapuch\Validation;
-use Remembrall\Constraint;
 use Remembrall\Model\Subscribing;
 
-final class InviteForm implements Form\Control {
-	private const COLUMNS = 3;
+final class RetryForm implements Form\Control {
 	private const ACTION = '/participants/invite',
-		NAME = 'invite';
-	private $subscription;
+		NAME = 'retry';
+	private $participant;
 	private $url;
 	private $csrf;
 	private $storage;
 
 	public function __construct(
-		Subscribing\Subscription $subscription,
+		Subscribing\Participant $participant,
 		Uri\Uri $url,
 		Csrf\Protection $csrf,
 		Form\Storage $storage
 	) {
-		$this->subscription = $subscription;
+		$this->participant = $participant;
 		$this->url = $url;
 		$this->csrf = $csrf;
 		$this->storage = $storage;
@@ -34,7 +32,7 @@ final class InviteForm implements Form\Control {
 	public function render(): string {
 		$xml = new \DOMDocument();
 		$xml->loadXML(
-			$this->subscription->print(new Output\Xml([], 'root'))->serialization()
+			$this->participant->print(new Output\Xml([], 'root'))->serialization()
 		);
 		return $this->form($xml)->render();
 	}
@@ -45,49 +43,30 @@ final class InviteForm implements Form\Control {
 
 	private function form(\DOMDocument $dom): Form\Control {
 		$id = (string) new Form\XmlDynamicValue('id', $dom);
+		$subscription = (string) new Form\XmlDynamicValue('subscription_id', $dom);
+		$email = (string) new Form\XmlDynamicValue('email', $dom);
 		return new Form\RawForm(
 			[
 				'id' => self::NAME,
-				'role' => 'form',
-				'class' => 'form-horizontal',
 				'name' => sprintf('%s-%s', self::NAME, $id),
 				'method' => 'POST',
 				'action' => $this->url->reference() . self::ACTION,
 			],
 			new Form\CsrfInput($this->csrf),
 			new Form\DefaultInput(
-				['type' => 'hidden', 'name' => 'subscription', 'value' => $id],
+				['type' => 'hidden', 'name' => 'subscription', 'value' => $subscription],
 				new Form\EmptyStorage(),
 				new Validation\PassiveRule()
 			),
-			new Form\BootstrapInput(
-				new Form\BoundControl(
-					new Form\DefaultInput(
-						[
-							'type' => 'email',
-							'name' => 'email',
-							'class' => 'form-control',
-							'required' => 'required',
-						],
-						$this->storage,
-						new Constraint\EmailRule()
-					),
-					new Form\LinkedLabel('Email', 'email')
-				),
-				self::COLUMNS
+			new Form\DefaultInput(
+				['type' => 'hidden', 'name' => 'email', 'value' => $email],
+				new Form\EmptyStorage(),
+				new Validation\PassiveRule()
 			),
-			new Form\BootstrapInput(
-				new Form\DefaultInput(
-					[
-						'type' => 'submit',
-						'name' => 'act',
-						'class' => 'form-control',
-						'value' => 'Invite',
-					],
-					$this->storage,
-					new Validation\PassiveRule()
-				),
-				self::COLUMNS
+			new Form\DefaultInput(
+				['type' => 'submit', 'name' => 'act'],
+				$this->storage,
+				new Validation\PassiveRule()
 			)
 		);
 	}

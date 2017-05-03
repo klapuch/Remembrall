@@ -58,6 +58,14 @@ final class DefaultPage extends Page\Layout {
 								new Form\Backup($_SESSION, $_POST)
 							)
 						),
+						new Response\FormResponse(
+							new Participants\RetryForms(
+								$participants,
+								$this->url,
+								$this->csrf,
+								new Form\Backup($_SESSION, $_POST)
+							)
+						),
 						new Response\PlainResponse(
 							new Output\ValidXml(
 								new Misc\XmlPrintedObjects(
