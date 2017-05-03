@@ -21,7 +21,7 @@
 					<xsl:value-of select="$class"/>
 				</xsl:attribute>
 				<xsl:attribute name="value">
-                    <xsl:value-of select="$value"/>
+					<xsl:value-of select="$value"/>
 				</xsl:attribute>
 			</xsl:if>
 			<xsl:copy-of select="@*"/>

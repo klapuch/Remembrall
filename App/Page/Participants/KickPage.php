@@ -22,14 +22,14 @@ final class KickPage extends Page\Layout {
 		try {
 			$this->protect();
 			$kick = (new Subscribing\MemorialInvitation(
-				$participant['subscription'],
+				(int) $participant['subscription'],
 				$participant['email'],
 				$this->database
-			))->print(new Output\Xml([], 'kick'));
+			))->print(new Output\Xml([], 'invitation'));
 			(new Subscribing\NonViolentParticipants(
 				$this->user,
 				$this->database
-			))->kick($participant['subscription'], $participant['email']);
+			))->kick((int) $participant['subscription'], $participant['email']);
 			(new Mail\SendmailMailer())->send(
 				(new Mail\Message())->setFrom(self::SENDER)
 					->addTo($participant['email'])

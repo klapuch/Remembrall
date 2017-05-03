@@ -53,7 +53,7 @@ final class MemorialInvitation extends TestCase\Database {
 			'me@participant.cz',
 			$this->database
 		))->print(new Output\FakeFormat());
-		Assert::same('|author|author@participant.cz||expression|//p||url|www.me.cz|', $print->serialization());
+		Assert::same('|author|author@participant.cz||expression|//p||email|me@participant.cz||code|abc||url|www.me.cz|', $print->serialization());
 	}
 
 	protected function prepareDatabase(): void {

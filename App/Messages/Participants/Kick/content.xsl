@@ -3,7 +3,7 @@
 
 	<xsl:output method="html" encoding="utf-8"/>
 
-	<xsl:template match="kick">
+	<xsl:template match="invitation">
 		<xsl:text disable-output-escaping="yes">&lt;!DOCTYPE html&gt;</xsl:text>
 		<html lang="cs-cz">
 			<body>

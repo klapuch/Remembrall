@@ -49,30 +49,19 @@
 	</xsl:template>
 
 	<xsl:template match="participant">
-		<p>
-			<xsl:value-of select="email"/>
-			<xsl:choose>
-				<xsl:when test="accepted='true'">
-					<span class="glyphicon glyphicon-ok" aria-hidden="true"/>
-					<a href="{$base_url}/participants/kick/{id}">
-						<span class="glyphicon glyphicon-remove" aria-hidden="true"/>
-					</a>
-				</xsl:when>
-				<xsl:otherwise>
-					<span class="glyphicon glyphicon-remove" aria-hidden="true"/>
-					<xsl:if test="harassed='false'">
-						<xsl:variable name="name" select="concat('retry-', id)"/>
-						<xsl:apply-templates select="/page/forms/form[@name=$name]" mode="button">
-							<xsl:with-param name="class">btn btn-primary btn-sm</xsl:with-param>
-							<xsl:with-param name="value">R</xsl:with-param>
-						</xsl:apply-templates>
-						<!--<a href="{$base_url}/participants/invite/{id}">-->
-							<!--<span class="glyphicon glyphicon-repeat" aria-hidden="true"/>-->
-						<!--</a>-->
-					</xsl:if>
-				</xsl:otherwise>
-			</xsl:choose>
-		</p>
+		<p><xsl:value-of select="email"/></p>
+		<xsl:variable name="kick" select="concat('kick-', id)"/>
+		<xsl:apply-templates select="/page/forms/form[@name=$kick]" mode="button">
+			<xsl:with-param name="class">btn btn-danger btn-sm</xsl:with-param>
+			<xsl:with-param name="value">✖</xsl:with-param>
+		</xsl:apply-templates>
+		<xsl:if test="accepted='false'">
+			<xsl:variable name="retry" select="concat('retry-', id)"/>
+			<xsl:apply-templates select="/page/forms/form[@name=$retry]" mode="button">
+				<xsl:with-param name="class">btn btn-primary btn-sm</xsl:with-param>
+				<xsl:with-param name="value">🗘</xsl:with-param>
+			</xsl:apply-templates>
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="subscription">

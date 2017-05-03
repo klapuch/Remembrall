@@ -19,7 +19,7 @@
 				To accept this invitation, please follow the link bellow:
 				<xsl:element name="a">
 					<xsl:attribute name="href">
-						<xsl:value-of select="base_url"/>
+						<xsl:value-of select="$base_url"/>
 						<xsl:text>/invitation/accept/</xsl:text>
 						<xsl:value-of select="code"/>
 					</xsl:attribute>
@@ -29,7 +29,7 @@
 				To decline this invitation, please follow the link bellow:
 				<xsl:element name="a">
 					<xsl:attribute name="href">
-						<xsl:value-of select="base_url"/>
+						<xsl:value-of select="$base_url"/>
 						<xsl:text>/invitation/decline/</xsl:text>
 						<xsl:value-of select="code"/>
 					</xsl:attribute>

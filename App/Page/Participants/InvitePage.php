@@ -36,19 +36,14 @@ final class InvitePage extends Page\Layout {
 						(new Output\XsltTemplate(
 							self::CONTENT,
 							new Output\ValidXml(
-								$invitation->print(
-									new Output\Xml(
-										['base_url' => $this->url->reference()],
-										'invitation'
-									)
-								),
+								$invitation->print(new Output\Xml([], 'invitation')),
 								self::SCHEMA
 							)
-						))->render()
+						))->render(['base_url' => $this->url->reference()])
 					)
 			);
 			$this->flashMessage('Participant has been asked', 'success');
-		} catch (\UnexpectedValueException | \OutOfRangeException $ex) {
+		} catch (\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
 		} finally {
 			$this->redirect('subscriptions');

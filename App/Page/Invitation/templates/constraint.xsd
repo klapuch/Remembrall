@@ -7,6 +7,7 @@
 			<xsd:element name="expression" type="xsd:string"/>
 			<xsd:element name="author" type="xsd:string"/>
 			<xsd:element name="code" type="xsd:string"/>
+			<xsd:element name="email" type="xsd:string"/>
 		</xsd:all>
 	</xsd:complexType>
 
