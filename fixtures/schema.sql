@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.5
--- Dumped by pg_dump version 9.5.5
+-- Dumped from database version 9.5.6
+-- Dumped by pg_dump version 9.5.6
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -14,17 +14,31 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner:
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
 --
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner:
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+--
+-- Name: citext; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS citext WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION citext; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION citext IS 'data type for case-insensitive character strings';
 
 
 SET search_path = public, pg_catalog;
@@ -100,6 +114,33 @@ ALTER TABLE forgotten_passwords_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE forgotten_passwords_id_seq OWNED BY forgotten_passwords.id;
 
+
+--
+-- Name: invitation_attempts_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE invitation_attempts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE invitation_attempts_id_seq OWNER TO postgres;
+
+--
+-- Name: invitation_attempts; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE invitation_attempts (
+    id integer DEFAULT nextval('invitation_attempts_id_seq'::regclass) NOT NULL,
+    attempt_at timestamp with time zone,
+    participant_id integer
+);
+
+
+ALTER TABLE invitation_attempts OWNER TO postgres;
 
 --
 -- Name: notifications; Type: TABLE; Schema: public; Owner: postgres
@@ -216,6 +257,44 @@ ALTER SEQUENCE part_visits_id_seq OWNED BY part_visits.id;
 
 
 --
+-- Name: participants; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE participants (
+    id integer NOT NULL,
+    email citext NOT NULL,
+    subscription_id integer NOT NULL,
+    code character varying(64) NOT NULL,
+    invited_at timestamp with time zone NOT NULL,
+    accepted boolean NOT NULL,
+    decided_at timestamp with time zone
+);
+
+
+ALTER TABLE participants OWNER TO postgres;
+
+--
+-- Name: participants_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE participants_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE participants_id_seq OWNER TO postgres;
+
+--
+-- Name: participants_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE participants_id_seq OWNED BY participants.id;
+
+
+--
 -- Name: parts; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -294,7 +373,7 @@ ALTER SEQUENCE subscriptions_id_seq OWNED BY subscriptions.id;
 
 CREATE TABLE users (
     id integer NOT NULL,
-    email citext NOT NULL,
+    email text NOT NULL,
     role character varying NOT NULL,
     password character varying(255) NOT NULL
 );
@@ -391,6 +470,13 @@ ALTER TABLE ONLY part_visits ALTER COLUMN id SET DEFAULT nextval('part_visits_id
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
+ALTER TABLE ONLY participants ALTER COLUMN id SET DEFAULT nextval('participants_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
 ALTER TABLE ONLY parts ALTER COLUMN id SET DEFAULT nextval('parts_id_seq'::regclass);
 
 
@@ -424,6 +510,14 @@ ALTER TABLE ONLY forgotten_passwords
 
 
 --
+-- Name: invitation_attempts_id; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY invitation_attempts
+    ADD CONSTRAINT invitation_attempts_id PRIMARY KEY (id);
+
+
+--
 -- Name: notifications_id; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -453,6 +547,22 @@ ALTER TABLE ONLY pages
 
 ALTER TABLE ONLY part_visits
     ADD CONSTRAINT "part_visits_ID" PRIMARY KEY (id);
+
+
+--
+-- Name: participants_email_subscription_id; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY participants
+    ADD CONSTRAINT participants_email_subscription_id UNIQUE (email, subscription_id);
+
+
+--
+-- Name: participants_id; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY participants
+    ADD CONSTRAINT participants_id PRIMARY KEY (id);
 
 
 --
@@ -519,6 +629,13 @@ CREATE INDEX forgotten_passwords_user_id ON forgotten_passwords USING btree (use
 
 
 --
+-- Name: invitation_attempts_participant_id; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX invitation_attempts_participant_id ON invitation_attempts USING btree (participant_id);
+
+
+--
 -- Name: notifications_subscription_id; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -537,6 +654,13 @@ CREATE INDEX page_visits_page_url ON page_visits USING btree (page_url);
 --
 
 CREATE INDEX part_visits_part_id ON part_visits USING btree (part_id);
+
+
+--
+-- Name: participants_subscription_id; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX participants_subscription_id ON participants USING btree (subscription_id);
 
 
 --
@@ -590,6 +714,14 @@ ALTER TABLE ONLY forgotten_passwords
 
 
 --
+-- Name: invitation_attempts_participant_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY invitation_attempts
+    ADD CONSTRAINT invitation_attempts_participant_id_fkey FOREIGN KEY (participant_id) REFERENCES participants(id) ON DELETE CASCADE;
+
+
+--
 -- Name: notifications_subscription_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -611,6 +743,14 @@ ALTER TABLE ONLY page_visits
 
 ALTER TABLE ONLY part_visits
     ADD CONSTRAINT part_visits_part_id_fkey FOREIGN KEY (part_id) REFERENCES parts(id) ON DELETE CASCADE;
+
+
+--
+-- Name: participants_subscription_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY participants
+    ADD CONSTRAINT participants_subscription_id_fkey FOREIGN KEY (subscription_id) REFERENCES subscriptions(id) ON DELETE CASCADE;
 
 
 --
