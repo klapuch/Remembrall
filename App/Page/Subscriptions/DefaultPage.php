@@ -5,7 +5,9 @@ namespace Remembrall\Page\Subscriptions;
 use Gajus\Dindent;
 use Klapuch\Application;
 use Klapuch\Dataset;
+use Klapuch\Form;
 use Klapuch\Output;
+use Remembrall\Form\Participants;
 use Remembrall\Form\Subscription;
 use Remembrall\Model\Misc;
 use Remembrall\Model\Subscribing;
@@ -31,6 +33,12 @@ final class DefaultPage extends Page\Layout {
 				)
 			)
 		);
+		$participants = iterator_to_array(
+			(new Subscribing\NonViolentParticipants(
+				$this->user,
+				$this->database
+			))->all()
+		);
 		return new Response\AuthenticatedResponse(
 			new Response\ComposedResponse(
 				new Response\CombinedResponse(
@@ -41,13 +49,48 @@ final class DefaultPage extends Page\Layout {
 							$this->csrf
 						)
 					),
-					new Response\PlainResponse(
-						new Output\ValidXml(
-							new Misc\XmlPrintedObjects(
-								'subscriptions',
-								['subscription' => $subscriptions]
-							),
-							__DIR__ . '/templates/constraint.xsd'
+					new Response\CombinedResponse(
+						new Response\FormResponse(
+							new Participants\InviteForms(
+								$subscriptions,
+								$this->url,
+								$this->csrf,
+								new Form\Backup($_SESSION, $_POST)
+							)
+						),
+						new Response\FormResponse(
+							new Participants\RetryForms(
+								$participants,
+								$this->url,
+								$this->csrf,
+								new Form\Backup($_SESSION, $_POST)
+							)
+						),
+						new Response\FormResponse(
+							new Participants\KickForms(
+								$participants,
+								$this->url,
+								$this->csrf,
+								new Form\Backup($_SESSION, $_POST)
+							)
+						),
+						new Response\PlainResponse(
+							new Output\ValidXml(
+								new Misc\XmlPrintedObjects(
+									'subscriptions',
+									['subscription' => $subscriptions]
+								),
+								__DIR__ . '/templates/constraint.xsd'
+							)
+						),
+						new Response\PlainResponse(
+							new Output\ValidXml(
+								new Misc\XmlPrintedObjects(
+									'participants',
+									['participant' => $participants]
+								),
+								__DIR__ . '/templates/constraint.xsd'
+							)
 						)
 					),
 					new Response\FlashResponse(),

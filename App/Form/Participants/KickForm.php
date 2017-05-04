@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace Remembrall\Form\Subscription;
+namespace Remembrall\Form\Participants;
 
 use Klapuch\Csrf;
 use Klapuch\Form;
@@ -9,26 +9,30 @@ use Klapuch\Uri;
 use Klapuch\Validation;
 use Remembrall\Model\Subscribing;
 
-final class DeleteForm implements Form\Control {
-	private const ACTION = '/subscription/delete', NAME = 'delete';
-	private $subscription;
+final class KickForm implements Form\Control {
+	private const ACTION = '/participants/kick',
+		NAME = 'kick';
+	private $participant;
 	private $url;
 	private $csrf;
+	private $storage;
 
 	public function __construct(
-		Subscribing\Subscription $subscription,
+		Subscribing\Participant $participant,
 		Uri\Uri $url,
-		Csrf\Protection $csrf
+		Csrf\Protection $csrf,
+		Form\Storage $storage
 	) {
-		$this->subscription = $subscription;
+		$this->participant = $participant;
 		$this->url = $url;
 		$this->csrf = $csrf;
+		$this->storage = $storage;
 	}
 
 	public function render(): string {
 		$xml = new \DOMDocument();
 		$xml->loadXML(
-			$this->subscription->print(new Output\Xml([], 'root'))->serialization()
+			$this->participant->print(new Output\Xml([], 'root'))->serialization()
 		);
 		return $this->form($xml)->render();
 	}
@@ -39,6 +43,8 @@ final class DeleteForm implements Form\Control {
 
 	private function form(\DOMDocument $dom): Form\Control {
 		$id = (string) new Form\XmlDynamicValue('id', $dom);
+		$subscription = (string) new Form\XmlDynamicValue('subscription_id', $dom);
+		$email = (string) new Form\XmlDynamicValue('email', $dom);
 		return new Form\RawForm(
 			[
 				'id' => self::NAME,
@@ -48,17 +54,18 @@ final class DeleteForm implements Form\Control {
 			],
 			new Form\CsrfInput($this->csrf),
 			new Form\DefaultInput(
-				[
-					'type' => 'hidden',
-					'name' => 'id',
-					'value' => $id,
-				],
+				['type' => 'hidden', 'name' => 'subscription', 'value' => $subscription],
 				new Form\EmptyStorage(),
 				new Validation\PassiveRule()
 			),
 			new Form\DefaultInput(
-				['type' => 'submit'],
+				['type' => 'hidden', 'name' => 'email', 'value' => $email],
 				new Form\EmptyStorage(),
+				new Validation\PassiveRule()
+			),
+			new Form\DefaultInput(
+				['type' => 'submit', 'name' => 'act'],
+				$this->storage,
 				new Validation\PassiveRule()
 			)
 		);

@@ -28,9 +28,17 @@
 
 	<permission resource="verification/confirm/{any}" role="guest"/>
 
-    <permission resource="verification/request" role="guest"/>
+	<permission resource="verification/request" role="guest"/>
 
 	<permission resource="password/remind" role="guest"/>
 
-    <permission resource="password/reset/{any}" role="guest"/>
+	<permission resource="password/reset/{any}" role="guest"/>
+
+	<permission resource="invitation/accept/{any}" role="guest"/>
+
+	<permission resource="invitation/deny/{any}" role="guest"/>
+
+	<permission resource="participants/invite" role="member"/>
+
+	<permission resource="participants/kick" role="member"/>
 </permissions>

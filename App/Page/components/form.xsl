@@ -8,23 +8,27 @@
 		</xsl:element>
 	</xsl:template>
 
-	<xsl:template match="form | form//*" mode="delete">
+	<xsl:template match="form | form//*" mode="button">
 		<xsl:param name="title"/>
+		<xsl:param name="class"/>
+		<xsl:param name="value"/>
 		<xsl:element name="{name()}">
 			<xsl:if test="@type='submit'">
 				<xsl:attribute name="title">
 					<xsl:value-of select="$title"/>
 				</xsl:attribute>
 				<xsl:attribute name="class">
-					<xsl:text>btn btn-danger btn-sm</xsl:text>
+					<xsl:value-of select="$class"/>
 				</xsl:attribute>
 				<xsl:attribute name="value">
-					<xsl:text>✖</xsl:text>
+					<xsl:value-of select="$value"/>
 				</xsl:attribute>
 			</xsl:if>
 			<xsl:copy-of select="@*"/>
-			<xsl:apply-templates select="node()" mode="delete">
+			<xsl:apply-templates select="node()" mode="button">
 				<xsl:with-param name="title" select="$title"/>
+				<xsl:with-param name="class" select="$class"/>
+				<xsl:with-param name="value" select="$value"/>
 			</xsl:apply-templates>
 		</xsl:element>
 	</xsl:template>

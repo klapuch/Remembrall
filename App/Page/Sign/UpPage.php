@@ -10,6 +10,7 @@ use Klapuch\Output;
 use Klapuch\Storage;
 use Nette\Mail;
 use Remembrall\Form\Sign;
+use Remembrall\Model;
 use Remembrall\Page;
 use Remembrall\Response;
 
@@ -50,11 +51,14 @@ final class UpPage extends Page\Layout {
 				function() use ($credentials): void {
 					(new Storage\Transaction($this->database))->start(
 						function() use ($credentials) {
-							(new Access\UniqueUsers(
-								$this->database,
-								new Encryption\AES256CBC(
-									$this->configuration['KEYS']['password']
-								)
+							(new Model\Access\ParticipatedUsers(
+								new Access\UniqueUsers(
+									$this->database,
+									new Encryption\AES256CBC(
+										$this->configuration['KEYS']['password']
+									)
+								),
+								$this->database
 							))->register(
 								$credentials['email'],
 								$credentials['password'],

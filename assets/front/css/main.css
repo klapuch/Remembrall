@@ -1,10 +1,15 @@
 @media (min-width: 768px) {
-    .modal-xl {
-        width: 90%;
-        max-width:1200px;
-    }
+	.modal-xl {
+		width: 90%;
+		max-width: 1200px;
+	}
 }
 
 form#delete {
 	display: inline-block;
+}
+
+.spacey {
+	border-collapse: separate;
+	border-spacing: 0.5em;
 }

@@ -3,7 +3,7 @@
 
 	<xsl:import href="../../templates/@layout.xsl"/>
 	<xsl:import href="tabs.xsl"/>
-	<xsl:import href="../components/content-modal.xsl"/>
+	<xsl:import href="../components/markup-modal.xsl"/>
 	<xsl:import href="../../components/direction.xsl"/>
 	<xsl:import href="../../components/pager.xsl"/>
 	<xsl:import href="../../components/per_page_select.xsl"/>
@@ -35,12 +35,12 @@
 			<td><xsl:value-of select="url"/></td>
 			<td><xsl:value-of select="expression"/></td>
 			<td>
-				<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#content-{id}">
+				<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#markup-{id}">
 					<span class="glyphicon glyphicon-eye-open" aria-hidden="true"/>
 				</button>
-				<xsl:call-template name="modal">
+				<xsl:call-template name="markup-modal">
 					<xsl:with-param name="id" select="id"/>
-					<xsl:with-param name="content" select="content"/>
+					<xsl:with-param name="markup" select="content"/>
 				</xsl:call-template>
 			</td>
 			<td><xsl:value-of select="occurrences"/></td>
