@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<form method="POST" role="form" class="form-horizontal" name="new" action="/subscription">
+  <input type="hidden" name="_csrf_token" value="pr073ct10n"/>
+  <div class="form-group">
+    <div class="col-sm-5">
+      <label for="url">Url</label>
+      <input type="text" name="url" class="form-control" required="required"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-5">
+      <label for="expression">Expression</label>
+      <input type="text" name="expression" class="form-control" required="required"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-5">
+      <label for="interval">Interval</label>
+      <input type="number" name="interval" class="form-control" required="required" min="30" max="1439"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-5">
+      <input type="submit" name="act" class="form-control" value="Subscribe"/>
+    </div>
+  </div>
+</form>

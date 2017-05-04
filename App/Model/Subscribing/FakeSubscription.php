@@ -7,9 +7,11 @@ use Klapuch\Time;
 
 final class FakeSubscription implements Subscription {
 	private $exception;
+	private $print;
 
-	public function __construct(\Throwable $exception = null) {
+	public function __construct(\Throwable $exception = null, Output\Format $print = null) {
 		$this->exception = $exception;
+		$this->print = $print;
 	}
 
 	public function cancel(): void {
@@ -28,6 +30,6 @@ final class FakeSubscription implements Subscription {
 	}
 
 	public function print(Output\Format $format): Output\Format {
-		return $format;
+		return $this->print ?: $format;
 	}
 }

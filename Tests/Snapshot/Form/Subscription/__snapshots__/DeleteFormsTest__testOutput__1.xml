@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<form>
+  <form id="delete" name="delete-666" method="POST" action="/subscription/delete">
+    <input type="hidden" name="_csrf_token" value="pr073ct10n"/>
+    <input type="hidden" name="id" value="666"/>
+    <input type="submit"/>
+  </form>
+  <form id="delete" name="delete-555" method="POST" action="/subscription/delete">
+    <input type="hidden" name="_csrf_token" value="pr073ct10n"/>
+    <input type="hidden" name="id" value="555"/>
+    <input type="submit"/>
+  </form>
+</form>

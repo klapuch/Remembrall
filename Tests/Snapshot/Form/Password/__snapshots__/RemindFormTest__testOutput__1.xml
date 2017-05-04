@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<form method="POST" role="form" class="form-horizontal" action="/password/remind" name="remind">
+  <input type="hidden" name="_csrf_token" value="pr073ct10n"/>
+  <div class="form-group">
+    <div class="col-sm-5">
+      <label for="email">Email</label>
+      <input type="email" name="email" class="form-control" required="required"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-5">
+      <input type="submit" name="act" class="form-control" value="Send"/>
+    </div>
+  </div>
+</form>
