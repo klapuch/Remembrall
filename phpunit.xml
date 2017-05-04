@@ -11,7 +11,7 @@
 	stopOnFailure="false">
 	<testsuites>
 		<testsuite name="Snapshot">
-			<directory>Tests/Snapshot</directory>
+			<directory>Tests/UI</directory>
 		</testsuite>
 	</testsuites>
 </phpunit>

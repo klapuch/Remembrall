@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace Remembrall\Snapshot\Form\Sign;
+namespace Remembrall\UI\Form\Sign;
 
 use Klapuch\Csrf;
 use Klapuch\Form;

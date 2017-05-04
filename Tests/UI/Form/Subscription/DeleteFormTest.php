@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace Remembrall\Snapshot\Form\Subscription;
+namespace Remembrall\UI\Form\Subscription;
 
 use Klapuch\Csrf;
 use Klapuch\Output;

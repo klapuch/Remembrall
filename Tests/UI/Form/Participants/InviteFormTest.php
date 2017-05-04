@@ -1,20 +1,26 @@
 <?php
 declare(strict_types = 1);
-namespace Remembrall\Snapshot\Form\Verification;
+namespace Remembrall\UI\Form\Participants;
 
 use Klapuch\Csrf;
 use Klapuch\Form;
+use Klapuch\Output;
 use Klapuch\Uri;
-use Remembrall\Form\Verification;
+use Remembrall\Form\Participants;
+use Remembrall\Model\Subscribing;
 use Spatie\Snapshots;
 
-final class RequestFormTest extends \PHPUnit\Framework\TestCase {
+final class InviteFormTest extends \PHPUnit\Framework\TestCase {
 	use Snapshots\MatchesSnapshots;
 
 	public function testOutput()
 	{
 		$this->assertMatchesXmlSnapshot(
-			(new Verification\RequestForm(
+			(new Participants\InviteForm(
+				new Subscribing\FakeSubscription(
+					null,
+					new Output\Xml(['id' => 666], 'root')
+				),
 				new Uri\FakeUri(''),
 				new Csrf\FakeProtection('pr073ct10n'),
 				new Form\EmptyStorage()

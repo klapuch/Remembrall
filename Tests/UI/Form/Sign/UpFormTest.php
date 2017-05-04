@@ -1,20 +1,20 @@
 <?php
 declare(strict_types = 1);
-namespace Remembrall\Snapshot\Form\Subscription;
+namespace Remembrall\UI\Form\Sign;
 
 use Klapuch\Csrf;
 use Klapuch\Form;
 use Klapuch\Uri;
-use Remembrall\Form\Subscription;
+use Remembrall\Form\Sign;
 use Spatie\Snapshots;
 
-final class NewFormTest extends \PHPUnit\Framework\TestCase {
+final class UpFormTest extends \PHPUnit\Framework\TestCase {
 	use Snapshots\MatchesSnapshots;
 
 	public function testOutput()
 	{
 		$this->assertMatchesXmlSnapshot(
-			(new Subscription\NewForm(
+			(new Sign\UpForm(
 				new Uri\FakeUri(''),
 				new Csrf\FakeProtection('pr073ct10n'),
 				new Form\EmptyStorage()

@@ -1,34 +1,33 @@
 <?php
 declare(strict_types = 1);
-namespace Remembrall\Snapshot\Form\Subscription;
+namespace Remembrall\UI\Form\Participants;
 
 use Klapuch\Csrf;
 use Klapuch\Form;
 use Klapuch\Output;
 use Klapuch\Uri;
-use Remembrall\Form\Subscription;
+use Remembrall\Form\Participants;
 use Remembrall\Model\Subscribing;
 use Spatie\Snapshots;
 
-final class EditFormTest extends \PHPUnit\Framework\TestCase {
+final class KickFormTest extends \PHPUnit\Framework\TestCase {
 	use Snapshots\MatchesSnapshots;
 
 	public function testOutput()
 	{
 		$this->assertMatchesXmlSnapshot(
-			(new Subscription\EditForm(
-				new Subscribing\FakeSubscription(
-					null,
+			(new Participants\KickForm(
+				new Subscribing\FakeParticipant(
 					new Output\Xml(
 						[
-							'url' => 'www.keybase.com',
-							'expression' => '//expr',
-							'interval' => 44,
+							'id' => 666,
+							'subscription_id' => 666,
+							'email' => 'me@participant.cz',
 						],
 						'root'
 					)
 				),
-				new Uri\FakeUri('', ''),
+				new Uri\FakeUri(''),
 				new Csrf\FakeProtection('pr073ct10n'),
 				new Form\EmptyStorage()
 			))->render()

@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace Remembrall\Snapshot\Form\Participants;
+namespace Remembrall\UI\Form\Participants;
 
 use Klapuch\Csrf;
 use Klapuch\Form;
