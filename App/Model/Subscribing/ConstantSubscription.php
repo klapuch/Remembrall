@@ -27,12 +27,6 @@ final class ConstantSubscription implements Subscription {
 	}
 
 	public function print(Output\Format $format): Output\Format {
-		return array_reduce(
-			array_keys($this->subscription),
-			function(Output\Format $format, string $name): Output\Format {
-				return $format->with($name, $this->subscription[$name]);
-			},
-			$format
-		);
+		return new Output\FilledFormat($format, $this->subscription);
 	}
 }

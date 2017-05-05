@@ -12,12 +12,6 @@ final class ConstantParticipant implements Participant {
 	}
 
 	public function print(Output\Format $format): Output\Format {
-		return array_reduce(
-			array_keys($this->participant),
-			function(Output\Format $format, string $name): Output\Format {
-				return $format->with($name, $this->participant[$name] === null ? '' : $this->participant[$name]);
-			},
-			$format
-		);
+		return new Output\FilledFormat($format, $this->participant);
 	}
 }

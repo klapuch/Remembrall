@@ -35,12 +35,6 @@ final class ConstantPart implements Part {
 	}
 
 	public function print(Output\Format $format): Output\Format {
-		return array_reduce(
-			array_keys($this->part),
-			function(Output\Format $format, string $name): Output\Format {
-				return $format->with($name, $this->part[$name]);
-			},
-			$format
-		);
+		return new Output\FilledFormat($format, $this->part);
 	}
 }
