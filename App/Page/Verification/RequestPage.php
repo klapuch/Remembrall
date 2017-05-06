@@ -14,7 +14,8 @@ use Remembrall\Response;
 final class RequestPage extends Page\Layout {
 	private const SENDER = 'Remembrall <remembrall@remembrall.org>',
 		SUBJECT = 'Remembrall registration verification code',
-		CONTENT = __DIR__ . '/../../Messages/Verification/Request/content.xsl';
+		CONTENT = __DIR__ . '/../../Messages/Verification/Request/content.xsl',
+		CONSTRAINT = __DIR__ . '/../../Messages/Verification/Request/constraint.xsd';
 
 	public function response(array $parameters): Application\Response {
 		return new Response\AuthenticatedResponse(
@@ -49,18 +50,26 @@ final class RequestPage extends Page\Layout {
 				),
 				new Form\Backup($_SESSION, $_POST),
 				function() use ($credentials): void {
-					(new Access\ReserveVerificationCodes(
-						$this->database,
-						new Mail\SendmailMailer(),
-						(new Mail\Message())->setFrom(self::SENDER)->setSubject(self::SUBJECT),
-						new Output\XsltTemplate(
-							self::CONTENT,
-							new Output\Xml(
-								['base_url' => $this->url->reference()],
-								'request'
-							)
-						)
+					$verification = (new Access\ReserveVerificationCodes(
+						$this->database
 					))->generate($credentials['email']);
+					(new Mail\SendmailMailer())->send(
+						(new Mail\Message())
+							->setFrom(self::SENDER)
+							->addTo($credentials['email'])
+							->setSubject(self::SUBJECT)
+							->setHtmlBody(
+								(new Output\XsltTemplate(
+									self::CONTENT,
+									$verification->print(
+										new Output\ValidXml(
+											new Output\Xml([], 'request'),
+											self::CONSTRAINT
+										)
+									)
+								))->render(['base_url' => $this->url->reference()])
+							)
+					);
 				}
 			))->validate();
 			$this->flashMessage('Verification code has been resent', 'success');

@@ -14,7 +14,8 @@ use Remembrall\Response;
 final class RemindPage extends Page\Layout {
 	private const SENDER = 'Remembrall <remembrall@remembrall.org>',
 		SUBJECT = 'Remembrall forgotten password',
-		CONTENT = __DIR__ . '/../../Messages/Password/Remind/content.xsl';
+		CONTENT = __DIR__ . '/../../Messages/Password/Remind/content.xsl',
+		CONSTRAINT = __DIR__ . '/../../Messages/Password/Remind/constraint.xsd';
 
 	public function response(array $parameters): Application\Response {
 		return new Response\AuthenticatedResponse(
@@ -45,22 +46,27 @@ final class RemindPage extends Page\Layout {
 				new Password\RemindForm($this->url, $this->csrf, new Form\Backup($_SESSION, $_POST)),
 				new Form\Backup($_SESSION, $_POST),
 				function() use ($credentials): void {
-					(new Access\LimitedForgottenPasswords(
+					$password = (new Access\LimitedForgottenPasswords(
 						new Access\SecureForgottenPasswords($this->database),
 						$this->database
 					))->remind($credentials['email']);
-					(new Access\EmailedForgottenPasswords(
-						$this->database,
-						new Mail\SendmailMailer(),
-						(new Mail\Message())->setFrom(self::SENDER)->setSubject(self::SUBJECT),
-						new Output\XsltTemplate(
-							self::CONTENT,
-							new Output\Xml(
-								['base_url' => $this->url->reference()],
-								'remind'
+					(new Mail\SendmailMailer())->send(
+						(new Mail\Message())
+							->setFrom(self::SENDER)
+							->addTo($credentials['email'])
+							->setSubject(self::SUBJECT)
+							->setHtmlBody(
+								(new Output\XsltTemplate(
+									self::CONTENT,
+									$password->print(
+										new Output\ValidXml(
+											new Output\Xml([], 'remind'),
+											self::CONSTRAINT
+										)
+									)
+								))->render(['base_url' => $this->url->reference()])
 							)
-						)
-					))->remind($credentials['email']);
+					);
 				}
 			))->validate();
 			$this->flashMessage('Password reset has been sent to your email', 'success');

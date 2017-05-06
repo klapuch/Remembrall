@@ -18,7 +18,8 @@ final class UpPage extends Page\Layout {
 	private const ROLE = 'member';
 	private const SENDER = 'Remembrall <remembrall@remembrall.org>',
 		SUBJECT = 'Remembrall registration verification code',
-		CONTENT = __DIR__ . '/../../Messages/Sign/Up/content.xsl';
+		CONTENT = __DIR__ . '/../../Messages/Sign/Up/content.xsl',
+		CONSTRAINT = __DIR__ . '/../../Messages/Sign/Up/constraint.xsd';
 
 	public function response(array $parameters): Application\Response {
 		return new Response\AuthenticatedResponse(
@@ -64,23 +65,28 @@ final class UpPage extends Page\Layout {
 								$credentials['password'],
 								self::ROLE
 							);
-							(new Access\SecureVerificationCodes(
+							$code = (new Access\SecureVerificationCodes(
 								$this->database
 							))->generate($credentials['email']);
+							(new Mail\SendmailMailer())->send(
+								(new Mail\Message())
+									->setFrom(self::SENDER)
+									->addTo($credentials['email'])
+									->setSubject(self::SUBJECT)
+									->setHtmlBody(
+										(new Output\XsltTemplate(
+											self::CONTENT,
+											$code->print(
+												new Output\ValidXml(
+													new Output\Xml([], 'up'),
+													self::CONSTRAINT
+												)
+											)
+										))->render(['base_url' => $this->url->reference()])
+									)
+							);
 						}
 					);
-					(new Access\ReserveVerificationCodes(
-						$this->database,
-						new Mail\SendmailMailer(),
-						(new Mail\Message())->setFrom(self::SENDER)->setSubject(self::SUBJECT),
-						new Output\XsltTemplate(
-							self::CONTENT,
-							new Output\Xml(
-								['base_url' => $this->url->reference()],
-								'up'
-							)
-						)
-					))->generate($credentials['email']);
 				}
 			))->validate();
 			$this->flashMessage('You have been signed up', 'success');

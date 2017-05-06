@@ -14,7 +14,7 @@
 		"php": ">=7.1",
 		"ext-mbstring": "*",
 		"ext-dom": "*",
-		"klapuch/access": "^2.0.0",
+		"klapuch/access": "^2.13.0",
 		"klapuch/authorization": "^3.0.0",
 		"klapuch/application": "@dev",
 		"klapuch/csrf": "^2.0.0",

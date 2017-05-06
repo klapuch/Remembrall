@@ -31,7 +31,8 @@ final class KickPage extends Page\Layout {
 				$this->database
 			))->kick((int) $participant['subscription'], $participant['email']);
 			(new Mail\SendmailMailer())->send(
-				(new Mail\Message())->setFrom(self::SENDER)
+				(new Mail\Message())
+					->setFrom(self::SENDER)
 					->addTo($participant['email'])
 					->setSubject(self::SUBJECT)
 					->setHtmlBody(

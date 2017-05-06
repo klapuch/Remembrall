@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a60ed0b5cd0da0aed0a75c28a44c40d6",
+    "content-hash": "11134e9e897259f33dd995ee5b361917",
     "packages": [
         {
             "name": "gajus/dindent",
@@ -53,29 +53,35 @@
         },
         {
             "name": "klapuch/access",
-            "version": "2.12.2",
+            "version": "2.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/Access.git",
-                "reference": "12acd1f5a4a0267d03290008243d10ff32716093"
+                "reference": "a8b8972764357142cde8a04e89964a2f2766d84d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klapuch/Access/zipball/12acd1f5a4a0267d03290008243d10ff32716093",
-                "reference": "12acd1f5a4a0267d03290008243d10ff32716093",
+                "url": "https://api.github.com/repos/klapuch/Access/zipball/a8b8972764357142cde8a04e89964a2f2766d84d",
+                "reference": "a8b8972764357142cde8a04e89964a2f2766d84d",
                 "shasum": ""
             },
             "require": {
+                "ext-pdo": "*",
                 "klapuch/encryption": "^2.0.0",
                 "klapuch/output": "^2.6",
                 "klapuch/storage": "^2.0.0",
                 "klapuch/validation": "*",
-                "nette/mail": "^2.4",
                 "php": ">=7.1"
             },
             "require-dev": {
+                "consistence/coding-standard": "^0.13.0",
+                "jakub-onderka/php-parallel-lint": "^0.9.2",
                 "mockery/mockery": "@dev",
-                "nette/tester": "^1.7"
+                "nette/tester": "^1.7",
+                "phing/phing": "^2.16",
+                "phpstan/phpstan": "^0.6.4",
+                "sebastian/phpcpd": "^3.0",
+                "slevomat/coding-standard": "^2.3"
             },
             "type": "library",
             "autoload": {
@@ -96,7 +102,7 @@
             ],
             "description": "access, authentication, login, register",
             "homepage": "https://github.com/klapuch/Access",
-            "time": "2017-05-01T20:18:40+00:00"
+            "time": "2017-05-06T21:09:15+00:00"
         },
         {
             "name": "klapuch/application",
@@ -104,12 +110,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/Application.git",
-                "reference": "da746ebd3ebfb71dc85471e6dd7e9851cd7f415c"
+                "reference": "11ca9319d4264196cb9e8f3d8bc27e01482272bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klapuch/Application/zipball/da746ebd3ebfb71dc85471e6dd7e9851cd7f415c",
-                "reference": "da746ebd3ebfb71dc85471e6dd7e9851cd7f415c",
+                "url": "https://api.github.com/repos/klapuch/Application/zipball/11ca9319d4264196cb9e8f3d8bc27e01482272bc",
+                "reference": "11ca9319d4264196cb9e8f3d8bc27e01482272bc",
                 "shasum": ""
             },
             "require": {
@@ -149,7 +155,7 @@
             ],
             "description": "HTTP core application",
             "homepage": "https://www.github.com/klapuch/Application",
-            "time": "2017-04-22 10:15:10"
+            "time": "2017-05-06 10:53:41"
         },
         {
             "name": "klapuch/authorization",
@@ -253,26 +259,26 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/Dataset.git",
-                "reference": "9c00988ef6325631506e67a45cca54428e7a0dec"
+                "reference": "05ed0c6c6a38888804f5c2d29205ba953e1e9a4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klapuch/Dataset/zipball/9c00988ef6325631506e67a45cca54428e7a0dec",
-                "reference": "9c00988ef6325631506e67a45cca54428e7a0dec",
+                "url": "https://api.github.com/repos/klapuch/Dataset/zipball/05ed0c6c6a38888804f5c2d29205ba953e1e9a4e",
+                "reference": "05ed0c6c6a38888804f5c2d29205ba953e1e9a4e",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.1"
             },
             "require-dev": {
-                "consistence/coding-standard": "^0.12.0",
+                "consistence/coding-standard": "^1.0",
                 "jakub-onderka/php-parallel-lint": "^0.9.2",
-                "mockery/mockery": "^0.9.6",
+                "mockery/mockery": "^0.9.9",
                 "nette/tester": "^1.7",
-                "object-calisthenics/phpcs-calisthenics-rules": "^2.0",
+                "phing/phing": "^2.16",
                 "phpstan/phpstan": "^0.6.4",
-                "sebastian/phpcpd": "^2.0",
-                "slevomat/coding-standard": "^1.1"
+                "sebastian/phpcpd": "^3.0",
+                "slevomat/coding-standard": "^2.3"
             },
             "type": "library",
             "autoload": {
@@ -293,28 +299,34 @@
             ],
             "description": "Operations applicable to datasets",
             "homepage": "https://www.github.com/klapuch/Dataset",
-            "time": "2017-03-19 13:47:22"
+            "time": "2017-05-05 11:39:31"
         },
         {
             "name": "klapuch/encryption",
-            "version": "2.0.0",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/Encryption.git",
-                "reference": "d7081969120d8c6538e5d354bc433349d7e3a430"
+                "reference": "e7d8d82714c2bf040fde03690e9078c6ffa09670"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klapuch/Encryption/zipball/d7081969120d8c6538e5d354bc433349d7e3a430",
-                "reference": "d7081969120d8c6538e5d354bc433349d7e3a430",
+                "url": "https://api.github.com/repos/klapuch/Encryption/zipball/e7d8d82714c2bf040fde03690e9078c6ffa09670",
+                "reference": "e7d8d82714c2bf040fde03690e9078c6ffa09670",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.0"
+                "php": ">=7.1"
             },
             "require-dev": {
+                "consistence/coding-standard": "^1.0",
                 "ext-mbstring": "*",
-                "nette/tester": "^1.7"
+                "jakub-onderka/php-parallel-lint": "^0.9.2",
+                "nette/tester": "^1.7",
+                "phing/phing": "^2.16",
+                "phpstan/phpstan": "^0.6.4",
+                "sebastian/phpcpd": "^3.0",
+                "slevomat/coding-standard": "^2.3"
             },
             "type": "library",
             "autoload": {
@@ -335,7 +347,7 @@
             ],
             "description": "AES256",
             "homepage": "https://github.com/klapuch/Encryption",
-            "time": "2017-01-15T09:22:12+00:00"
+            "time": "2017-05-05T11:50:58+00:00"
         },
         {
             "name": "klapuch/form",
@@ -387,25 +399,31 @@
         },
         {
             "name": "klapuch/http",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/Http.git",
-                "reference": "2914bcd210911ee9ca84282e0922b7b0776d2ef3"
+                "reference": "c8e4840b758405e67f4d511497ad6b87ceeaa3b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klapuch/Http/zipball/2914bcd210911ee9ca84282e0922b7b0776d2ef3",
-                "reference": "2914bcd210911ee9ca84282e0922b7b0776d2ef3",
+                "url": "https://api.github.com/repos/klapuch/Http/zipball/c8e4840b758405e67f4d511497ad6b87ceeaa3b0",
+                "reference": "c8e4840b758405e67f4d511497ad6b87ceeaa3b0",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
                 "klapuch/uri": "^2.0.0",
-                "php": ">=7.0"
+                "php": ">=7.1"
             },
             "require-dev": {
-                "nette/tester": "^1.7"
+                "consistence/coding-standard": "^1.0",
+                "jakub-onderka/php-parallel-lint": "^0.9.2",
+                "nette/tester": "^1.7",
+                "phing/phing": "^2.16",
+                "phpstan/phpstan": "^0.6.4",
+                "sebastian/phpcpd": "^3.0",
+                "slevomat/coding-standard": "^2.3"
             },
             "type": "library",
             "autoload": {
@@ -426,7 +444,7 @@
             ],
             "description": "http, request, response",
             "homepage": "https://github.com/klapuch/Http",
-            "time": "2017-02-27T18:58:37+00:00"
+            "time": "2017-05-05T12:06:56+00:00"
         },
         {
             "name": "klapuch/ini",
@@ -620,26 +638,32 @@
         },
         {
             "name": "klapuch/output",
-            "version": "2.8.0",
+            "version": "2.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/Output.git",
-                "reference": "a98d40033dd9bf78aa2193afa362573329ee47d1"
+                "reference": "ce04e61adf10a3767fde4834402905ba76fd3eb3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klapuch/Output/zipball/a98d40033dd9bf78aa2193afa362573329ee47d1",
-                "reference": "a98d40033dd9bf78aa2193afa362573329ee47d1",
+                "url": "https://api.github.com/repos/klapuch/Output/zipball/ce04e61adf10a3767fde4834402905ba76fd3eb3",
+                "reference": "ce04e61adf10a3767fde4834402905ba76fd3eb3",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "ext-simplexml": "*",
                 "ext-xsl": "*",
-                "php": ">=7.0"
+                "php": ">=7.1"
             },
             "require-dev": {
-                "nette/tester": "^1.7"
+                "consistence/coding-standard": "^0.13.0",
+                "jakub-onderka/php-parallel-lint": "^0.9.2",
+                "nette/tester": "^1.7",
+                "phing/phing": "^2.16",
+                "phpstan/phpstan": "^0.6.4",
+                "sebastian/phpcpd": "^3.0",
+                "slevomat/coding-standard": "^2.3"
             },
             "type": "library",
             "autoload": {
@@ -660,7 +684,7 @@
             ],
             "description": "printers, output, xml, json",
             "homepage": "https://github.com/klapuch/Output",
-            "time": "2017-05-05T07:30:34+00:00"
+            "time": "2017-05-05T10:22:57+00:00"
         },
         {
             "name": "klapuch/routing",
@@ -762,23 +786,29 @@
         },
         {
             "name": "klapuch/time",
-            "version": "3.0.1",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/Time.git",
-                "reference": "00e86547ddd0294b8f36b5fdf48d74e4b0fd57e2"
+                "reference": "f6cd191a738a490fcb9780a4b8433e246dc144b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klapuch/Time/zipball/00e86547ddd0294b8f36b5fdf48d74e4b0fd57e2",
-                "reference": "00e86547ddd0294b8f36b5fdf48d74e4b0fd57e2",
+                "url": "https://api.github.com/repos/klapuch/Time/zipball/f6cd191a738a490fcb9780a4b8433e246dc144b8",
+                "reference": "f6cd191a738a490fcb9780a4b8433e246dc144b8",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.0"
+                "php": ">=7.1"
             },
             "require-dev": {
-                "nette/tester": "^1.7"
+                "consistence/coding-standard": "^1.0",
+                "jakub-onderka/php-parallel-lint": "^0.9.2",
+                "nette/tester": "^1.7",
+                "phing/phing": "^2.16",
+                "phpstan/phpstan": "^0.6.4",
+                "sebastian/phpcpd": "^3.0",
+                "slevomat/coding-standard": "^2.3"
             },
             "type": "library",
             "autoload": {
@@ -799,7 +829,7 @@
             ],
             "description": "time, date, datetime, interval",
             "homepage": "https://github.com/klapuch/Time",
-            "time": "2017-01-13T20:36:03+00:00"
+            "time": "2017-05-05T13:40:42+00:00"
         },
         {
             "name": "klapuch/ui",
@@ -851,24 +881,30 @@
         },
         {
             "name": "klapuch/uri",
-            "version": "2.0.0",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/klapuch/Uri.git",
-                "reference": "de85d2eed3231e3a448006f12b8224cae27f6e63"
+                "reference": "680e8fe104a5f7e8e11ab3e32f0750e63c8ac549"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klapuch/Uri/zipball/de85d2eed3231e3a448006f12b8224cae27f6e63",
-                "reference": "de85d2eed3231e3a448006f12b8224cae27f6e63",
+                "url": "https://api.github.com/repos/klapuch/Uri/zipball/680e8fe104a5f7e8e11ab3e32f0750e63c8ac549",
+                "reference": "680e8fe104a5f7e8e11ab3e32f0750e63c8ac549",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
-                "php": ">=7.0"
+                "php": ">=7.1"
             },
             "require-dev": {
-                "nette/tester": "^1.7"
+                "consistence/coding-standard": "^1.0",
+                "jakub-onderka/php-parallel-lint": "^0.9.2",
+                "nette/tester": "^1.7",
+                "phing/phing": "^2.16",
+                "phpstan/phpstan": "^0.6.4",
+                "sebastian/phpcpd": "^3.0",
+                "slevomat/coding-standard": "^2.3"
             },
             "type": "library",
             "autoload": {
@@ -894,7 +930,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2017-02-27T18:50:24+00:00"
+            "time": "2017-05-05T14:05:18+00:00"
         },
         {
             "name": "klapuch/validation",

@@ -9,15 +9,16 @@
 			<body>
 				<xsl:text>Your password has been reset.</xsl:text>
                 <br/>
-				<xsl:text>To change your password follow the link bellow.</xsl:text>
+				<xsl:text>To change your password follow the link bellow, which is valid for </xsl:text>
+				<strong><xsl:value-of select="expiration"/></strong>
 				<br/>
 				<xsl:element name="a">
 					<xsl:attribute name="href">
-						<xsl:value-of select="base_url"/>
+						<xsl:value-of select="$base_url"/>
 						<xsl:text>/password/reset/</xsl:text>
-						<xsl:value-of select="$reminder"/>
+						<xsl:value-of select="reminder"/>
 					</xsl:attribute>
-					<xsl:value-of select="$reminder"/>
+					<xsl:value-of select="reminder"/>
 				</xsl:element>
 			</body>
 		</html>
