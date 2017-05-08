@@ -5,6 +5,7 @@ namespace Remembrall\Page\Sign;
 use Klapuch\Access;
 use Klapuch\Application;
 use Klapuch\Encryption;
+use Klapuch\Internal;
 use Klapuch\Form;
 use Remembrall\Form\Sign;
 use Remembrall\Page;
@@ -50,7 +51,8 @@ final class InPage extends Page\Layout {
 								)
 							)
 						),
-						$_SESSION
+						$_SESSION,
+						new Internal\CookieExtension($this->configuration['PROPRIETARY_SESSIONS'])
 					))->enter([$credentials['email'], $credentials['password']]);
 				}
 			))->validate();
