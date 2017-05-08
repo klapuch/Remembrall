@@ -12,7 +12,9 @@
 	<xsl:template match="/">
 		<xsl:text disable-output-escaping="yes">&lt;!DOCTYPE html&gt;</xsl:text>
 		<html lang="cs-cz">
-			<xsl:apply-templates select="page/head" mode="layout"/>
+			<head>
+				<xsl:apply-templates select="page/head" mode="layout"/>
+			</head>
 			<body>
 				<div id="wrap">
 					<xsl:apply-templates select="page/body/menu[@name='main']">
@@ -31,10 +33,7 @@
 	</xsl:template>
 
 	<xsl:template match="head" mode="layout">
-		<head>
-			<xsl:apply-templates/>
-			<xsl:apply-templates select="page/head"/>
-		</head>
+		<xsl:apply-templates/>
 	</xsl:template>
 
 	<xsl:template match="menu[@name='main']">
