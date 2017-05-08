@@ -25,6 +25,15 @@
 	<xsl:template match="participants">
 		<xsl:param name="id"/>
 		<xsl:param name="subscription_id"/>
+		<xsl:call-template name="participants">
+			<xsl:with-param name="id" select="$id"/>
+			<xsl:with-param name="subscription_id" select="$subscription_id"/>
+		</xsl:call-template>
+	</xsl:template>
+
+	<xsl:template name="participants">
+		<xsl:param name="id"/>
+		<xsl:param name="subscription_id"/>
 		<div class="modal fade" id="content-{$id}" tabindex="-1" role="dialog" aria-labelledby="content-label-{$id}">
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
@@ -35,7 +44,7 @@
 						<h4 class="modal-title" id="content-label-{$id}">Participants</h4>
 					</div>
 					<div class="modal-body">
-						<xsl:apply-templates/>
+						<xsl:apply-templates select="participant"/>
 						<xsl:apply-templates select="/page/forms/form[@name=concat('invite-', $subscription_id)]"/>
 					</div>
 					<div class="modal-footer">
@@ -96,10 +105,21 @@
 				<button type="button" class="participant-modal btn btn-primary btn-sm" data-toggle="modal" data-target="#content-{id}">
 					<span class="glyphicon glyphicon-user" aria-hidden="true"/>
 				</button>
-				<xsl:apply-templates select="key('participantsBySubscription', id)">
-					<xsl:with-param name="id" select="id"/>
-					<xsl:with-param name="subscription_id" select="id"/>
-				</xsl:apply-templates>
+				<xsl:variable name="participants" select="key('participantsBySubscription', id)"/>
+				<xsl:choose>
+					<xsl:when test="$participants">
+						<xsl:apply-templates select="$participants">
+							<xsl:with-param name="id" select="id"/>
+							<xsl:with-param name="subscription_id" select="id"/>
+						</xsl:apply-templates>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:call-template name="participants">
+							<xsl:with-param name="id" select="id"/>
+							<xsl:with-param name="subscription_id" select="id"/>
+						</xsl:call-template>
+					</xsl:otherwise>
+				</xsl:choose>
 			</td>
 			<td>
 				<xsl:apply-templates select="/page/body/options">
