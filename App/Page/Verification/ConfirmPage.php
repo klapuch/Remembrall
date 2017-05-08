@@ -4,6 +4,7 @@ namespace Remembrall\Page\Verification;
 
 use Klapuch\Access;
 use Klapuch\Application;
+use Klapuch\Internal;
 use Remembrall\Page;
 
 final class ConfirmPage extends Page\Layout {
@@ -20,7 +21,8 @@ final class ConfirmPage extends Page\Layout {
 			$this->flashMessage('Your code has been confirmed', 'success');
 			(new Access\SessionEntrance(
 				new Access\WelcomingEntrance($this->database),
-				$_SESSION
+				$_SESSION,
+				new Internal\CookieExtension($this->configuration['PROPRIETARY_SESSIONS'])
 			))->enter([$parameters['code']]);
 			$this->flashMessage('You have been logged in', 'success');
 			$this->redirect('subscription');
