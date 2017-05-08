@@ -17,7 +17,7 @@ final class DeclinePage extends Page\Layout {
 				$parameters['code'],
 				$this->database
 			))->decline();
-			$this->flashMessage('Invitation has been denied', 'success');
+			$this->flashMessage('Invitation has been declined', 'success');
 		} catch (\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
 		} finally {
