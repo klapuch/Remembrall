@@ -31,9 +31,9 @@ final class UnreliableParts implements Parts {
 				occurrences
 				FROM parts
 				RIGHT JOIN (
-					SELECT MIN(SUBSTRING(interval FROM '[0-9]+')::INT) AS interval,
+					SELECT MIN(interval_seconds) AS interval,
 					part_id, COUNT(*) AS occurrences
-					FROM subscriptions
+					FROM readable_subscriptions
 					GROUP BY part_id
 				) AS subscriptions ON subscriptions.part_id = parts.id 
 				LEFT JOIN (
@@ -82,9 +82,9 @@ final class UnreliableParts implements Parts {
 			"SELECT COUNT(*)
 			FROM parts
 			RIGHT JOIN (
-				SELECT MIN(SUBSTRING(interval FROM '[0-9]+')::INT) AS interval,
+				SELECT MIN(interval_seconds) AS interval,
 				part_id
-				FROM subscriptions
+				FROM readable_subscriptions
 				GROUP BY part_id
 			) AS subscriptions ON subscriptions.part_id = parts.id 
 			LEFT JOIN (

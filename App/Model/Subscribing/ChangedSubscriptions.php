@@ -40,20 +40,21 @@ final class ChangedSubscriptions implements Subscriptions {
 			$this->database,
 			$selection->expression(
 				"WITH changed_subscriptions AS (
-					SELECT subscriptions.id, page_url AS url, expression, content, email, parts.snapshot
+					SELECT readable_subscriptions.id, page_url AS url, expression, content, email, parts.snapshot, interval_seconds
 					FROM parts
-					INNER JOIN subscriptions ON subscriptions.part_id = parts.id
-					INNER JOIN users ON users.id = subscriptions.user_id
-					WHERE parts.snapshot != subscriptions.snapshot
-					AND last_update + INTERVAL '1 SECOND' * SUBSTRING(interval FROM '[0-9]+')::INT < NOW()
+					INNER JOIN readable_subscriptions ON readable_subscriptions.part_id = parts.id
+					INNER JOIN users ON users.id = readable_subscriptions.user_id
+					WHERE parts.snapshot != readable_subscriptions.snapshot
+					AND last_update + INTERVAL '1 SECOND' * interval_seconds < NOW()
 				)
 				SELECT *
 				FROM changed_subscriptions
 				UNION
-				SELECT changed_subscriptions.id, url, expression, content, participants.email, snapshot
+				SELECT changed_subscriptions.id, url, expression, content, participants.email, snapshot, interval_seconds
 				FROM changed_subscriptions
 				LEFT JOIN participants ON participants.subscription_id = changed_subscriptions.id
-				WHERE accepted = TRUE"
+				WHERE accepted = TRUE
+				ORDER BY email"
 			)
 		))->rows();
 		foreach ($subscriptions as $subscription) {

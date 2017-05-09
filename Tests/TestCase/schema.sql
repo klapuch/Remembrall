@@ -370,6 +370,23 @@ CREATE TABLE subscriptions (
 ALTER TABLE subscriptions OWNER TO postgres;
 
 --
+-- Name: readable_subscriptions; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW readable_subscriptions AS
+  SELECT subscriptions.id,
+    subscriptions.user_id,
+    subscriptions.part_id,
+    subscriptions."interval",
+    subscriptions.last_update,
+    subscriptions.snapshot,
+    ("substring"((subscriptions."interval")::text, '[0-9]+'::text))::integer AS interval_seconds
+  FROM subscriptions;
+
+
+ALTER TABLE readable_subscriptions OWNER TO postgres;
+
+--
 -- Name: subscriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
