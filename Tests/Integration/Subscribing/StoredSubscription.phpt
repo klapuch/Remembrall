@@ -74,7 +74,7 @@ final class StoredSubscription extends TestCase\Database {
 		$statement = $this->database->prepare('SELECT * FROM subscriptions WHERE id = ?');
 		$statement->execute([$id]);
 		$subscription = $statement->fetch();
-		Assert::same('PT10M', $subscription['interval']);
+		Assert::same('00:10:00', $subscription['interval']);
 		Assert::same('2000-01-01 00:00:00', $subscription['last_update']);
 	}
 

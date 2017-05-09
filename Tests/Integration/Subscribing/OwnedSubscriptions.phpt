@@ -37,7 +37,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 		Assert::count(1, $subscriptions);
 		Assert::same(1, $subscriptions[0]['id']);
 		Assert::same(666, $subscriptions[0]['user_id']);
-		Assert::same('PT120S', $subscriptions[0]['interval']);
+		Assert::same('00:02:00', $subscriptions[0]['interval']);
 		Assert::same('google snap', $subscriptions[0]['snapshot']);
 	}
 
