@@ -361,7 +361,7 @@ CREATE TABLE subscriptions (
     id integer NOT NULL,
     user_id integer NOT NULL,
     part_id integer NOT NULL,
-    "interval" interval NOT NULL,
+    "interval" character varying(10) NOT NULL,
     last_update timestamp without time zone NOT NULL,
     snapshot character varying(40) NOT NULL
 );
@@ -380,7 +380,7 @@ CREATE VIEW readable_subscriptions AS
     subscriptions."interval",
     subscriptions.last_update,
     subscriptions.snapshot,
-    date_part('epoch'::text, subscriptions."interval") AS interval_seconds
+    ("substring"((subscriptions."interval")::text, '[0-9]+'::text))::integer AS interval_seconds
   FROM subscriptions;
 
 
