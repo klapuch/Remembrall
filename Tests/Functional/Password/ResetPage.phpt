@@ -11,7 +11,6 @@ use Klapuch\Log;
 use Klapuch\Uri;
 use Remembrall\Page\Password;
 use Remembrall\TestCase;
-use Tester;
 use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
@@ -19,8 +18,7 @@ require __DIR__ . '/../../bootstrap.php';
 final class ResetPage extends TestCase\Page {
 	protected function setUp(): void {
 		parent::setUp();
-		Tester\Environment::lock('functional_database', __DIR__ . '/../../temp');
-		$this->database->exec('TRUNCATE forgotten_passwords');
+		$this->purge(['forgotten_passwords']);
 	}
 
 	public function testRedirectForInvalidReminder() {

@@ -3,9 +3,8 @@ declare(strict_types = 1);
 namespace Remembrall\TestCase;
 
 use Klapuch\Storage;
-use Tester;
 
-abstract class Page extends Tester\TestCase {
+abstract class Page extends Database {
 	protected $configuration;
 	/** @var \PDO */
 	protected $database;

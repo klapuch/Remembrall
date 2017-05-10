@@ -11,7 +11,6 @@ use Klapuch\Log;
 use Klapuch\Uri;
 use Remembrall\Page\Subscription;
 use Remembrall\TestCase;
-use Tester;
 use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
@@ -19,8 +18,7 @@ require __DIR__ . '/../../bootstrap.php';
 final class EditPage extends TestCase\Page {
 	protected function setUp(): void {
 		parent::setUp();
-		Tester\Environment::lock('database', __DIR__ . '/../../temp');
-		$this->database->exec('TRUNCATE subscriptions; ALTER SEQUENCE subscriptions_id_seq RESTART');
+		$this->purge(['subscriptions']);
 	}
 
 	/**
