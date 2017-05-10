@@ -16,4 +16,9 @@
 			<directory>Tests/UI</directory>
 		</testsuite>
 	</testsuites>
+	<filter>
+		<whitelist processUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">App/Form</directory>
+		</whitelist>
+	</filter>
 </phpunit>

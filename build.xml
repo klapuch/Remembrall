@@ -4,7 +4,7 @@
 	<resolvepath propertyName="base_path" file="."/>
 
 	<target name="check" depends="lint, phpcpd, phpstan, phpcs, snapshots, tests, cgi-tests"/>
-	<target name="ci" depends="check, coverage"/>
+	<target name="ci" depends="check, tester-coverage, phpunit-coverage"/>
 	<target name="build" depends="check, assets"/>
 
 	<target name="lint">
@@ -88,7 +88,7 @@
 		</exec>
 	</target>
 
-	<target name="coverage">
+	<target name="tester-coverage">
 		<exec executable="vendor/bin/tester" logoutput="true" passthru="true" checkreturn="true">
 			<arg value="-o"/>
 			<arg value="console"/>
@@ -99,9 +99,18 @@
 			<arg path="Tests/php.ini"/>
 			<arg path="Tests/"/>
 			<arg value="--coverage"/>
-			<arg value="coverage.xml"/>
+			<arg value="tester-coverage.xml"/>
 			<arg value="--coverage-src"/>
 			<arg path="App/"/>
+		</exec>
+	</target>
+
+	<target name="phpunit-coverage">
+		<exec executable="phpdbg" logoutput="true" passthru="true" checkreturn="true">
+			<arg value="-qrr"/>
+			<arg value="vendor/bin/phpunit"/>
+			<arg value="--coverage-clover"/>
+			<arg value="phpunit-coverage.xml"/>
 		</exec>
 	</target>
 
