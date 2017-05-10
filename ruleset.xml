@@ -17,7 +17,7 @@
 	<rule ref="PSR1.Files.SideEffects.FoundWithSymbols">
 		<exclude-pattern>Tests/Unit</exclude-pattern>
 		<exclude-pattern>Tests/Integration</exclude-pattern>
-		<exclude-pattern>Tests/UI</exclude-pattern>
+		<exclude-pattern>Tests/UI/Components</exclude-pattern>
 	</rule>
 
 	<rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml">
@@ -54,12 +54,6 @@
 		<properties>
 			<property name="rootNamespaces" type="array" value="App=>Remembrall,Tests=>Remembrall"/>
 			<property name="extensions" type="array" value="php,phpt"/>
-		</properties>
-	</rule>
-
-	<rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly">
-		<properties>
-			<property name="namespacesRequiredToUse" type="array" value="Remembrall"/>
 		</properties>
 	</rule>
 
