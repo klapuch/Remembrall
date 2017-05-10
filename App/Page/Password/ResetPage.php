@@ -6,6 +6,7 @@ use Klapuch\Access;
 use Klapuch\Application;
 use Klapuch\Encryption;
 use Klapuch\Form;
+use Klapuch\Uri;
 use Remembrall\Form\Password;
 use Remembrall\Page;
 use Remembrall\Response;
@@ -39,7 +40,10 @@ final class ResetPage extends Page\Layout {
 			);
 		} catch (\UnexpectedValueException $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
-			$this->redirect('password/remind');
+			return new Response\RedirectResponse(
+				new Response\EmptyResponse(),
+				new Uri\RelativeUrl($this->url, 'password/remind')
+			);
 		}
 	}
 

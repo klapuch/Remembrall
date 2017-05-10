@@ -68,7 +68,7 @@ final class StoredSubscription implements Subscription {
 			$this->database,
 			'SELECT readable_subscriptions.id, interval_seconds / 60 AS interval, page_url AS url, expression
 			FROM readable_subscriptions
-			INNER JOIN parts ON readable_subscriptions.part_id = parts.id
+			LEFT JOIN parts ON readable_subscriptions.part_id = parts.id
 			WHERE readable_subscriptions.id IS NOT DISTINCT FROM ?',
 			[$this->id]
 		))->row();

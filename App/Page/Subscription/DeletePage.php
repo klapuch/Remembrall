@@ -3,12 +3,17 @@ declare(strict_types = 1);
 namespace Remembrall\Page\Subscription;
 
 use Klapuch\Application;
+use Klapuch\Uri;
 use Remembrall\Model\Subscribing;
 use Remembrall\Page;
+use Remembrall\Response;
 
 final class DeletePage extends Page\Layout {
 	public function response(array $parameters): Application\Response {
-		$this->redirect('error');
+		return new Response\RedirectResponse(
+			new Response\EmptyResponse(),
+			new Uri\RelativeUrl($this->url, 'error')
+		);
 	}
 
 	public function submitDelete(array $subscription): void {

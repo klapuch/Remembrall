@@ -5,7 +5,9 @@ namespace Remembrall\Page\Verification;
 use Klapuch\Access;
 use Klapuch\Application;
 use Klapuch\Internal;
+use Klapuch\Uri;
 use Remembrall\Page;
+use Remembrall\Response;
 
 final class ConfirmPage extends Page\Layout {
 	public function response(array $parameters): Application\Response {
@@ -25,10 +27,16 @@ final class ConfirmPage extends Page\Layout {
 				new Internal\CookieExtension($this->configuration['PROPRIETARY_SESSIONS'])
 			))->enter([$parameters['code']]);
 			$this->flashMessage('You have been logged in', 'success');
-			$this->redirect('subscription');
+			return new Response\RedirectResponse(
+				new Response\EmptyResponse(),
+				new Uri\RelativeUrl($this->url, 'subscriptions')
+			);
 		} catch (\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
-			$this->redirect('sign/in');
+			return new Response\RedirectResponse(
+				new Response\EmptyResponse(),
+				new Uri\RelativeUrl($this->url, 'sign/in')
+			);
 		}
 	}
 }

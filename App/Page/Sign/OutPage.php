@@ -5,7 +5,9 @@ namespace Remembrall\Page\Sign;
 use Klapuch\Access;
 use Klapuch\Application;
 use Klapuch\Internal;
+use Klapuch\Uri;
 use Remembrall\Page;
+use Remembrall\Response;
 
 final class OutPage extends Page\Layout {
 	public function response(array $parameters): Application\Response {
@@ -21,10 +23,13 @@ final class OutPage extends Page\Layout {
 				}
 			))->exit();
 			$this->flashMessage('You have been logged out', 'success');
-			$this->redirect('sign/in');
 		} catch (\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
-			$this->redirect('sign/in');
+		} finally {
+			return new Response\RedirectResponse(
+				new Response\EmptyResponse(),
+				new Uri\RelativeUrl($this->url, 'sign/in')
+			);
 		}
 	}
 }

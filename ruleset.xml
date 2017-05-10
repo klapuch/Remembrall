@@ -18,6 +18,7 @@
 		<exclude-pattern>Tests/Unit</exclude-pattern>
 		<exclude-pattern>Tests/Integration</exclude-pattern>
 		<exclude-pattern>Tests/UI/Components</exclude-pattern>
+		<exclude-pattern>Tests/Functional</exclude-pattern>
 	</rule>
 
 	<rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml">
@@ -42,6 +43,7 @@
 		<exclude-pattern>Tests/Unit</exclude-pattern>
 		<exclude-pattern>Tests/Integration</exclude-pattern>
 		<exclude-pattern>Tests/UI</exclude-pattern>
+		<exclude-pattern>Tests/Functional</exclude-pattern>
 	</rule>
 
 	<rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration">

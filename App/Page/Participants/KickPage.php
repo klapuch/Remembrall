@@ -4,9 +4,11 @@ namespace Remembrall\Page\Participants;
 
 use Klapuch\Application;
 use Klapuch\Output;
+use Klapuch\Uri;
 use Nette\Mail;
 use Remembrall\Model\Subscribing;
 use Remembrall\Page;
+use Remembrall\Response;
 
 final class KickPage extends Page\Layout {
 	private const SCHEMA = __DIR__ . '/../Invitation/templates/constraint.xsd';
@@ -15,7 +17,10 @@ final class KickPage extends Page\Layout {
 		CONTENT = __DIR__ . '/../../Messages/Participants/Kick/content.xsl';
 
 	public function response(array $parameters): Application\Response {
-		$this->redirect('error');
+		return new Response\RedirectResponse(
+			new Response\EmptyResponse(),
+			new Uri\RelativeUrl($this->url, 'error')
+		);
 	}
 
 	public function submitKick(array $participant): void {
