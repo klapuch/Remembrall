@@ -34,12 +34,12 @@ final class ConfirmPage extends TestCase\Page {
 		$code = 'valid:code';
 		$statement = $this->database->prepare(
 			'INSERT INTO verification_codes (user_id, code, used) VALUES
-            (1, ?, FALSE)'
+            (2, ?, FALSE)'
 		);
 		$statement->execute([$code]);
 		$this->database->exec(
 			"INSERT INTO users (id, email, password, role) VALUES
-            (1, 'me@boss.cz', 'secret', 'member')"
+            (2, 'me@boss.cz', 'secret', 'member')"
 		);
 		$headers = (new Verification\ConfirmPage(
 			new Uri\FakeUri(''),
@@ -47,7 +47,7 @@ final class ConfirmPage extends TestCase\Page {
 			new Ini\FakeSource($this->configuration)
 		))->response(['code' => $code])->headers();
 		Assert::same(['Location' => '/subscriptions'], $headers);
-		Assert::same(1, $_SESSION['id']);
+		Assert::same(2, $_SESSION['id']);
 	}
 }
 
