@@ -6,6 +6,7 @@ use Klapuch\Access;
 use Klapuch\Application;
 use Klapuch\Form;
 use Klapuch\Output;
+use Klapuch\Uri;
 use Nette\Mail;
 use Remembrall\Form\Verification;
 use Remembrall\Page;
@@ -40,7 +41,7 @@ final class RequestPage extends Page\Layout {
 		);
 	}
 
-	public function submitRequest(array $credentials): void {
+	public function submitRequest(array $credentials): Application\Response {
 		try {
 			(new Form\HarnessedForm(
 				new Verification\RequestForm(
@@ -76,7 +77,10 @@ final class RequestPage extends Page\Layout {
 		} catch (\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
 		} finally {
-			$this->redirect('verification/request');
+			return new Response\RedirectResponse(
+				new Response\EmptyResponse(),
+				new Uri\RelativeUrl($this->url, 'verification/request')
+			);
 		}
 	}
 }

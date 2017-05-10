@@ -16,7 +16,7 @@ final class DeletePage extends Page\Layout {
 		);
 	}
 
-	public function submitDelete(array $subscription): void {
+	public function submitDelete(array $subscription): Application\Response {
 		try {
 			$this->protect();
 			(new Subscribing\OwnedSubscription(
@@ -32,7 +32,10 @@ final class DeletePage extends Page\Layout {
 		} catch (\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
 		} finally {
-			$this->redirect('subscriptions');
+			return new Response\RedirectResponse(
+				new Response\EmptyResponse(),
+				new Uri\RelativeUrl($this->url, 'subscriptions')
+			);
 		}
 	}
 }

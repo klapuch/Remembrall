@@ -23,7 +23,7 @@ final class KickPage extends Page\Layout {
 		);
 	}
 
-	public function submitKick(array $participant): void {
+	public function submitKick(array $participant): Application\Response {
 		try {
 			$this->protect();
 			$kick = (new Subscribing\MemorialInvitation(
@@ -51,7 +51,10 @@ final class KickPage extends Page\Layout {
 		} catch (\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
 		} finally {
-			$this->redirect('subscriptions');
+			return new Response\RedirectResponse(
+				new Response\EmptyResponse(),
+				new Uri\RelativeUrl($this->url, 'susbcriptions')
+			);
 		}
 	}
 }

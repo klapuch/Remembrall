@@ -8,6 +8,7 @@ use Klapuch\Encryption;
 use Klapuch\Form;
 use Klapuch\Output;
 use Klapuch\Storage;
+use Klapuch\Uri;
 use Nette\Mail;
 use Remembrall\Form\Sign;
 use Remembrall\Model;
@@ -44,7 +45,7 @@ final class UpPage extends Page\Layout {
 		);
 	}
 
-	public function submitUp(array $credentials): void {
+	public function submitUp(array $credentials): Application\Response {
 		try {
 			(new Form\HarnessedForm(
 				new Sign\InForm($this->url, $this->csrf, new Form\Backup($_SESSION, $_POST)),
@@ -91,10 +92,16 @@ final class UpPage extends Page\Layout {
 			))->validate();
 			$this->flashMessage('You have been signed up', 'success');
 			$this->flashMessage('Confirm your registration in the email', 'warning');
-			$this->redirect('sign/in');
+			return new Response\RedirectResponse(
+				new Response\EmptyResponse(),
+				new Uri\RelativeUrl($this->url, 'sign/in')
+			);
 		} catch (\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
-			$this->redirect('sign/up');
+			return new Response\RedirectResponse(
+				new Response\EmptyResponse(),
+				new Uri\RelativeUrl($this->url, 'sign/up')
+			);
 		}
 	}
 }

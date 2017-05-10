@@ -23,7 +23,7 @@ final class InvitePage extends Page\Layout {
 		);
 	}
 
-	public function submitInvite(array $participant): void {
+	public function submitInvite(array $participant): Application\Response {
 		try {
 			$this->protect();
 			$invitation = (new Subscribing\GuestParticipants(
@@ -52,7 +52,10 @@ final class InvitePage extends Page\Layout {
 		} catch (\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
 		} finally {
-			$this->redirect('subscriptions');
+			return new Response\RedirectResponse(
+				new Response\EmptyResponse(),
+				new Uri\RelativeUrl($this->url, 'subscriptions')
+			);
 		}
 	}
 }

@@ -5,6 +5,7 @@ namespace Remembrall\Page\Subscription;
 use Klapuch\Application;
 use Klapuch\Form;
 use Klapuch\Time;
+use Klapuch\Uri;
 use Remembrall\Form\Subscription;
 use Remembrall\Model\Subscribing;
 use Remembrall\Page;
@@ -43,7 +44,7 @@ final class EditPage extends Page\Layout {
 		);
 	}
 
-	public function submitEdit(array $subscription, array $parameters): void {
+	public function submitEdit(array $subscription, array $parameters): Application\Response {
 		try {
 			$id = $parameters['id'];
 			(new Form\HarnessedForm(
@@ -69,10 +70,16 @@ final class EditPage extends Page\Layout {
 				}
 			))->validate();
 			$this->flashMessage('Subscription has been edited', 'success');
-			$this->redirect('subscriptions');
+			return new Response\RedirectResponse(
+				new Response\EmptyResponse(),
+				new Uri\RelativeUrl($this->url, 'subscriptions')
+			);
 		} catch (\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
-			$this->redirect($this->url->path());
+			return new Response\RedirectResponse(
+				new Response\EmptyResponse(),
+				new Uri\RelativeUrl($this->url, $this->url->path())
+			);
 		}
 	}
 }

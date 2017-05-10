@@ -47,7 +47,7 @@ final class ResetPage extends Page\Layout {
 		}
 	}
 
-	public function submitReset(array $credentials): void {
+	public function submitReset(array $credentials): Application\Response {
 		try {
 			(new Form\HarnessedForm(
 				new Password\ResetForm(
@@ -79,10 +79,16 @@ final class ResetPage extends Page\Layout {
 				}
 			))->validate();
 			$this->flashMessage('Password has been reset', 'success');
-			$this->redirect('sign/in');
+			return new Response\RedirectResponse(
+				new Response\EmptyResponse(),
+				new Uri\RelativeUrl($this->url, 'sign/in')
+			);
 		} catch (\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
-			$this->redirect('password/remind');
+			return new Response\RedirectResponse(
+				new Response\EmptyResponse(),
+				new Uri\RelativeUrl($this->url, 'password/remind')
+			);
 		}
 	}
 }

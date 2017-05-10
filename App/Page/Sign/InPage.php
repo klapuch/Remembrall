@@ -7,6 +7,7 @@ use Klapuch\Application;
 use Klapuch\Encryption;
 use Klapuch\Form;
 use Klapuch\Internal;
+use Klapuch\Uri;
 use Remembrall\Form\Sign;
 use Remembrall\Page;
 use Remembrall\Response;
@@ -35,7 +36,7 @@ final class InPage extends Page\Layout {
 		);
 	}
 
-	public function submitIn(array $credentials): void {
+	public function submitIn(array $credentials): Application\Response {
 		try {
 			(new Form\HarnessedForm(
 				new Sign\InForm($this->url, $this->csrf, new Form\Backup($_SESSION, $_POST)),
@@ -57,10 +58,16 @@ final class InPage extends Page\Layout {
 				}
 			))->validate();
 			$this->flashMessage('You have been logged in', 'success');
-			$this->redirect('subscriptions');
+			return new Response\RedirectResponse(
+				new Response\EmptyResponse(),
+				new Uri\RelativeUrl($this->url, 'subscriptions')
+			);
 		} catch (\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
-			$this->redirect('sign/in');
+			return new Response\RedirectResponse(
+				new Response\EmptyResponse(),
+				new Uri\RelativeUrl($this->url, 'sign/in')
+			);
 		}
 	}
 }

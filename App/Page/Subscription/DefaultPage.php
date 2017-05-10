@@ -39,7 +39,7 @@ final class DefaultPage extends Page\Layout {
 		);
 	}
 
-	public function submitDefault(array $subscription): void {
+	public function submitDefault(array $subscription): Application\Response {
 		try {
 			(new Form\HarnessedForm(
 				new Subscription\NewForm(
@@ -116,10 +116,13 @@ final class DefaultPage extends Page\Layout {
 				}
 			))->validate();
 			$this->flashMessage('Subscription has been added', 'success');
-			$this->redirect('subscriptions');
 		} catch (\Throwable $ex) {
 			$this->flashMessage($ex->getMessage(), 'danger');
-			$this->redirect('subscription');
+		} finally {
+			return new Response\RedirectResponse(
+				new Response\EmptyResponse(),
+				new Uri\RelativeUrl($this->url, 'subscriptions')
+			);
 		}
 	}
 }
