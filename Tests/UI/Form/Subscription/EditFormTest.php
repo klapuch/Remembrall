@@ -4,30 +4,25 @@ namespace Remembrall\UI\Form\Subscription;
 
 use Klapuch\Csrf;
 use Klapuch\Form;
-use Klapuch\Output;
 use Klapuch\Uri;
 use Remembrall\Form\Subscription;
-use Remembrall\Model\Subscribing;
 use Spatie\Snapshots;
 
 final class EditFormTest extends \PHPUnit\Framework\TestCase {
 	use Snapshots\MatchesSnapshots;
 
-	public function testOutput()
-	{
+	public function testOutput() {
+		$dom = new \DOMDocument();
+		$dom->loadXML(
+			'<root>
+				<url>www.keybase.com</url>
+				<expression>//expr</expression>
+				<interval>44</interval>
+			</root>'
+		);
 		$this->assertMatchesXmlSnapshot(
 			(new Subscription\EditForm(
-				new Subscribing\FakeSubscription(
-					null,
-					new Output\Xml(
-						[
-							'url' => 'www.keybase.com',
-							'expression' => '//expr',
-							'interval' => 44,
-						],
-						'root'
-					)
-				),
+				$dom,
 				new Uri\FakeUri('', ''),
 				new Csrf\FakeProtection('pr073ct10n'),
 				new Form\EmptyStorage()

@@ -4,6 +4,7 @@ namespace Remembrall\Page\Subscription;
 
 use Klapuch\Application;
 use Klapuch\Form;
+use Klapuch\Output;
 use Klapuch\Time;
 use Klapuch\Uri;
 use Remembrall\Form\Subscription;
@@ -13,35 +14,47 @@ use Remembrall\Response;
 
 final class EditPage extends Page\Layout {
 	public function response(array $parameters): Application\Response {
-		return new Response\AuthenticatedResponse(
-			new Response\ComposedResponse(
-				new Response\CombinedResponse(
-					new Response\FormResponse(
-						new Subscription\EditForm(
-							new Subscribing\OwnedSubscription(
-								new Subscribing\StoredSubscription(
-									$parameters['id'],
-									$this->database
-								),
-								$parameters['id'],
-								$this->user,
-								$this->database
-							),
-							$this->url,
-							$this->csrf,
-							new Form\Backup($_SESSION, $_POST)
-						)
+		try {
+			$subscription = new \DOMDocument();
+			$subscription->loadXML(
+				(new Subscribing\OwnedSubscription(
+					new Subscribing\StoredSubscription(
+						$parameters['id'],
+						$this->database
 					),
-					new Response\FlashResponse(),
-					new Response\PermissionResponse(),
-					new Response\IdentifiedResponse($this->user)
+					$parameters['id'],
+					$this->user,
+					$this->database
+				))->print(new Output\Xml([], 'subscription'))->serialization()
+			);
+			return new Response\AuthenticatedResponse(
+				new Response\ComposedResponse(
+					new Response\CombinedResponse(
+						new Response\FormResponse(
+							new Subscription\EditForm(
+								$subscription,
+								$this->url,
+								$this->csrf,
+								new Form\Backup($_SESSION, $_POST)
+							)
+						),
+						new Response\FlashResponse(),
+						new Response\PermissionResponse(),
+						new Response\IdentifiedResponse($this->user)
+					),
+					__DIR__ . '/templates/edit.xml',
+					__DIR__ . '/../templates/layout.xml'
 				),
-				__DIR__ . '/templates/edit.xml',
-				__DIR__ . '/../templates/layout.xml'
-			),
-			$this->user,
-			$this->url
-		);
+				$this->user,
+				$this->url
+			);
+		} catch (\Throwable $ex) {
+			$this->flashMessage($ex->getMessage(), 'danger');
+			return new Response\RedirectResponse(
+				new Response\EmptyResponse(),
+				new Uri\RelativeUrl($this->url, 'subscriptions')
+			);
+		}
 	}
 
 	public function submitEdit(array $subscription, array $parameters): Application\Response {
@@ -49,7 +62,7 @@ final class EditPage extends Page\Layout {
 			$id = $parameters['id'];
 			(new Form\HarnessedForm(
 				new Subscription\EditForm(
-					new Subscribing\FakeSubscription(),
+					new \DOMDocument(),
 					$this->url,
 					$this->csrf,
 					new Form\Backup($_SESSION, $_POST)
