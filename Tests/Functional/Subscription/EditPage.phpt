@@ -16,13 +16,15 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class EditPage extends TestCase\Page {
-	public function testErrorOnForeignSubscription() {
-		$headers = (new Subscription\EditPage(
+	/**
+	 * @throws \Remembrall\Exception\NotFoundException You can not see foreign subscription
+	 */
+	public function testThrowingOnForeignSubscription() {
+		(new Subscription\EditPage(
 			new Uri\FakeUri('', ''),
 			new Log\FakeLogs(),
 			new Ini\FakeSource($this->configuration)
-		))->response(['id' => 0])->headers();
-		Assert::same(['Location' => '/subscriptions'], $headers);
+		))->response(['id' => 0])->body();
 	}
 
 	public function testWorkingResponseForOwnedSubscription() {

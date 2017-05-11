@@ -4,9 +4,11 @@ namespace Remembrall\Form\Subscription;
 
 use Klapuch\Csrf;
 use Klapuch\Form;
+use Klapuch\Output;
 use Klapuch\Uri;
 use Klapuch\Validation;
 use Remembrall\Constraint;
+use Remembrall\Model\Subscribing;
 
 final class EditForm implements Form\Control {
 	private const COLUMNS = 5;
@@ -17,7 +19,7 @@ final class EditForm implements Form\Control {
 	private $storage;
 
 	public function __construct(
-		\DOMDocument $subscription,
+		Subscribing\Subscription $subscription,
 		Uri\Uri $url,
 		Csrf\Protection $csrf,
 		Form\Storage $storage
@@ -29,14 +31,20 @@ final class EditForm implements Form\Control {
 	}
 
 	public function render(): string {
-		return $this->form($this->subscription)->render();
+		$xml = new \DOMDocument();
+		$xml->loadXML(
+			$this->subscription->print(
+				new Output\Xml([], self::NAME)
+			)->serialization()
+		);
+		return $this->form($xml)->render();
 	}
 
 	public function validate(): void {
 		$this->form(new \DOMDocument())->validate();
 	}
 
-	private function form(\DOMDocument $subscription): Form\Control {
+	private function form(\DOMDocument $dom): Form\Control {
 		return new Form\RawForm(
 			[
 				'method' => 'POST',
@@ -54,7 +62,7 @@ final class EditForm implements Form\Control {
 							'name' => 'url',
 							'class' => 'form-control',
 							'disabled' => 'true',
-							'value' => new Form\XmlDynamicValue('url', $subscription),
+							'value' => new Form\XmlDynamicValue('url', $dom),
 						],
 						$this->storage,
 						new Constraint\UrlRule()
@@ -71,7 +79,7 @@ final class EditForm implements Form\Control {
 							'name' => 'expression',
 							'class' => 'form-control',
 							'disabled' => 'true',
-							'value' => new Form\XmlDynamicValue('expression', $subscription),
+							'value' => new Form\XmlDynamicValue('expression', $dom),
 						],
 						$this->storage,
 						new Constraint\ExpressionRule()
@@ -88,7 +96,7 @@ final class EditForm implements Form\Control {
 							'name' => 'interval',
 							'class' => 'form-control',
 							'required' => 'required',
-							'value' => new Form\XmlDynamicValue('interval', $subscription),
+							'value' => new Form\XmlDynamicValue('interval', $dom),
 							'min' => Constraint\IntervalRule::MIN,
 							'max' => Constraint\IntervalRule::MAX,
 						],
