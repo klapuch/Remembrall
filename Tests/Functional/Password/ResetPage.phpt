@@ -16,11 +16,6 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class ResetPage extends TestCase\Page {
-	protected function setUp(): void {
-		parent::setUp();
-		$this->purge(['forgotten_passwords']);
-	}
-
 	public function testRedirectForInvalidReminder() {
 		$headers = (new Password\ResetPage(
 			new Uri\FakeUri(''),
@@ -31,7 +26,8 @@ final class ResetPage extends TestCase\Page {
 	}
 
 	public function testWorkingResponseForValidReminder() {
-		$reminder = 'abc123';
+		$this->purge(['forgotten_passwords']);
+		$reminder = '123abc123';
 		$statement = $this->database->prepare(
 			'INSERT INTO forgotten_passwords (user_id, used, reminder, reminded_at) VALUES
             (1, FALSE, ?, NOW())'

@@ -16,11 +16,6 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class ConfirmPage extends TestCase\Page {
-	protected function setUp(): void {
-		parent::setUp();
-		$this->purge(['users', 'verification_codes']);
-	}
-
 	public function testRedirectToLoginOnUnknownCode() {
 		$headers = (new Verification\ConfirmPage(
 			new Uri\FakeUri(''),
@@ -31,6 +26,7 @@ final class ConfirmPage extends TestCase\Page {
 	}
 
 	public function testLoggingOnValidCode() {
+		$this->purge(['users', 'verification_codes']);
 		$code = 'valid:code';
 		$statement = $this->database->prepare(
 			'INSERT INTO verification_codes (user_id, code, used) VALUES

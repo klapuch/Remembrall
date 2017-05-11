@@ -16,11 +16,6 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class EditPage extends TestCase\Page {
-	protected function setUp(): void {
-		parent::setUp();
-		$this->purge(['subscriptions']);
-	}
-
 	/**
 	 * @throws \Remembrall\Exception\NotFoundException You can not see foreign subscription
 	 */
@@ -33,6 +28,7 @@ final class EditPage extends TestCase\Page {
 	}
 
 	public function testWorkingResponseForOwnedSubscription() {
+		$this->purge(['subscriptions']);
 		$this->database->exec(
 			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
 			(1, 0, 4, 'PT3M', NOW(), '')"
