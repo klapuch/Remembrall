@@ -39,6 +39,7 @@ install:
     - echo extension=php_pdo.dll >> c:\php\php.ini
     - echo extension=php_pdo_pgsql.dll >> c:\php\php.ini
     - echo extension=php_dom.dll >> c:\php\php.ini
+    - echo extension=php_openssl.dll >> c:\php\php.ini
     - echo extension=php_xml.dll >> c:\php\php.ini
     - echo extension=php_simplexml.dll >> c:\php\php.ini
     - echo extension=php_xsl.dll >> c:\php\php.ini
