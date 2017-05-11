@@ -63,7 +63,6 @@ final class InPage extends Page\Layout {
 				new Uri\RelativeUrl($this->url, 'subscriptions')
 			);
 		} catch (\Throwable $ex) {
-			var_dump($ex->getMessage());
 			$this->flashMessage($ex->getMessage(), 'danger');
 			return new Response\RedirectResponse(
 				new Response\EmptyResponse(),
