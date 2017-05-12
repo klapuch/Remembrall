@@ -17,7 +17,7 @@ final class SafeResponse implements Application\Response {
 		Uri\Uri $fallback,
 		array &$sessions
 	) {
-		$this->origin = $origin;
+		$this->origin = new CachedResponse($origin);
 		$this->fallback = $fallback;
 		$this->sessions = &$sessions;
 	}
