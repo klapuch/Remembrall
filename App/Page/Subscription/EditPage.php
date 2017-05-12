@@ -16,21 +16,25 @@ final class EditPage extends Page\Layout {
 		return new Response\AuthenticatedResponse(
 			new Response\ComposedResponse(
 				new Response\CombinedResponse(
-					new Response\FormResponse(
-						new Subscription\EditForm(
-							new Subscribing\OwnedSubscription(
-								new Subscribing\StoredSubscription(
+					new Response\SafeResponse(
+						new Response\FormResponse(
+							new Subscription\EditForm(
+								new Subscribing\OwnedSubscription(
+									new Subscribing\StoredSubscription(
+										$parameters['id'],
+										$this->database
+									),
 									$parameters['id'],
+									$this->user,
 									$this->database
 								),
-								$parameters['id'],
-								$this->user,
-								$this->database
-							),
-							$this->url,
-							$this->csrf,
-							new Form\Backup($_SESSION, $_POST)
-						)
+								$this->url,
+								$this->csrf,
+								new Form\Backup($_SESSION, $_POST)
+							)
+						),
+						new Uri\RelativeUrl($this->url, 'subscriptions'),
+						$_SESSION
 					),
 					new Response\FlashResponse(),
 					new Response\PermissionResponse(),
