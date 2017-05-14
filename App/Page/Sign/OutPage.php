@@ -12,8 +12,6 @@ use Remembrall\Response;
 final class OutPage extends Page\Layout {
 	public function response(array $parameters): Application\Response {
 		try {
-			if (!isset($_SESSION['id']))
-				throw new \Exception('You are not logged in');
 			(new Access\SessionEntrance(
 				new Access\FakeEntrance(new Access\Guest()),
 				$_SESSION,
