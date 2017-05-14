@@ -21,10 +21,10 @@ final class DeletePage extends Page\Layout {
 			$this->protect();
 			(new Subscribing\OwnedSubscription(
 				new Subscribing\StoredSubscription(
-					(int) $subscription['id'],
+					$subscription['id'],
 					$this->database
 				),
-				(int) $subscription['id'],
+				$subscription['id'],
 				$this->user,
 				$this->database
 			))->cancel();

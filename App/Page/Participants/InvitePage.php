@@ -32,7 +32,7 @@ final class InvitePage extends Page\Layout {
 					$this->database
 				),
 				$this->database
-			))->invite((int) $participant['subscription'], $participant['email']);
+			))->invite($participant['subscription'], $participant['email']);
 			(new Mail\SendmailMailer())->send(
 				(new Mail\Message())
 					->setFrom(self::SENDER)
