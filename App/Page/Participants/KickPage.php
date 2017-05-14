@@ -47,13 +47,22 @@ final class KickPage extends Page\Layout {
 						))->render()
 					)
 			);
-			$this->flashMessage('Participant has been kicked', 'success');
+			return new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl($this->url, 'subscriptions')
+				),
+				['success' => 'Participant has been kicked'],
+				$_SESSION
+			);
 		} catch (\Throwable $ex) {
-			$this->flashMessage($ex->getMessage(), 'danger');
-		} finally {
-			return new Response\RedirectResponse(
-				new Response\EmptyResponse(),
-				new Uri\RelativeUrl($this->url, 'susbcriptions')
+			return new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl($this->url, 'subscriptions')
+				),
+				['danger' => $ex->getMessage()],
+				$_SESSION
 			);
 		}
 	}

@@ -70,9 +70,23 @@ final class RemindPage extends Page\Layout {
 					);
 				}
 			))->validate();
-			$this->flashMessage('Password reset has been sent to your email', 'success');
+			return new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl($this->url, 'password/remind')
+				),
+				['danger' => 'Password reset has been sent to your email'],
+				$_SESSION
+			);
 		} catch (\Throwable $ex) {
-			$this->flashMessage($ex->getMessage(), 'danger');
+			return new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl($this->url, 'password/remind')
+				),
+				['danger' => $ex->getMessage()],
+				$_SESSION
+			);
 		} finally {
 			return new Response\RedirectResponse(
 				new Response\EmptyResponse(),

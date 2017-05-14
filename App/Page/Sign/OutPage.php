@@ -22,13 +22,22 @@ final class OutPage extends Page\Layout {
 					}
 				}
 			))->exit();
-			$this->flashMessage('You have been logged out', 'success');
+			return new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl($this->url, 'sign/in')
+				),
+				['success' => 'You have been logged out'],
+				$_SESSION
+			);
 		} catch (\Throwable $ex) {
-			$this->flashMessage($ex->getMessage(), 'danger');
-		} finally {
-			return new Response\RedirectResponse(
-				new Response\EmptyResponse(),
-				new Uri\RelativeUrl($this->url, 'sign/in')
+			return new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl($this->url, 'sign/in')
+				),
+				['danger' => $ex->getMessage()],
+				$_SESSION
 			);
 		}
 	}

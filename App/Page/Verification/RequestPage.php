@@ -73,13 +73,22 @@ final class RequestPage extends Page\Layout {
 					);
 				}
 			))->validate();
-			$this->flashMessage('Verification code has been resent', 'success');
+			return new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl($this->url, 'verification/request')
+				),
+				['success' => 'Verification code has been resent'],
+				$_SESSION
+			);
 		} catch (\Throwable $ex) {
-			$this->flashMessage($ex->getMessage(), 'danger');
-		} finally {
-			return new Response\RedirectResponse(
-				new Response\EmptyResponse(),
-				new Uri\RelativeUrl($this->url, 'verification/request')
+			return new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl($this->url, 'verification/request')
+				),
+				['danger' => $ex->getMessage()],
+				$_SESSION
 			);
 		}
 	}

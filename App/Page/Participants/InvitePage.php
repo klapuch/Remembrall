@@ -48,13 +48,22 @@ final class InvitePage extends Page\Layout {
 						))->render(['base_url' => $this->url->reference()])
 					)
 			);
-			$this->flashMessage('Participant has been asked', 'success');
+			return new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl($this->url, 'subscriptions')
+				),
+				['success' => 'Participant has been asked'],
+				$_SESSION
+			);
 		} catch (\Throwable $ex) {
-			$this->flashMessage($ex->getMessage(), 'danger');
-		} finally {
-			return new Response\RedirectResponse(
-				new Response\EmptyResponse(),
-				new Uri\RelativeUrl($this->url, 'subscriptions')
+			return new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl($this->url, 'subscriptions')
+				),
+				['danger' => $ex->getMessage()],
+				$_SESSION
 			);
 		}
 	}

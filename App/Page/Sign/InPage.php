@@ -57,16 +57,22 @@ final class InPage extends Page\Layout {
 					))->enter([$credentials['email'], $credentials['password']]);
 				}
 			))->validate();
-			$this->flashMessage('You have been logged in', 'success');
-			return new Response\RedirectResponse(
-				new Response\EmptyResponse(),
-				new Uri\RelativeUrl($this->url, 'subscriptions')
+			return new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl($this->url, 'subscriptions')
+				),
+				['success' => 'You have been logged in'],
+				$_SESSION
 			);
 		} catch (\Throwable $ex) {
-			$this->flashMessage($ex->getMessage(), 'danger');
-			return new Response\RedirectResponse(
-				new Response\EmptyResponse(),
-				new Uri\RelativeUrl($this->url, 'sign/in')
+			return new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl($this->url, 'sign/in')
+				),
+				['danger' => $ex->getMessage()],
+				$_SESSION
 			);
 		}
 	}

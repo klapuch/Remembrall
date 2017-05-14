@@ -73,16 +73,22 @@ final class EditPage extends Page\Layout {
 					);
 				}
 			))->validate();
-			$this->flashMessage('Subscription has been edited', 'success');
-			return new Response\RedirectResponse(
-				new Response\EmptyResponse(),
-				new Uri\RelativeUrl($this->url, 'subscriptions')
+			return new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl($this->url, 'subscriptions')
+				),
+				['success' => 'Subscription has been edited'],
+				$_SESSION
 			);
 		} catch (\Throwable $ex) {
-			$this->flashMessage($ex->getMessage(), 'danger');
-			return new Response\RedirectResponse(
-				new Response\EmptyResponse(),
-				new Uri\RelativeUrl($this->url, $this->url->path())
+			return new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl($this->url, $this->url->path())
+				),
+				['danger' => $ex->getMessage()],
+				$_SESSION
 			);
 		}
 	}

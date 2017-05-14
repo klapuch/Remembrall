@@ -90,17 +90,26 @@ final class UpPage extends Page\Layout {
 					);
 				}
 			))->validate();
-			$this->flashMessage('You have been signed up', 'success');
-			$this->flashMessage('Confirm your registration in the email', 'warning');
-			return new Response\RedirectResponse(
-				new Response\EmptyResponse(),
-				new Uri\RelativeUrl($this->url, 'sign/in')
+			return new Response\InformativeResponse(
+				new Response\InformativeResponse(
+					new Response\RedirectResponse(
+						new Response\EmptyResponse(),
+						new Uri\RelativeUrl($this->url, 'sing/up')
+					),
+					['warning' => 'Confirm your registration in the email'],
+					$_SESSION
+				),
+				['success' => 'You have been signed up'],
+				$_SESSION
 			);
 		} catch (\Throwable $ex) {
-			$this->flashMessage($ex->getMessage(), 'danger');
-			return new Response\RedirectResponse(
-				new Response\EmptyResponse(),
-				new Uri\RelativeUrl($this->url, 'sign/up')
+			return new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl($this->url, 'sing/up')
+				),
+				['danger' => $ex->getMessage()],
+				$_SESSION
 			);
 		}
 	}

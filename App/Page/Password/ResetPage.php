@@ -39,10 +39,13 @@ final class ResetPage extends Page\Layout {
 				$this->url
 			);
 		} catch (\UnexpectedValueException $ex) {
-			$this->flashMessage($ex->getMessage(), 'danger');
-			return new Response\RedirectResponse(
-				new Response\EmptyResponse(),
-				new Uri\RelativeUrl($this->url, 'password/remind')
+			return new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl($this->url, 'password/remind')
+				),
+				['danger' => $ex->getMessage()],
+				$_SESSION
 			);
 		}
 	}
@@ -78,16 +81,22 @@ final class ResetPage extends Page\Layout {
 					))->change($credentials['password']);
 				}
 			))->validate();
-			$this->flashMessage('Password has been reset', 'success');
-			return new Response\RedirectResponse(
-				new Response\EmptyResponse(),
-				new Uri\RelativeUrl($this->url, 'sign/in')
+			return new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl($this->url, 'sign/in')
+				),
+				['success' => 'Password has been reset'],
+				$_SESSION
 			);
 		} catch (\Throwable $ex) {
-			$this->flashMessage($ex->getMessage(), 'danger');
-			return new Response\RedirectResponse(
-				new Response\EmptyResponse(),
-				new Uri\RelativeUrl($this->url, 'password/remind')
+			return new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl($this->url, 'password/remind')
+				),
+				['danger' => $ex->getMessage()],
+				$_SESSION
 			);
 		}
 	}

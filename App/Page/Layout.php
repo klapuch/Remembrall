@@ -8,7 +8,6 @@ use Klapuch\Csrf;
 use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Storage;
-use Klapuch\UI;
 use Klapuch\Uri;
 
 abstract class Layout implements Application\Request {
@@ -45,16 +44,6 @@ abstract class Layout implements Application\Request {
 				new Access\RegisteredUser($_SESSION['id'], $this->database)
 			);
 		}
-	}
-
-	/**
-	 * Flash message to the page
-	 * @param string $content
-	 * @param string $type
-	 * @return void
-	 */
-	final protected function flashMessage(string $content, string $type): void {
-		(new UI\PersistentFlashMessage($_SESSION))->flash($content, $type);
 	}
 
 	/**

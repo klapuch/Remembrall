@@ -20,22 +20,31 @@ final class ConfirmPage extends Page\Layout {
 				$parameters['code'],
 				$this->database
 			))->use();
-			$this->flashMessage('Your code has been confirmed', 'success');
 			(new Access\SessionEntrance(
 				new Access\WelcomingEntrance($this->database),
 				$_SESSION,
 				new Internal\CookieExtension($this->configuration['PROPRIETARY_SESSIONS'])
 			))->enter([$parameters['code']]);
-			$this->flashMessage('You have been logged in', 'success');
-			return new Response\RedirectResponse(
-				new Response\EmptyResponse(),
-				new Uri\RelativeUrl($this->url, 'subscriptions')
+			return new Response\InformativeResponse(
+				new Response\InformativeResponse(
+					new Response\RedirectResponse(
+						new Response\EmptyResponse(),
+						new Uri\RelativeUrl($this->url, 'subscriptions')
+					),
+					['success' => 'Your code has been confirmed'],
+					$_SESSION
+				),
+				['success' => 'You have been logged in'],
+				$_SESSION
 			);
 		} catch (\Throwable $ex) {
-			$this->flashMessage($ex->getMessage(), 'danger');
-			return new Response\RedirectResponse(
-				new Response\EmptyResponse(),
-				new Uri\RelativeUrl($this->url, 'sign/in')
+			return new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl($this->url, 'sign/in')
+				),
+				['danger' => $ex->getMessage()],
+				$_SESSION
 			);
 		}
 	}
