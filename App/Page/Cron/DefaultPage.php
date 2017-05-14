@@ -4,6 +4,7 @@ namespace Remembrall\Page\Cron;
 
 use Klapuch\Application;
 use Klapuch\Dataset;
+use Klapuch\Log;
 use Nette\Mail;
 use Remembrall\Model\Misc;
 use Remembrall\Model\Subscribing;
@@ -48,5 +49,16 @@ final class DefaultPage extends Page\Layout {
 		} catch (\Throwable $ex) {
 			throw $ex;
 		}
+	}
+
+	private function log(\Throwable $ex): void {
+		$this->logs->put(
+			new Log\PrettyLog(
+				$ex,
+				new Log\PrettySeverity(
+					new Log\JustifiedSeverity(Log\Severity::ERROR)
+				)
+			)
+		);
 	}
 }
