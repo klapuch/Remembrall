@@ -12,6 +12,7 @@ abstract class Page extends Database {
 
 	protected function setUp(): void {
 		parent::setUp();
+		$_POST = [];
 		$_POST[Csrf\Protection::NAME] = $_SESSION[Csrf\Protection::NAME] = '8PfBgonTZ9YcodKUzQ==';
 		$credentials = parse_ini_file(__DIR__ . '/.database.ini', true)['POSTGRES'];
 		$this->configuration = [

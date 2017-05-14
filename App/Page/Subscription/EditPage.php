@@ -50,7 +50,6 @@ final class EditPage extends Page\Layout {
 
 	public function submitEdit(array $subscription, array $parameters): Application\Response {
 		try {
-			$id = $parameters['id'];
 			(new Form\HarnessedForm(
 				new Subscription\EditForm(
 					new Subscribing\FakeSubscription(),
@@ -59,9 +58,9 @@ final class EditPage extends Page\Layout {
 					new Form\Backup($_SESSION, $_POST)
 				),
 				new Form\Backup($_SESSION, $_POST),
-				function() use ($subscription, $id): void {
+				function() use ($subscription, $parameters): void {
 					(new Subscribing\StoredSubscription(
-						$id,
+						$parameters['id'],
 						$this->database
 					))->edit(
 						new Time\TimeInterval(

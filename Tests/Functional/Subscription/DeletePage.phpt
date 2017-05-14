@@ -24,6 +24,16 @@ final class DeletePage extends TestCase\Page {
 		))->response([])->headers();
 		Assert::same(['Location' => '/error'], $headers);
 	}
+
+	public function testDeleting() {
+		$_POST['id'] = 123;
+		$headers = (new Subscription\DeletePage(
+			new Uri\FakeUri(''),
+			new Log\FakeLogs(),
+			new Ini\FakeSource($this->configuration)
+		))->submitDelete($_POST)->headers();
+		Assert::same(['Location' => '/subscriptions'], $headers);
+	}
 }
 
 (new DeletePage())->run();

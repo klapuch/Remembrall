@@ -43,6 +43,37 @@ final class ResetPage extends TestCase\Page {
 			$dom->loadXML($body);
 		});
 	}
+
+	public function testWorkingSubmit() {
+		$_POST['password'] = 'heslo';
+		$_POST['reminder'] = '123abc123';
+		$_POST['act'] = 'Send';
+		$this->purge(['forgotten_passwords']);
+		$statement = $this->database->prepare(
+			'INSERT INTO forgotten_passwords (user_id, used, reminder, reminded_at) VALUES
+			(1, FALSE, ?, NOW())'
+		);
+		$statement->execute([$_POST['reminder']]);
+		$headers = (new Password\ResetPage(
+			new Uri\FakeUri('', ''),
+			new Log\FakeLogs(),
+			new Ini\FakeSource($this->configuration)
+		))->submitReset($_POST)->headers();
+		Assert::same(['Location' => '/sign/in'], $headers);
+	}
+
+	public function testErrorSubmit() {
+		$this->purge(['forgotten_passwords']);
+		$_POST['password'] = 'heslo';
+		$_POST['reminder'] = '123abc123';
+		$_POST['act'] = 'Send';
+		$headers = (new Password\ResetPage(
+			new Uri\FakeUri('', ''),
+			new Log\FakeLogs(),
+			new Ini\FakeSource($this->configuration)
+		))->submitReset($_POST)->headers();
+		Assert::same(['Location' => '/password/remind'], $headers);
+	}
 }
 
 (new ResetPage())->run();
