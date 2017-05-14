@@ -127,7 +127,7 @@ final class DefaultPage extends Page\Layout {
 			return new Response\InformativeResponse(
 				new Response\RedirectResponse(
 					new Response\EmptyResponse(),
-					new Uri\RelativeUrl($this->url, 'subscriptions')
+					new Uri\RelativeUrl($this->url, $this->url->path())
 				),
 				['danger' => $ex->getMessage()],
 				$_SESSION

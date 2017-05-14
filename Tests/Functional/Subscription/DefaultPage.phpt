@@ -27,6 +27,30 @@ final class DefaultPage extends TestCase\Page {
 			$dom->loadXML($body);
 		});
 	}
+
+	public function testAddingSubscription() {
+		$this->truncate(['pages', 'parts']);
+		$_POST['url'] = 'http://www.example.com';
+		$_POST['expression'] = '//h1';
+		$_POST['interval'] = '34';
+		$_POST['act'] = 'Send';
+		$headers = (new Subscription\DefaultPage(
+			new Uri\FakeUri('', ''),
+			new Log\FakeLogs(),
+			new Ini\FakeSource($this->configuration)
+		))->submitDefault($_POST)->headers();
+		Assert::same(['Location' => '/subscriptions'], $headers);
+	}
+
+	public function testErrorOnAdding() {
+		$this->truncate(['pages', 'parts']);
+		$headers = (new Subscription\DefaultPage(
+			new Uri\FakeUri('', '/subscription/5'),
+			new Log\FakeLogs(),
+			new Ini\FakeSource($this->configuration)
+		))->submitDefault($_POST)->headers();
+		Assert::same(['Location' => '/subscription/5'], $headers);
+	}
 }
 
 (new DefaultPage())->run();

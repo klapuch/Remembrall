@@ -52,6 +52,31 @@ final class EditPage extends TestCase\Page {
 			$dom->loadXML($body);
 		});
 	}
+
+	public function testEditingSubscription() {
+		$_POST['interval'] = 34;
+		$_POST['act'] = 'Send';
+		$this->purge(['subscriptions']);
+		$this->database->exec(
+			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
+			(1, 0, 4, 'PT3M', NOW(), '')"
+		);
+		$headers = (new Subscription\EditPage(
+			new Uri\FakeUri('', ''),
+			new Log\FakeLogs(),
+			new Ini\FakeSource($this->configuration)
+		))->submitEdit($_POST, ['id' => 1])->headers();
+		Assert::same(['Location' => '/subscriptions'], $headers);
+	}
+
+	public function testErrorOnEditing() {
+		$headers = (new Subscription\EditPage(
+			new Uri\FakeUri('', 'subscription/1'),
+			new Log\FakeLogs(),
+			new Ini\FakeSource($this->configuration)
+		))->submitEdit($_POST, ['id' => 1])->headers();
+		Assert::same(['Location' => '/subscription/1'], $headers);
+	}
 }
 
 (new EditPage())->run();
