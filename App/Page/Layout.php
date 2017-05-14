@@ -47,16 +47,6 @@ abstract class Layout implements Application\Request {
 	}
 
 	/**
-	 * Redirect relatively to the given url
-	 * @param string $url
-	 * @return void
-	 */
-	final protected function redirect(string $url): void {
-		header(sprintf('Location: %s/%s', $this->url->reference(), $url));
-		exit;
-	}
-
-	/**
 	 * Protect against CSRF
 	 * @throws \Exception
 	 */
