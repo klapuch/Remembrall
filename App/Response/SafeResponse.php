@@ -4,7 +4,6 @@ namespace Remembrall\Response;
 
 use Klapuch\Application;
 use Klapuch\Output;
-use Klapuch\UI;
 use Klapuch\Uri;
 
 final class SafeResponse implements Application\Response {
@@ -30,12 +29,13 @@ final class SafeResponse implements Application\Response {
 		try {
 			$this->body();
 		} catch (\Throwable $ex) {
-			(new UI\PersistentFlashMessage(
+			return (new InformativeResponse(
+				new RedirectResponse(
+					$this->origin,
+					$this->fallback
+				),
+				['danger' => $ex->getMessage()],
 				$this->sessions
-			))->flash($ex->getMessage(), 'danger');
-			return (new RedirectResponse(
-				$this->origin,
-				$this->fallback
 			))->headers();
 		}
 		return $this->origin->headers();
