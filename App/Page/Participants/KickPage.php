@@ -34,7 +34,7 @@ final class KickPage extends Page\Layout {
 			(new Subscribing\NonViolentParticipants(
 				$this->user,
 				$this->database
-			))->kick($participant['subscription'], $participant['email']);
+			))->kick((int) $participant['subscription'], $participant['email']);
 			(new Mail\SendmailMailer())->send(
 				(new Mail\Message())
 					->setFrom(self::SENDER)
