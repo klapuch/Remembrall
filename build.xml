@@ -121,7 +121,7 @@
 	<target name="assets">
 		<exec command="yarn install" dir="assets" logoutput="true" passthru="true" checkreturn="true"/>
 		<exec command="gulp build" dir="assets" logoutput="true" passthru="true" checkreturn="true"/>
-		<symlink target="${base_path}/assets/dist" link="${base_path}/www/dist" overwrite="true" />
+		<symlink target="${base_path}/assets/dist" link="${base_path}/www/dist" overwrite="true"/>
 	</target>
 
 	<target name="migrations">
