@@ -5,7 +5,7 @@
 
 	<target name="check" depends="lint, phpcpd, phpstan, phpcs, snapshots, tests, cgi-tests"/>
 	<target name="ci" depends="check, tester-coverage, phpunit-coverage"/>
-	<target name="build" depends="migrations, assets"/>
+	<target name="build" depends="copy-configs, migrations, assets, optimize-autoloader"/>
 
 	<target name="lint">
 		<exec executable="vendor/bin/parallel-lint" logoutput="true" passthru="true" checkreturn="true">
@@ -129,6 +129,24 @@
 			<arg value="migrate"/>
 			<arg value="-e"/>
 			<arg value="production"/>
+		</exec>
+	</target>
+
+	<target name="copy-configs">
+		<symlink target="${base_path}/../Remembrall_config.local.ini" link="${base_path}/App/Configuration/config.local.ini" overwrite="true"/>
+	</target>
+
+	<target name="optimize-autoloader">
+		<exec executable="composer" logoutput="true" passthru="true" checkreturn="true">
+			<arg value="update"/>
+			<arg value="--no-interaction"/>
+			<arg value="--prefer-dist"/>
+			<arg value="--no-scripts"/>
+			<arg value="--no-progress"/>
+			<arg value="--no-suggest"/>
+			<arg value="--optimize-autoloader"/>
+			<arg value="--classmap-authoritative"/>
+			<arg value="--no-dev"/>
 		</exec>
 	</target>
 
