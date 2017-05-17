@@ -4,3 +4,4 @@ assets/dist
 www/dist
 App/Configuration/.config.local.ini
 composer.lock
+phinx.yml

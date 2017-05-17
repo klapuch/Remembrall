@@ -1,0 +1,15 @@
+paths:
+    migrations: %%PHINX_CONFIG_DIR%%/migrations
+
+environments:
+    default_migration_table: __phinx_log
+    default_database: production
+    production:
+        adapter: pgsql
+        host: localhost
+        name: remembrall
+        user: postgres
+        pass: 'postgres'
+        port: 5432
+
+version_order: creation
