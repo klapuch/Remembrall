@@ -11,16 +11,7 @@ language: php
 php:
   - 7.1
 
-env:
-  global:
-    secure: TrRSDQHdsHmz5L5yZLcxt+LzB72jIim65cf/gFOVEvAUq91DHekkslQykKA1lSJWB3IUUbxqSluaRy+bDU7JINnoOzrT0l/CzLp9LSG/o+AEYEUiF8oeupdfQKIhK9nGtOVE39X6O3SDUk+rsU+Ur6Ftdh6YTsdM+sNS1+vd+PW0EKByR+VFxNkg+AWHZo9EKXBUqFrsBkS1puFhHMCgeuBc9zVOvtY5yekHePfiAQr7CkoNcb9BDzGjD+2KlWbAKpfOKXRTgJKwBQzkTXxN5rstvYDYL6eQa8O4b+kqYLfTUCf0nVbk+qTWogXgOWhJLzOByFmbN9WZ2l72PkDty6KDkaU5WW+BAZS8DxVG7KW8+g7skHBl+Q5zsO1W45PvFJhjXHy/qwGmn0lAuiIviXJDpEq2FmclvnGX33HwkX8jCVRogviSMvJQ9HKpUfj921HIaLXwiHKLg2Xjp75luMeMg6bkpIGdNO72exgaq087AF2dfdPwCO9cNEkTMDM0nHet4Ewn4BM/9zY2cnQrrsivnJRQ+ugUfaa7PyfwTDdlDiqR/fgFfotKrQpec+mLdSF3otzcaVcbojyZv4tgrPQdxexxozfgBOEzp0xhQBr1+JZIVm9DPBINp0gYIrk4HZsmvFJ5Pdhmp93GXMrbOxxPHpEmVnMVj1XYe+iKLkQ=
-
 before_install:
-  - eval $(ssh-agent -s)
-  - echo $SSH_PRIVATE_KEY
-  - ssh-add <(echo $SSH_PRIVATE_KEY)
-  - mkdir -p ~/.ssh
-  - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
   - composer self-update
 
 install:
@@ -30,29 +21,16 @@ before_script:
   - psql -c 'CREATE DATABASE remembrall_test;' -U postgres
   - psql -U postgres remembrall_test < Tests/TestCase/schema.sql
 
-script:
-  - ./vendor/bin/phing ci
-
 after_script:
     - >
       wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar
       && php coveralls.phar --verbose --config Tests/.coveralls.yml
 
+script:
+  - ./vendor/bin/phing ci
+
 after_failure:
   - for i in $(find Tests -name \*.actual); do echo "--- $i"; cat $i; echo; echo; done
-
-#before_deploy:
-#  - eval $(ssh-agent -s)
-#  - ssh-add <(echo $SSH_PRIVATE_KEY)
-#  - mkdir -p ~/.ssh
-#  - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-
-deploy:
-  provider: script
-  skip_cleanup: true
-  script: ./rsync_travis.sh
-  on:
-    branch: master
 
 cache:
     directories:
