@@ -15,3 +15,6 @@ phpunit.xml
 README.md
 ruleset.xml
 tags.vim
+tester-coverage.xml
+phpunit-coverage.xml
+.dpl
