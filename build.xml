@@ -133,7 +133,7 @@
 	</target>
 
 	<target name="copy-configs">
-		<symlink target="${base_path}/../Remembrall_config.local.ini" link="${base_path}/App/Configuration/config.local.ini" overwrite="true"/>
+		<symlink target="${base_path}/../Remembrall_config.local.ini" link="${base_path}/App/Configuration/.config.local.ini" overwrite="true"/>
 		<symlink target="${base_path}/../Remembrall_phinx.yml" link="${base_path}/phinx.yml" overwrite="true"/>
 	</target>
 
