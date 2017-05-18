@@ -10,7 +10,7 @@ final class FlashResponse implements Application\Response {
 	public function body(): Output\Format {
 		return new Output\WrappedXml(
 			'flashMessages',
-			(new UI\FlashMessages(
+			(new UI\UniqueFlashMessages(
 				new UI\PersistentFlashMessage($_SESSION)
 			))->print(new Output\Xml([], 'flashMessage'))
 		);

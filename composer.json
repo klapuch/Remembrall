@@ -28,7 +28,7 @@
 		"klapuch/routing": "~0.0.1",
 		"klapuch/storage": "^2.0.0",
 		"klapuch/time": "^3.0.0",
-		"klapuch/ui": "^0.0.1",
+		"klapuch/ui": "^0.0.2",
 		"klapuch/uri": "^2.0.0",
 		"klapuch/validation": "^2.0.0",
 		"gajus/dindent": "^2.0",
