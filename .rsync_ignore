@@ -1,0 +1,17 @@
+.git
+.idea
+fixtures/
+Tests/
+.gitignore
+.rsync_ignore
+rsync_travis.sh
+.travis.yml
+active24.enc
+appveyor.yml
+phinx.local.yml
+phinx.yml
+phpstan.neon
+phpunit.xml
+README.md
+ruleset.xml
+tags.vim
