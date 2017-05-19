@@ -5,7 +5,7 @@
 
 	<target name="check" depends="lint, phpcpd, phpstan, phpcs, snapshots, tests, cgi-tests"/>
 	<target name="ci" depends="check, tester-coverage, phpunit-coverage"/>
-	<target name="after-deploy" depends="maintenance, copy-configs, migrations, assets, optimize-autoloader, done"/>
+	<target name="after-deploy" depends="maintenance, copy-configs, migrations, assets, optimize-autoloader, done, reload"/>
 
 	<target name="lint">
 		<exec executable="vendor/bin/parallel-lint" logoutput="true" passthru="true" checkreturn="true">
@@ -119,6 +119,7 @@
 	</target>
 
 	<target name="assets">
+		<echo msg="Building assets..."/>
 		<exec command="yarn install" dir="assets" logoutput="true" passthru="true" checkreturn="true"/>
 		<exec command="gulp build" dir="assets" logoutput="true" passthru="true" checkreturn="true"/>
 		<symlink target="${base_path}/assets/dist" link="${base_path}/www/dist" overwrite="true"/>
@@ -162,6 +163,14 @@
 	<target name="done">
 		<echo msg="Removing maintenance..."/>
 		<exec executable="commands/done.sh" logoutput="true" passthru="true" checkreturn="true"/>
+	</target>
+
+	<target name="reload">
+		<echo msg="Reloading resources..."/>
+		<exec executable="service" logoutput="true" passthru="true" checkreturn="true">
+			<arg value="apache2"/>
+			<arg value="reload"/>
+		</exec>
 	</target>
 
 </project>
