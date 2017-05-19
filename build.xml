@@ -125,6 +125,7 @@
 	</target>
 
 	<target name="migrations">
+		<echo msg="Running migrations..."/>
 		<exec executable="vendor/bin/phinx" logoutput="true" passthru="true" checkreturn="true">
 			<arg value="migrate"/>
 			<arg value="-e"/>
@@ -133,6 +134,7 @@
 	</target>
 
 	<target name="copy-configs">
+		<echo msg="Copying configs..."/>
 		<symlink target="${base_path}/../Remembrall_config.local.ini" link="${base_path}/App/Configuration/.config.local.ini" overwrite="true"/>
 		<symlink target="${base_path}/../Remembrall_phinx.yml" link="${base_path}/phinx.yml" overwrite="true"/>
 		<symlink target="${base_path}/../Remembrall_htaccess" link="${base_path}/www/.htaccess" overwrite="true"/>
@@ -153,10 +155,12 @@
 	</target>
 
 	<target name="maintenance">
+		<echo msg="Preparing maintenance..."/>
 		<exec executable="commands/maintenance.sh" logoutput="true" passthru="true" checkreturn="true"/>
 	</target>
 
 	<target name="done">
+		<echo msg="Removing maintenance..."/>
 		<exec executable="commands/done.sh" logoutput="true" passthru="true" checkreturn="true"/>
 	</target>
 
