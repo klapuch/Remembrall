@@ -5,7 +5,7 @@
 
 	<target name="check" depends="lint, phpcpd, phpstan, phpcs, snapshots, tests, cgi-tests"/>
 	<target name="ci" depends="check, tester-coverage, phpunit-coverage"/>
-	<target name="after-deploy" depends="maintenance, copy-configs, migrations, assets, optimize-autoloader, maintenance"/>
+	<target name="after-deploy" depends="maintenance, copy-configs, migrations, assets, optimize-autoloader, done"/>
 
 	<target name="lint">
 		<exec executable="vendor/bin/parallel-lint" logoutput="true" passthru="true" checkreturn="true">
@@ -154,6 +154,10 @@
 
 	<target name="maintenance">
 		<exec executable="commands/maintenance.sh" logoutput="true" passthru="true" checkreturn="true"/>
+	</target>
+
+	<target name="done">
+		<exec executable="commands/done.sh" logoutput="true" passthru="true" checkreturn="true"/>
 	</target>
 
 </project>
