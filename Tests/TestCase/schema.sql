@@ -104,7 +104,8 @@ CREATE TABLE forgotten_passwords (
     user_id integer NOT NULL,
     reminder character varying(141) NOT NULL,
     used boolean NOT NULL,
-    reminded_at timestamp without time zone NOT NULL
+    reminded_at timestamp without time zone NOT NULL,
+    expire_at timestamp without time zone NOT NULL
 );
 
 

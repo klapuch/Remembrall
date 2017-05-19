@@ -29,8 +29,8 @@ final class ResetPage extends TestCase\Page {
 		$this->purge(['forgotten_passwords']);
 		$reminder = '123abc123';
 		$statement = $this->database->prepare(
-			'INSERT INTO forgotten_passwords (user_id, used, reminder, reminded_at) VALUES
-            (1, FALSE, ?, NOW())'
+			"INSERT INTO forgotten_passwords (user_id, used, reminder, reminded_at, expire_at) VALUES
+            (1, FALSE, ?, NOW(), NOW() + INTERVAL '10 MINUTE')"
 		);
 		$statement->execute([$reminder]);
 		Assert::noError(function() use ($reminder) {
@@ -50,8 +50,8 @@ final class ResetPage extends TestCase\Page {
 		$_POST['act'] = 'Send';
 		$this->purge(['forgotten_passwords']);
 		$statement = $this->database->prepare(
-			'INSERT INTO forgotten_passwords (user_id, used, reminder, reminded_at) VALUES
-			(1, FALSE, ?, NOW())'
+			"INSERT INTO forgotten_passwords (user_id, used, reminder, reminded_at, expire_at) VALUES
+			(1, FALSE, ?, NOW(), NOW() + INTERVAL '10 MINUTE')"
 		);
 		$statement->execute([$_POST['reminder']]);
 		$headers = (new Password\ResetPage(
