@@ -107,14 +107,19 @@ final class StoredPart extends TestCase\Database {
 		Assert::same('NEW_SNAP', $parts[1]['snapshot']);
 	}
 
-	public function testPrintingWithoutOrigin() {
+	public function testAppendedPrintingById() {
+		$this->database->exec(
+			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
+			('www.facedown.cz', '//facedown', 'facedown content', 'face snap'),
+			('www.google.com', '//google', 'google content', 'google snap')"
+		);
 		Assert::same(
-			'|id|1|',
+			'|xxx||id|2||url|www.google.com||expression|//google||content|google content||snapshot|google snap|',
 			(new Web\StoredPart(
 				new Web\FakePart(),
-				1,
+				2,
 				$this->database
-			))->print(new Output\FakeFormat(''))->serialization()
+			))->print(new Output\FakeFormat('|xxx|'))->serialization()
 		);
 	}
 

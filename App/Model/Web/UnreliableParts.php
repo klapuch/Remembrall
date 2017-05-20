@@ -58,20 +58,15 @@ final class UnreliableParts implements Parts {
 				),
 				$this->database
 			);
-			yield new ConstantPart(
-				new StoredPart(
-					new HtmlPart(
-						new MatchingExpression(
-							new XPathExpression($page, $part['expression'])
-						),
-						$page
+			yield new StoredPart(
+				new HtmlPart(
+					new MatchingExpression(
+						new XPathExpression($page, $part['expression'])
 					),
-					$part['id'],
-					$this->database
+					$page
 				),
-				$part['content'],
-				$part['snapshot'],
-				$part
+				$part['id'],
+				new Storage\MemoryPDO($this->database, $part)
 			);
 		}
 	}

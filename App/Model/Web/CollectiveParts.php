@@ -48,11 +48,10 @@ final class CollectiveParts implements Parts {
 			)
 		))->rows();
 		foreach ($parts as $part) {
-			yield new ConstantPart(
+			yield new StoredPart(
 				new FakePart(),
-				$part['content'],
-				$part['snapshot'],
-				$part
+				$part['id'],
+				new Storage\MemoryPDO($this->database, $part)
 			);
 		}
 	}

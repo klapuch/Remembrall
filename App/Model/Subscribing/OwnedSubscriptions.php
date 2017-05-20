@@ -75,9 +75,9 @@ final class OwnedSubscriptions implements Subscriptions {
 			$selection->criteria([$this->owner->id()])
 		))->rows();
 		foreach ($subscriptions as $subscription) {
-			yield new ConstantSubscription(
-				new StoredSubscription($subscription['id'], $this->database),
-				$subscription
+			yield new StoredSubscription(
+				$subscription['id'],
+				new Storage\MemoryPDO($this->database, $subscription)
 			);
 		}
 	}

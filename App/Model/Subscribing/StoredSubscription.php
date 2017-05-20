@@ -72,9 +72,6 @@ final class StoredSubscription implements Subscription {
 			WHERE readable_subscriptions.id IS NOT DISTINCT FROM ?',
 			[$this->id]
 		))->row();
-		return $format->with('id', $subscription['id'])
-			->with('interval', $subscription['interval'])
-			->with('url', $subscription['url'])
-			->with('expression', $subscription['expression']);
+		return new Output\FilledFormat($format, $subscription);
 	}
 }

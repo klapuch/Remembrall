@@ -6,6 +6,7 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Unit\Subscribing;
 
+use Klapuch\Storage;
 use Nette\Mail;
 use Remembrall\Model\Subscribing;
 use Remembrall\Model\Web;
@@ -47,11 +48,13 @@ final class EmailSubscription extends TestCase\Mockery {
 				}
 			},
 			'recipient@foo.cz',
-			new Web\ConstantPart(
+			new Web\StoredPart(
 				new Web\FakePart(),
-				'',
-				'',
-				['url' => 'www.google.com', 'expression' => '//p', 'content' => 'FooBar']
+				1,
+				new Storage\MemoryPDO(
+					$this->mock(\PDO::class),
+					['url' => 'www.google.com', 'expression' => '//p', 'content' => 'FooBar']
+				)
 			)
 		))->notify();
 		$output = ob_get_clean();

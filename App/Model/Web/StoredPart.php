@@ -52,6 +52,13 @@ final class StoredPart implements Part {
 	}
 
 	public function print(Output\Format $format): Output\Format {
-		return $format->with('id', $this->id);
+		$part = (new Storage\ParameterizedQuery(
+			$this->database,
+			'SELECT id, page_url AS url, expression, content, snapshot
+			FROM parts
+			WHERE id = ?',
+			[$this->id]
+		))->row();
+		return new Output\FilledFormat($format, $part);
 	}
 }

@@ -7,6 +7,7 @@ declare(strict_types = 1);
 namespace Remembrall\Integration\Subscribing;
 
 use Klapuch\Dataset;
+use Klapuch\Storage;
 use Nette\Mail;
 use Remembrall\Model\Subscribing;
 use Remembrall\Model\Web;
@@ -59,15 +60,17 @@ final class ChangedSubscriptions extends TestCase\Database {
 				new Subscribing\StoredSubscription(2, $this->database),
 				new Mail\SendmailMailer(),
 				'b@b.cz',
-				new Web\ConstantPart(
+				new Web\StoredPart(
 					new Web\FakePart(),
-					'bc',
-					'bs',
-					[
-						'url' => 'www.matched.com',
-						'expression' => '//matched',
-						'content' => 'bc',
-					]
+					2,
+					new Storage\MemoryPDO(
+						$this->database,
+						[
+							'url' => 'www.matched.com',
+							'expression' => '//matched',
+							'content' => 'bc',
+						]
+					)
 				)
 			),
 			$subscription
@@ -79,15 +82,17 @@ final class ChangedSubscriptions extends TestCase\Database {
 				new Subscribing\StoredSubscription(2, $this->database),
 				new Mail\SendmailMailer(),
 				'me@participant.cz',
-				new Web\ConstantPart(
+				new Web\StoredPart(
 					new Web\FakePart(),
-					'bc',
-					'bs',
-					[
-						'url' => 'www.matched.com',
-						'expression' => '//matched',
-						'content' => 'bc',
-					]
+					2,
+					new Storage\MemoryPDO(
+						$this->database,
+						[
+							'url' => 'www.matched.com',
+							'expression' => '//matched',
+							'content' => 'bc',
+						]
+					)
 				)
 			),
 			$subscription

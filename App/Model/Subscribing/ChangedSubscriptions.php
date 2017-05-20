@@ -62,15 +62,17 @@ final class ChangedSubscriptions implements Subscriptions {
 				new StoredSubscription($subscription['id'], $this->database),
 				$this->mailer,
 				$subscription['email'],
-				new Web\ConstantPart(
+				new Web\StoredPart(
 					new Web\FakePart(),
-					$subscription['content'],
-					$subscription['snapshot'],
-					[
-						'content' => $subscription['content'],
-						'expression' => $subscription['expression'],
-						'url' => $subscription['url'],
-					]
+					$subscription['id'],
+					new Storage\MemoryPDO(
+						$this->database,
+						[
+							'content' => $subscription['content'],
+							'expression' => $subscription['expression'],
+							'url' => $subscription['url'],
+						]
+					)
 				)
 			);
 		}
