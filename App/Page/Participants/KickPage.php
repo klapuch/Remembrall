@@ -27,7 +27,7 @@ final class KickPage extends Page\Layout {
 		try {
 			$this->protect();
 			$kick = (new Subscribing\MemorialInvitation(
-				$participant['subscription'],
+				(int) $participant['subscription'],
 				$participant['email'],
 				$this->database
 			))->print(new Output\Xml([], 'invitation'));
