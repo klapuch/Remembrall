@@ -38,29 +38,21 @@ final class StoredSubscription implements Subscription {
 	}
 
 	public function notify(): void {
-		(new Storage\Transaction($this->database))->start(function(): void {
-			(new Storage\ParameterizedQuery(
-				$this->database,
-				'INSERT INTO notifications (subscription_id, notified_at) VALUES
-				(?, NOW())',
-				[$this->id]
-			))->execute();
-			(new Storage\ParameterizedQuery(
-				$this->database,
-				'UPDATE subscriptions
-				SET snapshot = (
-					SELECT snapshot
-					FROM parts
-					WHERE id = (
-						SELECT part_id
-						FROM subscriptions
-						WHERE id = :id
-					)
+		(new Storage\ParameterizedQuery(
+			$this->database,
+			'UPDATE subscriptions
+			SET snapshot = (
+				SELECT snapshot
+				FROM parts
+				WHERE id = (
+					SELECT part_id
+					FROM subscriptions
+					WHERE id = :id
 				)
-				WHERE id IS NOT DISTINCT FROM :id',
-				['id' => $this->id]
-			))->execute();
-		});
+			)
+			WHERE id IS NOT DISTINCT FROM :id',
+			['id' => $this->id]
+		))->execute();
 	}
 
 	public function print(Output\Format $format): Output\Format {

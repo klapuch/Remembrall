@@ -14,34 +14,50 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner:
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
 --
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner:
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
--- Name: citext; Type: EXTENSION; Schema: -; Owner:
+-- Name: citext; Type: EXTENSION; Schema: -; Owner: 
 --
 
 CREATE EXTENSION IF NOT EXISTS citext WITH SCHEMA public;
 
 
 --
--- Name: EXTENSION citext; Type: COMMENT; Schema: -; Owner:
+-- Name: EXTENSION citext; Type: COMMENT; Schema: -; Owner: 
 --
 
 COMMENT ON EXTENSION citext IS 'data type for case-insensitive character strings';
 
 
 SET search_path = public, pg_catalog;
+
+--
+-- Name: notify_subscriptions(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION notify_subscriptions() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+			begin
+				INSERT INTO notifications (subscription_id, notified_at) VALUES (new.id, NOW());
+				return new;
+			end
+			$$;
+
+
+ALTER FUNCTION public.notify_subscriptions() OWNER TO postgres;
 
 --
 -- Name: record_invitation(); Type: FUNCTION; Schema: public; Owner: postgres
@@ -375,14 +391,14 @@ ALTER TABLE subscriptions OWNER TO postgres;
 --
 
 CREATE VIEW readable_subscriptions AS
-  SELECT subscriptions.id,
+ SELECT subscriptions.id,
     subscriptions.user_id,
     subscriptions.part_id,
     subscriptions."interval",
     subscriptions.last_update,
     subscriptions.snapshot,
     ("substring"((subscriptions."interval")::text, '[0-9]+'::text))::integer AS interval_seconds
-  FROM subscriptions;
+   FROM subscriptions;
 
 
 ALTER TABLE readable_subscriptions OWNER TO postgres;
@@ -703,6 +719,13 @@ CREATE TRIGGER participants_au AFTER UPDATE ON participants FOR EACH ROW EXECUTE
 --
 
 CREATE TRIGGER parts_aiu AFTER INSERT OR UPDATE ON parts FOR EACH ROW EXECUTE PROCEDURE record_part_access();
+
+
+--
+-- Name: subscriptions_au; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER subscriptions_au AFTER UPDATE ON subscriptions FOR EACH ROW EXECUTE PROCEDURE notify_subscriptions();
 
 
 --
