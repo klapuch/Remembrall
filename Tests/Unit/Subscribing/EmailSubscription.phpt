@@ -6,7 +6,7 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Unit\Subscribing;
 
-use Klapuch\Storage;
+use Klapuch\Output;
 use Nette\Mail;
 use Remembrall\Model\Subscribing;
 use Remembrall\Model\Web;
@@ -36,7 +36,10 @@ final class EmailSubscription extends TestCase\Mockery {
 	public function testTemplateOutput() {
 		ob_start();
 		(new Subscribing\EmailSubscription(
-			new Subscribing\FakeSubscription(),
+			new Subscribing\FakeSubscription(
+				null,
+				new Output\Xml(['url' => 'www.google.com', 'expression' => '//p', 'content' => 'FooBar'], 'part')
+			),
 			new class implements Mail\IMailer {
 				public function send(Mail\Message $message) {
 					printf(
@@ -47,15 +50,7 @@ final class EmailSubscription extends TestCase\Mockery {
 					printf('Body: %s', $message->getHtmlBody());
 				}
 			},
-			'recipient@foo.cz',
-			new Web\StoredPart(
-				new Web\FakePart(),
-				1,
-				new Storage\MemoryPDO(
-					$this->mock(\PDO::class),
-					['url' => 'www.google.com', 'expression' => '//p', 'content' => 'FooBar']
-				)
-			)
+			'recipient@foo.cz'
 		))->notify();
 		$output = ob_get_clean();
 		Assert::contains('To: recipient@foo.cz', $output);

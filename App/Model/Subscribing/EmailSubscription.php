@@ -5,7 +5,6 @@ namespace Remembrall\Model\Subscribing;
 use Klapuch\Output;
 use Klapuch\Time;
 use Nette\Mail;
-use Remembrall\Model\Web;
 
 /**
  * Subscriptions sending to an email
@@ -19,18 +18,15 @@ final class EmailSubscription implements Subscription {
 	private $origin;
 	private $mailer;
 	private $recipient;
-	private $part;
 
 	public function __construct(
 		Subscription $origin,
 		Mail\IMailer $mailer,
-		string $recipient,
-		Web\Part $part
+		string $recipient
 	) {
 		$this->origin = $origin;
 		$this->mailer = $mailer;
 		$this->recipient = $recipient;
-		$this->part = $part;
 	}
 
 	public function cancel(): void {
@@ -51,7 +47,7 @@ final class EmailSubscription implements Subscription {
 				(new Output\XsltTemplate(
 					self::SUBJECT,
 					new Output\ValidXml(
-						$this->part->print(new Output\Xml([], 'part')),
+						$this->print(new Output\Xml([], 'part')),
 						self::SCHEMA
 					)
 				))->render()
@@ -60,7 +56,7 @@ final class EmailSubscription implements Subscription {
 				(new Output\XsltTemplate(
 					self::CONTENT,
 					new Output\ValidXml(
-						$this->part->print(new Output\Xml([], 'part')),
+						$this->print(new Output\Xml([], 'part')),
 						self::SCHEMA
 					)
 				))->render()

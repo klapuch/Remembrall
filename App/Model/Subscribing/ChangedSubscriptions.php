@@ -7,7 +7,6 @@ use Klapuch\Storage;
 use Klapuch\Time;
 use Klapuch\Uri;
 use Nette\Mail;
-use Remembrall\Model\Web;
 
 /**
  * All the changed subscriptions
@@ -59,11 +58,7 @@ final class ChangedSubscriptions implements Subscriptions {
 		))->rows();
 		foreach ($subscriptions as $subscription) {
 			yield new EmailSubscription(
-				new StoredSubscription($subscription['id'], $this->database),
-				$this->mailer,
-				$subscription['email'],
-				new Web\StoredPart(
-					new Web\FakePart(),
+				new StoredSubscription(
 					$subscription['id'],
 					new Storage\MemoryPDO(
 						$this->database,
@@ -73,7 +68,9 @@ final class ChangedSubscriptions implements Subscriptions {
 							'url' => $subscription['url'],
 						]
 					)
-				)
+				),
+				$this->mailer,
+				$subscription['email']
 			);
 		}
 	}

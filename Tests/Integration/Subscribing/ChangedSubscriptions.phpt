@@ -10,7 +10,6 @@ use Klapuch\Dataset;
 use Klapuch\Storage;
 use Nette\Mail;
 use Remembrall\Model\Subscribing;
-use Remembrall\Model\Web;
 use Remembrall\TestCase;
 use Tester\Assert;
 
@@ -57,11 +56,7 @@ final class ChangedSubscriptions extends TestCase\Database {
 		$subscription = $subscriptions->current();
 		Assert::equal(
 			new Subscribing\EmailSubscription(
-				new Subscribing\StoredSubscription(2, $this->database),
-				new Mail\SendmailMailer(),
-				'b@b.cz',
-				new Web\StoredPart(
-					new Web\FakePart(),
+				new Subscribing\StoredSubscription(
 					2,
 					new Storage\MemoryPDO(
 						$this->database,
@@ -71,7 +66,9 @@ final class ChangedSubscriptions extends TestCase\Database {
 							'content' => 'bc',
 						]
 					)
-				)
+				),
+				new Mail\SendmailMailer(),
+				'b@b.cz'
 			),
 			$subscription
 		);
@@ -79,11 +76,7 @@ final class ChangedSubscriptions extends TestCase\Database {
 		$subscription = $subscriptions->current();
 		Assert::equal(
 			new Subscribing\EmailSubscription(
-				new Subscribing\StoredSubscription(2, $this->database),
-				new Mail\SendmailMailer(),
-				'me@participant.cz',
-				new Web\StoredPart(
-					new Web\FakePart(),
+				new Subscribing\StoredSubscription(
 					2,
 					new Storage\MemoryPDO(
 						$this->database,
@@ -93,7 +86,9 @@ final class ChangedSubscriptions extends TestCase\Database {
 							'content' => 'bc',
 						]
 					)
-				)
+				),
+				new Mail\SendmailMailer(),
+				'me@participant.cz'
 			),
 			$subscription
 		);

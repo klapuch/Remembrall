@@ -26,7 +26,7 @@
 		"klapuch/log": "^1.0.0",
 		"klapuch/output": "^2.0.0",
 		"klapuch/routing": "~0.0.1",
-		"klapuch/storage": "^2.1.1",
+		"klapuch/storage": "^2.1.3",
 		"klapuch/time": "^3.0.0",
 		"klapuch/ui": "^0.0.2",
 		"klapuch/uri": "^2.0.0",
