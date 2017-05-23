@@ -12,7 +12,7 @@
 ### Docker
 `docker-compose up`
 #### Database
-Create database and name it **remembrall** via `pgsql -h localhost -U postgres -W` in **remembrall-postgres** image
+Create database and name it **remembrall** via `psql -U postgres -W` in **remembrall-postgres** image
 ##### Import
 `cat fixtures/schema.sql | docker exec -i {IMAGE} psql -U postgres -d remembrall`
 ### Init
