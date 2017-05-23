@@ -87,11 +87,6 @@ final class RemindPage extends Page\Layout {
 				['danger' => $ex->getMessage()],
 				$_SESSION
 			);
-		} finally {
-			return new Response\RedirectResponse(
-				new Response\EmptyResponse(),
-				new Uri\RelativeUrl($this->url, 'password/remind')
-			);
 		}
 	}
 }
