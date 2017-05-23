@@ -16,7 +16,7 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class OwnedSubscription extends TestCase\Database {
-	public function testThrowinOnHandlingForeign() {
+	public function testThrowingOnHandlingForeign() {
 		Assert::exception(function() {
 			(new Subscribing\OwnedSubscription(
 				new Subscribing\FakeSubscription(),
