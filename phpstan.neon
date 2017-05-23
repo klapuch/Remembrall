@@ -3,3 +3,6 @@ parameters:
 		- DateTimeImmutable
 		- DOMNode
 		- DateInterval
+	ignoreErrors:
+		# See bug https://github.com/phpstan/phpstan/issues/279
+		- '#Method DOMDocument::saveHTML\(\) invoked with 1 parameter, 0 required#'
