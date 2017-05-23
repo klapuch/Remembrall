@@ -31,9 +31,7 @@ final class KickForm implements Form\Control {
 
 	public function render(): string {
 		$xml = new \DOMDocument();
-		$xml->loadXML(
-			$this->participant->print(new Output\Xml([], 'root'))->serialization()
-		);
+		$xml->loadXML($this->participant->print(new Output\Xml([], 'root'))->serialization());
 		return $this->form($xml)->render();
 	}
 

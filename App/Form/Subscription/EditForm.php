@@ -32,11 +32,7 @@ final class EditForm implements Form\Control {
 
 	public function render(): string {
 		$xml = new \DOMDocument();
-		$xml->loadXML(
-			$this->subscription->print(
-				new Output\Xml([], self::NAME)
-			)->serialization()
-		);
+		$xml->loadXML($this->subscription->print(new Output\Xml([], self::NAME))->serialization());
 		return $this->form($xml)->render();
 	}
 

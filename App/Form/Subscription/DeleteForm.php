@@ -27,9 +27,7 @@ final class DeleteForm implements Form\Control {
 
 	public function render(): string {
 		$xml = new \DOMDocument();
-		$xml->loadXML(
-			$this->subscription->print(new Output\Xml([], 'root'))->serialization()
-		);
+		$xml->loadXML($this->subscription->print(new Output\Xml([], 'root'))->serialization());
 		return $this->form($xml)->render();
 	}
 
