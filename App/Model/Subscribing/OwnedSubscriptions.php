@@ -63,7 +63,7 @@ final class OwnedSubscriptions implements Subscriptions {
 				'SELECT subscriptions.id, expression, page_url AS url, interval,
 				visited_at, last_update, content
 				FROM parts
-				INNER JOIN (
+				LEFT JOIN (
 					SELECT part_id, MAX(visited_at) AS visited_at
 					FROM part_visits
 					GROUP BY part_id

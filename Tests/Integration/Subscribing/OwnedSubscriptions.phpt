@@ -119,6 +119,24 @@ final class OwnedSubscriptions extends TestCase\Database {
 		Assert::null($subscriptions->current());
 	}
 
+	public function testIteratingWithoutVisits() {
+		$this->database->exec(
+			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
+			('https://www.google.com', '//a', 'a', '')"
+		);
+		$this->database->exec(
+			"INSERT INTO subscriptions (part_id, user_id, interval, last_update, snapshot) VALUES
+			(1, 1, 'PT1M', '1993-01-01', '')"
+		);
+		$this->truncate(['part_visits']);
+		$subscriptions = (new Subscribing\OwnedSubscriptions(
+			new Access\FakeUser(1),
+			$this->database
+		))->all(new Dataset\FakeSelection('', []));
+		$subscription = $subscriptions->current();
+		Assert::notSame(null, $subscription);
+	}
+
 	public function testEmptyIterating() {
 		$subscriptions = (new Subscribing\OwnedSubscriptions(
 			new Access\FakeUser(1),
