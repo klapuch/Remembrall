@@ -6,6 +6,7 @@
 	<target name="check" depends="lint, phpcpd, phpstan, phpcs, snapshots, tests, cgi-tests"/>
 	<target name="ci" depends="check, tester-coverage, phpunit-coverage"/>
 	<target name="after-deploy" depends="maintenance, copy-configs, migrations, assets, optimize-autoloader, done, reload"/>
+	<target name="init" depends="lint, migrations, assets, reload"/>
 
 	<target name="lint">
 		<exec executable="vendor/bin/parallel-lint" logoutput="true" passthru="true" checkreturn="true">

@@ -1,0 +1,20 @@
+version: '3'
+services:
+    postgres:
+      image: postgres:9.6-alpine
+      container_name: remembrall-postgres
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_DB=remembrall
+    server:
+      image: klapuch/docker:project
+      container_name: remembrall-server
+      working_dir: /var/www/Remembrall
+      volumes:
+          - .:/var/www/Remembrall
+          - ./apache-config.conf:/etc/apache2/sites-enabled/000-default.conf
+      ports:
+       - 8080:80
+      depends_on:
+       - postgres
