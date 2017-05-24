@@ -13,7 +13,7 @@
 		<xsl:param name="class"/>
 		<xsl:param name="value"/>
 		<xsl:element name="{name()}">
-			<xsl:if test="@type='submit'">
+			<xsl:if test="@type='submit' or @type='button'">
 				<xsl:attribute name="title">
 					<xsl:value-of select="$title"/>
 				</xsl:attribute>
