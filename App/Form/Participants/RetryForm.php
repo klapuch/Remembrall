@@ -43,6 +43,7 @@ final class RetryForm implements Form\Control {
 		$id = (string) new Form\XmlDynamicValue('id', $dom);
 		$subscription = (string) new Form\XmlDynamicValue('subscription_id', $dom);
 		$email = (string) new Form\XmlDynamicValue('email', $dom);
+		$harassed = (string) new Form\XmlDynamicValue('harassed', $dom);
 		return new Form\RawForm(
 			[
 				'id' => self::NAME,
@@ -62,7 +63,7 @@ final class RetryForm implements Form\Control {
 				new Validation\PassiveRule()
 			),
 			new Form\DefaultInput(
-				['type' => 'submit', 'name' => 'act'],
+				['type' => $harassed ? 'button' : 'submit', 'name' => 'act'],
 				$this->storage,
 				new Validation\PassiveRule()
 			)

@@ -13,7 +13,7 @@ use Spatie\Snapshots;
 final class RetryFormTest extends \PHPUnit\Framework\TestCase {
 	use Snapshots\MatchesSnapshots;
 
-	public function testOutput()
+	public function testOutputWithSubmitType()
 	{
 		$this->assertMatchesXmlSnapshot(
 			(new Participants\RetryForm(
@@ -23,6 +23,28 @@ final class RetryFormTest extends \PHPUnit\Framework\TestCase {
 							'id' => 666,
 							'subscription_id' => 555,
 							'email' => 'me@participant.cz',
+						],
+						'root'
+					)
+				),
+				new Uri\FakeUri(''),
+				new Csrf\FakeProtection('pr073ct10n'),
+				new Form\EmptyStorage()
+			))->render()
+		);
+	}
+
+	public function testOutputWithButton()
+	{
+		$this->assertMatchesXmlSnapshot(
+			(new Participants\RetryForm(
+				new Subscribing\FakeParticipant(
+					new Output\Xml(
+						[
+							'id' => 666,
+							'subscription_id' => 555,
+							'email' => 'me@participant.cz',
+							'harassed' => 'true',
 						],
 						'root'
 					)

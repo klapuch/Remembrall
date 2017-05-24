@@ -69,14 +69,19 @@
 						<xsl:apply-templates select="/page/forms/form[@name=$kick]" mode="button">
 							<xsl:with-param name="class">btn btn-danger btn-sm</xsl:with-param>
 							<xsl:with-param name="value">✖</xsl:with-param>
+							<xsl:with-param name="title">Unsubscribe</xsl:with-param>
 						</xsl:apply-templates>
 					</td>
 					<td>
 						<xsl:if test="accepted='false'">
 							<xsl:variable name="retry" select="concat('retry-', id)"/>
 							<xsl:apply-templates select="/page/forms/form[@name=$retry]" mode="button">
-								<xsl:with-param name="class">btn btn-primary btn-sm</xsl:with-param>
+								<xsl:with-param name="class">
+									<xsl:text>btn btn-primary btn-sm </xsl:text>
+									<xsl:if test="harassed = 'true'">disabled</xsl:if>
+								</xsl:with-param>
 								<xsl:with-param name="value">🗘</xsl:with-param>
+								<xsl:with-param name="title">Retry</xsl:with-param>
 							</xsl:apply-templates>
 						</xsl:if>
 					</td>
