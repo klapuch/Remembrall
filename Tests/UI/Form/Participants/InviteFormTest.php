@@ -13,8 +13,7 @@ use Spatie\Snapshots;
 final class InviteFormTest extends \PHPUnit\Framework\TestCase {
 	use Snapshots\MatchesSnapshots;
 
-	public function testOutput()
-	{
+	public function testOutput() {
 		$this->assertMatchesXmlSnapshot(
 			(new Participants\InviteForm(
 				new Subscribing\FakeSubscription(

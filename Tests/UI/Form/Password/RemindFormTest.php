@@ -11,8 +11,7 @@ use Spatie\Snapshots;
 final class RemindFormTest extends \PHPUnit\Framework\TestCase {
 	use Snapshots\MatchesSnapshots;
 
-	public function testOutput()
-	{
+	public function testOutput() {
 		$this->assertMatchesXmlSnapshot(
 			(new Password\RemindForm(
 				new Uri\FakeUri(''),

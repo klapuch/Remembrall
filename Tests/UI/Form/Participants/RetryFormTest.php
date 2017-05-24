@@ -13,8 +13,7 @@ use Spatie\Snapshots;
 final class RetryFormTest extends \PHPUnit\Framework\TestCase {
 	use Snapshots\MatchesSnapshots;
 
-	public function testOutputWithSubmitType()
-	{
+	public function testOutputWithSubmitType() {
 		$this->assertMatchesXmlSnapshot(
 			(new Participants\RetryForm(
 				new Subscribing\FakeParticipant(
@@ -34,8 +33,7 @@ final class RetryFormTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testOutputWithButton()
-	{
+	public function testOutputWithButton() {
 		$this->assertMatchesXmlSnapshot(
 			(new Participants\RetryForm(
 				new Subscribing\FakeParticipant(

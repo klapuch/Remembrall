@@ -12,8 +12,7 @@ use Spatie\Snapshots;
 final class DeleteFormTest extends \PHPUnit\Framework\TestCase {
 	use Snapshots\MatchesSnapshots;
 
-	public function testOutput()
-	{
+	public function testOutput() {
 		$this->assertMatchesXmlSnapshot(
 			(new Subscription\DeleteForm(
 				new Subscribing\FakeSubscription(

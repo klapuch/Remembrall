@@ -11,8 +11,7 @@ use Spatie\Snapshots;
 final class RequestFormTest extends \PHPUnit\Framework\TestCase {
 	use Snapshots\MatchesSnapshots;
 
-	public function testOutput()
-	{
+	public function testOutput() {
 		$this->assertMatchesXmlSnapshot(
 			(new Verification\RequestForm(
 				new Uri\FakeUri(''),

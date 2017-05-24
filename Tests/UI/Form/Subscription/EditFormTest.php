@@ -13,8 +13,7 @@ use Spatie\Snapshots;
 final class EditFormTest extends \PHPUnit\Framework\TestCase {
 	use Snapshots\MatchesSnapshots;
 
-	public function testOutput()
-	{
+	public function testOutput() {
 		$this->assertMatchesXmlSnapshot(
 			(new Subscription\EditForm(
 				new Subscribing\FakeSubscription(

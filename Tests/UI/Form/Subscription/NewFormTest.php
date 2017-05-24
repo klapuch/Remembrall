@@ -11,8 +11,7 @@ use Spatie\Snapshots;
 final class NewFormTest extends \PHPUnit\Framework\TestCase {
 	use Snapshots\MatchesSnapshots;
 
-	public function testOutput()
-	{
+	public function testOutput() {
 		$this->assertMatchesXmlSnapshot(
 			(new Subscription\NewForm(
 				new Uri\FakeUri(''),

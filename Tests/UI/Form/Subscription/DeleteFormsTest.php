@@ -12,8 +12,7 @@ use Spatie\Snapshots;
 final class DeleteFormsTest extends \PHPUnit\Framework\TestCase {
 	use Snapshots\MatchesSnapshots;
 
-	public function testOutput()
-	{
+	public function testOutput() {
 		$this->assertMatchesXmlSnapshot(
 			sprintf(
 				'<form>%s</form>',

@@ -13,8 +13,7 @@ use Spatie\Snapshots;
 final class KickFormTest extends \PHPUnit\Framework\TestCase {
 	use Snapshots\MatchesSnapshots;
 
-	public function testOutput()
-	{
+	public function testOutput() {
 		$this->assertMatchesXmlSnapshot(
 			(new Participants\KickForm(
 				new Subscribing\FakeParticipant(
