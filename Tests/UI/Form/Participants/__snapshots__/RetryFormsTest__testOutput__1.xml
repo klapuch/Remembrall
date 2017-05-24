@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <forms>
-  <form id="retry" name="retry-666" method="POST" action="/participants/invite">
+  <form id="retry-666" name="retry-666" method="POST" action="/participants/invite">
     <input type="hidden" name="_csrf_token" value="pr073ct10n"/>
     <input type="hidden" name="subscription" value="555"/>
     <input type="hidden" name="email" value="me@participant.cz"/>
     <input type="submit" name="act"/>
   </form>
-  <form id="retry" name="retry-777" method="POST" action="/participants/invite">
+  <form id="retry-777" name="retry-777" method="POST" action="/participants/invite">
     <input type="hidden" name="_csrf_token" value="pr073ct10n"/>
     <input type="hidden" name="subscription" value="888"/>
     <input type="hidden" name="email" value="you@participant.cz"/>

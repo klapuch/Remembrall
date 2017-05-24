@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <forms>
-  <form id="kick" name="kick-666" method="POST" action="/participants/kick">
+  <form id="kick-666" name="kick-666" method="POST" action="/participants/kick">
     <input type="hidden" name="_csrf_token" value="pr073ct10n"/>
     <input type="hidden" name="subscription" value="666"/>
     <input type="hidden" name="email" value="me@participant.cz"/>
     <input type="submit" name="act"/>
   </form>
-  <form id="kick" name="kick-777" method="POST" action="/participants/kick">
+  <form id="kick-777" name="kick-777" method="POST" action="/participants/kick">
     <input type="hidden" name="_csrf_token" value="pr073ct10n"/>
     <input type="hidden" name="subscription" value="888"/>
     <input type="hidden" name="email" value="you@participant.cz"/>

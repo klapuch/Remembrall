@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<form id="kick" name="kick-666" method="POST" action="/participants/kick">
+<form id="kick-666" name="kick-666" method="POST" action="/participants/kick">
   <input type="hidden" name="_csrf_token" value="pr073ct10n"/>
   <input type="hidden" name="subscription" value="666"/>
   <input type="hidden" name="email" value="me@participant.cz"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<form id="invite" role="form" class="form-horizontal" name="invite-666" method="POST" action="/participants/invite">
+<form id="invite-666" role="form" class="form-horizontal" name="invite-666" method="POST" action="/participants/invite">
   <input type="hidden" name="_csrf_token" value="pr073ct10n"/>
   <input type="hidden" name="subscription" value="666"/>
   <div class="form-group">

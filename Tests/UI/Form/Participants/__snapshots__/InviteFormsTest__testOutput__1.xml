@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <forms>
-  <form id="invite" role="form" class="form-horizontal" name="invite-555" method="POST" action="/participants/invite">
+  <form id="invite-555" role="form" class="form-horizontal" name="invite-555" method="POST" action="/participants/invite">
     <input type="hidden" name="_csrf_token" value="pr073ct10n"/>
     <input type="hidden" name="subscription" value="555"/>
     <div class="form-group">
@@ -15,7 +15,7 @@
       </div>
     </div>
   </form>
-  <form id="invite" role="form" class="form-horizontal" name="invite-666" method="POST" action="/participants/invite">
+  <form id="invite-666" role="form" class="form-horizontal" name="invite-666" method="POST" action="/participants/invite">
     <input type="hidden" name="_csrf_token" value="pr073ct10n"/>
     <input type="hidden" name="subscription" value="666"/>
     <div class="form-group">
