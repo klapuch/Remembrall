@@ -45,7 +45,7 @@ final class InviteForm implements Form\Control {
 		$id = (string) new Form\XmlDynamicValue('id', $dom);
 		return new Form\RawForm(
 			[
-				'id' => self::NAME,
+				'id' => sprintf('%s-%s', self::NAME, $id),
 				'role' => 'form',
 				'class' => 'form-horizontal',
 				'name' => sprintf('%s-%s', self::NAME, $id),

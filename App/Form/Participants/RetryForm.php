@@ -46,7 +46,7 @@ final class RetryForm implements Form\Control {
 		$harassed = (string) new Form\XmlDynamicValue('harassed', $dom);
 		return new Form\RawForm(
 			[
-				'id' => self::NAME,
+				'id' => sprintf('%s-%s', self::NAME, $id),
 				'name' => sprintf('%s-%s', self::NAME, $id),
 				'method' => 'POST',
 				'action' => $this->url->reference() . self::ACTION,

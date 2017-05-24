@@ -45,7 +45,7 @@ final class KickForm implements Form\Control {
 		$email = (string) new Form\XmlDynamicValue('email', $dom);
 		return new Form\RawForm(
 			[
-				'id' => self::NAME,
+				'id' => sprintf('%s-%s', self::NAME, $id),
 				'name' => sprintf('%s-%s', self::NAME, $id),
 				'method' => 'POST',
 				'action' => $this->url->reference() . self::ACTION,

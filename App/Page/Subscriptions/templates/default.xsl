@@ -34,7 +34,7 @@
 	<xsl:template name="participants">
 		<xsl:param name="id"/>
 		<xsl:param name="subscription_id"/>
-		<div class="modal fade" id="content-{$id}" tabindex="-1" role="dialog" aria-labelledby="content-label-{$id}">
+		<div class="modal fade" id="participant-content-{$id}" tabindex="-1" role="dialog" aria-labelledby="participant-content-label-{$id}">
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -107,7 +107,7 @@
 				</xsl:call-template>
 			</td>
 			<td>
-				<button type="button" class="participant-modal btn btn-primary btn-sm" data-toggle="modal" data-target="#content-{id}">
+				<button type="button" class="participant-modal btn btn-primary btn-sm" data-toggle="modal" data-target="#participant-content-{id}">
 					<span class="glyphicon glyphicon-user" aria-hidden="true"/>
 				</button>
 				<xsl:variable name="participants" select="key('participantsBySubscription', id)"/>
