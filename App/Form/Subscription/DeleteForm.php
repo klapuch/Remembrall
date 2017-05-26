@@ -46,17 +46,21 @@ final class DeleteForm implements Form\Control {
 			],
 			new Form\CsrfInput($this->csrf),
 			new Form\DefaultInput(
-				[
-					'type' => 'hidden',
-					'name' => 'id',
-					'value' => $id,
-				],
-				new Form\EmptyStorage(),
+				new Form\StoredAttributes(
+					[
+						'type' => 'hidden',
+						'name' => 'id',
+						'value' => $id,
+					],
+					new Form\EmptyStorage()
+				),
 				new Validation\PassiveRule()
 			),
 			new Form\DefaultInput(
-				['type' => 'submit'],
-				new Form\EmptyStorage(),
+				new Form\StoredAttributes(
+					['type' => 'submit'],
+					new Form\EmptyStorage()
+				),
 				new Validation\PassiveRule()
 			)
 		);

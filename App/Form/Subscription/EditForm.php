@@ -53,14 +53,16 @@ final class EditForm implements Form\Control {
 			new Form\BootstrapInput(
 				new Form\BoundControl(
 					new Form\DefaultInput(
-						[
-							'type' => 'text',
-							'name' => 'url',
-							'class' => 'form-control',
-							'disabled' => 'true',
-							'value' => new Form\XmlDynamicValue('url', $dom),
-						],
-						$this->storage,
+						new Form\StoredAttributes(
+							[
+								'type' => 'text',
+								'name' => 'url',
+								'class' => 'form-control',
+								'disabled' => 'true',
+								'value' => new Form\XmlDynamicValue('url', $dom),
+							],
+							$this->storage
+						),
 						new Constraint\UrlRule()
 					),
 					new Form\LinkedLabel('Url', 'url')
@@ -70,14 +72,16 @@ final class EditForm implements Form\Control {
 			new Form\BootstrapInput(
 				new Form\BoundControl(
 					new Form\DefaultInput(
-						[
-							'type' => 'text',
-							'name' => 'expression',
-							'class' => 'form-control',
-							'disabled' => 'true',
-							'value' => new Form\XmlDynamicValue('expression', $dom),
-						],
-						$this->storage,
+						new Form\StoredAttributes(
+							[
+								'type' => 'text',
+								'name' => 'expression',
+								'class' => 'form-control',
+								'disabled' => 'true',
+								'value' => new Form\XmlDynamicValue('expression', $dom),
+							],
+							$this->storage
+						),
 						new Constraint\ExpressionRule()
 					),
 					new Form\LinkedLabel('Expression', 'expression')
@@ -87,16 +91,18 @@ final class EditForm implements Form\Control {
 			new Form\BootstrapInput(
 				new Form\BoundControl(
 					new Form\DefaultInput(
-						[
-							'type' => 'number',
-							'name' => 'interval',
-							'class' => 'form-control',
-							'required' => 'required',
-							'value' => new Form\XmlDynamicValue('interval', $dom),
-							'min' => Constraint\IntervalRule::MIN,
-							'max' => Constraint\IntervalRule::MAX,
-						],
-						$this->storage,
+						new Form\StoredAttributes(
+							[
+								'type' => 'number',
+								'name' => 'interval',
+								'class' => 'form-control',
+								'required' => 'required',
+								'value' => new Form\XmlDynamicValue('interval', $dom),
+								'min' => Constraint\IntervalRule::MIN,
+								'max' => Constraint\IntervalRule::MAX,
+							],
+							$this->storage
+						),
 						new Constraint\IntervalRule()
 					),
 					new Form\LinkedLabel('Interval', 'interval')
@@ -105,13 +111,15 @@ final class EditForm implements Form\Control {
 			),
 			new Form\BootstrapInput(
 				new Form\DefaultInput(
-					[
-						'type' => 'submit',
-						'name' => 'act',
-						'class' => 'form-control',
-						'value' => 'Edit',
-					],
-					$this->storage,
+					new Form\StoredAttributes(
+						[
+							'type' => 'submit',
+							'name' => 'act',
+							'class' => 'form-control',
+							'value' => 'Edit',
+						],
+						$this->storage
+					),
 					new Validation\PassiveRule()
 				),
 				self::COLUMNS

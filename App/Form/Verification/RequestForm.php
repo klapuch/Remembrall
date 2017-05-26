@@ -47,13 +47,15 @@ final class RequestForm implements Form\Control {
 			new Form\BootstrapInput(
 				new Form\BoundControl(
 					new Form\DefaultInput(
-						[
-							'type' => 'email',
-							'name' => 'email',
-							'class' => 'form-control',
-							'required' => 'required',
-						],
-						$this->storage,
+						new Form\StoredAttributes(
+							[
+								'type' => 'email',
+								'name' => 'email',
+								'class' => 'form-control',
+								'required' => 'required',
+							],
+							$this->storage
+						),
 						new Constraint\EmailRule()
 					),
 					new Form\LinkedLabel('Email', 'email')
@@ -62,13 +64,15 @@ final class RequestForm implements Form\Control {
 			),
 			new Form\BootstrapInput(
 				new Form\DefaultInput(
-					[
-						'type' => 'submit',
-						'name' => 'act',
-						'class' => 'form-control',
-						'value' => 'Send',
-					],
-					$this->storage,
+					new Form\StoredAttributes(
+						[
+							'type' => 'submit',
+							'name' => 'act',
+							'class' => 'form-control',
+							'value' => 'Send',
+						],
+						$this->storage
+					),
 					new Validation\PassiveRule()
 				),
 				self::COLUMNS

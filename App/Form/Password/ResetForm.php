@@ -49,13 +49,15 @@ final class ResetForm implements Form\Control {
 			new Form\BootstrapInput(
 				new Form\BoundControl(
 					new Form\DefaultInput(
-						[
-							'type' => 'password',
-							'name' => 'password',
-							'class' => 'form-control',
-							'required' => 'required',
-						],
-						$this->storage,
+						new Form\StoredAttributes(
+							[
+								'type' => 'password',
+								'name' => 'password',
+								'class' => 'form-control',
+								'required' => 'required',
+							],
+							$this->storage
+						),
 						new Constraint\PasswordRule()
 					),
 					new Form\LinkedLabel('New password', 'password')
@@ -63,12 +65,14 @@ final class ResetForm implements Form\Control {
 				self::COLUMNS
 			),
 			new Form\DefaultInput(
-				[
-					'type' => 'hidden',
-					'name' => 'reminder',
-					'value' => $this->reminder,
-				],
-				$this->storage,
+				new Form\StoredAttributes(
+					[
+						'type' => 'hidden',
+						'name' => 'reminder',
+						'value' => $this->reminder,
+					],
+					$this->storage
+				),
 				new Validation\FriendlyRule(
 					new Validation\NegateRule(new Validation\EmptyRule()),
 					'Reminder must be filled'
@@ -76,13 +80,15 @@ final class ResetForm implements Form\Control {
 			),
 			new Form\BootstrapInput(
 				new Form\DefaultInput(
-					[
-						'type' => 'submit',
-						'name' => 'act',
-						'class' => 'form-control',
-						'value' => 'Change',
-					],
-					$this->storage,
+					new Form\StoredAttributes(
+						[
+							'type' => 'submit',
+							'name' => 'act',
+							'class' => 'form-control',
+							'value' => 'Change',
+						],
+						$this->storage
+					),
 					new Validation\PassiveRule()
 				),
 				self::COLUMNS

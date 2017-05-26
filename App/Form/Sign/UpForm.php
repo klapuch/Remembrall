@@ -47,13 +47,15 @@ final class UpForm implements Form\Control {
 			new Form\BootstrapInput(
 				new Form\BoundControl(
 					new Form\DefaultInput(
-						[
-							'type' => 'email',
-							'name' => 'email',
-							'class' => 'form-control',
-							'required' => 'required',
-						],
-						$this->storage,
+						new Form\StoredAttributes(
+							[
+								'type' => 'email',
+								'name' => 'email',
+								'class' => 'form-control',
+								'required' => 'required',
+							],
+							$this->storage
+						),
 						new Constraint\EmailRule()
 					),
 					new Form\LinkedLabel('Email', 'email')
@@ -63,13 +65,15 @@ final class UpForm implements Form\Control {
 			new Form\BootstrapInput(
 				new Form\BoundControl(
 					new Form\DefaultInput(
-						[
-							'type' => 'password',
-							'name' => 'password',
-							'class' => 'form-control',
-							'required' => 'required',
-						],
-						$this->storage,
+						new Form\StoredAttributes(
+							[
+								'type' => 'password',
+								'name' => 'password',
+								'class' => 'form-control',
+								'required' => 'required',
+							],
+							$this->storage
+						),
 						new Constraint\PasswordRule()
 					),
 					new Form\LinkedLabel('Password', 'password')
@@ -78,13 +82,15 @@ final class UpForm implements Form\Control {
 			),
 			new Form\BootstrapInput(
 				new Form\DefaultInput(
-					[
-						'type' => 'submit',
-						'name' => 'act',
-						'class' => 'form-control',
-						'value' => 'Register',
-					],
-					$this->storage,
+					new Form\StoredAttributes(
+						[
+							'type' => 'submit',
+							'name' => 'act',
+							'class' => 'form-control',
+							'value' => 'Register',
+						],
+						$this->storage
+					),
 					new Validation\PassiveRule()
 				),
 				self::COLUMNS

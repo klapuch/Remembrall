@@ -54,20 +54,24 @@ final class InviteForm implements Form\Control {
 			],
 			new Form\CsrfInput($this->csrf),
 			new Form\DefaultInput(
-				['type' => 'hidden', 'name' => 'subscription', 'value' => $id],
-				new Form\EmptyStorage(),
+				new Form\StoredAttributes(
+					['type' => 'hidden', 'name' => 'subscription', 'value' => $id],
+					new Form\EmptyStorage()
+				),
 				new Validation\PassiveRule()
 			),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
 					new Form\DefaultInput(
-						[
-							'type' => 'email',
-							'name' => 'email',
-							'class' => 'form-control',
-							'required' => 'required',
-						],
-						$this->storage,
+						new Form\StoredAttributes(
+							[
+								'type' => 'email',
+								'name' => 'email',
+								'class' => 'form-control',
+								'required' => 'required',
+							],
+							$this->storage
+						),
 						new Constraint\EmailRule()
 					),
 					new Form\LinkedLabel('Email', 'email')
@@ -76,13 +80,15 @@ final class InviteForm implements Form\Control {
 			),
 			new Form\BootstrapInput(
 				new Form\DefaultInput(
-					[
-						'type' => 'submit',
-						'name' => 'act',
-						'class' => 'form-control',
-						'value' => 'Invite',
-					],
-					$this->storage,
+					new Form\StoredAttributes(
+						[
+							'type' => 'submit',
+							'name' => 'act',
+							'class' => 'form-control',
+							'value' => 'Invite',
+						],
+						$this->storage
+					),
 					new Validation\PassiveRule()
 				),
 				self::COLUMNS
