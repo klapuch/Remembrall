@@ -45,7 +45,8 @@
 		"consistence/coding-standard": "^0.13.0",
 		"spatie/phpunit-snapshot-assertions": "^0.4.1",
 		"robmorgan/phinx": "^0.8.0",
-		"phpstan/phpstan": "^0.7.0"
+		"phpstan/phpstan": "^0.7.0",
+		"deployer/deployer": "^5.0"
 	},
 	"autoload": {
 		"psr-4": {

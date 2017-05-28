@@ -5,8 +5,7 @@
 
 	<target name="check" depends="lint, phpcpd, phpstan, phpcs, snapshots, tests, cgi-tests"/>
 	<target name="ci" depends="check, tester-coverage, phpunit-coverage"/>
-	<target name="after-deploy" depends="maintenance, copy-configs, migrations, assets, optimize-autoloader, done, reload"/>
-	<target name="init" depends="lint, migrations, assets, reload"/>
+	<target name="init" depends="lint, migrations, assets"/>
 
 	<target name="lint">
 		<exec executable="vendor/bin/parallel-lint" logoutput="true" passthru="true" checkreturn="true">
@@ -120,57 +119,16 @@
 	</target>
 
 	<target name="assets">
-		<echo msg="Building assets..."/>
 		<exec command="yarn install" dir="assets" logoutput="true" passthru="true" checkreturn="true"/>
 		<exec command="gulp build" dir="assets" logoutput="true" passthru="true" checkreturn="true"/>
 		<symlink target="${base_path}/assets/dist" link="${base_path}/www/dist" overwrite="true"/>
 	</target>
 
 	<target name="migrations">
-		<echo msg="Running migrations..."/>
 		<exec executable="vendor/bin/phinx" logoutput="true" passthru="true" checkreturn="true">
 			<arg value="migrate"/>
 			<arg value="-e"/>
 			<arg value="production"/>
-		</exec>
-	</target>
-
-	<target name="copy-configs">
-		<echo msg="Copying configs..."/>
-		<symlink target="${base_path}/../Remembrall_config.local.ini" link="${base_path}/App/Configuration/.config.local.ini" overwrite="true"/>
-		<symlink target="${base_path}/../Remembrall_phinx.yml" link="${base_path}/phinx.yml" overwrite="true"/>
-		<symlink target="${base_path}/../Remembrall_htaccess" link="${base_path}/www/.htaccess" overwrite="true"/>
-	</target>
-
-	<target name="optimize-autoloader">
-		<exec executable="composer" logoutput="true" passthru="true" checkreturn="true">
-			<arg value="update"/>
-			<arg value="--no-interaction"/>
-			<arg value="--prefer-dist"/>
-			<arg value="--no-scripts"/>
-			<arg value="--no-progress"/>
-			<arg value="--no-suggest"/>
-			<arg value="--optimize-autoloader"/>
-			<arg value="--classmap-authoritative"/>
-			<arg value="--no-dev"/>
-		</exec>
-	</target>
-
-	<target name="maintenance">
-		<echo msg="Preparing maintenance..."/>
-		<exec executable="commands/maintenance.sh" logoutput="true" passthru="true" checkreturn="true"/>
-	</target>
-
-	<target name="done">
-		<echo msg="Removing maintenance..."/>
-		<exec executable="commands/done.sh" logoutput="true" passthru="true" checkreturn="true"/>
-	</target>
-
-	<target name="reload">
-		<echo msg="Reloading resources..."/>
-		<exec executable="service" logoutput="true" passthru="true" checkreturn="true">
-			<arg value="apache2"/>
-			<arg value="reload"/>
 		</exec>
 	</target>
 
