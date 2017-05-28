@@ -11,18 +11,15 @@ final class RetryForms implements Form\Control {
 	private $participants;
 	private $url;
 	private $csrf;
-	private $storage;
 
 	public function __construct(
 		array $participants,
 		Uri\Uri $url,
-		Csrf\Protection $csrf,
-		Form\Storage $storage
+		Csrf\Protection $csrf
 	) {
 		$this->participants = $participants;
 		$this->url = $url;
 		$this->csrf = $csrf;
-		$this->storage = $storage;
 	}
 
 	public function validate(): void {
@@ -36,8 +33,7 @@ final class RetryForms implements Form\Control {
 				return $forms .= (new RetryForm(
 					$participant,
 					$this->url,
-					$this->csrf,
-					$this->storage
+					$this->csrf
 				))->render();
 			},
 			''

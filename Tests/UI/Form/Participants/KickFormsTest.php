@@ -3,7 +3,6 @@ declare(strict_types = 1);
 namespace Remembrall\UI\Form\Participants;
 
 use Klapuch\Csrf;
-use Klapuch\Form;
 use Klapuch\Output;
 use Klapuch\Uri;
 use Remembrall\Form\Participants;
@@ -41,8 +40,7 @@ final class KickFormsTest extends \PHPUnit\Framework\TestCase {
 						),
 					],
 					new Uri\FakeUri(''),
-					new Csrf\FakeProtection('pr073ct10n'),
-					new Form\EmptyStorage()
+					new Csrf\FakeProtection('pr073ct10n')
 				))->render()
 			)
 		);

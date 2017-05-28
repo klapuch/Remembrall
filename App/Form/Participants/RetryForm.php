@@ -15,18 +15,15 @@ final class RetryForm implements Form\Control {
 	private $participant;
 	private $url;
 	private $csrf;
-	private $storage;
 
 	public function __construct(
 		Subscribing\Participant $participant,
 		Uri\Uri $url,
-		Csrf\Protection $csrf,
-		Form\Storage $storage
+		Csrf\Protection $csrf
 	) {
 		$this->participant = $participant;
 		$this->url = $url;
 		$this->csrf = $csrf;
-		$this->storage = $storage;
 	}
 
 	public function render(): string {
@@ -69,7 +66,7 @@ final class RetryForm implements Form\Control {
 			new Form\DefaultInput(
 				new Form\StoredAttributes(
 					['type' => $harassed ? 'button' : 'submit', 'name' => 'act'],
-					$this->storage
+					new Form\EmptyStorage()
 				),
 				new Validation\PassiveRule()
 			)

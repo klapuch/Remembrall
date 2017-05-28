@@ -62,16 +62,14 @@ final class DefaultPage extends Page\Layout {
 							new Participants\RetryForms(
 								$participants,
 								$this->url,
-								$this->csrf,
-								new Form\Backup($_SESSION, $_POST)
+								$this->csrf
 							)
 						),
 						new Response\FormResponse(
 							new Participants\KickForms(
 								$participants,
 								$this->url,
-								$this->csrf,
-								new Form\Backup($_SESSION, $_POST)
+								$this->csrf
 							)
 						),
 						new Response\PlainResponse(

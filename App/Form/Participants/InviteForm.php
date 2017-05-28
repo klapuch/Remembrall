@@ -87,7 +87,7 @@ final class InviteForm implements Form\Control {
 							'class' => 'form-control',
 							'value' => 'Invite',
 						],
-						$this->storage
+						new Form\EmptyStorage()
 					),
 					new Validation\PassiveRule()
 				),
