@@ -45,7 +45,7 @@ final class DeleteForm implements Form\Control {
 				'action' => $this->url->reference() . self::ACTION,
 			],
 			new Form\CsrfInput($this->csrf),
-			new Form\DefaultInput(
+			new Form\Input(
 				new Form\StoredAttributes(
 					[
 						'type' => 'hidden',
@@ -56,7 +56,7 @@ final class DeleteForm implements Form\Control {
 				),
 				new Validation\PassiveRule()
 			),
-			new Form\DefaultInput(
+			new Form\Input(
 				new Form\StoredAttributes(
 					['type' => 'submit'],
 					new Form\EmptyStorage()

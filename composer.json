@@ -19,7 +19,7 @@
 		"klapuch/application": "@dev",
 		"klapuch/csrf": "^2.0.0",
 		"klapuch/dataset": "@dev",
-		"klapuch/form": "^5.4.0",
+		"klapuch/form": "@dev",
 		"klapuch/http": "^1.0.0",
 		"klapuch/ini": "^2.0.0",
 		"klapuch/iterator": "^1.1.0",

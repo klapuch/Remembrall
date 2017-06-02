@@ -46,7 +46,7 @@ final class RequestForm implements Form\Control {
 			new Form\CsrfInput($this->csrf),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
-					new Form\DefaultInput(
+					new Form\Input(
 						new Form\StoredAttributes(
 							[
 								'type' => 'email',
@@ -63,7 +63,7 @@ final class RequestForm implements Form\Control {
 				self::COLUMNS
 			),
 			new Form\BootstrapInput(
-				new Form\DefaultInput(
+				new Form\Input(
 					new Form\StoredAttributes(
 						[
 							'type' => 'submit',

@@ -52,7 +52,7 @@ final class EditForm implements Form\Control {
 			new Form\CsrfInput($this->csrf),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
-					new Form\DefaultInput(
+					new Form\Input(
 						new Form\StoredAttributes(
 							[
 								'type' => 'text',
@@ -71,7 +71,7 @@ final class EditForm implements Form\Control {
 			),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
-					new Form\DefaultInput(
+					new Form\Input(
 						new Form\StoredAttributes(
 							[
 								'type' => 'text',
@@ -90,7 +90,7 @@ final class EditForm implements Form\Control {
 			),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
-					new Form\DefaultInput(
+					new Form\Input(
 						new Form\StoredAttributes(
 							[
 								'type' => 'number',
@@ -110,7 +110,7 @@ final class EditForm implements Form\Control {
 				self::COLUMNS
 			),
 			new Form\BootstrapInput(
-				new Form\DefaultInput(
+				new Form\Input(
 					new Form\StoredAttributes(
 						[
 							'type' => 'submit',

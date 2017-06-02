@@ -53,7 +53,7 @@ final class InviteForm implements Form\Control {
 				'action' => $this->url->reference() . self::ACTION,
 			],
 			new Form\CsrfInput($this->csrf),
-			new Form\DefaultInput(
+			new Form\Input(
 				new Form\StoredAttributes(
 					['type' => 'hidden', 'name' => 'subscription', 'value' => $id],
 					new Form\EmptyStorage()
@@ -62,7 +62,7 @@ final class InviteForm implements Form\Control {
 			),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
-					new Form\DefaultInput(
+					new Form\Input(
 						new Form\StoredAttributes(
 							[
 								'type' => 'email',
@@ -79,7 +79,7 @@ final class InviteForm implements Form\Control {
 				self::COLUMNS
 			),
 			new Form\BootstrapInput(
-				new Form\DefaultInput(
+				new Form\Input(
 					new Form\StoredAttributes(
 						[
 							'type' => 'submit',

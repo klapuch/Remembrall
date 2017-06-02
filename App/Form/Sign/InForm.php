@@ -46,7 +46,7 @@ final class InForm implements Form\Control {
 			new Form\CsrfInput($this->csrf),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
-					new Form\DefaultInput(
+					new Form\Input(
 						new Form\StoredAttributes(
 							[
 								'type' => 'email',
@@ -64,7 +64,7 @@ final class InForm implements Form\Control {
 			),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
-					new Form\DefaultInput(
+					new Form\Input(
 						new Form\StoredAttributes(
 							[
 								'type' => 'password',
@@ -81,7 +81,7 @@ final class InForm implements Form\Control {
 				self::COLUMNS
 			),
 			new Form\BootstrapInput(
-				new Form\DefaultInput(
+				new Form\Input(
 					new Form\StoredAttributes(
 						[
 							'type' => 'submit',

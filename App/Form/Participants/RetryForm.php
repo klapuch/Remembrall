@@ -49,21 +49,21 @@ final class RetryForm implements Form\Control {
 				'action' => $this->url->reference() . self::ACTION,
 			],
 			new Form\CsrfInput($this->csrf),
-			new Form\DefaultInput(
+			new Form\Input(
 				new Form\StoredAttributes(
 					['type' => 'hidden', 'name' => 'subscription', 'value' => $subscription],
 					new Form\EmptyStorage()
 				),
 				new Validation\PassiveRule()
 			),
-			new Form\DefaultInput(
+			new Form\Input(
 				new Form\StoredAttributes(
 					['type' => 'hidden', 'name' => 'email', 'value' => $email],
 					new Form\EmptyStorage()
 				),
 				new Validation\PassiveRule()
 			),
-			new Form\DefaultInput(
+			new Form\Input(
 				new Form\StoredAttributes(
 					['type' => $harassed ? 'button' : 'submit', 'name' => 'act'],
 					new Form\EmptyStorage()
