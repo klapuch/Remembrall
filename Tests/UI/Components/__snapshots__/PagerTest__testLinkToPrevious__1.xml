@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<nav xmlns:php="http://php.net/xsl" aria-label="pager">
+  <ul class="pager">
+    <li class="previous">
+      <a href="?page=2"><span aria-hidden="true">&#x2190;</span>
+									Previous
+								</a>
+    </li>
+  </ul>
+</nav>

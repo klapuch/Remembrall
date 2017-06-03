@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<div xmlns:php="http://php.net/xsl" class="row">
+  <div class="col-xs-2 col-xs-offset-10">
+    <select id="per_page" class="form-control">
+      <option value="?page=1&amp;per_page=20" selected="true">Prompt</option>
+      <option value="?page=1&amp;per_page=30">2</option>
+    </select>
+  </div>
+</div>

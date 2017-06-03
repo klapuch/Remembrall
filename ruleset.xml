@@ -17,7 +17,6 @@
 	<rule ref="PSR1.Files.SideEffects.FoundWithSymbols">
 		<exclude-pattern>Tests/Unit</exclude-pattern>
 		<exclude-pattern>Tests/Integration</exclude-pattern>
-		<exclude-pattern>Tests/UI/Components</exclude-pattern>
 		<exclude-pattern>Tests/Functional</exclude-pattern>
 	</rule>
 
