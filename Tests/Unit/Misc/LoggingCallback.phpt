@@ -17,9 +17,8 @@ require __DIR__ . '/../../bootstrap.php';
 final class LoggingCallback extends TestCase\Mockery {
 	public function testLoggingOnThrowing() {
 		$file = Tester\FileMock::create('');
-		$logs = new Log\FakeLogs($file);
-		Assert::exception(function() use ($logs) {
-			(new Misc\LoggingCallback($logs))->invoke(function() {
+		Assert::exception(function() use ($file) {
+			(new Misc\LoggingCallback(new Log\FakeLogs($file)))->invoke(function() {
 				throw new \DomainException('fooMessage');
 			});
 		}, new \DomainException, 'fooMessage');
@@ -36,7 +35,7 @@ final class LoggingCallback extends TestCase\Mockery {
 
 	public function testReturningValue() {
 		Assert::same(
-			strlen('abc'),
+			3,
 			(new Misc\LoggingCallback(
 				$this->mock(Log\Logs::class)
 			))->invoke('strlen', ['abc'])

@@ -22,7 +22,6 @@ final class HarnessedSubscriptions extends TestCase\Mockery {
 		$uri = new Uri\FakeUri();
 		$interval = new Time\FakeInterval();
 		$iterator = new \ArrayIterator([]);
-		$format = new Output\FakeFormat();
 		$expression = '//p';
 		$origin = $this->mock(Subscribing\Subscriptions::class);
 		$callback = $this->mock(Misc\Callback::class);

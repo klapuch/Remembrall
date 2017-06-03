@@ -15,24 +15,6 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class ComposedResponse extends Tester\TestCase {
 	public function testPuttingTemplateToLayout() {
-		$template = Tester\FileMock::create(
-			'<?xml version="1.0" encoding="utf-8"?>
-			<page>
-				<head>
-					<title>Error</title>
-				</head>
-			</page>',
-			'xml'
-		);
-		$layout = Tester\FileMock::create(
-			'<?xml version="1.0" encoding="utf-8"?>
-			<page>
-				<body>
-					<header level="1">Error</header>
-				</body>
-			</page>',
-			'xml'
-		);
 		Assert::same(
 			'<?xml version="1.0" encoding="utf-8"?> <page> <head> <title>Error</title> </head> <body> <header level="1">Error</header> </body></page>',
 			preg_replace(
@@ -40,8 +22,24 @@ final class ComposedResponse extends Tester\TestCase {
 				' ',
 				(new Response\ComposedResponse(
 					new Response\PlainResponse(new Output\FakeFormat()),
-					$template,
-					$layout
+					Tester\FileMock::create(
+						'<?xml version="1.0" encoding="utf-8"?>
+						<page>
+							<head>
+								<title>Error</title>
+							</head>
+						</page>',
+						'xml'
+					),
+					Tester\FileMock::create(
+						'<?xml version="1.0" encoding="utf-8"?>
+						<page>
+							<body>
+								<header level="1">Error</header>
+							</body>
+						</page>',
+						'xml'
+					)
 				))->body()->serialization()
 			)
 		);

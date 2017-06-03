@@ -22,7 +22,6 @@ final class HarnessedParts extends TestCase\Mockery {
 		$part = new Web\FakePart();
 		$iterator = new \ArrayIterator([]);
 		$count = 3;
-		$format = new Output\FakeFormat();
 		$expression = '//p';
 		$origin = $this->mock(Web\Parts::class);
 		$callback = $this->mock(Misc\Callback::class);

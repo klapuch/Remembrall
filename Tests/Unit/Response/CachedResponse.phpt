@@ -14,15 +14,13 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class CachedResponse extends TestCase\Mockery {
-	public function testCaching() {
+	public function testMultipleCallsWithSingleExecution() {
 		$origin = $this->mock(Application\Response::class);
 		$origin->shouldReceive('body')->once();
 		$origin->shouldReceive('headers')->once();
 		$response = new Response\CachedResponse($origin);
-		$body = $response->body();
-		Assert::equal($body, $response->body());
-		$headers = $response->headers();
-		Assert::equal($headers, $response->headers());
+		Assert::equal($response->body(), $response->body());
+		Assert::equal($response->headers(), $response->headers());
 	}
 }
 
