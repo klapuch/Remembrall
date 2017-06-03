@@ -7,7 +7,6 @@ declare(strict_types = 1);
 namespace Remembrall\Unit\Web;
 
 use Klapuch\Dataset;
-use Klapuch\Output;
 use Klapuch\Uri;
 use Remembrall\Model\Misc;
 use Remembrall\Model\Web;
