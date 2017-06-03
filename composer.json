@@ -33,7 +33,8 @@
 		"klapuch/validation": "^2.0.0",
 		"gajus/dindent": "^2.0",
 		"nette/mail": "^2.4.0",
-		"texy/texy": "^2.9"
+		"texy/texy": "^2.9",
+		"symfony/css-selector": "^3.3"
 	},
 	"require-dev": {
 		"nette/tester": "^1.7",
