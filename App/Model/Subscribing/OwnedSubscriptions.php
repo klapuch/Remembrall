@@ -23,6 +23,7 @@ final class OwnedSubscriptions implements Subscriptions {
 	public function subscribe(
 		Uri\Uri $url,
 		string $expression,
+		string $language,
 		Time\Interval $interval
 	): void {
 		try {
@@ -34,12 +35,14 @@ final class OwnedSubscriptions implements Subscriptions {
 					SELECT id, ?, ?, NOW(), snapshot
 					FROM parts
 					WHERE expression IS NOT DISTINCT FROM ?
+					AND language IS NOT DISTINCT FROM ?
 					AND page_url IS NOT DISTINCT FROM ?
 				)',
 				[
 					$this->owner->id(),
 					$interval->iso(),
 					$expression,
+					$language,
 					$url->reference(),
 				]
 			))->execute();
@@ -60,7 +63,7 @@ final class OwnedSubscriptions implements Subscriptions {
 		$subscriptions = (new Storage\ParameterizedQuery(
 			$this->database,
 			$selection->expression(
-				'SELECT subscriptions.id, expression, page_url AS url, interval,
+				'SELECT subscriptions.id, expression, page_url AS url, interval, language,
 				visited_at, last_update, content
 				FROM parts
 				LEFT JOIN (

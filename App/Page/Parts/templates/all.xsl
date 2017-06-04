@@ -34,6 +34,7 @@
 			<td><xsl:number format="1. "/></td>
 			<td><xsl:value-of select="url"/></td>
 			<td><xsl:value-of select="expression"/></td>
+			<td><xsl:value-of select="language"/></td>
 			<td>
 				<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#markup-{id}">
 					<span class="glyphicon glyphicon-eye-open" aria-hidden="true"/>

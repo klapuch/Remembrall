@@ -17,7 +17,7 @@ final class FakeParts implements Parts {
 		$this->parts = $parts;
 	}
 
-	public function add(Part $part, Uri\Uri $uri, string $expression): void {
+	public function add(Part $part, Uri\Uri $uri, string $expression, string $language): void {
 		if ($this->exception)
 			throw $this->exception;
 	}

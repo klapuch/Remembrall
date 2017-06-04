@@ -29,6 +29,25 @@ final class FormattedPart extends Tester\TestCase {
 			))->print(new Output\ArrayFormat(['content' => '<h1>FOO</h1>']))->serialization()
 		);
 	}
+
+	public function testFormattingLanguage() {
+		Assert::same(
+			'XPath',
+			(new Web\FormattedPart(
+				new Web\FakePart(),
+				new Texy\Texy(),
+				new Dindent\Indenter()
+			))->print(new Output\ArrayFormat(['language' => 'xpath']))->serialization()
+		);
+		Assert::same(
+			'CSS',
+			(new Web\FormattedPart(
+				new Web\FakePart(),
+				new Texy\Texy(),
+				new Dindent\Indenter()
+			))->print(new Output\ArrayFormat(['language' => 'css']))->serialization()
+		);
+	}
 }
 
 (new FormattedPart())->run();

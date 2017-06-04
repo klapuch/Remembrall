@@ -22,6 +22,7 @@ final class HarnessedSubscriptions implements Subscriptions {
 	public function subscribe(
 		Uri\Uri $uri,
 		string $expression,
+		string $language,
 		Time\Interval $interval
 	): void {
 		$this->callback->invoke(

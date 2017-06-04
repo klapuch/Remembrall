@@ -29,9 +29,10 @@ final class ChangedSubscriptions implements Subscriptions {
 	public function subscribe(
 		Uri\Uri $url,
 		string $expression,
+		string $language,
 		Time\Interval $interval
 	): void {
-		$this->origin->subscribe($url, $expression, $interval);
+		$this->origin->subscribe($url, $expression, $language, $interval);
 	}
 
 	public function all(Dataset\Selection $selection): \Traversable {

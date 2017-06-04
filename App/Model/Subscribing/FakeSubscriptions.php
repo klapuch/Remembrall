@@ -21,6 +21,7 @@ final class FakeSubscriptions implements Subscriptions {
 	public function subscribe(
 		Uri\Uri $uri,
 		string $expression,
+		string $language,
 		Time\Interval $interval
 	): void {
 		if ($this->exception)

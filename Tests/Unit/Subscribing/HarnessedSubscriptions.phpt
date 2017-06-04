@@ -22,16 +22,17 @@ final class HarnessedSubscriptions extends TestCase\Mockery {
 		$interval = new Time\FakeInterval();
 		$iterator = new \ArrayIterator([]);
 		$expression = '//p';
+		$language = 'xpath';
 		$origin = $this->mock(Subscribing\Subscriptions::class);
 		$callback = $this->mock(Misc\Callback::class);
 		$callback->shouldReceive('invoke')
 			->once()
-			->with([$origin, 'subscribe'], [$uri, $expression, $interval]);
-		Assert::noError(function() use ($origin, $callback, $uri, $interval, $expression) {
+			->with([$origin, 'subscribe'], [$uri, $expression, $language, $interval]);
+		Assert::noError(function() use ($origin, $callback, $uri, $interval, $expression, $language) {
 			(new Subscribing\HarnessedSubscriptions(
 				$origin,
 				$callback
-			))->subscribe($uri, $expression, $interval);
+			))->subscribe($uri, $expression, $language, $interval);
 		});
 		$selection = new Dataset\FakeSelection();
 		$callback->shouldReceive('invoke')

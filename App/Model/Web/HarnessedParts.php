@@ -18,7 +18,7 @@ final class HarnessedParts implements Parts {
 		$this->callback = $callback;
 	}
 
-	public function add(Part $part, Uri\Uri $uri, string $expression): void {
+	public function add(Part $part, Uri\Uri $uri, string $expression, string $language): void {
 		$this->callback->invoke(
 			[$this->origin, __FUNCTION__],
 			func_get_args()

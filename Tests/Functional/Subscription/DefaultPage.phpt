@@ -33,6 +33,7 @@ final class DefaultPage extends TestCase\Page {
 		$_POST['url'] = 'http://www.example.com';
 		$_POST['expression'] = '//h1';
 		$_POST['interval'] = '34';
+		$_POST['language'] = 'xpath';
 		$_POST['act'] = 'Send';
 		$headers = (new Subscription\DefaultPage(
 			new Uri\FakeUri('', ''),

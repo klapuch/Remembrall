@@ -26,6 +26,7 @@ final class LimitedSubscriptions extends TestCase\Database {
 				))->subscribe(
 					new Uri\FakeUri('url'),
 					'//p',
+					'xpath',
 					new Time\FakeInterval()
 				);
 			}
@@ -56,7 +57,12 @@ final class LimitedSubscriptions extends TestCase\Database {
 			new Subscribing\FakeSubscriptions(),
 			new Access\FakeUser(666),
 			$this->database
-		))->subscribe(new Uri\FakeUri('url'), '//p', new Time\FakeInterval());
+		))->subscribe(
+			new Uri\FakeUri('url'),
+			'//p',
+			'xpath',
+			new Time\FakeInterval()
+		);
 	}
 
 	protected function prepareDatabase(): void {

@@ -26,8 +26,8 @@ final class FormattedParts implements Parts {
 		$this->indenter = $indenter;
 	}
 
-	public function add(Part $part, Uri\Uri $uri, string $expression): void {
-		$this->origin->add($part, $uri, $expression);
+	public function add(Part $part, Uri\Uri $uri, string $expression, string $language): void {
+		$this->origin->add($part, $uri, $expression, $language);
 	}
 
 	public function all(Dataset\Selection $selection): \Traversable {

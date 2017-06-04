@@ -30,6 +30,7 @@ final class LimitedSubscriptions implements Subscriptions {
 	public function subscribe(
 		Uri\Uri $uri,
 		string $expression,
+		string $language,
 		Time\Interval $interval
 	): void {
 		if ($this->overstepped()) {
@@ -40,7 +41,7 @@ final class LimitedSubscriptions implements Subscriptions {
 				)
 			);
 		}
-		$this->origin->subscribe($uri, $expression, $interval);
+		$this->origin->subscribe($uri, $expression, $language, $interval);
 	}
 
 	public function all(Dataset\Selection $selection): \Traversable {

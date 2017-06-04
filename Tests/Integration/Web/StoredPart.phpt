@@ -109,12 +109,12 @@ final class StoredPart extends TestCase\Database {
 
 	public function testAppendedPrintingById() {
 		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.facedown.cz', '//facedown', 'facedown content', 'face snap'),
-			('www.google.com', '//google', 'google content', 'google snap')"
+			"INSERT INTO parts (page_url, expression, content, snapshot, language) VALUES
+			('www.facedown.cz', '//facedown', 'facedown content', 'face snap', 'css'),
+			('www.google.com', '//google', 'google content', 'google snap', 'xpath')"
 		);
 		Assert::same(
-			'|xxx||id|2||url|www.google.com||expression|//google||content|google content||snapshot|google snap|',
+			'|xxx||id|2||url|www.google.com||expression|//google||content|google content||snapshot|google snap||language|xpath|',
 			(new Web\StoredPart(
 				new Web\FakePart(),
 				2,
@@ -122,7 +122,6 @@ final class StoredPart extends TestCase\Database {
 			))->print(new Output\FakeFormat('|xxx|'))->serialization()
 		);
 	}
-
 
 	protected function prepareDatabase(): void {
 		$this->purge(['parts']);

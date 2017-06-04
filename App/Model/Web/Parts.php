@@ -11,9 +11,10 @@ interface Parts {
 	 * @param \Remembrall\Model\Web\Part $part
 	 * @param \Klapuch\Uri\Uri $uri
 	 * @param string $expression
+	 * @param string $language
 	 * @return void
 	 */
-	public function add(Part $part, Uri\Uri $uri, string $expression): void;
+	public function add(Part $part, Uri\Uri $uri, string $expression, string $language): void;
 
 	/**
 	 * Go through all the parts

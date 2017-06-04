@@ -52,6 +52,10 @@ final class FormattedSubscription implements Subscription {
 					new \DateTimeImmutable(),
 					new \DateInterval($interval)
 				);
+			})
+			->adjusted('language', function(string $language): string {
+				static $formatted = ['xpath' => 'XPath', 'css' => 'CSS'];
+				return $formatted[$language];
 			});
 	}
 }

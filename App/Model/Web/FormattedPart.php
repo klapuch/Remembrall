@@ -45,6 +45,10 @@ final class FormattedPart implements Part {
 						$this->indenter->indent($content)
 					)
 				);
+			})
+			->adjusted('language', function(string $language): string {
+				static $formatted = ['xpath' => 'XPath', 'css' => 'CSS'];
+				return $formatted[$language];
 			});
 	}
 }

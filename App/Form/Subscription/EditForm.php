@@ -11,6 +11,7 @@ use Remembrall\Constraint;
 use Remembrall\Model\Subscribing;
 
 final class EditForm implements Form\Control {
+	private const LANGUAGES = ['xpath', 'css'];
 	private const COLUMNS = 5;
 	private const NAME = 'edit';
 	private $subscription;
@@ -41,6 +42,7 @@ final class EditForm implements Form\Control {
 	}
 
 	private function form(\DOMDocument $dom): Form\Control {
+		$language = (string) new Form\XmlDynamicValue('language', $dom);
 		return new Form\RawForm(
 			[
 				'method' => 'POST',
@@ -85,6 +87,46 @@ final class EditForm implements Form\Control {
 						new Constraint\ExpressionRule()
 					),
 					new Form\LinkedLabel('Expression', 'expression')
+				),
+				self::COLUMNS
+			),
+			new Form\BootstrapInput(
+				new Form\BoundControl(
+					new Form\Select(
+						new Form\StoredAttributes(
+							[
+								'name' => 'language',
+								'class' => 'form-control',
+								'disabled' => 'true',
+							],
+							new Form\EmptyStorage()
+						),
+						new Form\Option(
+							new Form\DependentAttributes(
+								[
+									'value' => 'xpath',
+									'disabled' => 'true',
+								] + ($language === 'xpath' ? ['selected' => 'true'] : []),
+								$this->storage,
+								'language'
+							),
+							'XPath',
+							new Validation\OneOfRule(self::LANGUAGES)
+						),
+						new Form\Option(
+							new Form\DependentAttributes(
+								[
+									'value' => 'css',
+									'disabled' => 'true',
+								] + ($language === 'css' ? ['selected' => 'true'] : []),
+								$this->storage,
+								'language'
+							),
+							'CSS',
+							new Validation\OneOfRule(self::LANGUAGES)
+						)
+					),
+					new Form\LinkedLabel('Language', 'language')
 				),
 				self::COLUMNS
 			),

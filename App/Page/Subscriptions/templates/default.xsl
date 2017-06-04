@@ -96,6 +96,7 @@
 			<td><xsl:value-of select="last_update"/></td>
 			<td><xsl:value-of select="interval"/></td>
 			<td><xsl:value-of select="expression"/></td>
+			<td><xsl:value-of select="language"/></td>
 			<td><xsl:value-of select="url"/></td>
 			<td>
 				<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#markup-{id}">

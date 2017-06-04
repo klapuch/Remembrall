@@ -16,16 +16,17 @@ final class CollectiveParts implements Parts {
 		$this->database = $database;
 	}
 
-	public function add(Part $part, Uri\Uri $url, string $expression): void {
+	public function add(Part $part, Uri\Uri $url, string $expression, string $language): void {
 		(new Storage\ParameterizedQuery(
 			$this->database,
-			'INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			(:url, :expression, :content, :snapshot)
-			ON CONFLICT (page_url, expression)
+			'INSERT INTO parts (page_url, expression, language, content, snapshot) VALUES
+			(:url, :expression, :language, :content, :snapshot)
+			ON CONFLICT (page_url, expression, language)
 			DO UPDATE SET content = :content, snapshot = :snapshot',
 			[
 				'url' => $url->reference(),
 				'expression' => $expression,
+				'language' => $language,
 				'content' => $part->content(),
 				'snapshot' => $part->snapshot(),
 			]

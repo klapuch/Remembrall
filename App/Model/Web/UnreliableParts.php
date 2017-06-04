@@ -19,15 +19,15 @@ final class UnreliableParts implements Parts {
 		$this->database = $database;
 	}
 
-	public function add(Part $part, Uri\Uri $uri, string $expression): void {
-		$this->origin->add($part, $uri, $expression);
+	public function add(Part $part, Uri\Uri $uri, string $expression, string $language): void {
+		$this->origin->add($part, $uri, $expression, $language);
 	}
 
 	public function all(Dataset\Selection $selection): \Traversable {
 		$parts = (new Storage\ParameterizedQuery(
 			$this->database,
 			$selection->expression(
-				"SELECT page_url AS url, expression, parts.id, content, snapshot,
+				"SELECT page_url AS url, expression, parts.id, content, snapshot, language,
 				occurrences
 				FROM parts
 				RIGHT JOIN (
@@ -61,7 +61,11 @@ final class UnreliableParts implements Parts {
 			yield new StoredPart(
 				new HtmlPart(
 					new MatchingExpression(
-						new XPathExpression($page, $part['expression'])
+						new SuitableExpression(
+							$part['language'],
+							$page,
+							$part['expression']
+						)
 					),
 					$page
 				),

@@ -29,6 +29,7 @@ final class OwnedSubscriptions extends TestCase\Database {
 		))->subscribe(
 			new Uri\FakeUri('www.google.com'),
 			'//google',
+			'xpath',
 			new Time\FakeInterval(null, null, 'PT120S')
 		);
 		$statement = $this->database->prepare('SELECT * FROM subscriptions');
@@ -50,14 +51,18 @@ final class OwnedSubscriptions extends TestCase\Database {
 			new Access\FakeUser(666),
 			$this->database
 		);
-		$subscribe = function() use ($subscriptions) {
+		$subscribe = function(string $language = 'xpath') use ($subscriptions) {
 			$subscriptions->subscribe(
 				new Uri\FakeUri('www.google.com'),
 				'//google',
+				$language,
 				new Time\FakeInterval(null, null, 'PT120S')
 			);
 		};
-		$subscribe();
+		Assert::noError(function() use ($subscribe) {
+			$subscribe();
+			$subscribe('css');
+		});
 		$ex = Assert::exception(
 			$subscribe,
 			\Remembrall\Exception\DuplicateException::class,

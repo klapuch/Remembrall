@@ -9,6 +9,7 @@ use Klapuch\Validation;
 use Remembrall\Constraint;
 
 final class NewForm implements Form\Control {
+	private const LANGUAGES = ['xpath', 'css'];
 	private const COLUMNS = 5;
 	private const ACTION = '/subscription',
 		NAME = 'new';
@@ -79,6 +80,39 @@ final class NewForm implements Form\Control {
 						new Constraint\ExpressionRule()
 					),
 					new Form\LinkedLabel('Expression', 'expression')
+				),
+				self::COLUMNS
+			),
+			new Form\BootstrapInput(
+				new Form\BoundControl(
+					new Form\Select(
+						new Form\StoredAttributes(
+							[
+								'name' => 'language',
+								'class' => 'form-control',
+							],
+							new Form\EmptyStorage()
+						),
+						new Form\Option(
+							new Form\DependentAttributes(
+								['value' => 'xpath'],
+								$this->storage,
+								'language'
+							),
+							'XPath',
+							new Validation\OneOfRule(self::LANGUAGES)
+						),
+						new Form\Option(
+							new Form\DependentAttributes(
+								['value' => 'css'],
+								$this->storage,
+								'language'
+							),
+							'CSS',
+							new Validation\OneOfRule(self::LANGUAGES)
+						)
+					),
+					new Form\LinkedLabel('Language', 'language')
 				),
 				self::COLUMNS
 			),

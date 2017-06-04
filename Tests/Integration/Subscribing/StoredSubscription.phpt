@@ -125,12 +125,12 @@ final class StoredSubscription extends TestCase\Database {
 			(1, 111, 3, 'PT1980S', '2000-01-01', 'abc_snap')"
 		);
 		$this->database->exec(
-			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(3, 'www.google.com', '//p', 'google content', 'google snap')"
+			"INSERT INTO parts (id, page_url, expression, content, snapshot, language) VALUES
+			(3, 'www.google.com', '//p', 'google content', 'google snap', 'css')"
 		);
 		$subscription = new Subscribing\StoredSubscription(1, $this->database);
 		Assert::same(
-			'|id|1||interval|33||url|www.google.com||expression|//p|',
+			'|id|1||interval|33||url|www.google.com||expression|//p||language|css|',
 			$subscription->print(new Output\FakeFormat(''))->serialization()
 		);
 	}

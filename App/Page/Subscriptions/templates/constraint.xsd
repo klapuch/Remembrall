@@ -36,6 +36,13 @@
 		<xsd:restriction base="xsd:string"/>
 	</xsd:simpleType>
 
+	<xsd:simpleType name="language">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="XPath"/>
+			<xsd:enumeration value="CSS"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
 	<xsd:complexType name="subscription">
 		<xsd:all>
 			<xsd:element name="id" type="id"/>
@@ -45,6 +52,7 @@
 			<xsd:element name="interval" type="interval"/>
 			<xsd:element name="content" type="content"/>
 			<xsd:element name="visited_at" type="visited_at"/>
+			<xsd:element name="language" type="language"/>
 		</xsd:all>
 	</xsd:complexType>
 

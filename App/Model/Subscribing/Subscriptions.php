@@ -11,6 +11,7 @@ interface Subscriptions {
 	 * Subscribe to a new part
 	 * @param \Klapuch\Uri\Uri $uri
 	 * @param string $expression
+	 * @param string $language
 	 * @param \Klapuch\Time\Interval $interval
 	 * @throws \Remembrall\Exception\DuplicateException
 	 * @return void
@@ -18,6 +19,7 @@ interface Subscriptions {
 	public function subscribe(
 		Uri\Uri $uri,
 		string $expression,
+		string $language,
 		Time\Interval $interval
 	): void;
 

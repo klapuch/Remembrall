@@ -18,15 +18,15 @@ final class PopularParts implements Parts {
 		$this->database = $database;
 	}
 
-	public function add(Part $part, Uri\Uri $url, string $expression): void {
-		$this->origin->add($part, $url, $expression);
+	public function add(Part $part, Uri\Uri $url, string $expression, string $language): void {
+		$this->origin->add($part, $url, $expression, $language);
 	}
 
 	public function all(Dataset\Selection $selection): \Traversable {
 		$parts = (new Storage\ParameterizedQuery(
 			$this->database,
 			$selection->expression(
-				'SELECT id, page_url AS url, expression, content, snapshot,
+				'SELECT id, page_url AS url, expression, content, snapshot, language,
 				occurrences
 				FROM parts
 				INNER JOIN (

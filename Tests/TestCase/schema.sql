@@ -44,6 +44,18 @@ COMMENT ON EXTENSION citext IS 'data type for case-insensitive character strings
 SET search_path = public, pg_catalog;
 
 --
+-- Name: languages; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE languages AS ENUM (
+    'xpath',
+    'css'
+);
+
+
+ALTER TYPE languages OWNER TO postgres;
+
+--
 -- Name: notify_subscriptions(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -343,7 +355,8 @@ CREATE TABLE parts (
     page_url character varying NOT NULL,
     expression character varying NOT NULL,
     content text NOT NULL,
-    snapshot character varying(40) NOT NULL
+    snapshot character varying(40) NOT NULL,
+    language languages DEFAULT 'xpath'::languages NOT NULL
 );
 
 

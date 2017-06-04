@@ -20,14 +20,8 @@ final class SuitableExpression implements Expression {
 	}
 
 	public function matches(): \DOMNodeList {
-		if (in_array($this->language, self::LANGUAGES)) {
-			return (new XPathExpression(
-				$this->page,
-				$this->language === 'css'
-					? (new CssSelector\CssSelectorConverter())->toXPath($this->expression)
-					: $this->expression
-			))->matches();
-		}
+		if (in_array($this->language, self::LANGUAGES))
+			return (new XPathExpression($this->page, (string) $this))->matches();
 		throw new \UnexpectedValueException(
 			sprintf(
 				'Allowed languages are %s - "%s" given',
@@ -43,5 +37,11 @@ final class SuitableExpression implements Expression {
 				$this->language
 			)
 		);
+	}
+
+	public function __toString(): string {
+		if ($this->language === 'css')
+			return (new CssSelector\CssSelectorConverter())->toXPath($this->expression);
+		return $this->expression;
 	}
 }

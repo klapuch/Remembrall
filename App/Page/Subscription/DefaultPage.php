@@ -78,7 +78,8 @@ final class DefaultPage extends Page\Layout {
 							))->add(
 								new Web\HtmlPart(
 									new Web\MatchingExpression(
-										new Web\XPathExpression(
+										new Web\SuitableExpression(
+											$subscription['language'],
 											$page,
 											$subscription['expression']
 										)
@@ -86,7 +87,8 @@ final class DefaultPage extends Page\Layout {
 									$page
 								),
 								$url,
-								$subscription['expression']
+								$subscription['expression'],
+								$subscription['language']
 							);
 							(new Subscribing\HarnessedSubscriptions(
 								new Subscribing\LimitedSubscriptions(
@@ -101,6 +103,7 @@ final class DefaultPage extends Page\Layout {
 							))->subscribe(
 								$url,
 								$subscription['expression'],
+								$subscription['language'],
 								new Time\TimeInterval(
 									new \DateTimeImmutable(),
 									new \DateInterval(

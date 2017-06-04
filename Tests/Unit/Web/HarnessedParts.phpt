@@ -22,16 +22,17 @@ final class HarnessedParts extends TestCase\Mockery {
 		$iterator = new \ArrayIterator([]);
 		$count = 3;
 		$expression = '//p';
+		$language = 'xpath';
 		$origin = $this->mock(Web\Parts::class);
 		$callback = $this->mock(Misc\Callback::class);
 		$callback->shouldReceive('invoke')
 			->once()
-			->with([$origin, 'add'], [$part, $uri, $expression]);
-		Assert::noError(function() use ($origin, $callback, $uri, $part, $expression) {
+			->with([$origin, 'add'], [$part, $uri, $expression, $language]);
+		Assert::noError(function() use ($origin, $callback, $uri, $part, $expression, $language) {
 			(new Web\HarnessedParts(
 				$origin,
 				$callback
-			))->add($part, $uri, $expression);
+			))->add($part, $uri, $expression, $language);
 		});
 		$selection = new Dataset\FakeSelection();
 		$callback->shouldReceive('invoke')

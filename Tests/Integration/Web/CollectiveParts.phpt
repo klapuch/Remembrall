@@ -21,7 +21,8 @@ final class CollectiveParts extends TestCase\Database {
 		))->add(
 			new Web\FakePart('google content', null, 'google snap'),
 			new Uri\FakeUri('www.google.com'),
-			'//p'
+			'//p',
+			'xpath'
 		);
 		$statement = $this->database->prepare('SELECT * FROM parts');
 		$statement->execute();
@@ -31,6 +32,7 @@ final class CollectiveParts extends TestCase\Database {
 		Assert::same('google content', $parts[0]['content']);
 		Assert::same('google snap', $parts[0]['snapshot']);
 		Assert::same('//p', $parts[0]['expression']);
+		Assert::same('xpath', $parts[0]['language']);
 	}
 
 	public function testAddingToOthers() {
@@ -38,12 +40,14 @@ final class CollectiveParts extends TestCase\Database {
 		$parts->add(
 			new Web\FakePart('google content', null, 'google snap'),
 			new Uri\FakeUri('www.google.com'),
-			'//google'
+			'//google',
+			'xpath'
 		);
 		$parts->add(
 			new Web\FakePart('facedown content', null, 'facedown snap'),
 			new Uri\FakeUri('www.facedown.cz'),
-			'//facedown'
+			'//facedown',
+			'css'
 		);
 		$statement = $this->database->prepare('SELECT * FROM parts');
 		$statement->execute();
@@ -53,10 +57,12 @@ final class CollectiveParts extends TestCase\Database {
 		Assert::same('google content', $parts[0]['content']);
 		Assert::same('google snap', $parts[0]['snapshot']);
 		Assert::same('//google', $parts[0]['expression']);
+		Assert::same('xpath', $parts[0]['language']);
 		Assert::same('www.facedown.cz', $parts[1]['page_url']);
 		Assert::same('facedown content', $parts[1]['content']);
 		Assert::same('facedown snap', $parts[1]['snapshot']);
 		Assert::same('//facedown', $parts[1]['expression']);
+		Assert::same('css', $parts[1]['language']);
 	}
 
 	public function testAddingWithRecordedVisitation() {
@@ -66,25 +72,31 @@ final class CollectiveParts extends TestCase\Database {
 		))->add(
 			new Web\FakePart('<p>Content</p>', null, ''),
 			new Uri\FakeUri('www.google.com'),
-			'//p'
+			'//p',
+			'xpath'
 		);
 		$statement = $this->database->prepare('SELECT * FROM part_visits');
 		$statement->execute();
 		Assert::count(1, $statement->fetchAll());
 	}
 
-	public function testUpdatingDuplication() {
+	public function testUpdatingDuplicationForSameLanguage() {
 		$oldPart = new Web\FakePart('Content', null, 'OLD_SNAP');
 		$newPart = new Web\FakePart('NEW_CONTENT', null, 'NEW_SNAP');
 		$parts = new Web\CollectiveParts($this->database);
-		$parts->add($oldPart, new Uri\FakeUri('www.google.com'), '//p');
-		$parts->add($newPart, new Uri\FakeUri('www.google.com'), '//p');
+		$parts->add($oldPart, new Uri\FakeUri('www.google.com'), '//p', 'xpath');
+		$parts->add($newPart, new Uri\FakeUri('www.google.com'), '//p', 'xpath');
+		$parts->add(new Web\FakePart('CSS', null, 'CSS_SNAP'), new Uri\FakeUri('www.google.com'), '//p', 'css');
 		$statement = $this->database->prepare('SELECT * FROM parts');
 		$statement->execute();
 		$parts = $statement->fetchAll();
-		Assert::count(1, $parts);
+		Assert::count(2, $parts);
 		Assert::same('NEW_CONTENT', $parts[0]['content']);
 		Assert::same('NEW_SNAP', $parts[0]['snapshot']);
+		Assert::same('xpath', $parts[0]['language']);
+		Assert::same('CSS', $parts[1]['content']);
+		Assert::same('CSS_SNAP', $parts[1]['snapshot']);
+		Assert::same('css', $parts[1]['language']);
 	}
 
 	public function testUpdatingDuplicationWithAllRecordedVisitation() {
@@ -92,8 +104,8 @@ final class CollectiveParts extends TestCase\Database {
 		$oldPart = new Web\FakePart('Content', null, 'OLD_SNAP');
 		$newPart = new Web\FakePart('NEW_CONTENT', null, 'NEW_SNAP');
 		$parts = new Web\CollectiveParts($this->database);
-		$parts->add($oldPart, new Uri\FakeUri('www.google.com'), '//p');
-		$parts->add($newPart, new Uri\FakeUri('www.google.com'), '//p');
+		$parts->add($oldPart, new Uri\FakeUri('www.google.com'), '//p', 'xpath');
+		$parts->add($newPart, new Uri\FakeUri('www.google.com'), '//p', 'xpath');
 		$statement = $this->database->prepare('SELECT * FROM part_visits');
 		$statement->execute();
 		Assert::count(2, $statement->fetchAll());

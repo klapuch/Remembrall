@@ -51,6 +51,25 @@ final class FormattedSubscription extends Tester\TestCase {
 			))->print(new Output\ArrayFormat(['interval' => 'PT1980S']))->serialization()
 		);
 	}
+
+	public function testFormattingToHumanReadableLanguage() {
+		Assert::same(
+			'XPath',
+			(new Subscribing\FormattedSubscription(
+				new Subscribing\FakeSubscription(),
+				new Texy\Texy(),
+				new Dindent\Indenter()
+			))->print(new Output\ArrayFormat(['language' => 'xpath']))->serialization()
+		);
+		Assert::same(
+			'CSS',
+			(new Subscribing\FormattedSubscription(
+				new Subscribing\FakeSubscription(),
+				new Texy\Texy(),
+				new Dindent\Indenter()
+			))->print(new Output\ArrayFormat(['language' => 'css']))->serialization()
+		);
+	}
 }
 
 (new FormattedSubscription())->run();

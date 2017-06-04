@@ -54,7 +54,7 @@ final class StoredPart implements Part {
 	public function print(Output\Format $format): Output\Format {
 		$part = (new Storage\ParameterizedQuery(
 			$this->database,
-			'SELECT id, page_url AS url, expression, content, snapshot
+			'SELECT id, page_url AS url, expression, content, snapshot, language
 			FROM parts
 			WHERE id = ?',
 			[$this->id]
