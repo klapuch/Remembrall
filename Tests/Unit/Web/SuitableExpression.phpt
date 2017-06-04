@@ -27,25 +27,6 @@ final class SuitableExpression extends Tester\TestCase {
 		Assert::same($match->item(0)->nodeName, 'p');
 	}
 
-	public function testSameExpressionAsPassed() {
-		Assert::same(
-			'//p[@class="text"]',
-			(string) new Web\SuitableExpression(
-				'xpath',
-				new Web\FakePage(),
-				'//p[@class="text"]'
-			)
-		);
-		Assert::same(
-			'p.text',
-			(string) new Web\SuitableExpression(
-				'css',
-				new Web\FakePage(),
-				'p.text'
-			)
-		);
-	}
-
 	public function testUsingCssForMatch() {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p class="text">Hi there</p>');

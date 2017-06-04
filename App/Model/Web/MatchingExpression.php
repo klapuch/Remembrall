@@ -20,8 +20,4 @@ final class MatchingExpression implements Expression {
 			'For the given expression there are no matches'
 		);
 	}
-
-	public function __toString(): string {
-		return (string) $this->origin;
-	}
 }

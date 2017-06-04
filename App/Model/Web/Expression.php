@@ -9,11 +9,4 @@ interface Expression {
 	 * @return \DOMNodeList
 	 */
 	public function matches(): \DOMNodeList;
-
-	/**
-	 * Expression itself
-	 * For XPath, it may be //div[@id=someID]
-	 * @return string
-	 */
-	public function __toString(): string;
 }

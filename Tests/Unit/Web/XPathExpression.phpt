@@ -13,28 +13,6 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class XPathExpression extends Tester\TestCase {
-	public function testValidExpression() {
-		$expression = '//p';
-		Assert::same(
-			(string) new Web\XPathExpression(
-				new Web\FakePage,
-				$expression
-			),
-			$expression
-		);
-	}
-
-	public function testAllowingInvalidExpression() {
-		$expression = '123';
-		Assert::same(
-			(string) new Web\XPathExpression(
-				new Web\FakePage,
-				$expression
-			),
-			$expression
-		);
-	}
-
 	public function testMatch() {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>Hi there</p>');

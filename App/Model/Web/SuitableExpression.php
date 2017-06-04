@@ -44,8 +44,4 @@ final class SuitableExpression implements Expression {
 			)
 		);
 	}
-
-	public function __toString(): string {
-		return $this->expression;
-	}
 }

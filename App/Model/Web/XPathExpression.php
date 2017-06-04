@@ -19,8 +19,4 @@ final class XPathExpression implements Expression {
 			$this->page->content()
 		))->query($this->expression);
 	}
-
-	public function __toString(): string {
-		return $this->expression;
-	}
 }
