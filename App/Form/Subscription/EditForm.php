@@ -63,7 +63,7 @@ final class EditForm implements Form\Control {
 								'disabled' => 'true',
 								'value' => new Form\XmlDynamicValue('url', $dom),
 							],
-							$this->storage
+							new Form\EmptyStorage()
 						),
 						new Constraint\UrlRule()
 					),
@@ -82,7 +82,7 @@ final class EditForm implements Form\Control {
 								'disabled' => 'true',
 								'value' => new Form\XmlDynamicValue('expression', $dom),
 							],
-							$this->storage
+							new Form\EmptyStorage()
 						),
 						new Constraint\ExpressionRule()
 					),
@@ -107,7 +107,7 @@ final class EditForm implements Form\Control {
 									'value' => 'xpath',
 									'disabled' => 'true',
 								] + ($language === 'xpath' ? ['selected' => 'true'] : []),
-								$this->storage,
+								new Form\EmptyStorage(),
 								'language'
 							),
 							'XPath',
@@ -119,7 +119,7 @@ final class EditForm implements Form\Control {
 									'value' => 'css',
 									'disabled' => 'true',
 								] + ($language === 'css' ? ['selected' => 'true'] : []),
-								$this->storage,
+								new Form\EmptyStorage(),
 								'language'
 							),
 							'CSS',
