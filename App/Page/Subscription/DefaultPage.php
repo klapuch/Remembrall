@@ -73,7 +73,10 @@ final class DefaultPage extends Page\Layout {
 								)
 							);
 							(new Web\HarnessedParts(
-								new Web\CollectiveParts($this->database),
+								new Web\SafeParts(
+									new Web\CollectiveParts($this->database),
+									$this->database
+								),
 								new Misc\LoggingCallback($this->logs)
 							))->add(
 								new Web\HtmlPart(
