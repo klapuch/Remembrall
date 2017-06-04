@@ -5,42 +5,42 @@ namespace Remembrall\Model\Web;
 use Symfony\Component\CssSelector;
 
 /**
- * Expression using CSS or XPath selector by user choice
+ * Expression using CSS or XPath language by user choice
  */
 final class SuitableExpression implements Expression {
-	private const CHOICES = ['xpath', 'css'];
-	private $choice;
+	private const LANGUAGES = ['xpath', 'css'];
+	private $language;
 	private $expression;
 	private $page;
 
-	public function __construct(string $choice, Page $page, string $expression) {
-		$this->choice = $choice;
+	public function __construct(string $language, Page $page, string $expression) {
+		$this->language = $language;
 		$this->page = $page;
 		$this->expression = $expression;
 	}
 
 	public function matches(): \DOMNodeList {
-		if (in_array($this->choice, self::CHOICES)) {
+		if (in_array($this->language, self::LANGUAGES)) {
 			return (new XPathExpression(
 				$this->page,
-				$this->choice === 'css'
+				$this->language === 'css'
 					? (new CssSelector\CssSelectorConverter())->toXPath($this->expression)
 					: $this->expression
 			))->matches();
 		}
 		throw new \UnexpectedValueException(
 			sprintf(
-				'Allowed choices are %s - "%s" given',
+				'Allowed languages are %s - "%s" given',
 				implode(
 					', ',
 					array_map(
-						function(string $choice): string {
-							return sprintf('"%s"', $choice);
+						function(string $language): string {
+							return sprintf('"%s"', $language);
 						},
-						self::CHOICES
+						self::LANGUAGES
 					)
 				),
-				$this->choice
+				$this->language
 			)
 		);
 	}

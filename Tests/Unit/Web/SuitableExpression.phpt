@@ -42,7 +42,7 @@ final class SuitableExpression extends Tester\TestCase {
 	}
 
 	/**
-	 * @throws \UnexpectedValueException Allowed choices are "xpath", "css" - "foo" given
+	 * @throws \UnexpectedValueException Allowed languages are "xpath", "css" - "foo" given
 	 */
 	public function testThrowingOnUnknownChoice() {
 		(new Web\SuitableExpression(
