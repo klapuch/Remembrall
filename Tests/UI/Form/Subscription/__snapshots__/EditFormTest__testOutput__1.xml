@@ -15,7 +15,7 @@
   </div>
   <div class="form-group">
     <div class="col-sm-5">
-      <label for="language">Language</label>
+      <label for="language">Query language</label>
       <select name="language" class="form-control" disabled="true">
         <option value="xpath" disabled="true">XPath</option>
         <option value="css" disabled="true">CSS</option>

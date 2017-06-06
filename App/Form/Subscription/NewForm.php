@@ -112,7 +112,7 @@ final class NewForm implements Form\Control {
 							new Validation\OneOfRule(self::LANGUAGES)
 						)
 					),
-					new Form\LinkedLabel('Language', 'language')
+					new Form\LinkedLabel('Query language', 'language')
 				),
 				self::COLUMNS
 			),
