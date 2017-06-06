@@ -11,30 +11,42 @@ use Texy;
 
 final class UnreliablePage extends Layout {
 	public function response(array $parameters): Application\Response {
-		return new Response\AuthenticatedResponse(
-			new Response\ComposedResponse(
-				new Response\CombinedResponse(
-					new Response\PlainResponse(
-						(new Page(
-							new Web\FormattedParts(
-								new Web\UnreliableParts(
-									new Web\CollectiveParts($this->database),
-									$this->database
-								),
-								new Texy\Texy(),
-								new Dindent\Indenter()
-							)
-						))->render()
+		try {
+			return new Response\AuthenticatedResponse(
+				new Response\ComposedResponse(
+					new Response\CombinedResponse(
+						new Response\PlainResponse(
+							(new Page(
+								new Web\FormattedParts(
+									new Web\UnreliableParts(
+										new Web\CollectiveParts($this->database),
+										$this->database
+									),
+									new Texy\Texy(),
+									new Dindent\Indenter()
+								)
+							))->render()
+						),
+						new Response\FlashResponse(),
+						new Response\GetResponse(),
+						new Response\PermissionResponse(),
+						new Response\IdentifiedResponse($this->user)
 					),
-					new Response\GetResponse(),
-					new Response\PermissionResponse(),
-					new Response\IdentifiedResponse($this->user)
+					__DIR__ . '/templates/unreliable.xml',
+					__DIR__ . '/../templates/layout.xml'
 				),
-				__DIR__ . '/templates/unreliable.xml',
-				__DIR__ . '/../templates/layout.xml'
-			),
-			$this->user,
-			$this->url
-		);
+				$this->user,
+				$this->url
+			);
+		} catch (\UnexpectedValueException $ex) {
+			return new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					$this->url
+				),
+				['danger' => $ex->getMessage()],
+				$_SESSION
+			);
+		}
 	}
 }
