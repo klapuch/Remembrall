@@ -16,4 +16,4 @@ Create database and name it **remembrall** via `psql -U postgres -W` in **rememb
 ##### Import
 `cat fixtures/schema.sql | docker exec -i {IMAGE} psql -U postgres -d remembrall`
 ### Init
-Go to `remembrall-server` image (`docker exec -it {IMAGE} /bin/bash`) and run `vendor/bin/phing init`
+Go to `remembrall-server` image (`docker exec -it {IMAGE} sh`) and run `vendor/bin/phing init`
