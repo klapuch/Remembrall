@@ -17,7 +17,7 @@
 					<heading>#</heading>
 					<heading sort="url">URL</heading>
 					<heading sort="expression">Expression</heading>
-					<heading>Language</heading>
+					<heading sort="language">Language</heading>
 					<heading>Content</heading>
 					<heading sort="occurrences">Occurrences</heading>
 					<heading>Options</heading>

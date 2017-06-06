@@ -9,7 +9,7 @@ use Remembrall\Model\Misc;
 use Remembrall\Model\Web;
 
 final class Page {
-	private const COLUMNS = ['url', 'expression', 'occurrences'];
+	private const COLUMNS = ['url', 'expression', 'occurrences', 'language'];
 	private const DEFAULT_PER_PAGE = 100;
 	private const START_PER_PAGE = 10;
 	private $parts;

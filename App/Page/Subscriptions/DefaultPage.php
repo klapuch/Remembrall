@@ -16,7 +16,7 @@ use Remembrall\Response;
 use Texy;
 
 final class DefaultPage extends Page\Layout {
-	private const FIELDS = ['last_update', 'interval', 'expression', 'url'];
+	private const FIELDS = ['last_update', 'interval', 'expression', 'url', 'language'];
 
 	public function response(array $parameters): Application\Response {
 		$subscriptions = iterator_to_array(
