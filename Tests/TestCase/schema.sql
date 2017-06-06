@@ -651,11 +651,11 @@ ALTER TABLE ONLY parts
 
 
 --
--- Name: parts_page_url_expression; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: parts_page_url_expression_language; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY parts
-    ADD CONSTRAINT parts_page_url_expression UNIQUE (page_url, expression);
+    ADD CONSTRAINT parts_page_url_expression_language UNIQUE (page_url, expression, language);
 
 
 --
