@@ -20,21 +20,36 @@ final class ExistingPart implements Part {
 	}
 
 	public function content(): string {
-		if (!$this->exists())
-			throw new \Remembrall\Exception\NotFoundException('The part does not exist');
-		return $this->origin->content();
+		if ($this->exists())
+			return $this->origin->content();
+		throw new \Remembrall\Exception\NotFoundException(
+			sprintf(
+				'Content from part id "%d" does not exist',
+				$this->id
+			)
+		);
 	}
 
 	public function snapshot(): string {
-		if (!$this->exists())
-			throw new \Remembrall\Exception\NotFoundException('The part does not exist');
-		return $this->origin->snapshot();
+		if ($this->exists())
+			return $this->origin->snapshot();
+		throw new \Remembrall\Exception\NotFoundException(
+			sprintf(
+				'Snapshot from part id "%d" does not exist',
+				$this->id
+			)
+		);
 	}
 
 	public function refresh(): Part {
-		if (!$this->exists())
-			throw new \Remembrall\Exception\NotFoundException('The part does not exist');
-		return $this->origin->refresh();
+		if ($this->exists())
+			return $this->origin->refresh();
+		throw new \Remembrall\Exception\NotFoundException(
+			sprintf(
+				'The part id "%d" does not exist',
+				$this->id
+			)
+		);
 	}
 
 	public function print(Output\Format $format): Output\Format {

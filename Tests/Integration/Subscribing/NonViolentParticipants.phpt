@@ -152,7 +152,7 @@ final class NonViolentParticipants extends TestCase\Database {
 		$participants->invite($subscription, $participant);
 		Assert::exception(function() use ($participant, $participants, $subscription) {
 			$participants->invite($subscription, $participant);
-		}, \OutOfRangeException::class, 'Participant declined your invitation too many times');
+		}, \OutOfRangeException::class, '"me@participant.cz" declined your invitation too many times');
 		Assert::same(5, $this->database->query('SELECT COUNT(*) FROM invitation_attempts')->fetchColumn());
 		$this->database->exec("UPDATE invitation_attempts SET attempt_at = NOW() - INTERVAL '12 HOUR'");
 		$participants->invite($subscription, $participant);
@@ -162,7 +162,7 @@ final class NonViolentParticipants extends TestCase\Database {
 		$participants->invite($subscription, $participant);
 		Assert::exception(function() use ($participant, $participants, $subscription) {
 			$participants->invite($subscription, $participant);
-		}, \OutOfRangeException::class, 'Participant declined your invitation too many times');
+		}, \OutOfRangeException::class, '"me@participant.cz" declined your invitation too many times');
 		Assert::noError(function() use ($subscription, $participant, $participants) {
 			$participants->invite($subscription, 'you@participant.cz');
 			$participants->invite($subscription + 1, $participant);

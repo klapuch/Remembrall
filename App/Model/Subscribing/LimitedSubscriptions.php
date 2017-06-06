@@ -38,6 +38,13 @@ final class LimitedSubscriptions implements Subscriptions {
 				sprintf(
 					'You have reached the limit of %d subscribed parts',
 					self::LIMIT
+				),
+				0,
+				new \Exception(
+					sprintf(
+						'User id "%d" reached the maximum of subscribed parts',
+						$this->user->id()
+					)
 				)
 			);
 		}

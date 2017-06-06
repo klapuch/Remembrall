@@ -33,9 +33,6 @@ final class LimitedSubscriptions extends TestCase\Database {
 		);
 	}
 
-	/**
-	 * @throws \OverflowException You have reached the limit of 5 subscribed parts
-	 */
 	public function testSubscribingOverLimit() {
 		$this->database->exec(
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
@@ -53,16 +50,19 @@ final class LimitedSubscriptions extends TestCase\Database {
 			(4, 666, 'PT4M', NOW(), ''),
 			(5, 666, 'PT5M', NOW(), '')"
 		);
-		(new Subscribing\LimitedSubscriptions(
-			new Subscribing\FakeSubscriptions(),
-			new Access\FakeUser(666),
-			$this->database
-		))->subscribe(
-			new Uri\FakeUri('url'),
-			'//p',
-			'xpath',
-			new Time\FakeInterval()
-		);
+		$ex = Assert::exception(function() {
+			(new Subscribing\LimitedSubscriptions(
+				new Subscribing\FakeSubscriptions(),
+				new Access\FakeUser(666),
+				$this->database
+			))->subscribe(
+				new Uri\FakeUri('url'),
+				'//p',
+				'xpath',
+				new Time\FakeInterval()
+			);
+		}, \OverflowException::class, 'You have reached the limit of 5 subscribed parts');
+		Assert::type(\Throwable::class, $ex->getPrevious());
 	}
 
 	protected function prepareDatabase(): void {

@@ -17,7 +17,7 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class OwnedSubscription extends TestCase\Database {
 	public function testThrowingOnHandlingForeign() {
-		Assert::exception(function() {
+		$ex = Assert::exception(function() {
 			(new Subscribing\OwnedSubscription(
 				new Subscribing\FakeSubscription(),
 				1,
@@ -25,7 +25,8 @@ final class OwnedSubscription extends TestCase\Database {
 				$this->database
 			))->cancel();
 		}, \Remembrall\Exception\NotFoundException::class);
-		Assert::exception(function() {
+		Assert::type(\Throwable::class, $ex->getPrevious());
+		$ex = Assert::exception(function() {
 			(new Subscribing\OwnedSubscription(
 				new Subscribing\FakeSubscription(),
 				1,
@@ -33,6 +34,7 @@ final class OwnedSubscription extends TestCase\Database {
 				$this->database
 			))->edit(new Time\FakeInterval(null, null, 'PT10M'));
 		}, \Remembrall\Exception\NotFoundException::class);
+		Assert::type(\Throwable::class, $ex->getPrevious());
 		Assert::exception(function() {
 			(new Subscribing\OwnedSubscription(
 				new Subscribing\FakeSubscription(),
@@ -41,7 +43,7 @@ final class OwnedSubscription extends TestCase\Database {
 				$this->database
 			))->notify();
 		}, \Remembrall\Exception\NotFoundException::class);
-		Assert::exception(function() {
+		$ex = Assert::exception(function() {
 			(new Subscribing\OwnedSubscription(
 				new Subscribing\FakeSubscription(),
 				1,
@@ -49,6 +51,7 @@ final class OwnedSubscription extends TestCase\Database {
 				$this->database
 			))->print(new Output\FakeFormat(''));
 		}, \Remembrall\Exception\NotFoundException::class);
+		Assert::type(\Throwable::class, $ex->getPrevious());
 	}
 
 	public function testHandlingOwned() {

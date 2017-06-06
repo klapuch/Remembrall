@@ -21,14 +21,14 @@ final class UnusedInvitation extends TestCase\Database {
 				'abcd',
 				$this->database
 			))->accept();
-		}, \Remembrall\Exception\NotFoundException::class, 'The invitation is accepted or does not exist');
+		}, \Remembrall\Exception\NotFoundException::class, 'The invitation with code "abcd" is accepted or does not exist');
 		Assert::exception(function() {
 			(new Subscribing\UnusedInvitation(
 				new Subscribing\FakeInvitation(),
 				'abcd',
 				$this->database
 			))->decline();
-		}, \Remembrall\Exception\NotFoundException::class, 'The invitation is declined or does not exist');
+		}, \Remembrall\Exception\NotFoundException::class, 'The invitation with code "abcd" is declined or does not exist');
 		$this->database->prepare(
 			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
 			('me@participant.cz', 1, 'abc', NOW(), FALSE, NULL)"
@@ -39,18 +39,18 @@ final class UnusedInvitation extends TestCase\Database {
 				'abcd',
 				$this->database
 			))->accept();
-		}, \Remembrall\Exception\NotFoundException::class, 'The invitation is accepted or does not exist');
+		}, \Remembrall\Exception\NotFoundException::class, 'The invitation with code "abcd" is accepted or does not exist');
 		Assert::exception(function() {
 			(new Subscribing\UnusedInvitation(
 				new Subscribing\FakeInvitation(),
 				'abcd',
 				$this->database
 			))->decline();
-		}, \Remembrall\Exception\NotFoundException::class, 'The invitation is declined or does not exist');
+		}, \Remembrall\Exception\NotFoundException::class, 'The invitation with code "abcd" is declined or does not exist');
 	}
 
 	/**
-	 * @throws \Remembrall\Exception\NotFoundException The invitation is accepted or does not exist
+	 * @throws \Remembrall\Exception\NotFoundException The invitation with code "abc" is accepted or does not exist
 	 */
 	public function testThrowingOnAcceptingAlreadyAcceptedCode() {
 		$code = 'abc';
@@ -66,7 +66,7 @@ final class UnusedInvitation extends TestCase\Database {
 	}
 
 	/**
-	 * @throws \Remembrall\Exception\NotFoundException The invitation is accepted or does not exist
+	 * @throws \Remembrall\Exception\NotFoundException The invitation with code "ABC" is accepted or does not exist
 	 */
 	public function testThrowingOnAcceptingCaseInsensitiveCode() {
 		$code = 'abc';
@@ -82,7 +82,7 @@ final class UnusedInvitation extends TestCase\Database {
 	}
 
 	/**
-	 * @throws \Remembrall\Exception\NotFoundException The invitation is declined or does not exist
+	 * @throws \Remembrall\Exception\NotFoundException The invitation with code "ABC" is declined or does not exist
 	 */
 	public function testThrowingOnDecliningCaseInsensitiveCode() {
 		$code = 'abc';
@@ -98,7 +98,7 @@ final class UnusedInvitation extends TestCase\Database {
 	}
 
 	/**
-	 * @throws \Remembrall\Exception\NotFoundException The invitation is declined or does not exist
+	 * @throws \Remembrall\Exception\NotFoundException The invitation with code "abc" is declined or does not exist
 	 */
 	public function testThrowingOnDeclineAlreadyDeclinedCode() {
 		$code = 'abc';
@@ -114,7 +114,7 @@ final class UnusedInvitation extends TestCase\Database {
 	}
 
 	/**
-	 * @throws \Remembrall\Exception\NotFoundException The invitation is declined or does not exist
+	 * @throws \Remembrall\Exception\NotFoundException The invitation with code "abc" is declined or does not exist
 	 */
 	public function testThrowingOnPrintingAffectedCode() {
 		(new Subscribing\UnusedInvitation(

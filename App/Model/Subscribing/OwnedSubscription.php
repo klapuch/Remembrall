@@ -31,7 +31,15 @@ final class OwnedSubscription implements Subscription {
 	public function cancel(): void {
 		if (!$this->owned()) {
 			throw new \Remembrall\Exception\NotFoundException(
-				'You can not cancel foreign subscription'
+				'You can not cancel foreign subscription',
+				0,
+				new \Exception(
+					sprintf(
+						'User "%d" is not owner of "%d" subscription for cancelling',
+						$this->owner->id(),
+						$this->id
+					)
+				)
 			);
 		}
 		$this->origin->cancel();
@@ -40,7 +48,15 @@ final class OwnedSubscription implements Subscription {
 	public function edit(Time\Interval $interval): void {
 		if (!$this->owned()) {
 			throw new \Remembrall\Exception\NotFoundException(
-				'You can not edit foreign subscription'
+				'You can not edit foreign subscription',
+				0,
+				new \Exception(
+					sprintf(
+						'User "%d" is not owner of "%d" subscription for editing',
+						$this->owner->id(),
+						$this->id
+					)
+				)
 			);
 		}
 		$this->origin->edit($interval);
@@ -49,7 +65,15 @@ final class OwnedSubscription implements Subscription {
 	public function notify(): void {
 		if (!$this->owned()) {
 			throw new \Remembrall\Exception\NotFoundException(
-				'You can not be notified on foreign subscription'
+				'You can not be notified on foreign subscription',
+				0,
+				new \Exception(
+					sprintf(
+						'User "%d" is not owner of "%d" subscription for notifying',
+						$this->owner->id(),
+						$this->id
+					)
+				)
 			);
 		}
 		$this->origin->notify();
@@ -58,7 +82,15 @@ final class OwnedSubscription implements Subscription {
 	public function print(Output\Format $format): Output\Format {
 		if (!$this->owned()) {
 			throw new \Remembrall\Exception\NotFoundException(
-				'You can not see foreign subscription'
+				'You can not see foreign subscription',
+				0,
+				new \Exception(
+					sprintf(
+						'User "%d" is not owner of "%d" subscription for seeing',
+						$this->owner->id(),
+						$this->id
+					)
+				)
 			);
 		}
 		return $this->origin->print($format);
