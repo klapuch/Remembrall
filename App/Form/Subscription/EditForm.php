@@ -106,8 +106,8 @@ final class EditForm implements Form\Control {
 								[
 									'value' => 'xpath',
 									'disabled' => 'true',
-								] + ($language === 'xpath' ? ['selected' => 'true'] : []),
-								new Form\EmptyStorage(),
+								],
+								new Form\FakeStorage(['language' => $language]),
 								'language'
 							),
 							'XPath',
@@ -118,8 +118,8 @@ final class EditForm implements Form\Control {
 								[
 									'value' => 'css',
 									'disabled' => 'true',
-								] + ($language === 'css' ? ['selected' => 'true'] : []),
-								new Form\EmptyStorage(),
+								],
+								new Form\FakeStorage(['language' => $language]),
 								'language'
 							),
 							'CSS',
