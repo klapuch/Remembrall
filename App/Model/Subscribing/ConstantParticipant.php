@@ -8,7 +8,7 @@ final class ConstantParticipant implements Participant {
 	private $participant;
 
 	public function __construct(array $participant) {
-	    $this->participant = $participant;
+		$this->participant = $participant;
 	}
 
 	public function print(Output\Format $format): Output\Format {
