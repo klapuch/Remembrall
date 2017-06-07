@@ -9,7 +9,7 @@ final class FakeParticipants implements Participants {
 	private $invitation;
 
 	public function __construct(Invitation $invitation = null) {
-	    $this->invitation = $invitation;
+		$this->invitation = $invitation;
 	}
 
 	public function invite(int $subscription, string $email): Invitation {
