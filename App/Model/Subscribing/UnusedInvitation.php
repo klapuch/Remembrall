@@ -9,14 +9,14 @@ use Klapuch\Storage;
  * Invitation which has not been used yet
  */
 final class UnusedInvitation implements Invitation {
+	private $origin;
 	private $code;
 	private $database;
-	private $origin;
 
 	public function __construct(Invitation $origin, string $code, \PDO $database) {
+		$this->origin = $origin;
 		$this->code = $code;
 		$this->database = $database;
-		$this->origin = $origin;
 	}
 
 	public function accept(): void {
