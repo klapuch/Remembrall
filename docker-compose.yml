@@ -12,6 +12,7 @@ services:
       working_dir: /var/www/Remembrall
       volumes:
           - .:/var/www/Remembrall
+          - ./sendmail:/usr/sbin/fake-sendmail
     server:
       image: nginx:alpine
       working_dir: /var/www/Remembrall

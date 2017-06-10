@@ -76,7 +76,7 @@ final class RequestPage extends Page\Layout {
 			return new Response\InformativeResponse(
 				new Response\RedirectResponse(
 					new Response\EmptyResponse(),
-					new Uri\RelativeUrl($this->url, 'verification/request')
+					new Uri\RelativeUrl($this->url, 'sign/in')
 				),
 				['success' => 'Verification code has been resent'],
 				$_SESSION

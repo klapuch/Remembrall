@@ -46,6 +46,10 @@
 		<exclude-pattern>Tests/Functional</exclude-pattern>
 	</rule>
 
+	<rule ref="Squiz.Strings.DoubleQuoteUsage.ContainsVar">
+		<exclude-pattern>Tests/Functional</exclude-pattern>
+	</rule>
+
 	<rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration">
 		<properties>
 			<property name="usefulAnnotations" type="array" value="@dataProvider,@throws"/>

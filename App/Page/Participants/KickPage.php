@@ -25,6 +25,8 @@ final class KickPage extends Page\Layout {
 
 	public function submitKick(array $participant): Application\Response {
 		try {
+			if (!isset($participant['email']) || !isset($participant['subscription']))
+				throw new \Exception('Email and subscription must be specified');
 			$this->protect();
 			$kick = (new Subscribing\MemorialInvitation(
 				(int) $participant['subscription'],

@@ -1,0 +1,6 @@
+#!/bin/bash
+{
+date
+echo $@
+cat
+} >> /var/log/sendmail.log

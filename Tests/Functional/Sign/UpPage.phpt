@@ -29,6 +29,29 @@ final class UpPage extends \Tester\TestCase {
 			$dom->loadXML($body);
 		});
 	}
+
+	public function testValidSubmitting() {
+		$this->purge(['users', 'verification_codes']);
+		$_POST['email'] = 'me@me.cz';
+		$_POST['password'] = 'heslo123';
+		$_POST['act'] = 'Register';
+		$headers = (new Sign\UpPage(
+			new Uri\FakeUri(''),
+			new Log\FakeLogs(),
+			new Ini\FakeSource($this->configuration)
+		))->submitUp($_POST)->headers();
+		Assert::same('/sign/in', $headers['Location']);
+	}
+
+	public function testErrorSubmittingRedirectingToSamePage() {
+		$headers = (new Sign\UpPage(
+			new Uri\FakeUri(''),
+			new Log\FakeLogs(),
+			new Ini\FakeSource($this->configuration)
+		))->submitUp([])->headers();
+		Assert::same('/sign/up', $headers['Location']);
+	}
 }
+
 
 (new UpPage())->run();

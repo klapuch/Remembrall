@@ -94,7 +94,7 @@ final class UpPage extends Page\Layout {
 				new Response\InformativeResponse(
 					new Response\RedirectResponse(
 						new Response\EmptyResponse(),
-						new Uri\RelativeUrl($this->url, 'sing/up')
+						new Uri\RelativeUrl($this->url, 'sign/in')
 					),
 					['warning' => 'Confirm your registration in the email'],
 					$_SESSION
@@ -106,7 +106,7 @@ final class UpPage extends Page\Layout {
 			return new Response\InformativeResponse(
 				new Response\RedirectResponse(
 					new Response\EmptyResponse(),
-					new Uri\RelativeUrl($this->url, 'sing/up')
+					new Uri\RelativeUrl($this->url, 'sign/up')
 				),
 				['danger' => $ex->getMessage()],
 				$_SESSION

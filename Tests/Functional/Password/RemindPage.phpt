@@ -29,6 +29,35 @@ final class RemindPage extends \Tester\TestCase {
 			$dom->loadXML($body);
 		});
 	}
+
+	public function testValidSubmitting() {
+		$_POST['email'] = 'me@me.cz';
+		$_POST['act'] = 'Remind';
+		$this->purge(['users', 'forgotten_passwords']);
+		$this->database->exec(
+			"INSERT INTO users (id, email, password, role) VALUES
+            (1, '{$_POST['email']}', 'secret', 'member')"
+		);
+		$this->database->exec(
+			"INSERT INTO forgotten_passwords (user_id, used, reminder, reminded_at, expire_at) VALUES
+            (1, FALSE, 'abc', NOW(), NOW() + INTERVAL '10 MINUTE')"
+		);
+		$headers = (new Password\RemindPage(
+			new Uri\FakeUri(''),
+			new Log\FakeLogs(),
+			new Ini\FakeSource($this->configuration)
+		))->submitRemind($_POST)->headers();
+		Assert::same('/sign/in', $headers['Location']);
+	}
+
+	public function testErrorSubmittingRedirectingToSamePage() {
+		$response = (new Password\RemindPage(
+			new Uri\FakeUri(''),
+			new Log\FakeLogs(),
+			new Ini\FakeSource($this->configuration)
+		))->submitRemind([]);
+		Assert::same('/password/remind', $response->headers()['Location']);
+	}
 }
 
 (new RemindPage())->run();

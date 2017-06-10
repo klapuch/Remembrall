@@ -25,6 +25,8 @@ final class InvitePage extends Page\Layout {
 
 	public function submitInvite(array $participant): Application\Response {
 		try {
+			if (!isset($participant['email']) || !isset($participant['subscription']))
+				throw new \Exception('Email and subscription must be specified');
 			$this->protect();
 			$invitation = (new Subscribing\GuestParticipants(
 				new Subscribing\NonViolentParticipants(

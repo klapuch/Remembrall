@@ -73,7 +73,7 @@ final class RemindPage extends Page\Layout {
 			return new Response\InformativeResponse(
 				new Response\RedirectResponse(
 					new Response\EmptyResponse(),
-					new Uri\RelativeUrl($this->url, 'password/remind')
+					new Uri\RelativeUrl($this->url, 'sign/in')
 				),
 				['danger' => 'Password reset has been sent to your email'],
 				$_SESSION

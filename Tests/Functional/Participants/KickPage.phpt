@@ -10,6 +10,7 @@ use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Uri;
 use Remembrall\Page\Participants;
+use Remembrall\Response;
 use Remembrall\TestCase;
 use Tester\Assert;
 
@@ -25,6 +26,61 @@ final class KickPage extends \Tester\TestCase {
 			new Ini\FakeSource($this->configuration)
 		))->response([])->headers();
 		Assert::same(['Location' => '/error'], $headers);
+	}
+
+	public function testValidSubmitting() {
+		$_POST['subscription'] = 1;
+		$_POST['email'] = 'foo@email.cz';
+		$this->purge(['participants', 'invitation_attempts', 'subscriptions', 'parts', 'users']);
+		$this->database->exec(
+			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
+			(1, 0, 4, 'PT3M', NOW(), '')"
+		);
+		$this->database->exec(
+			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
+			(4, 'www.google.com', '//google', 'google content', 'google snap')"
+		);
+		$this->database->exec(
+			"INSERT INTO users (id, email, password, role) VALUES
+            (0, 'admin@admin.cz', 'secret', 'member')"
+		);
+		$this->database->exec(
+			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) 
+			VALUES ('{$_POST['email']}', 1, 'abc', NOW(), FALSE, NULL)"
+		);
+		Assert::equal(
+			new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl(new Uri\FakeUri(''), 'subscriptions')
+				),
+				['success' => 'Participant has been kicked'],
+				$_SESSION
+			),
+			(new Participants\KickPage(
+				new Uri\FakeUri(''),
+				new Log\FakeLogs(),
+				new Ini\FakeSource($this->configuration)
+			))->submitKick($_POST)
+		);
+	}
+
+	public function testSubmittingWithoutNeededFields() {
+		Assert::equal(
+			new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl(new Uri\FakeUri(''), 'subscriptions')
+				),
+				['danger' => 'Email and subscription must be specified'],
+				$_SESSION
+			),
+			(new Participants\KickPage(
+				new Uri\FakeUri(''),
+				new Log\FakeLogs(),
+				new Ini\FakeSource($this->configuration)
+			))->submitKick([])
+		);
 	}
 }
 
