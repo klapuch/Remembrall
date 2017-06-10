@@ -90,7 +90,6 @@ final class ResetPage extends Page\Layout {
 				$_SESSION
 			);
 		} catch (\Throwable $ex) {
-			var_dump($ex->getMessage());
 			return new Response\InformativeResponse(
 				new Response\RedirectResponse(
 					new Response\EmptyResponse(),

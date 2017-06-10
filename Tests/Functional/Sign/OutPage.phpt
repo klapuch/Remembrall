@@ -10,6 +10,7 @@ use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Uri;
 use Remembrall\Page\Sign;
+use Remembrall\Response;
 use Remembrall\TestCase;
 use Tester\Assert;
 
@@ -27,13 +28,43 @@ final class OutPage extends \Tester\TestCase {
 		Assert::same('', $body);
 	}
 
-	public function testRedirectionInEveryCase() {
-		$headers = (new Sign\OutPage(
+	public function testSuccessLeaving() {
+		$_SESSION['id'] = 1;
+		$response = (new Sign\OutPage(
 			new Uri\FakeUri(''),
 			new Log\FakeLogs(),
 			new Ini\FakeSource($this->configuration)
-		))->response([])->headers();
-		Assert::same(['Location' => '/sign/in'], $headers);
+		))->response([]);
+		Assert::equal(
+			new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl(new Uri\FakeUri(''), 'sign/in')
+				),
+				['success' => 'You have been logged out'],
+				$_SESSION
+			),
+			$response
+		);
+	}
+
+	public function testRedirectingToSamePageOnError() {
+		$response = (new Sign\OutPage(
+			new Uri\FakeUri(''),
+			new Log\FakeLogs(),
+			new Ini\FakeSource($this->configuration)
+		))->response([]);
+		Assert::equal(
+			new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl(new Uri\FakeUri(''), 'sign/in')
+				),
+				['danger' => 'You are not logged in'],
+				$_SESSION
+			),
+			$response
+		);
 	}
 }
 

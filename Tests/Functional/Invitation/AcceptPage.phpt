@@ -10,6 +10,7 @@ use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Uri;
 use Remembrall\Page\Invitation;
+use Remembrall\Response;
 use Remembrall\TestCase;
 use Tester\Assert;
 
@@ -27,13 +28,47 @@ final class AcceptPage extends \Tester\TestCase {
 		Assert::same('', $body);
 	}
 
-	public function testRedirectInEveryCase() {
-		$headers = (new Invitation\AcceptPage(
+	public function testSuccessAccepting() {
+		$code = 'abc123';
+		$this->database->exec(
+			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) 
+			VALUES ('foo@email.cz', 1, '{$code}', NOW(), FALSE, NULL)"
+		);
+		$response = (new Invitation\AcceptPage(
 			new Uri\FakeUri(''),
 			new Log\FakeLogs(),
 			new Ini\FakeSource($this->configuration)
-		))->response(['code' => 'abc123'])->headers();
-		Assert::same(['Location' => '/sign/in'], $headers);
+		))->response(['code' => $code]);
+		Assert::equal(
+			new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl(new Uri\FakeUri(''), 'sign/in')
+				),
+				['success' => 'Invitation has been accepted'],
+				$_SESSION
+			),
+			$response
+		);
+	}
+
+	public function testErrorOnAccepting() {
+		$response = (new Invitation\AcceptPage(
+			new Uri\FakeUri(''),
+			new Log\FakeLogs(),
+			new Ini\FakeSource($this->configuration)
+		))->response(['code' => 'abc123']);
+		Assert::equal(
+			new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl(new Uri\FakeUri(''), 'sign/in')
+				),
+				['danger' => 'The invitation with code "abc123" is accepted or does not exist'],
+				$_SESSION
+			),
+			$response
+		);
 	}
 }
 

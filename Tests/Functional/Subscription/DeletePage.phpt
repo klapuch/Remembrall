@@ -10,6 +10,7 @@ use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Uri;
 use Remembrall\Page\Subscription;
+use Remembrall\Response;
 use Remembrall\TestCase;
 use Tester\Assert;
 
@@ -27,14 +28,48 @@ final class DeletePage extends \Tester\TestCase {
 		Assert::same(['Location' => '/error'], $headers);
 	}
 
-	public function testDeleting() {
-		$_POST['id'] = 123;
-		$headers = (new Subscription\DeletePage(
+	public function testSuccessDeleting() {
+		$this->database->exec(
+			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
+			(1, 0, 4, 'PT3M', NOW(), '')"
+		);
+		$_POST['id'] = 1;
+		$response = (new Subscription\DeletePage(
 			new Uri\FakeUri(''),
 			new Log\FakeLogs(),
 			new Ini\FakeSource($this->configuration)
-		))->submitDelete($_POST)->headers();
-		Assert::same(['Location' => '/subscriptions'], $headers);
+		))->submitDelete($_POST);
+		Assert::equal(
+			new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl(new Uri\FakeUri(''), 'subscriptions')
+				),
+				['success' => 'Subscription has been deleted'],
+				$_SESSION
+			),
+			$response
+		);
+	}
+
+	public function testErrorOnDeleting() {
+		$_POST['id'] = 1;
+		$response = (new Subscription\DeletePage(
+			new Uri\FakeUri(''),
+			new Log\FakeLogs(),
+			new Ini\FakeSource($this->configuration)
+		))->submitDelete($_POST);
+		Assert::equal(
+			new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl(new Uri\FakeUri(''), 'subscriptions')
+				),
+				['danger' => 'You can not cancel foreign subscription'],
+				$_SESSION
+			),
+			$response
+		);
 	}
 }
 
