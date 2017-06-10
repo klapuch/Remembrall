@@ -46,7 +46,7 @@ final class ResetPage extends \Tester\TestCase {
 		});
 	}
 
-	public function testWorkingSubmit() {
+	public function testValidSubmitting() {
 		$_POST['password'] = 'heslo';
 		$_POST['reminder'] = '123abc123';
 		$_POST['act'] = 'Send';

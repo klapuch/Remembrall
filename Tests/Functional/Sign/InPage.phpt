@@ -39,7 +39,7 @@ final class InPage extends \Tester\TestCase {
 		Assert::same(['Location' => '/sign/in'], $headers);
 	}
 
-	public function testLoggingWithCorrectCredentials() {
+	public function testValidSubmitting() {
 		$_POST['email'] = 'klapuchdominik@gmail.com';
 		$_POST['password'] = 'heslo';
 		$_POST['act'] = 'Login';
