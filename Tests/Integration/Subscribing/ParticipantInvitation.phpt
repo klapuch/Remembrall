@@ -79,10 +79,6 @@ final class ParticipantInvitation extends \Tester\TestCase {
 			$participant
 		);
 	}
-
-	protected function prepareDatabase(): void {
-		$this->purge(['participants', 'subscriptions', 'users', 'parts', 'invitation_attempts']);
-	}
 }
 
 (new ParticipantInvitation)->run();

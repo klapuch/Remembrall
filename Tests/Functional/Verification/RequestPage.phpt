@@ -31,7 +31,6 @@ final class RequestPage extends \Tester\TestCase {
 	}
 
 	public function testValidSubmitting() {
-		$this->purge(['users', 'verification_codes']);
 		$_POST['email'] = 'me@me.cz';
 		$_POST['act'] = 'Request';
 		$user = 2;

@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.6
--- Dumped by pg_dump version 9.5.6
+-- Dumped from database version 9.5.7
+-- Dumped by pg_dump version 9.5.7
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -118,6 +118,49 @@ $$;
 
 
 ALTER FUNCTION public.record_part_access() OWNER TO postgres;
+
+--
+-- Name: restart_sequences(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION restart_sequences() RETURNS void
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+    statements CURSOR FOR
+    	SELECT 'ALTER SEQUENCE ' || relname || ' RESTART;' AS query
+      FROM pg_class
+      WHERE relkind = 'S';
+BEGIN
+    FOR stmt IN statements LOOP
+        EXECUTE stmt.query;
+    END LOOP;
+END;
+$$;
+
+
+ALTER FUNCTION public.restart_sequences() OWNER TO postgres;
+
+--
+-- Name: truncate_tables(character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION truncate_tables(username character varying) RETURNS void
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+    statements CURSOR FOR
+        SELECT tablename FROM pg_tables
+        WHERE tableowner = username AND schemaname = 'public';
+BEGIN
+    FOR stmt IN statements LOOP
+        EXECUTE 'TRUNCATE TABLE ' || quote_ident(stmt.tablename) || ' CASCADE;';
+    END LOOP;
+END;
+$$;
+
+
+ALTER FUNCTION public.truncate_tables(username character varying) OWNER TO postgres;
 
 SET default_tablespace = '';
 

@@ -18,9 +18,9 @@ final class StoredPart extends \Tester\TestCase {
 
 	public function testContent() {
 		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.facedown.cz', '//facedown', 'facedown content', 'face snap'),
-			('www.google.com', '//google', 'google content', 'google snap')"
+			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
+			(1, 'www.facedown.cz', '//facedown', 'facedown content', 'face snap'),
+			(2, 'www.google.com', '//google', 'google content', 'google snap')"
 		);
 		Assert::same(
 			'facedown content',
@@ -34,9 +34,9 @@ final class StoredPart extends \Tester\TestCase {
 
 	public function testSnapshot() {
 		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.facedown.cz', '//facedown', 'facedown content', 'face snap'),
-			('www.google.com', '//google', 'google content', 'google snap')"
+			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
+			(1, 'www.facedown.cz', '//facedown', 'facedown content', 'face snap'),
+			(2, 'www.google.com', '//google', 'google content', 'google snap')"
 		);
 		Assert::same(
 			'face snap',
@@ -50,9 +50,9 @@ final class StoredPart extends \Tester\TestCase {
 
 	public function testRefreshingToNewContent() {
 		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.facedown.cz', '//facedown', 'facedown content', 'face snap'),
-			('www.google.com', '//google', 'google content', 'google snap')"
+			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
+			(1, 'www.facedown.cz', '//facedown', 'facedown content', 'face snap'),
+			(2, 'www.google.com', '//google', 'google content', 'google snap')"
 		);
 		$id = 1;
 		(new Web\StoredPart(
@@ -69,12 +69,12 @@ final class StoredPart extends \Tester\TestCase {
 
 	public function testRefreshingWithRecordedVisitation() {
 		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.facedown.cz', '//facedown', 'facedown content', 'face snap'),
-			('www.google.com', '//google', 'google content', 'google snap')"
+			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
+			(1, 'www.facedown.cz', '//facedown', 'facedown content', 'face snap'),
+			(2, 'www.google.com', '//google', 'google content', 'google snap')"
 		);
 		$id = 1;
-		$this->purge(['part_visits']);
+		$this->truncate(['part_visits']);
 		(new Web\StoredPart(
 			new Web\FakePart('NEW_CONTENT', null, 'NEW_SNAP'),
 			$id,
@@ -87,9 +87,9 @@ final class StoredPart extends \Tester\TestCase {
 
 	public function testRefreshingWithoutAffectingOthers() {
 		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.facedown.cz', '//facedown', 'facedown content', 'face snap'),
-			('www.google.com', '//google', 'google content', 'google snap')"
+			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
+			(1, 'www.facedown.cz', '//facedown', 'facedown content', 'face snap'),
+			(2, 'www.google.com', '//google', 'google content', 'google snap')"
 		);
 		$id = 1;
 		(new Web\StoredPart(
@@ -111,9 +111,9 @@ final class StoredPart extends \Tester\TestCase {
 
 	public function testAppendedPrintingById() {
 		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot, language) VALUES
-			('www.facedown.cz', '//facedown', 'facedown content', 'face snap', 'css'),
-			('www.google.com', '//google', 'google content', 'google snap', 'xpath')"
+			"INSERT INTO parts (id, page_url, expression, content, snapshot, language) VALUES
+			(1, 'www.facedown.cz', '//facedown', 'facedown content', 'face snap', 'css'),
+			(2, 'www.google.com', '//google', 'google content', 'google snap', 'xpath')"
 		);
 		Assert::same(
 			'|xxx||id|2||url|www.google.com||expression|//google||content|google content||snapshot|google snap||language|xpath|',
@@ -123,10 +123,6 @@ final class StoredPart extends \Tester\TestCase {
 				$this->database
 			))->print(new Output\FakeFormat('|xxx|'))->serialization()
 		);
-	}
-
-	protected function prepareDatabase(): void {
-		$this->purge(['parts']);
 	}
 }
 

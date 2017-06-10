@@ -31,7 +31,6 @@ final class DefaultPage extends \Tester\TestCase {
 	}
 
 	public function testAddingSubscription() {
-		$this->truncate(['pages', 'parts', 'subscriptions']);
 		$_POST['url'] = 'http://www.example.com';
 		$_POST['expression'] = '//h1';
 		$_POST['interval'] = '34';
@@ -46,7 +45,6 @@ final class DefaultPage extends \Tester\TestCase {
 	}
 
 	public function testErrorOnAdding() {
-		$this->truncate(['pages', 'parts', 'subscriptions']);
 		$headers = (new Subscription\DefaultPage(
 			new Uri\FakeUri('', '/subscription/5'),
 			new Log\FakeLogs(),

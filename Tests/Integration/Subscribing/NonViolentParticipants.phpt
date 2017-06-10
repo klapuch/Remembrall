@@ -121,7 +121,7 @@ final class NonViolentParticipants extends \Tester\TestCase {
 			(3, 'author@participant.cz', 'heslo', 'member'),
 			(2, 'foo@participant.cz', 'heslo2', 'member')"
 		);
-		$this->purge(['invitation_attempts']);
+		$this->truncate(['invitation_attempts']);
 		$this->database->exec(
 			'INSERT INTO invitation_attempts (id, participant_id, attempt_at) VALUES
 			(1, 1, NOW()), (2, 1, NOW()), (3, 1, NOW()), (4, 1, NOW()), (5, 1, NOW())'
@@ -169,10 +169,6 @@ final class NonViolentParticipants extends \Tester\TestCase {
 			$participants->invite($subscription, 'you@participant.cz');
 			$participants->invite($subscription + 1, $participant);
 		});
-	}
-
-	protected function prepareDatabase(): void {
-		$this->purge(['participants', 'subscriptions', 'users', 'invitation_attempts']);
 	}
 }
 

@@ -19,7 +19,6 @@ final class EditPage extends \Tester\TestCase {
 	use TestCase\Page;
 
 	public function testErrorOnForeignSubscription() {
-		$this->purge(['users', 'verification_codes']);
 		$this->database->exec(
 			"INSERT INTO users (id, email, password, role) VALUES
 			(2, 'klapuchdominik@gmail.com', 'dc98d5af8f15840afcab387d5923f330df4a7bc76625e024fec2cb1f626543dccf352999ffd4e3c15047bee301104d06651ccaaee60ed3b98723b1e04cbaa429e00f088976bd9b5a94d5863f1d124ee8', 'member')"
@@ -39,7 +38,6 @@ final class EditPage extends \Tester\TestCase {
 	}
 
 	public function testWorkingResponseForOwnedSubscription() {
-		$this->purge(['subscriptions']);
 		$this->database->exec(
 			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
 			(1, 0, 4, 'PT3M', NOW(), '')"
@@ -58,7 +56,6 @@ final class EditPage extends \Tester\TestCase {
 	public function testEditingSubscription() {
 		$_POST['interval'] = 34;
 		$_POST['act'] = 'Send';
-		$this->purge(['subscriptions']);
 		$this->database->exec(
 			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
 			(1, 0, 4, 'PT3M', NOW(), '')"

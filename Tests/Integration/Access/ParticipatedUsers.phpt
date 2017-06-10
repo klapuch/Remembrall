@@ -38,19 +38,19 @@ final class ParticipatedUsers extends \Tester\TestCase {
 
 	public function testTransferringInheritSubscriptions() {
 		$this->database->exec(
+			"INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES
+			(3, 3, 'PT10S', '2000-01-01', 'abc'),
+			(3, 4, 'PT20S', '2001-01-01', 'def'),
+			(3, 5, 'PT30S', '2002-01-01', 'ghi')"
+		);
+		$this->database->exec(
 			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
 			('me@participant.cz', 1, 'abc', NOW(), TRUE, NOW()),
 			('me@participant.cz', 2, 'abc', NOW(), FALSE, NULL),
 			('me@participant.cz', 3, 'abc', NOW(), TRUE, NOW()),
 			('you@participant.cz', 3, 'abc', NOW(), TRUE, NOW())"
 		);
-		$this->database->exec(
-			"INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES
-			(3, 3, 'PT10S', NOW(), 'abc'),
-			(3, 4, 'PT20S', NOW(), 'def'),
-			(3, 5, 'PT30S', NOW(), 'ghi')"
-		);
-		(new Model\Access\ParticipatedUsers(
+		$user = (new Model\Access\ParticipatedUsers(
 			new Access\UniqueUsers($this->database, new Encryption\FakeCipher()),
 			$this->database
 		))->register('me@participant.cz', '123', 'member');
@@ -60,27 +60,23 @@ final class ParticipatedUsers extends \Tester\TestCase {
 		$subscriptions = $this->database->query('SELECT * FROM subscriptions ORDER BY id')->fetchAll();
 		Assert::count(5, $subscriptions);
 		Assert::same(
-			[
-				'id' => 4,
-				'user_id' => 1,
-				'part_id' => $subscriptions[0]['part_id'],
-				'interval' => $subscriptions[0]['interval'],
-				'last_update' => $subscriptions[0]['last_update'],
-				'snapshot' => $subscriptions[0]['snapshot'],
-			],
-			$subscriptions[3]
+			[$user->id()],
+			array_unique([
+				$subscriptions[3]['user_id'],
+				$subscriptions[4]['user_id'],
+			])
 		);
-		Assert::same(
-			[
-				'id' => 5,
-				'user_id' => 1,
-				'part_id' => $subscriptions[2]['part_id'],
-				'interval' => $subscriptions[2]['interval'],
-				'last_update' => $subscriptions[2]['last_update'],
-				'snapshot' => $subscriptions[2]['snapshot'],
-			],
-			$subscriptions[4]
-		);
+		Assert::same(3, $subscriptions[3]['part_id']);
+		Assert::same(5, $subscriptions[4]['part_id']);
+
+		Assert::same('PT10S', $subscriptions[3]['interval']);
+		Assert::same('PT30S', $subscriptions[4]['interval']);
+
+		Assert::same('2000-01-01 00:00:00', $subscriptions[3]['last_update']);
+		Assert::same('2002-01-01 00:00:00', $subscriptions[4]['last_update']);
+
+		Assert::same('abc', $subscriptions[3]['snapshot']);
+		Assert::same('ghi', $subscriptions[4]['snapshot']);
 	}
 
 	public function testTransferringWithCaseInsensitiveEmail() {
@@ -99,7 +95,7 @@ final class ParticipatedUsers extends \Tester\TestCase {
 		Assert::count(0, $this->database->query('SELECT * FROM participants')->fetchAll());
 		Assert::count(0, $this->database->query('SELECT * FROM invitation_attempts')->fetchAll());
 		Assert::count(2, $this->database->query('SELECT * FROM subscriptions')->fetchAll());
-		$this->prepareDatabase();
+		$this->clear();
 		$this->database->exec(
 			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
 			('me@participant.cz', 1, 'abc', NOW(), TRUE, NOW())"
@@ -115,10 +111,6 @@ final class ParticipatedUsers extends \Tester\TestCase {
 		Assert::count(0, $this->database->query('SELECT * FROM participants')->fetchAll());
 		Assert::count(0, $this->database->query('SELECT * FROM invitation_attempts')->fetchAll());
 		Assert::count(2, $this->database->query('SELECT * FROM subscriptions')->fetchAll());
-	}
-
-	protected function prepareDatabase(): void {
-		$this->purge(['users', 'participants', 'invitation_attempts', 'subscriptions']);
 	}
 }
 

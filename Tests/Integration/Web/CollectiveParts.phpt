@@ -159,10 +159,6 @@ final class CollectiveParts extends \Tester\TestCase {
 		))->all(new Dataset\FakeSelection(''));
 		Assert::null($parts->current());
 	}
-
-	protected function prepareDatabase(): void {
-		$this->purge(['parts', 'subscriptions']);
-	}
 }
 
 (new CollectiveParts)->run();

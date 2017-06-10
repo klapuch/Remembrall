@@ -20,20 +20,20 @@ final class ChangedSubscriptions extends \Tester\TestCase {
 
 	public function testChangedSnapshotAndPastDateForParticipantAndAuthor() {
 		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES 
-			('a', '//a', 'ac', 'as'),
-			('www.matched.com', '//matched', 'bc', 'bs'),
-			('c', '//c', 'cc', 'cs'),
-			('d', '//d', 'dc', 'ds'),
-			('e', '//e', 'ec', 'es')"
+			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES 
+			(1, 'a', '//a', 'ac', 'as'),
+			(2, 'www.matched.com', '//matched', 'bc', 'bs'),
+			(3, 'c', '//c', 'cc', 'cs'),
+			(4, 'd', '//d', 'dc', 'ds'),
+			(5, 'e', '//e', 'ec', 'es')"
 		);
 		$this->database->exec(
-			"INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES 
-			(1, 1, 'PT10S', '2000-01-01', 'as'),
-			(2, 2, 'PT10S', '2002-01-01', 'changed'),
-			(3, 3, 'PT10S', NOW(), 'changed but time is recent'),
-			(4, 4, 'PT10S', NOW(), 'ds'),
-			(5, 5, 'PT10S', '2001-01-01', 'es')"
+			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES 
+			(1, 1, 1, 'PT10S', '2000-01-01', 'as'),
+			(2, 2, 2, 'PT10S', '2002-01-01', 'changed'),
+			(3, 3, 3, 'PT10S', NOW(), 'changed but time is recent'),
+			(4, 4, 4, 'PT10S', NOW(), 'ds'),
+			(5, 5, 5, 'PT10S', '2001-01-01', 'es')"
 		);
 		$this->database->exec(
 			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
@@ -100,8 +100,8 @@ final class ChangedSubscriptions extends \Tester\TestCase {
 
 	public function testTemplateFields() {
 		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES 
-			('www.matched.com', '//matched', 'bc', 'bs')"
+			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES 
+			(1, 'www.matched.com', '//matched', 'bc', 'bs')"
 		);
 		$this->database->exec(
 			"INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES 
@@ -141,10 +141,6 @@ final class ChangedSubscriptions extends \Tester\TestCase {
 			$this->database
 		))->all(new Dataset\FakeSelection(''));
 		Assert::null($subscriptions->current());
-	}
-
-	protected function prepareDatabase(): void {
-		$this->purge(['parts', 'subscriptions', 'users', 'part_visits', 'participants', 'invitation_attempts']);
 	}
 }
 

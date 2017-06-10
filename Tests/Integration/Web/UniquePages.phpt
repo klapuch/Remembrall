@@ -89,10 +89,6 @@ final class UniquePages extends \Tester\TestCase {
 		$statement->execute();
 		Assert::count(1, $statement->fetchAll());
 	}
-
-	protected function prepareDatabase(): void {
-		$this->truncate(['pages', 'page_visits']);
-	}
 }
 
 (new UniquePages)->run();

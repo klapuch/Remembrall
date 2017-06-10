@@ -22,8 +22,8 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 
 	public function testSubscribingBrandNewOne() {
 		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.google.com', '//google', 'google content', 'google snap')"
+			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
+			(1, 'www.google.com', '//google', 'google content', 'google snap')"
 		);
 		(new Subscribing\OwnedSubscriptions(
 			new Access\FakeUser(666),
@@ -38,7 +38,6 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 		$statement->execute();
 		$subscriptions = $statement->fetchAll();
 		Assert::count(1, $subscriptions);
-		Assert::same(1, $subscriptions[0]['id']);
 		Assert::same(666, $subscriptions[0]['user_id']);
 		Assert::same('PT120S', $subscriptions[0]['interval']);
 		Assert::same('google snap', $subscriptions[0]['snapshot']);
@@ -75,11 +74,11 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 
 	public function testIteratingOwned() {
 		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('https://www.google.com', '//a', 'a', ''),
-			('http://www.facedown.cz', '//b', 'b', ''),
-			('http://www.facedown.cz', '//c', 'c', ''),
-			('https://www.google.com', '//d', 'd', '')"
+			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
+			(1, 'https://www.google.com', '//a', 'a', ''),
+			(2, 'http://www.facedown.cz', '//b', 'b', ''),
+			(3, 'http://www.facedown.cz', '//c', 'c', ''),
+			(4, 'https://www.google.com', '//d', 'd', '')"
 		);
 		$this->database->exec(
 			"INSERT INTO subscriptions (part_id, user_id, interval, last_update, snapshot) VALUES
@@ -98,8 +97,8 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 			(4, '2003-01-01 01:01:01')"
 		);
 		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.google.com', '//google', 'google content', 'google snap')"
+			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
+			(5, 'www.google.com', '//google', 'google content', 'google snap')"
 		);
 		$subscriptions = (new Subscribing\OwnedSubscriptions(
 			new Access\FakeUser(1),
@@ -128,8 +127,8 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 
 	public function testIteratingWithoutVisits() {
 		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('https://www.google.com', '//a', 'a', '')"
+			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
+			(1, 'https://www.google.com', '//a', 'a', '')"
 		);
 		$this->database->exec(
 			"INSERT INTO subscriptions (part_id, user_id, interval, last_update, snapshot) VALUES
@@ -150,11 +149,6 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 			$this->database
 		))->all(new Dataset\FakeSelection('', []));
 		Assert::null($subscriptions->current());
-	}
-
-	protected function prepareDatabase(): void {
-		$this->truncate(['parts', 'subscriptions']);
-		$this->restartSequence(['parts', 'subscriptions']);
 	}
 }
 

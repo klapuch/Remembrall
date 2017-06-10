@@ -31,7 +31,6 @@ final class KickPage extends \Tester\TestCase {
 	public function testValidSubmitting() {
 		$_POST['subscription'] = 1;
 		$_POST['email'] = 'foo@email.cz';
-		$this->purge(['participants', 'invitation_attempts', 'subscriptions', 'parts', 'users']);
 		$this->database->exec(
 			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
 			(1, 0, 4, 'PT3M', NOW(), '')"

@@ -21,20 +21,17 @@ trait Database {
 			$this->credentials['POSTGRES']['user'],
 			$this->credentials['POSTGRES']['password']
 		);
-		$this->prepareDatabase();
+		$this->clear();
 	}
 
-	protected function prepareDatabase(): void {
-		/** Template method, suitable for overriding */
-	}
-
-	/**
-	 * Truncate and restart sequences to the given tables
-	 * @param array $tables
-	 */
-	protected function purge(array $tables): void {
-		$this->truncate($tables);
-		$this->restartSequence($tables);
+	final protected function clear(): void {
+		$this->database->exec(
+			sprintf(
+				"SELECT truncate_tables('%s');
+				SELECT restart_sequences()",
+				$this->credentials['POSTGRES']['user']
+			)
+		);
 	}
 
 	/**
@@ -44,7 +41,7 @@ trait Database {
 	final protected function truncate(array $tables): void {
 		$this->database->exec(sprintf('TRUNCATE %s', implode(',', $tables)));
 	}
-
+	
 	/**
 	 * Restart sequences to the given tables
 	 * @param array $tables

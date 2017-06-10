@@ -102,10 +102,6 @@ final class OwnedSubscription extends \Tester\TestCase {
 			}
 		);
 	}
-
-	protected function prepareDatabase(): void {
-		$this->purge(['subscriptions']);
-	}
 }
 
 (new OwnedSubscription)->run();

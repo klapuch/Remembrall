@@ -33,7 +33,6 @@ final class RemindPage extends \Tester\TestCase {
 	public function testValidSubmitting() {
 		$_POST['email'] = 'me@me.cz';
 		$_POST['act'] = 'Remind';
-		$this->purge(['users', 'forgotten_passwords']);
 		$this->database->exec(
 			"INSERT INTO users (id, email, password, role) VALUES
             (1, '{$_POST['email']}', 'secret', 'member')"

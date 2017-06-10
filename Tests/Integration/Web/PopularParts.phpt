@@ -69,10 +69,6 @@ final class PopularParts extends \Tester\TestCase {
 		))->all(new Dataset\FakeSelection(''));
 		Assert::null($parts->current());
 	}
-
-	protected function prepareDatabase(): void {
-		$this->purge(['parts', 'subscriptions']);
-	}
 }
 
 (new PopularParts)->run();

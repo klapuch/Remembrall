@@ -58,10 +58,6 @@ final class GuestParticipants extends \Tester\TestCase {
 			))->invite(1, 'me@participant.cz')
 		);
 	}
-
-	protected function prepareDatabase(): void {
-		$this->purge(['users']);
-	}
 }
 
 (new GuestParticipants)->run();

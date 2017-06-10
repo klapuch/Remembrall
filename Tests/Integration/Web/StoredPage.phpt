@@ -99,10 +99,6 @@ final class StoredPage extends \Tester\TestCase {
 		$statement->execute();
 		Assert::count(1, $statement->fetchAll());
 	}
-
-	protected function prepareDatabase(): void {
-		$this->truncate(['pages', 'page_visits']);
-	}
 }
 
 (new StoredPage)->run();

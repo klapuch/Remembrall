@@ -62,10 +62,6 @@ final class SafeParts extends \Tester\TestCase {
 		$statement->execute();
 		Assert::count(1, $statement->fetchAll());
 	}
-
-	protected function prepareDatabase(): void {
-		$this->purge(['parts', 'subscriptions']);
-	}
 }
 
 (new SafeParts)->run();

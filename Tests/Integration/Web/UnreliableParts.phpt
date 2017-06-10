@@ -18,12 +18,12 @@ final class UnreliableParts extends \Tester\TestCase {
 
 	public function testIterating() {
 		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.google.com', '//a', 'a', ''),
-			('www.facedown.cz', '//b', 'b', ''),
-			('www.google.com', '//c', 'c', ''),
-			('www.facedown.cz', '//d', 'd', ''),
-			('www.new.cz', '//e', 'e', '')"
+			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
+			(1, 'www.google.com', '//a', 'a', ''),
+			(2, 'www.facedown.cz', '//b', 'b', ''),
+			(3, 'www.google.com', '//c', 'c', ''),
+			(4, 'www.facedown.cz', '//d', 'd', ''),
+			(5, 'www.new.cz', '//e', 'e', '')"
 		);
 		$this->truncate(['part_visits']);
 		$this->database->exec(
@@ -59,9 +59,9 @@ final class UnreliableParts extends \Tester\TestCase {
 
 	public function testCounting() {
 		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.google.com', '//a', 'a', ''),
-			('www.facedown.cz', '//d', 'd', '')"
+			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
+			(1, 'www.google.com', '//a', 'a', ''),
+			(2, 'www.facedown.cz', '//d', 'd', '')"
 		);
 		$this->truncate(['part_visits']);
 		$this->database->exec(
@@ -92,11 +92,6 @@ final class UnreliableParts extends \Tester\TestCase {
 			$this->database
 		))->all(new Dataset\FakeSelection(''));
 		Assert::null($parts->current());
-	}
-
-	protected function prepareDatabase(): void {
-		$this->truncate(['parts', 'part_visits', 'subscriptions']);
-		$this->restartSequence(['parts', 'subscriptions']);
 	}
 }
 

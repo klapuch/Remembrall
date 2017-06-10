@@ -28,7 +28,6 @@ final class ConfirmPage extends \Tester\TestCase {
 	}
 
 	public function testLoggingOnValidCode() {
-		$this->purge(['users', 'verification_codes']);
 		$code = 'valid:code';
 		$statement = $this->database->prepare(
 			'INSERT INTO verification_codes (user_id, code, used) VALUES

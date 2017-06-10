@@ -31,7 +31,6 @@ final class UpPage extends \Tester\TestCase {
 	}
 
 	public function testValidSubmitting() {
-		$this->purge(['users', 'verification_codes']);
 		$_POST['email'] = 'me@me.cz';
 		$_POST['password'] = 'heslo123';
 		$_POST['act'] = 'Register';

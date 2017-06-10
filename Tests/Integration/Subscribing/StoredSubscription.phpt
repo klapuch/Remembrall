@@ -136,10 +136,6 @@ final class StoredSubscription extends \Tester\TestCase {
 			$subscription->print(new Output\FakeFormat(''))->serialization()
 		);
 	}
-
-	protected function prepareDatabase(): void {
-		$this->purge(['subscriptions', 'notifications', 'parts']);
-	}
 }
 
 (new StoredSubscription)->run();

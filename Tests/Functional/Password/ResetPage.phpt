@@ -28,7 +28,6 @@ final class ResetPage extends \Tester\TestCase {
 	}
 
 	public function testWorkingResponseForValidReminder() {
-		$this->purge(['forgotten_passwords']);
 		$reminder = '123abc123';
 		$statement = $this->database->prepare(
 			"INSERT INTO forgotten_passwords (user_id, used, reminder, reminded_at, expire_at) VALUES
@@ -50,7 +49,6 @@ final class ResetPage extends \Tester\TestCase {
 		$_POST['password'] = 'heslo';
 		$_POST['reminder'] = '123abc123';
 		$_POST['act'] = 'Send';
-		$this->purge(['forgotten_passwords']);
 		$statement = $this->database->prepare(
 			"INSERT INTO forgotten_passwords (user_id, used, reminder, reminded_at, expire_at) VALUES
 			(1, FALSE, ?, NOW(), NOW() + INTERVAL '10 MINUTE')"
@@ -65,7 +63,6 @@ final class ResetPage extends \Tester\TestCase {
 	}
 
 	public function testErrorSubmit() {
-		$this->purge(['forgotten_passwords']);
 		$_POST['password'] = 'heslo';
 		$_POST['reminder'] = '123abc123';
 		$_POST['act'] = 'Send';

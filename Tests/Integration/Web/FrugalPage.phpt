@@ -118,10 +118,6 @@ final class FrugalPage extends \Tester\TestCase {
 			))->content()->saveHTML()
 		);
 	}
-
-	protected function prepareDatabase(): void {
-		$this->truncate(['pages', 'page_visits']);
-	}
 }
 
 (new FrugalPage())->run();

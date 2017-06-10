@@ -53,8 +53,8 @@ final class ExistingPart extends \Tester\TestCase {
 
 	public function testExistingPart() {
 		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.facedown.cz', '//d', 'd', '')"
+			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
+			(1, 'www.facedown.cz', '//d', 'd', '')"
 		);
 		Assert::noError(
 			function() {
@@ -83,10 +83,6 @@ final class ExistingPart extends \Tester\TestCase {
 				))->snapshot();
 			}
 		);
-	}
-
-	protected function prepareDatabase(): void {
-		$this->purge(['parts']);
 	}
 }
 

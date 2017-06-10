@@ -171,10 +171,6 @@ final class UnusedInvitation extends \Tester\TestCase {
 			))->decline();
 		});
 	}
-
-	protected function prepareDatabase(): void {
-		$this->purge(['participants', 'invitation_attempts']);
-	}
 }
 
 (new UnusedInvitation)->run();

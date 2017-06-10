@@ -57,10 +57,6 @@ final class MemorialInvitation extends \Tester\TestCase {
 		))->print(new Output\FakeFormat());
 		Assert::same('|author|author@participant.cz||expression|//p||email|me@participant.cz||code|abc||url|www.me.cz|', $print->serialization());
 	}
-
-	protected function prepareDatabase(): void {
-		$this->purge(['participants', 'subscriptions', 'users', 'parts', 'invitation_attempts']);
-	}
 }
 
 (new MemorialInvitation())->run();

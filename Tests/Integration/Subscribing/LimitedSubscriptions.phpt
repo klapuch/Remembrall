@@ -37,12 +37,12 @@ final class LimitedSubscriptions extends \Tester\TestCase {
 
 	public function testSubscribingOverLimit() {
 		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.google.com', '//a', 'a', ''),
-			('www.facedown.cz', '//b', 'b', ''),
-			('www.facedown.cz', '//c', 'c', ''),
-			('www.google.com', '//d', 'd', ''),
-			('www.facedown.cz', '//d', 'd', '')"
+			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
+			(1, 'www.google.com', '//a', 'a', ''),
+			(2, 'www.facedown.cz', '//b', 'b', ''),
+			(3, 'www.facedown.cz', '//c', 'c', ''),
+			(4, 'www.google.com', '//d', 'd', ''),
+			(5, 'www.facedown.cz', '//d', 'd', '')"
 		);
 		$this->database->exec(
 			"INSERT INTO subscriptions (part_id, user_id, interval, last_update, snapshot) VALUES
@@ -65,10 +65,6 @@ final class LimitedSubscriptions extends \Tester\TestCase {
 			);
 		}, \OverflowException::class, 'You have reached the limit of 5 subscribed parts');
 		Assert::type(\Throwable::class, $ex->getPrevious());
-	}
-
-	protected function prepareDatabase(): void {
-		$this->purge(['parts', 'subscriptions']);
 	}
 }
 
