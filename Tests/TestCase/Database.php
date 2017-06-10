@@ -41,7 +41,7 @@ trait Database {
 	final protected function truncate(array $tables): void {
 		$this->database->exec(sprintf('TRUNCATE %s', implode(',', $tables)));
 	}
-	
+
 	/**
 	 * Restart sequences to the given tables
 	 * @param array $tables
