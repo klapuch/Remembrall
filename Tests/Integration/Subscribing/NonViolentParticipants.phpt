@@ -78,6 +78,7 @@ final class NonViolentParticipants extends \Tester\TestCase {
 		$participants->kick(2, $participant);
 		$participants->invite(3, $participant);
 		Assert::count(1, $this->database->query('SELECT * FROM participants')->fetchAll());
+		Assert::count(2, $this->database->query('SELECT * FROM invitation_attempts')->fetchAll());
 		Assert::same(3, $this->database->query('SELECT subscription_id FROM participants')->fetchColumn());
 	}
 
