@@ -30,11 +30,6 @@ final class OutPage extends \Tester\TestCase {
 
 	public function testSuccessLeaving() {
 		$_SESSION['id'] = 1;
-		$response = (new Sign\OutPage(
-			new Uri\FakeUri(''),
-			new Log\FakeLogs(),
-			new Ini\FakeSource($this->configuration)
-		))->response([]);
 		Assert::equal(
 			new Response\InformativeResponse(
 				new Response\RedirectResponse(
@@ -44,16 +39,15 @@ final class OutPage extends \Tester\TestCase {
 				['success' => 'You have been logged out'],
 				$_SESSION
 			),
-			$response
+			(new Sign\OutPage(
+				new Uri\FakeUri(''),
+				new Log\FakeLogs(),
+				new Ini\FakeSource($this->configuration)
+			))->response([])
 		);
 	}
 
 	public function testRedirectingToSamePageOnError() {
-		$response = (new Sign\OutPage(
-			new Uri\FakeUri(''),
-			new Log\FakeLogs(),
-			new Ini\FakeSource($this->configuration)
-		))->response([]);
 		Assert::equal(
 			new Response\InformativeResponse(
 				new Response\RedirectResponse(
@@ -63,7 +57,11 @@ final class OutPage extends \Tester\TestCase {
 				['danger' => 'You are not logged in'],
 				$_SESSION
 			),
-			$response
+			(new Sign\OutPage(
+				new Uri\FakeUri(''),
+				new Log\FakeLogs(),
+				new Ini\FakeSource($this->configuration)
+			))->response([])
 		);
 	}
 }

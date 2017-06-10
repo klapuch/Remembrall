@@ -34,11 +34,6 @@ final class AcceptPage extends \Tester\TestCase {
 			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) 
 			VALUES ('foo@email.cz', 1, '{$code}', NOW(), FALSE, NULL)"
 		);
-		$response = (new Invitation\AcceptPage(
-			new Uri\FakeUri(''),
-			new Log\FakeLogs(),
-			new Ini\FakeSource($this->configuration)
-		))->response(['code' => $code]);
 		Assert::equal(
 			new Response\InformativeResponse(
 				new Response\RedirectResponse(
@@ -48,16 +43,15 @@ final class AcceptPage extends \Tester\TestCase {
 				['success' => 'Invitation has been accepted'],
 				$_SESSION
 			),
-			$response
+			(new Invitation\AcceptPage(
+				new Uri\FakeUri(''),
+				new Log\FakeLogs(),
+				new Ini\FakeSource($this->configuration)
+			))->response(['code' => $code])
 		);
 	}
 
 	public function testErrorOnAccepting() {
-		$response = (new Invitation\AcceptPage(
-			new Uri\FakeUri(''),
-			new Log\FakeLogs(),
-			new Ini\FakeSource($this->configuration)
-		))->response(['code' => 'abc123']);
 		Assert::equal(
 			new Response\InformativeResponse(
 				new Response\RedirectResponse(
@@ -67,7 +61,11 @@ final class AcceptPage extends \Tester\TestCase {
 				['danger' => 'The invitation with code "abc123" is accepted or does not exist'],
 				$_SESSION
 			),
-			$response
+			(new Invitation\AcceptPage(
+				new Uri\FakeUri(''),
+				new Log\FakeLogs(),
+				new Ini\FakeSource($this->configuration)
+			))->response(['code' => 'abc123'])
 		);
 	}
 }

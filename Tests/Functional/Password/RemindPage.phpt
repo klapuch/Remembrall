@@ -50,12 +50,12 @@ final class RemindPage extends \Tester\TestCase {
 	}
 
 	public function testErrorSubmittingRedirectingToSamePage() {
-		$response = (new Password\RemindPage(
+		$headers = (new Password\RemindPage(
 			new Uri\FakeUri(''),
 			new Log\FakeLogs(),
 			new Ini\FakeSource($this->configuration)
-		))->submitRemind([]);
-		Assert::same('/password/remind', $response->headers()['Location']);
+		))->submitRemind([])->headers();
+		Assert::same('/password/remind', $headers['Location']);
 	}
 }
 

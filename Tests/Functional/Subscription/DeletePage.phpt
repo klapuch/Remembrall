@@ -34,11 +34,6 @@ final class DeletePage extends \Tester\TestCase {
 			(1, 0, 4, 'PT3M', NOW(), '')"
 		);
 		$_POST['id'] = 1;
-		$response = (new Subscription\DeletePage(
-			new Uri\FakeUri(''),
-			new Log\FakeLogs(),
-			new Ini\FakeSource($this->configuration)
-		))->submitDelete($_POST);
 		Assert::equal(
 			new Response\InformativeResponse(
 				new Response\RedirectResponse(
@@ -48,17 +43,16 @@ final class DeletePage extends \Tester\TestCase {
 				['success' => 'Subscription has been deleted'],
 				$_SESSION
 			),
-			$response
+			(new Subscription\DeletePage(
+				new Uri\FakeUri(''),
+				new Log\FakeLogs(),
+				new Ini\FakeSource($this->configuration)
+			))->submitDelete($_POST)
 		);
 	}
 
 	public function testErrorOnDeleting() {
 		$_POST['id'] = 1;
-		$response = (new Subscription\DeletePage(
-			new Uri\FakeUri(''),
-			new Log\FakeLogs(),
-			new Ini\FakeSource($this->configuration)
-		))->submitDelete($_POST);
 		Assert::equal(
 			new Response\InformativeResponse(
 				new Response\RedirectResponse(
@@ -68,7 +62,11 @@ final class DeletePage extends \Tester\TestCase {
 				['danger' => 'You can not cancel foreign subscription'],
 				$_SESSION
 			),
-			$response
+			(new Subscription\DeletePage(
+				new Uri\FakeUri(''),
+				new Log\FakeLogs(),
+				new Ini\FakeSource($this->configuration)
+			))->submitDelete($_POST)
 		);
 	}
 }
