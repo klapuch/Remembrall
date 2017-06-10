@@ -13,7 +13,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class CachedResponse extends TestCase\Mockery {
+final class CachedResponse extends \Tester\TestCase {
+	use TestCase\Mockery;
+
 	public function testMultipleCallsWithSingleExecution() {
 		$origin = $this->mock(Application\Response::class);
 		$origin->shouldReceive('body')->once();

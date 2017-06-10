@@ -15,7 +15,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class InvitePage extends TestCase\Page {
+final class InvitePage extends \Tester\TestCase {
+	use TestCase\Page;
+
 	public function testBlockingGet() {
 		$headers = (new Participants\InvitePage(
 			new Uri\FakeUri(''),

@@ -15,7 +15,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class OutPage extends TestCase\Page {
+final class OutPage extends \Tester\TestCase {
+	use TestCase\Page;
+
 	public function testWorkingResponse() {
 		$body = (new Sign\OutPage(
 			new Uri\FakeUri(''),

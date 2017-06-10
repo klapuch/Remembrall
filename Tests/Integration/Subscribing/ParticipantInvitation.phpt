@@ -13,7 +13,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class ParticipantInvitation extends TestCase\Database {
+final class ParticipantInvitation extends \Tester\TestCase {
+	use TestCase\Database;
+
 	public function testAcceptingInvitationWithKnownCode() {
 		$code = 'abc';
 		$this->database->prepare(

@@ -13,7 +13,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class UniquePages extends TestCase\Database {
+final class UniquePages extends \Tester\TestCase {
+	use TestCase\Database;
+
 	public function testAddingBrandNewOne() {
 		$url = new Uri\FakeUri('www.facedown.cz');
 		$dom = new \DOMDocument();

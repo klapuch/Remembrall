@@ -15,7 +15,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class EditPage extends TestCase\Page {
+final class EditPage extends \Tester\TestCase {
+	use TestCase\Page;
+
 	public function testErrorOnForeignSubscription() {
 		$this->purge(['users', 'verification_codes']);
 		$this->database->exec(

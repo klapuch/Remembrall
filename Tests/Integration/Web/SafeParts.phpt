@@ -13,7 +13,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class SafeParts extends TestCase\Database {
+final class SafeParts extends \Tester\TestCase {
+	use TestCase\Database;
+
 	public function testThrowingOnLanguageOutOfAllowedEnum() {
 		$ex = Assert::exception(function() {
 			(new Web\SafeParts(
@@ -62,7 +64,6 @@ final class SafeParts extends TestCase\Database {
 	}
 
 	protected function prepareDatabase(): void {
-		parent::prepareDatabase();
 		$this->purge(['parts', 'subscriptions']);
 	}
 }

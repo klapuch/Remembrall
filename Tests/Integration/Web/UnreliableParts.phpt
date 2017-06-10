@@ -13,7 +13,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class UnreliableParts extends TestCase\Database {
+final class UnreliableParts extends \Tester\TestCase {
+	use TestCase\Database;
+
 	public function testIterating() {
 		$this->database->exec(
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES

@@ -15,7 +15,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class LimitedSubscriptions extends TestCase\Database {
+final class LimitedSubscriptions extends \Tester\TestCase {
+	use TestCase\Database;
+
 	public function testSubscribingInLimit() {
 		Assert::noError(
 			function() {

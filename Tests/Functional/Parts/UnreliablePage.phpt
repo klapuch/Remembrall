@@ -15,7 +15,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class UnreliablePage extends TestCase\Page {
+final class UnreliablePage extends \Tester\TestCase {
+	use TestCase\Page;
+
 	public function testWorkingResponse() {
 		Assert::noError(function() {
 			$body = (new Parts\UnreliablePage(

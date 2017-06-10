@@ -15,7 +15,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class ConfirmPage extends TestCase\Page {
+final class ConfirmPage extends \Tester\TestCase {
+	use TestCase\Page;
+
 	public function testRedirectToLoginOnUnknownCode() {
 		$headers = (new Verification\ConfirmPage(
 			new Uri\FakeUri(''),

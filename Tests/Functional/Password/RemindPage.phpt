@@ -15,7 +15,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class RemindPage extends TestCase\Page {
+final class RemindPage extends \Tester\TestCase {
+	use TestCase\Page;
+
 	public function testValidContent() {
 		Assert::noError(function() {
 			$body = (new Password\RemindPage(

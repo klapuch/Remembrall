@@ -15,7 +15,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class RequestPage extends TestCase\Page {
+final class RequestPage extends \Tester\TestCase {
+	use TestCase\Page;
+
 	public function testWorkingResponse() {
 		Assert::noError(function() {
 			$body = (new Verification\RequestPage(

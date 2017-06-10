@@ -15,7 +15,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class ChangedSubscriptions extends TestCase\Database {
+final class ChangedSubscriptions extends \Tester\TestCase {
+	use TestCase\Database;
+
 	public function testChangedSnapshotAndPastDateForParticipantAndAuthor() {
 		$this->database->exec(
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES 

@@ -15,7 +15,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class EmailSubscription extends TestCase\Mockery {
+final class EmailSubscription extends \Tester\TestCase {
+	use TestCase\Mockery;
+
 	public function testSendingAfterNotifying() {
 		Assert::exception(
 			function() {

@@ -12,7 +12,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class InvitedParticipants extends TestCase\Database {
+final class InvitedParticipants extends \Tester\TestCase {
+	use TestCase\Database;
+
 	public function testThrowingOnKickingUnknownParticipant() {
 		[$participant, $subscription] = ['me@participant.cz', 2];
 		$statement = $this->database->prepare(

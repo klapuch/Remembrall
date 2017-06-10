@@ -15,7 +15,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class AcceptPage extends TestCase\Page {
+final class AcceptPage extends \Tester\TestCase {
+	use TestCase\Page;
+
 	public function testWorkingResponse() {
 		$body = (new Invitation\AcceptPage(
 			new Uri\FakeUri(''),

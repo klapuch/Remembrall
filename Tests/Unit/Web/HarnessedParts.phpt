@@ -15,7 +15,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class HarnessedParts extends TestCase\Mockery {
+final class HarnessedParts extends \Tester\TestCase {
+	use TestCase\Mockery;
+
 	public function testThroughCallback() {
 		$uri = new Uri\FakeUri();
 		$part = new Web\FakePart();

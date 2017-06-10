@@ -14,7 +14,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class StoredSubscription extends TestCase\Database {
+final class StoredSubscription extends \Tester\TestCase {
+	use TestCase\Database;
+
 	public function testCancelingWithoutAffectingOthers() {
 		$this->database->exec(
 			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES

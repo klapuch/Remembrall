@@ -15,7 +15,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class InPage extends TestCase\Page {
+final class InPage extends \Tester\TestCase {
+	use TestCase\Page;
+
 	public function testValidContent() {
 		Assert::noError(function() {
 			$body = (new Sign\InPage(

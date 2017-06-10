@@ -14,7 +14,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class LoggingCallback extends TestCase\Mockery {
+final class LoggingCallback extends \Tester\TestCase {
+	use TestCase\Mockery;
+
 	public function testLoggingOnThrowing() {
 		$file = Tester\FileMock::create('');
 		Assert::exception(function() use ($file) {

@@ -12,7 +12,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class GuestParticipants extends TestCase\Database {
+final class GuestParticipants extends \Tester\TestCase {
+	use TestCase\Database;
+
 	/**
 	 * @throws \UnexpectedValueException Email "me@participant.cz" is registered and can not be participant
 	 */

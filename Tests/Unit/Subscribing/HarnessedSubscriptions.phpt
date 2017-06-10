@@ -16,7 +16,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class HarnessedSubscriptions extends TestCase\Mockery {
+final class HarnessedSubscriptions extends \Tester\TestCase {
+	use TestCase\Mockery;
+
 	public function testThroughCallback() {
 		$uri = new Uri\FakeUri();
 		$interval = new Time\FakeInterval();

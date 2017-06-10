@@ -5,18 +5,21 @@ namespace Remembrall\TestCase;
 use Klapuch\Storage;
 use Tester;
 
-abstract class Database extends Mockery {
+trait Database {
 	/** @var \PDO */
 	protected $database;
+
+	/** @var string[] */
+	protected $credentials;
 
 	protected function setUp(): void {
 		parent::setUp();
 		Tester\Environment::lock('database', __DIR__ . '/../temp');
-		$credentials = parse_ini_file(__DIR__ . '/.database.ini', true);
+		$this->credentials = parse_ini_file(__DIR__ . '/.database.ini', true);
 		$this->database = new Storage\SafePDO(
-			$credentials['POSTGRES']['dsn'],
-			$credentials['POSTGRES']['user'],
-			$credentials['POSTGRES']['password']
+			$this->credentials['POSTGRES']['dsn'],
+			$this->credentials['POSTGRES']['user'],
+			$this->credentials['POSTGRES']['password']
 		);
 		$this->prepareDatabase();
 	}

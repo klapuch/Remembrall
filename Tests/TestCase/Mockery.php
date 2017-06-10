@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Remembrall\TestCase;
 
-abstract class Mockery extends \Tester\TestCase {
+trait Mockery {
 	protected function mock(string $class): \Mockery\MockInterface {
 		return \Mockery::mock($class);
 	}

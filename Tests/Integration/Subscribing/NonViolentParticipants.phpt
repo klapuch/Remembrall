@@ -14,7 +14,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class NonViolentParticipants extends TestCase\Database {
+final class NonViolentParticipants extends \Tester\TestCase {
+	use TestCase\Database;
+
 	public function testInvitingBrandNewParticipant() {
 		(new Subscribing\NonViolentParticipants(
 			new Access\FakeUser(),

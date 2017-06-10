@@ -13,7 +13,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class FrugalPage extends TestCase\Database {
+final class FrugalPage extends \Tester\TestCase {
+	use TestCase\Database;
+
 	public function testFrugalPage() {
 		$this->database->exec(
 			"INSERT INTO pages (url, content) VALUES

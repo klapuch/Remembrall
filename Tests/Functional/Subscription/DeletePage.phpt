@@ -15,7 +15,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class DeletePage extends TestCase\Page {
+final class DeletePage extends \Tester\TestCase {
+	use TestCase\Page;
+
 	public function testBlockingGet() {
 		$headers = (new Subscription\DeletePage(
 			new Uri\FakeUri(''),

@@ -13,7 +13,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class UnusedInvitation extends TestCase\Database {
+final class UnusedInvitation extends \Tester\TestCase {
+	use TestCase\Database;
+
 	public function testThrowingOnUnknownCode() {
 		Assert::exception(function() {
 			(new Subscribing\UnusedInvitation(

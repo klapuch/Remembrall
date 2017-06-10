@@ -15,7 +15,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class KickPage extends TestCase\Page {
+final class KickPage extends \Tester\TestCase {
+	use TestCase\Page;
+
 	public function testBlockingGet() {
 		$headers = (new Participants\KickPage(
 			new Uri\FakeUri(''),

@@ -13,7 +13,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class StoredPart extends TestCase\Database {
+final class StoredPart extends \Tester\TestCase {
+	use TestCase\Database;
+
 	public function testContent() {
 		$this->database->exec(
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES

@@ -15,7 +15,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class PopularPage extends TestCase\Page {
+final class PopularPage extends \Tester\TestCase {
+	use TestCase\Page;
+
 	public function testWorkingResponse() {
 		Assert::noError(function() {
 			$body = (new Parts\PopularPage(

@@ -13,7 +13,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class StoredPage extends TestCase\Database {
+final class StoredPage extends \Tester\TestCase {
+	use TestCase\Database;
+
 	public function testHtmlContent() {
 		$this->database->exec(
 			"INSERT INTO pages (url, content) VALUES

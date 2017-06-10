@@ -8,12 +8,11 @@ namespace Remembrall\Unit\Misc;
 
 use Klapuch\Output;
 use Remembrall\Model\Misc;
-use Tester;
 use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class XmlPrintedObjects extends Tester\TestCase {
+final class XmlPrintedObjects extends \Tester\TestCase {
 	public function testWrapping() {
 		Assert::same(
 			'<parts><part><foo>bar</foo></part><part><bar>foo</bar></part></parts>',

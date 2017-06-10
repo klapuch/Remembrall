@@ -15,7 +15,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class DeclinePage extends TestCase\Page {
+final class DeclinePage extends \Tester\TestCase {
+	use TestCase\Page;
+
 	public function testWorkingResponse() {
 		$body = (new Invitation\DeclinePage(
 			new Uri\FakeUri(''),

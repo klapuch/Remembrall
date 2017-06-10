@@ -15,7 +15,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class ResetPage extends TestCase\Page {
+final class ResetPage extends \Tester\TestCase {
+	use TestCase\Page;
+
 	public function testRedirectForInvalidReminder() {
 		$headers = (new Password\ResetPage(
 			new Uri\FakeUri(''),

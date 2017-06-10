@@ -14,7 +14,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class ParticipatedUsers extends TestCase\Database {
+final class ParticipatedUsers extends \Tester\TestCase {
+	use TestCase\Database;
+
 	public function testPassingWithNoNeededTransfer() {
 		$this->database->exec(
 			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES

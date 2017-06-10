@@ -13,7 +13,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class MemorialInvitation extends TestCase\Database {
+final class MemorialInvitation extends \Tester\TestCase {
+	use TestCase\Database;
+
 	public function testThrowingOnManipulation() {
 		Assert::exception(function() {
 			(new Subscribing\MemorialInvitation(

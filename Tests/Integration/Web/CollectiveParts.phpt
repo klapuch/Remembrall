@@ -14,7 +14,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class CollectiveParts extends TestCase\Database {
+final class CollectiveParts extends \Tester\TestCase {
+	use TestCase\Database;
+
 	public function testAddingBrandNewOne() {
 		(new Web\CollectiveParts(
 			$this->database

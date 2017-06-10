@@ -15,7 +15,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class OwnedSubscription extends TestCase\Database {
+final class OwnedSubscription extends \Tester\TestCase {
+	use TestCase\Database;
+
 	public function testThrowingOnHandlingForeign() {
 		$ex = Assert::exception(function() {
 			(new Subscribing\OwnedSubscription(
