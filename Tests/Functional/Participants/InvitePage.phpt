@@ -61,17 +61,6 @@ final class InvitePage extends \Tester\TestCase {
 		);
 	}
 
-	public function testErrorSubmittingRedirectingToSamePage() {
-		$_POST['subscription'] = 1;
-		$_POST['email'] = 'foo@email.cz';
-		$headers = (new Participants\InvitePage(
-			new Uri\FakeUri(''),
-			new Log\FakeLogs(),
-			new Ini\FakeSource($this->configuration)
-		))->submitInvite($_POST)->headers();
-		Assert::same('/subscriptions', $headers['Location']);
-	}
-
 	public function testSubmittingWithoutNeededFields() {
 		Assert::equal(
 			new Response\InformativeResponse(
