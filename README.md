@@ -10,7 +10,7 @@
 - `cp App/Configuration/.config.local.sample.ini App/Configuration/.config.local.ini`, change your credentials and disable https features
 - `cp phinx.sample.yml phinx.yml`, change your credentials
 ### Docker
-`docker-compose up`
+`cd docker && docker-compose up`
 #### Database
 Create database and name it **remembrall** via `psql -U postgres -W` in **remembrall-postgres** image
 ##### Import
