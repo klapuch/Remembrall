@@ -5,3 +5,4 @@ www/dist
 App/Configuration/.config.local.ini
 composer.lock
 phinx.yml
+Tests/TestCase/.config.local.ini

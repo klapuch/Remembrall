@@ -19,7 +19,7 @@ init:
     - SET PATH=%POSTGRES_PATH%\bin;%PATH%
 
 build_script:
-    - echo password="Password12!" >> .\Tests\TestCase\.database.ini
+    - copy Tests\TestCase\.config.appveyor.ini Tests\TestCase\.config.local.ini
     - createdb remembrall_test
     - psql remembrall_test < .\Tests\TestCase\schema.sql
 

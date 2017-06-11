@@ -7,20 +7,17 @@ services:
         - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=postgres
         - POSTGRES_DB=remembrall
+      ports:
+        - 5432:5432
     php:
       image: klapuch/docker:fpm-project
-      working_dir: /var/www/Remembrall
       volumes:
           - .:/var/www/Remembrall
           - ./sendmail:/usr/sbin/fake-sendmail
     server:
       image: nginx:alpine
-      working_dir: /var/www/Remembrall
       volumes:
           - .:/var/www/Remembrall
           - ./site.conf:/etc/nginx/conf.d/default.conf
       ports:
-        - 8080:80
-      depends_on:
-        - postgres
-        - php
+        - 80:80

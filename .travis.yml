@@ -18,6 +18,7 @@ install:
   - composer install --no-interaction --prefer-dist --no-scripts --no-progress --no-suggest --optimize-autoloader --classmap-authoritative
 
 before_script:
+  - cp -f Tests/TestCase/.config.travis.ini Tests/TestCase/.config.local.ini
   - sudo cp -f ./sendmail /usr/sbin/fake-sendmail && sudo chmod +x /usr/sbin/fake-sendmail
   - psql -c 'CREATE DATABASE remembrall_test;' -U postgres
   - psql -U postgres remembrall_test < Tests/TestCase/schema.sql

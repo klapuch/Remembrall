@@ -15,7 +15,7 @@ trait Database {
 	protected function setUp(): void {
 		parent::setUp();
 		Tester\Environment::lock('database', __DIR__ . '/../temp');
-		$this->credentials = parse_ini_file(__DIR__ . '/.database.ini', true);
+		$this->credentials = parse_ini_file(__DIR__ . '/.config.local.ini', true);
 		$this->database = new Storage\SafePDO(
 			$this->credentials['POSTGRES']['dsn'],
 			$this->credentials['POSTGRES']['user'],
