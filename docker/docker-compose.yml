@@ -10,7 +10,7 @@ services:
       ports:
         - 5432:5432
     php-fpm:
-      image: klapuch/docker:fpm-project
+      build: ./php-fpm
       volumes:
           - ./..:/var/www/Remembrall
           - ./sendmail:/usr/sbin/fake-sendmail
