@@ -38,7 +38,7 @@ final class InviteForm implements Form\Control {
 	}
 
 	public function validate(): void {
-		// It is not needed
+		$this->form(new \DOMDocument())->validate();
 	}
 
 	private function form(\DOMDocument $dom): Form\Control {
@@ -56,7 +56,7 @@ final class InviteForm implements Form\Control {
 			new Form\Input(
 				new Form\StoredAttributes(
 					['type' => 'hidden', 'name' => 'subscription', 'value' => $id],
-					new Form\EmptyStorage()
+					$this->storage
 				),
 				new Validation\PassiveRule()
 			),
@@ -80,14 +80,13 @@ final class InviteForm implements Form\Control {
 			),
 			new Form\BootstrapInput(
 				new Form\Input(
-					new Form\StoredAttributes(
+					new Form\FakeAttributes(
 						[
 							'type' => 'submit',
 							'name' => 'act',
 							'class' => 'form-control',
 							'value' => 'Invite',
-						],
-						new Form\EmptyStorage()
+						]
 					),
 					new Validation\PassiveRule()
 				),

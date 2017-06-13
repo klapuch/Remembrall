@@ -15,15 +15,18 @@ final class KickForm implements Form\Control {
 	private $participant;
 	private $url;
 	private $csrf;
+	private $storage;
 
 	public function __construct(
 		Subscribing\Participant $participant,
 		Uri\Uri $url,
-		Csrf\Protection $csrf
+		Csrf\Protection $csrf,
+		Form\Storage $storage
 	) {
 		$this->participant = $participant;
 		$this->url = $url;
 		$this->csrf = $csrf;
+		$this->storage = $storage;
 	}
 
 	public function render(): string {
@@ -33,7 +36,7 @@ final class KickForm implements Form\Control {
 	}
 
 	public function validate(): void {
-		// It is not needed
+		$this->form(new \DOMDocument())->validate();
 	}
 
 	private function form(\DOMDocument $dom): Form\Control {
@@ -51,22 +54,19 @@ final class KickForm implements Form\Control {
 			new Form\Input(
 				new Form\StoredAttributes(
 					['type' => 'hidden', 'name' => 'subscription', 'value' => $subscription],
-					new Form\EmptyStorage()
+					$this->storage
 				),
 				new Validation\PassiveRule()
 			),
 			new Form\Input(
 				new Form\StoredAttributes(
 					['type' => 'hidden', 'name' => 'email', 'value' => $email],
-					new Form\EmptyStorage()
+					$this->storage
 				),
 				new Validation\PassiveRule()
 			),
 			new Form\Input(
-				new Form\StoredAttributes(
-					['type' => 'submit', 'name' => 'act'],
-					new Form\EmptyStorage()
-				),
+				new Form\FakeAttributes(['type' => 'submit', 'name' => 'act']),
 				new Validation\PassiveRule()
 			)
 		);

@@ -59,24 +59,6 @@ final class InvitePage extends \Tester\TestCase {
 			))->submitInvite($_POST)
 		);
 	}
-
-	public function testSubmittingWithoutNeededFields() {
-		Assert::equal(
-			new Response\InformativeResponse(
-				new Response\RedirectResponse(
-					new Response\EmptyResponse(),
-					new Uri\RelativeUrl(new Uri\FakeUri(''), 'subscriptions')
-				),
-				['danger' => 'Email and subscription must be specified'],
-				$_SESSION
-			),
-			(new Participants\InvitePage(
-				new Uri\FakeUri(''),
-				new Log\FakeLogs(),
-				new Ini\FakeSource($this->configuration)
-			))->submitInvite([])
-		);
-	}
 }
 
 (new InvitePage())->run();

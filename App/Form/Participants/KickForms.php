@@ -33,7 +33,8 @@ final class KickForms implements Form\Control {
 				return $forms .= (new KickForm(
 					$participant,
 					$this->url,
-					$this->csrf
+					$this->csrf,
+					new Form\EmptyStorage()
 				))->render();
 			},
 			''
