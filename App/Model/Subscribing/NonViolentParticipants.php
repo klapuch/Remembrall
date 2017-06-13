@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\Access;
+use Klapuch\Output;
 use Klapuch\Storage;
 
 /**
@@ -64,14 +65,24 @@ final class NonViolentParticipants implements Participants {
 			[$this->author->id()]
 		))->execute();
 		foreach ($participants as $participant) {
-			yield new ConstantParticipant(
+			yield new class(
 				[
 					'harassed' => $this->harassed(
 						$participant['subscription_id'],
 						$participant['email']
 					),
 				] + $participant
-			);
+			) implements Participant {
+				private $participant;
+
+				public function __construct(array $participant) {
+					$this->participant = $participant;
+				}
+
+				public function print(Output\Format $format): Output\Format {
+					return new Output\FilledFormat($format, $this->participant);
+				}
+			};
 		}
 	}
 
