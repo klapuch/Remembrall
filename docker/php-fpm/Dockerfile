@@ -1,16 +1,25 @@
-FROM php:7.1-fpm-alpine
+FROM php:7.1-fpm
 
-RUN apk update && apk upgrade && apk add --no-cache git \
-	&& apk add --no-cache libmcrypt-dev && docker-php-ext-install mcrypt \
-	&& apk add --no-cache postgresql-dev libpq && docker-php-ext-install pdo_pgsql \
-	&& apk add --no-cache zip unzip && docker-php-ext-install zip \
-	&& apk add --no-cache libxslt-dev && docker-php-ext-install xsl dom
+# PHP
+RUN apt-get update -qq && apt-get install -y git sudo libcurl4-openssl-dev \
+	&& apt-get install -y libmcrypt-dev && docker-php-ext-install mcrypt \
+	&& apt-get install -y libpq-dev && docker-php-ext-install pdo_pgsql \
+	&& apt-get install -y zip unzip && docker-php-ext-install zip \
+	&& apt-get install -y libxslt-dev && docker-php-ext-install xsl
 
+# COMPOSER
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
 
-RUN apk add --no-cache nodejs && npm install npm@latest -g \
-	&& echo -e 'http://dl-cdn.alpinelinux.org/alpine/edge/main\nhttp://dl-cdn.alpinelinux.org/alpine/edge/community\nhttp://dl-cdn.alpinelinux.org/alpine/edge/testing' > /etc/apk/repositories \
-	&& apk add --no-cache yarn \
-	&& yarn global add gulp
+# NODE JS
+RUN curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash - \
+	&& apt-get install -y nodejs \
+	&& ln -sf /usr/bin/nodejs /usr/bin/node
 
-RUN rm -rf /var/cache/apk/*
+# YARN & GULP
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+	&& echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list \
+	&& apt-get update && apt-get install yarn
+RUN yarn global add gulp
+
+# CLEANING
+RUN apt-get clean
