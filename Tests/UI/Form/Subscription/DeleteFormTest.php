@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Remembrall\UI\Form\Subscription;
 
 use Klapuch\Csrf;
+use Klapuch\Form\EmptyStorage;
 use Klapuch\Output;
 use Klapuch\Uri;
 use Remembrall\Form\Subscription;
@@ -20,7 +21,8 @@ final class DeleteFormTest extends \PHPUnit\Framework\TestCase {
 					new Output\Xml(['id' => 666], 'root')
 				),
 				new Uri\FakeUri(''),
-				new Csrf\FakeProtection('pr073ct10n')
+				new Csrf\FakeProtection('pr073ct10n'),
+				new EmptyStorage()
 			))->render()
 		);
 	}

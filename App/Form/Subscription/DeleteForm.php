@@ -14,15 +14,18 @@ final class DeleteForm implements Form\Control {
 	private $subscription;
 	private $url;
 	private $csrf;
+	private $storage;
 
 	public function __construct(
 		Subscribing\Subscription $subscription,
 		Uri\Uri $url,
-		Csrf\Protection $csrf
+		Csrf\Protection $csrf,
+		Form\Storage $storage
 	) {
 		$this->subscription = $subscription;
 		$this->url = $url;
 		$this->csrf = $csrf;
+		$this->storage = $storage;
 	}
 
 	public function render(): string {
@@ -32,7 +35,7 @@ final class DeleteForm implements Form\Control {
 	}
 
 	public function validate(): void {
-		// It is not needed
+		$this->form(new \DOMDocument())->validate();
 	}
 
 	private function form(\DOMDocument $dom): Form\Control {
@@ -52,15 +55,12 @@ final class DeleteForm implements Form\Control {
 						'name' => 'id',
 						'value' => $id,
 					],
-					new Form\EmptyStorage()
+					$this->storage
 				),
 				new Validation\PassiveRule()
 			),
 			new Form\Input(
-				new Form\StoredAttributes(
-					['type' => 'submit'],
-					new Form\EmptyStorage()
-				),
+				new Form\FakeAttributes(['type' => 'submit']),
 				new Validation\PassiveRule()
 			)
 		);

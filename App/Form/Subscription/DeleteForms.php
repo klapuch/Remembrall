@@ -33,7 +33,8 @@ final class DeleteForms implements Form\Control {
 				return $forms .= (new DeleteForm(
 					$subscription,
 					$this->url,
-					$this->csrf
+					$this->csrf,
+					new Form\EmptyStorage()
 				))->render();
 			},
 			''

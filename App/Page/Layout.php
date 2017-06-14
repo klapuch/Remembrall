@@ -45,13 +45,4 @@ abstract class Layout implements Application\Request {
 			);
 		}
 	}
-
-	/**
-	 * Protect against CSRF
-	 * @throws \Exception
-	 */
-	final protected function protect(): void {
-		if ($this->csrf->attacked())
-			throw new \Exception('Timeout');
-	}
 }
