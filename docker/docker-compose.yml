@@ -16,6 +16,7 @@ services:
         - 8080:8080
     php-fpm:
       build: ./php-fpm
+      working_dir: /var/www/Remembrall
       volumes:
           - ./..:/var/www/Remembrall
           - ./sendmail:/usr/sbin/fake-sendmail

@@ -7,7 +7,7 @@ environments:
     production:
         adapter: pgsql
         host: localhost
-        name: remembrall
+        name: remembrall-postgres
         user: postgres
         pass: 'postgres'
         port: 5432
