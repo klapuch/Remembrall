@@ -5,12 +5,9 @@ namespace Remembrall\Page\Subscription;
 use Klapuch\Application;
 use Klapuch\Form;
 use Klapuch\Http;
-use Klapuch\Storage;
-use Klapuch\Time;
 use Klapuch\Uri;
 use Remembrall\Form\Subscription;
 use Remembrall\Model\Misc;
-use Remembrall\Model\Subscribing;
 use Remembrall\Model\Web;
 use Remembrall\Page;
 use Remembrall\Response;
@@ -57,77 +54,35 @@ final class DefaultPage extends Page\Layout {
 							)
 						)
 					);
-					(new Storage\Transaction($this->database))->start(
-						function() use ($url, $subscription): void {
-							$page = (new Web\HarnessedPages(
-								new Web\UniquePages($this->database),
-								new Misc\LoggingCallback($this->logs)
-							))->add(
-								$url,
-								new Web\FrugalPage(
-									$url,
-									new Web\HtmlWebPage(
-										new Http\BasicRequest('GET', $url)
-									),
-									$this->database
+					$page = new Web\FrugalPage(
+						$url,
+						new Web\HtmlWebPage(new Http\BasicRequest('GET', $url)),
+						$this->database
+					);
+					(new Web\HarnessedParts(
+						new Web\TemporaryParts($this->redis),
+						new Misc\LoggingCallback($this->logs)
+					))->add(
+						new Web\HtmlPart(
+							new Web\MatchingExpression(
+								new Web\SuitableExpression(
+									$subscription['language'],
+									$page,
+									$subscription['expression']
 								)
-							);
-							(new Web\HarnessedParts(
-								new Web\SafeParts(
-									new Web\CollectiveParts($this->database),
-									$this->database
-								),
-								new Misc\LoggingCallback($this->logs)
-							))->add(
-								new Web\HtmlPart(
-									new Web\MatchingExpression(
-										new Web\SuitableExpression(
-											$subscription['language'],
-											$page,
-											$subscription['expression']
-										)
-									),
-									$page
-								),
-								$url,
-								$subscription['expression'],
-								$subscription['language']
-							);
-							(new Subscribing\HarnessedSubscriptions(
-								new Subscribing\LimitedSubscriptions(
-									new Subscribing\OwnedSubscriptions(
-										$this->user,
-										$this->database
-									),
-									$this->user,
-									$this->database
-								),
-								new Misc\LoggingCallback($this->logs)
-							))->subscribe(
-								$url,
-								$subscription['expression'],
-								$subscription['language'],
-								new Time\TimeInterval(
-									new \DateTimeImmutable(),
-									new \DateInterval(
-										sprintf(
-											'PT%dM',
-											$subscription['interval']
-										)
-									)
-								)
-							);
-						}
+							),
+							$page
+						),
+						$url,
+						$subscription['expression'],
+						$subscription['language']
 					);
 				}
 			))->validate();
-			return new Response\InformativeResponse(
-				new Response\RedirectResponse(
-					new Response\EmptyResponse(),
-					new Uri\RelativeUrl($this->url, 'subscriptions')
-				),
-				['success' => 'Subscription has been added'],
-				$_SESSION
+			$_SESSION['subscription'] = $subscription;
+			return new Response\RedirectResponse(
+				new Response\EmptyResponse(),
+				new Uri\RelativeUrl($this->url, 'subscription/preview')
 			);
 		} catch (\Throwable $ex) {
 			return new Response\InformativeResponse(

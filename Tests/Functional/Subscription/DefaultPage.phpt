@@ -41,7 +41,8 @@ final class DefaultPage extends \Tester\TestCase {
 			new Log\FakeLogs(),
 			new Ini\FakeSource($this->configuration)
 		))->submitDefault($_POST)->headers();
-		Assert::same(['Location' => '/subscriptions'], $headers);
+		Assert::equal($_SESSION['subscription'], $_POST);
+		Assert::same(['Location' => '/subscription/preview'], $headers);
 	}
 
 	public function testErrorOnAdding() {
