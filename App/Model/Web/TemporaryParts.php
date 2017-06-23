@@ -78,7 +78,7 @@ final class TemporaryParts implements Parts {
 			0
 		);
 	}
-
+	// @codingStandardsIgnoreStart
 	/**
 	 * Is time too old?
 	 * @param int $time
@@ -87,4 +87,5 @@ final class TemporaryParts implements Parts {
 	private function expired(int $time): bool {
 		return $time < strtotime(sprintf('-%s', self::TTL));
 	}
+	// @codingStandardsIgnoreEnd
 }
