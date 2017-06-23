@@ -77,7 +77,7 @@ final class DefaultPage extends Page\Layout {
 						$part['expression'],
 						$part['language']
 					);
-					$_SESSION['part'] = ['url' => $url->reference()] + $part;
+					$_SESSION['part'] = $part;
 				}
 			))->validate();
 			return new Response\RedirectResponse(

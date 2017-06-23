@@ -7,6 +7,7 @@
 	<xsl:template match="page">
 		<h1><xsl:apply-templates select="body/header[@level=1]"/> of <xsl:apply-templates select="part" mode="title"/></h1>
 		<xsl:apply-templates select="part"/>
+        <xsl:apply-templates select="forms/form[@name='new']"/>
 	</xsl:template>
 
 	<xsl:template match="part">
