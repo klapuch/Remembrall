@@ -18,7 +18,7 @@ final class DefaultPage extends Page\Layout {
 			new Response\ComposedResponse(
 				new Response\CombinedResponse(
 					new Response\FormResponse(
-						new Subscription\NewForm(
+						new Subscription\PreviewForm(
 							$this->url,
 							$this->csrf,
 							new Form\Backup($_SESSION, $_POST)
@@ -36,20 +36,20 @@ final class DefaultPage extends Page\Layout {
 		);
 	}
 
-	public function submitDefault(array $subscription): Application\Response {
+	public function submitDefault(array $part): Application\Response {
 		try {
 			(new Form\HarnessedForm(
-				new Subscription\NewForm(
+				new Subscription\PreviewForm(
 					$this->url,
 					$this->csrf,
 					new Form\Backup($_SESSION, $_POST)
 				),
 				new Form\Backup($_SESSION, $_POST),
-				function() use ($subscription): void {
+				function() use ($part): void {
 					$url = new Uri\NormalizedUrl(
 						new Uri\ReachableUrl(
 							new Uri\SchemeForcedUrl(
-								new Uri\ValidUrl($subscription['url']),
+								new Uri\ValidUrl($part['url']),
 								['http', 'https']
 							)
 						)
@@ -66,20 +66,20 @@ final class DefaultPage extends Page\Layout {
 						new Web\HtmlPart(
 							new Web\MatchingExpression(
 								new Web\SuitableExpression(
-									$subscription['language'],
+									$part['language'],
 									$page,
-									$subscription['expression']
+									$part['expression']
 								)
 							),
 							$page
 						),
 						$url,
-						$subscription['expression'],
-						$subscription['language']
+						$part['expression'],
+						$part['language']
 					);
+					$_SESSION['part'] = ['url' => $url->reference()] + $part;
 				}
 			))->validate();
-			$_SESSION['subscription'] = $subscription;
 			return new Response\RedirectResponse(
 				new Response\EmptyResponse(),
 				new Uri\RelativeUrl($this->url, 'subscription/preview')

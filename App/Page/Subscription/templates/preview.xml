@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page>
+    <head>
+		<title>Preview</title>
+		<meta name="description" content="Preview before submitting"/>
+	</head>
+	<body>
+		<header level="1">Preview</header>
+	</body>
+</page>

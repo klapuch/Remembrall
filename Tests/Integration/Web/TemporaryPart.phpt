@@ -14,7 +14,7 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class ThrowawayPart extends \Tester\TestCase {
+final class TemporaryPart extends \Tester\TestCase {
 	use TestCase\Redis;
 
 	public function testPrintingExisting() {
@@ -24,7 +24,7 @@ final class ThrowawayPart extends \Tester\TestCase {
 		))->add(new Web\FakePart('CONTENT'), $url, $expression, $language);
 		Assert::same(
 			'|content|CONTENT||url|www.google.com||expression|//p||language|xpath|',
-			(new Web\ThrowawayPart(
+			(new Web\TemporaryPart(
 				$this->redis,
 				$url,
 				$expression,
@@ -33,23 +33,23 @@ final class ThrowawayPart extends \Tester\TestCase {
 		);
 	}
 
-	public function testRemovingAfterPrinting() {
+	public function testKeepingAfterPrinting() {
 		[$expression, $language, $url] = ['//p', 'xpath', new Uri\FakeUri('www.google.com')];
 		(new Web\TemporaryParts(
 			$this->redis
 		))->add(new Web\FakePart('CONTENT'), $url, $expression, $language);
-		(new Web\ThrowawayPart(
+		(new Web\TemporaryPart(
 			$this->redis,
 			$url,
 			$expression,
 			$language
 		))->print(new Output\FakeFormat(''));
-		Assert::count(0, $this->redis->hgetall('parts'));
+		Assert::count(1, $this->redis->hgetall('parts'));
 	}
 
 	public function testThrowingOnPrintingUnknown() {
 		$ex = Assert::exception(function() {
-			(new Web\ThrowawayPart(
+			(new Web\TemporaryPart(
 				$this->redis,
 				new Uri\FakeUri('www.google.com'),
 				'//p',
@@ -60,4 +60,4 @@ final class ThrowawayPart extends \Tester\TestCase {
 	}
 }
 
-(new ThrowawayPart)->run();
+(new TemporaryPart)->run();

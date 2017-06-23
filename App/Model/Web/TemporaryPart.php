@@ -7,9 +7,9 @@ use Klapuch\Uri;
 use Predis;
 
 /**
- * Part for single use
+ * Part with low TTL
  */
-final class ThrowawayPart implements Part {
+final class TemporaryPart implements Part {
 	private $redis;
 	private $url;
 	private $expression;
@@ -40,28 +40,24 @@ final class ThrowawayPart implements Part {
 	}
 
 	public function print(Output\Format $format): Output\Format {
-		try {
-			$key = new PartHash($this->url, $this->expression, $this->language);
-			if ($this->redis->hexists(new PartsName(), $key)) {
-				return new Output\FilledFormat(
-					$format,
-					unserialize($this->redis->hget(new PartsName(), $key))
-				);
-			}
-			throw new \UnexpectedValueException(
-				'Part not found',
-				0,
-				new \Exception(
-					sprintf(
-						'Part for "%s" URL and %s expression "%s" not found',
-						$this->url->reference(),
-						$this->language,
-						$this->expression
-					)
-				)
+		$key = new PartHash($this->url, $this->expression, $this->language);
+		if ($this->redis->hexists(new PartsName(), $key)) {
+			return new Output\FilledFormat(
+				$format,
+				unserialize($this->redis->hget(new PartsName(), $key))
 			);
-		} finally {
-			$this->redis->hdel(new PartsName(), [$key]);
 		}
+		throw new \UnexpectedValueException(
+			'Part not found',
+			0,
+			new \Exception(
+				sprintf(
+					'Part for "%s" URL and %s expression "%s" not found',
+					$this->url->reference(),
+					$this->language,
+					$this->expression
+				)
+			)
+		);
 	}
 }

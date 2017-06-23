@@ -24,23 +24,33 @@ final class TemporaryParts extends \Tester\TestCase {
 			$this->redis
 		))->add(new Web\FakePart(''), $url, $expression, $language);
 		Assert::count(1, $this->redis->hgetall('parts'));
+		Assert::count(1, $this->redis->hgetall('parts_access'));
 	}
 
-	public function testKeepingPartsInReasonableLimit() {
-		[$language, $url] = ['xpath', new Uri\FakeUri('www.google.com')];
-		$parts = new Web\TemporaryParts($this->redis);
-		$parts->add(new Web\FakePart(''), $url, '//h1', $language);
-		$parts->add(new Web\FakePart(''), $url, '//h2', $language);
-		$parts->add(new Web\FakePart(''), $url, '//h3', $language);
-		$parts->add(new Web\FakePart(''), $url, '//h4', $language);
-		$parts->add(new Web\FakePart(''), $url, '//h5', $language);
-		$parts->add(new Web\FakePart(''), $url, '//h6', $language);
-		$parts->add(new Web\FakePart(''), $url, '//h7', $language);
-		$pieces = $this->redis->hgetall('parts');
-		Assert::count(2, $pieces);
-		Assert::contains('//h7', current($pieces));
-		next($pieces);
-		Assert::contains('//h6', current($pieces));
+	public function testAddingWithRemovingAllExpired() {
+		[$expression, $language, $url] = ['//p', 'xpath', new Uri\FakeUri('www.google.com')];
+		$this->redis->hset('parts', 'abc', 'data');
+		$this->redis->hset('parts_access', 'abc', strtotime('-1 hour'));
+		$this->redis->hset('parts', 'def', 'data');
+		$this->redis->hset('parts_access', 'def', strtotime('-40 minutes'));
+		(new Web\TemporaryParts(
+			$this->redis
+		))->add(new Web\FakePart(''), $url, $expression, $language);
+		Assert::count(1, $this->redis->hgetall('parts'));
+		Assert::count(1, $this->redis->hgetall('parts_access'));
+	}
+
+	public function testKeepingNonExpired() {
+		[$expression, $language, $url] = ['//p', 'xpath', new Uri\FakeUri('www.google.com')];
+		$this->redis->hset('parts', 'abc', 'data');
+		$this->redis->hset('parts_access', 'abc', strtotime('-10 minutes'));
+		$this->redis->hset('parts', 'def', 'data');
+		$this->redis->hset('parts_access', 'def', strtotime('-20 minutes'));
+		(new Web\TemporaryParts(
+			$this->redis
+		))->add(new Web\FakePart(''), $url, $expression, $language);
+		Assert::count(3, $this->redis->hgetall('parts'));
+		Assert::count(3, $this->redis->hgetall('parts_access'));
 	}
 
 	public function testStoringEverything() {
@@ -65,6 +75,7 @@ final class TemporaryParts extends \Tester\TestCase {
 		$parts->add(new Web\FakePart(''), $url, $expression, $language);
 		$parts->add(new Web\FakePart(''), $url, '//h1', $language);
 		Assert::count(2, $this->redis->hgetall('parts'));
+		Assert::count(2, $this->redis->hgetall('parts_access'));
 	}
 
 	public function testAddingSamePartWithoutDuplicity() {
@@ -73,6 +84,7 @@ final class TemporaryParts extends \Tester\TestCase {
 		$parts->add(new Web\FakePart(''), $url, $expression, $language);
 		$parts->add(new Web\FakePart(''), $url, $expression, $language);
 		Assert::count(1, $this->redis->hgetall('parts'));
+		Assert::count(1, $this->redis->hgetall('parts_access'));
 	}
 
 	public function testCounting() {
@@ -90,8 +102,8 @@ final class TemporaryParts extends \Tester\TestCase {
 		$parts->add(new Web\FakePart('BAR'), $url, '//h1', $language);
 		$pieces = iterator_to_array($parts->all(new Dataset\FakeSelection()));
 		Assert::count(2, $pieces);
-		Assert::contains('BAR', $pieces[0]->print(new FakeFormat())->serialization());
-		Assert::contains('FOO', $pieces[1]->print(new FakeFormat())->serialization());
+		Assert::contains('http://www.google.com', $pieces[0]->print(new FakeFormat())->serialization());
+		Assert::contains('http://www.google.com', $pieces[1]->print(new FakeFormat())->serialization());
 	}
 }
 
