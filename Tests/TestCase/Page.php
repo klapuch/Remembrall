@@ -9,12 +9,16 @@ trait Page {
 	use TestCase\Database {
 		Database::setUp as databaseSetUp;
 	}
+	use TestCase\Redis {
+		Redis::setUp as redisSetUp;
+	}
 
 	protected $configuration;
 
 	protected function setUp(): void {
 		parent::setUp();
 		$this->databaseSetUp();
+		$this->redisSetUp();
 		$_POST = [];
 		$_POST[Csrf\Protection::NAME] = $_SESSION[Csrf\Protection::NAME] = '8PfBgonTZ9YcodKUzQ==';
 		$this->configuration = [

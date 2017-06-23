@@ -9,18 +9,29 @@ namespace Remembrall\Functional\Subscription;
 use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Uri;
+use Remembrall\Model\Web\FakePart;
+use Remembrall\Model\Web\TemporaryParts;
 use Remembrall\Page\Subscription;
 use Remembrall\TestCase;
 use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class DefaultPage extends \Tester\TestCase {
+final class PreviewPage extends \Tester\TestCase {
 	use TestCase\Page;
 
 	public function testWorkingResponse() {
+		$_SESSION['part'] = ['url' => 'http://www.example.com', 'expression' => '//h1', 'language' => 'xpath'];
+		(new TemporaryParts(
+			$this->redis
+		))->add(
+			new FakePart(''),
+			new Uri\FakeUri($_SESSION['part']['url']),
+			$_SESSION['part']['expression'],
+			$_SESSION['part']['language']
+		);
 		Assert::noError(function() {
-			$body = (new Subscription\DefaultPage(
+			$body = (new Subscription\PreviewPage(
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
@@ -30,28 +41,26 @@ final class DefaultPage extends \Tester\TestCase {
 		});
 	}
 
-	public function testAddingSubscription() {
-		$_POST['url'] = 'http://www.example.com/';
-		$_POST['expression'] = '//h1';
-		$_POST['language'] = 'xpath';
+	public function testAddingAfterPreview() {
+		$_SESSION['part'] = ['url' => 'http://www.example.com', 'expression' => '//h1', 'language' => 'xpath'];
+		$_POST['interval'] = '44';
 		$_POST['act'] = 'Send';
-		$headers = (new Subscription\DefaultPage(
+		$headers = (new Subscription\PreviewPage(
 			new Uri\FakeUri('', ''),
 			new Log\FakeLogs(),
 			new Ini\FakeSource($this->configuration)
-		))->submitDefault($_POST)->headers();
-		Assert::equal($_SESSION['part'], $_POST);
-		Assert::same(['Location' => '/subscription/preview'], $headers);
+		))->submitPreview($_POST)->headers();
+		Assert::same(['Location' => '/subscriptions'], $headers);
 	}
 
 	public function testErrorOnAdding() {
-		$headers = (new Subscription\DefaultPage(
+		$headers = (new Subscription\PreviewPage(
 			new Uri\FakeUri('', '/subscription/5'),
 			new Log\FakeLogs(),
 			new Ini\FakeSource($this->configuration)
-		))->submitDefault($_POST)->headers();
+		))->submitPreview($_POST)->headers();
 		Assert::same(['Location' => '/subscription/5'], $headers);
 	}
 }
 
-(new DefaultPage())->run();
+(new PreviewPage())->run();
