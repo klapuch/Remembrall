@@ -19,14 +19,14 @@ init:
     - SET PATH=%POSTGRES_PATH%\bin;%PATH%
 
 build_script:
-    - nuget install redis-64 -excludeversion
-    - redis-64\tools\redis-server.exe --service-install
-    - redis-64\tools\redis-server.exe --service-start
     - copy Tests\TestCase\.config.appveyor.ini Tests\TestCase\.config.local.ini
     - createdb remembrall_test
     - psql remembrall_test < .\Tests\TestCase\schema.sql
 
 install:
+    - nuget install redis-64 -excludeversion
+    - redis-64\tools\redis-server.exe --service-install
+    - redis-64\tools\redis-server.exe --service-start
     - IF EXIST c:\php\71 (SET PHP=0) ELSE (SET PHP=1)
     - IF %PHP%==1 mkdir c:\php\71
     - IF %PHP%==1 cd c:\php\71
