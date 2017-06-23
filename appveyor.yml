@@ -20,8 +20,8 @@ init:
 
 build_script:
     - nuget install redis-64 -excludeversion
-    - redis-64\redis-server.exe --service-install
-    - redis-64\redis-server.exe --service-start
+    - redis-64\tools\redis-server.exe --service-install
+    - redis-64\tools\redis-server.exe --service-start
     - copy Tests\TestCase\.config.appveyor.ini Tests\TestCase\.config.local.ini
     - createdb remembrall_test
     - psql remembrall_test < .\Tests\TestCase\schema.sql
