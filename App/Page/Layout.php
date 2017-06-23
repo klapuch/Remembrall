@@ -9,6 +9,7 @@ use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Storage;
 use Klapuch\Uri;
+use Predis;
 
 abstract class Layout implements Application\Request {
 	/** @var mixed[] */
@@ -23,6 +24,8 @@ abstract class Layout implements Application\Request {
 	protected $user;
 	/** @var \PDO */
 	protected $database;
+	/** @var \Predis\Client */
+	protected $redis;
 
 	public function __construct(
 		Uri\Uri $url,
@@ -37,6 +40,7 @@ abstract class Layout implements Application\Request {
 			$this->configuration['DATABASE']['user'],
 			$this->configuration['DATABASE']['password']
 		);
+		$this->redis = new Predis\Client($this->configuration['REDIS']['uri']);
 		$this->csrf = new Csrf\Memory($_SESSION, $_POST, $_GET);
 		$this->user = new Access\Guest();
 		if (isset($_SESSION['id'])) {

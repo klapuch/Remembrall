@@ -34,7 +34,8 @@
     "gajus/dindent": "^2.0",
     "nette/mail": "^2.4.0",
     "texy/texy": "^2.9",
-    "symfony/css-selector": "^3.3"
+    "symfony/css-selector": "^3.3",
+    "predis/predis": "^1.1"
   },
   "require-dev": {
     "nette/tester": "^1.7",

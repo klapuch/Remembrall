@@ -30,3 +30,8 @@ services:
           - ./nginx/error.log:/var/log/nginx/error.log
       ports:
         - 80:80
+    redis:
+      image: redis:alpine
+      container_name: remembrall-redis
+      ports:
+        - 6379:6379

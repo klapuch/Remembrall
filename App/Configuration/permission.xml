@@ -16,6 +16,8 @@
 
 	<permission resource="subscription/delete" role="member"/>
 
+	<permission resource="subscription/preview" role="member"/>
+
 	<permission resource="subscription/edit/{num}" role="member"/>
 
 	<permission resource="subscription" role="member"/>
