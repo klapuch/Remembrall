@@ -20,44 +20,65 @@ use Texy;
 
 final class PreviewPage extends Page\Layout {
 	public function response(array $parameters): Application\Response {
-		return new Response\AuthenticatedResponse(
-			new Response\ComposedResponse(
-				new Response\CombinedResponse(
-					new Response\FormResponse(
-						new Subscription\NewForm(
-							$this->url,
-							$this->csrf,
-							new Form\Backup($_SESSION, $_POST)
-						)
-					),
-					new Response\PlainResponse(
-						(new Web\FormattedPart(
-							new Web\TemporaryPart(
-								$this->redis,
-								new Uri\NormalizedUrl(
-									new Uri\SchemeForcedUrl(
-										new Uri\ValidUrl(
-											$_SESSION['part']['url']
-										),
-										['http', 'https']
-									)
-								),
-								$_SESSION['part']['expression'],
-								$_SESSION['part']['language']
+		if (isset($_SESSION['part'], $_SESSION['part']['url'], $_SESSION['part']['expression'], $_SESSION['part']['language'])) {
+			try {
+				return new Response\AuthenticatedResponse(
+					new Response\ComposedResponse(
+						new Response\CombinedResponse(
+							new Response\FormResponse(
+								new Subscription\NewForm(
+									$this->url,
+									$this->csrf,
+									new Form\Backup($_SESSION, $_POST)
+								)
 							),
-							new Texy\Texy(),
-							new Dindent\Indenter()
-						))->print(new Output\Xml([], 'part'))
+							new Response\PlainResponse(
+								(new Web\FormattedPart(
+									new Web\TemporaryPart(
+										$this->redis,
+										new Uri\NormalizedUrl(
+											new Uri\SchemeForcedUrl(
+												new Uri\ValidUrl(
+													$_SESSION['part']['url']
+												),
+												['http', 'https']
+											)
+										),
+										$_SESSION['part']['expression'],
+										$_SESSION['part']['language']
+									),
+									new Texy\Texy(),
+									new Dindent\Indenter()
+								))->print(new Output\Xml([], 'part'))
+							),
+							new Response\FlashResponse(),
+							new Response\PermissionResponse(),
+							new Response\IdentifiedResponse($this->user)
+						),
+						__DIR__ . '/templates/preview.xml',
+						__DIR__ . '/../templates/layout.xml'
 					),
-					new Response\FlashResponse(),
-					new Response\PermissionResponse(),
-					new Response\IdentifiedResponse($this->user)
-				),
-				__DIR__ . '/templates/preview.xml',
-				__DIR__ . '/../templates/layout.xml'
+					$this->user,
+					$this->url
+				);
+			} catch (\UnexpectedValueException $ex) {
+				return new Response\InformativeResponse(
+					new Response\RedirectResponse(
+						new Response\EmptyResponse(),
+						new Uri\RelativeUrl($this->url, 'subscription')
+					),
+					['danger' => $ex->getMessage()],
+					$_SESSION
+				);
+			}
+		}
+		return new Response\InformativeResponse(
+			new Response\RedirectResponse(
+				new Response\EmptyResponse(),
+				new Uri\RelativeUrl($this->url, 'subscription')
 			),
-			$this->user,
-			$this->url
+			['danger' => 'Missing referenced part'],
+			$_SESSION
 		);
 	}
 

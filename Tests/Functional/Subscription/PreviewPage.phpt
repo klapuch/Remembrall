@@ -41,6 +41,35 @@ final class PreviewPage extends \Tester\TestCase {
 		});
 	}
 
+	public function testNotFoundPartLeadingToError() {
+		$_SESSION['part'] = ['url' => 'http://www.example.com', 'expression' => '//h1', 'language' => 'xpath'];
+		$headers = (new Subscription\PreviewPage(
+			new Uri\FakeUri(''),
+			new Log\FakeLogs(),
+			new Ini\FakeSource($this->configuration)
+		))->response([])->headers();
+		Assert::same(['Location' => '/subscription'], $headers);
+	}
+
+	public function testMissingSessionFieldForResponseLeadingToError() {
+		$headers = (new Subscription\PreviewPage(
+			new Uri\FakeUri(''),
+			new Log\FakeLogs(),
+			new Ini\FakeSource($this->configuration)
+		))->response([])->headers();
+		Assert::same(['Location' => '/subscription'], $headers);
+	}
+
+	public function testMissingSomeSessionFieldForResponseLeadingToError() {
+		$_SESSION['part'] = ['language' => 'xpath'];
+		$headers = (new Subscription\PreviewPage(
+			new Uri\FakeUri(''),
+			new Log\FakeLogs(),
+			new Ini\FakeSource($this->configuration)
+		))->response([])->headers();
+		Assert::same(['Location' => '/subscription'], $headers);
+	}
+
 	public function testAddingAfterPreview() {
 		$_SESSION['part'] = ['url' => 'http://www.example.com', 'expression' => '//h1', 'language' => 'xpath'];
 		$_POST['interval'] = '44';
