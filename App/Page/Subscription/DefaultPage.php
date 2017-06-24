@@ -46,11 +46,13 @@ final class DefaultPage extends Page\Layout {
 				),
 				new Form\Backup($_SESSION, $_POST),
 				function() use ($part): void {
-					$url = new Uri\NormalizedUrl(
-						new Uri\ReachableUrl(
-							new Uri\SchemeForcedUrl(
-								new Uri\ValidUrl($part['url']),
-								['http', 'https']
+					$url = new Uri\CachedUri(
+						new Uri\NormalizedUrl(
+							new Uri\ReachableUrl(
+								new Uri\SchemeForcedUrl(
+									new Uri\ValidUrl($part['url']),
+									['http', 'https']
+								)
 							)
 						)
 					);

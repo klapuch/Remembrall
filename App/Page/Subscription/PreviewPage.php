@@ -36,12 +36,14 @@ final class PreviewPage extends Page\Layout {
 								(new Web\FormattedPart(
 									new Web\TemporaryPart(
 										$this->redis,
-										new Uri\NormalizedUrl(
-											new Uri\SchemeForcedUrl(
-												new Uri\ValidUrl(
-													$_SESSION['part']['url']
-												),
-												['http', 'https']
+										new Uri\CachedUri(
+											new Uri\NormalizedUrl(
+												new Uri\SchemeForcedUrl(
+													new Uri\ValidUrl(
+														$_SESSION['part']['url']
+													),
+													['http', 'https']
+												)
 											)
 										),
 										$_SESSION['part']['expression'],
@@ -94,10 +96,12 @@ final class PreviewPage extends Page\Layout {
 				function() use ($subscription): void {
 					(new Storage\Transaction($this->database))->start(
 						function() use ($subscription): void {
-							$url = new Uri\NormalizedUrl(
-								new Uri\SchemeForcedUrl(
-									new Uri\ValidUrl($_SESSION['part']['url']),
-									['http', 'https']
+							$url = new Uri\CachedUri(
+								new Uri\NormalizedUrl(
+									new Uri\SchemeForcedUrl(
+										new Uri\ValidUrl($_SESSION['part']['url']),
+										['http', 'https']
+									)
 								)
 							);
 							$page = (new Web\HarnessedPages(
