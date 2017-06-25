@@ -27,26 +27,26 @@ final class ParticipatedUsers implements Access\Users {
 				$user = $this->origin->register($email, $password, $role);
 				(new Storage\ParameterizedQuery(
 					$this->database,
-						"WITH removed_participants AS (
-							DELETE FROM participants
-							WHERE email = ?
-							AND accepted = TRUE
-							RETURNING id, subscription_id
-						), removed_invitations AS (
-							DELETE FROM invitation_attempts
-							WHERE participant_id IN (
+					'WITH removed_participants AS (
+						DELETE FROM participants
+						WHERE email = ?
+						AND accepted = TRUE
+						RETURNING id, subscription_id
+					), removed_invitations AS (
+						DELETE FROM invitation_attempts
+						WHERE participant_id IN (
 							SELECT subscription_id
 							FROM removed_participants
 						)
 						RETURNING participant_id AS subscription_id
-						)
-						INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot)
-						SELECT ?, part_id, interval, last_update, snapshot
-						FROM subscriptions
-						WHERE id IN (
-							SELECT subscription_id
-							FROM removed_invitations
-						)",
+					)
+					INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot)
+					SELECT ?, part_id, interval, last_update, snapshot
+					FROM subscriptions
+					WHERE id IN (
+						SELECT subscription_id
+						FROM removed_invitations
+					)',
 					[$email, $user->id()]
 				))->execute();
 				return $user;
