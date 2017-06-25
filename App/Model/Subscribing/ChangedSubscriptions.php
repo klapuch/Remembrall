@@ -53,7 +53,7 @@ final class ChangedSubscriptions implements Subscriptions {
 				SELECT changed_subscriptions.id, url, expression, content, participants.email, snapshot, interval_seconds
 				FROM changed_subscriptions
 				LEFT JOIN participants ON participants.subscription_id = changed_subscriptions.id
-				WHERE accepted = TRUE
+				WHERE accepted IS TRUE
 				ORDER BY email"
 			)
 		))->rows();

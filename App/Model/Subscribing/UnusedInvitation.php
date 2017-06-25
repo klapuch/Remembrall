@@ -61,7 +61,7 @@ final class UnusedInvitation implements Invitation {
 			'SELECT 1
 			FROM participants
 			WHERE code = ?
-			AND accepted = TRUE',
+			AND accepted IS TRUE',
 			[$code]
 		))->field();
 	}

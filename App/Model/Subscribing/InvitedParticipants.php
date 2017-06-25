@@ -45,7 +45,7 @@ final class InvitedParticipants implements Participants {
 			FROM participants
 			WHERE email = ?
 			AND subscription_id = ?
-			AND accepted = TRUE',
+			AND accepted IS TRUE',
 			[$email, $subscription]
 		))->field();
 	}

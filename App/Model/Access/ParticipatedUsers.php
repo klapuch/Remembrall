@@ -30,7 +30,7 @@ final class ParticipatedUsers implements Access\Users {
 					'WITH removed_participants AS (
 						DELETE FROM participants
 						WHERE email = ?
-						AND accepted = TRUE
+						AND accepted IS TRUE
 						RETURNING id, subscription_id
 					), removed_invitations AS (
 						DELETE FROM invitation_attempts
