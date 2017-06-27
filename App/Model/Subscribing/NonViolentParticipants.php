@@ -56,23 +56,23 @@ final class NonViolentParticipants implements Participants {
 	public function all(): \Iterator {
 		$participants = (new Storage\ParameterizedQuery(
 			$this->database,
-			'SELECT participants.id, participants.email, subscription_id, invited_at, accepted, decided_at
+			"SELECT participants.id, participants.email, subscription_id, (
+				SELECT 1
+				FROM invitation_attempts
+				WHERE participant_id = participants.id
+				AND attempt_at + INTERVAL '1 HOUR' * ? > NOW()
+				HAVING COUNT(*) >= ?
+			) AS harassed,
+			invited_at, accepted, decided_at
 			FROM participants
 			INNER JOIN subscriptions ON subscriptions.id = participants.subscription_id
 			INNER JOIN users ON users.id = subscriptions.user_id
 			WHERE user_id = ?
-			ORDER BY decided_at DESC',
-			[$this->author->id()]
+			ORDER BY decided_at DESC",
+			[self::RELEASE, self::ATTEMPTS, $this->author->id()]
 		))->execute();
 		foreach ($participants as $participant) {
-			yield new class(
-				[
-					'harassed' => $this->harassed(
-						$participant['subscription_id'],
-						$participant['email']
-					),
-				] + $participant
-			) implements Participant {
+			yield new class($participant) implements Participant {
 				private $participant;
 
 				public function __construct(array $participant) {
