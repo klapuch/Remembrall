@@ -7,6 +7,7 @@ declare(strict_types = 1);
 namespace Remembrall\Integration\Web;
 
 use Klapuch\Dataset;
+use Klapuch\Output;
 use Klapuch\Uri;
 use Remembrall\Model\Web;
 use Remembrall\TestCase;
@@ -132,12 +133,15 @@ final class CollectiveParts extends \Tester\TestCase {
 		))->all(new Dataset\FakeSelection(''));
 		$part = $parts->current();
 		Assert::same('a', $part->content());
+		Assert::contains('|occurrences|2|', $part->print(new Output\FakeFormat())->serialization());
 		$parts->next();
 		$part = $parts->current();
 		Assert::same('b', $part->content());
+		Assert::contains('|occurrences|1|', $part->print(new Output\FakeFormat())->serialization());
 		$parts->next();
 		$part = $parts->current();
 		Assert::same('c', $part->content());
+		Assert::contains('|occurrences|0|', $part->print(new Output\FakeFormat())->serialization());
 		$parts->next();
 		Assert::null($parts->current());
 	}
