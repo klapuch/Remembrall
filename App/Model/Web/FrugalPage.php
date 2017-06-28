@@ -31,7 +31,7 @@ final class FrugalPage implements Page {
 				$this->database,
 				'SELECT content
 				FROM pages
-				WHERE url IS NOT DISTINCT FROM ?',
+				WHERE url = ?',
 				[$this->uri->reference()]
 			))->field()
 		);
@@ -55,7 +55,7 @@ final class FrugalPage implements Page {
 			WHERE (
 				SELECT MAX(visited_at)
 				FROM page_visits
-				WHERE page_url IS NOT DISTINCT FROM ?
+				WHERE page_url = ?
 			) + INTERVAL '1 MINUTE' * ? < NOW()",
 			[$uri->reference(), (new \DateInterval(self::EXPIRATION))->i]
 		))->field();
@@ -71,7 +71,7 @@ final class FrugalPage implements Page {
 			$this->database,
 			'SELECT 1
 			FROM pages
-			WHERE url IS NOT DISTINCT FROM ?',
+			WHERE url = ?',
 			[$uri->reference()]
 		))->field();
 	}

@@ -22,7 +22,7 @@ final class StoredSubscription implements Subscription {
 		(new Storage\ParameterizedQuery(
 			$this->database,
 			'DELETE FROM subscriptions
-			WHERE id IS NOT DISTINCT FROM ?',
+			WHERE id = ?',
 			[$this->id]
 		))->execute();
 	}
@@ -32,7 +32,7 @@ final class StoredSubscription implements Subscription {
 			$this->database,
 			'UPDATE subscriptions
 			SET interval = ?
-			WHERE id IS NOT DISTINCT FROM ?',
+			WHERE id = ?',
 			[$interval->iso(), $this->id]
 		))->execute();
 	}
@@ -50,7 +50,7 @@ final class StoredSubscription implements Subscription {
 					WHERE id = :id
 				)
 			)
-			WHERE id IS NOT DISTINCT FROM :id',
+			WHERE id = :id',
 			['id' => $this->id]
 		))->execute();
 	}
@@ -61,7 +61,7 @@ final class StoredSubscription implements Subscription {
 			'SELECT readable_subscriptions.id, interval_seconds / 60 AS interval, page_url AS url, expression, language
 			FROM readable_subscriptions
 			LEFT JOIN parts ON readable_subscriptions.part_id = parts.id
-			WHERE readable_subscriptions.id IS NOT DISTINCT FROM ?',
+			WHERE readable_subscriptions.id = ?',
 			[$this->id]
 		))->row();
 		return new Output\FilledFormat($format, $subscription);

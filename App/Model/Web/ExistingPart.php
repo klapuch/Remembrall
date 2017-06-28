@@ -65,7 +65,7 @@ final class ExistingPart implements Part {
 			$this->database,
 			'SELECT 1
 			FROM parts
-			WHERE id IS NOT DISTINCT FROM ?',
+			WHERE id = ?',
 			[$this->id]
 		))->field();
 	}

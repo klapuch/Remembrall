@@ -26,7 +26,7 @@ final class StoredPage implements Page {
 				$this->database,
 				'SELECT content
 				FROM pages
-				WHERE url IS NOT DISTINCT FROM ?',
+				WHERE url = ?',
 				[$this->url->reference()]
 			))->field()
 		);
@@ -39,7 +39,7 @@ final class StoredPage implements Page {
 			$this->database,
 			'UPDATE pages
 			SET content = ?
-			WHERE url IS NOT DISTINCT FROM ?',
+			WHERE url = ?',
 			[$refreshedPage->content()->saveHTML(), $this->url->reference()]
 		))->execute();
 		return $this;

@@ -24,7 +24,7 @@ final class StoredPart implements Part {
 			$this->database,
 			'SELECT content
 			FROM parts
-			WHERE id IS NOT DISTINCT FROM ?',
+			WHERE id = ?',
 			[$this->id]
 		))->field();
 	}
@@ -34,7 +34,7 @@ final class StoredPart implements Part {
 			$this->database,
 			'SELECT snapshot
 			FROM parts
-			WHERE id IS NOT DISTINCT FROM ?',
+			WHERE id = ?',
 			[$this->id]
 		))->field();
 	}
@@ -45,7 +45,7 @@ final class StoredPart implements Part {
 			$this->database,
 			'UPDATE parts
 			SET content = ?, snapshot = ?
-			WHERE id IS NOT DISTINCT FROM ?',
+			WHERE id = ?',
 			[$refreshedPart->content(), $refreshedPart->snapshot(), $this->id]
 		))->execute();
 		return $this;

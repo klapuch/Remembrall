@@ -34,9 +34,9 @@ final class OwnedSubscriptions implements Subscriptions {
 				(
 					SELECT id, ?, ?, NOW(), snapshot
 					FROM parts
-					WHERE expression IS NOT DISTINCT FROM ?
-					AND language IS NOT DISTINCT FROM ?
-					AND page_url IS NOT DISTINCT FROM ?
+					WHERE expression = ?
+					AND language = ?
+					AND page_url = ?
 				)',
 				[
 					$this->owner->id(),
@@ -72,7 +72,7 @@ final class OwnedSubscriptions implements Subscriptions {
 					GROUP BY part_id
 				) AS part_visits ON parts.id = part_visits.part_id
 				INNER JOIN subscriptions ON subscriptions.part_id = parts.id
-				WHERE subscriptions.user_id IS NOT DISTINCT FROM ?
+				WHERE subscriptions.user_id = ?
 				ORDER BY visited_at DESC'
 			),
 			$selection->criteria([$this->owner->id()])
