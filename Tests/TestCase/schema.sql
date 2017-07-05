@@ -275,7 +275,7 @@ ALTER SEQUENCE notifications_id_seq OWNED BY notifications.id;
 -- Name: page_visits; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE UNLOGGED TABLE page_visits (
+CREATE TABLE page_visits (
     id integer NOT NULL,
     page_url character varying NOT NULL,
     visited_at timestamp without time zone NOT NULL
@@ -321,7 +321,7 @@ ALTER TABLE pages OWNER TO postgres;
 -- Name: part_visits; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE UNLOGGED TABLE part_visits (
+CREATE TABLE part_visits (
     id integer NOT NULL,
     part_id integer NOT NULL,
     visited_at timestamp without time zone NOT NULL
