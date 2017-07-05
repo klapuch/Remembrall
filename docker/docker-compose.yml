@@ -7,6 +7,8 @@ services:
         - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=postgres
         - POSTGRES_DB=remembrall
+      volumes:
+        - ./postgres/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
       ports:
         - 5432:5432
     adminer:
