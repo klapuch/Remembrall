@@ -26,7 +26,8 @@ final class PopularParts implements Parts {
 		$parts = (new Storage\ParameterizedQuery(
 			$this->database,
 			$selection->expression(
-				'SELECT id, page_url AS url, expression, content, snapshot, language,
+				'SELECT id, page_url AS url, (expression).value AS expression,
+				content, snapshot, (expression).language,
 				occurrences
 				FROM parts
 				INNER JOIN (

@@ -40,7 +40,7 @@ final class ChangedSubscriptions implements Subscriptions {
 			$this->database,
 			$selection->expression(
 				"WITH changed_subscriptions AS (
-					SELECT readable_subscriptions.id, page_url AS url, expression, content, email, parts.snapshot, interval_seconds
+					SELECT readable_subscriptions.id, page_url AS url, (expression).value AS expression, content, email, parts.snapshot, interval_seconds
 					FROM parts
 					INNER JOIN readable_subscriptions ON readable_subscriptions.part_id = parts.id
 					INNER JOIN users ON users.id = readable_subscriptions.user_id

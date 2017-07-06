@@ -54,7 +54,7 @@ final class ExistingPart extends \Tester\TestCase {
 	public function testExistingPart() {
 		$this->database->exec(
 			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(1, 'www.facedown.cz', '//d', 'd', '')"
+			(1, 'www.facedown.cz', ROW('//d', 'xpath'), 'd', '')"
 		);
 		Assert::noError(
 			function() {

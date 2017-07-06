@@ -34,8 +34,7 @@ final class CollectiveParts extends \Tester\TestCase {
 		Assert::same('www.google.com', $parts[0]['page_url']);
 		Assert::same('google content', $parts[0]['content']);
 		Assert::same('google snap', $parts[0]['snapshot']);
-		Assert::same('//p', $parts[0]['expression']);
-		Assert::same('xpath', $parts[0]['language']);
+		Assert::same('(//p,xpath)', $parts[0]['expression']);
 	}
 
 	public function testAddingToOthers() {
@@ -59,13 +58,11 @@ final class CollectiveParts extends \Tester\TestCase {
 		Assert::same('www.google.com', $parts[0]['page_url']);
 		Assert::same('google content', $parts[0]['content']);
 		Assert::same('google snap', $parts[0]['snapshot']);
-		Assert::same('//google', $parts[0]['expression']);
-		Assert::same('xpath', $parts[0]['language']);
+		Assert::same('(//google,xpath)', $parts[0]['expression']);
 		Assert::same('www.facedown.cz', $parts[1]['page_url']);
 		Assert::same('facedown content', $parts[1]['content']);
 		Assert::same('facedown snap', $parts[1]['snapshot']);
-		Assert::same('//facedown', $parts[1]['expression']);
-		Assert::same('css', $parts[1]['language']);
+		Assert::same('(//facedown,css)', $parts[1]['expression']);
 	}
 
 	public function testAddingWithRecordedVisitation() {
@@ -96,10 +93,10 @@ final class CollectiveParts extends \Tester\TestCase {
 		Assert::count(2, $parts);
 		Assert::same('NEW_CONTENT', $parts[0]['content']);
 		Assert::same('NEW_SNAP', $parts[0]['snapshot']);
-		Assert::same('xpath', $parts[0]['language']);
+		Assert::contains('xpath', $parts[0]['expression']);
 		Assert::same('CSS', $parts[1]['content']);
 		Assert::same('CSS_SNAP', $parts[1]['snapshot']);
-		Assert::same('css', $parts[1]['language']);
+		Assert::contains('css', $parts[1]['expression']);
 	}
 
 	public function testUpdatingDuplicationWithAllRecordedVisitation() {
@@ -117,9 +114,9 @@ final class CollectiveParts extends \Tester\TestCase {
 	public function testIterating() {
 		$this->database->exec(
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.google.com', '//a', 'a', ''),
-			('www.seznam.cz', '//b', 'b', ''),
-			('www.facedown.cz', '//c', 'c', '')"
+			('www.google.com', ROW('//a', 'xpath'), 'a', ''),
+			('www.seznam.cz', ROW('//b', 'xpath'), 'b', ''),
+			('www.facedown.cz', ROW('//c', 'xpath'), 'c', '')"
 		);
 		$this->database->exec(
 			"INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES
@@ -149,9 +146,9 @@ final class CollectiveParts extends \Tester\TestCase {
 	public function testCounting() {
 		$this->database->exec(
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.google.com', '//a', 'a', ''),
-			('www.seznam.cz', '//b', 'b', ''),
-			('www.facedown.cz', '//c', 'c', '')"
+			('www.google.com', ROW('//a', 'xpath'), 'a', ''),
+			('www.seznam.cz', ROW('//b', 'xpath'), 'b', ''),
+			('www.facedown.cz', ROW('//c', 'xpath'), 'c', '')"
 		);
 		$parts = new Web\CollectiveParts($this->database);
 		Assert::same(3, $parts->count());

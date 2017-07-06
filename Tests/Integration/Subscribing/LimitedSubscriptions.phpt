@@ -38,11 +38,11 @@ final class LimitedSubscriptions extends \Tester\TestCase {
 	public function testSubscribingOverLimit() {
 		$this->database->exec(
 			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(1, 'www.google.com', '//a', 'a', ''),
-			(2, 'www.facedown.cz', '//b', 'b', ''),
-			(3, 'www.facedown.cz', '//c', 'c', ''),
-			(4, 'www.google.com', '//d', 'd', ''),
-			(5, 'www.facedown.cz', '//d', 'd', '')"
+			(1, 'www.google.com', ROW('//a', 'xpath'), 'a', ''),
+			(2, 'www.facedown.cz', ROW('//b', 'xpath'), 'b', ''),
+			(3, 'www.facedown.cz', ROW('//c', 'xpath'), 'c', ''),
+			(4, 'www.google.com', ROW('//d', 'xpath'), 'd', ''),
+			(5, 'www.facedown.cz', ROW('//d', 'xpath'), 'd', '')"
 		);
 		$this->database->exec(
 			"INSERT INTO subscriptions (part_id, user_id, interval, last_update, snapshot) VALUES

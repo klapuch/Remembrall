@@ -19,10 +19,10 @@ final class PopularParts extends \Tester\TestCase {
 	public function testIterating() {
 		$this->database->exec(
 			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(1, 'foo.cz', '//foo', 'foo', 'fooSnap'),
-			(2, 'bar.cz', '//bar', 'bar', 'barSnap'),
-			(3, 'kar.cz', '//kar', 'kar', 'karSnap'),
-			(4, 'baz.cz', '//baz', 'baz', 'bazSnap')"
+			(1, 'foo.cz', ROW('//foo', 'xpath'), 'foo', 'fooSnap'),
+			(2, 'bar.cz', ROW('//bar', 'xpath'), 'bar', 'barSnap'),
+			(3, 'kar.cz', ROW('//kar', 'xpath'), 'kar', 'karSnap'),
+			(4, 'baz.cz', ROW('//baz', 'xpath'), 'baz', 'bazSnap')"
 		);
 		$this->database->exec(
 			"INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES
@@ -52,8 +52,8 @@ final class PopularParts extends \Tester\TestCase {
 	public function testCounting() {
 		$this->database->exec(
 			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(2, 'bar.cz', '//bar', 'bar', 'barSnap'),
-			(4, 'baz.cz', '//baz', 'baz', 'bazSnap')"
+			(2, 'bar.cz', ROW('//bar', 'xpath'), 'bar', 'barSnap'),
+			(4, 'baz.cz', ROW('//baz', 'xpath'), 'baz', 'bazSnap')"
 		);
 		$parts = new Web\PopularParts(
 			new Web\FakeParts(),

@@ -37,7 +37,7 @@ final class InvitePage extends \Tester\TestCase {
 		);
 		$this->database->exec(
 			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(4, 'www.google.com', '//google', 'google content', 'google snap')"
+			(4, 'www.google.com', ROW('//google', 'xpath'), 'google content', 'google snap')"
 		);
 		$this->database->exec(
 			"INSERT INTO users (id, email, password, role) VALUES

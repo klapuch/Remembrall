@@ -23,7 +23,7 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 	public function testSubscribingBrandNewOne() {
 		$this->database->exec(
 			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(1, 'www.google.com', '//google', 'google content', 'google snap')"
+			(1, 'www.google.com', ROW('//google', 'xpath'), 'google content', 'google snap')"
 		);
 		(new Subscribing\OwnedSubscriptions(
 			new Access\FakeUser(666),
@@ -46,7 +46,7 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 	public function testThrowingOnDuplication() {
 		$this->database->exec(
 			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.google.com', '//google', 'google content', 'google snap')"
+			('www.google.com', ROW('//google', 'xpath'), 'google content', 'google snap')"
 		);
 		$subscriptions = new Subscribing\OwnedSubscriptions(
 			new Access\FakeUser(666),
@@ -75,10 +75,10 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 	public function testIteratingOwned() {
 		$this->database->exec(
 			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(1, 'https://www.google.com', '//a', 'a', ''),
-			(2, 'http://www.facedown.cz', '//b', 'b', ''),
-			(3, 'http://www.facedown.cz', '//c', 'c', ''),
-			(4, 'https://www.google.com', '//d', 'd', '')"
+			(1, 'https://www.google.com', ROW('//a', 'xpath'), 'a', ''),
+			(2, 'http://www.facedown.cz', ROW('//b', 'xpath'), 'b', ''),
+			(3, 'http://www.facedown.cz', ROW('//c', 'xpath'), 'c', ''),
+			(4, 'https://www.google.com', ROW('//d', 'xpath'), 'd', '')"
 		);
 		$this->database->exec(
 			"INSERT INTO subscriptions (part_id, user_id, interval, last_update, snapshot) VALUES
@@ -98,7 +98,7 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 		);
 		$this->database->exec(
 			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(5, 'www.google.com', '//google', 'google content', 'google snap')"
+			(5, 'www.google.com', ROW('//google', 'xpath'), 'google content', 'google snap')"
 		);
 		$subscriptions = (new Subscribing\OwnedSubscriptions(
 			new Access\FakeUser(1),
@@ -128,7 +128,7 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 	public function testIteratingWithoutVisits() {
 		$this->database->exec(
 			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(1, 'https://www.google.com', '//a', 'a', '')"
+			(1, 'https://www.google.com', ROW('//a', 'xpath'), 'a', '')"
 		);
 		$this->database->exec(
 			"INSERT INTO subscriptions (part_id, user_id, interval, last_update, snapshot) VALUES

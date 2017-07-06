@@ -25,8 +25,8 @@ final class StoredSubscription extends \Tester\TestCase {
 		);
 		$this->database->exec(
 			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(3, 'www.facedown.cz', '//p', 'facedown content', 'facedown snap'),
-			(4, 'www.google.com', '//p', 'google content', 'google snap')"
+			(3, 'www.facedown.cz', ROW('//p', 'xpath'), 'facedown content', 'facedown snap'),
+			(4, 'www.google.com', ROW('//p', 'xpath'), 'google content', 'google snap')"
 		);
 		(new Subscribing\StoredSubscription(1, $this->database))->cancel();
 		$statement = $this->database->prepare('SELECT * FROM subscriptions');
@@ -44,8 +44,8 @@ final class StoredSubscription extends \Tester\TestCase {
 		);
 		$this->database->exec(
 			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(3, 'www.facedown.cz', '//p', 'facedown content', 'facedown snap'),
-			(4, 'www.google.com', '//p', 'google content', 'google snap')"
+			(3, 'www.facedown.cz', ROW('//p', 'xpath'), 'facedown content', 'facedown snap'),
+			(4, 'www.google.com', ROW('//p', 'xpath'), 'google content', 'google snap')"
 		);
 		$statement = $this->database->prepare('SELECT * FROM subscriptions');
 		$statement->execute();
@@ -65,8 +65,8 @@ final class StoredSubscription extends \Tester\TestCase {
 		);
 		$this->database->exec(
 			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(3, 'www.facedown.cz', '//p', 'facedown content', 'facedown snap'),
-			(4, 'www.google.com', '//p', 'google content', 'google snap')"
+			(3, 'www.facedown.cz', ROW('//p', 'xpath'), 'facedown content', 'facedown snap'),
+			(4, 'www.google.com', ROW('//p', 'xpath'), 'google content', 'google snap')"
 		);
 		$id = 1;
 		(new Subscribing\StoredSubscription(
@@ -88,8 +88,8 @@ final class StoredSubscription extends \Tester\TestCase {
 		);
 		$this->database->exec(
 			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(3, 'www.facedown.cz', '//p', 'facedown content', 'facedown snap'),
-			(4, 'www.google.com', '//p', 'google content', 'google snap')"
+			(3, 'www.facedown.cz', ROW('//p', 'xpath'), 'facedown content', 'facedown snap'),
+			(4, 'www.google.com', ROW('//p', 'xpath'), 'google content', 'google snap')"
 		);
 		$id = 1;
 		(new Subscribing\StoredSubscription($id, $this->database))->notify();
@@ -108,8 +108,8 @@ final class StoredSubscription extends \Tester\TestCase {
 		);
 		$this->database->exec(
 			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(3, 'www.facedown.cz', '//p', 'facedown content', 'facedown snap'),
-			(4, 'www.google.com', '//p', 'google content', 'google snap')"
+			(3, 'www.facedown.cz', ROW('//p', 'xpath'), 'facedown content', 'facedown snap'),
+			(4, 'www.google.com', ROW('//p', 'xpath'), 'google content', 'google snap')"
 		);
 		$id = 1;
 		(new Subscribing\StoredSubscription(
@@ -127,8 +127,8 @@ final class StoredSubscription extends \Tester\TestCase {
 			(1, 111, 3, 'PT1980S', '2000-01-01', 'abc_snap')"
 		);
 		$this->database->exec(
-			"INSERT INTO parts (id, page_url, expression, content, snapshot, language) VALUES
-			(3, 'www.google.com', '//p', 'google content', 'google snap', 'css')"
+			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
+			(3, 'www.google.com', ROW('//p', 'css'), 'google content', 'google snap')"
 		);
 		$subscription = new Subscribing\StoredSubscription(1, $this->database);
 		Assert::same(

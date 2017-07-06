@@ -27,7 +27,8 @@ final class UnreliableParts implements Parts {
 		$parts = (new Storage\ParameterizedQuery(
 			$this->database,
 			$selection->expression(
-				"SELECT page_url AS url, expression, parts.id, content, snapshot, language,
+				"SELECT page_url AS url, (expression).value AS expression,
+				parts.id, content, snapshot, (expression).language,
 				occurrences
 				FROM parts
 				RIGHT JOIN (

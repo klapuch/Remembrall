@@ -39,7 +39,7 @@ final class ParticipantInvitation implements Invitation {
 			$this->database,
 			'SELECT participants.email, code,
 			users.email AS author,
-			expression, page_url AS url
+			(expression).value AS expression, page_url AS url
 			FROM participants
 			INNER JOIN subscriptions ON subscriptions.id = participants.subscription_id
 			INNER JOIN parts ON parts.id = subscriptions.part_id

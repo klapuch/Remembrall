@@ -19,9 +19,9 @@ final class CollectiveParts implements Parts {
 	public function add(Part $part, Uri\Uri $url, string $expression, string $language): void {
 		(new Storage\ParameterizedQuery(
 			$this->database,
-			'INSERT INTO parts (page_url, expression, language, content, snapshot) VALUES
-			(:url, :expression, :language, :content, :snapshot)
-			ON CONFLICT (page_url, expression, language)
+			'INSERT INTO parts (page_url, expression, content, snapshot) VALUES
+			(:url, ROW(:expression, :language), :content, :snapshot)
+			ON CONFLICT (page_url, expression)
 			DO UPDATE SET content = :content, snapshot = :snapshot',
 			[
 				'url' => $url->reference(),
@@ -37,7 +37,7 @@ final class CollectiveParts implements Parts {
 		$parts = (new Storage\ParameterizedQuery(
 			$this->database,
 			$selection->expression(
-				'SELECT id, page_url AS url, content, expression, snapshot,
+				'SELECT id, page_url AS url, content, (expression).value AS expression, snapshot,
 				COALESCE(occurrences, 0) AS occurrences
 				FROM parts
 				LEFT JOIN (

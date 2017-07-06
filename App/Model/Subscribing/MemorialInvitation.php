@@ -27,7 +27,7 @@ final class MemorialInvitation implements Invitation {
 	public function print(Output\Format $format): Output\Format {
 		$invitation = (new Storage\ParameterizedQuery(
 			$this->database,
-			'SELECT users.email AS author, expression, page_url AS url, code, participants.email
+			'SELECT users.email AS author, (expression).value AS expression, page_url AS url, code, participants.email
 			FROM participants
 			INNER JOIN subscriptions ON subscriptions.id = participants.subscription_id
 			INNER JOIN parts ON parts.id = subscriptions.part_id

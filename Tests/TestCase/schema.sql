@@ -2,11 +2,12 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.7
--- Dumped by pg_dump version 9.5.7
+-- Dumped from database version 9.6.3
+-- Dumped by pg_dump version 9.6.3
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
@@ -54,6 +55,18 @@ CREATE TYPE languages AS ENUM (
 
 
 ALTER TYPE languages OWNER TO postgres;
+
+--
+-- Name: expression; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE expression AS (
+	value character varying,
+	language languages
+);
+
+
+ALTER TYPE expression OWNER TO postgres;
 
 --
 -- Name: notify_subscriptions(); Type: FUNCTION; Schema: public; Owner: postgres
@@ -396,10 +409,9 @@ ALTER SEQUENCE participants_id_seq OWNED BY participants.id;
 CREATE TABLE parts (
     id integer NOT NULL,
     page_url character varying NOT NULL,
-    expression character varying NOT NULL,
     content text NOT NULL,
     snapshot character varying(40) NOT NULL,
-    language languages DEFAULT 'xpath'::languages NOT NULL
+    expression expression NOT NULL
 );
 
 
@@ -552,77 +564,77 @@ ALTER SEQUENCE verification_codes_id_seq OWNED BY verification_codes.id;
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: forgotten_passwords id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY forgotten_passwords ALTER COLUMN id SET DEFAULT nextval('forgotten_passwords_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: invitation_attempts id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY invitation_attempts ALTER COLUMN id SET DEFAULT nextval('invitation_attempts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: notifications id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY notifications ALTER COLUMN id SET DEFAULT nextval('notifications_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: page_visits id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY page_visits ALTER COLUMN id SET DEFAULT nextval('page_visits_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: part_visits id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY part_visits ALTER COLUMN id SET DEFAULT nextval('part_visits_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: participants id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY participants ALTER COLUMN id SET DEFAULT nextval('participants_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: parts id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY parts ALTER COLUMN id SET DEFAULT nextval('parts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: subscriptions id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY subscriptions ALTER COLUMN id SET DEFAULT nextval('subscriptions_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: verification_codes id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY verification_codes ALTER COLUMN id SET DEFAULT nextval('verification_codes_id_seq'::regclass);
 
 
 --
--- Name: forgotten_passwords_id; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: forgotten_passwords forgotten_passwords_id; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY forgotten_passwords
@@ -630,7 +642,7 @@ ALTER TABLE ONLY forgotten_passwords
 
 
 --
--- Name: invitation_attempts_id; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: invitation_attempts invitation_attempts_id; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY invitation_attempts
@@ -638,7 +650,7 @@ ALTER TABLE ONLY invitation_attempts
 
 
 --
--- Name: invitations_id; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: participants invitations_id; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY participants
@@ -646,7 +658,7 @@ ALTER TABLE ONLY participants
 
 
 --
--- Name: notifications_id; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: notifications notifications_id; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY notifications
@@ -654,7 +666,7 @@ ALTER TABLE ONLY notifications
 
 
 --
--- Name: page_visits_ID; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: page_visits page_visits_ID; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY page_visits
@@ -662,7 +674,7 @@ ALTER TABLE ONLY page_visits
 
 
 --
--- Name: pages_url; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: pages pages_url; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY pages
@@ -670,7 +682,7 @@ ALTER TABLE ONLY pages
 
 
 --
--- Name: part_visits_ID; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: part_visits part_visits_ID; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY part_visits
@@ -678,7 +690,7 @@ ALTER TABLE ONLY part_visits
 
 
 --
--- Name: participants_email_subscription_id; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: participants participants_email_subscription_id; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY participants
@@ -686,7 +698,7 @@ ALTER TABLE ONLY participants
 
 
 --
--- Name: parts_ID; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: parts parts_ID; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY parts
@@ -694,15 +706,15 @@ ALTER TABLE ONLY parts
 
 
 --
--- Name: parts_page_url_expression_language; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: parts parts_page_url_expression; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY parts
-    ADD CONSTRAINT parts_page_url_expression_language UNIQUE (page_url, expression, language);
+    ADD CONSTRAINT parts_page_url_expression UNIQUE (page_url, expression);
 
 
 --
--- Name: subscribed_parts_ID; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: subscriptions subscribed_parts_ID; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY subscriptions
@@ -710,7 +722,7 @@ ALTER TABLE ONLY subscriptions
 
 
 --
--- Name: subscribed_parts_subscriber_id_part_id; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: subscriptions subscribed_parts_subscriber_id_part_id; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY subscriptions
@@ -718,7 +730,7 @@ ALTER TABLE ONLY subscriptions
 
 
 --
--- Name: users_email; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: users users_email; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY users
@@ -726,7 +738,7 @@ ALTER TABLE ONLY users
 
 
 --
--- Name: users_id; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: users users_id; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY users
@@ -734,7 +746,7 @@ ALTER TABLE ONLY users
 
 
 --
--- Name: verification_codes_id; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: verification_codes verification_codes_id; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY verification_codes
@@ -742,7 +754,7 @@ ALTER TABLE ONLY verification_codes
 
 
 --
--- Name: verification_codes_user_id; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: verification_codes verification_codes_user_id; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY verification_codes
@@ -750,48 +762,38 @@ ALTER TABLE ONLY verification_codes
 
 
 --
--- Name: pages_aiu; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: pages pages_aiu; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
 CREATE TRIGGER pages_aiu AFTER INSERT OR UPDATE ON pages FOR EACH ROW EXECUTE PROCEDURE record_page_access();
 
 
 --
--- Name: participants_ai; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: participants participants_ai; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
 CREATE TRIGGER participants_ai AFTER INSERT ON participants FOR EACH ROW EXECUTE PROCEDURE record_invitation();
 
 
 --
--- Name: participants_au; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: participants participants_au; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
 CREATE TRIGGER participants_au AFTER UPDATE ON participants FOR EACH ROW EXECUTE PROCEDURE record_invitation();
 
 
 --
--- Name: parts_aiu; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: parts parts_aiu; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
 CREATE TRIGGER parts_aiu AFTER INSERT OR UPDATE ON parts FOR EACH ROW EXECUTE PROCEDURE record_part_access();
 
 
 --
--- Name: subscriptions_au; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: subscriptions subscriptions_au; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
 CREATE TRIGGER subscriptions_au AFTER UPDATE ON subscriptions FOR EACH ROW EXECUTE PROCEDURE notify_subscriptions();
-
-
---
--- Name: public; Type: ACL; Schema: -; Owner: postgres
---
-
-REVOKE ALL ON SCHEMA public FROM PUBLIC;
-REVOKE ALL ON SCHEMA public FROM postgres;
-GRANT ALL ON SCHEMA public TO postgres;
-GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
 --

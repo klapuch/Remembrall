@@ -21,11 +21,11 @@ final class ChangedSubscriptions extends \Tester\TestCase {
 	public function testChangedSnapshotAndPastDateForParticipantAndAuthor() {
 		$this->database->exec(
 			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES 
-			(1, 'a', '//a', 'ac', 'as'),
-			(2, 'www.matched.com', '//matched', 'bc', 'bs'),
-			(3, 'c', '//c', 'cc', 'cs'),
-			(4, 'd', '//d', 'dc', 'ds'),
-			(5, 'e', '//e', 'ec', 'es')"
+			(1, 'a', ROW('//a', 'xpath'), 'ac', 'as'),
+			(2, 'www.matched.com', ROW('//matched', 'xpath'), 'bc', 'bs'),
+			(3, 'c', ROW('//c', 'xpath'), 'cc', 'cs'),
+			(4, 'd', ROW('//d', 'xpath'), 'dc', 'ds'),
+			(5, 'e', ROW('//e', 'xpath'), 'ec', 'es')"
 		);
 		$this->database->exec(
 			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES 
@@ -101,7 +101,7 @@ final class ChangedSubscriptions extends \Tester\TestCase {
 	public function testTemplateFields() {
 		$this->database->exec(
 			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES 
-			(1, 'www.matched.com', '//matched', 'bc', 'bs')"
+			(1, 'www.matched.com', ROW('//matched', 'xpath'), 'bc', 'bs')"
 		);
 		$this->database->exec(
 			"INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES 

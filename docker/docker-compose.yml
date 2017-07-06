@@ -9,6 +9,7 @@ services:
         - POSTGRES_DB=remembrall
       volumes:
         - ./postgres/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
+        - ./..:/var/www/Remembrall
       ports:
         - 5432:5432
     adminer:

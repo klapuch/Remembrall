@@ -60,7 +60,7 @@ final class ParticipantInvitation extends \Tester\TestCase {
 		)->execute([$code]);
 		$this->database->exec(
 			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES 
-			(4, 'www.me.cz', '//p', 'foo', 'as')"
+			(4, 'www.me.cz', ROW('//p', 'xpath'), 'foo', 'as')"
 		);
 		$this->database->exec(
 			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES 

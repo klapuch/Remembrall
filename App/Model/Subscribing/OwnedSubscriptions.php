@@ -34,8 +34,7 @@ final class OwnedSubscriptions implements Subscriptions {
 				(
 					SELECT id, ?, ?, NOW(), snapshot
 					FROM parts
-					WHERE expression = ?
-					AND language = ?
+					WHERE expression = ROW(?, ?)::expression
 					AND page_url = ?
 				)',
 				[
@@ -63,7 +62,7 @@ final class OwnedSubscriptions implements Subscriptions {
 		$subscriptions = (new Storage\ParameterizedQuery(
 			$this->database,
 			$selection->expression(
-				'SELECT subscriptions.id, expression, page_url AS url, interval, language,
+				'SELECT subscriptions.id, (expression).value AS expression, page_url AS url, interval, (expression).language,
 				visited_at, last_update, content
 				FROM parts
 				LEFT JOIN (
