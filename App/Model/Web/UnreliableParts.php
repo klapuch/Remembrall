@@ -31,13 +31,13 @@ final class UnreliableParts implements Parts {
 				parts.id, content, snapshot, (expression).language,
 				occurrences
 				FROM parts
-				RIGHT JOIN (
-					SELECT MIN(interval_seconds) AS interval,
-					part_id, COUNT(*) AS occurrences
+				JOIN counted_subscriptions() AS subscriptions ON subscriptions.part_id = parts.id 
+				JOIN (
+					SELECT MIN(interval_seconds) AS interval, part_id
 					FROM readable_subscriptions
 					GROUP BY part_id
-				) AS subscriptions ON subscriptions.part_id = parts.id 
-				LEFT JOIN (
+				) AS readable_subscriptions ON readable_subscriptions.part_id = parts.id 
+				JOIN (
 					SELECT MAX(visited_at) AS visited_at, part_id
 					FROM part_visits
 					GROUP BY part_id

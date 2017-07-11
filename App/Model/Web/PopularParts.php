@@ -27,14 +27,9 @@ final class PopularParts implements Parts {
 			$this->database,
 			$selection->expression(
 				'SELECT id, page_url AS url, (expression).value AS expression,
-				content, snapshot, (expression).language,
-				occurrences
+				content, snapshot, (expression).language, occurrences
 				FROM parts
-				INNER JOIN (
-					SELECT part_id, COUNT(*) AS occurrences
-					FROM subscriptions
-					GROUP BY part_id
-				) AS subscriptions ON subscriptions.part_id = parts.id
+				INNER JOIN counted_subscriptions() AS subscriptions ON subscriptions.part_id = parts.id
 				ORDER BY occurrences DESC'
 			)
 		))->rows();
