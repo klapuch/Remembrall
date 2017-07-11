@@ -30,11 +30,7 @@ final class PopularParts implements Parts {
 				content, snapshot, (expression).language,
 				occurrences
 				FROM parts
-				INNER JOIN (
-					SELECT part_id, COUNT(*) AS occurrences
-					FROM subscriptions
-					GROUP BY part_id
-				) AS subscriptions ON subscriptions.part_id = parts.id
+				INNER JOIN counted_subscriptions() AS subscriptions ON subscriptions.part_id = parts.id
 				ORDER BY occurrences DESC'
 			)
 		))->rows();

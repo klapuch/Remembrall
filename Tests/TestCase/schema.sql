@@ -15,28 +15,28 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner:
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
 --
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner:
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
--- Name: citext; Type: EXTENSION; Schema: -; Owner:
+-- Name: citext; Type: EXTENSION; Schema: -; Owner: 
 --
 
 CREATE EXTENSION IF NOT EXISTS citext WITH SCHEMA public;
 
 
 --
--- Name: EXTENSION citext; Type: COMMENT; Schema: -; Owner:
+-- Name: EXTENSION citext; Type: COMMENT; Schema: -; Owner: 
 --
 
 COMMENT ON EXTENSION citext IS 'data type for case-insensitive character strings';
@@ -67,6 +67,30 @@ CREATE TYPE expression AS (
 
 
 ALTER TYPE expression OWNER TO postgres;
+
+--
+-- Name: counted_subscriptions(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION counted_subscriptions(OUT part_id integer, OUT occurrences bigint) RETURNS SETOF record
+    LANGUAGE sql
+    AS $$
+  WITH merged_subscriptions AS (
+    SELECT part_id
+    FROM subscriptions
+    UNION ALL
+    SELECT part_id
+    FROM participants
+    INNER JOIN subscriptions ON subscriptions.id = participants.subscription_id
+    WHERE accepted = TRUE
+  )
+  SELECT part_id, COUNT(*) AS occurrences
+  FROM merged_subscriptions
+  GROUP BY part_id;
+$$;
+
+
+ALTER FUNCTION public.counted_subscriptions(OUT part_id integer, OUT occurrences bigint) OWNER TO postgres;
 
 --
 -- Name: notify_subscriptions(); Type: FUNCTION; Schema: public; Owner: postgres
