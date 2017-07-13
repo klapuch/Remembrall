@@ -39,16 +39,14 @@ final class FormattedPart implements Part {
 	public function print(Output\Format $format): Output\Format {
 		return $this->origin->print($format)
 			->adjusted('content', function(string $content): string {
-				return $this->texy->process(
-					sprintf(
-						"/---code html \n %s",
-						$this->indenter->indent($content)
-					)
+				return (string) new PrettyCode(
+					$content,
+					$this->texy,
+					$this->indenter
 				);
 			})
 			->adjusted('language', function(string $language): string {
-				static $formatted = ['xpath' => 'XPath', 'css' => 'CSS'];
-				return $formatted[$language];
+				return (string) new PrettyLanguage($language);
 			});
 	}
 }
