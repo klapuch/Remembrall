@@ -5,6 +5,7 @@ namespace Remembrall\Model\Subscribing;
 use Gajus\Dindent;
 use Klapuch\Output;
 use Klapuch\Time;
+use Remembrall\Model\Web;
 use Texy;
 
 final class FormattedSubscription implements Subscription {
@@ -37,11 +38,10 @@ final class FormattedSubscription implements Subscription {
 	public function print(Output\Format $format): Output\Format {
 		return $this->origin->print($format)
 			->adjusted('content', function(string $content): string {
-				return $this->texy->process(
-					sprintf(
-						"/---code html \n %s",
-						$this->indenter->indent($content)
-					)
+				return (string) new Web\PrettyCode(
+					$content,
+					$this->texy,
+					$this->indenter
 				);
 			})
 			->adjusted('last_update', function(string $lastUpdate): string {
@@ -54,8 +54,7 @@ final class FormattedSubscription implements Subscription {
 				);
 			})
 			->adjusted('language', function(string $language): string {
-				static $formatted = ['xpath' => 'XPath', 'css' => 'CSS'];
-				return $formatted[$language];
+				return (string) new Web\PrettyLanguage($language);
 			});
 	}
 }
