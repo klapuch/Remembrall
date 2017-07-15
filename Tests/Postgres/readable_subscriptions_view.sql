@@ -4,7 +4,9 @@ DECLARE
 	intervals INTEGER[];
 	expected_intervals CONSTANT INTEGER[] := ARRAY[1, 20, 0, 555];
 BEGIN
-	TRUNCATE subscriptions;
+	PERFORM truncate_tables('postgres');
+	PERFORM restart_sequences();
+
 	INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES
 	(1, 2, 'PT1S', NOW(), md5(random()::TEXT)),
 	(1, 3, 'PT20S', NOW(), md5(random()::TEXT)),

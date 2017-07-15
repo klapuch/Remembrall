@@ -4,6 +4,9 @@ DECLARE
 	count INTEGER;
 	expected_count CONSTANT INTEGER := 3;
 BEGIN
+	PERFORM truncate_tables('postgres');
+	PERFORM restart_sequences();
+
 	INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
 	(2, 'bar.cz', ROW ('//bar', 'xpath'), 'bar', 'barSnap'),
 	(3, 'baz.cz', ROW ('//baz', 'xpath'), 'baz', 'bazSnap');
