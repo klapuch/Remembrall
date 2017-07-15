@@ -17,16 +17,16 @@ final class EmailSubscription implements Subscription {
 		SCHEMA = self::TEMPLATES . '/constraint.xsd';
 	private $origin;
 	private $mailer;
-	private $recipient;
+	private $recipients;
 
 	public function __construct(
 		Subscription $origin,
 		Mail\IMailer $mailer,
-		string $recipient
+		array $recipients
 	) {
 		$this->origin = $origin;
 		$this->mailer = $mailer;
-		$this->recipient = $recipient;
+		$this->recipients = $recipients;
 	}
 
 	public function cancel(): void {
@@ -40,26 +40,31 @@ final class EmailSubscription implements Subscription {
 	public function notify(): void {
 		$this->origin->notify();
 		$this->mailer->send(
-			(new Mail\Message())
-			->setFrom(self::SENDER)
-			->addTo($this->recipient)
-			->setSubject(
-				(new Output\XsltTemplate(
-					self::SUBJECT,
-					new Output\ValidXml(
-						$this->print(new Output\Xml([], 'part')),
-						self::SCHEMA
+			array_reduce(
+				$this->recipients,
+				function(Mail\Message $message, string $recipient): Mail\Message {
+					return $message->addBcc($recipient);
+				},
+				(new Mail\Message())
+					->setFrom(self::SENDER)
+					->setSubject(
+						(new Output\XsltTemplate(
+							self::SUBJECT,
+							new Output\ValidXml(
+								$this->print(new Output\Xml([], 'part')),
+								self::SCHEMA
+							)
+						))->render()
 					)
-				))->render()
-			)
-			->setHtmlBody(
-				(new Output\XsltTemplate(
-					self::CONTENT,
-					new Output\ValidXml(
-						$this->print(new Output\Xml([], 'part')),
-						self::SCHEMA
+					->setHtmlBody(
+						(new Output\XsltTemplate(
+							self::CONTENT,
+							new Output\ValidXml(
+								$this->print(new Output\Xml([], 'part')),
+								self::SCHEMA
+							)
+						))->render()
 					)
-				))->render()
 			)
 		);
 	}

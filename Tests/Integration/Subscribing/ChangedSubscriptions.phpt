@@ -25,7 +25,8 @@ final class ChangedSubscriptions extends \Tester\TestCase {
 			(2, 'www.matched.com', ROW('//matched', 'xpath'), 'bc', 'bs'),
 			(3, 'c', ROW('//c', 'xpath'), 'cc', 'cs'),
 			(4, 'd', ROW('//d', 'xpath'), 'dc', 'ds'),
-			(5, 'e', ROW('//e', 'xpath'), 'ec', 'es')"
+			(5, 'e', ROW('//e', 'xpath'), 'ec', 'es'),
+			(7, 'www.matched2.com', ROW('//matched2', 'xpath'), 'bc2', 'bs2')"
 		);
 		$this->database->exec(
 			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES 
@@ -33,7 +34,8 @@ final class ChangedSubscriptions extends \Tester\TestCase {
 			(2, 2, 2, 'PT10S', '2002-01-01', 'changed'),
 			(3, 3, 3, 'PT10S', NOW(), 'changed but time is recent'),
 			(4, 4, 4, 'PT10S', NOW(), 'ds'),
-			(5, 5, 5, 'PT10S', '2001-01-01', 'es')"
+			(5, 5, 5, 'PT10S', '2001-01-01', 'es'),
+			(6, 2, 7, 'PT20S', '2003-01-01', 'changed2')"
 		);
 		$this->database->exec(
 			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
@@ -70,7 +72,7 @@ final class ChangedSubscriptions extends \Tester\TestCase {
 					)
 				),
 				new Mail\SendmailMailer(),
-				'b@b.cz'
+				['b@b.cz', 'me@participant.cz']
 			),
 			$subscription
 		);
@@ -79,18 +81,18 @@ final class ChangedSubscriptions extends \Tester\TestCase {
 		Assert::equal(
 			new Subscribing\EmailSubscription(
 				new Subscribing\StoredSubscription(
-					2,
+					6,
 					new Storage\MemoryPDO(
 						$this->database,
 						[
-							'url' => 'www.matched.com',
-							'expression' => '//matched',
-							'content' => 'bc',
+							'url' => 'www.matched2.com',
+							'expression' => '//matched2',
+							'content' => 'bc2',
 						]
 					)
 				),
 				new Mail\SendmailMailer(),
-				'me@participant.cz'
+				['b@b.cz']
 			),
 			$subscription
 		);
@@ -98,7 +100,7 @@ final class ChangedSubscriptions extends \Tester\TestCase {
 		Assert::null($subscriptions->current());
 	}
 
-	public function testTemplateFields() {
+	public function testFillingTemplateFields() {
 		$this->database->exec(
 			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES 
 			(1, 'www.matched.com', ROW('//matched', 'xpath'), 'bc', 'bs')"
@@ -116,8 +118,8 @@ final class ChangedSubscriptions extends \Tester\TestCase {
 			new class implements Mail\IMailer {
 				public function send(Mail\Message $message) {
 					printf(
-						'To: %s',
-						implode(array_keys($message->getHeader('To')))
+						'Bcc: %s',
+						implode(array_keys($message->getHeader('Bcc')))
 					);
 					printf('Subject: %s', $message->getSubject());
 					printf('Body: %s', $message->getHtmlBody());
@@ -132,9 +134,10 @@ final class ChangedSubscriptions extends \Tester\TestCase {
 		Assert::contains('www.matched.com', $output);
 		Assert::contains('//matched', $output);
 		Assert::contains('bc', $output);
+		Assert::contains('Bcc: a@a.cz', $output);
 	}
 
-	public function testEmptyIterating() {
+	public function testPassingEmptyIterating() {
 		$subscriptions = (new Subscribing\ChangedSubscriptions(
 			new Subscribing\FakeSubscriptions(),
 			new Mail\SendmailMailer(),

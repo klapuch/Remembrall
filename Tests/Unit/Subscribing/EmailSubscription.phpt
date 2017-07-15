@@ -26,7 +26,7 @@ final class EmailSubscription extends \Tester\TestCase {
 				(new Subscribing\EmailSubscription(
 					new Subscribing\FakeSubscription(new \DomainException('foo')),
 					$mailer,
-					'recipient@foo.cz',
+					['recipient@foo.cz'],
 					new Web\FakePart()
 				))->notify();
 			},
@@ -45,17 +45,17 @@ final class EmailSubscription extends \Tester\TestCase {
 			new class implements Mail\IMailer {
 				public function send(Mail\Message $message) {
 					printf(
-						'To: %s',
-						implode(array_keys($message->getHeader('To')))
+						'Bcc: %s',
+						implode(array_keys($message->getHeader('Bcc')))
 					);
 					printf('Subject: %s', $message->getSubject());
 					printf('Body: %s', $message->getHtmlBody());
 				}
 			},
-			'recipient@foo.cz'
+			['recipient@foo.cz']
 		))->notify();
 		$output = ob_get_clean();
-		Assert::contains('To: recipient@foo.cz', $output);
+		Assert::contains('Bcc: recipient@foo.cz', $output);
 		Assert::contains('Subject: Changes occurred on www.google.com page with //p expression', $output);
 		Assert::contains('<p>Hi, there are some changes on <strong>www.google.com</strong> website with <strong>//p</strong> expression</p>', $output);
 		Assert::contains('<p>Check it out bellow this text</p>', $output);
