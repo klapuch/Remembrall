@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<form role="form" action="test.php">
+  <input type="text" name="test"/>
+  <button title="My Title" class="My Class" value="Some Value" type="submit" name="submit1"/>
+  <input title="My Title" class="My Class" value="Some Value" type="button" name="submit2"/>
+  <input title="My Title" class="My Class" value="Some Value" type="submit" name="submit3"/>
+  <button name="submit4"/>
+  <input title="Old Title" class="My Class" value="Some Value" type="submit" name="submit5"/>
+</form>

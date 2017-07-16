@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<form role="form" action="test.php">
+  <input type="text" name="test"/>
+  <button type="submit" name="submit"/>
+</form>
