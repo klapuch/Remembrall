@@ -7,6 +7,9 @@
 			<styles>
 				<style href="dist/front/front.css"/>
 			</styles>
+			<scripts>
+				<script src="dist/front/front.js"/>
+			</scripts>
 		</assets>
 	</head>
 	<body>
@@ -30,10 +33,5 @@
 				<link href="sign/out">Sign out</link>
 			</item>
 		</menu>
-		<assets>
-			<scripts>
-				<script src="dist/front/front.js"/>
-			</scripts>
-		</assets>
 	</body>
 </page>
