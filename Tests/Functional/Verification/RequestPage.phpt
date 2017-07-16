@@ -10,6 +10,7 @@ use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Uri;
 use Remembrall\Page\Verification;
+use Remembrall\Response;
 use Remembrall\TestCase;
 use Tester\Assert;
 
@@ -30,7 +31,7 @@ final class RequestPage extends \Tester\TestCase {
 		});
 	}
 
-	public function testValidSubmitting() {
+	public function testValidRequesting() {
 		$_POST['email'] = 'me@me.cz';
 		$_POST['act'] = 'Request';
 		$user = 2;
@@ -50,13 +51,24 @@ final class RequestPage extends \Tester\TestCase {
 		Assert::same('/sign/in', $headers['Location']);
 	}
 
-	public function testErrorSubmittingRedirectingToSamePage() {
-		$headers = (new Verification\RequestPage(
-			new Uri\FakeUri(''),
-			new Log\FakeLogs(),
-			new Ini\FakeSource($this->configuration)
-		))->submitRequest([])->headers();
-		Assert::same('/verification/request', $headers['Location']);
+	public function testErrorOnUnknownEmail() {
+		$_POST['email'] = 'me@me.cz';
+		$_POST['act'] = 'Request';
+		Assert::equal(
+			new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl(new Uri\FakeUri(''), 'verification/request')
+				),
+				['danger' => 'For the given email, there is no valid verification code'],
+				$_SESSION
+			),
+			(new Verification\RequestPage(
+				new Uri\FakeUri(''),
+				new Log\FakeLogs(),
+				new Ini\FakeSource($this->configuration)
+			))->submitRequest($_POST)
+		);
 	}
 }
 

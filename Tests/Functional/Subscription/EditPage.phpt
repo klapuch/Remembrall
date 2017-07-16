@@ -10,8 +10,8 @@ use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Uri;
 use Remembrall\Page\Subscription;
-use Remembrall\TestCase;
 use Remembrall\Response;
+use Remembrall\TestCase;
 use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';

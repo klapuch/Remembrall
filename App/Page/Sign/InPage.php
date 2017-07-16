@@ -65,7 +65,7 @@ final class InPage extends Page\Layout {
 				['success' => 'You have been logged in'],
 				$_SESSION
 			);
-		} catch (\UnexpectedValueException | \Exception $ex) {
+		} catch (\Throwable $ex) {
 			return new Response\InformativeResponse(
 				new Response\RedirectResponse(
 					new Response\EmptyResponse(),
