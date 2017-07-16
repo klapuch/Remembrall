@@ -78,7 +78,7 @@ final class RemindPage extends Page\Layout {
 				['danger' => 'Password reset has been sent to your email'],
 				$_SESSION
 			);
-		} catch (\Throwable $ex) {
+		} catch (\UnexpectedValueException | \OverflowException $ex) {
 			return new Response\InformativeResponse(
 				new Response\RedirectResponse(
 					new Response\EmptyResponse(),

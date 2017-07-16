@@ -11,6 +11,7 @@ use Klapuch\Log;
 use Klapuch\Uri;
 use Remembrall\Page\Subscription;
 use Remembrall\TestCase;
+use Remembrall\Response;
 use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
@@ -18,7 +19,7 @@ require __DIR__ . '/../../bootstrap.php';
 final class EditPage extends \Tester\TestCase {
 	use TestCase\Page;
 
-	public function testErrorOnForeignSubscription() {
+	public function testErrorOnViewingForeignSubscription() {
 		$this->database->exec(
 			"INSERT INTO users (id, email, password, role) VALUES
 			(2, 'klapuchdominik@gmail.com', 'dc98d5af8f15840afcab387d5923f330df4a7bc76625e024fec2cb1f626543dccf352999ffd4e3c15047bee301104d06651ccaaee60ed3b98723b1e04cbaa429e00f088976bd9b5a94d5863f1d124ee8', 'member')"
@@ -68,13 +69,24 @@ final class EditPage extends \Tester\TestCase {
 		Assert::same(['Location' => '/subscriptions'], $headers);
 	}
 
-	public function testErrorOnEditing() {
-		$headers = (new Subscription\EditPage(
-			new Uri\FakeUri('', 'subscription/1'),
-			new Log\FakeLogs(),
-			new Ini\FakeSource($this->configuration)
-		))->submitEdit($_POST, ['id' => 1])->headers();
-		Assert::same(['Location' => '/subscription/1'], $headers);
+	public function testErrorOnEditingForeignSubscription() {
+		$_POST['interval'] = 34;
+		$_POST['act'] = 'Send';
+		Assert::equal(
+			new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl(new Uri\FakeUri('', 'subscription/1'), 'subscription/1')
+				),
+				['danger' => 'You can not edit foreign subscription'],
+				$_SESSION
+			),
+			(new Subscription\EditPage(
+				new Uri\FakeUri('', 'subscription/1'),
+				new Log\FakeLogs(),
+				new Ini\FakeSource($this->configuration)
+			))->submitEdit($_POST, ['id' => 1])
+		);
 	}
 }
 

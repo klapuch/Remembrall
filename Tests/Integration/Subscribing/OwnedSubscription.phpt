@@ -26,7 +26,7 @@ final class OwnedSubscription extends \Tester\TestCase {
 				new Access\FakeUser(666),
 				$this->database
 			))->cancel();
-		}, \Remembrall\Exception\NotFoundException::class);
+		}, \UnexpectedValueException::class);
 		Assert::type(\Throwable::class, $ex->getPrevious());
 		$ex = Assert::exception(function() {
 			(new Subscribing\OwnedSubscription(
@@ -35,7 +35,7 @@ final class OwnedSubscription extends \Tester\TestCase {
 				new Access\FakeUser(666),
 				$this->database
 			))->edit(new Time\FakeInterval(null, null, 'PT10M'));
-		}, \Remembrall\Exception\NotFoundException::class);
+		}, \UnexpectedValueException::class);
 		Assert::type(\Throwable::class, $ex->getPrevious());
 		Assert::exception(function() {
 			(new Subscribing\OwnedSubscription(
@@ -44,7 +44,7 @@ final class OwnedSubscription extends \Tester\TestCase {
 				new Access\FakeUser(666),
 				$this->database
 			))->notify();
-		}, \Remembrall\Exception\NotFoundException::class);
+		}, \UnexpectedValueException::class);
 		$ex = Assert::exception(function() {
 			(new Subscribing\OwnedSubscription(
 				new Subscribing\FakeSubscription(),
@@ -52,7 +52,7 @@ final class OwnedSubscription extends \Tester\TestCase {
 				new Access\FakeUser(666),
 				$this->database
 			))->print(new Output\FakeFormat(''));
-		}, \Remembrall\Exception\NotFoundException::class);
+		}, \UnexpectedValueException::class);
 		Assert::type(\Throwable::class, $ex->getPrevious());
 	}
 

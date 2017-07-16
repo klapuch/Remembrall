@@ -51,7 +51,7 @@ final class DeletePage extends \Tester\TestCase {
 		);
 	}
 
-	public function testErrorOnDeleting() {
+	public function testErrorOnDeletingForeignOne() {
 		$_POST['id'] = 1;
 		Assert::equal(
 			new Response\InformativeResponse(

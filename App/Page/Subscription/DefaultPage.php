@@ -86,7 +86,7 @@ final class DefaultPage extends Page\Layout {
 				new Response\EmptyResponse(),
 				new Uri\RelativeUrl($this->url, 'subscription/preview')
 			);
-		} catch (\Throwable $ex) {
+		} catch (\UnexpectedValueException $ex) {
 			return new Response\InformativeResponse(
 				new Response\RedirectResponse(
 					new Response\EmptyResponse(),

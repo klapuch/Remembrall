@@ -68,7 +68,7 @@ final class InvitePage extends Page\Layout {
 				['success' => 'Participant has been asked'],
 				$_SESSION
 			);
-		} catch (\Throwable $ex) {
+		} catch (\UnexpectedValueException $ex) {
 			return new Response\InformativeResponse(
 				new Response\RedirectResponse(
 					new Response\EmptyResponse(),

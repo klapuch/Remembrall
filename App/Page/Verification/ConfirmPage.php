@@ -37,7 +37,7 @@ final class ConfirmPage extends Page\Layout {
 				['success' => 'You have been logged in'],
 				$_SESSION
 			);
-		} catch (\Throwable $ex) {
+		} catch (\UnexpectedValueException | \LogicException $ex) {
 			return new Response\InformativeResponse(
 				new Response\RedirectResponse(
 					new Response\EmptyResponse(),

@@ -34,7 +34,7 @@ final class LimitedSubscriptions implements Subscriptions {
 		Time\Interval $interval
 	): void {
 		if ($this->overstepped()) {
-			throw new \OverflowException(
+			throw new \UnexpectedValueException(
 				sprintf(
 					'You have reached the limit of %d subscribed parts',
 					self::LIMIT

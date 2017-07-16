@@ -46,7 +46,7 @@ final class OwnedSubscriptions implements Subscriptions {
 				]
 			))->execute();
 		} catch (\Klapuch\Storage\UniqueConstraint $ex) {
-			throw new \Remembrall\Exception\DuplicateException(
+			throw new \UnexpectedValueException(
 				sprintf(
 					'"%s" expression on "%s" page is already subscribed by you',
 					$expression,

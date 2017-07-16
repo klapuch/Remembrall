@@ -28,7 +28,7 @@ final class OutPage extends Page\Layout {
 				['success' => 'You have been logged out'],
 				$_SESSION
 			);
-		} catch (\Throwable $ex) {
+		} catch (\UnexpectedValueException | \LogicException $ex) {
 			return new Response\InformativeResponse(
 				new Response\RedirectResponse(
 					new Response\EmptyResponse(),

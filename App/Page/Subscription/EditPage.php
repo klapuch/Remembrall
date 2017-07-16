@@ -59,8 +59,13 @@ final class EditPage extends Page\Layout {
 				),
 				new Form\Backup($_SESSION, $_POST),
 				function() use ($subscription, $parameters): void {
-					(new Subscribing\StoredSubscription(
+					(new Subscribing\OwnedSubscription(
+						new Subscribing\StoredSubscription(
+							$parameters['id'],
+							$this->database
+						),
 						$parameters['id'],
+						$this->user,
 						$this->database
 					))->edit(
 						new Time\TimeInterval(
@@ -80,7 +85,7 @@ final class EditPage extends Page\Layout {
 				['success' => 'Subscription has been edited'],
 				$_SESSION
 			);
-		} catch (\Throwable $ex) {
+		} catch (\UnexpectedValueException $ex) {
 			return new Response\InformativeResponse(
 				new Response\RedirectResponse(
 					new Response\EmptyResponse(),

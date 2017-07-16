@@ -81,7 +81,7 @@ final class RequestPage extends Page\Layout {
 				['success' => 'Verification code has been resent'],
 				$_SESSION
 			);
-		} catch (\Throwable $ex) {
+		} catch (\UnexpectedValueException | \Exception $ex) {
 			return new Response\InformativeResponse(
 				new Response\RedirectResponse(
 					new Response\EmptyResponse(),

@@ -21,7 +21,7 @@ final class UnusedInvitation implements Invitation {
 
 	public function accept(): void {
 		if ($this->accepted($this->code)) {
-			throw new \Remembrall\Exception\NotFoundException(
+			throw new \UnexpectedValueException(
 				sprintf(
 					'The invitation with code "%s" is accepted or does not exist',
 					$this->code
@@ -33,7 +33,7 @@ final class UnusedInvitation implements Invitation {
 
 	public function decline(): void {
 		if ($this->decided($this->code)) {
-			throw new \Remembrall\Exception\NotFoundException(
+			throw new \UnexpectedValueException(
 				sprintf(
 					'The invitation with code "%s" is declined or does not exist',
 					$this->code
@@ -45,7 +45,7 @@ final class UnusedInvitation implements Invitation {
 
 	public function print(Output\Format $format): Output\Format {
 		if ($this->decided($this->code)) {
-			throw new \Remembrall\Exception\NotFoundException(
+			throw new \UnexpectedValueException(
 				sprintf(
 					'The invitation with code "%s" is declined or does not exist',
 					$this->code

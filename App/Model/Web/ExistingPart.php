@@ -22,7 +22,7 @@ final class ExistingPart implements Part {
 	public function content(): string {
 		if ($this->exists())
 			return $this->origin->content();
-		throw new \Remembrall\Exception\NotFoundException(
+		throw new \UnexpectedValueException(
 			sprintf(
 				'Content from part id "%d" does not exist',
 				$this->id
@@ -33,7 +33,7 @@ final class ExistingPart implements Part {
 	public function snapshot(): string {
 		if ($this->exists())
 			return $this->origin->snapshot();
-		throw new \Remembrall\Exception\NotFoundException(
+		throw new \UnexpectedValueException(
 			sprintf(
 				'Snapshot from part id "%d" does not exist',
 				$this->id
@@ -44,7 +44,7 @@ final class ExistingPart implements Part {
 	public function refresh(): Part {
 		if ($this->exists())
 			return $this->origin->refresh();
-		throw new \Remembrall\Exception\NotFoundException(
+		throw new \UnexpectedValueException(
 			sprintf(
 				'The part id "%d" does not exist',
 				$this->id

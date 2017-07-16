@@ -11,6 +11,7 @@ use Klapuch\Log;
 use Klapuch\Uri;
 use Remembrall\Page\Sign;
 use Remembrall\TestCase;
+use Remembrall\Response;
 use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
@@ -42,13 +43,29 @@ final class UpPage extends \Tester\TestCase {
 		Assert::same('/sign/in', $headers['Location']);
 	}
 
-	public function testErrorSubmittingRedirectingToSamePage() {
-		$headers = (new Sign\UpPage(
-			new Uri\FakeUri(''),
-			new Log\FakeLogs(),
-			new Ini\FakeSource($this->configuration)
-		))->submitUp([])->headers();
-		Assert::same('/sign/up', $headers['Location']);
+	public function testErrorOnTakenEmail() {
+		$_POST['email'] = 'me@me.cz';
+		$_POST['password'] = 'heslo123';
+		$_POST['act'] = 'Register';
+		$this->database->exec(
+			"INSERT INTO users (id, email, password, role) VALUES
+			(2, '{$_POST['email']}', 'heslo', 'member')"
+		);
+		Assert::equal(
+			new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl(new Uri\FakeUri(''), 'sign/up')
+				),
+				['danger' => 'Email "me@me.cz" already exists'],
+				$_SESSION
+			),
+			(new Sign\UpPage(
+				new Uri\FakeUri(''),
+				new Log\FakeLogs(),
+				new Ini\FakeSource($this->configuration)
+			))->submitUp($_POST)
+		);
 	}
 }
 

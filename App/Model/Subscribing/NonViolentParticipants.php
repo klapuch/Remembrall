@@ -22,7 +22,7 @@ final class NonViolentParticipants implements Participants {
 
 	public function invite(int $subscription, string $email): Invitation {
 		if ($this->harassed($subscription, $email)) {
-			throw new \OutOfRangeException(
+			throw new \UnexpectedValueException(
 				sprintf(
 					'"%s" declined your invitation too many times',
 					$email

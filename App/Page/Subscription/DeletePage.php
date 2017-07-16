@@ -48,7 +48,7 @@ final class DeletePage extends Page\Layout {
 				['success' => 'Subscription has been deleted'],
 				$_SESSION
 			);
-		} catch (\Throwable $ex) {
+		} catch (\UnexpectedValueException $ex) {
 			return new Response\InformativeResponse(
 				new Response\RedirectResponse(
 					new Response\EmptyResponse(),
