@@ -27,7 +27,7 @@ final class DeclinePage extends Page\Layout {
 				['success' => 'Invitation has been declined'],
 				$_SESSION
 			);
-		} catch (\Throwable $ex) {
+		} catch (\UnexpectedValueException $ex) {
 			return new Response\InformativeResponse(
 				new Response\RedirectResponse(
 					new Response\EmptyResponse(),

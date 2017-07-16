@@ -57,7 +57,7 @@ final class HtmlWebPage extends Tester\TestCase {
 					)
 				))->content();
 			},
-			\Remembrall\Exception\NotFoundException::class,
+			\UnexpectedValueException::class,
 			'Page is unreachable. Does the URL exist?'
 		);
 		Assert::type(\Throwable::class, $ex->getPrevious());
@@ -76,7 +76,7 @@ final class HtmlWebPage extends Tester\TestCase {
 					)
 				))->content();
 			},
-			\Remembrall\Exception\NotFoundException::class,
+			\UnexpectedValueException::class,
 			'Page is unreachable. Does the URL exist?'
 		);
 		Assert::type(\Throwable::class, $ex->getPrevious());

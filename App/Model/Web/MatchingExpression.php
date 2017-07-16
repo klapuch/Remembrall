@@ -16,7 +16,7 @@ final class MatchingExpression implements Expression {
 		$matches = $this->origin->matches();
 		if ($matches->length > 0)
 			return $matches;
-		throw new \Remembrall\Exception\NotFoundException(
+		throw new \UnexpectedValueException(
 			'For the given expression there are no matches'
 		);
 	}

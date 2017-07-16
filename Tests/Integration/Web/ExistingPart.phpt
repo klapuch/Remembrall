@@ -24,7 +24,7 @@ final class ExistingPart extends \Tester\TestCase {
 					$this->database
 				))->content();
 			},
-			\Remembrall\Exception\NotFoundException::class,
+			\UnexpectedValueException::class,
 			'Content from part id "123" does not exist'
 		);
 		Assert::exception(
@@ -35,7 +35,7 @@ final class ExistingPart extends \Tester\TestCase {
 					$this->database
 				))->refresh();
 			},
-			\Remembrall\Exception\NotFoundException::class,
+			\UnexpectedValueException::class,
 			'The part id "124" does not exist'
 		);
 		Assert::exception(
@@ -46,7 +46,7 @@ final class ExistingPart extends \Tester\TestCase {
 					$this->database
 				))->snapshot();
 			},
-			\Remembrall\Exception\NotFoundException::class,
+			\UnexpectedValueException::class,
 			'Snapshot from part id "125" does not exist'
 		);
 	}

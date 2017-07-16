@@ -66,7 +66,7 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 		});
 		$ex = Assert::exception(
 			$subscribe,
-			\Remembrall\Exception\DuplicateException::class,
+			\UnexpectedValueException::class,
 			'"//google" expression on "www.google.com" page is already subscribed by you'
 		);
 		Assert::type(\Throwable::class, $ex->getPrevious());

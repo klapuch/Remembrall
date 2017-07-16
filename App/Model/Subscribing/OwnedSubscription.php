@@ -30,7 +30,7 @@ final class OwnedSubscription implements Subscription {
 
 	public function cancel(): void {
 		if (!$this->owned()) {
-			throw new \Remembrall\Exception\NotFoundException(
+			throw new \UnexpectedValueException(
 				'You can not cancel foreign subscription',
 				0,
 				new \Exception(
@@ -47,7 +47,7 @@ final class OwnedSubscription implements Subscription {
 
 	public function edit(Time\Interval $interval): void {
 		if (!$this->owned()) {
-			throw new \Remembrall\Exception\NotFoundException(
+			throw new \UnexpectedValueException(
 				'You can not edit foreign subscription',
 				0,
 				new \Exception(
@@ -64,7 +64,7 @@ final class OwnedSubscription implements Subscription {
 
 	public function notify(): void {
 		if (!$this->owned()) {
-			throw new \Remembrall\Exception\NotFoundException(
+			throw new \UnexpectedValueException(
 				'You can not be notified on foreign subscription',
 				0,
 				new \Exception(
@@ -81,7 +81,7 @@ final class OwnedSubscription implements Subscription {
 
 	public function print(Output\Format $format): Output\Format {
 		if (!$this->owned()) {
-			throw new \Remembrall\Exception\NotFoundException(
+			throw new \UnexpectedValueException(
 				'You can not see foreign subscription',
 				0,
 				new \Exception(

@@ -27,7 +27,7 @@ final class InvitedParticipants extends \Tester\TestCase {
 				new Subscribing\FakeParticipants(),
 				$this->database
 			))->kick($subscription, $participant);
-		}, \Remembrall\Exception\NotFoundException::class, 'Email "me@participant.cz" is not your participant');
+		}, \UnexpectedValueException::class, 'Email "me@participant.cz" is not your participant');
 	}
 
 	public function testThrowingOnKickingUnknownCaseInsensitiveParticipant() {
@@ -63,7 +63,7 @@ final class InvitedParticipants extends \Tester\TestCase {
 				new Subscribing\FakeParticipants(),
 				$this->database
 			))->invite($subscription, strtoupper($participant));
-		}, \Remembrall\Exception\DuplicateException::class, 'Email "ME@PARTICIPANT.CZ" is already your participant');
+		}, \UnexpectedValueException::class, 'Email "ME@PARTICIPANT.CZ" is already your participant');
 		$this->truncate(['participants']);
 		$statement->execute([strtoupper($participant), $subscription]);
 		Assert::exception(function() use ($subscription, $participant) {
@@ -71,7 +71,7 @@ final class InvitedParticipants extends \Tester\TestCase {
 				new Subscribing\FakeParticipants(),
 				$this->database
 			))->invite($subscription, strtolower($participant));
-		}, \Remembrall\Exception\DuplicateException::class, 'Email "me@participant.cz" is already your participant');
+		}, \UnexpectedValueException::class, 'Email "me@participant.cz" is already your participant');
 	}
 
 	public function testThrowingOnInvitingAcceptedParticipant() {
@@ -86,7 +86,7 @@ final class InvitedParticipants extends \Tester\TestCase {
 				new Subscribing\FakeParticipants(new Subscribing\FakeInvitation()),
 				$this->database
 			))->invite($subscription, $participant);
-		}, \Remembrall\Exception\DuplicateException::class, 'Email "me@participant.cz" is already your participant');
+		}, \UnexpectedValueException::class, 'Email "me@participant.cz" is already your participant');
 		$this->truncate(['participants']);
 		$statement->execute([$participant, $subscription + 1]);
 		Assert::noError(function() use ($subscription, $participant) {

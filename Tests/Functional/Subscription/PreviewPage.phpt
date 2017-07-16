@@ -12,6 +12,7 @@ use Klapuch\Uri;
 use Remembrall\Model\Web\FakePart;
 use Remembrall\Model\Web\TemporaryParts;
 use Remembrall\Page\Subscription;
+use Remembrall\Response;
 use Remembrall\TestCase;
 use Tester\Assert;
 
@@ -41,33 +42,60 @@ final class PreviewPage extends \Tester\TestCase {
 		});
 	}
 
-	public function testNotFoundPartLeadingToError() {
+	public function testErrorOnNotFoundPart() {
 		$_SESSION['part'] = ['url' => 'http://www.example.com', 'expression' => '//h1', 'language' => 'xpath'];
-		$headers = (new Subscription\PreviewPage(
-			new Uri\FakeUri(''),
-			new Log\FakeLogs(),
-			new Ini\FakeSource($this->configuration)
-		))->response([])->headers();
-		Assert::same(['Location' => '/subscription'], $headers);
+		Assert::equal(
+			new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl(new Uri\FakeUri(''), 'subscription')
+				),
+				['danger' => 'Part not found'],
+				$_SESSION
+			),
+			(new Subscription\PreviewPage(
+				new Uri\FakeUri(''),
+				new Log\FakeLogs(),
+				new Ini\FakeSource($this->configuration)
+			))->response([])
+		);
 	}
 
 	public function testMissingSessionFieldForResponseLeadingToError() {
-		$headers = (new Subscription\PreviewPage(
-			new Uri\FakeUri(''),
-			new Log\FakeLogs(),
-			new Ini\FakeSource($this->configuration)
-		))->response([])->headers();
-		Assert::same(['Location' => '/subscription'], $headers);
+		Assert::equal(
+			new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl(new Uri\FakeUri(''), 'subscription')
+				),
+				['danger' => 'Missing referenced part'],
+				$_SESSION
+			),
+			(new Subscription\PreviewPage(
+				new Uri\FakeUri(''),
+				new Log\FakeLogs(),
+				new Ini\FakeSource($this->configuration)
+			))->response([])
+		);
 	}
 
 	public function testMissingSomeSessionFieldForResponseLeadingToError() {
 		$_SESSION['part'] = ['language' => 'xpath'];
-		$headers = (new Subscription\PreviewPage(
-			new Uri\FakeUri(''),
-			new Log\FakeLogs(),
-			new Ini\FakeSource($this->configuration)
-		))->response([])->headers();
-		Assert::same(['Location' => '/subscription'], $headers);
+		Assert::equal(
+			new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl(new Uri\FakeUri(''), 'subscription')
+				),
+				['danger' => 'Missing referenced part'],
+				$_SESSION
+			),
+			(new Subscription\PreviewPage(
+				new Uri\FakeUri(''),
+				new Log\FakeLogs(),
+				new Ini\FakeSource($this->configuration)
+			))->response([])
+		);
 	}
 
 	public function testAddingAfterPreview() {

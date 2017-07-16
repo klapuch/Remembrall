@@ -18,7 +18,7 @@ final class InvitedParticipants implements Participants {
 
 	public function invite(int $subscription, string $email): Invitation {
 		if ($this->accepted($email, $subscription)) {
-			throw new \Remembrall\Exception\DuplicateException(
+			throw new \UnexpectedValueException(
 				sprintf('Email "%s" is already your participant', $email)
 			);
 		}
@@ -27,7 +27,7 @@ final class InvitedParticipants implements Participants {
 
 	public function kick(int $subscription, string $email): void {
 		if (!$this->invited($email, $subscription)) {
-			throw new \Remembrall\Exception\NotFoundException(
+			throw new \UnexpectedValueException(
 				sprintf('Email "%s" is not your participant', $email)
 			);
 		}

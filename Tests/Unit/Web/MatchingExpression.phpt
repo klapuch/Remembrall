@@ -14,7 +14,7 @@ require __DIR__ . '/../../bootstrap.php';
 
 final class MatchingExpression extends Tester\TestCase {
 	/**
-	 * @throws \Remembrall\Exception\NotFoundException For the given expression there are no matches
+	 * @throws \UnexpectedValueException For the given expression there are no matches
 	 */
 	public function testThrowingOnNoMatch() {
 		$dom = new \DOMDocument();

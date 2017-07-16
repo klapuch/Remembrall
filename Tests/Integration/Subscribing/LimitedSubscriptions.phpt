@@ -63,7 +63,7 @@ final class LimitedSubscriptions extends \Tester\TestCase {
 				'xpath',
 				new Time\FakeInterval()
 			);
-		}, \OverflowException::class, 'You have reached the limit of 5 subscribed parts');
+		}, \UnexpectedValueException::class, 'You have reached the limit of 5 subscribed parts');
 		Assert::type(\Throwable::class, $ex->getPrevious());
 	}
 }

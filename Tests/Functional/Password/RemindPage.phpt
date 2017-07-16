@@ -6,10 +6,12 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Functional\Password;
 
+use Klapuch\Access;
 use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Uri;
 use Remembrall\Page\Password;
+use Remembrall\Response;
 use Remembrall\TestCase;
 use Tester\Assert;
 
@@ -37,10 +39,6 @@ final class RemindPage extends \Tester\TestCase {
 			"INSERT INTO users (id, email, password, role) VALUES
             (1, '{$_POST['email']}', 'secret', 'member')"
 		);
-		$this->database->exec(
-			"INSERT INTO forgotten_passwords (user_id, used, reminder, reminded_at, expire_at) VALUES
-            (1, FALSE, 'abc', NOW(), NOW() + INTERVAL '10 MINUTE')"
-		);
 		$headers = (new Password\RemindPage(
 			new Uri\FakeUri(''),
 			new Log\FakeLogs(),
@@ -49,13 +47,52 @@ final class RemindPage extends \Tester\TestCase {
 		Assert::same('/sign/in', $headers['Location']);
 	}
 
-	public function testErrorSubmittingRedirectingToSamePage() {
-		$headers = (new Password\RemindPage(
-			new Uri\FakeUri(''),
-			new Log\FakeLogs(),
-			new Ini\FakeSource($this->configuration)
-		))->submitRemind([])->headers();
-		Assert::same('/password/remind', $headers['Location']);
+	public function testErrorOnTooManyAttempts() {
+		$_POST['email'] = 'me@me.cz';
+		$_POST['act'] = 'Remind';
+		$this->database->exec(
+			"INSERT INTO users (id, email, password, role) VALUES
+            (1, '{$_POST['email']}', 'secret', 'member')"
+		);
+		$passwords = new Access\SecureForgottenPasswords($this->database);
+		$passwords->remind($_POST['email']);
+		$passwords->remind($_POST['email']);
+		$passwords->remind($_POST['email']);
+		Assert::equal(
+			new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl(new Uri\FakeUri(''), 'password/remind')
+				),
+				['danger' => 'You have reached limit 3 forgotten passwords in last 24 hours'],
+				$_SESSION
+			),
+			(new Password\RemindPage(
+				new Uri\FakeUri(''),
+				new Log\FakeLogs(),
+				new Ini\FakeSource($this->configuration)
+			))->submitRemind($_POST)
+		);
+	}
+
+	public function testErrorOnUnknownEmail() {
+		$_POST['email'] = 'me@me.cz';
+		$_POST['act'] = 'Remind';
+		Assert::equal(
+			new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl(new Uri\FakeUri(''), 'password/remind')
+				),
+				['danger' => 'The email does not exist'],
+				$_SESSION
+			),
+			(new Password\RemindPage(
+				new Uri\FakeUri(''),
+				new Log\FakeLogs(),
+				new Ini\FakeSource($this->configuration)
+			))->submitRemind($_POST)
+		);
 	}
 }
 
