@@ -10,7 +10,7 @@ use Klapuch\Uri;
 
 const CONFIGURATION = __DIR__ . '/../App/Configuration/.config.ini',
 	LOCAL_CONFIGURATION = __DIR__ . '/../App/Configuration/.config.local.ini',
-	ROUTES = __DIR__ . '/../App/Configuration/routes.ini',
+	ROUTES = __DIR__ . '/../App/Configuration/routes.json',
 	LOGS = __DIR__ . '/../log';
 echo new Application\HtmlPage(
 	new Ini\CombinedSource(
@@ -23,7 +23,7 @@ echo new Application\HtmlPage(
 		)
 	),
 	new Log\FilesystemLogs(new Log\DynamicLocation(new Log\DirectoryLocation(LOGS))),
-	new Routing\HttpRoutes(new Ini\ValidSource(ROUTES, new Ini\TypedSource(ROUTES))),
+	new Routing\HttpRoutes(json_decode(file_get_contents(ROUTES), true)),
 	new Uri\BaseUrl(
 		$_SERVER['SCRIPT_NAME'],
 		$_SERVER['REQUEST_URI'],

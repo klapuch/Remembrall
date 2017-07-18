@@ -1,0 +1,31 @@
+{
+	"sign/in": "Sign/in",
+	"sign/out": "Sign/out",
+	"sign/up": "Sign/up",
+
+	"subscriptions": "Subscriptions/default",
+
+	"subscription/delete": "Subscription/delete",
+	"subscription": "Subscription/default",
+    "subscription/edit/{id [1-9][0-9]*}": "Subscription/edit",
+	"subscription/preview": "Subscription/preview",
+
+	"parts/popular": "Parts/popular",
+	"parts/unreliable": "Parts/unreliable",
+
+	"error": "Error/default",
+
+	"verification/confirm/{code [a-f0-9]+:[a-f0-9]+}": "Verification/confirm",
+	"verification/request": "Verification/request",
+
+	"password/remind": "Password/remind",
+	"password/reset/{reminder [a-f0-9]+:[a-f0-9]+}": "Password/reset",
+
+	"invitation/accept/{code [a-f0-9]+}": "Invitation/accept",
+	"invitation/decline/{code [a-f0-9]+}": "Invitation/deny",
+
+	"participants/invite": "Participants/invite",
+	"participants/kick": "Participants/kick",
+
+	"cron": "Cron/default"
+}
