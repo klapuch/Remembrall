@@ -44,7 +44,7 @@ final class ChangedSubscriptions implements Subscriptions {
 					FROM parts
 					INNER JOIN readable_subscriptions ON readable_subscriptions.part_id = parts.id
 					INNER JOIN users ON users.id = readable_subscriptions.user_id
-					WHERE parts.snapshot != readable_subscriptions.snapshot
+					WHERE NOT parts.snapshot = readable_subscriptions.snapshot
 					AND last_update + INTERVAL '1 SECOND' * interval_seconds < NOW()
 				), participated_subscriptions AS (
 					SELECT host_subscriptions.id, url, expression, content, participants.email
