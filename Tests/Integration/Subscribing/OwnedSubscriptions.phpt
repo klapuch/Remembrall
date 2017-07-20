@@ -34,12 +34,12 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 			'xpath',
 			new Time\FakeInterval(null, null, 'PT120S')
 		);
-		$statement = $this->database->prepare('SELECT * FROM subscriptions');
+		$statement = $this->database->prepare('SELECT * FROM readable_subscriptions()');
 		$statement->execute();
 		$subscriptions = $statement->fetchAll();
 		Assert::count(1, $subscriptions);
 		Assert::same(666, $subscriptions[0]['user_id']);
-		Assert::same('PT120S', $subscriptions[0]['interval']);
+		Assert::same('PT2M', $subscriptions[0]['interval']);
 		Assert::same('google snap', $subscriptions[0]['snapshot']);
 	}
 

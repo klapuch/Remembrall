@@ -33,28 +33,28 @@ CREATE SCHEMA unit_tests;
 ALTER SCHEMA unit_tests OWNER TO postgres;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner:
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
 --
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner:
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
--- Name: citext; Type: EXTENSION; Schema: -; Owner:
+-- Name: citext; Type: EXTENSION; Schema: -; Owner: 
 --
 
 CREATE EXTENSION IF NOT EXISTS citext WITH SCHEMA public;
 
 
 --
--- Name: EXTENSION citext; Type: COMMENT; Schema: -; Owner:
+-- Name: EXTENSION citext; Type: COMMENT; Schema: -; Owner: 
 --
 
 COMMENT ON EXTENSION citext IS 'data type for case-insensitive character strings';
@@ -679,6 +679,22 @@ CREATE FUNCTION notify_subscriptions() RETURNS trigger
 ALTER FUNCTION public.notify_subscriptions() OWNER TO postgres;
 
 --
+-- Name: readable_subscriptions(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION readable_subscriptions() RETURNS TABLE(id integer, user_id integer, part_id integer, "interval" interval, last_update timestamp without time zone, snapshot character varying, interval_seconds integer)
+    LANGUAGE sql
+    AS $$
+SET intervalstyle = 'ISO_8601';
+SELECT *, extract(epoch from interval)::integer AS interval_seconds
+   FROM subscriptions;
+
+			$$;
+
+
+ALTER FUNCTION public.readable_subscriptions() OWNER TO postgres;
+
+--
 -- Name: record_invitation(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1170,6 +1186,100 @@ $$;
 
 ALTER FUNCTION unit_tests.begin_psql(verbosity integer, format text) OWNER TO postgres;
 
+--
+-- Name: counted_subscriptions(); Type: FUNCTION; Schema: unit_tests; Owner: postgres
+--
+
+CREATE FUNCTION counted_subscriptions() RETURNS public.test_result
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+	message TEST_RESULT;
+	count INTEGER;
+	expected_count CONSTANT INTEGER := 3;
+BEGIN
+	PERFORM truncate_tables('postgres');
+	PERFORM restart_sequences();
+
+	INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
+	(2, 'bar.cz', ROW ('//bar', 'xpath'), 'bar', 'barSnap'),
+	(3, 'baz.cz', ROW ('//baz', 'xpath'), 'baz', 'bazSnap');
+
+	INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES
+	(1, 2, 'PT6M', NOW(), md5(random()::TEXT)), (2, 2, 'PT6M', NOW(), md5(random()::TEXT));
+
+	INSERT INTO participants (id, email, subscription_id, code, invited_at, accepted, decided_at) VALUES (1, 'a@a.cz', 1, 'abc', NOW(), TRUE, NOW()),
+	(2, 'b@a.cz', 1, 'abc', NOW(), FALSE, NOW()),
+	(3, 'c@a.cz', 1, 'abc', NOW(), FALSE, NULL);
+
+	SELECT occurrences
+	FROM public.counted_subscriptions()
+	INTO count;
+	IF count = expected_count
+	THEN
+		SELECT assert.ok('Counted subscriptions are matching.')
+		INTO message;
+	ELSE
+		SELECT assert.fail(format('Expected count of subscription was %s, actual %s', expected_count, count))
+		INTO message;
+	END IF;
+	RETURN message;
+END
+$$;
+
+
+ALTER FUNCTION unit_tests.counted_subscriptions() OWNER TO postgres;
+
+--
+-- Name: readable_subscriptions(); Type: FUNCTION; Schema: unit_tests; Owner: postgres
+--
+
+CREATE FUNCTION readable_subscriptions() RETURNS public.test_result
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+	message TEST_RESULT;
+	second_intervals INTEGER[];
+	iso_intervals VARCHAR[];
+	expected_second_intervals CONSTANT INTEGER[] := ARRAY[1, 20, 0, 555, 123];
+	expected_iso_intervals CONSTANT VARCHAR[] := ARRAY['PT1S', 'PT20S', 'PT0S', 'PT9M15S', 'PT2M3S'];
+BEGIN
+	PERFORM truncate_tables('postgres');
+	PERFORM restart_sequences();
+
+	INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES
+	(1, 2, 'PT1S', NOW(), md5(random()::TEXT)),
+	(1, 3, 'PT20S', NOW(), md5(random()::TEXT)),
+	(1, 5, 'PT0S', NOW(), md5(random()::TEXT)),
+	(2, 6, 'PT555S', NOW(), md5(random()::TEXT)),
+	(2, 7, 'PT2M3S', NOW(), md5(random()::TEXT));
+
+	SELECT array_agg(interval_seconds), array_agg(interval)
+	FROM readable_subscriptions()
+	INTO second_intervals, iso_intervals;
+	IF second_intervals = expected_second_intervals
+	THEN
+		SELECT assert.ok('Second intervals are matching.')
+		INTO message;
+	ELSE
+		SELECT assert.fail(format('Expected intervals in seconds were %s, actual %s', expected_second_intervals, second_intervals))
+		INTO message;
+	END IF;
+	IF iso_intervals = expected_iso_intervals
+	THEN
+		SELECT assert.ok('ISO intervals are matching.')
+		INTO message;
+	ELSE
+		SELECT assert.fail(format('Expected ISO intervals were %s, actual %s', expected_iso_intervals, iso_intervals))
+		INTO message;
+	END IF;
+	RETURN message;
+END
+$$;
+
+
+ALTER FUNCTION unit_tests.readable_subscriptions() OWNER TO postgres;
+
 SET search_path = public, pg_catalog;
 
 SET default_tablespace = '';
@@ -1443,30 +1553,13 @@ CREATE TABLE subscriptions (
     id integer NOT NULL,
     user_id integer NOT NULL,
     part_id integer NOT NULL,
-    "interval" character varying(10) NOT NULL,
+    "interval" interval NOT NULL,
     last_update timestamp without time zone NOT NULL,
     snapshot character varying(40) NOT NULL
 );
 
 
 ALTER TABLE subscriptions OWNER TO postgres;
-
---
--- Name: readable_subscriptions; Type: VIEW; Schema: public; Owner: postgres
---
-
-CREATE VIEW readable_subscriptions AS
- SELECT subscriptions.id,
-    subscriptions.user_id,
-    subscriptions.part_id,
-    subscriptions."interval",
-    subscriptions.last_update,
-    subscriptions.snapshot,
-    ("substring"((subscriptions."interval")::text, '[0-9]+'::text))::integer AS interval_seconds
-   FROM subscriptions;
-
-
-ALTER TABLE readable_subscriptions OWNER TO postgres;
 
 --
 -- Name: subscriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
