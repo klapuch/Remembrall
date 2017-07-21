@@ -1,7 +1,7 @@
 <?php
 use Phinx\Migration\AbstractMigration;
 
-class ReadableSubscriptions extends AbstractMigration {
+class IntervalColumn extends AbstractMigration {
 	public function change() {
 		$this->execute('DROP VIEW IF EXISTS readable_subscriptions');
 		$this->execute('ALTER TABLE subscriptions ALTER COLUMN "interval" TYPE interval USING interval::interval');
