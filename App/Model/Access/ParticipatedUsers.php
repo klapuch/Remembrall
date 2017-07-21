@@ -42,7 +42,7 @@ final class ParticipatedUsers implements Access\Users {
 					)
 					INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot)
 					SELECT ?, part_id, interval, last_update, snapshot
-					FROM subscriptions
+					FROM readable_subscriptions()
 					WHERE id IN (
 						SELECT subscription_id
 						FROM removed_invitations

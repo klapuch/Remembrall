@@ -73,7 +73,7 @@ final class StoredSubscription extends \Tester\TestCase {
 			$id,
 			$this->database
 		))->edit(new Time\FakeInterval(null, null, 'PT10M'));
-		$statement = $this->database->prepare('SELECT * FROM subscriptions WHERE id = ?');
+		$statement = $this->database->prepare('SELECT * FROM readable_subscriptions() WHERE id = ?');
 		$statement->execute([$id]);
 		$subscription = $statement->fetch();
 		Assert::same('PT10M', $subscription['interval']);
@@ -132,7 +132,7 @@ final class StoredSubscription extends \Tester\TestCase {
 		);
 		$subscription = new Subscribing\StoredSubscription(1, $this->database);
 		Assert::same(
-			'|id|1||interval|33||url|www.google.com||expression|//p||language|css|',
+			'|id|1||interval|PT33M||url|www.google.com||expression|//p||language|css|',
 			$subscription->print(new Output\FakeFormat(''))->serialization()
 		);
 	}

@@ -34,7 +34,7 @@ final class UnreliableParts implements Parts {
 				JOIN counted_subscriptions() AS subscriptions ON subscriptions.part_id = parts.id 
 				JOIN (
 					SELECT MIN(interval_seconds) AS interval, part_id
-					FROM readable_subscriptions
+					FROM readable_subscriptions()
 					GROUP BY part_id
 				) AS readable_subscriptions ON readable_subscriptions.part_id = parts.id 
 				JOIN (
@@ -84,7 +84,7 @@ final class UnreliableParts implements Parts {
 			RIGHT JOIN (
 				SELECT MIN(interval_seconds) AS interval,
 				part_id
-				FROM readable_subscriptions
+				FROM readable_subscriptions()
 				GROUP BY part_id
 			) AS subscriptions ON subscriptions.part_id = parts.id 
 			LEFT JOIN (

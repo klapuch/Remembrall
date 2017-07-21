@@ -40,11 +40,11 @@ final class ChangedSubscriptions implements Subscriptions {
 			$this->database,
 			$selection->expression(
 				"WITH host_subscriptions AS (
-					SELECT readable_subscriptions.id, page_url AS url, (expression).value AS expression, content, email
+					SELECT subscriptions.id, page_url AS url, (expression).value AS expression, content, email
 					FROM parts
-					INNER JOIN readable_subscriptions ON readable_subscriptions.part_id = parts.id
-					INNER JOIN users ON users.id = readable_subscriptions.user_id
-					WHERE NOT parts.snapshot = readable_subscriptions.snapshot
+					INNER JOIN readable_subscriptions() AS subscriptions ON subscriptions.part_id = parts.id
+					INNER JOIN users ON users.id = subscriptions.user_id
+					WHERE NOT parts.snapshot = subscriptions.snapshot
 					AND last_update + INTERVAL '1 SECOND' * interval_seconds < NOW()
 				), participated_subscriptions AS (
 					SELECT host_subscriptions.id, url, expression, content, participants.email
