@@ -11,7 +11,7 @@ BEGIN
 
 	INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES
 	(1, 2, 'PT1S', NOW(), md5(random()::TEXT)),
-	(1, 3, 'PT20S', NOW(), md5(random()::TEXT)),
+	(1, 3, '00:00:20'::interval, NOW(), md5(random()::TEXT)),
 	(1, 5, 'PT0S', NOW(), md5(random()::TEXT)),
 	(2, 6, 'PT555S', NOW(), md5(random()::TEXT)),
 	(2, 7, 'PT2M3S', NOW(), md5(random()::TEXT));
