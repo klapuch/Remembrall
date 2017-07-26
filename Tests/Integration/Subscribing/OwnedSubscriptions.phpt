@@ -104,23 +104,17 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 			new Access\FakeUser(1),
 			$this->database
 		))->all(new Dataset\FakeSelection('', []));
-		$subscription = $subscriptions->current();
-		Assert::contains(
-			'1993-01-01',
-			$subscription->print(new Output\FakeFormat(''))->serialization()
-		);
+		$subscription = $subscriptions->current()->print(new Output\FakeFormat(''))->serialization();
+		Assert::contains('1993-01-01', $subscription);
+		Assert::contains('PT1M', $subscription);
 		$subscriptions->next();
-		$subscription = $subscriptions->current();
-		Assert::contains(
-			'1997-01-01',
-			$subscription->print(new Output\FakeFormat(''))->serialization()
-		);
+		$subscription = $subscriptions->current()->print(new Output\FakeFormat(''))->serialization();
+		Assert::contains('1997-01-01', $subscription);
+		Assert::contains('PT4M', $subscription);
 		$subscriptions->next();
-		$subscription = $subscriptions->current();
-		Assert::contains(
-			'1996-01-01',
-			$subscription->print(new Output\FakeFormat(''))->serialization()
-		);
+		$subscription = $subscriptions->current()->print(new Output\FakeFormat(''))->serialization();
+		Assert::contains('1996-01-01', $subscription);
+		Assert::contains('PT3M', $subscription);
 		$subscriptions->next();
 		Assert::null($subscriptions->current());
 	}

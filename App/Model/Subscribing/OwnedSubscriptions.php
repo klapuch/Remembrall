@@ -70,7 +70,7 @@ final class OwnedSubscriptions implements Subscriptions {
 					FROM part_visits
 					GROUP BY part_id
 				) AS part_visits ON parts.id = part_visits.part_id
-				INNER JOIN subscriptions ON subscriptions.part_id = parts.id
+				INNER JOIN readable_subscriptions() AS subscriptions ON subscriptions.part_id = parts.id
 				WHERE subscriptions.user_id = ?
 				ORDER BY visited_at DESC'
 			),
