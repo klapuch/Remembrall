@@ -23,7 +23,7 @@ echo new Application\HtmlPage(
 		)
 	),
 	new Log\FilesystemLogs(new Log\DynamicLocation(new Log\DirectoryLocation(LOGS))),
-	new Routing\HttpRoutes(json_decode(file_get_contents(ROUTES), true)),
+	new Routing\HttpRoutes(json_decode(file_get_contents(ROUTES), true), $_SERVER['REQUEST_METHOD']),
 	new Uri\BaseUrl(
 		$_SERVER['SCRIPT_NAME'],
 		$_SERVER['REQUEST_URI'],

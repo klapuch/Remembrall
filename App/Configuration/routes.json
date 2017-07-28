@@ -7,7 +7,7 @@
 
 	"subscription/delete": "Subscription/delete",
 	"subscription": "Subscription/default",
-    "subscription/edit/{id [1-9][0-9]*}": "Subscription/edit",
+	"subscription/edit/{id :id}": "Subscription/edit",
 	"subscription/preview": "Subscription/preview",
 
 	"parts/popular": "Parts/popular",
