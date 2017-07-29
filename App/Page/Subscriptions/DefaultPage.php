@@ -18,7 +18,7 @@ use Texy;
 final class DefaultPage extends Page\Layout {
 	private const FIELDS = ['last_update', 'interval', 'expression', 'url', 'language'];
 
-	public function response(array $parameters): Application\Response {
+	public function response(array $parameters): Output\Template {
 		$subscriptions = iterator_to_array(
 			(new Subscribing\FormattedSubscriptions(
 				new Subscribing\OwnedSubscriptions(
@@ -39,68 +39,71 @@ final class DefaultPage extends Page\Layout {
 				$this->database
 			))->all()
 		);
-		return new Response\AuthenticatedResponse(
-			new Response\ComposedResponse(
-				new Response\CombinedResponse(
-					new Response\FormResponse(
-						new Subscription\DeleteForms(
-							$subscriptions,
-							$this->url,
-							$this->csrf
-						)
-					),
+		return new Application\HtmlTemplate(
+			new Response\AuthenticatedResponse(
+				new Response\ComposedResponse(
 					new Response\CombinedResponse(
 						new Response\FormResponse(
-							new Participants\InviteForms(
+							new Subscription\DeleteForms(
 								$subscriptions,
 								$this->url,
-								$this->csrf,
-								new Form\Backup($_SESSION, $_POST)
-							)
-						),
-						new Response\FormResponse(
-							new Participants\RetryForms(
-								$participants,
-								$this->url,
 								$this->csrf
 							)
 						),
-						new Response\FormResponse(
-							new Participants\KickForms(
-								$participants,
-								$this->url,
-								$this->csrf
+						new Response\CombinedResponse(
+							new Response\FormResponse(
+								new Participants\InviteForms(
+									$subscriptions,
+									$this->url,
+									$this->csrf,
+									new Form\Backup($_SESSION, $_POST)
+								)
+							),
+							new Response\FormResponse(
+								new Participants\RetryForms(
+									$participants,
+									$this->url,
+									$this->csrf
+								)
+							),
+							new Response\FormResponse(
+								new Participants\KickForms(
+									$participants,
+									$this->url,
+									$this->csrf
+								)
+							),
+							new Response\PlainResponse(
+								new Output\ValidXml(
+									new Misc\XmlPrintedObjects(
+										'subscriptions',
+										['subscription' => $subscriptions]
+									),
+									__DIR__ . '/templates/constraint.xsd'
+								)
+							),
+							new Response\PlainResponse(
+								new Output\ValidXml(
+									new Misc\XmlPrintedObjects(
+										'participants',
+										['participant' => $participants]
+									),
+									__DIR__ . '/templates/constraint.xsd'
+								)
 							)
 						),
-						new Response\PlainResponse(
-							new Output\ValidXml(
-								new Misc\XmlPrintedObjects(
-									'subscriptions',
-									['subscription' => $subscriptions]
-								),
-								__DIR__ . '/templates/constraint.xsd'
-							)
-						),
-						new Response\PlainResponse(
-							new Output\ValidXml(
-								new Misc\XmlPrintedObjects(
-									'participants',
-									['participant' => $participants]
-								),
-								__DIR__ . '/templates/constraint.xsd'
-							)
-						)
+						new Response\FlashResponse(),
+						new Response\GetResponse(),
+						new Response\PermissionResponse(),
+						new Response\IdentifiedResponse($this->user)
 					),
-					new Response\FlashResponse(),
-					new Response\GetResponse(),
-					new Response\PermissionResponse(),
-					new Response\IdentifiedResponse($this->user)
+					__DIR__ . '/templates/default.xml',
+					__DIR__ . '/../templates/layout.xml'
 				),
-				__DIR__ . '/templates/default.xml',
-				__DIR__ . '/../templates/layout.xml'
+				$this->user,
+				$this->url
 			),
-			$this->user,
-			$this->url
+			__DIR__ . '/templates/default.xsl'
 		);
 	}
 }

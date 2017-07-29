@@ -60,7 +60,7 @@ final class KickPage extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->submitKick($_POST)
+			))->post($_POST)
 		);
 	}
 }

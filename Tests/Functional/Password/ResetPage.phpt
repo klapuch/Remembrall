@@ -58,7 +58,7 @@ final class ResetPage extends \Tester\TestCase {
 			new Uri\FakeUri('', ''),
 			new Log\FakeLogs(),
 			new Ini\FakeSource($this->configuration)
-		))->submitReset($_POST)->headers();
+		))->post($_POST)->headers();
 		Assert::same(['Location' => '/sign/in'], $headers);
 	}
 
@@ -70,7 +70,7 @@ final class ResetPage extends \Tester\TestCase {
 			new Uri\FakeUri('', ''),
 			new Log\FakeLogs(),
 			new Ini\FakeSource($this->configuration)
-		))->submitReset($_POST)->headers();
+		))->post($_POST)->headers();
 		Assert::same(['Location' => '/password/remind'], $headers);
 	}
 }

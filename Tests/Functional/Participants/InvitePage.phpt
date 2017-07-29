@@ -58,7 +58,7 @@ final class InvitePage extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->submitInvite($_POST)
+			))->post($_POST)
 		);
 	}
 
@@ -82,7 +82,7 @@ final class InvitePage extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->submitInvite($_POST)
+			))->post($_POST)
 		);
 	}
 
@@ -119,7 +119,7 @@ final class InvitePage extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->submitInvite($_POST)
+			))->post($_POST)
 		);
 	}
 }

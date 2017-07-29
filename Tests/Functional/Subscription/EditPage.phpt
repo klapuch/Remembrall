@@ -65,7 +65,7 @@ final class EditPage extends \Tester\TestCase {
 			new Uri\FakeUri('', ''),
 			new Log\FakeLogs(),
 			new Ini\FakeSource($this->configuration)
-		))->submitEdit($_POST, ['id' => 1])->headers();
+		))->post($_POST, ['id' => 1])->headers();
 		Assert::same(['Location' => '/subscriptions'], $headers);
 	}
 
@@ -85,7 +85,7 @@ final class EditPage extends \Tester\TestCase {
 				new Uri\FakeUri('', 'subscription/1'),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->submitEdit($_POST, ['id' => 1])
+			))->post($_POST, ['id' => 1])
 		);
 	}
 }

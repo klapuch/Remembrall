@@ -29,9 +29,5 @@ echo new Application\HtmlPage(
 		$_SERVER['REQUEST_URI'],
 		$_SERVER['SERVER_NAME'],
 		$_SERVER['HTTPS'] ?? 'http'
-	),
-	$_SERVER['REQUEST_METHOD'],
-	in_array($_SERVER['REQUEST_METHOD'], ['GET', 'POST'], true)
-		? ${'_' . $_SERVER['REQUEST_METHOD']}
-		: []
+	)
 );

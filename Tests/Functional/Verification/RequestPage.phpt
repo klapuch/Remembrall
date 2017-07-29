@@ -47,7 +47,7 @@ final class RequestPage extends \Tester\TestCase {
 			new Uri\FakeUri(''),
 			new Log\FakeLogs(),
 			new Ini\FakeSource($this->configuration)
-		))->submitRequest($_POST)->headers();
+		))->post($_POST)->headers();
 		Assert::same('/sign/in', $headers['Location']);
 	}
 
@@ -67,7 +67,7 @@ final class RequestPage extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->submitRequest($_POST)
+			))->post($_POST)
 		);
 	}
 }

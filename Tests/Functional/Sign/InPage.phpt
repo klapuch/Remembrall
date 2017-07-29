@@ -48,7 +48,7 @@ final class InPage extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->submitIn(['email' => 'me@boss.cz', 'password' => 'secret'])
+			))->post(['email' => 'me@boss.cz', 'password' => 'secret'])
 		);
 	}
 
@@ -77,7 +77,7 @@ final class InPage extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->submitIn(['email' => 'klapuchdominik@gmail.com', 'password' => 'secret'])
+			))->post(['email' => 'klapuchdominik@gmail.com', 'password' => 'secret'])
 		);
 	}
 
@@ -97,7 +97,7 @@ final class InPage extends \Tester\TestCase {
 			new Uri\FakeUri(''),
 			new Log\FakeLogs(),
 			new Ini\FakeSource($this->configuration)
-		))->submitIn(['email' => $_POST['email'], 'password' => $_POST['password']])->headers();
+		))->post(['email' => $_POST['email'], 'password' => $_POST['password']])->headers();
 		Assert::same(['Location' => '/subscriptions'], $headers);
 		Assert::same(2, $_SESSION['id']);
 	}

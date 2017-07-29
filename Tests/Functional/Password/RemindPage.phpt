@@ -43,7 +43,7 @@ final class RemindPage extends \Tester\TestCase {
 			new Uri\FakeUri(''),
 			new Log\FakeLogs(),
 			new Ini\FakeSource($this->configuration)
-		))->submitRemind($_POST)->headers();
+		))->post($_POST)->headers();
 		Assert::same('/sign/in', $headers['Location']);
 	}
 
@@ -71,7 +71,7 @@ final class RemindPage extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->submitRemind($_POST)
+			))->post($_POST)
 		);
 	}
 
@@ -91,7 +91,7 @@ final class RemindPage extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->submitRemind($_POST)
+			))->post($_POST)
 		);
 	}
 }

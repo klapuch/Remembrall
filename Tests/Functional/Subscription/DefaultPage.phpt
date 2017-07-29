@@ -39,7 +39,7 @@ final class DefaultPage extends \Tester\TestCase {
 			new Uri\FakeUri('', ''),
 			new Log\FakeLogs(),
 			new Ini\FakeSource($this->configuration)
-		))->submitDefault($_POST)->headers();
+		))->post($_POST)->headers();
 		Assert::equal($_SESSION['part'], $_POST);
 		Assert::same(['Location' => '/subscription/preview'], $headers);
 	}
@@ -49,7 +49,7 @@ final class DefaultPage extends \Tester\TestCase {
 			new Uri\FakeUri('', '/subscription/5'),
 			new Log\FakeLogs(),
 			new Ini\FakeSource($this->configuration)
-		))->submitDefault($_POST)->headers();
+		))->post($_POST)->headers();
 		Assert::same(['Location' => '/subscription/5'], $headers);
 	}
 }

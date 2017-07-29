@@ -39,7 +39,7 @@ final class UpPage extends \Tester\TestCase {
 			new Uri\FakeUri(''),
 			new Log\FakeLogs(),
 			new Ini\FakeSource($this->configuration)
-		))->submitUp($_POST)->headers();
+		))->post($_POST)->headers();
 		Assert::same('/sign/in', $headers['Location']);
 	}
 
@@ -64,7 +64,7 @@ final class UpPage extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->submitUp($_POST)
+			))->post($_POST)
 		);
 	}
 }

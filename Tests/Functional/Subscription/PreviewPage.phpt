@@ -106,7 +106,7 @@ final class PreviewPage extends \Tester\TestCase {
 			new Uri\FakeUri('', ''),
 			new Log\FakeLogs(),
 			new Ini\FakeSource($this->configuration)
-		))->submitPreview($_POST)->headers();
+		))->post($_POST)->headers();
 		Assert::same(['Location' => '/subscriptions'], $headers);
 	}
 
@@ -115,7 +115,7 @@ final class PreviewPage extends \Tester\TestCase {
 			new Uri\FakeUri('', '/subscription/5'),
 			new Log\FakeLogs(),
 			new Ini\FakeSource($this->configuration)
-		))->submitPreview($_POST)->headers();
+		))->post($_POST)->headers();
 		Assert::same(['Location' => '/subscription/5'], $headers);
 	}
 }

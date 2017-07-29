@@ -47,7 +47,7 @@ final class DeletePage extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->submitDelete($_POST)
+			))->post($_POST)
 		);
 	}
 
@@ -66,7 +66,7 @@ final class DeletePage extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->submitDelete($_POST)
+			))->post($_POST)
 		);
 	}
 }

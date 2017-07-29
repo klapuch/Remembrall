@@ -4,12 +4,13 @@ namespace Remembrall\Page\Invitation;
 
 use Klapuch\Application;
 use Klapuch\Uri;
+use Klapuch\Output;
 use Remembrall\Model\Subscribing;
 use Remembrall\Page;
 use Remembrall\Response;
 
 final class DeclinePage extends Page\Layout {
-	public function response(array $parameters): Application\Response {
+	public function response(array $parameters): Output\Template {
 		try {
 			(new Subscribing\UnusedInvitation(
 				new Subscribing\ParticipantInvitation(
@@ -19,22 +20,26 @@ final class DeclinePage extends Page\Layout {
 				$parameters['code'],
 				$this->database
 			))->decline();
-			return new Response\InformativeResponse(
-				new Response\RedirectResponse(
-					new Response\EmptyResponse(),
-					new Uri\RelativeUrl($this->url, 'sign/in')
-				),
-				['success' => 'Invitation has been declined'],
-				$_SESSION
+			return new Application\HtmlTemplate(
+				new Response\InformativeResponse(
+					new Response\RedirectResponse(
+						new Response\EmptyResponse(),
+						new Uri\RelativeUrl($this->url, 'sign/in')
+					),
+					['success' => 'Invitation has been declined'],
+					$_SESSION
+				)
 			);
 		} catch (\UnexpectedValueException $ex) {
-			return new Response\InformativeResponse(
-				new Response\RedirectResponse(
-					new Response\EmptyResponse(),
-					new Uri\RelativeUrl($this->url, 'sign/in')
-				),
-				['danger' => $ex->getMessage()],
-				$_SESSION
+			return new Application\HtmlTemplate(
+				new Response\InformativeResponse(
+					new Response\RedirectResponse(
+						new Response\EmptyResponse(),
+						new Uri\RelativeUrl($this->url, 'sign/in')
+					),
+					['danger' => $ex->getMessage()],
+					$_SESSION
+				)
 			);
 		}
 	}
