@@ -3,8 +3,8 @@ declare(strict_types = 1);
 namespace Remembrall\Page\Participants;
 
 use Klapuch\Application;
-use Klapuch\Output;
 use Klapuch\Form;
+use Klapuch\Output;
 use Klapuch\Uri;
 use Nette\Mail;
 use Remembrall\Form\Participants;

@@ -3,8 +3,8 @@ declare(strict_types = 1);
 namespace Remembrall\Page\Invitation;
 
 use Klapuch\Application;
-use Klapuch\Uri;
 use Klapuch\Output;
+use Klapuch\Uri;
 use Remembrall\Model\Subscribing;
 use Remembrall\Page;
 use Remembrall\Response;

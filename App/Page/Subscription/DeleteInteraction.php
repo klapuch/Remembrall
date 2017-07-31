@@ -4,8 +4,8 @@ namespace Remembrall\Page\Subscription;
 
 use Klapuch\Application;
 use Klapuch\Form;
-use Klapuch\Uri;
 use Klapuch\Output;
+use Klapuch\Uri;
 use Remembrall\Form\Subscription;
 use Remembrall\Model\Subscribing;
 use Remembrall\Page;

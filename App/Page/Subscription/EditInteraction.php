@@ -4,8 +4,8 @@ namespace Remembrall\Page\Subscription;
 
 use Klapuch\Application;
 use Klapuch\Form;
-use Klapuch\Time;
 use Klapuch\Output;
+use Klapuch\Time;
 use Klapuch\Uri;
 use Remembrall\Form\Subscription;
 use Remembrall\Model\Subscribing;
@@ -13,7 +13,7 @@ use Remembrall\Page;
 use Remembrall\Response;
 
 final class EditInteraction extends Page\Layout {
-	public function response(array $subscription): Output\Template { //TODO - add ID
+	public function response(array $subscription): Output\Template {
 		try {
 			(new Form\HarnessedForm(
 				new Subscription\EditForm(
@@ -26,10 +26,10 @@ final class EditInteraction extends Page\Layout {
 				function() use ($subscription): void {
 					(new Subscribing\OwnedSubscription(
 						new Subscribing\StoredSubscription(
-							$subscription['id'],
+							(int) $subscription['id'],
 							$this->database
 						),
-						$subscription['id'],
+						(int) $subscription['id'],
 						$this->user,
 						$this->database
 					))->edit(

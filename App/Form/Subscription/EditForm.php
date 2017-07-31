@@ -43,6 +43,7 @@ final class EditForm implements Form\Control {
 
 	private function form(\DOMDocument $dom): Form\Control {
 		$language = (string) new Form\XmlDynamicValue('language', $dom);
+		$id = (string) new Form\XmlDynamicValue('id', $dom);
 		return new Form\RawForm(
 			[
 				'method' => 'POST',
@@ -52,6 +53,13 @@ final class EditForm implements Form\Control {
 				'action' => $this->url->reference() . '/' . $this->url->path(),
 			],
 			new Form\CsrfInput($this->csrf),
+			new Form\Input(
+				new Form\StoredAttributes(
+					['type' => 'hidden', 'name' => 'id', 'value' => $id],
+					$this->storage
+				),
+				new Validation\PassiveRule()
+			),
 			new Form\BootstrapInput(
 				new Form\BoundControl(
 					new Form\Input(

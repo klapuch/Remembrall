@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <page>
 	<head>
-		<title>Unrealiable parts</title>
+		<title>Unreliable parts</title>
 		<meta name="description" content="Unreliable parts"/>
 	</head>
 	<body>
-		<header level="1">Unrealiable parts</header>
+		<header level="1">Unreliable parts</header>
 		<options>
 			<option purpose="acquire">
 				<title>Acquire</title>

@@ -18,7 +18,7 @@ final class KickInteraction extends Page\Layout {
 		SUBJECT = 'Kick from subscription',
 		CONTENT = __DIR__ . '/../../Messages/Participants/Kick/content.xsl';
 
-	public function response(array $participant): Application\Response {
+	public function response(array $participant): Output\Template {
 		(new Form\HarnessedForm(
 			new Participants\KickForm(
 				new Subscribing\FakeParticipant(),
@@ -54,13 +54,15 @@ final class KickInteraction extends Page\Layout {
 				);
 			}
 		))->validate();
-		return new Response\InformativeResponse(
-			new Response\RedirectResponse(
-				new Response\EmptyResponse(),
-				new Uri\RelativeUrl($this->url, 'subscriptions')
-			),
-			['success' => 'Participant has been kicked'],
-			$_SESSION
+		return new Application\HtmlTemplate(
+			new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl($this->url, 'subscriptions')
+				),
+				['success' => 'Participant has been kicked'],
+				$_SESSION
+			)
 		);
 	}
 }

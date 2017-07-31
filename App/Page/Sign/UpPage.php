@@ -6,7 +6,6 @@ use Klapuch\Application;
 use Klapuch\Form;
 use Klapuch\Output;
 use Remembrall\Form\Sign;
-use Remembrall\Model;
 use Remembrall\Page;
 use Remembrall\Response;
 

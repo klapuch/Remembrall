@@ -2,9 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Page\Cron;
 
-use Klapuch\Output;
 use Klapuch\Dataset;
 use Klapuch\Log;
+use Klapuch\Output;
 use Nette\Mail;
 use Remembrall\Model\Misc;
 use Remembrall\Model\Subscribing;
