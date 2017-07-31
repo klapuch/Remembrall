@@ -26,11 +26,13 @@ final class PopularPage extends \Tester\TestCase {
 		Assert::same(
 			'Popular parts',
 			(string) DomQuery::fromHtml(
-				(new Parts\PopularPage(
-					new Uri\FakeUri('', '/sign/in'),
-					new Log\FakeLogs(),
-					new Ini\FakeSource($this->configuration)
-				))->response([])->render(['nonce' => '', 'base_url' => ''])
+				(new Misc\TestTemplate(
+					(new Parts\PopularPage(
+						new Uri\FakeUri('', '/sign/in'),
+						new Log\FakeLogs(),
+						new Ini\FakeSource($this->configuration)
+					))->response([])
+				))->render()
 			)->find('h1')[0]
 		);
 	}

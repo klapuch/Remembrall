@@ -30,11 +30,13 @@ final class EditPage extends \Tester\TestCase {
 		Assert::same(
 			'Edit subscription',
 			(string) DomQuery::fromHtml(
-				(new Subscription\EditPage(
-					new Uri\FakeUri('', '/subscription/edit/1'),
-					new Log\FakeLogs(),
-					new Ini\FakeSource($this->configuration)
-				))->response(['id' => 1])->render(['nonce' => '', 'base_url' => ''])
+				(new Misc\TestTemplate(
+					(new Subscription\EditPage(
+						new Uri\FakeUri('', '/subscription/edit/1'),
+						new Log\FakeLogs(),
+						new Ini\FakeSource($this->configuration)
+					))->response(['id' => 1])
+				))->render()
 			)->find('h1')[0]
 		);
 	}

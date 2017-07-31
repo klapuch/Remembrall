@@ -9,6 +9,7 @@ namespace Remembrall\Functional\Sign;
 use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Uri;
+use Remembrall\Misc;
 use Remembrall\Page\Sign;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -23,11 +24,13 @@ final class UpPage extends \Tester\TestCase {
 		Assert::same(
 			'Sign up',
 			(string) DomQuery::fromHtml(
-				(new Sign\UpPage(
-					new Uri\FakeUri('', '/sign/up'),
-					new Log\FakeLogs(),
-					new Ini\FakeSource($this->configuration)
-				))->response([])->render(['nonce' => '', 'base_url' => ''])
+				(new Misc\TestTemplate(
+					(new Sign\UpPage(
+						new Uri\FakeUri('', '/sign/up'),
+						new Log\FakeLogs(),
+						new Ini\FakeSource($this->configuration)
+					))->response([])
+				))->render()
 			)->find('h1')[0]
 		);
 	}

@@ -26,11 +26,14 @@ final class UnreliablePage extends \Tester\TestCase {
 		Assert::same(
 			'Unreliable parts',
 			(string) DomQuery::fromHtml(
-				(new Parts\UnreliablePage(
-					new Uri\FakeUri('', '/sign/in'),
-					new Log\FakeLogs(),
-					new Ini\FakeSource($this->configuration)
-				))->response([])->render(['nonce' => '', 'base_url' => ''])
+				(new Misc\TestTemplate(
+					(new Parts\UnreliablePage(
+						new Uri\FakeUri('', '/sign/in'),
+						new Log\FakeLogs(),
+						new Ini\FakeSource($this->configuration)
+					))->response([])
+				))
+				->render()
 			)->find('h1')[0]
 		);
 	}

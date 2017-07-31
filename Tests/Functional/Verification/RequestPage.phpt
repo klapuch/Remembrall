@@ -9,6 +9,7 @@ namespace Remembrall\Functional\Verification;
 use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Uri;
+use Remembrall\Misc;
 use Remembrall\Page\Verification;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -23,11 +24,13 @@ final class RequestPage extends \Tester\TestCase {
 		Assert::same(
 			'Verification request',
 			(string) DomQuery::fromHtml(
-				(new Verification\RequestPage(
-					new Uri\FakeUri('', '/verification/request'),
-					new Log\FakeLogs(),
-					new Ini\FakeSource($this->configuration)
-				))->response([])->render(['nonce' => '', 'base_url' => ''])
+				(new Misc\TestTemplate(
+					(new Verification\RequestPage(
+						new Uri\FakeUri('', '/verification/request'),
+						new Log\FakeLogs(),
+						new Ini\FakeSource($this->configuration)
+					))->response([])
+				))->render()
 			)->find('h1')[0]
 		);
 	}

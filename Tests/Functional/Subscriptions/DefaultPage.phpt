@@ -29,11 +29,13 @@ final class DefaultPage extends \Tester\TestCase {
 		Assert::same(
 			'Subscriptions',
 			(string) DomQuery::fromHtml(
-				(new Subscriptions\DefaultPage(
-					new Uri\FakeUri('', '/subscriptions'),
-					new Log\FakeLogs(),
-					new Ini\FakeSource($this->configuration)
-				))->response([])->render(['nonce' => '', 'base_url' => ''])
+				(new Misc\TestTemplate(
+					(new Subscriptions\DefaultPage(
+						new Uri\FakeUri('', '/subscriptions'),
+						new Log\FakeLogs(),
+						new Ini\FakeSource($this->configuration)
+					))->response([])
+				))->render()
 			)->find('h1')[0]
 		);
 	}
@@ -41,11 +43,13 @@ final class DefaultPage extends \Tester\TestCase {
 	public function testWorkingRenderingOnNoSubscriptions() {
 		$_SESSION['id'] = (new Misc\TestUsers($this->database))->register()->id();
 		Assert::noError(function() {
-			(new Subscriptions\DefaultPage(
-				new Uri\FakeUri('', '/subscriptions'),
-				new Log\FakeLogs(),
-				new Ini\FakeSource($this->configuration)
-			))->response([])->render(['nonce' => '', 'base_url' => '']);
+			(new Misc\TestTemplate(
+				(new Subscriptions\DefaultPage(
+					new Uri\FakeUri('', '/subscriptions'),
+					new Log\FakeLogs(),
+					new Ini\FakeSource($this->configuration)
+				))->response([])
+			))->render();
 		});
 	}
 }

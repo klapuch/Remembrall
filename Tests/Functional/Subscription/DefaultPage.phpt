@@ -9,6 +9,7 @@ namespace Remembrall\Functional\Subscription;
 use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Uri;
+use Remembrall\Misc;
 use Remembrall\Page\Subscription;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -23,11 +24,13 @@ final class DefaultPage extends \Tester\TestCase {
 		Assert::same(
 			'Subscription',
 			(string) DomQuery::fromHtml(
-				(new Subscription\DefaultPage(
-					new Uri\FakeUri('', '/sign/in'),
-					new Log\FakeLogs(),
-					new Ini\FakeSource($this->configuration)
-				))->response([])->render(['nonce' => '', 'base_url' => ''])
+				(new Misc\TestTemplate(
+					(new Subscription\DefaultPage(
+						new Uri\FakeUri('', '/sign/in'),
+						new Log\FakeLogs(),
+						new Ini\FakeSource($this->configuration)
+					))->response([])
+				))->render()
 			)->find('h1')[0]
 		);
 	}

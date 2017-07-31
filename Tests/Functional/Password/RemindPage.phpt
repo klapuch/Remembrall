@@ -9,6 +9,7 @@ namespace Remembrall\Functional\Password;
 use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Uri;
+use Remembrall\Misc;
 use Remembrall\Page\Password;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -23,11 +24,13 @@ final class RemindPage extends \Tester\TestCase {
 		Assert::same(
 			'Remind password',
 			(string) DomQuery::fromHtml(
-				(new Password\RemindPage(
-					new Uri\FakeUri('', '/password/remind'),
-					new Log\FakeLogs(),
-					new Ini\FakeSource($this->configuration)
-				))->response([])->render(['nonce' => '', 'base_url' => ''])
+				(new Misc\TestTemplate(
+					(new Password\RemindPage(
+						new Uri\FakeUri('', '/password/remind'),
+						new Log\FakeLogs(),
+						new Ini\FakeSource($this->configuration)
+					))->response([])
+				))->render()
 			)->find('h1')[0]
 		);
 	}

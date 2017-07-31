@@ -10,6 +10,7 @@ use Klapuch\Application;
 use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Uri;
+use Remembrall\Misc;
 use Remembrall\Page\Password;
 use Remembrall\Response;
 use Remembrall\TestCase;
@@ -31,11 +32,13 @@ final class ResetPage extends \Tester\TestCase {
 		Assert::same(
 			'Password reset',
 			(string) DomQuery::fromHtml(
-				(new Password\ResetPage(
-					new Uri\FakeUri('', '/password/reset/123'),
-					new Log\FakeLogs(),
-					new Ini\FakeSource($this->configuration)
-				))->response(['reminder' => $reminder])->render(['nonce' => '', 'base_url' => ''])
+				(new Misc\TestTemplate(
+					(new Password\ResetPage(
+						new Uri\FakeUri('', '/password/reset/123'),
+						new Log\FakeLogs(),
+						new Ini\FakeSource($this->configuration)
+					))->response(['reminder' => $reminder])
+				))->render()
 			)->find('h1')[0]
 		);
 	}

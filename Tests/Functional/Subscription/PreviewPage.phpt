@@ -43,11 +43,13 @@ final class PreviewPage extends \Tester\TestCase {
 		Assert::contains(
 			'Preview of ',
 			(string) DomQuery::fromHtml(
-				(new Subscription\PreviewPage(
-					new Uri\FakeUri('', '/subscription/preview'),
-					new Log\FakeLogs(),
-					new Ini\FakeSource($this->configuration)
-				))->response([])->render(['nonce' => '', 'base_url' => ''])
+				(new Misc\TestTemplate(
+					(new Subscription\PreviewPage(
+						new Uri\FakeUri('', '/subscription/preview'),
+						new Log\FakeLogs(),
+						new Ini\FakeSource($this->configuration)
+					))->response([])
+				))->render()
 			)->find('h1')[0]
 		);
 	}
