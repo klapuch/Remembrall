@@ -22,7 +22,7 @@ final class EditFormTest extends \PHPUnit\Framework\TestCase {
 						[
 							'url' => 'www.keybase.com',
 							'expression' => '//expr',
-							'interval' => 44,
+							'interval' => 'PT44M',
 							'id' => '2',
 						],
 						'root'

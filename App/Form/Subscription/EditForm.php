@@ -147,7 +147,7 @@ final class EditForm implements Form\Control {
 								'name' => 'interval',
 								'class' => 'form-control',
 								'required' => 'required',
-								'value' => new Form\XmlDynamicValue('interval', $dom),
+								'value' => (new \DateInterval((string) new Form\XmlDynamicValue('interval', $dom)))->i,
 								'min' => Constraint\IntervalRule::MIN,
 								'max' => Constraint\IntervalRule::MAX,
 							],
