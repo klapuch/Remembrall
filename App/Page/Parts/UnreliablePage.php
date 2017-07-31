@@ -4,48 +4,54 @@ namespace Remembrall\Page\Parts;
 
 use Gajus\Dindent;
 use Klapuch\Application;
+use Klapuch\Output;
 use Remembrall\Model\Web;
 use Remembrall\Page\Layout;
 use Remembrall\Response;
 use Texy;
 
 final class UnreliablePage extends Layout {
-	public function response(array $parameters): Application\Response {
+	public function response(array $parameters): Output\Template {
 		try {
-			return new Response\AuthenticatedResponse(
-				new Response\ComposedResponse(
-					new Response\CombinedResponse(
-						new Response\PlainResponse(
-							(new Page(
-								new Web\FormattedParts(
-									new Web\UnreliableParts(
-										new Web\CollectiveParts($this->database),
-										$this->database
-									),
-									new Texy\Texy(),
-									new Dindent\Indenter()
-								)
-							))->render()
+			return new Application\HtmlTemplate(
+				new Response\AuthenticatedResponse(
+					new Response\ComposedResponse(
+						new Response\CombinedResponse(
+							new Response\PlainResponse(
+								(new Page(
+									new Web\FormattedParts(
+										new Web\UnreliableParts(
+											new Web\CollectiveParts($this->database),
+											$this->database
+										),
+										new Texy\Texy(),
+										new Dindent\Indenter()
+									)
+								))->render()
+							),
+							new Response\FlashResponse(),
+							new Response\GetResponse(),
+							new Response\PermissionResponse(),
+							new Response\IdentifiedResponse($this->user)
 						),
-						new Response\FlashResponse(),
-						new Response\GetResponse(),
-						new Response\PermissionResponse(),
-						new Response\IdentifiedResponse($this->user)
+						__DIR__ . '/templates/unreliable.xml',
+						__DIR__ . '/../templates/layout.xml'
 					),
-					__DIR__ . '/templates/unreliable.xml',
-					__DIR__ . '/../templates/layout.xml'
-				),
-				$this->user,
-				$this->url
-			);
-		} catch (\UnexpectedValueException $ex) {
-			return new Response\InformativeResponse(
-				new Response\RedirectResponse(
-					new Response\EmptyResponse(),
+					$this->user,
 					$this->url
 				),
-				['danger' => $ex->getMessage()],
-				$_SESSION
+				__DIR__ . '/templates/unreliable.xsl'
+			);
+		} catch (\UnexpectedValueException $ex) {
+			return new Application\HtmlTemplate(
+				new Response\InformativeResponse(
+					new Response\RedirectResponse(
+						new Response\EmptyResponse(),
+						$this->url
+					),
+					['danger' => $ex->getMessage()],
+					$_SESSION
+				)
 			);
 		}
 	}

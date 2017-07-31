@@ -4,21 +4,15 @@ namespace Remembrall\Page\Subscription;
 
 use Klapuch\Application;
 use Klapuch\Form;
+use Klapuch\Output;
 use Klapuch\Uri;
 use Remembrall\Form\Subscription;
 use Remembrall\Model\Subscribing;
 use Remembrall\Page;
 use Remembrall\Response;
 
-final class DeletePage extends Page\Layout {
-	public function response(array $parameters): Application\Response {
-		return new Response\RedirectResponse(
-			new Response\EmptyResponse(),
-			new Uri\RelativeUrl($this->url, 'error')
-		);
-	}
-
-	public function submitDelete(array $subscription): Application\Response {
+final class DeleteInteraction extends Page\Layout {
+	public function response(array $subscription): Output\Template {
 		try {
 			(new Form\HarnessedForm(
 				new Subscription\DeleteForm(
@@ -40,22 +34,26 @@ final class DeletePage extends Page\Layout {
 					))->cancel();
 				}
 			))->validate();
-			return new Response\InformativeResponse(
-				new Response\RedirectResponse(
-					new Response\EmptyResponse(),
-					new Uri\RelativeUrl($this->url, 'subscriptions')
-				),
-				['success' => 'Subscription has been deleted'],
-				$_SESSION
+			return new Application\HtmlTemplate(
+				new Response\InformativeResponse(
+					new Response\RedirectResponse(
+						new Response\EmptyResponse(),
+						new Uri\RelativeUrl($this->url, 'subscriptions')
+					),
+					['success' => 'Subscription has been deleted'],
+					$_SESSION
+				)
 			);
 		} catch (\UnexpectedValueException $ex) {
-			return new Response\InformativeResponse(
-				new Response\RedirectResponse(
-					new Response\EmptyResponse(),
-					new Uri\RelativeUrl($this->url, 'subscriptions')
-				),
-				['danger' => $ex->getMessage()],
-				$_SESSION
+			return new Application\HtmlTemplate(
+				new Response\InformativeResponse(
+					new Response\RedirectResponse(
+						new Response\EmptyResponse(),
+						new Uri\RelativeUrl($this->url, 'subscriptions')
+					),
+					['danger' => $ex->getMessage()],
+					$_SESSION
+				)
 			);
 		}
 	}

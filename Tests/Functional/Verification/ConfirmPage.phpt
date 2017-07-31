@@ -6,6 +6,7 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Functional\Verification;
 
+use Klapuch\Application;
 use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Uri;
@@ -21,13 +22,15 @@ final class ConfirmPage extends \Tester\TestCase {
 
 	public function testErrorOnUnknownCode() {
 		Assert::equal(
-			new Response\InformativeResponse(
-				new Response\RedirectResponse(
-					new Response\EmptyResponse(),
-					new Uri\RelativeUrl(new Uri\FakeUri(''), 'sign/in')
-				),
-				['danger' => 'The verification code does not exist'],
-				$_SESSION
+			new Application\HtmlTemplate(
+				new Response\InformativeResponse(
+					new Response\RedirectResponse(
+						new Response\EmptyResponse(),
+						new Uri\RelativeUrl(new Uri\FakeUri(''), 'sign/in')
+					),
+					['danger' => 'The verification code does not exist'],
+					$_SESSION
+				)
 			),
 			(new Verification\ConfirmPage(
 				new Uri\FakeUri(''),
@@ -44,13 +47,15 @@ final class ConfirmPage extends \Tester\TestCase {
             (2, '$code', TRUE)"
 		);
 		Assert::equal(
-			new Response\InformativeResponse(
-				new Response\RedirectResponse(
-					new Response\EmptyResponse(),
-					new Uri\RelativeUrl(new Uri\FakeUri(''), 'sign/in')
-				),
-				['danger' => 'Verification code was already used'],
-				$_SESSION
+			new Application\HtmlTemplate(
+				new Response\InformativeResponse(
+					new Response\RedirectResponse(
+						new Response\EmptyResponse(),
+						new Uri\RelativeUrl(new Uri\FakeUri(''), 'sign/in')
+					),
+					['danger' => 'Verification code was already used'],
+					$_SESSION
+				)
 			),
 			(new Verification\ConfirmPage(
 				new Uri\FakeUri(''),
@@ -70,12 +75,27 @@ final class ConfirmPage extends \Tester\TestCase {
 			"INSERT INTO users (id, email, password, role) VALUES
             (2, 'me@boss.cz', 'secret', 'member')"
 		);
-		$headers = (new Verification\ConfirmPage(
-			new Uri\FakeUri(''),
-			new Log\FakeLogs(),
-			new Ini\FakeSource($this->configuration)
-		))->response(['code' => $code])->headers();
-		Assert::same(['Location' => '/subscriptions'], $headers);
+		Assert::equal(
+			new Application\HtmlTemplate(
+				new Response\InformativeResponse(
+					new Response\InformativeResponse(
+						new Response\RedirectResponse(
+							new Response\EmptyResponse(),
+							new Uri\RelativeUrl(new Uri\FakeUri(''), 'subscriptions')
+						),
+						['success' => 'Your code has been confirmed'],
+						$_SESSION
+					),
+					['success' => 'You have been logged in'],
+					$_SESSION
+				)
+			),
+			(new Verification\ConfirmPage(
+				new Uri\FakeUri(''),
+				new Log\FakeLogs(),
+				new Ini\FakeSource($this->configuration)
+			))->response(['code' => $code])
+		);
 		Assert::same(2, $_SESSION['id']);
 	}
 }

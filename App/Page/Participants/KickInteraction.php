@@ -12,20 +12,13 @@ use Remembrall\Model\Subscribing;
 use Remembrall\Page;
 use Remembrall\Response;
 
-final class KickPage extends Page\Layout {
+final class KickInteraction extends Page\Layout {
 	private const SCHEMA = __DIR__ . '/../Invitation/templates/constraint.xsd';
 	private const SENDER = 'Remembrall <remembrall@remembrall.org>',
 		SUBJECT = 'Kick from subscription',
 		CONTENT = __DIR__ . '/../../Messages/Participants/Kick/content.xsl';
 
-	public function response(array $parameters): Application\Response {
-		return new Response\RedirectResponse(
-			new Response\EmptyResponse(),
-			new Uri\RelativeUrl($this->url, 'error')
-		);
-	}
-
-	public function submitKick(array $participant): Application\Response {
+	public function response(array $participant): Output\Template {
 		(new Form\HarnessedForm(
 			new Participants\KickForm(
 				new Subscribing\FakeParticipant(),
@@ -61,13 +54,15 @@ final class KickPage extends Page\Layout {
 				);
 			}
 		))->validate();
-		return new Response\InformativeResponse(
-			new Response\RedirectResponse(
-				new Response\EmptyResponse(),
-				new Uri\RelativeUrl($this->url, 'subscriptions')
-			),
-			['success' => 'Participant has been kicked'],
-			$_SESSION
+		return new Application\HtmlTemplate(
+			new Response\InformativeResponse(
+				new Response\RedirectResponse(
+					new Response\EmptyResponse(),
+					new Uri\RelativeUrl($this->url, 'subscriptions')
+				),
+				['success' => 'Participant has been kicked'],
+				$_SESSION
+			)
 		);
 	}
 }

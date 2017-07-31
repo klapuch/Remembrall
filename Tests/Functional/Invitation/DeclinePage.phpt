@@ -6,6 +6,7 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Functional\Invitation;
 
+use Klapuch\Application;
 use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Uri;
@@ -19,15 +20,6 @@ require __DIR__ . '/../../bootstrap.php';
 final class DeclinePage extends \Tester\TestCase {
 	use TestCase\Page;
 
-	public function testWorkingResponse() {
-		$body = (new Invitation\DeclinePage(
-			new Uri\FakeUri(''),
-			new Log\FakeLogs(),
-			new Ini\FakeSource($this->configuration)
-		))->response(['code' => 'abc123'])->body()->serialization();
-		Assert::same('', $body);
-	}
-
 	public function testSuccessDeclining() {
 		$code = 'abc123';
 		$this->database->exec(
@@ -35,13 +27,15 @@ final class DeclinePage extends \Tester\TestCase {
 			VALUES ('foo@email.cz', 1, '{$code}', NOW(), FALSE, NULL)"
 		);
 		Assert::equal(
-			new Response\InformativeResponse(
-				new Response\RedirectResponse(
-					new Response\EmptyResponse(),
-					new Uri\RelativeUrl(new Uri\FakeUri(''), 'sign/in')
-				),
-				['success' => 'Invitation has been declined'],
-				$_SESSION
+			new Application\HtmlTemplate(
+				new Response\InformativeResponse(
+					new Response\RedirectResponse(
+						new Response\EmptyResponse(),
+						new Uri\RelativeUrl(new Uri\FakeUri(''), 'sign/in')
+					),
+					['success' => 'Invitation has been declined'],
+					$_SESSION
+				)
 			),
 			(new Invitation\DeclinePage(
 				new Uri\FakeUri(''),
@@ -53,13 +47,15 @@ final class DeclinePage extends \Tester\TestCase {
 
 	public function testErrorOnDeclining() {
 		Assert::equal(
-			new Response\InformativeResponse(
-				new Response\RedirectResponse(
-					new Response\EmptyResponse(),
-					new Uri\RelativeUrl(new Uri\FakeUri(''), 'sign/in')
-				),
-				['danger' => 'The invitation with code "abc123" is declined or does not exist'],
-				$_SESSION
+			new Application\HtmlTemplate(
+				new Response\InformativeResponse(
+					new Response\RedirectResponse(
+						new Response\EmptyResponse(),
+						new Uri\RelativeUrl(new Uri\FakeUri(''), 'sign/in')
+					),
+					['danger' => 'The invitation with code "abc123" is declined or does not exist'],
+					$_SESSION
+				)
 			),
 			(new Invitation\DeclinePage(
 				new Uri\FakeUri(''),

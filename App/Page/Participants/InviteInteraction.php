@@ -12,20 +12,13 @@ use Remembrall\Model\Subscribing;
 use Remembrall\Page;
 use Remembrall\Response;
 
-final class InvitePage extends Page\Layout {
+final class InviteInteraction extends Page\Layout {
 	private const SCHEMA = __DIR__ . '/../Invitation/templates/constraint.xsd';
 	private const SENDER = 'Remembrall <remembrall@remembrall.org>',
 		SUBJECT = 'Invitation to subscription',
 		CONTENT = __DIR__ . '/../../Messages/Participants/Invite/content.xsl';
 
-	public function response(array $parameters): Application\Response {
-		return new Response\RedirectResponse(
-			new Response\EmptyResponse(),
-			new Uri\RelativeUrl($this->url, 'error')
-		);
-	}
-
-	public function submitInvite(array $participant): Application\Response {
+	public function response(array $participant): Output\Template {
 		try {
 			(new Form\HarnessedForm(
 				new Participants\InviteForm(
@@ -60,22 +53,26 @@ final class InvitePage extends Page\Layout {
 					);
 				}
 			))->validate();
-			return new Response\InformativeResponse(
-				new Response\RedirectResponse(
-					new Response\EmptyResponse(),
-					new Uri\RelativeUrl($this->url, 'subscriptions')
-				),
-				['success' => 'Participant has been asked'],
-				$_SESSION
+			return new Application\HtmlTemplate(
+				new Response\InformativeResponse(
+					new Response\RedirectResponse(
+						new Response\EmptyResponse(),
+						new Uri\RelativeUrl($this->url, 'subscriptions')
+					),
+					['success' => 'Participant has been asked'],
+					$_SESSION
+				)
 			);
 		} catch (\UnexpectedValueException $ex) {
-			return new Response\InformativeResponse(
-				new Response\RedirectResponse(
-					new Response\EmptyResponse(),
-					new Uri\RelativeUrl($this->url, 'subscriptions')
-				),
-				['danger' => $ex->getMessage()],
-				$_SESSION
+			return new Application\HtmlTemplate(
+				new Response\InformativeResponse(
+					new Response\RedirectResponse(
+						new Response\EmptyResponse(),
+						new Uri\RelativeUrl($this->url, 'subscriptions')
+					),
+					['danger' => $ex->getMessage()],
+					$_SESSION
+				)
 			);
 		}
 	}

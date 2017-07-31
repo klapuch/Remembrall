@@ -2,9 +2,9 @@
 declare(strict_types = 1);
 namespace Remembrall\Page\Cron;
 
-use Klapuch\Application;
 use Klapuch\Dataset;
 use Klapuch\Log;
+use Klapuch\Output;
 use Nette\Mail;
 use Remembrall\Model\Misc;
 use Remembrall\Model\Subscribing;
@@ -12,7 +12,7 @@ use Remembrall\Model\Web;
 use Remembrall\Page;
 
 final class DefaultPage extends Page\Layout {
-	public function response(array $parameters): Application\Response {
+	public function response(array $parameters): Output\Template {
 		try {
 			$parts = new Web\HarnessedParts(
 				new Web\UnreliableParts(

@@ -6,22 +6,25 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Functional\Subscription;
 
+use Klapuch\Application;
 use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Uri;
+use Remembrall\Misc;
 use Remembrall\Model\Web\FakePart;
 use Remembrall\Model\Web\TemporaryParts;
 use Remembrall\Page\Subscription;
 use Remembrall\Response;
 use Remembrall\TestCase;
 use Tester\Assert;
+use Tester\DomQuery;
 
 require __DIR__ . '/../../bootstrap.php';
 
 final class PreviewPage extends \Tester\TestCase {
 	use TestCase\Page;
 
-	public function testWorkingResponse() {
+	public function testWorkingRendering() {
 		$_SESSION['part'] = ['url' => 'http://www.example.com', 'expression' => '//h1', 'language' => 'xpath'];
 		(new TemporaryParts(
 			$this->redis
@@ -31,27 +34,38 @@ final class PreviewPage extends \Tester\TestCase {
 			$_SESSION['part']['expression'],
 			$_SESSION['part']['language']
 		);
-		Assert::noError(function() {
-			$body = (new Subscription\PreviewPage(
-				new Uri\FakeUri(''),
-				new Log\FakeLogs(),
-				new Ini\FakeSource($this->configuration)
-			))->response([])->body()->serialization();
-			$dom = new \DOMDocument();
-			$dom->loadXML($body);
-		});
+		$user = (new Misc\TestUsers($this->database))->register();
+		$this->database->exec(
+			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
+			(1, {$user->id()}, 4, 'PT3M', NOW(), '')"
+		);
+		$_SESSION['id'] = 1;
+		Assert::contains(
+			'Preview of ',
+			(string) DomQuery::fromHtml(
+				(new Misc\TestTemplate(
+					(new Subscription\PreviewPage(
+						new Uri\FakeUri('', '/subscription/preview'),
+						new Log\FakeLogs(),
+						new Ini\FakeSource($this->configuration)
+					))->response([])
+				))->render()
+			)->find('h1')[0]
+		);
 	}
 
 	public function testErrorOnNotFoundPart() {
 		$_SESSION['part'] = ['url' => 'http://www.example.com', 'expression' => '//h1', 'language' => 'xpath'];
 		Assert::equal(
-			new Response\InformativeResponse(
-				new Response\RedirectResponse(
-					new Response\EmptyResponse(),
-					new Uri\RelativeUrl(new Uri\FakeUri(''), 'subscription')
-				),
-				['danger' => 'Part not found'],
-				$_SESSION
+			new Application\HtmlTemplate(
+				new Response\InformativeResponse(
+					new Response\RedirectResponse(
+						new Response\EmptyResponse(),
+						new Uri\RelativeUrl(new Uri\FakeUri(''), 'subscription')
+					),
+					['danger' => 'Part not found'],
+					$_SESSION
+				)
 			),
 			(new Subscription\PreviewPage(
 				new Uri\FakeUri(''),
@@ -63,13 +77,15 @@ final class PreviewPage extends \Tester\TestCase {
 
 	public function testMissingSessionFieldForResponseLeadingToError() {
 		Assert::equal(
-			new Response\InformativeResponse(
-				new Response\RedirectResponse(
-					new Response\EmptyResponse(),
-					new Uri\RelativeUrl(new Uri\FakeUri(''), 'subscription')
-				),
-				['danger' => 'Missing referenced part'],
-				$_SESSION
+			new Application\HtmlTemplate(
+				new Response\InformativeResponse(
+					new Response\RedirectResponse(
+						new Response\EmptyResponse(),
+						new Uri\RelativeUrl(new Uri\FakeUri(''), 'subscription')
+					),
+					['danger' => 'Missing referenced part'],
+					$_SESSION
+				)
 			),
 			(new Subscription\PreviewPage(
 				new Uri\FakeUri(''),
@@ -82,13 +98,15 @@ final class PreviewPage extends \Tester\TestCase {
 	public function testMissingSomeSessionFieldForResponseLeadingToError() {
 		$_SESSION['part'] = ['language' => 'xpath'];
 		Assert::equal(
-			new Response\InformativeResponse(
-				new Response\RedirectResponse(
-					new Response\EmptyResponse(),
-					new Uri\RelativeUrl(new Uri\FakeUri(''), 'subscription')
-				),
-				['danger' => 'Missing referenced part'],
-				$_SESSION
+			new Application\HtmlTemplate(
+				new Response\InformativeResponse(
+					new Response\RedirectResponse(
+						new Response\EmptyResponse(),
+						new Uri\RelativeUrl(new Uri\FakeUri(''), 'subscription')
+					),
+					['danger' => 'Missing referenced part'],
+					$_SESSION
+				)
 			),
 			(new Subscription\PreviewPage(
 				new Uri\FakeUri(''),
@@ -96,27 +114,6 @@ final class PreviewPage extends \Tester\TestCase {
 				new Ini\FakeSource($this->configuration)
 			))->response([])
 		);
-	}
-
-	public function testAddingAfterPreview() {
-		$_SESSION['part'] = ['url' => 'http://www.example.com', 'expression' => '//h1', 'language' => 'xpath'];
-		$_POST['interval'] = '44';
-		$_POST['act'] = 'Send';
-		$headers = (new Subscription\PreviewPage(
-			new Uri\FakeUri('', ''),
-			new Log\FakeLogs(),
-			new Ini\FakeSource($this->configuration)
-		))->submitPreview($_POST)->headers();
-		Assert::same(['Location' => '/subscriptions'], $headers);
-	}
-
-	public function testErrorOnAdding() {
-		$headers = (new Subscription\PreviewPage(
-			new Uri\FakeUri('', '/subscription/5'),
-			new Log\FakeLogs(),
-			new Ini\FakeSource($this->configuration)
-		))->submitPreview($_POST)->headers();
-		Assert::same(['Location' => '/subscription/5'], $headers);
 	}
 }
 

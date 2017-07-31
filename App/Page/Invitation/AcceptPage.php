@@ -3,13 +3,14 @@ declare(strict_types = 1);
 namespace Remembrall\Page\Invitation;
 
 use Klapuch\Application;
+use Klapuch\Output;
 use Klapuch\Uri;
 use Remembrall\Model\Subscribing;
 use Remembrall\Page;
 use Remembrall\Response;
 
 final class AcceptPage extends Page\Layout {
-	public function response(array $parameters): Application\Response {
+	public function response(array $parameters): Output\Template {
 		try {
 			(new Subscribing\UnusedInvitation(
 				new Subscribing\ParticipantInvitation(
@@ -19,22 +20,26 @@ final class AcceptPage extends Page\Layout {
 				$parameters['code'],
 				$this->database
 			))->accept();
-			return new Response\InformativeResponse(
-				new Response\RedirectResponse(
-					new Response\EmptyResponse(),
-					new Uri\RelativeUrl($this->url, 'sign/in')
-				),
-				['success' => 'Invitation has been accepted'],
-				$_SESSION
+			return new Application\HtmlTemplate(
+				new Response\InformativeResponse(
+					new Response\RedirectResponse(
+						new Response\EmptyResponse(),
+						new Uri\RelativeUrl($this->url, 'sign/in')
+					),
+					['success' => 'Invitation has been accepted'],
+					$_SESSION
+				)
 			);
 		} catch (\UnexpectedValueException $ex) {
-			return new Response\InformativeResponse(
-				new Response\RedirectResponse(
-					new Response\EmptyResponse(),
-					new Uri\RelativeUrl($this->url, 'sign/in')
-				),
-				['danger' => $ex->getMessage()],
-				$_SESSION
+			return new Application\HtmlTemplate(
+				new Response\InformativeResponse(
+					new Response\RedirectResponse(
+						new Response\EmptyResponse(),
+						new Uri\RelativeUrl($this->url, 'sign/in')
+					),
+					['danger' => $ex->getMessage()],
+					$_SESSION
+				)
 			);
 		}
 	}
