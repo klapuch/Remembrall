@@ -44,6 +44,7 @@ final class EditForm implements Form\Control {
 	private function form(\DOMDocument $dom): Form\Control {
 		$language = (string) new Form\XmlDynamicValue('language', $dom);
 		$id = (string) new Form\XmlDynamicValue('id', $dom);
+		$interval = (string) new Form\XmlDynamicValue('interval', $dom);
 		return new Form\RawForm(
 			[
 				'method' => 'POST',
@@ -147,7 +148,7 @@ final class EditForm implements Form\Control {
 								'name' => 'interval',
 								'class' => 'form-control',
 								'required' => 'required',
-								'value' => (new \DateInterval((string) new Form\XmlDynamicValue('interval', $dom)))->i,
+								'value' => $interval ? (new \DateInterval($interval))->i : '',
 								'min' => Constraint\IntervalRule::MIN,
 								'max' => Constraint\IntervalRule::MAX,
 							],
