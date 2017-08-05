@@ -1,7 +1,7 @@
 version: '3'
 services:
     postgres:
-      image: postgres:alpine
+      image: postgres:latest
       container_name: remembrall-postgres
       environment:
         - POSTGRES_USER=postgres
