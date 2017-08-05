@@ -12,7 +12,7 @@ const CONFIGURATION = __DIR__ . '/../App/Configuration/.config.ini',
 	LOCAL_CONFIGURATION = __DIR__ . '/../App/Configuration/.config.local.ini',
 	ROUTES = __DIR__ . '/../App/Configuration/routes.json',
 	LOGS = __DIR__ . '/../log';
-echo new Application\HtmlPage(
+echo new Application\SuitedPage(
 	new Ini\CombinedSource(
 		new Ini\ValidSource(CONFIGURATION, new Ini\TypedSource(CONFIGURATION)),
 		new Ini\MutedSource(

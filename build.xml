@@ -71,7 +71,11 @@
 			<arg value="php"/>
 			<arg value="-c"/>
 			<arg path="Tests/php.ini"/>
-			<arg path="Tests/"/>
+			<arg path="Tests/Unit"/>
+			<arg path="Tests/Misc"/>
+			<arg path="Tests/Postgres"/>
+			<arg path="Tests/Functional"/>
+			<arg path="Tests/Integration"/>
 		</exec>
 	</target>
 
@@ -84,7 +88,11 @@
 			<arg value="php-cgi"/>
 			<arg value="-c"/>
 			<arg path="Tests/php.ini"/>
-			<arg path="Tests/"/>
+			<arg path="Tests/Unit"/>
+			<arg path="Tests/Misc"/>
+			<arg path="Tests/Postgres"/>
+			<arg path="Tests/Functional"/>
+			<arg path="Tests/Integration"/>
 		</exec>
 	</target>
 
@@ -97,7 +105,11 @@
 			<arg value="phpdbg"/>
 			<arg value="-c"/>
 			<arg path="Tests/php.ini"/>
-			<arg path="Tests/"/>
+			<arg path="Tests/Unit"/>
+			<arg path="Tests/Misc"/>
+			<arg path="Tests/Postgres"/>
+			<arg path="Tests/Functional"/>
+			<arg path="Tests/Integration"/>
 			<arg value="--coverage"/>
 			<arg value="tester-coverage.xml"/>
 			<arg value="--coverage-src"/>

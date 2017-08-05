@@ -3,3 +3,4 @@ parameters:
 		- DateTimeImmutable
 		- DOMNode
 		- DateInterval
+		- LibXMLError
