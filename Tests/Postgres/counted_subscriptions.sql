@@ -12,9 +12,11 @@ BEGIN
 	(3, 'baz.cz', ROW ('//baz', 'xpath'), 'baz', 'bazSnap');
 
 	INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES
-	(1, 2, 'PT6M', NOW(), md5(random()::TEXT)), (2, 2, 'PT6M', NOW(), md5(random()::TEXT));
+	(1, 2, 'PT6M', NOW(), md5(random()::TEXT)),
+	(2, 2, 'PT6M', NOW(), md5(random()::TEXT));
 
-	INSERT INTO participants (id, email, subscription_id, code, invited_at, accepted, decided_at) VALUES (1, 'a@a.cz', 1, 'abc', NOW(), TRUE, NOW()),
+	INSERT INTO participants (id, email, subscription_id, code, invited_at, accepted, decided_at) VALUES
+	(1, 'a@a.cz', 1, 'abc', NOW(), TRUE, NOW()),
 	(2, 'b@a.cz', 1, 'abc', NOW(), FALSE, NOW()),
 	(3, 'c@a.cz', 1, 'abc', NOW(), FALSE, NULL);
 
