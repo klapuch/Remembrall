@@ -19,9 +19,11 @@ final class Test extends \Tester\TestCase {
 		$this->database->beginTransaction();
 		$test = $this->database->query('SELECT * FROM unit_tests.begin()')->fetch();
 		$this->database->rollBack();
-		if ($test['result'] !== 'Y')
+		try {
+			Assert::same('Y', $test['result']);
+		} finally {
 			echo $test['message'];
-		Assert::same('Y', $test['result']);
+		}
 	}
 }
 
