@@ -19,7 +19,7 @@ BEGIN
 	SELECT array_agg(interval_seconds), array_agg(interval)
 	FROM readable_subscriptions()
 	INTO second_intervals, iso_intervals;
-	IF second_intervals = expected_second_intervals
+	IF second_intervals IS NOT DISTINCT FROM expected_second_intervals
 	THEN
 		SELECT assert.ok('Second intervals are matching.')
 		INTO message;
@@ -27,7 +27,7 @@ BEGIN
 		SELECT assert.fail(format('Expected intervals in seconds were %s, actual %s', expected_second_intervals, second_intervals))
 		INTO message;
 	END IF;
-	IF iso_intervals = expected_iso_intervals
+	IF iso_intervals IS NOT DISTINCT FROM expected_iso_intervals
 	THEN
 		SELECT assert.ok('ISO intervals are matching.')
 		INTO message;

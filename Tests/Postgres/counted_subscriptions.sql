@@ -21,7 +21,7 @@ BEGIN
 	SELECT occurrences
 	FROM public.counted_subscriptions()
 	INTO count;
-	IF count = expected_count
+	IF count IS NOT DISTINCT FROM expected_count
 	THEN
 		SELECT assert.ok('Counted subscriptions are matching.')
 		INTO message;
