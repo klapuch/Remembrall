@@ -1,10 +1,9 @@
-FROM php:7.1-fpm
+FROM php:rc-fpm
 
 # PHP
-RUN apt-get update -qq && apt-get install -y git sudo libcurl4-openssl-dev \
-	&& apt-get install -y libmcrypt-dev && docker-php-ext-install mcrypt \
+RUN apt-get update -qq && apt-get install -y git sudo libcurl4-openssl-dev gnupg \
 	&& apt-get install -y libpq-dev && docker-php-ext-install pdo_pgsql \
-	&& apt-get install -y zip unzip && docker-php-ext-install zip \
+	&& apt-get install -y zlib1g-dev zip unzip && docker-php-ext-install zip \
 	&& apt-get install -y libxslt-dev && docker-php-ext-install xsl
 
 # COMPOSER
