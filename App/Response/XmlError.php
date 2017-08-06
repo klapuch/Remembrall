@@ -5,6 +5,9 @@ namespace Remembrall\Response;
 use Klapuch\Application;
 use Klapuch\Output;
 
+/**
+ * Error for XML format
+ */
 final class XmlError implements Application\Response {
 	private const HEADERS = ['content-type' => 'text/xml; charset=utf8'];
 	private const CODES = [400, 599],

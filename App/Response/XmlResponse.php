@@ -5,6 +5,9 @@ namespace Remembrall\Response;
 use Klapuch\Application;
 use Klapuch\Output;
 
+/**
+ * Validated XML response
+ */
 final class XmlResponse implements Application\Response {
 	private const HEADERS = ['content-type' => 'text/xml; charset=utf8'];
 	private const OK = 200;
