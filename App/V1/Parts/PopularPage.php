@@ -30,9 +30,7 @@ final class PopularPage extends Layout {
 				)
 			);
 		} catch (\UnexpectedValueException $ex) {
-			return new Application\RawTemplate(
-				new Response\XmlError($ex->getMessage())
-			);
+			return new Application\RawTemplate(new Response\XmlError($ex));
 		}
 	}
 }

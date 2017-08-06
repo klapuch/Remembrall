@@ -8,17 +8,18 @@ use Klapuch\Output;
 final class XmlError implements Application\Response {
 	private const HEADERS = ['content-type' => 'text/xml; charset=utf8'];
 	private const CODES = [400, 599],
-		BAD_REQUEST = 400;
-	private $text;
+		DEFAULT_CODE = 400,
+		DELEGATE = 0;
+	private $error;
 	private $code;
 	private $headers;
 
 	public function __construct(
-		string $text,
-		int $code = self::BAD_REQUEST,
-		array $headers = []
+		\Throwable $error,
+		array $headers = [],
+		int $code = self::DELEGATE
 	) {
-		$this->text = $text;
+		$this->error = $error;
 		$this->code = $code;
 		$this->headers = $headers;
 	}
@@ -27,18 +28,26 @@ final class XmlError implements Application\Response {
 		$dom = new \DOMDocument('1.0', 'utf-8');
 		$message = $dom->createElement('message');
 		$text = $dom->createAttribute('text');
-		$text->value = htmlspecialchars($this->text, ENT_QUOTES | ENT_XHTML);
+		$text->value = $this->text($this->error);
 		$message->appendChild($text);
 		$dom->appendChild($message);
 		return new Output\DomFormat($dom, 'xml');
 	}
 
 	public function headers(): array {
-		http_response_code(
-			in_array($this->code, range(...self::CODES))
-				? $this->code
-				: self::BAD_REQUEST
-		);
+		http_response_code($this->code($this->error, $this->code));
 		return self::HEADERS + array_change_key_case($this->headers);
+	}
+
+	private function code(\Throwable $error, int $code): int {
+		$choice = $error->getCode() ?: $code;
+		return in_array($choice, range(...self::CODES))
+			? $choice
+			: self::DEFAULT_CODE;
+	}
+
+	private function text(\Throwable $error): string {
+		return htmlspecialchars($error->getMessage(), ENT_QUOTES | ENT_XHTML)
+			?: 'Unknown error, contact support.';
 	}
 }
