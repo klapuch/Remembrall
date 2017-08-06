@@ -17,13 +17,13 @@ use Tester\DomQuery;
 
 require __DIR__ . '/../../../bootstrap.php';
 
-final class PopularPage extends \Tester\TestCase {
+final class UnreliablePage extends \Tester\TestCase {
 	use TestCase\Page;
 
 	public function testWorkingRendering() {
 		Assert::noError(function() {
 			new \SimpleXMLElement(
-				(new Parts\PopularPage(
+				(new Parts\UnreliablePage(
 					new Uri\FakeUri('', '/parts/popular'),
 					new Log\FakeLogs(),
 					new Ini\FakeSource($this->configuration)
@@ -35,7 +35,7 @@ final class PopularPage extends \Tester\TestCase {
 	public function testRenderingError() {
 		$_GET['sort'] = 'foo';
 		$dom = DomQuery::fromXml(
-			(new Parts\PopularPage(
+			(new Parts\UnreliablePage(
 				new Uri\FakeUri('', '/parts/popular'),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
@@ -48,4 +48,4 @@ final class PopularPage extends \Tester\TestCase {
 	}
 }
 
-(new PopularPage())->run();
+(new UnreliablePage())->run();
