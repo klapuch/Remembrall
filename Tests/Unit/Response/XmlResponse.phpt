@@ -61,7 +61,7 @@ final class XmlResponse extends Tester\TestCase {
 			))->body();
 		}, \UnexpectedValueException::class, 'XML document is not valid');
 		Assert::type(\Throwable::class, $ex->getPrevious());
-		Assert::contains("Start tag expected, '<' not found", $ex->getPrevious()->getMessage());
+		Assert::same("Start tag expected, '<' not found", $ex->getPrevious()->getMessage());
 	}
 
 	public function testEnablingOldStateOfErrors() {

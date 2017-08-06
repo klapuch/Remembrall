@@ -33,7 +33,7 @@ final class XmlResponse implements Application\Response {
 							' | ',
 							array_map(
 								function(\LibXMLError $error): string {
-									return $error->message;
+									return trim($error->message);
 								},
 								libxml_get_errors()
 							)
