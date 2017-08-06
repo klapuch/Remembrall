@@ -47,7 +47,7 @@
     "consistence/coding-standard": "^1.1.0",
     "spatie/phpunit-snapshot-assertions": "^1.0.0",
     "robmorgan/phinx": "^0.8.0",
-    "phpstan/phpstan": "^0.7.0",
+    "phpstan/phpstan": "^0.8.0",
     "deployer/deployer": "^5.0"
   },
   "autoload": {
