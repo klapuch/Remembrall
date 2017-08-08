@@ -16,9 +16,8 @@
 	"subscription/preview [POST]": "Remembrall\\Page\\Subscription\\PreviewInteraction",
 
 	"parts/popular [GET]": "Remembrall\\Page\\Parts\\PopularPage",
-	"v1/parts/popular [GET]": "Remembrall\\V1\\Parts\\PopularPage",
 	"parts/unreliable [GET]": "Remembrall\\Page\\Parts\\UnreliablePage",
-	"v1/parts/unreliable [GET]": "Remembrall\\V1\\Parts\\UnreliablePage",
+	"v1/parts [GET]": "Remembrall\\V1\\Parts\\Page",
 
 	"error [GET]": "Remembrall\\Page\\Error\\DefaultPage",
 

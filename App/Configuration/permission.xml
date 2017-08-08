@@ -9,6 +9,9 @@
 	<permission resource="parts/popular" role="guest"/>
 	<permission resource="parts/popular" role="member"/>
 
+	<permission resource="v1/parts" role="member"/>
+	<permission resource="v1/parts" role="guest"/>
+
 	<permission resource="parts/unreliable" role="guest"/>
 	<permission resource="parts/unreliable" role="member"/>
 
