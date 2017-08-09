@@ -35,6 +35,7 @@ final class Page extends \Tester\TestCase {
 
 	public function testRenderingError() {
 		$_GET['sort'] = 'foo';
+		$_GET['type'] = 'popular';
 		$dom = DomQuery::fromXml(
 			(new Parts\Page(
 				new Uri\FakeUri('', ''),

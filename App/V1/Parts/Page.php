@@ -3,12 +3,12 @@ declare(strict_types = 1);
 namespace Remembrall\V1\Parts;
 
 use Klapuch\Application;
+use Klapuch\Dataset;
 use Klapuch\Output;
+use Remembrall\Model\Misc;
 use Remembrall\Model\Web;
 use Remembrall\Page\Layout;
 use Remembrall\Response;
-use Klapuch\Dataset;
-use Remembrall\Model\Misc;
 
 final class Page extends Layout {
 	private const COLUMNS = ['url', 'expression', 'occurrences', 'language'];
