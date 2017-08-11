@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <permissions>
+    <!-- WEB -->
 	<permission resource="cron" role="guest"/>
 	<permission resource="cron" role="member"/>
 
@@ -8,9 +9,6 @@
 
 	<permission resource="parts/popular" role="guest"/>
 	<permission resource="parts/popular" role="member"/>
-
-	<permission resource="v1/parts" role="member"/>
-	<permission resource="v1/parts" role="guest"/>
 
 	<permission resource="parts/unreliable" role="guest"/>
 	<permission resource="parts/unreliable" role="member"/>
@@ -46,4 +44,8 @@
 	<permission resource="participants/invite" role="member"/>
 
 	<permission resource="participants/kick" role="member"/>
+
+	<!-- REST API -->
+	<permission resource="v1/parts" role="member"/>
+	<permission resource="v1/parts" role="guest"/>
 </permissions>

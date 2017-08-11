@@ -14,7 +14,7 @@ use Remembrall\Response;
 use Texy;
 
 final class PreviewPage extends Page\Layout {
-	public function response(array $parameters): Output\Template {
+	public function template(array $parameters): Output\Template {
 		if (isset($_SESSION['part'], $_SESSION['part']['url'], $_SESSION['part']['expression'], $_SESSION['part']['language'])) {
 			try {
 				return new Application\HtmlTemplate(

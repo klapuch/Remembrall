@@ -29,7 +29,7 @@ final class UpPage extends \Tester\TestCase {
 						new Uri\FakeUri('', '/sign/up'),
 						new Log\FakeLogs(),
 						new Ini\FakeSource($this->configuration)
-					))->response([])
+					))->template([])
 				))->render()
 			)->find('h1')[0]
 		);

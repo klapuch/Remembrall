@@ -18,7 +18,7 @@ final class InviteInteraction extends Page\Layout {
 		SUBJECT = 'Invitation to subscription',
 		CONTENT = __DIR__ . '/../../Messages/Participants/Invite/content.xsl';
 
-	public function response(array $participant): Output\Template {
+	public function template(array $participant): Output\Template {
 		try {
 			(new Form\HarnessedForm(
 				new Participants\InviteForm(

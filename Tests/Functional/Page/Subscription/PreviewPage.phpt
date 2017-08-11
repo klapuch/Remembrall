@@ -48,7 +48,7 @@ final class PreviewPage extends \Tester\TestCase {
 						new Uri\FakeUri('', '/subscription/preview'),
 						new Log\FakeLogs(),
 						new Ini\FakeSource($this->configuration)
-					))->response([])
+					))->template([])
 				))->render()
 			)->find('h1')[0]
 		);
@@ -71,7 +71,7 @@ final class PreviewPage extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->response([])
+			))->template([])
 		);
 	}
 
@@ -91,7 +91,7 @@ final class PreviewPage extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->response([])
+			))->template([])
 		);
 	}
 
@@ -112,7 +112,7 @@ final class PreviewPage extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->response([])
+			))->template([])
 		);
 	}
 }

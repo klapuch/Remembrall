@@ -22,7 +22,7 @@ final class UpInteraction extends Page\Layout {
 		CONTENT = __DIR__ . '/../../Messages/Sign/Up/content.xsl',
 		CONSTRAINT = __DIR__ . '/../../Messages/Sign/Up/constraint.xsd';
 
-	public function response(array $credentials): Output\Template {
+	public function template(array $credentials): Output\Template {
 		try {
 			(new Form\HarnessedForm(
 				new Sign\InForm($this->url, $this->csrf, new Form\Backup($_SESSION, $_POST)),

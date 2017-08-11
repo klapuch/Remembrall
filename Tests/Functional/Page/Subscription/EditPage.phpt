@@ -37,7 +37,7 @@ final class EditPage extends \Tester\TestCase {
 					new Uri\FakeUri('', '/subscription/edit/1'),
 					new Log\FakeLogs(),
 					new Ini\FakeSource($this->configuration)
-				))->response(['id' => 1])
+				))->template(['id' => 1])
 			))->render()
 		);
 		Assert::same('Edit subscription', (string) $dom->find('h1')[0]);

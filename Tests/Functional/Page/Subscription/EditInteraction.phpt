@@ -50,7 +50,7 @@ final class EditInteraction extends \Tester\TestCase {
 				new Uri\FakeUri('', ''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->response($_POST)
+			))->template($_POST)
 		);
 	}
 
@@ -73,7 +73,7 @@ final class EditInteraction extends \Tester\TestCase {
 				new Uri\FakeUri('', 'subscription/1'),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->response($_POST)
+			))->template($_POST)
 		);
 	}
 }

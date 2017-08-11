@@ -36,7 +36,7 @@ final class ConfirmPage extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->response(['code' => 'abc123'])
+			))->template(['code' => 'abc123'])
 		);
 	}
 
@@ -61,7 +61,7 @@ final class ConfirmPage extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->response(['code' => $code])
+			))->template(['code' => $code])
 		);
 	}
 
@@ -94,7 +94,7 @@ final class ConfirmPage extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->response(['code' => $code])
+			))->template(['code' => $code])
 		);
 		Assert::same(2, $_SESSION['id']);
 	}

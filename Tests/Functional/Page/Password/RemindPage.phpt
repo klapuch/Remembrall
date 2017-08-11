@@ -29,7 +29,7 @@ final class RemindPage extends \Tester\TestCase {
 						new Uri\FakeUri('', '/password/remind'),
 						new Log\FakeLogs(),
 						new Ini\FakeSource($this->configuration)
-					))->response([])
+					))->template([])
 				))->render()
 			)->find('h1')[0]
 		);

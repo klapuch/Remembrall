@@ -4,6 +4,7 @@
 	"sign/out [GET]": "Remembrall\\Page\\Sign\\OutPage",
 	"sign/up [GET]": "Remembrall\\Page\\Sign\\UpPage",
 	"sign/up [POST]": "Remembrall\\Page\\Sign\\UpInteraction",
+	"v1/tokens [POST]": "Remembrall\\V1\\Tokens\\Post",
 
 	"subscriptions [GET]": "Remembrall\\Page\\Subscriptions\\DefaultPage",
 
@@ -17,7 +18,7 @@
 
 	"parts/popular [GET]": "Remembrall\\Page\\Parts\\PopularPage",
 	"parts/unreliable [GET]": "Remembrall\\Page\\Parts\\UnreliablePage",
-	"v1/parts [GET]": "Remembrall\\V1\\Parts\\Page",
+	"v1/parts [GET]": "Remembrall\\V1\\Parts\\Get",
 
 	"error [GET]": "Remembrall\\Page\\Error\\DefaultPage",
 

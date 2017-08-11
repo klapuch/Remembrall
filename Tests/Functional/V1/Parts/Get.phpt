@@ -17,18 +17,18 @@ use Tester\DomQuery;
 
 require __DIR__ . '/../../../bootstrap.php';
 
-final class Page extends \Tester\TestCase {
+final class Get extends \Tester\TestCase {
 	use TestCase\Page;
 
 	public function testWorkingRendering() {
 		$_GET['type'] = 'popular';
 		Assert::noError(function() {
 			new \SimpleXMLElement(
-				(new Parts\Page(
+				(new Parts\Get(
 					new Uri\FakeUri('', ''),
 					new Log\FakeLogs(),
 					new Ini\FakeSource($this->configuration)
-				))->response([])->render()
+				))->template([])->render()
 			);
 		});
 	}
@@ -37,11 +37,11 @@ final class Page extends \Tester\TestCase {
 		$_GET['sort'] = 'foo';
 		$_GET['type'] = 'popular';
 		$dom = DomQuery::fromXml(
-			(new Parts\Page(
+			(new Parts\Get(
 				new Uri\FakeUri('', ''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->response([])->render()
+			))->template([])->render()
 		);
 		Assert::same(
 			'Following criteria are not allowed: "foo"',
@@ -50,4 +50,4 @@ final class Page extends \Tester\TestCase {
 	}
 }
 
-(new Page())->run();
+(new Get())->run();

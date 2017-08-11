@@ -37,7 +37,7 @@ final class OutPage extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->response([])
+			))->template([])
 		);
 	}
 
@@ -57,7 +57,7 @@ final class OutPage extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->response([])
+			))->template([])
 		);
 	}
 }

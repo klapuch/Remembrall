@@ -18,7 +18,7 @@ final class RemindInteraction extends Page\Layout {
 		CONTENT = __DIR__ . '/../../Messages/Password/Remind/content.xsl',
 		CONSTRAINT = __DIR__ . '/../../Messages/Password/Remind/constraint.xsd';
 
-	public function response(array $credentials): Output\Template {
+	public function template(array $credentials): Output\Template {
 		try {
 			(new Form\HarnessedForm(
 				new Password\RemindForm($this->url, $this->csrf, new Form\Backup($_SESSION, $_POST)),

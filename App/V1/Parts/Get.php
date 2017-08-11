@@ -10,12 +10,12 @@ use Remembrall\Model\Web;
 use Remembrall\Page\Layout;
 use Remembrall\Response;
 
-final class Page extends Layout {
+final class Get extends Layout {
 	private const COLUMNS = ['url', 'expression', 'occurrences', 'language'];
 	private const DEFAULT_PER_PAGE = 100;
 	private const START_PER_PAGE = 10;
 
-	public function response(array $parameters): Output\Template {
+	public function template(array $parameters): Output\Template {
 		try {
 			return new Application\RawTemplate(
 				new Response\XmlResponse(
@@ -57,7 +57,7 @@ final class Page extends Layout {
 					),
 				]
 			),
-			__DIR__ . '/templates/constraint.xsd'
+			__DIR__ . '/schema/constraint.xsd'
 		);
 	}
 }

@@ -11,7 +11,7 @@ use Klapuch\Storage;
 use Klapuch\Uri;
 use Predis;
 
-abstract class Layout implements Application\Request {
+abstract class Layout implements Application\View {
 	/** @var mixed[] */
 	protected $configuration;
 	/** @var \Klapuch\Uri\Uri */

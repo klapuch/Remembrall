@@ -31,7 +31,7 @@ final class PopularPage extends \Tester\TestCase {
 						new Uri\FakeUri('', '/sign/in'),
 						new Log\FakeLogs(),
 						new Ini\FakeSource($this->configuration)
-					))->response([])
+					))->template([])
 				))->render()
 			)->find('h1')[0]
 		);
@@ -55,7 +55,7 @@ final class PopularPage extends \Tester\TestCase {
 				new Uri\FakeUri('', 'parts/popular'),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->response([])
+			))->template([])
 		);
 	}
 }

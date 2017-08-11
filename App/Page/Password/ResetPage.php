@@ -12,7 +12,7 @@ use Remembrall\Page;
 use Remembrall\Response;
 
 final class ResetPage extends Page\Layout {
-	public function response(array $parameters): Output\Template {
+	public function template(array $parameters): Output\Template {
 		try {
 			(new Access\ValidReminderRule(
 				$this->database

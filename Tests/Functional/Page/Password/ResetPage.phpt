@@ -37,7 +37,7 @@ final class ResetPage extends \Tester\TestCase {
 						new Uri\FakeUri('', '/password/reset/123'),
 						new Log\FakeLogs(),
 						new Ini\FakeSource($this->configuration)
-					))->response(['reminder' => $reminder])
+					))->template(['reminder' => $reminder])
 				))->render()
 			)->find('h1')[0]
 		);
@@ -59,7 +59,7 @@ final class ResetPage extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->response(['reminder' => 'abc123'])
+			))->template(['reminder' => 'abc123'])
 		);
 	}
 }

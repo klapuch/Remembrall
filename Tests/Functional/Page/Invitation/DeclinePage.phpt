@@ -41,7 +41,7 @@ final class DeclinePage extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->response(['code' => $code])
+			))->template(['code' => $code])
 		);
 	}
 
@@ -61,7 +61,7 @@ final class DeclinePage extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->response(['code' => 'abc123'])
+			))->template(['code' => 'abc123'])
 		);
 	}
 }

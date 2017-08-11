@@ -40,7 +40,7 @@ final class InInteraction extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->response(['email' => 'me@boss.cz', 'password' => 'secret'])
+			))->template(['email' => 'me@boss.cz', 'password' => 'secret'])
 		);
 	}
 
@@ -64,7 +64,7 @@ final class InInteraction extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->response(['email' => 'klapuchdominik@gmail.com', 'password' => 'secret'])
+			))->template(['email' => 'klapuchdominik@gmail.com', 'password' => 'secret'])
 		);
 	}
 
@@ -88,7 +88,7 @@ final class InInteraction extends \Tester\TestCase {
 				new Uri\FakeUri(''),
 				new Log\FakeLogs(),
 				new Ini\FakeSource($this->configuration)
-			))->response(['email' => $_POST['email'], 'password' => $_POST['password']])
+			))->template(['email' => $_POST['email'], 'password' => $_POST['password']])
 		);
 		Assert::same(1, $_SESSION['id']);
 	}

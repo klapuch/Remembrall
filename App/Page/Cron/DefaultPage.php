@@ -12,7 +12,7 @@ use Remembrall\Model\Web;
 use Remembrall\Page;
 
 final class DefaultPage extends Page\Layout {
-	public function response(array $parameters): Output\Template {
+	public function template(array $parameters): Output\Template {
 		try {
 			$parts = new Web\HarnessedParts(
 				new Web\UnreliableParts(

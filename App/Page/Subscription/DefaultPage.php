@@ -10,7 +10,7 @@ use Remembrall\Page;
 use Remembrall\Response;
 
 final class DefaultPage extends Page\Layout {
-	public function response(array $parameters): Output\Template {
+	public function template(array $parameters): Output\Template {
 		return new Application\HtmlTemplate(
 			new Response\AuthenticatedResponse(
 				new Response\ComposedResponse(
