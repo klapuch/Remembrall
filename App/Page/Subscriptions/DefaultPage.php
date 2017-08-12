@@ -18,7 +18,7 @@ use Texy;
 final class DefaultPage extends Page\Layout {
 	private const FIELDS = ['last_update', 'interval', 'expression', 'url', 'language'];
 
-	public function response(array $parameters): Output\Template {
+	public function template(array $parameters): Output\Template {
 		$subscriptions = iterator_to_array(
 			(new Subscribing\FormattedSubscriptions(
 				new Subscribing\OwnedSubscriptions(
@@ -40,7 +40,7 @@ final class DefaultPage extends Page\Layout {
 			))->all()
 		);
 		return new Application\HtmlTemplate(
-			new Response\AuthenticatedResponse(
+			new Response\WebAuthentication(
 				new Response\ComposedResponse(
 					new Response\CombinedResponse(
 						new Response\FormResponse(

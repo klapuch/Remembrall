@@ -14,7 +14,7 @@ use Remembrall\Page;
 use Remembrall\Response;
 
 final class DefaultInteraction extends Page\Layout {
-	public function response(array $part): Output\Template {
+	public function template(array $part): Output\Template {
 		try {
 			(new Form\HarnessedForm(
 				new Subscription\PreviewForm(

@@ -18,7 +18,7 @@ final class RequestInteraction extends Page\Layout {
 		CONTENT = __DIR__ . '/../../Messages/Verification/Request/content.xsl',
 		CONSTRAINT = __DIR__ . '/../../Messages/Verification/Request/constraint.xsd';
 
-	public function response(array $credentials): Output\Template {
+	public function template(array $credentials): Output\Template {
 		try {
 			(new Form\HarnessedForm(
 				new Verification\RequestForm(

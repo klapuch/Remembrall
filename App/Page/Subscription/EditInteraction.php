@@ -13,7 +13,7 @@ use Remembrall\Page;
 use Remembrall\Response;
 
 final class EditInteraction extends Page\Layout {
-	public function response(array $subscription): Output\Template {
+	public function template(array $subscription): Output\Template {
 		try {
 			(new Form\HarnessedForm(
 				new Subscription\EditForm(

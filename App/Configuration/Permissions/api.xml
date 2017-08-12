@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<permissions>
+	<permission resource="v1/parts" role="member"/>
+	<permission resource="v1/parts" role="guest"/>
+</permissions>

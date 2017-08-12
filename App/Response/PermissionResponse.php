@@ -6,7 +6,7 @@ use Klapuch\Application;
 use Klapuch\Output;
 
 final class PermissionResponse implements Application\Response {
-	private const PERMISSION = __DIR__ . '/../Configuration/permission.xml';
+	private const PERMISSION = __DIR__ . '/../Configuration/Permissions/web.xml';
 
 	public function body(): Output\Format {
 		return new Output\RemoteXml(self::PERMISSION);

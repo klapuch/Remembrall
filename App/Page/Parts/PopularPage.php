@@ -11,10 +11,10 @@ use Remembrall\Response;
 use Texy;
 
 final class PopularPage extends Layout {
-	public function response(array $parameters): Output\Template {
+	public function template(array $parameters): Output\Template {
 		try {
 			return new Application\HtmlTemplate(
-				new Response\AuthenticatedResponse(
+				new Response\WebAuthentication(
 					new Response\ComposedResponse(
 						new Response\CombinedResponse(
 							new Response\PlainResponse(

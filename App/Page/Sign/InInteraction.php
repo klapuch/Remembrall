@@ -14,7 +14,7 @@ use Remembrall\Page;
 use Remembrall\Response;
 
 final class InInteraction extends Page\Layout {
-	public function response(array $credentials): Output\Template {
+	public function template(array $credentials): Output\Template {
 		try {
 			(new Form\HarnessedForm(
 				new Sign\InForm($this->url, $this->csrf, new Form\Backup($_SESSION, $_POST)),

@@ -10,7 +10,7 @@ use Remembrall\Page;
 use Remembrall\Response;
 
 final class DeclinePage extends Page\Layout {
-	public function response(array $parameters): Output\Template {
+	public function template(array $parameters): Output\Template {
 		try {
 			(new Subscribing\UnusedInvitation(
 				new Subscribing\ParticipantInvitation(

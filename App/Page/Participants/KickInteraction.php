@@ -18,7 +18,7 @@ final class KickInteraction extends Page\Layout {
 		SUBJECT = 'Kick from subscription',
 		CONTENT = __DIR__ . '/../../Messages/Participants/Kick/content.xsl';
 
-	public function response(array $participant): Output\Template {
+	public function template(array $participant): Output\Template {
 		(new Form\HarnessedForm(
 			new Participants\KickForm(
 				new Subscribing\FakeParticipant(),

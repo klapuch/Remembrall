@@ -13,7 +13,7 @@ use Remembrall\Page;
 use Remembrall\Response;
 
 final class ResetInteraction extends Page\Layout {
-	public function response(array $credentials): Output\Template {
+	public function template(array $credentials): Output\Template {
 		try {
 			(new Form\HarnessedForm(
 				new Password\ResetForm(

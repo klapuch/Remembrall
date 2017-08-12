@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+	<xsd:complexType name="credentials">
+		<xsd:sequence>
+			<xsd:element name="email" type="xsd:string"/>
+			<xsd:element name="password" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:element name="credentials" type="credentials"/>
+
+</xsd:schema>

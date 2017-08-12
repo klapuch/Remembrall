@@ -11,7 +11,7 @@ use Remembrall\Page;
 use Remembrall\Response;
 
 final class ConfirmPage extends Page\Layout {
-	public function response(array $parameters): Output\Template {
+	public function template(array $parameters): Output\Template {
 		try {
 			(new Access\ExistingVerificationCode(
 				new Access\ThrowawayVerificationCode(
