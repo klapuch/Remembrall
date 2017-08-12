@@ -13,7 +13,12 @@ use Remembrall\Response;
 final class Post extends Layout {
 	public function template(array $parameters): Output\Template {
 		try {
-			$credentials = new \SimpleXMLElement(file_get_contents('php://input'));
+			$credentials = new \SimpleXMLElement(
+				(new Output\ValidXml(
+					(new Application\PlainRequest())->body(),
+					__DIR__ . '/schema/constraint.xsd'
+				))->serialization()
+			);
 			(new Access\SessionEntrance(
 				new Access\VerifiedEntrance(
 					$this->database,
@@ -25,8 +30,19 @@ final class Post extends Layout {
 					)
 				),
 				$_SESSION,
-				new Internal\CookieExtension($this->configuration['PROPRIETARY_SESSIONS'])
+				new class implements Internal\Extension {
+					public function improve(): void {
+					}
+				}
 			))->enter([$credentials->email, $credentials->password]);
+			return new Application\RawTemplate(
+				new Response\XmlResponse(
+					new Response\PlainResponse(
+						new Output\Xml(['id' => session_id()], 'token')
+					),
+					201
+				)
+			);
 		} catch (\UnexpectedValueException $ex) {
 			return new Application\RawTemplate(new Response\XmlError($ex));
 		}
