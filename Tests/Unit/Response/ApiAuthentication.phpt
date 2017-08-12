@@ -26,7 +26,6 @@ final class ApiAuthentication extends Tester\TestCase {
 				new Uri\FakeUri(null, 'v1/parts')
 			))->headers()
 		);
-		Assert::false(http_response_code());
 	}
 
 	public function testProvidingDefaultRole() {

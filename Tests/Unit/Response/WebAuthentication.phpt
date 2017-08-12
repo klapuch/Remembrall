@@ -27,7 +27,6 @@ final class WebAuthentication extends Tester\TestCase {
 				new Uri\FakeUri(null, 'sign/in')
 			))->headers()
 		);
-		Assert::false(http_response_code());
 	}
 
 	public function testProvidingDefaultRole() {

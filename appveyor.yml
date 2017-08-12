@@ -45,5 +45,6 @@ install:
     - php composer.phar install --no-interaction --prefer-dist --no-scripts --no-progress --no-suggest --optimize-autoloader --classmap-authoritative --ignore-platform-reqs
 
 test_script:
+    - vendor/bin/phing snapshots
     - vendor/bin/phing win-tests
     - vendor/bin/phing win-cgi-tests
