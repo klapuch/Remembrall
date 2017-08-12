@@ -8,8 +8,9 @@ services:
         - POSTGRES_PASSWORD=postgres
         - POSTGRES_DB=remembrall
       volumes:
-#        - ./postgres/data:/var/lib/postgresql/data
+        - ./postgres/postgresql.conf:/etc/postgresql.conf
         - ./..:/var/www/Remembrall
+      command: postgres -c config_file=/etc/postgresql.conf
       ports:
         - 5432:5432
     adminer:
