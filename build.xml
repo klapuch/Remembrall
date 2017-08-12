@@ -96,6 +96,40 @@
 		</exec>
 	</target>
 
+	<target name="win-tests">
+		<exec executable="vendor/bin/tester" logoutput="true" passthru="true" checkreturn="true">
+			<arg value="-o"/>
+			<arg value="console"/>
+			<arg value="-s"/>
+			<arg value="-p"/>
+			<arg value="php"/>
+			<arg value="-c"/>
+			<arg path="Tests/php.win.ini"/>
+			<arg path="Tests/Unit"/>
+			<arg path="Tests/Misc"/>
+			<arg path="Tests/Postgres"/>
+			<arg path="Tests/Functional"/>
+			<arg path="Tests/Integration"/>
+		</exec>
+	</target>
+
+	<target name="win-cgi-tests">
+		<exec executable="vendor/bin/tester" logoutput="true" passthru="true" checkreturn="true">
+			<arg value="-o"/>
+			<arg value="console"/>
+			<arg value="-s"/>
+			<arg value="-p"/>
+			<arg value="php-cgi"/>
+			<arg value="-c"/>
+			<arg path="Tests/php.win.ini"/>
+			<arg path="Tests/Unit"/>
+			<arg path="Tests/Misc"/>
+			<arg path="Tests/Postgres"/>
+			<arg path="Tests/Functional"/>
+			<arg path="Tests/Integration"/>
+		</exec>
+	</target>
+
 	<target name="tester-coverage">
 		<exec executable="vendor/bin/tester" logoutput="true" passthru="true" checkreturn="true">
 			<arg value="-o"/>
