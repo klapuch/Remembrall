@@ -20,7 +20,7 @@ final class Get extends Layout {
 			return new Application\RawTemplate(
 				new Response\XmlResponse(
 					new Response\CachedResponse(
-						new Response\AuthenticatedResponse(
+						new Response\ApiAuthentication(
 							new Response\PlainResponse(
 								$this->format(
 									new Web\SuitedParts(

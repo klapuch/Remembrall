@@ -9,8 +9,8 @@ use Klapuch\Output;
 use Klapuch\UI;
 use Klapuch\Uri;
 
-final class AuthenticatedResponse implements Application\Response {
-	private const PERMISSION = __DIR__ . '/../Configuration/permission.xml';
+final class WebAuthentication implements Application\Response {
+	private const PERMISSION = __DIR__ . '/../Configuration/Permissions/web.xml';
 	private $origin;
 	private $user;
 	private $uri;
@@ -37,6 +37,7 @@ final class AuthenticatedResponse implements Application\Response {
 			)
 		);
 		if (!$role->allowed($this->uri->path())) {
+			http_response_code(403);
 			(new UI\PersistentFlashMessage(
 				$_SESSION
 			))->flash('You are not allowed to see the page.', 'danger');

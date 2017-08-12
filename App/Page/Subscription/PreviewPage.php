@@ -18,7 +18,7 @@ final class PreviewPage extends Page\Layout {
 		if (isset($_SESSION['part'], $_SESSION['part']['url'], $_SESSION['part']['expression'], $_SESSION['part']['language'])) {
 			try {
 				return new Application\HtmlTemplate(
-					new Response\AuthenticatedResponse(
+					new Response\WebAuthentication(
 						new Response\ComposedResponse(
 							new Response\CombinedResponse(
 								new Response\FormResponse(

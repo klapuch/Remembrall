@@ -40,7 +40,7 @@ final class DefaultPage extends Page\Layout {
 			))->all()
 		);
 		return new Application\HtmlTemplate(
-			new Response\AuthenticatedResponse(
+			new Response\WebAuthentication(
 				new Response\ComposedResponse(
 					new Response\CombinedResponse(
 						new Response\FormResponse(

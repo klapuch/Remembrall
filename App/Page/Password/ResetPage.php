@@ -18,7 +18,7 @@ final class ResetPage extends Page\Layout {
 				$this->database
 			))->apply($parameters['reminder']);
 			return new Application\HtmlTemplate(
-				new Response\AuthenticatedResponse(
+				new Response\WebAuthentication(
 					new Response\ComposedResponse(
 						new Response\CombinedResponse(
 							new Response\FormResponse(
