@@ -1,0 +1,5 @@
+{
+	"v1/tokens [POST]": "Remembrall\\V1\\Tokens\\Post",
+
+	"v1/parts [GET]": "Remembrall\\V1\\Parts\\Get"
+}
