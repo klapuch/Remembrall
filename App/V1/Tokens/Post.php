@@ -38,7 +38,7 @@ final class Post extends Layout {
 			return new Application\RawTemplate(
 				new Response\XmlResponse(
 					new Response\PlainResponse(
-						new Output\Xml(['id' => session_id()], 'token')
+						new Output\Xml(['@id' => session_id()], 'token')
 					),
 					201
 				)
