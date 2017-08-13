@@ -5,7 +5,6 @@ namespace Remembrall\V1\Tokens;
 use Klapuch\Access;
 use Klapuch\Application;
 use Klapuch\Encryption;
-use Klapuch\Internal;
 use Klapuch\Output;
 use Remembrall\Page;
 use Remembrall\Response;
@@ -19,7 +18,7 @@ final class Post extends Page\Api {
 					__DIR__ . '/schema/constraint.xsd'
 				))->serialization()
 			);
-			(new Access\SessionEntrance(
+			$user = (new Access\TokenEntrance(
 				new Access\VerifiedEntrance(
 					$this->database,
 					new Access\SecureEntrance(
@@ -28,17 +27,12 @@ final class Post extends Page\Api {
 							$this->configuration['KEYS']['password']
 						)
 					)
-				),
-				$_SESSION,
-				new class implements Internal\Extension {
-					public function improve(): void {
-					}
-				}
+				)
 			))->enter([$credentials->email, $credentials->password]);
 			return new Application\RawTemplate(
 				new Response\XmlResponse(
 					new Response\PlainResponse(
-						new Output\Xml(['@id' => session_id()], 'token')
+						new Output\Xml(['@id' => $user->id()], 'token')
 					),
 					201
 				)
