@@ -23,7 +23,7 @@ final class OwnedSubscription extends \Tester\TestCase {
 			(new Subscribing\OwnedSubscription(
 				new Subscribing\FakeSubscription(),
 				1,
-				new Access\FakeUser(666),
+				new Access\FakeUser('666'),
 				$this->database
 			))->cancel();
 		}, \UnexpectedValueException::class);
@@ -32,7 +32,7 @@ final class OwnedSubscription extends \Tester\TestCase {
 			(new Subscribing\OwnedSubscription(
 				new Subscribing\FakeSubscription(),
 				1,
-				new Access\FakeUser(666),
+				new Access\FakeUser('666'),
 				$this->database
 			))->edit(new Time\FakeInterval(null, null, 'PT10M'));
 		}, \UnexpectedValueException::class);
@@ -41,7 +41,7 @@ final class OwnedSubscription extends \Tester\TestCase {
 			(new Subscribing\OwnedSubscription(
 				new Subscribing\FakeSubscription(),
 				1,
-				new Access\FakeUser(666),
+				new Access\FakeUser('666'),
 				$this->database
 			))->notify();
 		}, \UnexpectedValueException::class);
@@ -49,7 +49,7 @@ final class OwnedSubscription extends \Tester\TestCase {
 			(new Subscribing\OwnedSubscription(
 				new Subscribing\FakeSubscription(),
 				1,
-				new Access\FakeUser(666),
+				new Access\FakeUser('666'),
 				$this->database
 			))->print(new Output\FakeFormat(''));
 		}, \UnexpectedValueException::class);
@@ -66,7 +66,7 @@ final class OwnedSubscription extends \Tester\TestCase {
 				(new Subscribing\OwnedSubscription(
 					new Subscribing\FakeSubscription(),
 					2,
-					new Access\FakeUser(666),
+					new Access\FakeUser('666'),
 					$this->database
 				))->cancel();
 			}
@@ -76,7 +76,7 @@ final class OwnedSubscription extends \Tester\TestCase {
 				(new Subscribing\OwnedSubscription(
 					new Subscribing\FakeSubscription(),
 					2,
-					new Access\FakeUser(666),
+					new Access\FakeUser('666'),
 					$this->database
 				))->edit(new Time\FakeInterval(null, null, 'PT10M'));
 			}
@@ -86,7 +86,7 @@ final class OwnedSubscription extends \Tester\TestCase {
 				(new Subscribing\OwnedSubscription(
 					new Subscribing\FakeSubscription(),
 					2,
-					new Access\FakeUser(666),
+					new Access\FakeUser('666'),
 					$this->database
 				))->notify();
 			}
@@ -96,7 +96,7 @@ final class OwnedSubscription extends \Tester\TestCase {
 				(new Subscribing\OwnedSubscription(
 					new Subscribing\FakeSubscription(),
 					2,
-					new Access\FakeUser(666),
+					new Access\FakeUser('666'),
 					$this->database
 				))->print(new Output\FakeFormat(''));
 			}

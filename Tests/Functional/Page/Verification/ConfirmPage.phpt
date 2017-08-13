@@ -96,7 +96,7 @@ final class ConfirmPage extends \Tester\TestCase {
 				new Ini\FakeSource($this->configuration)
 			))->template(['code' => $code])
 		);
-		Assert::same(2, $_SESSION['id']);
+		Assert::same('2', $_SESSION['id']);
 	}
 }
 

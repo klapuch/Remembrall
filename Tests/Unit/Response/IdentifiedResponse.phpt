@@ -18,7 +18,7 @@ final class IdentifiedResponse extends Tester\TestCase {
 		Assert::contains(
 			'<user id="1" role="member" email="foo@bar.cz"/>',
 			(new Response\IdentifiedResponse(
-				new Access\FakeUser(1, ['role' => 'member', 'email' => 'foo@bar.cz'])
+				new Access\FakeUser('1', ['role' => 'member', 'email' => 'foo@bar.cz'])
 			))->body()->serialization()
 		);
 	}
@@ -27,7 +27,7 @@ final class IdentifiedResponse extends Tester\TestCase {
 		Assert::contains(
 			'<user id="1"/>',
 			(new Response\IdentifiedResponse(
-				new Access\FakeUser(1, [])
+				new Access\FakeUser('1', [])
 			))->body()->serialization()
 		);
 	}
@@ -36,7 +36,7 @@ final class IdentifiedResponse extends Tester\TestCase {
 		Assert::contains(
 			'<?xml',
 			(new Response\IdentifiedResponse(
-				new Access\FakeUser(1, [])
+				new Access\FakeUser('1', [])
 			))->body()->serialization()
 		);
 	}

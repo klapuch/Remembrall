@@ -21,6 +21,6 @@ final class TestUsers implements Access\Users {
 			"INSERT INTO verification_codes (user_id, code, used, used_at) VALUES
 			(1, 'c7fb39e3b3e0d9efa6fce134b703fcea5c4c4196cef0dcaccf:3b59944087428cd5b95be4f18dcf06b8815b9fa6', TRUE, NOW());"
 		);
-		return new Access\ConstantUser(1, []);
+		return new Access\ConstantUser('1', []);
 	}
 }

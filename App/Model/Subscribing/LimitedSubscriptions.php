@@ -42,7 +42,7 @@ final class LimitedSubscriptions implements Subscriptions {
 				0,
 				new \Exception(
 					sprintf(
-						'User id "%d" reached the maximum of subscribed parts',
+						'User id "%s" reached the maximum of subscribed parts',
 						$this->user->id()
 					)
 				)

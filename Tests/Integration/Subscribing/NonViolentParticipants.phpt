@@ -128,7 +128,7 @@ final class NonViolentParticipants extends \Tester\TestCase {
 			(1, 1, NOW()), (2, 1, NOW()), (3, 1, NOW()), (4, 1, NOW()), (5, 1, NOW())'
 		);
 		$participants = (new Subscribing\NonViolentParticipants(
-			new Access\FakeUser(3),
+			new Access\FakeUser('3'),
 			$this->database
 		))->all();
 		$print = $participants->current()->print(new Output\FakeFormat())->serialization();

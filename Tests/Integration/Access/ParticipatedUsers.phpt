@@ -62,8 +62,8 @@ final class ParticipatedUsers extends \Tester\TestCase {
 		Assert::same(
 			[$user->id()],
 			array_unique([
-				$subscriptions[3]['user_id'],
-				$subscriptions[4]['user_id'],
+				(string) $subscriptions[3]['user_id'],
+				(string) $subscriptions[4]['user_id'],
 			])
 		);
 		Assert::same(3, $subscriptions[3]['part_id']);

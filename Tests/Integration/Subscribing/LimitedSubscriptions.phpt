@@ -23,7 +23,7 @@ final class LimitedSubscriptions extends \Tester\TestCase {
 			function() {
 				(new Subscribing\LimitedSubscriptions(
 					new Subscribing\FakeSubscriptions(),
-					new Access\FakeUser(666),
+					new Access\FakeUser('666'),
 					$this->database
 				))->subscribe(
 					new Uri\FakeUri('url'),
@@ -55,7 +55,7 @@ final class LimitedSubscriptions extends \Tester\TestCase {
 		$ex = Assert::exception(function() {
 			(new Subscribing\LimitedSubscriptions(
 				new Subscribing\FakeSubscriptions(),
-				new Access\FakeUser(666),
+				new Access\FakeUser('666'),
 				$this->database
 			))->subscribe(
 				new Uri\FakeUri('url'),

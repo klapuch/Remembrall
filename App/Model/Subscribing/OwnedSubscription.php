@@ -35,7 +35,7 @@ final class OwnedSubscription implements Subscription {
 				0,
 				new \Exception(
 					sprintf(
-						'User "%d" is not owner of "%d" subscription for cancelling',
+						'User "%s" is not owner of "%d" subscription for cancelling',
 						$this->owner->id(),
 						$this->id
 					)
@@ -52,7 +52,7 @@ final class OwnedSubscription implements Subscription {
 				0,
 				new \Exception(
 					sprintf(
-						'User "%d" is not owner of "%d" subscription for editing',
+						'User "%s" is not owner of "%d" subscription for editing',
 						$this->owner->id(),
 						$this->id
 					)
@@ -69,7 +69,7 @@ final class OwnedSubscription implements Subscription {
 				0,
 				new \Exception(
 					sprintf(
-						'User "%d" is not owner of "%d" subscription for notifying',
+						'User "%s" is not owner of "%d" subscription for notifying',
 						$this->owner->id(),
 						$this->id
 					)
@@ -86,7 +86,7 @@ final class OwnedSubscription implements Subscription {
 				0,
 				new \Exception(
 					sprintf(
-						'User "%d" is not owner of "%d" subscription for seeing',
+						'User "%s" is not owner of "%d" subscription for seeing',
 						$this->owner->id(),
 						$this->id
 					)

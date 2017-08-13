@@ -22,7 +22,7 @@ final class ApiAuthentication extends Tester\TestCase {
 			['foo' => 'bar'],
 			(new Response\ApiAuthentication(
 				new Response\PlainResponse(new Output\FakeFormat('foo'), ['foo' => 'bar']),
-				new Access\FakeUser(1, ['role' => 'guest']),
+				new Access\FakeUser('1', ['role' => 'guest']),
 				new Uri\FakeUri(null, 'v1/parts')
 			))->headers()
 		);
@@ -33,7 +33,7 @@ final class ApiAuthentication extends Tester\TestCase {
 			['foo' => 'bar'],
 			(new Response\ApiAuthentication(
 				new Response\PlainResponse(new Output\FakeFormat('foo'), ['foo' => 'bar']),
-				new Access\FakeUser(1, []),
+				new Access\FakeUser('1', []),
 				new Uri\FakeUri(null, 'v1/parts')
 			))->headers()
 		);
@@ -42,7 +42,7 @@ final class ApiAuthentication extends Tester\TestCase {
 	public function testForbiddenStatusCodeForDeniedAccess() {
 		(new Response\ApiAuthentication(
 			new Response\PlainResponse(new Output\FakeFormat('foo'), ['foo' => 'bar']),
-			new Access\FakeUser(1, ['role' => 'guest']),
+			new Access\FakeUser('1', ['role' => 'guest']),
 			new Uri\FakeUri('localhost', 'foo')
 		))->headers();
 		Assert::same(403, http_response_code());
@@ -55,7 +55,7 @@ final class ApiAuthentication extends Tester\TestCase {
 ',
 			(new Response\ApiAuthentication(
 				new Response\PlainResponse(new Output\FakeFormat('foo'), ['foo' => 'bar']),
-				new Access\FakeUser(1, ['role' => 'guest']),
+				new Access\FakeUser('1', ['role' => 'guest']),
 				new Uri\FakeUri('localhost', 'foo')
 			))->body()->serialization()
 		);

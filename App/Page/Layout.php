@@ -45,7 +45,7 @@ abstract class Layout implements Application\View {
 		$this->user = new Access\Guest();
 		if (isset($_SESSION['id'])) {
 			$this->user = new Access\CachedUser(
-				new Access\RegisteredUser($_SESSION['id'], $this->database)
+				new Access\RegisteredUser((string) $_SESSION['id'], $this->database)
 			);
 		}
 	}

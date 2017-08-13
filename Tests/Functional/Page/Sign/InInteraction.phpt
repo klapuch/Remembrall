@@ -90,7 +90,7 @@ final class InInteraction extends \Tester\TestCase {
 				new Ini\FakeSource($this->configuration)
 			))->template(['email' => $_POST['email'], 'password' => $_POST['password']])
 		);
-		Assert::same(1, $_SESSION['id']);
+		Assert::same('1', $_SESSION['id']);
 	}
 }
 

@@ -18,7 +18,7 @@ final class IdentifiedResponse implements Application\Response {
 		$dom = new \DOMDocument();
 		$dom->loadXML(
 			sprintf(
-				'<user id="%d" %s/>',
+				'<user id="%s" %s/>',
 				$this->user->id(),
 				(new Markup\ConcatenatedAttribute(
 					...array_map(

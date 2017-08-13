@@ -26,7 +26,7 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 			(1, 'www.google.com', ROW('//google', 'xpath'), 'google content', 'google snap')"
 		);
 		(new Subscribing\OwnedSubscriptions(
-			new Access\FakeUser(666),
+			new Access\FakeUser('666'),
 			$this->database
 		))->subscribe(
 			new Uri\FakeUri('www.google.com'),
@@ -49,7 +49,7 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 			('www.google.com', ROW('//google', 'xpath'), 'google content', 'google snap')"
 		);
 		$subscriptions = new Subscribing\OwnedSubscriptions(
-			new Access\FakeUser(666),
+			new Access\FakeUser('666'),
 			$this->database
 		);
 		$subscribe = function(string $language = 'xpath') use ($subscriptions) {
@@ -101,7 +101,7 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 			(5, 'www.google.com', ROW('//google', 'xpath'), 'google content', 'google snap')"
 		);
 		$subscriptions = (new Subscribing\OwnedSubscriptions(
-			new Access\FakeUser(1),
+			new Access\FakeUser('1'),
 			$this->database
 		))->all(new Dataset\FakeSelection('', []));
 		$subscription = $subscriptions->current()->print(new Output\FakeFormat(''))->serialization();
@@ -130,7 +130,7 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 		);
 		$this->truncate(['part_visits']);
 		$subscriptions = (new Subscribing\OwnedSubscriptions(
-			new Access\FakeUser(1),
+			new Access\FakeUser('1'),
 			$this->database
 		))->all(new Dataset\FakeSelection('', []));
 		$subscription = $subscriptions->current();
@@ -139,7 +139,7 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 
 	public function testEmptyIterating() {
 		$subscriptions = (new Subscribing\OwnedSubscriptions(
-			new Access\FakeUser(1),
+			new Access\FakeUser('1'),
 			$this->database
 		))->all(new Dataset\FakeSelection('', []));
 		Assert::null($subscriptions->current());

@@ -23,7 +23,7 @@ final class WebAuthentication extends Tester\TestCase {
 			['foo' => 'bar'],
 			(new Response\WebAuthentication(
 				new Response\PlainResponse(new Output\FakeFormat('foo'), ['foo' => 'bar']),
-				new Access\FakeUser(1, ['role' => 'guest']),
+				new Access\FakeUser('1', ['role' => 'guest']),
 				new Uri\FakeUri(null, 'sign/in')
 			))->headers()
 		);
@@ -34,7 +34,7 @@ final class WebAuthentication extends Tester\TestCase {
 			['foo' => 'bar'],
 			(new Response\WebAuthentication(
 				new Response\PlainResponse(new Output\FakeFormat('foo'), ['foo' => 'bar']),
-				new Access\FakeUser(1, []),
+				new Access\FakeUser('1', []),
 				new Uri\FakeUri(null, 'sign/in')
 			))->headers()
 		);
@@ -46,7 +46,7 @@ final class WebAuthentication extends Tester\TestCase {
 			['Location' => 'localhost/sign/in', 'foo' => 'bar'],
 			(new Response\WebAuthentication(
 				new Response\PlainResponse(new Output\FakeFormat('foo'), ['foo' => 'bar']),
-				new Access\FakeUser(1, ['role' => 'guest']),
+				new Access\FakeUser('1', ['role' => 'guest']),
 				new Uri\FakeUri('localhost', 'sign/out')
 			))->headers()
 		);
@@ -56,7 +56,7 @@ final class WebAuthentication extends Tester\TestCase {
 		$_SESSION = [];
 		(new Response\WebAuthentication(
 			new Response\PlainResponse(new Output\FakeFormat('foo'), ['foo' => 'bar']),
-			new Access\FakeUser(1, ['role' => 'guest']),
+			new Access\FakeUser('1', ['role' => 'guest']),
 			new Uri\FakeUri('localhost', 'sign/out')
 		))->headers();
 		Assert::same(403, http_response_code());
@@ -66,7 +66,7 @@ final class WebAuthentication extends Tester\TestCase {
 		$_SESSION = [];
 		(new Response\WebAuthentication(
 			new Response\PlainResponse(new Output\FakeFormat('foo'), ['foo' => 'bar']),
-			new Access\FakeUser(1, ['role' => 'guest']),
+			new Access\FakeUser('1', ['role' => 'guest']),
 			new Uri\FakeUri('localhost', 'sign/out')
 		))->headers();
 		Assert::same(
@@ -81,7 +81,7 @@ final class WebAuthentication extends Tester\TestCase {
 			['Location' => 'localhost/'],
 			(new Response\WebAuthentication(
 				new Response\PlainResponse(new Output\FakeFormat('foo'), []),
-				new Access\FakeUser(1, ['role' => 'member']),
+				new Access\FakeUser('1', ['role' => 'member']),
 				new Uri\FakeUri('localhost', 'sign/in')
 			))->headers()
 		);
@@ -93,7 +93,7 @@ final class WebAuthentication extends Tester\TestCase {
 			['Location' => 'localhost/sign/in', 'foo' => 'bar'],
 			(new Response\WebAuthentication(
 				new Response\PlainResponse(new Output\FakeFormat('foo'), ['foo' => 'bar', 'Location' => 'foo']),
-				new Access\FakeUser(1, ['role' => 'guest']),
+				new Access\FakeUser('1', ['role' => 'guest']),
 				new Uri\FakeUri('localhost', 'sign/out')
 			))->headers()
 		);
