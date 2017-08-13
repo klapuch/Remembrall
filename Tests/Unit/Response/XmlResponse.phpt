@@ -83,8 +83,8 @@ final class XmlResponse extends Tester\TestCase {
 				new Response\PlainResponse(
 					new Output\FakeFormat('<?xml version="1.0"?><foo/>'),
 					[]
-				))
-			)->body()->serialization()
+				)
+			))->body()->serialization()
 		);
 	}
 
@@ -97,8 +97,8 @@ final class XmlResponse extends Tester\TestCase {
 				new Response\PlainResponse(
 					new Output\FakeFormat('<foo/>'),
 					[]
-				))
-			)->body()->serialization()
+				)
+			))->body()->serialization()
 		);
 	}
 
@@ -111,8 +111,8 @@ final class XmlResponse extends Tester\TestCase {
 				new Response\PlainResponse(
 					new Output\FakeFormat('<?xml version="1.0"?><foo id="1"></foo>'),
 					[]
-				))
-			)->body()->serialization()
+				)
+			))->body()->serialization()
 		);
 	}
 }

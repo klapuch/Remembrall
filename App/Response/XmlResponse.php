@@ -31,17 +31,7 @@ final class XmlResponse implements Application\Response {
 				throw new \UnexpectedValueException(
 					'XML document is not valid',
 					0,
-					new \Exception(
-						implode(
-							' | ',
-							array_map(
-								function(\LibXMLError $error): string {
-									return trim($error->message);
-								},
-								libxml_get_errors()
-							)
-						)
-					)
+					new \Exception($this->error(...libxml_get_errors()))
 				);
 			}
 			return new class($body, $xml) implements Output\Format {
@@ -80,5 +70,17 @@ final class XmlResponse implements Application\Response {
 	public function headers(): array {
 		http_response_code($this->code);
 		return self::HEADERS + array_change_key_case($this->origin->headers(), CASE_LOWER);
+	}
+
+	private function error(\LibXMLError ...$errors): string {
+		return implode(
+			' | ',
+			array_map(
+				function(\LibXMLError $error): string {
+					return trim($error->message);
+				},
+				$errors
+			)
+		);
 	}
 }
