@@ -10,7 +10,7 @@ use Klapuch\Output;
 use Remembrall\Page;
 use Remembrall\Response;
 
-final class Post extends Page\Layout {
+final class Post extends Page\Api {
 	public function template(array $parameters): Output\Template {
 		try {
 			$credentials = new \SimpleXMLElement(

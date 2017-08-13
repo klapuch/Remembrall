@@ -7,10 +7,10 @@ use Klapuch\Dataset;
 use Klapuch\Output;
 use Remembrall\Model\Misc;
 use Remembrall\Model\Web;
-use Remembrall\Page\Layout;
+use Remembrall\Page\Api;
 use Remembrall\Response;
 
-final class Get extends Layout {
+final class Get extends Api {
 	private const COLUMNS = ['url', 'expression', 'occurrences', 'language'];
 	private const DEFAULT_PER_PAGE = 100;
 	private const START_PER_PAGE = 10;
