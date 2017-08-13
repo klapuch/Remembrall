@@ -44,7 +44,34 @@ final class XmlResponse implements Application\Response {
 					)
 				);
 			}
-			return $body;
+			return new class($body, $xml) implements Output\Format {
+				private $origin;
+				private $xml;
+
+				public function __construct(Output\Format $origin, \SimpleXMLElement $xml) {
+					$this->origin = $origin;
+					$this->xml = $xml;
+				}
+
+				public function with($tag, $content = null): Output\Format {
+					return $this->origin->with($tag, $content);
+				}
+
+				public function serialization(): string {
+					$dom = new \DOMDocument('1.0', 'utf-8');
+					$dom->appendChild(
+						$dom->importNode(
+							dom_import_simplexml($this->xml),
+							true
+						)
+					);
+					return $dom->saveXML();
+				}
+
+				public function adjusted($tag, callable $adjustment): Output\Format {
+					return $this->origin->adjusted($tag, $adjustment);
+				}
+			};
 		} finally {
 			libxml_use_internal_errors($previous);
 		}

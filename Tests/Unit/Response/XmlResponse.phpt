@@ -74,11 +74,45 @@ final class XmlResponse extends Tester\TestCase {
 		Assert::same($switch, libxml_use_internal_errors());
 	}
 
-	public function testPassingWithValidXml() {
-		$format = new Output\FakeFormat('<?xml version="1.0" encoding="utf-8"?><foo/>');
-		Assert::same(
-			(new Response\XmlResponse(new Response\PlainResponse($format, [])))->body(),
-			$format
+	public function testRewritingEncodingToUtf8() {
+		Assert::equal(
+			'<?xml version="1.0" encoding="utf-8"?>
+<foo/>
+',
+			(new Response\XmlResponse(
+				new Response\PlainResponse(
+					new Output\FakeFormat('<?xml version="1.0"?><foo/>'),
+					[]
+				))
+			)->body()->serialization()
+		);
+	}
+
+	public function testAddingXmlDeclaration() {
+		Assert::equal(
+			'<?xml version="1.0" encoding="utf-8"?>
+<foo/>
+',
+			(new Response\XmlResponse(
+				new Response\PlainResponse(
+					new Output\FakeFormat('<foo/>'),
+					[]
+				))
+			)->body()->serialization()
+		);
+	}
+
+	public function testMakingEmptyTag() {
+		Assert::equal(
+			'<?xml version="1.0" encoding="utf-8"?>
+<foo id="1"/>
+',
+			(new Response\XmlResponse(
+				new Response\PlainResponse(
+					new Output\FakeFormat('<?xml version="1.0"?><foo id="1"></foo>'),
+					[]
+				))
+			)->body()->serialization()
 		);
 	}
 }
