@@ -7,10 +7,10 @@ use Klapuch\Application;
 use Klapuch\Encryption;
 use Klapuch\Internal;
 use Klapuch\Output;
-use Remembrall\Page\Layout;
+use Remembrall\Page;
 use Remembrall\Response;
 
-final class Post extends Layout {
+final class Post extends Page\Layout {
 	public function template(array $parameters): Output\Template {
 		try {
 			$credentials = new \SimpleXMLElement(
