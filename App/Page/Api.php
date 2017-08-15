@@ -34,11 +34,8 @@ abstract class Api implements Application\View {
 			$this->configuration['DATABASE']['user'],
 			$this->configuration['DATABASE']['password']
 		);
-		$this->user = new Access\Guest();
-		if (isset($_SESSION['id'])) {
-			$this->user = new Access\CachedUser(
-				new Access\RegisteredUser($_SESSION['id'], $this->database)
-			);
-		}
+		$this->user = (new Access\ApiEntrance(
+			$this->database
+		))->enter((new Application\PlainRequest())->headers());
 	}
 }
