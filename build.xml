@@ -28,7 +28,7 @@
 		<exec executable="vendor/bin/phpstan" logoutput="true" passthru="true" checkreturn="true">
 			<arg value="analyse"/>
 			<arg value="-l"/>
-			<arg value="7"/>
+			<arg value="max"/>
 			<arg value="-c"/>
 			<arg path="phpstan.neon"/>
 			<arg path="App"/>
