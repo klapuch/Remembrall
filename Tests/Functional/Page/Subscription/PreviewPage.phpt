@@ -39,7 +39,7 @@ final class PreviewPage extends \Tester\TestCase {
 			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
 			(1, {$user->id()}, 4, 'PT3M', NOW(), '')"
 		);
-		$_SESSION['id'] = 1;
+		$_SESSION['id'] = '1';
 		Assert::contains(
 			'Preview of ',
 			(string) DomQuery::fromHtml(

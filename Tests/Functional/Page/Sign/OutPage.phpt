@@ -21,7 +21,7 @@ final class OutPage extends \Tester\TestCase {
 	use TestCase\Page;
 
 	public function testSuccessLeaving() {
-		$_SESSION['id'] = 1;
+		$_SESSION['id'] = '1';
 		Assert::equal(
 			new Application\HtmlTemplate(
 				new Response\InformativeResponse(
