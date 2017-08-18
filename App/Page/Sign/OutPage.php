@@ -31,7 +31,7 @@ final class OutPage extends Page\Layout {
 					$_SESSION
 				)
 			);
-		} catch (\UnexpectedValueException | \LogicException $ex) {
+		} catch (\UnexpectedValueException $ex) {
 			return new Application\HtmlTemplate(
 				new Response\InformativeResponse(
 					new Response\RedirectResponse(
