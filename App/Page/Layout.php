@@ -42,11 +42,8 @@ abstract class Layout implements Application\View {
 		);
 		$this->redis = new Predis\Client($this->configuration['REDIS']['uri']);
 		$this->csrf = new Csrf\Memory($_SESSION, $_POST, $_GET);
-		$this->user = new Access\Guest();
-		if (isset($_SESSION['id'])) {
-			$this->user = new Access\CachedUser(
-				new Access\RegisteredUser((string) $_SESSION['id'], $this->database)
-			);
-		}
+		$this->user = (new Access\WebEntrance(
+			$this->database
+		))->enter($_SESSION);
 	}
 }
