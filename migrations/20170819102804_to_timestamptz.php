@@ -37,5 +37,18 @@ END;
 $$;
 SQL
 		);
+		$this->execute(
+			<<< SQL
+DROP FUNCTION readable_subscriptions();
+CREATE FUNCTION readable_subscriptions() RETURNS TABLE(id integer, user_id integer, part_id integer, "interval" interval, last_update timestamp with time zone, snapshot character varying, interval_seconds integer)
+	LANGUAGE sql
+	AS $$
+		SET intervalstyle = 'ISO_8601';
+		SELECT *, extract(epoch from interval)::integer AS interval_seconds
+		FROM subscriptions;
+	$$;
+SQL
+
+		);
 	}
 }
