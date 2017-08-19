@@ -30,7 +30,7 @@ final class NonViolentParticipants extends \Tester\TestCase {
 		Assert::null($participants[0]['decided_at']);
 		Assert::match('~[0-9a-fA-F]{64}~', $participants[0]['code']);
 		Assert::same(
-			(new \DateTime())->format('Y-m-d'),
+			(new \DateTime($this->database->query('SELECT NOW()')->fetchColumn()))->format('Y-m-d'),
 			(new \DateTime($participants[0]['invited_at']))->format('Y-m-d')
 		);
 	}

@@ -29,7 +29,7 @@ final class ParticipantInvitation extends \Tester\TestCase {
 		$participant = $this->database->query('SELECT * FROM participants')->fetch();
 		Assert::true($participant['accepted']);
 		Assert::same(
-			(new \DateTime())->format('Y-m-d'),
+			(new \DateTime($this->database->query('SELECT NOW()')->fetchColumn()))->format('Y-m-d'),
 			(new \DateTime($participant['decided_at']))->format('Y-m-d')
 		);
 	}
@@ -47,7 +47,7 @@ final class ParticipantInvitation extends \Tester\TestCase {
 		$participant = $this->database->query('SELECT * FROM participants')->fetch();
 		Assert::false($participant['accepted']);
 		Assert::same(
-			(new \DateTime())->format('Y-m-d'),
+			(new \DateTime($this->database->query('SELECT NOW()')->fetchColumn()))->format('Y-m-d'),
 			(new \DateTime($participant['decided_at']))->format('Y-m-d')
 		);
 	}
