@@ -35,12 +35,12 @@ final class SuitedParts implements Parts {
 	 */
 	private function parts(string $type): Parts {
 		if (in_array(strtolower($type), self::TYPES)) {
-			if (strcasecmp($type, 'popular')) {
+			if (strcasecmp($type, 'popular') === 0) {
 				return new PopularParts(
 					new CollectiveParts($this->database),
 					$this->database
 				);
-			} elseif (strcasecmp($type, 'unreliable')) {
+			} elseif (strcasecmp($type, 'unreliable') === 0) {
 				return new UnreliableParts(
 					new CollectiveParts($this->database),
 					$this->database
