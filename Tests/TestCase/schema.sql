@@ -691,8 +691,22 @@ SELECT *, extract(epoch from interval)::integer AS interval_seconds
 
 			$$;
 
-
 ALTER FUNCTION public.readable_subscriptions() OWNER TO postgres;
+
+
+--
+-- Name: to_ISO8601(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+CREATE FUNCTION to_ISO8601(timestamptz) RETURNS text
+LANGUAGE plpgsql IMMUTABLE STRICT
+AS $$
+BEGIN
+	RETURN to_char ($1, 'YYYY-MM-DD"T"HH24:MI:SS"Z"');
+END
+$$;
+
+ALTER FUNCTION public.to_ISO8601() OWNER TO postgres;
+
 
 --
 -- Name: record_invitation(); Type: FUNCTION; Schema: public; Owner: postgres

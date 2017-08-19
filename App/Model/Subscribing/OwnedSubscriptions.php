@@ -63,7 +63,7 @@ final class OwnedSubscriptions implements Subscriptions {
 			$this->database,
 			$selection->expression(
 				'SELECT subscriptions.id, (expression).value AS expression, page_url AS url, interval, (expression).language,
-				visited_at, last_update, content
+				to_ISO8601(visited_at) AS visited_at, to_ISO8601(last_update) AS last_update, content
 				FROM parts
 				LEFT JOIN (
 					SELECT part_id, MAX(visited_at) AS visited_at
