@@ -33,28 +33,28 @@ CREATE SCHEMA unit_tests;
 ALTER SCHEMA unit_tests OWNER TO postgres;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner:
 --
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner:
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
--- Name: citext; Type: EXTENSION; Schema: -; Owner: 
+-- Name: citext; Type: EXTENSION; Schema: -; Owner:
 --
 
 CREATE EXTENSION IF NOT EXISTS citext WITH SCHEMA public;
 
 
 --
--- Name: EXTENSION citext; Type: COMMENT; Schema: -; Owner: 
+-- Name: EXTENSION citext; Type: COMMENT; Schema: -; Owner:
 --
 
 COMMENT ON EXTENSION citext IS 'data type for case-insensitive character strings';
@@ -682,7 +682,7 @@ ALTER FUNCTION public.notify_subscriptions() OWNER TO postgres;
 -- Name: readable_subscriptions(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION readable_subscriptions() RETURNS TABLE(id integer, user_id integer, part_id integer, "interval" interval, last_update timestamp without time zone, snapshot character varying, interval_seconds integer)
+CREATE FUNCTION readable_subscriptions() RETURNS TABLE(id integer, user_id integer, part_id integer, "interval" interval, last_update timestamp with time zone, snapshot character varying, interval_seconds integer)
     LANGUAGE sql
     AS $$
 SET intervalstyle = 'ISO_8601';
@@ -1295,8 +1295,8 @@ CREATE TABLE forgotten_passwords (
     user_id integer NOT NULL,
     reminder character varying(141) NOT NULL,
     used boolean NOT NULL,
-    reminded_at timestamp without time zone NOT NULL,
-    expire_at timestamp without time zone NOT NULL
+    reminded_at timestamp with time zone NOT NULL,
+    expire_at timestamp with time zone NOT NULL
 );
 
 
@@ -1398,7 +1398,7 @@ ALTER SEQUENCE notifications_id_seq OWNED BY notifications.id;
 CREATE TABLE page_visits (
     id integer NOT NULL,
     page_url character varying NOT NULL,
-    visited_at timestamp without time zone NOT NULL
+    visited_at timestamp with time zone NOT NULL
 );
 
 
@@ -1444,7 +1444,7 @@ ALTER TABLE pages OWNER TO postgres;
 CREATE TABLE part_visits (
     id integer NOT NULL,
     part_id integer NOT NULL,
-    visited_at timestamp without time zone NOT NULL
+    visited_at timestamp with time zone NOT NULL
 );
 
 
@@ -1554,7 +1554,7 @@ CREATE TABLE subscriptions (
     user_id integer NOT NULL,
     part_id integer NOT NULL,
     "interval" interval NOT NULL,
-    last_update timestamp without time zone NOT NULL,
+    last_update timestamp with time zone NOT NULL,
     snapshot character varying(40) NOT NULL
 );
 
@@ -1626,7 +1626,7 @@ CREATE TABLE verification_codes (
     user_id integer NOT NULL,
     code character varying(91) NOT NULL,
     used boolean NOT NULL,
-    used_at timestamp without time zone
+    used_at timestamp with time zone
 );
 
 
