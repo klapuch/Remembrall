@@ -77,7 +77,7 @@ final class StoredSubscription extends \Tester\TestCase {
 		$statement->execute([$id]);
 		$subscription = $statement->fetch();
 		Assert::same('PT10M', $subscription['interval']);
-		Assert::same('2000-01-01 00:00:00', $subscription['last_update']);
+		Assert::contains('2000-01-01 00:00:00', $subscription['last_update']);
 	}
 
 	public function testNotifying() {

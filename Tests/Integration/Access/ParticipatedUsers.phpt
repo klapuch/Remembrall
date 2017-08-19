@@ -72,8 +72,8 @@ final class ParticipatedUsers extends \Tester\TestCase {
 		Assert::same('PT10S', $subscriptions[3]['interval']);
 		Assert::same('PT30S', $subscriptions[4]['interval']);
 
-		Assert::same('2000-01-01 00:00:00', $subscriptions[3]['last_update']);
-		Assert::same('2002-01-01 00:00:00', $subscriptions[4]['last_update']);
+		Assert::contains('2000-01-01 00:00:00', $subscriptions[3]['last_update']);
+		Assert::contains('2002-01-01 00:00:00', $subscriptions[4]['last_update']);
 
 		Assert::same('abc', $subscriptions[3]['snapshot']);
 		Assert::same('ghi', $subscriptions[4]['snapshot']);
