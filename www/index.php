@@ -13,7 +13,7 @@ const CONFIGURATION = __DIR__ . '/../App/Configuration/.config.ini',
 	WEB_ROUTES = __DIR__ . '/../App/Configuration/Routes/web.json',
 	API_ROUTES = __DIR__ . '/../App/Configuration/Routes/api.json',
 	LOGS = __DIR__ . '/../log';
-echo new Application\SuitedPage(
+echo (new Application\SuitedPage(
 	new Ini\CombinedSource(
 		new Ini\ValidSource(CONFIGURATION, new Ini\TypedSource(CONFIGURATION)),
 		new Ini\MutedSource(
@@ -34,4 +34,4 @@ echo new Application\SuitedPage(
 		$_SERVER['SERVER_NAME'],
 		$_SERVER['HTTPS'] ?? 'http'
 	)
-);
+))->render();
