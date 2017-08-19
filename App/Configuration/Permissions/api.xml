@@ -3,4 +3,5 @@
 	<permission resource="v1/parts" role="member"/>
 	<permission resource="v1/parts" role="guest"/>
 	<permission resource="v1/subscriptions" role="member"/>
+	<permission resource="v1/subscriptions/{num}" role="member"/>
 </permissions>

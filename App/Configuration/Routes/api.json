@@ -3,5 +3,6 @@
 
 	"v1/parts [GET]": "Remembrall\\V1\\Parts\\Get",
 
-	"v1/subscriptions [GET]": "Remembrall\\V1\\Subscriptions\\Get"
+	"v1/subscriptions [GET]": "Remembrall\\V1\\Subscriptions\\Get",
+	"v1/subscriptions/{id :id} [GET]": "Remembrall\\V1\\Subscription\\Get"
 }

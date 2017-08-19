@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+	<xsd:simpleType name="id">
+		<xsd:restriction base="xsd:unsignedInt">
+			<xsd:minInclusive value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="language">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="xpath"/>
+			<xsd:enumeration value="css"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:complexType name="subscription">
+		<xsd:all>
+			<xsd:element name="id" type="id"/>
+			<xsd:element name="expression" type="xsd:string"/>
+			<xsd:element name="url" type="xsd:anyURI"/>
+			<xsd:element name="last_update" type="xsd:dateTime"/>
+			<xsd:element name="interval" type="xsd:duration"/>
+			<xsd:element name="content" type="xsd:string"/>
+			<xsd:element name="visited_at" type="xsd:dateTime"/>
+			<xsd:element name="language" type="language"/>
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:element name="subscription" type="subscription"/>
+
+</xsd:schema>

@@ -58,9 +58,11 @@ final class StoredSubscription implements Subscription {
 	public function print(Output\Format $format): Output\Format {
 		$subscription = (new Storage\ParameterizedQuery(
 			$this->database,
-			'SELECT subscriptions.id, interval, page_url AS url, (expression).value AS expression, (expression).language
+			'SELECT subscriptions.id, interval, page_url AS url, (expression).value AS expression, (expression).language,
+			content, to_ISO8601(last_update) AS last_update, to_ISO8601(visited_at) AS visited_at
 			FROM readable_subscriptions() AS subscriptions
 			LEFT JOIN parts ON subscriptions.part_id = parts.id
+			INNER JOIN part_visits ON part_visits.part_id = parts.id
 			WHERE subscriptions.id = ?',
 			[$this->id]
 		))->row();
