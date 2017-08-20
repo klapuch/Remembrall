@@ -11,7 +11,7 @@ Sends emails about changes on your subscribed pages. You type URL, CSS or XPath 
 ### Clone
 `git clone git@github.com:klapuch/Remembrall.git`
 ### Dockerize
-#### Run
+Start via docker compose:
 `cd Remembrall && docker-compose -p remembrall up -d`
 #### Configs
 Basic config:
@@ -19,17 +19,17 @@ Basic config:
 Phinx config for migrations:
 `docker exec -i remembrall_php-fpm_1 cp phinx.sample.yml phinx.yml`
 #### Database
-Create production database
+Create production database:
 `docker exec -i remembrall-postgres psql -U postgres -c "CREATE DATABASE remembrall"`
-Create test database
+Create test database:
 `docker exec -i remembrall-postgres psql -U postgres -c "CREATE DATABASE remembrall_test"`
-Import schema to production database
+Import schema to production database:
 `cat fixtures/schema.sql | docker exec -i remembrall-postgres psql -U postgres -d remembrall`
-Import schema to test database
+Import schema to test database:
 `cat Tests/TestCase/schema.sql | docker exec -i remembrall-postgres psql -U postgres -d remembrall_test`
 
 #### Installation
-Install all dependencies
+Install all dependencies:
 `docker exec -i remembrall_php-fpm_1 composer install`
-Run linting, migrations and initialize assets
+Run linting, migrations and initialize assets:
 `docker exec -i remembrall_php-fpm_1 vendor/bin/phing init`
