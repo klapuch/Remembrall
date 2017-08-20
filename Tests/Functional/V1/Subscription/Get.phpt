@@ -38,11 +38,12 @@ final class Get extends \Tester\TestCase {
 				new Ini\FakeSource($this->configuration)
 			))->template(['id' => 1])->render()
 		);
+		Assert::same(200, http_response_code());
 		Assert::true($dom->has('subscription'));
 		Assert::true($dom->has('id'));
 	}
 
-	public function testRenderingError() {
+	public function testRenderingErrorForForeignAccess() {
 		$dom = DomQuery::fromXml(
 			(new Subscription\Get(
 				new Uri\FakeUri('', ''),
@@ -50,6 +51,7 @@ final class Get extends \Tester\TestCase {
 				new Ini\FakeSource($this->configuration)
 			))->template(['id' => 2])->render()
 		);
+		Assert::same(403, http_response_code());
 		Assert::same(
 			'You can not see foreign subscription',
 			(string) $dom->find('message')[0]->attributes()

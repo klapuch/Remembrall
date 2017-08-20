@@ -4,6 +4,7 @@ namespace Remembrall\V1\Subscription;
 
 use Klapuch\Application;
 use Klapuch\Output;
+use Remembrall\Model\Misc;
 use Remembrall\Model\Subscribing;
 use Remembrall\Page;
 use Remembrall\Response;
@@ -17,14 +18,17 @@ final class Get extends Page\Api {
 						new Response\ApiAuthentication(
 							new Response\PlainResponse(
 								new Output\ValidXml(
-									(new Subscribing\OwnedSubscription(
-										new Subscribing\StoredSubscription(
+									(new Subscribing\HarnessedSubscription(
+										new Subscribing\OwnedSubscription(
+											new Subscribing\StoredSubscription(
+												$parameters['id'],
+												$this->database
+											),
 											$parameters['id'],
+											$this->user,
 											$this->database
 										),
-										$parameters['id'],
-										$this->user,
-										$this->database
+										new Misc\ApiErrorCallback(403)
 									))->print(new Output\Xml([], 'subscription')),
 									__DIR__ . '/schema/constraint.xsd'
 								)

@@ -38,6 +38,7 @@ final class Get extends \Tester\TestCase {
 				new Ini\FakeSource($this->configuration)
 			))->template([])->render()
 		);
+		Assert::same(200, http_response_code());
 		Assert::true($dom->has('subscriptions'));
 		Assert::true($dom->has('subscription'));
 		Assert::true($dom->has('id'));
@@ -52,6 +53,7 @@ final class Get extends \Tester\TestCase {
 				new Ini\FakeSource($this->configuration)
 			))->template([])->render()
 		);
+		Assert::same(400, http_response_code());
 		Assert::same(
 			'Following criteria are not allowed: "foo"',
 			(string) $dom->find('message')[0]->attributes()
