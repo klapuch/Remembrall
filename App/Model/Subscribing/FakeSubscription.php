@@ -30,6 +30,8 @@ final class FakeSubscription implements Subscription {
 	}
 
 	public function print(Output\Format $format): Output\Format {
+		if ($this->exception)
+			throw $this->exception;
 		return $this->print ?: $format;
 	}
 }
