@@ -7,7 +7,7 @@ use Klapuch\Time;
 use Remembrall\Model\Misc;
 
 /**
- * Subscriptions harnessed by callback
+ * Subscription harnessed by callback
  */
 final class HarnessedSubscription implements Subscription {
 	private $origin;
