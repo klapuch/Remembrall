@@ -10,6 +10,7 @@ use Klapuch\Application;
 use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Uri;
+use Remembrall\Misc;
 use Remembrall\Page\Subscription;
 use Remembrall\Response;
 use Remembrall\TestCase;
@@ -21,10 +22,10 @@ final class DeleteInteraction extends \Tester\TestCase {
 	use TestCase\Page;
 
 	public function testSuccessDeleting() {
-		$this->database->exec(
-			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
-			(1, 0, 4, 'PT3M', NOW(), '')"
-		);
+		$user = (new Misc\TestUsers($this->database))->register();
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SampleSubscription($this->database, $user, 1))->try();
+		$_SESSION['id'] = $user->id();
 		$_POST['id'] = 1;
 		Assert::equal(
 			new Application\HtmlTemplate(

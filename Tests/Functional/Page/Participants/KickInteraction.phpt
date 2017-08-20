@@ -24,19 +24,17 @@ final class KickInteraction extends \Tester\TestCase {
 	public function testValidSubmitting() {
 		$_POST['subscription'] = 1;
 		$_POST['email'] = 'foo@email.cz';
-		$user = (new Misc\TestUsers($this->database))->register();
-		$this->database->exec(
-			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
-			(1, {$user->id()}, 4, 'PT3M', NOW(), '')"
-		);
-		$this->database->exec(
-			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(4, 'www.google.com', ROW('//google', 'xpath'), 'google content', 'google snap')"
-		);
-		$this->database->exec(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) 
-			VALUES ('{$_POST['email']}', 1, 'abc', NOW(), FALSE, NULL)"
-		);
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SampleSubscription(
+			$this->database,
+			(new Misc\TestUsers($this->database))->register(),
+			1
+		))->try();
+		(new Misc\SampleParticipant(
+			$this->database,
+			1,
+			$_POST['email']
+		))->try();
 		Assert::equal(
 			new Application\HtmlTemplate(
 				new Response\InformativeResponse(

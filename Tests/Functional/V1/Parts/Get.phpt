@@ -7,9 +7,11 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Functional\V1\Parts;
 
+use Klapuch\Access;
 use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Uri;
+use Remembrall\Misc;
 use Remembrall\TestCase;
 use Remembrall\V1\Parts;
 use Tester\Assert;
@@ -21,14 +23,12 @@ final class Get extends \Tester\TestCase {
 	use TestCase\Page;
 
 	public function testWorkingRendering() {
-		$this->database->exec(
-			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(1, 'foo.cz', ROW('//foo', 'xpath'), 'foo', 'fooSnap')"
-		);
-		$this->database->exec(
-			"INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES
-			(1, 1, 'PT6M', NOW(), md5(random()::text))"
-		);
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SampleSubscription(
+			$this->database,
+			new Access\FakeUser('1'),
+			1
+		))->try();
 		$_GET['type'] = 'popular';
 		$dom = DomQuery::fromXml(
 			(new Parts\Get(

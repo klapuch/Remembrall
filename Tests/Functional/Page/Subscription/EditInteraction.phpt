@@ -26,14 +26,8 @@ final class EditInteraction extends \Tester\TestCase {
 		$_POST['id'] = 1;
 		$_POST['act'] = 'Send';
 		$user = (new Misc\TestUsers($this->database))->register();
-		$this->database->exec(
-			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES 
-			(4, 'www.me.cz', ROW('//p', 'xpath'), 'foo', 'as')"
-		);
-		$this->database->exec(
-			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
-			(1, {$user->id()}, 4, 'PT3M', NOW(), '')"
-		);
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SampleSubscription($this->database, $user, 1))->try();
 		$_SESSION['id'] = $user->id();
 		Assert::equal(
 			new Application\HtmlTemplate(

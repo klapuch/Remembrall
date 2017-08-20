@@ -26,15 +26,12 @@ final class InviteInteraction extends \Tester\TestCase {
 	public function testValidSubmitting() {
 		$_POST['subscription'] = 1;
 		$_POST['email'] = 'foo@email.cz';
-		$user = (new Misc\TestUsers($this->database))->register();
-		$this->database->exec(
-			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
-			(1, {$user->id()}, 4, 'PT3M', NOW(), '')"
-		);
-		$this->database->exec(
-			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(4, 'www.google.com', ROW('//google', 'xpath'), 'google content', 'google snap')"
-		);
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SampleSubscription(
+			$this->database,
+			(new Misc\TestUsers($this->database))->register(),
+			1
+		))->try();
 		Assert::equal(
 			new Application\HtmlTemplate(
 				new Response\InformativeResponse(
@@ -80,11 +77,12 @@ final class InviteInteraction extends \Tester\TestCase {
 	public function testErrorOnTooManyAttempts() {
 		$_POST['subscription'] = 1;
 		$_POST['email'] = 'foo@bar.cz';
-		(new Misc\TestUsers($this->database))->register();
-		$this->database->exec(
-			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
-			(1, 0, 4, 'PT3M', NOW(), '')"
-		);
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SampleSubscription(
+			$this->database,
+			(new Misc\TestUsers($this->database))->register(),
+			1
+		))->try();
 		$participants = new Subscribing\NonViolentParticipants(
 			new Access\FakeUser(),
 			$this->database

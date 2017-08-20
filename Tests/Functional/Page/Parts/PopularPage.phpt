@@ -22,7 +22,24 @@ require __DIR__ . '/../../../bootstrap.php';
 final class PopularPage extends \Tester\TestCase {
 	use TestCase\Page;
 
-	public function testWorkingRendering() {
+	public function testPassingWithMultipleParts() {
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SamplePart($this->database))->try();
+		Assert::same(
+			'Popular parts',
+			(string) DomQuery::fromHtml(
+				(new Misc\TestTemplate(
+					(new Parts\PopularPage(
+						new Uri\FakeUri('', '/sign/in'),
+						new Log\FakeLogs(),
+						new Ini\FakeSource($this->configuration)
+					))->template([])
+				))->render()
+			)->find('h1')[0]
+		);
+	}
+
+	public function testPassingWithNoPart() {
 		Assert::same(
 			'Popular parts',
 			(string) DomQuery::fromHtml(
