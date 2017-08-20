@@ -12,6 +12,7 @@ Sends emails about changes on your subscribed pages. You type URL, CSS or XPath 
 `git clone git@github.com:klapuch/Remembrall.git`
 ### Dockerize
 Start via docker compose:
+
 `cd Remembrall && docker-compose -p remembrall up -d`
 #### Configs
 Basic config:
