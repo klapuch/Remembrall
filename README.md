@@ -25,6 +25,7 @@ Phinx config for migrations:
 Create production database:
 
 `docker exec -i remembrall-postgres psql -U postgres -c "CREATE DATABASE remembrall"`
+
 Create test database:
 
 `docker exec -i remembrall-postgres psql -U postgres -c "CREATE DATABASE remembrall_test"`
