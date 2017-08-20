@@ -17,20 +17,31 @@ Start via docker compose:
 Basic config:
 
 `cp App/Configuration/.config.local.sample.ini App/Configuration/.config.local.ini`, disable HTTPS features
+
 Phinx config for migrations:
+
 `docker exec -i remembrall_php-fpm_1 cp phinx.sample.yml phinx.yml`
 #### Database
 Create production database:
+
 `docker exec -i remembrall-postgres psql -U postgres -c "CREATE DATABASE remembrall"`
 Create test database:
+
 `docker exec -i remembrall-postgres psql -U postgres -c "CREATE DATABASE remembrall_test"`
+
 Import schema to production database:
+
 `cat fixtures/schema.sql | docker exec -i remembrall-postgres psql -U postgres -d remembrall`
+
 Import schema to test database:
+
 `cat Tests/TestCase/schema.sql | docker exec -i remembrall-postgres psql -U postgres -d remembrall_test`
 
 #### Installation
 Install all dependencies:
+
 `docker exec -i remembrall_php-fpm_1 composer install`
+
 Run linting, migrations and initialize assets:
+
 `docker exec -i remembrall_php-fpm_1 vendor/bin/phing init`
