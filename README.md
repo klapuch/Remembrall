@@ -15,6 +15,7 @@ Start via docker compose:
 `cd Remembrall && docker-compose -p remembrall up -d`
 #### Configs
 Basic config:
+
 `cp App/Configuration/.config.local.sample.ini App/Configuration/.config.local.ini`, disable HTTPS features
 Phinx config for migrations:
 `docker exec -i remembrall_php-fpm_1 cp phinx.sample.yml phinx.yml`
