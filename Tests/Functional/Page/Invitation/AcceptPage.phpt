@@ -10,6 +10,7 @@ use Klapuch\Application;
 use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Uri;
+use Remembrall\Misc;
 use Remembrall\Page\Invitation;
 use Remembrall\Response;
 use Remembrall\TestCase;
@@ -22,10 +23,12 @@ final class AcceptPage extends \Tester\TestCase {
 
 	public function testSuccessAccepting() {
 		$code = 'abc123';
-		$this->database->exec(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) 
-			VALUES ('foo@email.cz', 1, '{$code}', NOW(), FALSE, NULL)"
-		);
+		(new Misc\SampleParticipant(
+			$this->database,
+			1,
+			'foo@email.cz',
+			$code
+		))->try();
 		Assert::equal(
 			new Application\HtmlTemplate(
 				new Response\InformativeResponse(

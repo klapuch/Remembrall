@@ -22,7 +22,8 @@ require __DIR__ . '/../../../bootstrap.php';
 final class UnreliablePage extends \Tester\TestCase {
 	use TestCase\Page;
 
-	public function testWorkingRendering() {
+	public function testPassingWithMultipleParts() {
+		(new Misc\SamplePart($this->database))->try();
 		Assert::same(
 			'Unreliable parts',
 			(string) DomQuery::fromHtml(
@@ -34,6 +35,22 @@ final class UnreliablePage extends \Tester\TestCase {
 					))->template([])
 				))
 				->render()
+			)->find('h1')[0]
+		);
+	}
+
+	public function testPassingWithNoPart() {
+		Assert::same(
+			'Unreliable parts',
+			(string) DomQuery::fromHtml(
+				(new Misc\TestTemplate(
+					(new Parts\UnreliablePage(
+						new Uri\FakeUri('', '/sign/in'),
+						new Log\FakeLogs(),
+						new Ini\FakeSource($this->configuration)
+					))->template([])
+				))
+					->render()
 			)->find('h1')[0]
 		);
 	}

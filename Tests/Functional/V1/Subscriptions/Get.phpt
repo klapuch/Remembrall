@@ -23,14 +23,10 @@ final class Get extends \Tester\TestCase {
 
 	public function testWorkingRendering() {
 		$user = (new Misc\ApiTestUsers($this->database))->register();
-		$this->database->exec(
-			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(2, 'https://www.google.com', ROW('//a', 'xpath'), 'a', '')"
-		);
-		$this->database->exec(
-			"INSERT INTO subscriptions (id, part_id, user_id, interval, last_update, snapshot) VALUES
-			(1, 2, '{$user->id()}', 'PT1M', '1993-01-01', '')"
-		);
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SampleSubscription($this->database, $user, 1))->try();
+		(new Misc\SampleSubscription($this->database, $user, 2))->try();
 		$dom = DomQuery::fromXml(
 			(new Subscriptions\Get(
 				new Uri\FakeUri('', 'v1/subscriptions'),

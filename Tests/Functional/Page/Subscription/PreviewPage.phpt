@@ -35,11 +35,9 @@ final class PreviewPage extends \Tester\TestCase {
 			$_SESSION['part']['language']
 		);
 		$user = (new Misc\TestUsers($this->database))->register();
-		$this->database->exec(
-			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
-			(1, {$user->id()}, 4, 'PT3M', NOW(), '')"
-		);
-		$_SESSION['id'] = '1';
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SampleSubscription($this->database, $user, 1))->try();
+		$_SESSION['id'] = $user->id();
 		Assert::contains(
 			'Preview of ',
 			(string) DomQuery::fromHtml(
