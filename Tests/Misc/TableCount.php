@@ -16,14 +16,16 @@ final class TableCount implements Assertion {
 	}
 
 	public function assert(): void {
+		$current = $this->database->query(
+			sprintf(
+				'SELECT COUNT(*) FROM %s',
+				$this->table
+			)
+		)->fetchColumn();
 		Assert::same(
 			$this->count,
-			$this->database->query(
-				sprintf(
-					'SELECT COUNT(*) FROM %s',
-					$this->table
-				)
-			)->fetchColumn()
+			$current,
+			sprintf('%s TABLE', strtoupper($this->table))
 		);
 	}
 }
