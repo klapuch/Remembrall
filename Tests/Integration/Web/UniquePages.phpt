@@ -7,6 +7,7 @@ declare(strict_types = 1);
 namespace Remembrall\Integration\Web;
 
 use Klapuch\Uri;
+use Remembrall\Misc;
 use Remembrall\Model\Web;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -25,12 +26,10 @@ final class UniquePages extends \Tester\TestCase {
 			new Web\StoredPage($page, $url, $this->database),
 			(new Web\UniquePages($this->database))->add($url, $page)
 		);
-		$statement = $this->database->prepare('SELECT * FROM pages');
-		$statement->execute();
-		$pages = $statement->fetchAll();
-		Assert::count(1, $pages);
-		Assert::contains('content', $pages[0]['content']);
-		Assert::same('www.facedown.cz', $pages[0]['url']);
+		(new Misc\TableCount($this->database, 'pages', 1))->assert();
+		$page = $this->database->query('SELECT * FROM pages')->fetch();
+		Assert::contains('content', $page['content']);
+		Assert::same('www.facedown.cz', $page['url']);
 	}
 
 	public function testRecordingVisitation() {
@@ -41,9 +40,7 @@ final class UniquePages extends \Tester\TestCase {
 			new Uri\FakeUri('www.facedown.cz'),
 			new Web\FakePage($dom)
 		);
-		$statement = $this->database->prepare('SELECT * FROM page_visits');
-		$statement->execute();
-		Assert::count(1, $statement->fetchAll());
+		(new Misc\TableCount($this->database, 'page_visits', 1))->assert();
 	}
 
 	public function testAddingToOthers() {
@@ -52,10 +49,8 @@ final class UniquePages extends \Tester\TestCase {
 		$pages = new Web\UniquePages($this->database);
 		$pages->add(new Uri\FakeUri('www.google.com'), new Web\FakePage($dom));
 		$pages->add(new Uri\FakeUri('www.seznam.cz'), new Web\FakePage($dom));
-		$statement = $this->database->prepare('SELECT * FROM pages');
-		$statement->execute();
-		$pages = $statement->fetchAll();
-		Assert::count(2, $pages);
+		(new Misc\TableCount($this->database, 'pages', 2))->assert();
+		$pages = $this->database->query('SELECT * FROM pages')->fetchAll();
 		Assert::notSame($pages[0], $pages[1]);
 	}
 
@@ -68,11 +63,8 @@ final class UniquePages extends \Tester\TestCase {
 		$pages = new Web\UniquePages($this->database);
 		$pages->add($url, new Web\FakePage($oldDom));
 		$pages->add($url, new Web\FakePage($newDom));
-		$statement = $this->database->prepare('SELECT * FROM pages');
-		$statement->execute();
-		$pages = $statement->fetchAll();
-		Assert::count(1, $pages);
-		Assert::contains('new content', $pages[0]['content']);
+		(new Misc\TableCount($this->database, 'pages', 1))->assert();
+		Assert::contains('new content', $this->database->query('SELECT content FROM pages')->fetchColumn());
 	}
 
 	public function testUpdatingOnDuplicationWithRecordedVisitation() {
@@ -85,9 +77,7 @@ final class UniquePages extends \Tester\TestCase {
 		$pages->add($url, new Web\FakePage($oldDom));
 		$this->truncate(['page_visits']);
 		$pages->add($url, new Web\FakePage($newDom));
-		$statement = $this->database->prepare('SELECT * FROM page_visits');
-		$statement->execute();
-		Assert::count(1, $statement->fetchAll());
+		(new Misc\TableCount($this->database, 'page_visits', 1))->assert();
 	}
 }
 

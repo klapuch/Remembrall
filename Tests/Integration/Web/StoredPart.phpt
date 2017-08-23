@@ -7,6 +7,7 @@ declare(strict_types = 1);
 namespace Remembrall\Integration\Web;
 
 use Klapuch\Output;
+use Remembrall\Misc;
 use Remembrall\Model\Web;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -80,9 +81,7 @@ final class StoredPart extends \Tester\TestCase {
 			$id,
 			$this->database
 		))->refresh();
-		$statement = $this->database->prepare('SELECT * FROM part_visits');
-		$statement->execute();
-		Assert::count(1, $statement->fetchAll());
+		(new Misc\TableCount($this->database, 'part_visits', 1))->assert();
 	}
 
 	public function testRefreshingWithoutAffectingOthers() {
@@ -97,10 +96,8 @@ final class StoredPart extends \Tester\TestCase {
 			$id,
 			$this->database
 		))->refresh();
-		$statement = $this->database->prepare('SELECT * FROM parts');
-		$statement->execute();
-		$parts = $statement->fetchAll();
-		Assert::count(2, $parts);
+		(new Misc\TableCount($this->database, 'parts', 2))->assert();
+		$parts = $this->database->query('SELECT * FROM parts')->fetchAll();
 		Assert::same(2, $parts[0]['id']);
 		Assert::same('google content', $parts[0]['content']);
 		Assert::same('google snap', $parts[0]['snapshot']);

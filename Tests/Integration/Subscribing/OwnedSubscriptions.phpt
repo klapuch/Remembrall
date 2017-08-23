@@ -11,6 +11,7 @@ use Klapuch\Dataset;
 use Klapuch\Output;
 use Klapuch\Time;
 use Klapuch\Uri;
+use Remembrall\Misc;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -34,13 +35,11 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 			'xpath',
 			new Time\FakeInterval(null, null, 'PT120S')
 		);
-		$statement = $this->database->prepare('SELECT * FROM readable_subscriptions()');
-		$statement->execute();
-		$subscriptions = $statement->fetchAll();
-		Assert::count(1, $subscriptions);
-		Assert::same(666, $subscriptions[0]['user_id']);
-		Assert::same('PT2M', $subscriptions[0]['interval']);
-		Assert::same('google snap', $subscriptions[0]['snapshot']);
+		(new Misc\TableCount($this->database, 'readable_subscriptions()', 1))->assert();
+		$subscriptions = $this->database->query('SELECT * FROM readable_subscriptions()')->fetch();
+		Assert::same(666, $subscriptions['user_id']);
+		Assert::same('PT2M', $subscriptions['interval']);
+		Assert::same('google snap', $subscriptions['snapshot']);
 	}
 
 	public function testThrowingOnDuplication() {

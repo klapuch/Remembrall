@@ -8,6 +8,7 @@ namespace Remembrall\Integration\Subscribing;
 
 use Klapuch\Output;
 use Klapuch\Time;
+use Remembrall\Misc;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -29,11 +30,8 @@ final class StoredSubscription extends \Tester\TestCase {
 			(4, 'www.google.com', ROW('//p', 'xpath'), 'google content', 'google snap')"
 		);
 		(new Subscribing\StoredSubscription(1, $this->database))->cancel();
-		$statement = $this->database->prepare('SELECT * FROM subscriptions');
-		$statement->execute();
-		$subscriptions = $statement->fetchAll();
-		Assert::count(1, $subscriptions);
-		Assert::same(2, $subscriptions[0]['id']);
+		(new Misc\TableCount($this->database, 'subscriptions', 1))->assert();
+		Assert::same(2, $this->database->query('SELECT id FROM subscriptions')->fetchColumn());
 	}
 
 	public function testCancelingUnknownWithoutEffect() {
@@ -93,11 +91,8 @@ final class StoredSubscription extends \Tester\TestCase {
 		);
 		$id = 1;
 		(new Subscribing\StoredSubscription($id, $this->database))->notify();
-		$statement = $this->database->prepare('SELECT * FROM notifications');
-		$statement->execute();
-		$notifications = $statement->fetchAll();
-		Assert::count(1, $notifications);
-		Assert::same($id, $notifications[0]['subscription_id']);
+		(new Misc\TableCount($this->database, 'notifications', 1))->assert();
+		Assert::same($id, $this->database->query('SELECT subscription_id FROM notifications')->fetchColumn());
 	}
 
 	public function testNotifyingWithUpdatedSnapshot() {

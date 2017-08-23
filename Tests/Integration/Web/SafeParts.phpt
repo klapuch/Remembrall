@@ -7,6 +7,7 @@ declare(strict_types = 1);
 namespace Remembrall\Integration\Web;
 
 use Klapuch\Uri;
+use Remembrall\Misc;
 use Remembrall\Model\Web;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -29,9 +30,7 @@ final class SafeParts extends \Tester\TestCase {
 			);
 		}, \UnexpectedValueException::class, 'Allowed languages are "xpath, css" - "foo" given');
 		Assert::type(\Throwable::class, $ex->getPrevious());
-		$statement = $this->database->prepare('SELECT * FROM parts');
-		$statement->execute();
-		Assert::count(0, $statement->fetchAll());
+		(new Misc\TableCount($this->database, 'parts', 0))->assert();
 	}
 
 	public function testReThrowingUnknownError() {
@@ -58,9 +57,7 @@ final class SafeParts extends \Tester\TestCase {
 			'//p',
 			'xpath'
 		);
-		$statement = $this->database->prepare('SELECT * FROM parts');
-		$statement->execute();
-		Assert::count(1, $statement->fetchAll());
+		(new Misc\TableCount($this->database, 'parts', 1))->assert();
 	}
 }
 

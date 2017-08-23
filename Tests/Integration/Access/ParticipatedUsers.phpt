@@ -8,6 +8,7 @@ namespace Remembrall\Integration\Access;
 
 use Klapuch\Access;
 use Klapuch\Encryption;
+use Remembrall\Misc;
 use Remembrall\Model;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -30,10 +31,10 @@ final class ParticipatedUsers extends \Tester\TestCase {
 			new Access\UniqueUsers($this->database, new Encryption\FakeCipher()),
 			$this->database
 		))->register('me@participant.cz', '123', 'member');
-		Assert::count(1, $this->database->query('SELECT * FROM participants')->fetchAll());
-		Assert::count(1, $this->database->query('SELECT * FROM invitation_attempts')->fetchAll());
-		Assert::count(1, $this->database->query('SELECT * FROM users')->fetchAll());
-		Assert::count(1, $this->database->query('SELECT * FROM subscriptions')->fetchAll());
+		(new Misc\TableCount($this->database, 'participants', 1))->assert();
+		(new Misc\TableCount($this->database, 'invitation_attempts', 1))->assert();
+		(new Misc\TableCount($this->database, 'users', 1))->assert();
+		(new Misc\TableCount($this->database, 'subscriptions', 1))->assert();
 	}
 
 	public function testTransferringInheritSubscriptions() {
@@ -54,11 +55,11 @@ final class ParticipatedUsers extends \Tester\TestCase {
 			new Access\UniqueUsers($this->database, new Encryption\FakeCipher()),
 			$this->database
 		))->register('me@participant.cz', '123', 'member');
-		Assert::count(2, $this->database->query('SELECT * FROM participants')->fetchAll());
-		Assert::count(2, $this->database->query('SELECT * FROM invitation_attempts')->fetchAll());
-		Assert::count(1, $this->database->query('SELECT * FROM users')->fetchAll());
+		(new Misc\TableCount($this->database, 'participants', 2))->assert();
+		(new Misc\TableCount($this->database, 'invitation_attempts', 2))->assert();
+		(new Misc\TableCount($this->database, 'users', 1))->assert();
+		(new Misc\TableCount($this->database, 'subscriptions', 5))->assert();
 		$subscriptions = $this->database->query('SELECT * FROM subscriptions ORDER BY id')->fetchAll();
-		Assert::count(5, $subscriptions);
 		Assert::same(
 			[$user->id()],
 			array_unique([
@@ -92,9 +93,9 @@ final class ParticipatedUsers extends \Tester\TestCase {
 			new Access\UniqueUsers($this->database, new Encryption\FakeCipher()),
 			$this->database
 		))->register('me@participant.cz', '123', 'member');
-		Assert::count(0, $this->database->query('SELECT * FROM participants')->fetchAll());
-		Assert::count(0, $this->database->query('SELECT * FROM invitation_attempts')->fetchAll());
-		Assert::count(2, $this->database->query('SELECT * FROM subscriptions')->fetchAll());
+		(new Misc\TableCount($this->database, 'participants', 0))->assert();
+		(new Misc\TableCount($this->database, 'invitation_attempts', 0))->assert();
+		(new Misc\TableCount($this->database, 'subscriptions', 2))->assert();
 		$this->clear();
 		$this->database->exec(
 			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
@@ -108,9 +109,9 @@ final class ParticipatedUsers extends \Tester\TestCase {
 			new Access\UniqueUsers($this->database, new Encryption\FakeCipher()),
 			$this->database
 		))->register('ME@participant.cz', '123', 'member');
-		Assert::count(0, $this->database->query('SELECT * FROM participants')->fetchAll());
-		Assert::count(0, $this->database->query('SELECT * FROM invitation_attempts')->fetchAll());
-		Assert::count(2, $this->database->query('SELECT * FROM subscriptions')->fetchAll());
+		(new Misc\TableCount($this->database, 'participants', 0))->assert();
+		(new Misc\TableCount($this->database, 'invitation_attempts', 0))->assert();
+		(new Misc\TableCount($this->database, 'subscriptions', 2))->assert();
 	}
 }
 

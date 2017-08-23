@@ -9,6 +9,7 @@ namespace Remembrall\Integration\Web;
 use Klapuch\Dataset;
 use Klapuch\Output;
 use Klapuch\Uri;
+use Remembrall\Misc;
 use Remembrall\Model\Web;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -27,14 +28,12 @@ final class CollectiveParts extends \Tester\TestCase {
 			'//p',
 			'xpath'
 		);
-		$statement = $this->database->prepare('SELECT * FROM parts');
-		$statement->execute();
-		$parts = $statement->fetchAll();
-		Assert::count(1, $parts);
-		Assert::same('www.google.com', $parts[0]['page_url']);
-		Assert::same('google content', $parts[0]['content']);
-		Assert::same('google snap', $parts[0]['snapshot']);
-		Assert::same('(//p,xpath)', $parts[0]['expression']);
+		(new Misc\TableCount($this->database, 'parts', 1))->assert();
+		$parts = $this->database->query('SELECT * FROM parts')->fetch();
+		Assert::same('www.google.com', $parts['page_url']);
+		Assert::same('google content', $parts['content']);
+		Assert::same('google snap', $parts['snapshot']);
+		Assert::same('(//p,xpath)', $parts['expression']);
 	}
 
 	public function testAddingToOthers() {
@@ -51,10 +50,8 @@ final class CollectiveParts extends \Tester\TestCase {
 			'//facedown',
 			'css'
 		);
-		$statement = $this->database->prepare('SELECT * FROM parts');
-		$statement->execute();
-		$parts = $statement->fetchAll();
-		Assert::count(2, $parts);
+		(new Misc\TableCount($this->database, 'parts', 2))->assert();
+		$parts = $this->database->query('SELECT * FROM parts')->fetchAll();
 		Assert::same('www.google.com', $parts[0]['page_url']);
 		Assert::same('google content', $parts[0]['content']);
 		Assert::same('google snap', $parts[0]['snapshot']);
@@ -75,9 +72,7 @@ final class CollectiveParts extends \Tester\TestCase {
 			'//p',
 			'xpath'
 		);
-		$statement = $this->database->prepare('SELECT * FROM part_visits');
-		$statement->execute();
-		Assert::count(1, $statement->fetchAll());
+		(new Misc\TableCount($this->database, 'part_visits', 1))->assert();
 	}
 
 	public function testUpdatingDuplicationForSameLanguage() {
@@ -87,10 +82,8 @@ final class CollectiveParts extends \Tester\TestCase {
 		$parts->add($oldPart, new Uri\FakeUri('www.google.com'), '//p', 'xpath');
 		$parts->add($newPart, new Uri\FakeUri('www.google.com'), '//p', 'xpath');
 		$parts->add(new Web\FakePart('CSS', null, 'CSS_SNAP'), new Uri\FakeUri('www.google.com'), '//p', 'css');
-		$statement = $this->database->prepare('SELECT * FROM parts');
-		$statement->execute();
-		$parts = $statement->fetchAll();
-		Assert::count(2, $parts);
+		$parts = $this->database->query('SELECT * FROM parts')->fetchAll();
+		(new Misc\TableCount($this->database, 'parts', 2))->assert();
 		Assert::same('NEW_CONTENT', $parts[0]['content']);
 		Assert::same('NEW_SNAP', $parts[0]['snapshot']);
 		Assert::contains('xpath', $parts[0]['expression']);
@@ -106,9 +99,7 @@ final class CollectiveParts extends \Tester\TestCase {
 		$parts = new Web\CollectiveParts($this->database);
 		$parts->add($oldPart, new Uri\FakeUri('www.google.com'), '//p', 'xpath');
 		$parts->add($newPart, new Uri\FakeUri('www.google.com'), '//p', 'xpath');
-		$statement = $this->database->prepare('SELECT * FROM part_visits');
-		$statement->execute();
-		Assert::count(2, $statement->fetchAll());
+		(new Misc\TableCount($this->database, 'part_visits', 2))->assert();
 	}
 
 	public function testIterating() {

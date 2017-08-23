@@ -7,6 +7,7 @@ declare(strict_types = 1);
 namespace Remembrall\Integration\Web;
 
 use Klapuch\Uri;
+use Remembrall\Misc;
 use Remembrall\Model\Web;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -70,10 +71,8 @@ final class StoredPage extends \Tester\TestCase {
 			new Uri\FakeUri('www.facedown.cz'),
 			$this->database
 		))->refresh();
-		$statement = $this->database->prepare('SELECT * FROM pages');
-		$statement->execute();
-		$pages = $statement->fetchAll();
-		Assert::count(2, $pages);
+		(new Misc\TableCount($this->database, 'pages', 2))->assert();
+		$pages = $this->database->query('SELECT * FROM pages')->fetchAll();
 		Assert::contains('google content', $pages[0]['content']);
 		Assert::contains('NEW_CONTENT', $pages[1]['content']);
 	}
@@ -95,9 +94,7 @@ final class StoredPage extends \Tester\TestCase {
 			new Uri\FakeUri('www.facedown.cz'),
 			$this->database
 		))->refresh();
-		$statement = $this->database->prepare('SELECT * FROM page_visits');
-		$statement->execute();
-		Assert::count(1, $statement->fetchAll());
+		(new Misc\TableCount($this->database, 'page_visits', 1))->assert();
 	}
 }
 

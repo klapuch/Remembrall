@@ -8,6 +8,7 @@ namespace Remembrall\Integration\Subscribing;
 
 use Klapuch\Access;
 use Klapuch\Output;
+use Remembrall\Misc;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -22,8 +23,8 @@ final class NonViolentParticipants extends \Tester\TestCase {
 			new Access\FakeUser(),
 			$this->database
 		))->invite(2, 'me@participant.cz');
+		(new Misc\TableCount($this->database, 'participants', 1))->assert();
 		$participants = $this->database->query('SELECT * FROM participants')->fetchAll();
-		Assert::count(1, $participants);
 		Assert::same('me@participant.cz', $participants[0]['email']);
 		Assert::same(2, $participants[0]['subscription_id']);
 		Assert::false($participants[0]['accepted']);
@@ -43,19 +44,15 @@ final class NonViolentParticipants extends \Tester\TestCase {
 		$rows = $statement->fetchAll();
 		$participants->invite(2, 'me@participant.cz');
 		$statement->execute();
-		$updatedRows = $statement->fetchAll();
-		Assert::count(1, $updatedRows);
-		Assert::same(['invited_at'], array_keys(array_diff($rows[0], $updatedRows[0])));
+		(new Misc\TableCount($this->database, 'participants', 1))->assert();
+		Assert::same(['invited_at'], array_keys(array_diff($rows[0], $statement->fetch())));
 	}
 
 	public function testInvitingWithCaseSensitiveEmail() {
 		$participants = new Subscribing\NonViolentParticipants(new Access\FakeUser(), $this->database);
 		$participants->invite(2, 'me@participant.cz');
 		$participants->invite(2, 'ME@participant.cz');
-		$statement = $this->database->prepare('SELECT * FROM participants');
-		$statement->execute();
-		$rows = $statement->fetchAll();
-		Assert::count(1, $rows);
+		(new Misc\TableCount($this->database, 'participants', 1))->assert();
 	}
 
 	public function testInvitingAgainWithDeniedDecision() {
@@ -77,8 +74,8 @@ final class NonViolentParticipants extends \Tester\TestCase {
 		$participants->invite(2, $participant);
 		$participants->kick(2, $participant);
 		$participants->invite(3, $participant);
-		Assert::count(1, $this->database->query('SELECT * FROM participants')->fetchAll());
-		Assert::count(2, $this->database->query('SELECT * FROM invitation_attempts')->fetchAll());
+		(new Misc\TableCount($this->database, 'participants', 1))->assert();
+		(new Misc\TableCount($this->database, 'invitation_attempts', 2))->assert();
 		Assert::same(3, $this->database->query('SELECT subscription_id FROM participants')->fetchColumn());
 	}
 
@@ -98,10 +95,10 @@ final class NonViolentParticipants extends \Tester\TestCase {
 		$participants = new Subscribing\NonViolentParticipants(new Access\FakeUser(), $this->database);
 		$participants->invite(2, $participant);
 		$participants->kick(2, strtoupper($participant));
-		Assert::count(0, $this->database->query('SELECT * FROM participants')->fetchAll());
+		(new Misc\TableCount($this->database, 'participants', 0))->assert();
 		$participants->invite(2, strtoupper($participant));
 		$participants->kick(2, $participant);
-		Assert::count(0, $this->database->query('SELECT * FROM participants')->fetchAll());
+		(new Misc\TableCount($this->database, 'participants', 0))->assert();
 	}
 
 	public function testPrintingAuthorsParticipants() {
