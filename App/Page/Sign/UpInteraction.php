@@ -29,7 +29,7 @@ final class UpInteraction extends Page\Layout {
 				new Form\Backup($_SESSION, $_POST),
 				function() use ($credentials): void {
 					(new Storage\Transaction($this->database))->start(
-						function() use ($credentials) {
+						function() use ($credentials): void {
 							(new Model\Access\ParticipatedUsers(
 								new Access\UniqueUsers(
 									$this->database,
