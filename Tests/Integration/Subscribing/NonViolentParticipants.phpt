@@ -57,11 +57,10 @@ final class NonViolentParticipants extends \Tester\TestCase {
 
 	public function testInvitingAgainWithDeniedDecision() {
 		[$participant, $subscription] = ['me@participant.cz', 1];
-		$statement = $this->database->prepare(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			(?, ?, '123', NOW(), FALSE, NOW())"
-		);
-		$statement->execute([$participant, $subscription]);
+		(new Misc\SampleParticipant(
+			$this->database,
+			['email' => $participant, 'accepted' => false]
+		))->try();
 		$participants = new Subscribing\NonViolentParticipants(new Access\FakeUser(), $this->database);
 		Assert::noError(function() use ($participant, $participants, $subscription) {
 			$participants->invite($subscription, $participant);

@@ -6,6 +6,7 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Integration\Subscribing;
 
+use Remembrall\Misc;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -17,26 +18,18 @@ final class InvitedParticipants extends \Tester\TestCase {
 
 	public function testThrowingOnKickingUnknownParticipant() {
 		[$participant, $subscription] = ['me@participant.cz', 2];
-		$statement = $this->database->prepare(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			(?, ?, '123', NOW(), FALSE, NULL)"
-		);
-		$statement->execute([$participant, $subscription + 1]);
+		(new Misc\SampleParticipant($this->database, ['email' => $participant]))->try();
 		Assert::exception(function() use ($participant, $subscription) {
 			(new Subscribing\InvitedParticipants(
 				new Subscribing\FakeParticipants(),
 				$this->database
-			))->kick($subscription, $participant);
+			))->kick(2, $participant);
 		}, \UnexpectedValueException::class, 'Email "me@participant.cz" is not your participant');
 	}
 
 	public function testThrowingOnKickingUnknownCaseInsensitiveParticipant() {
 		[$participant, $subscription] = ['me@participant.cz', 2];
-		$statement = $this->database->prepare(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			(?, ?, '123', NOW(), FALSE, NULL)"
-		);
-		$statement->execute([$participant, $subscription]);
+		(new Misc\SampleParticipant($this->database, ['email' => $participant, 'subscription' => $subscription]))->try();
 		$participants = new Subscribing\InvitedParticipants(
 			new Subscribing\FakeParticipants(new Subscribing\FakeInvitation()),
 			$this->database
@@ -45,7 +38,7 @@ final class InvitedParticipants extends \Tester\TestCase {
 			$participants->kick($subscription, strtoupper($participant));
 		});
 		$this->truncate(['participants']);
-		$statement->execute([strtoupper($participant), $subscription]);
+		(new Misc\SampleParticipant($this->database, ['email' => $participant, 'subscription' => $subscription]))->try();
 		Assert::noError(function() use ($participant, $participants, $subscription) {
 			$participants->kick($subscription, $participant);
 		});
@@ -53,11 +46,10 @@ final class InvitedParticipants extends \Tester\TestCase {
 
 	public function testThrowingOnInvitingCaseInsensitiveAcceptedParticipant() {
 		[$participant, $subscription] = ['me@participant.cz', 1];
-		$statement = $this->database->prepare(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			(?, ?, '123', NOW(), TRUE, NOW())"
-		);
-		$statement->execute([$participant, $subscription]);
+		(new Misc\SampleParticipant(
+			$this->database,
+			['email' => $participant, 'subscription' => $subscription, 'accepted' => true]
+		))->try();
 		Assert::exception(function() use ($subscription, $participant) {
 			(new Subscribing\InvitedParticipants(
 				new Subscribing\FakeParticipants(),
@@ -65,7 +57,10 @@ final class InvitedParticipants extends \Tester\TestCase {
 			))->invite($subscription, strtoupper($participant));
 		}, \UnexpectedValueException::class, 'Email "ME@PARTICIPANT.CZ" is already your participant');
 		$this->truncate(['participants']);
-		$statement->execute([strtoupper($participant), $subscription]);
+		(new Misc\SampleParticipant(
+			$this->database,
+			['email' => strtoupper($participant), 'subscription' => $subscription, 'accepted' => true]
+		))->try();
 		Assert::exception(function() use ($subscription, $participant) {
 			(new Subscribing\InvitedParticipants(
 				new Subscribing\FakeParticipants(),
@@ -76,11 +71,10 @@ final class InvitedParticipants extends \Tester\TestCase {
 
 	public function testThrowingOnInvitingAcceptedParticipant() {
 		[$participant, $subscription] = ['me@participant.cz', 1];
-		$statement = $this->database->prepare(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			(?, ?, '123', NOW(), TRUE, NOW())"
-		);
-		$statement->execute([$participant, $subscription]);
+		(new Misc\SampleParticipant(
+			$this->database,
+			['email' => $participant, 'subscription' => $subscription, 'accepted' => true]
+		))->try();
 		Assert::exception(function() use ($subscription, $participant) {
 			(new Subscribing\InvitedParticipants(
 				new Subscribing\FakeParticipants(new Subscribing\FakeInvitation()),
@@ -88,7 +82,10 @@ final class InvitedParticipants extends \Tester\TestCase {
 			))->invite($subscription, $participant);
 		}, \UnexpectedValueException::class, 'Email "me@participant.cz" is already your participant');
 		$this->truncate(['participants']);
-		$statement->execute([$participant, $subscription + 1]);
+		(new Misc\SampleParticipant(
+			$this->database,
+			['email' => $participant, 'accepted' => true]
+		))->try();
 		Assert::noError(function() use ($subscription, $participant) {
 			(new Subscribing\InvitedParticipants(
 				new Subscribing\FakeParticipants(new Subscribing\FakeInvitation()),

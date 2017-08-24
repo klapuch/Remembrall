@@ -7,6 +7,7 @@ declare(strict_types = 1);
 namespace Remembrall\Integration\Subscribing;
 
 use Klapuch\Output;
+use Remembrall\Misc;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -31,10 +32,7 @@ final class UnusedInvitation extends \Tester\TestCase {
 				$this->database
 			))->decline();
 		}, \UnexpectedValueException::class, 'The invitation with code "abcd" is declined or does not exist');
-		$this->database->prepare(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			('me@participant.cz', 1, 'abc', NOW(), FALSE, NULL)"
-		)->execute();
+		(new Misc\SampleParticipant($this->database))->try();
 		Assert::exception(function() {
 			(new Subscribing\UnusedInvitation(
 				new Subscribing\FakeInvitation(),
@@ -56,10 +54,10 @@ final class UnusedInvitation extends \Tester\TestCase {
 	 */
 	public function testThrowingOnAcceptingAlreadyAcceptedCode() {
 		$code = 'abc';
-		$this->database->prepare(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			('me@participant.cz', 1, ?, NOW(), TRUE, NULL)"
-		)->execute([$code]);
+		(new Misc\SampleParticipant(
+			$this->database,
+			['code' => $code, 'accepted' => true]
+		))->try();
 		(new Subscribing\UnusedInvitation(
 			new Subscribing\FakeInvitation(),
 			$code,
@@ -72,10 +70,10 @@ final class UnusedInvitation extends \Tester\TestCase {
 	 */
 	public function testThrowingOnAcceptingCaseInsensitiveCode() {
 		$code = 'abc';
-		$this->database->prepare(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			('me@participant.cz', 1, ?, NOW(), FALSE, NULL)"
-		)->execute([$code]);
+		(new Misc\SampleParticipant(
+			$this->database,
+			['code' => $code, 'accepted' => false]
+		))->try();
 		(new Subscribing\UnusedInvitation(
 			new Subscribing\FakeInvitation(),
 			strtoupper($code),
@@ -88,10 +86,10 @@ final class UnusedInvitation extends \Tester\TestCase {
 	 */
 	public function testThrowingOnDecliningCaseInsensitiveCode() {
 		$code = 'abc';
-		$this->database->prepare(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			('me@participant.cz', 1, ?, NOW(), FALSE, NULL)"
-		)->execute([$code]);
+		(new Misc\SampleParticipant(
+			$this->database,
+			['code' => $code, 'accepted' => false]
+		))->try();
 		(new Subscribing\UnusedInvitation(
 			new Subscribing\FakeInvitation(),
 			strtoupper($code),
@@ -104,10 +102,10 @@ final class UnusedInvitation extends \Tester\TestCase {
 	 */
 	public function testThrowingOnDeclineAlreadyDeclinedCode() {
 		$code = 'abc';
-		$this->database->prepare(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			('me@participant.cz', 1, ?, NOW(), FALSE, NOW())"
-		)->execute([$code]);
+		(new Misc\SampleParticipant(
+			$this->database,
+			['code' => $code, 'accepted' => false]
+		))->try();
 		(new Subscribing\UnusedInvitation(
 			new Subscribing\FakeInvitation(),
 			$code,
@@ -128,10 +126,10 @@ final class UnusedInvitation extends \Tester\TestCase {
 
 	public function testPrinting() {
 		$code = 'abc';
-		$this->database->prepare(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			('me@participant.cz', 1, ?, NOW(), FALSE, NULL)"
-		)->execute([$code]);
+		(new Misc\SampleParticipant(
+			$this->database,
+			['code' => $code, 'accepted' => true, 'decided_at' => 'NULL']
+		))->try();
 		Assert::equal(
 			new Output\FakeFormat(),
 			(new Subscribing\UnusedInvitation(
@@ -144,10 +142,10 @@ final class UnusedInvitation extends \Tester\TestCase {
 
 	public function testAccepting() {
 		$code = 'abc';
-		$this->database->prepare(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			('me@participant.cz', 1, ?, NOW(), FALSE, NULL)"
-		)->execute([$code]);
+		(new Misc\SampleParticipant(
+			$this->database,
+			['code' => $code, 'accepted' => false, 'decided_at' => 'NULL']
+		))->try();
 		Assert::noError(function() use ($code) {
 			(new Subscribing\UnusedInvitation(
 				new Subscribing\FakeInvitation(),
@@ -159,17 +157,19 @@ final class UnusedInvitation extends \Tester\TestCase {
 
 	public function testDeclining() {
 		$code = 'abc';
-		$this->database->prepare(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			('me@participant.cz', 1, ?, NOW(), FALSE, NULL)"
-		)->execute([$code]);
-		Assert::noError(function() use ($code) {
-			(new Subscribing\UnusedInvitation(
-				new Subscribing\FakeInvitation(),
-				$code,
-				$this->database
-			))->decline();
-		});
+		(new Misc\SampleParticipant(
+			$this->database,
+			['code' => $code, 'accepted' => false, 'decided_at' => 'NULL']
+		))->try();
+		Assert::noError(
+			function() use ($code) {
+				(new Subscribing\UnusedInvitation(
+					new Subscribing\FakeInvitation(),
+					$code,
+					$this->database
+				))->decline();
+			}
+		);
 	}
 }
 

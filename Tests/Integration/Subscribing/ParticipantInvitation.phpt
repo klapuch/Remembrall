@@ -7,6 +7,7 @@ declare(strict_types = 1);
 namespace Remembrall\Integration\Subscribing;
 
 use Klapuch\Output;
+use Remembrall\Misc;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -18,10 +19,7 @@ final class ParticipantInvitation extends \Tester\TestCase {
 
 	public function testAcceptingInvitationWithKnownCode() {
 		$code = 'abc';
-		$this->database->prepare(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			('me@participant.cz', 1, ?, NOW(), FALSE, NULL)"
-		)->execute([$code]);
+		(new Misc\SampleParticipant($this->database, ['code' => $code]))->try();
 		(new Subscribing\ParticipantInvitation(
 			$code,
 			$this->database
@@ -36,10 +34,7 @@ final class ParticipantInvitation extends \Tester\TestCase {
 
 	public function testDecliningWithCapturedDecision() {
 		$code = 'abc';
-		$this->database->prepare(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			('me@participant.cz', 1, ?, NOW(), FALSE, NULL)"
-		)->execute([$code]);
+		(new Misc\SampleParticipant($this->database, ['code' => $code, 'accepted' => false]))->try();
 		(new Subscribing\ParticipantInvitation(
 			$code,
 			$this->database

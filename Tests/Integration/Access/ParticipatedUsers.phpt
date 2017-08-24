@@ -19,10 +19,7 @@ final class ParticipatedUsers extends \Tester\TestCase {
 	use TestCase\Database;
 
 	public function testPassingWithNoNeededTransfer() {
-		$this->database->exec(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			('you@participant.cz', 1, 'abc', NOW(), TRUE, NOW())"
-		);
+		(new Misc\SampleParticipant($this->database, ['subscription' => 1]))->try();
 		$this->database->exec(
 			"INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES
 			(3, 3, 'PT10S', NOW(), 'abc')"
@@ -44,17 +41,15 @@ final class ParticipatedUsers extends \Tester\TestCase {
 			(3, 4, 'PT20S', '2001-01-01', 'def'),
 			(3, 5, 'PT30S', '2002-01-01', 'ghi')"
 		);
-		$this->database->exec(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			('me@participant.cz', 1, 'abc', NOW(), TRUE, NOW()),
-			('me@participant.cz', 2, 'abc', NOW(), FALSE, NULL),
-			('me@participant.cz', 3, 'abc', NOW(), TRUE, NOW()),
-			('you@participant.cz', 3, 'abc', NOW(), TRUE, NOW())"
-		);
+		$novice = 'me@participant.cz';
+		(new Misc\SampleParticipant($this->database, ['email' => $novice, 'subscription' => 1, 'accepted' => true]))->try();
+		(new Misc\SampleParticipant($this->database, ['email' => $novice, 'subscription' => 2, 'accepted' => false]))->try();
+		(new Misc\SampleParticipant($this->database, ['email' => $novice, 'subscription' => 3, 'accepted' => true]))->try();
+		(new Misc\SampleParticipant($this->database, ['subscription' => 3, 'accepted' => true]))->try();
 		$user = (new Model\Access\ParticipatedUsers(
 			new Access\UniqueUsers($this->database, new Encryption\FakeCipher()),
 			$this->database
-		))->register('me@participant.cz', '123', 'member');
+		))->register($novice, '123', 'member');
 		(new Misc\TableCount($this->database, 'participants', 2))->assert();
 		(new Misc\TableCount($this->database, 'invitation_attempts', 2))->assert();
 		(new Misc\TableCount($this->database, 'users', 1))->assert();
@@ -81,10 +76,10 @@ final class ParticipatedUsers extends \Tester\TestCase {
 	}
 
 	public function testTransferringWithCaseInsensitiveEmail() {
-		$this->database->exec(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			('ME@participant.cz', 1, 'abc', NOW(), TRUE, NOW())"
-		);
+		(new Misc\SampleParticipant(
+			$this->database,
+			['email' => 'ME@participant.cz', 'subscription' => 1, 'accepted' => true]
+		))->try();
 		$this->database->exec(
 			"INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES
 			(3, 3, 'PT10S', NOW(), 'abc')"
@@ -97,10 +92,10 @@ final class ParticipatedUsers extends \Tester\TestCase {
 		(new Misc\TableCount($this->database, 'invitation_attempts', 0))->assert();
 		(new Misc\TableCount($this->database, 'subscriptions', 2))->assert();
 		$this->clear();
-		$this->database->exec(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			('me@participant.cz', 1, 'abc', NOW(), TRUE, NOW())"
-		);
+		(new Misc\SampleParticipant(
+			$this->database,
+			['email' => 'me@participant.cz', 'subscription' => 1, 'accepted' => true]
+		))->try();
 		$this->database->exec(
 			"INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES
 			(3, 3, 'PT10S', NOW(), 'abc')"

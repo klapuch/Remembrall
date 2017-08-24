@@ -9,6 +9,7 @@ namespace Remembrall\Integration\Subscribing;
 use Klapuch\Dataset;
 use Klapuch\Storage;
 use Nette\Mail;
+use Remembrall\Misc;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -37,13 +38,10 @@ final class ChangedSubscriptions extends \Tester\TestCase {
 			(5, 5, 5, 'PT10S', '2001-01-01', 'es'),
 			(6, 2, 7, 'PT20S', '2003-01-01', 'changed2')"
 		);
-		$this->database->exec(
-			"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) VALUES
-			('me@participant.cz', 2, 'abc', NOW(), TRUE, NOW()),
-			('foo@participant.cz', 2, 'abc', NOW(), FALSE, NOW()),
-			('bar@participant.cz', 2, 'abc', NOW(), FALSE, NULL),
-			('baz@participant.cz', 3, 'abc', NOW(), TRUE, NOW())"
-		);
+		(new Misc\SampleParticipant($this->database, ['email' => 'me@participant.cz', 'subscription' => 2, 'accepted' => true]))->try();
+		(new Misc\SampleParticipant($this->database, ['subscription' => 2, 'accepted' => false]))->try();
+		(new Misc\SampleParticipant($this->database, ['subscription' => 2, 'accepted' => false]))->try();
+		(new Misc\SampleParticipant($this->database, ['subscription' => 3, 'accepted' => true]))->try();
 		$this->database->exec(
 			"INSERT INTO users (id, email, password, role) VALUES 
 			(1, 'a@a.cz', 'a', 'member'),

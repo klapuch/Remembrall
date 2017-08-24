@@ -6,15 +6,20 @@ final class SampleParticipant implements Sample {
 	private $database;
 	private $participant;
 
-	public function __construct(\PDO $database, array $participant) {
+	public function __construct(\PDO $database, array $participant = []) {
 		$this->database = $database;
 		$this->participant = $participant;
 	}
 
 	public function try(): void {
 		$stmt = $this->database->prepare(
-			'INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) 
-			VALUES (?, ?, ?, NOW(), FALSE, NULL)'
+			sprintf(
+				"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) 
+				VALUES (?, ?, ?, %s, '%s', %s)",
+				$this->participant['invited_at'] ?? 'NOW()',
+				($this->participant['accepted'] ?? mt_rand(0, 1)) ? 't' : 'f',
+				$this->participant['decided_at'] ?? 'NOW()'
+			)
 		);
 		$stmt->execute(
 			[

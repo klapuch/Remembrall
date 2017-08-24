@@ -7,7 +7,6 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Functional\V1\Parts;
 
-use Klapuch\Access;
 use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Uri;

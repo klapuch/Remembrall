@@ -23,7 +23,10 @@ final class AcceptPage extends \Tester\TestCase {
 
 	public function testSuccessAccepting() {
 		$code = 'abc123';
-		(new Misc\SampleParticipant($this->database, ['code' => $code]))->try();
+		(new Misc\SampleParticipant(
+			$this->database,
+			['code' => $code, 'subscription' => 1, 'accepted' => false]
+		))->try();
 		Assert::equal(
 			new Application\HtmlTemplate(
 				new Response\InformativeResponse(
