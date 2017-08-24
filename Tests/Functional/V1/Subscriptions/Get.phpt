@@ -25,8 +25,8 @@ final class Get extends \Tester\TestCase {
 		$user = (new Misc\ApiTestUsers($this->database))->register();
 		(new Misc\SamplePart($this->database))->try();
 		(new Misc\SamplePart($this->database))->try();
-		(new Misc\SampleSubscription($this->database, $user, 1))->try();
-		(new Misc\SampleSubscription($this->database, $user, 2))->try();
+		(new Misc\SampleSubscription($this->database, ['user' => $user->id(), 'part' => 1]))->try();
+		(new Misc\SampleSubscription($this->database, ['user' => $user->id(), 'part' => 2]))->try();
 		$dom = DomQuery::fromXml(
 			(new Subscriptions\Get(
 				new Uri\FakeUri('', 'v1/subscriptions'),

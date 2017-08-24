@@ -29,8 +29,7 @@ final class InviteInteraction extends \Tester\TestCase {
 		(new Misc\SamplePart($this->database))->try();
 		(new Misc\SampleSubscription(
 			$this->database,
-			(new Misc\TestUsers($this->database))->register(),
-			1
+			['user' => (new Misc\TestUsers($this->database))->register()->id(), 'part' => 1]
 		))->try();
 		Assert::equal(
 			new Application\HtmlTemplate(
@@ -80,8 +79,7 @@ final class InviteInteraction extends \Tester\TestCase {
 		(new Misc\SamplePart($this->database))->try();
 		(new Misc\SampleSubscription(
 			$this->database,
-			(new Misc\TestUsers($this->database))->register(),
-			1
+			['user' => (new Misc\TestUsers($this->database))->register()->id()]
 		))->try();
 		$participants = new Subscribing\NonViolentParticipants(
 			new Access\FakeUser(),

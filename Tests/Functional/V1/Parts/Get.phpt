@@ -24,11 +24,7 @@ final class Get extends \Tester\TestCase {
 
 	public function testWorkingRendering() {
 		(new Misc\SamplePart($this->database))->try();
-		(new Misc\SampleSubscription(
-			$this->database,
-			new Access\FakeUser('1'),
-			1
-		))->try();
+		(new Misc\SampleSubscription($this->database, ['user' => '1', 'part' => 1]))->try();
 		$_GET['type'] = 'popular';
 		$dom = DomQuery::fromXml(
 			(new Parts\Get(

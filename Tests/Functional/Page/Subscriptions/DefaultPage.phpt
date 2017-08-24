@@ -23,7 +23,7 @@ final class DefaultPage extends \Tester\TestCase {
 	public function testWorkingRenderingOnSomeSubscriptions() {
 		$user = (new Misc\TestUsers($this->database))->register();
 		(new Misc\SamplePart($this->database))->try();
-		(new Misc\SampleSubscription($this->database, $user, 1))->try();
+		(new Misc\SampleSubscription($this->database, ['user' => $user->id(), 'part' => 1]))->try();
 		$_SESSION['id'] = $user->id();
 		Assert::same(
 			'Subscriptions',

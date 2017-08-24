@@ -27,13 +27,11 @@ final class KickInteraction extends \Tester\TestCase {
 		(new Misc\SamplePart($this->database))->try();
 		(new Misc\SampleSubscription(
 			$this->database,
-			(new Misc\TestUsers($this->database))->register(),
-			1
+			['user' => (new Misc\TestUsers($this->database))->register()->id(), 'part' => 1]
 		))->try();
 		(new Misc\SampleParticipant(
 			$this->database,
-			1,
-			$_POST['email']
+			$_POST
 		))->try();
 		Assert::equal(
 			new Application\HtmlTemplate(

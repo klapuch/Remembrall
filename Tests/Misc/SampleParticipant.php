@@ -4,20 +4,11 @@ namespace Remembrall\Misc;
 
 final class SampleParticipant implements Sample {
 	private $database;
-	private $email;
-	private $subscription;
-	private $code;
+	private $participant;
 
-	public function __construct(
-		\PDO $database,
-		int $subscription,
-		string $email = null,
-		string $code = null
-	) {
+	public function __construct(\PDO $database, array $participant) {
 		$this->database = $database;
-		$this->subscription = $subscription;
-		$this->email = $email;
-		$this->code = $code;
+		$this->participant = $participant;
 	}
 
 	public function try(): void {
@@ -27,12 +18,12 @@ final class SampleParticipant implements Sample {
 		);
 		$stmt->execute(
 			[
-				$this->email ?: sprintf(
+				$this->participant['email'] ?? sprintf(
 					'%s@gmail.com',
 					substr(uniqid('', true), -mt_rand(1, 10))
 				),
-				$this->subscription,
-				$this->code ?: bin2hex(random_bytes(10)),
+				$this->participant['subscription_id'] ?? $this->participant['subscription'] ?? mt_rand(),
+				$this->participant['code'] ?? bin2hex(random_bytes(10)),
 			]
 		);
 	}

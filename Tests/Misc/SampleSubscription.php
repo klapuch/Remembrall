@@ -2,21 +2,13 @@
 declare(strict_types = 1);
 namespace Remembrall\Misc;
 
-use Klapuch\Access;
-
 final class SampleSubscription implements Sample {
 	private $database;
-	private $user;
-	private $part;
+	private $subscription;
 
-	public function __construct(
-		\PDO $database,
-		Access\User $user,
-		int $part
-	) {
+	public function __construct(\PDO $database, array $subscription) {
 		$this->database = $database;
-		$this->user = $user;
-		$this->part = $part;
+		$this->subscription = $subscription;
 	}
 
 	public function try(): void {
@@ -26,11 +18,11 @@ final class SampleSubscription implements Sample {
 		);
 		$stmt->execute(
 			[
-				$this->part,
-				$this->user->id(),
-				sprintf('PT%dM', mt_rand(30, 100)),
-				sprintf('199%1$d-0%1$d-0%1$d', mt_rand(1, 9)),
-				bin2hex(random_bytes(10)),
+				$this->subscription['part'] ?? $this->subscription['part_id'] ?? mt_rand(),
+				$this->subscription['user'] ?? $this->subscription['user_id'] ?? mt_rand(),
+				$this->subscription['interval'] ?? sprintf('PT%dM', mt_rand(30, 100)),
+				$this->subscription['last_update'] ?? sprintf('199%1$d-0%1$d-0%1$d', mt_rand(1, 9)),
+				$this->subscription['snapshot'] ?? bin2hex(random_bytes(10)),
 			]
 		);
 	}

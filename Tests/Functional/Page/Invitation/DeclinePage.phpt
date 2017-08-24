@@ -23,12 +23,7 @@ final class DeclinePage extends \Tester\TestCase {
 
 	public function testSuccessDeclining() {
 		$code = 'abc123';
-		(new Misc\SampleParticipant(
-			$this->database,
-			1,
-			'foo@email.cz',
-			$code
-		))->try();
+		(new Misc\SampleParticipant($this->database, ['code' => $code]))->try();
 		Assert::equal(
 			new Application\HtmlTemplate(
 				new Response\InformativeResponse(
