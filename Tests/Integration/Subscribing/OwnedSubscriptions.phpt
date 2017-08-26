@@ -22,10 +22,14 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 	use TestCase\Database;
 
 	public function testSubscribingBrandNewOne() {
-		$this->database->exec(
-			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(1, 'www.google.com', ROW('//google', 'xpath'), 'google content', 'google snap')"
-		);
+		(new Misc\SamplePart(
+			$this->database,
+			[
+				'expression' => ['value' => '//google', 'language' => 'xpath'],
+				'page_url' => 'www.google.com',
+				'snapshot' => 'google snap',
+			]
+		))->try();
 		(new Subscribing\OwnedSubscriptions(
 			new Access\FakeUser('666'),
 			$this->database
@@ -43,10 +47,13 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 	}
 
 	public function testThrowingOnDuplication() {
-		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.google.com', ROW('//google', 'xpath'), 'google content', 'google snap')"
-		);
+		(new Misc\SamplePart(
+			$this->database,
+			[
+				'expression' => ['value' => '//google', 'language' => 'xpath'],
+				'page_url' => 'www.google.com',
+			]
+		))->try();
 		$subscriptions = new Subscribing\OwnedSubscriptions(
 			new Access\FakeUser('666'),
 			$this->database
@@ -72,13 +79,10 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 	}
 
 	public function testIteratingOwned() {
-		$this->database->exec(
-			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(1, 'https://www.google.com', ROW('//a', 'xpath'), 'a', ''),
-			(2, 'http://www.facedown.cz', ROW('//b', 'xpath'), 'b', ''),
-			(3, 'http://www.facedown.cz', ROW('//c', 'xpath'), 'c', ''),
-			(4, 'https://www.google.com', ROW('//d', 'xpath'), 'd', '')"
-		);
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SamplePart($this->database))->try();
 		(new Misc\SampleSubscription($this->database, ['user' => 1, 'part' => 1]))->try();
 		(new Misc\SampleSubscription($this->database, ['user' => 2, 'part' => 2]))->try();
 		(new Misc\SampleSubscription($this->database, ['user' => 1, 'part' => 3]))->try();
@@ -92,10 +96,7 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 			(3, '2002-01-01 01:01:01'),
 			(4, '2003-01-01 01:01:01')"
 		);
-		$this->database->exec(
-			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(5, 'www.google.com', ROW('//google', 'xpath'), 'google content', 'google snap')"
-		);
+		(new Misc\SamplePart($this->database))->try();
 		$subscriptions = (new Subscribing\OwnedSubscriptions(
 			new Access\FakeUser('1'),
 			$this->database
@@ -113,10 +114,7 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 	}
 
 	public function testIteratingWithoutVisits() {
-		$this->database->exec(
-			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(1, 'https://www.google.com', ROW('//a', 'xpath'), 'a', '')"
-		);
+		(new Misc\SamplePart($this->database))->try();
 		(new Misc\SampleSubscription($this->database, ['user' => 1, 'part' => 1]))->try();
 		$this->truncate(['part_visits']);
 		$subscriptions = (new Subscribing\OwnedSubscriptions(

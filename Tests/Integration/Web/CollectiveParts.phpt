@@ -103,12 +103,9 @@ final class CollectiveParts extends \Tester\TestCase {
 	}
 
 	public function testIterating() {
-		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.google.com', ROW('//a', 'xpath'), 'a', ''),
-			('www.seznam.cz', ROW('//b', 'xpath'), 'b', ''),
-			('www.facedown.cz', ROW('//c', 'xpath'), 'c', '')"
-		);
+		(new Misc\SamplePart($this->database, ['content' => 'a']))->try();
+		(new Misc\SamplePart($this->database, ['content' => 'b']))->try();
+		(new Misc\SamplePart($this->database, ['content' => 'c']))->try();
 		(new Misc\SampleSubscription($this->database, ['part' => 1]))->try();
 		(new Misc\SampleSubscription($this->database, ['part' => 1]))->try();
 		(new Misc\SampleSubscription($this->database, ['part' => 2]))->try();
@@ -132,14 +129,10 @@ final class CollectiveParts extends \Tester\TestCase {
 	}
 
 	public function testCounting() {
-		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.google.com', ROW('//a', 'xpath'), 'a', ''),
-			('www.seznam.cz', ROW('//b', 'xpath'), 'b', ''),
-			('www.facedown.cz', ROW('//c', 'xpath'), 'c', '')"
-		);
-		$parts = new Web\CollectiveParts($this->database);
-		Assert::same(3, $parts->count());
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SamplePart($this->database))->try();
+		Assert::same(3, (new Web\CollectiveParts($this->database))->count());
 	}
 
 	public function testIteratingPrinting() {

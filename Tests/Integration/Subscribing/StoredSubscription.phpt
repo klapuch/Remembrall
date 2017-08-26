@@ -21,11 +21,8 @@ final class StoredSubscription extends \Tester\TestCase {
 	public function testCancelingWithoutAffectingOthers() {
 		(new Misc\SampleSubscription($this->database))->try();
 		(new Misc\SampleSubscription($this->database))->try();
-		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.facedown.cz', ROW('//p', 'xpath'), 'facedown content', 'facedown snap'),
-			('www.google.com', ROW('//p', 'xpath'), 'google content', 'google snap')"
-		);
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SamplePart($this->database))->try();
 		(new Subscribing\StoredSubscription(1, $this->database))->cancel();
 		(new Misc\TableCount($this->database, 'subscriptions', 1))->assert();
 		Assert::same(2, $this->database->query('SELECT id FROM subscriptions')->fetchColumn());
@@ -33,11 +30,8 @@ final class StoredSubscription extends \Tester\TestCase {
 
 	public function testCancelingUnknownWithoutEffect() {
 		(new Misc\SampleSubscription($this->database))->try();
-		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.facedown.cz', ROW('//p', 'xpath'), 'facedown content', 'facedown snap'),
-			('www.google.com', ROW('//p', 'xpath'), 'google content', 'google snap')"
-		);
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SamplePart($this->database))->try();
 		$statement = $this->database->prepare('SELECT * FROM subscriptions');
 		$statement->execute();
 		$before = $statement->fetchAll();
@@ -50,11 +44,8 @@ final class StoredSubscription extends \Tester\TestCase {
 
 	public function testEditingIntervalWithoutChangingLastUpdate() {
 		(new Misc\SampleSubscription($this->database, ['last_update' => '2000-01-01 00:00:00']))->try();
-		$this->database->exec(
-			"INSERT INTO parts (page_url, expression, content, snapshot) VALUES
-			('www.facedown.cz', ROW('//p', 'xpath'), 'facedown content', 'facedown snap'),
-			('www.google.com', ROW('//p', 'xpath'), 'google content', 'google snap')"
-		);
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SamplePart($this->database))->try();
 		$id = 1;
 		(new Subscribing\StoredSubscription(
 			$id,
@@ -70,11 +61,9 @@ final class StoredSubscription extends \Tester\TestCase {
 	public function testNotifying() {
 		[$part, $subscription] = [3, 1];
 		(new Misc\SampleSubscription($this->database, ['part' => $part]))->try();
-		$this->database->exec(
-			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(3, 'www.facedown.cz', ROW('//p', 'xpath'), 'facedown content', 'facedown snap'),
-			(4, 'www.google.com', ROW('//p', 'xpath'), 'google content', 'google snap')"
-		);
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SamplePart($this->database))->try();
 		(new Subscribing\StoredSubscription($subscription, $this->database))->notify();
 		(new Misc\TableCount($this->database, 'notifications', 1))->assert();
 		Assert::same($subscription, $this->database->query('SELECT subscription_id FROM notifications')->fetchColumn());
@@ -83,11 +72,9 @@ final class StoredSubscription extends \Tester\TestCase {
 	public function testNotifyingWithUpdatedSnapshot() {
 		[$part, $subscription] = [3, 1];
 		(new Misc\SampleSubscription($this->database, ['part' => $part]))->try();
-		$this->database->exec(
-			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(3, 'www.facedown.cz', ROW('//p', 'xpath'), 'facedown content', 'facedown snap'),
-			(4, 'www.google.com', ROW('//p', 'xpath'), 'google content', 'google snap')"
-		);
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SamplePart($this->database, ['snapshot' => 'facedown snap']))->try();
 		(new Subscribing\StoredSubscription(
 			$subscription,
 			$this->database

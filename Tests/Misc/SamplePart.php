@@ -5,9 +5,11 @@ namespace Remembrall\Misc;
 final class SamplePart implements Sample {
 	private const LANGUAGES = ['xpath', 'css'];
 	private $database;
+	private $part;
 
-	public function __construct(\PDO $database) {
+	public function __construct(\PDO $database, array $part = []) {
 		$this->database = $database;
+		$this->part = $part;
 	}
 
 	public function try(): void {
@@ -17,17 +19,17 @@ final class SamplePart implements Sample {
 		);
 		$stmt->execute(
 			[
-				sprintf(
+				$this->part['page_url'] ?? sprintf(
 					'https://www.%s.com',
 					substr(uniqid('', true), -mt_rand(1, 10))
 				),
-				sprintf(
+				$this->part['expression']['value'] ?? sprintf(
 					'//%s',
 					substr(uniqid('', true), -mt_rand(1, 10))
 				),
-				self::LANGUAGES[array_rand(self::LANGUAGES)],
-				bin2hex(random_bytes(10)),
-				bin2hex(random_bytes(5)),
+				$this->part['expression']['language'] ?? self::LANGUAGES[array_rand(self::LANGUAGES)],
+				$this->part['content'] ?? bin2hex(random_bytes(10)),
+				$this->part['snapshot'] ?? bin2hex(random_bytes(5)),
 			]
 		);
 	}

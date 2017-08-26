@@ -18,13 +18,10 @@ final class PopularParts extends \Tester\TestCase {
 	use TestCase\Database;
 
 	public function testIterating() {
-		$this->database->exec(
-			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(1, 'foo.cz', ROW('//foo', 'xpath'), 'foo', 'fooSnap'),
-			(2, 'bar.cz', ROW('//bar', 'xpath'), 'bar', 'barSnap'),
-			(3, 'kar.cz', ROW('//kar', 'xpath'), 'kar', 'karSnap'),
-			(4, 'baz.cz', ROW('//baz', 'xpath'), 'baz', 'bazSnap')"
-		);
+		(new Misc\SamplePart($this->database, ['content' => 'foo']))->try();
+		(new Misc\SamplePart($this->database, ['content' => 'bar']))->try();
+		(new Misc\SamplePart($this->database, ['content' => 'kar']))->try();
+		(new Misc\SamplePart($this->database, ['content' => 'baz']))->try();
 		(new Misc\SampleSubscription($this->database, ['part' => 2]))->try();
 		(new Misc\SampleSubscription($this->database, ['part' => 2]))->try();
 		(new Misc\SampleSubscription($this->database, ['part' => 3]))->try();
@@ -48,16 +45,15 @@ final class PopularParts extends \Tester\TestCase {
 	}
 
 	public function testCounting() {
-		$this->database->exec(
-			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(2, 'bar.cz', ROW('//bar', 'xpath'), 'bar', 'barSnap'),
-			(4, 'baz.cz', ROW('//baz', 'xpath'), 'baz', 'bazSnap')"
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SamplePart($this->database))->try();
+		Assert::same(
+			2,
+			(new Web\PopularParts(
+				new Web\FakeParts(),
+				$this->database
+			))->count()
 		);
-		$parts = new Web\PopularParts(
-			new Web\FakeParts(),
-			$this->database
-		);
-		Assert::same(2, $parts->count());
 	}
 
 	public function testEmptyIterating() {

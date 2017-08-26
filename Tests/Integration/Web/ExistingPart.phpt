@@ -6,6 +6,7 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Integration\Web;
 
+use Remembrall\Misc;
 use Remembrall\Model\Web;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -52,10 +53,7 @@ final class ExistingPart extends \Tester\TestCase {
 	}
 
 	public function testExistingPart() {
-		$this->database->exec(
-			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(1, 'www.facedown.cz', ROW('//d', 'xpath'), 'd', '')"
-		);
+		(new Misc\SamplePart($this->database))->try();
 		Assert::noError(
 			function() {
 				(new Web\ExistingPart(

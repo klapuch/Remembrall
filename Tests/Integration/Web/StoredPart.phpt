@@ -18,11 +18,8 @@ final class StoredPart extends \Tester\TestCase {
 	use TestCase\Database;
 
 	public function testContent() {
-		$this->database->exec(
-			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(1, 'www.facedown.cz', ROW('//facedown', 'xpath'), 'facedown content', 'face snap'),
-			(2, 'www.google.com', ROW('//google', 'xpath'), 'google content', 'google snap')"
-		);
+		(new Misc\SamplePart($this->database, ['content' => 'facedown content']))->try();
+		(new Misc\SamplePart($this->database))->try();
 		Assert::same(
 			'facedown content',
 			(new Web\StoredPart(
@@ -34,11 +31,8 @@ final class StoredPart extends \Tester\TestCase {
 	}
 
 	public function testSnapshot() {
-		$this->database->exec(
-			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(1, 'www.facedown.cz', ROW('//facedown', 'xpath'), 'facedown content', 'face snap'),
-			(2, 'www.google.com', ROW('//google', 'xpath'), 'google content', 'google snap')"
-		);
+		(new Misc\SamplePart($this->database, ['snapshot' => 'face snap']))->try();
+		(new Misc\SamplePart($this->database))->try();
 		Assert::same(
 			'face snap',
 			(new Web\StoredPart(
@@ -50,11 +44,8 @@ final class StoredPart extends \Tester\TestCase {
 	}
 
 	public function testRefreshingToNewContent() {
-		$this->database->exec(
-			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(1, 'www.facedown.cz', ROW('//facedown', 'xpath'), 'facedown content', 'face snap'),
-			(2, 'www.google.com', ROW('//google', 'xpath'), 'google content', 'google snap')"
-		);
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SamplePart($this->database))->try();
 		$id = 1;
 		(new Web\StoredPart(
 			new Web\FakePart('NEW_CONTENT', null, 'NEW_SNAP'),
@@ -69,11 +60,8 @@ final class StoredPart extends \Tester\TestCase {
 	}
 
 	public function testRefreshingWithRecordedVisitation() {
-		$this->database->exec(
-			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(1, 'www.facedown.cz', ROW('//facedown', 'xpath'), 'facedown content', 'face snap'),
-			(2, 'www.google.com', ROW('//google', 'xpath'), 'google content', 'google snap')"
-		);
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SamplePart($this->database))->try();
 		$id = 1;
 		$this->truncate(['part_visits']);
 		(new Web\StoredPart(
@@ -85,11 +73,8 @@ final class StoredPart extends \Tester\TestCase {
 	}
 
 	public function testRefreshingWithoutAffectingOthers() {
-		$this->database->exec(
-			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(1, 'www.facedown.cz', ROW('//facedown', 'xpath'), 'facedown content', 'face snap'),
-			(2, 'www.google.com', ROW('//google', 'xpath'), 'google content', 'google snap')"
-		);
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SamplePart($this->database, ['content' => 'google content', 'snapshot' => 'google snap']))->try();
 		$id = 1;
 		(new Web\StoredPart(
 			new Web\FakePart('NEW_CONTENT', null, 'NEW_SNAP'),

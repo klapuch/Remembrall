@@ -18,14 +18,11 @@ final class UnreliableParts extends \Tester\TestCase {
 	use TestCase\Database;
 
 	public function testIterating() {
-		$this->database->exec(
-			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(1, 'www.google.com', ROW('//a', 'xpath'), 'a', ''),
-			(2, 'www.facedown.cz', ROW('//b', 'xpath'), 'b', ''),
-			(3, 'www.google.com', ROW('//c', 'xpath'), 'c', ''),
-			(4, 'www.facedown.cz', ROW('//d', 'xpath'), 'd', ''),
-			(5, 'www.new.cz', ROW('//e', 'xpath'), 'e', '')"
-		);
+		(new Misc\SamplePart($this->database, ['content' => 'a']))->try();
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SamplePart($this->database, ['content' => 'd']))->try();
+		(new Misc\SamplePart($this->database))->try();
 		$this->truncate(['part_visits']);
 		$this->database->exec(
 			"INSERT INTO part_visits (part_id, visited_at) VALUES
@@ -56,11 +53,8 @@ final class UnreliableParts extends \Tester\TestCase {
 	}
 
 	public function testCounting() {
-		$this->database->exec(
-			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(1, 'www.google.com', ROW('//a', 'xpath'), 'a', ''),
-			(2, 'www.facedown.cz', ROW('//d', 'xpath'), 'd', '')"
-		);
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SamplePart($this->database))->try();
 		$this->truncate(['part_visits']);
 		$this->database->exec(
 			"INSERT INTO part_visits (part_id, visited_at) VALUES

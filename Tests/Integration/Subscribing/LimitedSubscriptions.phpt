@@ -37,14 +37,11 @@ final class LimitedSubscriptions extends \Tester\TestCase {
 	}
 
 	public function testThrowingOnSubscribingOverLimit() {
-		$this->database->exec(
-			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
-			(1, 'www.google.com', ROW('//a', 'xpath'), 'a', ''),
-			(2, 'www.facedown.cz', ROW('//b', 'xpath'), 'b', ''),
-			(3, 'www.facedown.cz', ROW('//c', 'xpath'), 'c', ''),
-			(4, 'www.google.com', ROW('//d', 'xpath'), 'd', ''),
-			(5, 'www.facedown.cz', ROW('//d', 'xpath'), 'd', '')"
-		);
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SamplePart($this->database))->try();
+		(new Misc\SamplePart($this->database))->try();
 		(new Misc\SampleSubscription($this->database, ['user' => 666, 'part' => 1]))->try();
 		(new Misc\SampleSubscription($this->database, ['user' => 666, 'part' => 2]))->try();
 		(new Misc\SampleSubscription($this->database, ['user' => 666, 'part' => 3]))->try();
