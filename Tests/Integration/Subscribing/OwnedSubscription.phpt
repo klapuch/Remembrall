@@ -9,6 +9,7 @@ namespace Remembrall\Integration\Subscribing;
 use Klapuch\Access;
 use Klapuch\Output;
 use Klapuch\Time;
+use Remembrall\Misc;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -57,15 +58,12 @@ final class OwnedSubscription extends \Tester\TestCase {
 	}
 
 	public function testPassingOnHandlingOwned() {
-		$this->database->exec(
-			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
-			(2, 666, 4, 'PT3M', NOW(), '')"
-		);
+		(new Misc\SampleSubscription($this->database, ['user' => 666]))->try();
 		Assert::noError(
 			function() {
 				(new Subscribing\OwnedSubscription(
 					new Subscribing\FakeSubscription(),
-					2,
+					1,
 					new Access\FakeUser('666'),
 					$this->database
 				))->cancel();
@@ -75,7 +73,7 @@ final class OwnedSubscription extends \Tester\TestCase {
 			function() {
 				(new Subscribing\OwnedSubscription(
 					new Subscribing\FakeSubscription(),
-					2,
+					1,
 					new Access\FakeUser('666'),
 					$this->database
 				))->edit(new Time\FakeInterval(null, null, 'PT10M'));
@@ -85,7 +83,7 @@ final class OwnedSubscription extends \Tester\TestCase {
 			function() {
 				(new Subscribing\OwnedSubscription(
 					new Subscribing\FakeSubscription(),
-					2,
+					1,
 					new Access\FakeUser('666'),
 					$this->database
 				))->notify();
@@ -95,7 +93,7 @@ final class OwnedSubscription extends \Tester\TestCase {
 			function() {
 				(new Subscribing\OwnedSubscription(
 					new Subscribing\FakeSubscription(),
-					2,
+					1,
 					new Access\FakeUser('666'),
 					$this->database
 				))->print(new Output\FakeFormat(''));

@@ -7,6 +7,7 @@ declare(strict_types = 1);
 namespace Remembrall\Integration\Web;
 
 use Klapuch\Dataset;
+use Remembrall\Misc;
 use Remembrall\Model\Web;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -24,15 +25,12 @@ final class PopularParts extends \Tester\TestCase {
 			(3, 'kar.cz', ROW('//kar', 'xpath'), 'kar', 'karSnap'),
 			(4, 'baz.cz', ROW('//baz', 'xpath'), 'baz', 'bazSnap')"
 		);
-		$this->database->exec(
-			"INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES
-			(1, 2, 'PT6M', NOW(), md5(random()::text)),
-			(2, 2, 'PT6M', NOW(), md5(random()::text)),
-			(3, 3, 'PT6M', NOW(), md5(random()::text)),
-			(4, 4, 'PT6M', NOW(), md5(random()::text)),
-			(5, 2, 'PT6M', NOW(), md5(random()::text)),
-			(6, 4, 'PT6M', NOW(), md5(random()::text))"
-		);
+		(new Misc\SampleSubscription($this->database, ['part' => 2]))->try();
+		(new Misc\SampleSubscription($this->database, ['part' => 2]))->try();
+		(new Misc\SampleSubscription($this->database, ['part' => 3]))->try();
+		(new Misc\SampleSubscription($this->database, ['part' => 4]))->try();
+		(new Misc\SampleSubscription($this->database, ['part' => 2]))->try();
+		(new Misc\SampleSubscription($this->database, ['part' => 4]))->try();
 		$parts = (new Web\PopularParts(
 			new Web\FakeParts(),
 			$this->database

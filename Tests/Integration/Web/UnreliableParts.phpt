@@ -7,6 +7,7 @@ declare(strict_types = 1);
 namespace Remembrall\Integration\Web;
 
 use Klapuch\Dataset;
+use Remembrall\Misc;
 use Remembrall\Model\Web;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -35,15 +36,12 @@ final class UnreliableParts extends \Tester\TestCase {
 			(2, NOW() - INTERVAL '5 SECOND'),
 			(4, NOW() - INTERVAL '45 SECOND')"
 		);
-		$this->database->exec(
-			"INSERT INTO subscriptions (part_id, user_id, interval, last_update, snapshot) VALUES
-			(1, 1, 'PT10S', NOW(), ''),
-			(1, 2, 'PT50S', NOW(), ''),
-			(1, 3, 'PT5S', NOW(), ''),
-			(2, 3, 'PT10S', NOW(), ''),
-			(2, 4, 'PT50S', NOW(), ''),
-			(4, 1, 'PT10S', NOW(), '')"
-		);
+		(new Misc\SampleSubscription($this->database, ['part' => 1, 'interval' => 'PT10S']))->try();
+		(new Misc\SampleSubscription($this->database, ['part' => 1, 'interval' => 'PT50S']))->try();
+		(new Misc\SampleSubscription($this->database, ['part' => 1, 'interval' => 'PT5S']))->try();
+		(new Misc\SampleSubscription($this->database, ['part' => 2, 'interval' => 'PT10S']))->try();
+		(new Misc\SampleSubscription($this->database, ['part' => 2, 'interval' => 'PT50S']))->try();
+		(new Misc\SampleSubscription($this->database, ['part' => 4, 'interval' => 'PT10S']))->try();
 		$parts = (new Web\UnreliableParts(
 			new Web\FakeParts(),
 			$this->database
@@ -69,21 +67,11 @@ final class UnreliableParts extends \Tester\TestCase {
 			(1, NOW() - INTERVAL '50 SECOND'),
 			(2, NOW() - INTERVAL '45 SECOND')"
 		);
-		$this->database->exec(
-			"INSERT INTO subscriptions (part_id, user_id, interval, last_update, snapshot) VALUES
-			(1, 1, 'PT10S', NOW(), ''),
-			(2, 1, 'PT10S', NOW(), '')"
-		);
-		$parts = new Web\UnreliableParts(
-			new Web\FakeParts(),
-			$this->database
-		);
-		$count = 2;
-		Assert::same($count, $parts->count());
-		Assert::same(
-			$count,
-			iterator_count($parts->all(new Dataset\FakeSelection('')))
-		);
+		(new Misc\SampleSubscription($this->database, ['part' => 1, 'interval' => 'PT10S']))->try();
+		(new Misc\SampleSubscription($this->database, ['part' => 2, 'interval' => 'PT10S']))->try();
+		$parts = new Web\UnreliableParts(new Web\FakeParts(), $this->database);
+		Assert::same(2, $parts->count());
+		Assert::same(2, iterator_count($parts->all(new Dataset\FakeSelection(''))));
 	}
 
 	public function testEmptyIterating() {

@@ -9,6 +9,7 @@ namespace Remembrall\Integration\Subscribing;
 use Klapuch\Access;
 use Klapuch\Time;
 use Klapuch\Uri;
+use Remembrall\Misc;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -44,14 +45,11 @@ final class LimitedSubscriptions extends \Tester\TestCase {
 			(4, 'www.google.com', ROW('//d', 'xpath'), 'd', ''),
 			(5, 'www.facedown.cz', ROW('//d', 'xpath'), 'd', '')"
 		);
-		$this->database->exec(
-			"INSERT INTO subscriptions (part_id, user_id, interval, last_update, snapshot) VALUES
-			(1, 666, 'PT1M', NOW(), ''),
-			(2, 666, 'PT2M', NOW(), ''),
-			(3, 666, 'PT3M', NOW(), ''),
-			(4, 666, 'PT4M', NOW(), ''),
-			(5, 666, 'PT5M', NOW(), '')"
-		);
+		(new Misc\SampleSubscription($this->database, ['user' => 666, 'part' => 1]))->try();
+		(new Misc\SampleSubscription($this->database, ['user' => 666, 'part' => 2]))->try();
+		(new Misc\SampleSubscription($this->database, ['user' => 666, 'part' => 3]))->try();
+		(new Misc\SampleSubscription($this->database, ['user' => 666, 'part' => 4]))->try();
+		(new Misc\SampleSubscription($this->database, ['user' => 666, 'part' => 5]))->try();
 		$ex = Assert::exception(function() {
 			(new Subscribing\LimitedSubscriptions(
 				new Subscribing\FakeSubscriptions(),

@@ -103,10 +103,7 @@ final class ChangedSubscriptions extends \Tester\TestCase {
 			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES 
 			(1, 'www.matched.com', ROW('//matched', 'xpath'), 'bc', 'bs')"
 		);
-		$this->database->exec(
-			"INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES 
-			(1, 1, 'PT10S', '2000-01-01', 'as')"
-		);
+		(new Misc\SampleSubscription($this->database, ['user' => 1, 'part' => 1]))->try();
 		$this->database->exec(
 			"INSERT INTO users (id, email, password, role) VALUES 
 			(1, 'a@a.cz', 'a', 'member')"

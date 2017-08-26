@@ -79,13 +79,10 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 			(3, 'http://www.facedown.cz', ROW('//c', 'xpath'), 'c', ''),
 			(4, 'https://www.google.com', ROW('//d', 'xpath'), 'd', '')"
 		);
-		$this->database->exec(
-			"INSERT INTO subscriptions (part_id, user_id, interval, last_update, snapshot) VALUES
-			(1, 1, 'PT1M', '1993-01-01', ''),
-			(2, 2, 'PT2M', '1994-01-01', ''),
-			(3, 1, 'PT3M', '1996-01-01', ''),
-			(4, 1, 'PT4M', '1997-01-01', '')"
-		);
+		(new Misc\SampleSubscription($this->database, ['user' => 1, 'part' => 1]))->try();
+		(new Misc\SampleSubscription($this->database, ['user' => 2, 'part' => 2]))->try();
+		(new Misc\SampleSubscription($this->database, ['user' => 1, 'part' => 3]))->try();
+		(new Misc\SampleSubscription($this->database, ['user' => 1, 'part' => 4]))->try();
 		$this->truncate(['part_visits']);
 		$this->database->exec(
 			"INSERT INTO part_visits (part_id, visited_at) VALUES
@@ -104,16 +101,13 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 			$this->database
 		))->all(new Dataset\FakeSelection('', []));
 		$subscription = $subscriptions->current()->print(new Output\FakeFormat(''))->serialization();
-		Assert::contains('1993-01-01', $subscription);
-		Assert::contains('PT1M', $subscription);
+		Assert::contains('|id|1|', $subscription);
 		$subscriptions->next();
 		$subscription = $subscriptions->current()->print(new Output\FakeFormat(''))->serialization();
-		Assert::contains('1997-01-01', $subscription);
-		Assert::contains('PT4M', $subscription);
+		Assert::contains('|id|4|', $subscription);
 		$subscriptions->next();
 		$subscription = $subscriptions->current()->print(new Output\FakeFormat(''))->serialization();
-		Assert::contains('1996-01-01', $subscription);
-		Assert::contains('PT3M', $subscription);
+		Assert::contains('|id|3|', $subscription);
 		$subscriptions->next();
 		Assert::null($subscriptions->current());
 	}
@@ -123,10 +117,7 @@ final class OwnedSubscriptions extends \Tester\TestCase {
 			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
 			(1, 'https://www.google.com', ROW('//a', 'xpath'), 'a', '')"
 		);
-		$this->database->exec(
-			"INSERT INTO subscriptions (part_id, user_id, interval, last_update, snapshot) VALUES
-			(1, 1, 'PT1M', '1993-01-01', '')"
-		);
+		(new Misc\SampleSubscription($this->database, ['user' => 1, 'part' => 1]))->try();
 		$this->truncate(['part_visits']);
 		$subscriptions = (new Subscribing\OwnedSubscriptions(
 			new Access\FakeUser('1'),

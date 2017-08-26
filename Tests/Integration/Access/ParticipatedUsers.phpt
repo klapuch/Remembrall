@@ -20,10 +20,7 @@ final class ParticipatedUsers extends \Tester\TestCase {
 
 	public function testRegisteringWithoutTransferring() {
 		(new Misc\SampleParticipant($this->database, ['subscription' => 1]))->try();
-		$this->database->exec(
-			"INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES
-			(3, 3, 'PT10S', NOW(), 'abc')"
-		);
+		(new Misc\SampleSubscription($this->database))->try();
 		(new Model\Access\ParticipatedUsers(
 			new Access\UniqueUsers($this->database, new Encryption\FakeCipher()),
 			$this->database
@@ -80,10 +77,7 @@ final class ParticipatedUsers extends \Tester\TestCase {
 			$this->database,
 			['email' => 'ME@participant.cz', 'subscription' => 1, 'accepted' => true]
 		))->try();
-		$this->database->exec(
-			"INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES
-			(3, 3, 'PT10S', NOW(), 'abc')"
-		);
+		(new Misc\SampleSubscription($this->database))->try();
 		(new Model\Access\ParticipatedUsers(
 			new Access\UniqueUsers($this->database, new Encryption\FakeCipher()),
 			$this->database
@@ -96,10 +90,7 @@ final class ParticipatedUsers extends \Tester\TestCase {
 			$this->database,
 			['email' => 'me@participant.cz', 'subscription' => 1, 'accepted' => true]
 		))->try();
-		$this->database->exec(
-			"INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES
-			(3, 3, 'PT10S', NOW(), 'abc')"
-		);
+		(new Misc\SampleSubscription($this->database))->try();
 		(new Model\Access\ParticipatedUsers(
 			new Access\UniqueUsers($this->database, new Encryption\FakeCipher()),
 			$this->database

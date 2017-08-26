@@ -109,13 +109,10 @@ final class CollectiveParts extends \Tester\TestCase {
 			('www.seznam.cz', ROW('//b', 'xpath'), 'b', ''),
 			('www.facedown.cz', ROW('//c', 'xpath'), 'c', '')"
 		);
-		$this->database->exec(
-			"INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES
-			(1, 1, 'PT1M', NOW(), md5(random()::text)),
-			(2, 1, 'PT1M', NOW(), md5(random()::text)),
-			(3, 2, 'PT1M', NOW(), md5(random()::text)),
-			(4, 4, 'PT1M', NOW(), md5(random()::text))"
-		);
+		(new Misc\SampleSubscription($this->database, ['part' => 1]))->try();
+		(new Misc\SampleSubscription($this->database, ['part' => 1]))->try();
+		(new Misc\SampleSubscription($this->database, ['part' => 2]))->try();
+		(new Misc\SampleSubscription($this->database, ['part' => 4]))->try();
 		$parts = (new Web\CollectiveParts(
 			$this->database
 		))->all(new Dataset\FakeSelection(''));
