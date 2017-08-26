@@ -26,10 +26,7 @@ final class RequestInteraction extends \Tester\TestCase {
 		$_POST['act'] = 'Request';
 		(new Misc\SampleUser($this->database))->try();
 		(new Misc\SampleUser($this->database, $_POST))->try();
-		$this->database->exec(
-			"INSERT INTO verification_codes (user_id, code, used) VALUES
-            (2, 'valid:code', FALSE)"
-		);
+		(new Misc\SampleVerificationCode($this->database, ['used' => false, 'user' => 2]))->try();
 		Assert::equal(
 			new Application\HtmlTemplate(
 				new Response\InformativeResponse(

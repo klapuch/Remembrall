@@ -43,10 +43,7 @@ final class ConfirmPage extends \Tester\TestCase {
 
 	public function testErrorOnUsedToken() {
 		$code = 'abc123';
-		$this->database->exec(
-			"INSERT INTO verification_codes (user_id, code, used) VALUES
-            (2, '$code', TRUE)"
-		);
+		(new Misc\SampleVerificationCode($this->database, ['code' => $code, 'used' => true]))->try();
 		Assert::equal(
 			new Application\HtmlTemplate(
 				new Response\InformativeResponse(
@@ -68,10 +65,7 @@ final class ConfirmPage extends \Tester\TestCase {
 
 	public function testSigningInOnValidCode() {
 		$code = 'valid:code';
-		$this->database->exec(
-			"INSERT INTO verification_codes (user_id, code, used) VALUES
-            (2, '$code', FALSE)"
-		);
+		(new Misc\SampleVerificationCode($this->database, ['code' => $code, 'used' => false, 'user' => 2]))->try();
 		(new Misc\SampleUser($this->database))->try();
 		(new Misc\SampleUser($this->database))->try();
 		Assert::equal(
