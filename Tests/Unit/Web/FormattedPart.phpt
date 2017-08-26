@@ -30,7 +30,7 @@ final class FormattedPart extends Tester\TestCase {
 		);
 	}
 
-	public function testFormattingLanguage() {
+	public function testTransformingLanguageToHumanReadableForm() {
 		Assert::same(
 			'XPath',
 			(new Web\FormattedPart(

@@ -56,7 +56,7 @@ final class OwnedSubscription extends \Tester\TestCase {
 		Assert::type(\Throwable::class, $ex->getPrevious());
 	}
 
-	public function testHandlingOwned() {
+	public function testPassingOnHandlingOwned() {
 		$this->database->exec(
 			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES
 			(2, 666, 4, 'PT3M', NOW(), '')"

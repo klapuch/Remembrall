@@ -13,7 +13,7 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class GetResponse extends Tester\TestCase {
-	public function testGetArrayInXml() {
+	public function testGetArrayToXml() {
 		$_GET['name'] = 'Dom';
 		$_GET['age'] = 20;
 		Assert::same(

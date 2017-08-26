@@ -15,7 +15,7 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 final class RedirectResponse extends Tester\TestCase {
-	public function testAddingFormerLocation() {
+	public function testRewritingHeaderLocation() {
 		Assert::same(
 			['Location' => 'http://site.com/sign/in', 'Content-Type' => 'bar'],
 			(new Response\RedirectResponse(

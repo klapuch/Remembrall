@@ -24,7 +24,7 @@ final class MatchingExpression extends Tester\TestCase {
 		))->matches();
 	}
 
-	public function testMatches() {
+	public function testPassingMatches() {
 		$dom = new \DOMDocument();
 		$dom->loadHTML('<p>Hi there!</p>');
 		Assert::noError(function() use ($dom) {

@@ -16,15 +16,16 @@ require __DIR__ . '/../../bootstrap.php';
 final class InvitedParticipants extends \Tester\TestCase {
 	use TestCase\Database;
 
+	/**
+	 * @throws \UnexpectedValueException Email "me@participant.cz" is not your participant
+	 */
 	public function testThrowingOnKickingUnknownParticipant() {
-		[$participant, $subscription] = ['me@participant.cz', 2];
+		$participant = 'me@participant.cz';
 		(new Misc\SampleParticipant($this->database, ['email' => $participant]))->try();
-		Assert::exception(function() use ($participant, $subscription) {
-			(new Subscribing\InvitedParticipants(
-				new Subscribing\FakeParticipants(),
-				$this->database
-			))->kick(2, $participant);
-		}, \UnexpectedValueException::class, 'Email "me@participant.cz" is not your participant');
+		(new Subscribing\InvitedParticipants(
+			new Subscribing\FakeParticipants(),
+			$this->database
+		))->kick(2, $participant);
 	}
 
 	public function testThrowingOnKickingUnknownCaseInsensitiveParticipant() {

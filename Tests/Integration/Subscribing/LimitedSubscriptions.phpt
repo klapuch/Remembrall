@@ -18,7 +18,7 @@ require __DIR__ . '/../../bootstrap.php';
 final class LimitedSubscriptions extends \Tester\TestCase {
 	use TestCase\Database;
 
-	public function testSubscribingInLimit() {
+	public function testPassingOnSubscribingInLimit() {
 		Assert::noError(
 			function() {
 				(new Subscribing\LimitedSubscriptions(
@@ -35,7 +35,7 @@ final class LimitedSubscriptions extends \Tester\TestCase {
 		);
 	}
 
-	public function testSubscribingOverLimit() {
+	public function testThrowingOnSubscribingOverLimit() {
 		$this->database->exec(
 			"INSERT INTO parts (id, page_url, expression, content, snapshot) VALUES
 			(1, 'www.google.com', ROW('//a', 'xpath'), 'a', ''),

@@ -40,7 +40,7 @@ final class WebAuthentication extends Tester\TestCase {
 		);
 	}
 
-	public function testLocationHeaderOnDeniedAccess() {
+	public function testRedirectingOnDeniedAccess() {
 		$_SESSION = [];
 		Assert::same(
 			['Location' => 'localhost/sign/in', 'foo' => 'bar'],
@@ -52,7 +52,7 @@ final class WebAuthentication extends Tester\TestCase {
 		);
 	}
 
-	public function testForbiddenStatusCodeForDeniedAccess() {
+	public function testForbiddenStatusCodeOnDeniedAccess() {
 		$_SESSION = [];
 		(new Response\WebAuthentication(
 			new Response\PlainResponse(new Output\FakeFormat('foo'), ['foo' => 'bar']),

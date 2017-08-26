@@ -18,7 +18,7 @@ require __DIR__ . '/../../bootstrap.php';
 final class ParticipatedUsers extends \Tester\TestCase {
 	use TestCase\Database;
 
-	public function testPassingWithNoNeededTransfer() {
+	public function testRegisteringWithoutTransferring() {
 		(new Misc\SampleParticipant($this->database, ['subscription' => 1]))->try();
 		$this->database->exec(
 			"INSERT INTO subscriptions (user_id, part_id, interval, last_update, snapshot) VALUES

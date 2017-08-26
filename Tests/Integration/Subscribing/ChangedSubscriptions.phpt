@@ -135,7 +135,7 @@ final class ChangedSubscriptions extends \Tester\TestCase {
 		Assert::contains('Bcc: a@a.cz', $output);
 	}
 
-	public function testPassingEmptyIterating() {
+	public function testPassingWithEmptyIterating() {
 		$subscriptions = (new Subscribing\ChangedSubscriptions(
 			new Subscribing\FakeSubscriptions(),
 			new Mail\SendmailMailer(),

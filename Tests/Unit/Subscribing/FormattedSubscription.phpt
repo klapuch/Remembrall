@@ -30,7 +30,7 @@ final class FormattedSubscription extends Tester\TestCase {
 		);
 	}
 
-	public function testFormattingToHumanReadableDateTime() {
+	public function testFormattingDateTimeToHumanReadableForm() {
 		Assert::same(
 			'2017-07-04 12:22',
 			(new Subscribing\FormattedSubscription(
@@ -52,7 +52,7 @@ final class FormattedSubscription extends Tester\TestCase {
 		);
 	}
 
-	public function testFormattingToHumanReadableLanguage() {
+	public function testFormattingLanguageToHumanReadableForm() {
 		Assert::same(
 			'XPath',
 			(new Subscribing\FormattedSubscription(
