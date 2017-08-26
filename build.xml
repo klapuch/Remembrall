@@ -136,7 +136,9 @@
 			<arg value="console"/>
 			<arg value="-s"/>
 			<arg value="-p"/>
-			<arg value="phpdbg"/>
+			<arg value="php-cgi"/>
+            <arg value="-d"/>
+            <arg value="extension=xdebug.so"/>
 			<arg value="-c"/>
 			<arg path="Tests/php.ini"/>
 			<arg path="Tests/Unit"/>
