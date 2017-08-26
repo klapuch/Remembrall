@@ -41,7 +41,6 @@ final class StoredSubscription extends \Tester\TestCase {
 		Assert::same($before, $after);
 	}
 
-
 	public function testEditingIntervalWithoutChangingLastUpdate() {
 		(new Misc\SampleSubscription($this->database, ['last_update' => '2000-01-01 00:00:00']))->try();
 		(new Misc\SamplePart($this->database))->try();
@@ -58,7 +57,7 @@ final class StoredSubscription extends \Tester\TestCase {
 		Assert::contains('2000-01-01 00:00:00', $subscription['last_update']);
 	}
 
-	public function testNotifying() {
+	public function testStoredNotification() {
 		[$part, $subscription] = [3, 1];
 		(new Misc\SampleSubscription($this->database, ['part' => $part]))->try();
 		(new Misc\SamplePart($this->database))->try();

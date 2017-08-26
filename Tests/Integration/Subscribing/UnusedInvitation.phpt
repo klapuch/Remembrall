@@ -68,7 +68,7 @@ final class UnusedInvitation extends \Tester\TestCase {
 	/**
 	 * @throws \UnexpectedValueException The invitation with code "ABC" is accepted or does not exist
 	 */
-	public function testThrowingOnAcceptingCaseInsensitiveCode() {
+	public function testThrowingOnAcceptingAlreadyAcceptedCaseInsensitiveCode() {
 		$code = 'abc';
 		(new Misc\SampleParticipant(
 			$this->database,
@@ -79,22 +79,6 @@ final class UnusedInvitation extends \Tester\TestCase {
 			strtoupper($code),
 			$this->database
 		))->accept();
-	}
-
-	/**
-	 * @throws \UnexpectedValueException The invitation with code "ABC" is declined or does not exist
-	 */
-	public function testThrowingOnDecliningCaseInsensitiveCode() {
-		$code = 'abc';
-		(new Misc\SampleParticipant(
-			$this->database,
-			['code' => $code, 'accepted' => false]
-		))->try();
-		(new Subscribing\UnusedInvitation(
-			new Subscribing\FakeInvitation(),
-			strtoupper($code),
-			$this->database
-		))->decline();
 	}
 
 	/**
@@ -109,6 +93,22 @@ final class UnusedInvitation extends \Tester\TestCase {
 		(new Subscribing\UnusedInvitation(
 			new Subscribing\FakeInvitation(),
 			$code,
+			$this->database
+		))->decline();
+	}
+
+	/**
+	 * @throws \UnexpectedValueException The invitation with code "ABC" is declined or does not exist
+	 */
+	public function testThrowingOnDecliningCaseInsensitiveCode() {
+		$code = 'abc';
+		(new Misc\SampleParticipant(
+			$this->database,
+			['code' => $code, 'accepted' => false]
+		))->try();
+		(new Subscribing\UnusedInvitation(
+			new Subscribing\FakeInvitation(),
+			strtoupper($code),
 			$this->database
 		))->decline();
 	}
@@ -140,7 +140,7 @@ final class UnusedInvitation extends \Tester\TestCase {
 		);
 	}
 
-	public function testAccepting() {
+	public function testPassingOnAccepting() {
 		$code = 'abc';
 		(new Misc\SampleParticipant(
 			$this->database,
@@ -155,11 +155,11 @@ final class UnusedInvitation extends \Tester\TestCase {
 		});
 	}
 
-	public function testDeclining() {
+	public function testPassingOnDeclining() {
 		$code = 'abc';
 		(new Misc\SampleParticipant(
 			$this->database,
-			['code' => $code, 'accepted' => false, 'decided_at' => 'NULL']
+			['code' => $code, 'decided_at' => 'NULL']
 		))->try();
 		Assert::noError(
 			function() use ($code) {

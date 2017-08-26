@@ -47,7 +47,7 @@ final class ParticipantInvitation extends \Tester\TestCase {
 		);
 	}
 
-	public function testPrintingEmailableInformation() {
+	public function testPrintingEmailInformation() {
 		$code = 'abc';
 		$this->database->prepare(
 			"INSERT INTO participants (id, email, subscription_id, code, invited_at, accepted, decided_at) VALUES

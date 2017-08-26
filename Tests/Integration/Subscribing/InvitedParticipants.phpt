@@ -45,31 +45,6 @@ final class InvitedParticipants extends \Tester\TestCase {
 		});
 	}
 
-	public function testThrowingOnInvitingCaseInsensitiveAcceptedParticipant() {
-		[$participant, $subscription] = ['me@participant.cz', 1];
-		(new Misc\SampleParticipant(
-			$this->database,
-			['email' => $participant, 'subscription' => $subscription, 'accepted' => true]
-		))->try();
-		Assert::exception(function() use ($subscription, $participant) {
-			(new Subscribing\InvitedParticipants(
-				new Subscribing\FakeParticipants(),
-				$this->database
-			))->invite($subscription, strtoupper($participant));
-		}, \UnexpectedValueException::class, 'Email "ME@PARTICIPANT.CZ" is already your participant');
-		$this->truncate(['participants']);
-		(new Misc\SampleParticipant(
-			$this->database,
-			['email' => strtoupper($participant), 'subscription' => $subscription, 'accepted' => true]
-		))->try();
-		Assert::exception(function() use ($subscription, $participant) {
-			(new Subscribing\InvitedParticipants(
-				new Subscribing\FakeParticipants(),
-				$this->database
-			))->invite($subscription, strtolower($participant));
-		}, \UnexpectedValueException::class, 'Email "me@participant.cz" is already your participant');
-	}
-
 	public function testThrowingOnInvitingAcceptedParticipant() {
 		[$participant, $subscription] = ['me@participant.cz', 1];
 		(new Misc\SampleParticipant(
@@ -93,6 +68,31 @@ final class InvitedParticipants extends \Tester\TestCase {
 				$this->database
 			))->invite($subscription, $participant);
 		});
+	}
+
+	public function testThrowingOnInvitingCaseInsensitiveAcceptedParticipant() {
+		[$participant, $subscription] = ['me@participant.cz', 1];
+		(new Misc\SampleParticipant(
+			$this->database,
+			['email' => $participant, 'subscription' => $subscription, 'accepted' => true]
+		))->try();
+		Assert::exception(function() use ($subscription, $participant) {
+			(new Subscribing\InvitedParticipants(
+				new Subscribing\FakeParticipants(),
+				$this->database
+			))->invite($subscription, strtoupper($participant));
+		}, \UnexpectedValueException::class, 'Email "ME@PARTICIPANT.CZ" is already your participant');
+		$this->truncate(['participants']);
+		(new Misc\SampleParticipant(
+			$this->database,
+			['email' => strtoupper($participant), 'subscription' => $subscription, 'accepted' => true]
+		))->try();
+		Assert::exception(function() use ($subscription, $participant) {
+			(new Subscribing\InvitedParticipants(
+				new Subscribing\FakeParticipants(),
+				$this->database
+			))->invite($subscription, strtolower($participant));
+		}, \UnexpectedValueException::class, 'Email "me@participant.cz" is already your participant');
 	}
 }
 

@@ -48,14 +48,14 @@ final class NonViolentParticipants extends \Tester\TestCase {
 		Assert::same(['invited_at'], array_keys(array_diff($rows[0], $statement->fetch())));
 	}
 
-	public function testInvitingWithCaseSensitiveEmail() {
+	public function testInvitingWithCaseSensitiveEmailWithoutAdding() {
 		$participants = new Subscribing\NonViolentParticipants(new Access\FakeUser(), $this->database);
 		$participants->invite(2, 'me@participant.cz');
 		$participants->invite(2, 'ME@participant.cz');
 		(new Misc\TableCount($this->database, 'participants', 1))->assert();
 	}
 
-	public function testInvitingAgainWithDeniedDecision() {
+	public function testInvitingAgainAfterDeniedDecision() {
 		[$participant, $subscription] = ['me@participant.cz', 1];
 		(new Misc\SampleParticipant(
 			$this->database,
@@ -82,9 +82,11 @@ final class NonViolentParticipants extends \Tester\TestCase {
 		$participant = 'me@participant.cz';
 		$participants = new Subscribing\NonViolentParticipants(new Access\FakeUser(), $this->database);
 		$invitation = $participants->invite(2, $participant);
-		$code = $this->database->query('SELECT code FROM participants')->fetchColumn();
 		Assert::equal(
-			new Subscribing\ParticipantInvitation($code, $this->database),
+			new Subscribing\ParticipantInvitation(
+				$this->database->query('SELECT code FROM participants')->fetchColumn(),
+				$this->database
+			),
 			$invitation
 		);
 	}
