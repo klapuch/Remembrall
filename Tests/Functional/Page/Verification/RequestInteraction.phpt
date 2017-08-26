@@ -10,6 +10,7 @@ use Klapuch\Application;
 use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Uri;
+use Remembrall\Misc;
 use Remembrall\Page\Verification;
 use Remembrall\Response;
 use Remembrall\TestCase;
@@ -23,10 +24,8 @@ final class RequestInteraction extends \Tester\TestCase {
 	public function testValidRequesting() {
 		$_POST['email'] = 'me@me.cz';
 		$_POST['act'] = 'Request';
-		$this->database->exec(
-			"INSERT INTO users (id, email, password, role) VALUES
-            (2, '{$_POST['email']}', 'secret', 'member')"
-		);
+		(new Misc\SampleUser($this->database))->try();
+		(new Misc\SampleUser($this->database, $_POST))->try();
 		$this->database->exec(
 			"INSERT INTO verification_codes (user_id, code, used) VALUES
             (2, 'valid:code', FALSE)"

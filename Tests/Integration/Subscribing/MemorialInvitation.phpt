@@ -7,6 +7,7 @@ declare(strict_types = 1);
 namespace Remembrall\Integration\Subscribing;
 
 use Klapuch\Output;
+use Remembrall\Misc;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -46,10 +47,9 @@ final class MemorialInvitation extends \Tester\TestCase {
 			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES 
 			(2, 3, 4, 'PT10S', '2000-01-01', 'as')"
 		);
-		$this->database->exec(
-			"INSERT INTO users (id, email, password, role) VALUES 
-			(3, 'author@participant.cz', 'heslo', 'member')"
-		);
+		(new Misc\SampleUser($this->database))->try();
+		(new Misc\SampleUser($this->database))->try();
+		(new Misc\SampleUser($this->database, ['email' => 'author@participant.cz']))->try();
 		$print = (new Subscribing\MemorialInvitation(
 			2,
 			'me@participant.cz',

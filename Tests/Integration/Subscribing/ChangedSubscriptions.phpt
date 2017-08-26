@@ -42,14 +42,11 @@ final class ChangedSubscriptions extends \Tester\TestCase {
 		(new Misc\SampleParticipant($this->database, ['subscription' => 2, 'accepted' => false]))->try();
 		(new Misc\SampleParticipant($this->database, ['subscription' => 2, 'accepted' => false]))->try();
 		(new Misc\SampleParticipant($this->database, ['subscription' => 3, 'accepted' => true]))->try();
-		$this->database->exec(
-			"INSERT INTO users (id, email, password, role) VALUES 
-			(1, 'a@a.cz', 'a', 'member'),
-			(2, 'b@b.cz', 'b', 'member'),
-			(3, 'c@c.cz', 'c', 'member'),
-			(4, 'd@d.cz', 'd', 'member'),
-			(5, 'e@e.cz', 'e', 'member')"
-		);
+		(new Misc\SampleUser($this->database))->try();
+		(new Misc\SampleUser($this->database, ['email' => 'b@b.cz']))->try();
+		(new Misc\SampleUser($this->database))->try();
+		(new Misc\SampleUser($this->database))->try();
+		(new Misc\SampleUser($this->database))->try();
 		$subscriptions = (new Subscribing\ChangedSubscriptions(
 			new Subscribing\FakeSubscriptions(),
 			new Mail\SendmailMailer(),
@@ -104,10 +101,7 @@ final class ChangedSubscriptions extends \Tester\TestCase {
 			(1, 'www.matched.com', ROW('//matched', 'xpath'), 'bc', 'bs')"
 		);
 		(new Misc\SampleSubscription($this->database, ['user' => 1, 'part' => 1]))->try();
-		$this->database->exec(
-			"INSERT INTO users (id, email, password, role) VALUES 
-			(1, 'a@a.cz', 'a', 'member')"
-		);
+		(new Misc\SampleUser($this->database, ['email' => 'a@a.cz']))->try();
 		$subscriptions = (new Subscribing\ChangedSubscriptions(
 			new Subscribing\FakeSubscriptions(),
 			new class implements Mail\IMailer {

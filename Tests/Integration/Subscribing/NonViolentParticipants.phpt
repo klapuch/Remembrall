@@ -113,11 +113,9 @@ final class NonViolentParticipants extends \Tester\TestCase {
 			(2, 3, 4, 'PT10S', '2000-01-01', 'aa'),
 			(3, 2, 4, 'PT5S', '2001-01-01', 'ab')"
 		);
-		$this->database->exec(
-			"INSERT INTO users (id, email, password, role) VALUES 
-			(3, 'author@participant.cz', 'heslo', 'member'),
-			(2, 'foo@participant.cz', 'heslo2', 'member')"
-		);
+		(new Misc\SampleUser($this->database))->try();
+		(new Misc\SampleUser($this->database))->try();
+		(new Misc\SampleUser($this->database))->try();
 		$this->truncate(['invitation_attempts']);
 		$this->database->exec(
 			'INSERT INTO invitation_attempts (id, participant_id, attempt_at) VALUES

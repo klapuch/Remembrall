@@ -10,6 +10,7 @@ use Klapuch\Application;
 use Klapuch\Ini;
 use Klapuch\Log;
 use Klapuch\Uri;
+use Remembrall\Misc;
 use Remembrall\Page\Verification;
 use Remembrall\Response;
 use Remembrall\TestCase;
@@ -71,10 +72,8 @@ final class ConfirmPage extends \Tester\TestCase {
 			"INSERT INTO verification_codes (user_id, code, used) VALUES
             (2, '$code', FALSE)"
 		);
-		$this->database->exec(
-			"INSERT INTO users (id, email, password, role) VALUES
-            (2, 'me@boss.cz', 'secret', 'member')"
-		);
+		(new Misc\SampleUser($this->database))->try();
+		(new Misc\SampleUser($this->database))->try();
 		Assert::equal(
 			new Application\HtmlTemplate(
 				new Response\InformativeResponse(

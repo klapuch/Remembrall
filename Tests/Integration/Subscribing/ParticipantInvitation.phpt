@@ -61,10 +61,9 @@ final class ParticipantInvitation extends \Tester\TestCase {
 			"INSERT INTO subscriptions (id, user_id, part_id, interval, last_update, snapshot) VALUES 
 			(2, 3, 4, 'PT10S', '2000-01-01', 'as')"
 		);
-		$this->database->exec(
-			"INSERT INTO users (id, email, password, role) VALUES 
-			(3, 'author@participant.cz', 'heslo', 'member')"
-		);
+		(new Misc\SampleUser($this->database))->try();
+		(new Misc\SampleUser($this->database))->try();
+		(new Misc\SampleUser($this->database, ['email' => 'author@participant.cz']))->try();
 		$participant = (new Subscribing\ParticipantInvitation(
 			$code,
 			$this->database

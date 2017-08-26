@@ -6,6 +6,7 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Integration\Subscribing;
 
+use Remembrall\Misc;
 use Remembrall\Model\Subscribing;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -19,9 +20,7 @@ final class GuestParticipants extends \Tester\TestCase {
 	 * @throws \UnexpectedValueException Email "me@participant.cz" is registered and can not be participant
 	 */
 	public function testThrowingOnInvitingRegisteredEmail() {
-		$this->database->exec(
-			"INSERT INTO users (email, password, role) VALUES ('me@participant.cz', 'heslo', 'member')"
-		);
+		(new Misc\SampleUser($this->database, ['email' => 'me@participant.cz']))->try();
 		(new Subscribing\GuestParticipants(
 			new Subscribing\FakeParticipants(),
 			$this->database
@@ -29,18 +28,14 @@ final class GuestParticipants extends \Tester\TestCase {
 	}
 
 	public function testThrowingOnInvitingRegisteredCaseInsensitiveEmail() {
-		$this->database->exec(
-			"INSERT INTO users (email, password, role) VALUES ('me@participant.cz', 'heslo', 'member')"
-		);
+		(new Misc\SampleUser($this->database, ['email' => 'me@participant.cz']))->try();
 		Assert::exception(function() {
 			(new Subscribing\GuestParticipants(
 				new Subscribing\FakeParticipants(),
 				$this->database
 			))->invite(1, 'ME@participant.cz');
 		}, \UnexpectedValueException::class);
-		$this->database->exec(
-			"INSERT INTO users (email, password, role) VALUES ('YOU@participant.cz', 'heslo', 'member')"
-		);
+		(new Misc\SampleUser($this->database, ['email' => 'YOU@participant.cz']))->try();
 		Assert::exception(function() {
 			(new Subscribing\GuestParticipants(
 				new Subscribing\FakeParticipants(),
