@@ -7,6 +7,7 @@ declare(strict_types = 1);
 namespace Remembrall\Integration\Web;
 
 use Klapuch\Uri;
+use Remembrall\Misc;
 use Remembrall\Model\Web;
 use Remembrall\TestCase;
 use Tester\Assert;
@@ -17,10 +18,7 @@ final class FrugalPage extends \Tester\TestCase {
 	use TestCase\Database;
 
 	public function testFrugalPage() {
-		$this->database->exec(
-			"INSERT INTO pages (url, content) VALUES
-			('www.google.com', 'google')"
-		);
+		(new Misc\SamplePage($this->database, ['url' => 'www.google.com', 'content' => 'google']))->try();
 		Assert::contains(
 			'google',
 			(new Web\FrugalPage(
@@ -37,10 +35,7 @@ final class FrugalPage extends \Tester\TestCase {
 			('www.google.com', NOW() - INTERVAL '70 MINUTE'),
 			('www.google.com', NOW() - INTERVAL '20 MINUTE')"
 		);
-		$this->database->exec(
-			"INSERT INTO pages (url, content) VALUES
-			('www.google.com', 'google')"
-		);
+		(new Misc\SamplePage($this->database, ['url' => 'www.google.com', 'content' => 'google']))->try();
 		Assert::contains(
 			'google',
 			(new Web\FrugalPage(
@@ -52,10 +47,7 @@ final class FrugalPage extends \Tester\TestCase {
 	}
 
 	public function testOutdatedPage() {
-		$this->database->exec(
-			"INSERT INTO pages (url, content) VALUES
-			('www.google.com', 'google')"
-		);
+		(new Misc\SamplePage($this->database, ['url' => 'www.google.com']))->try();
 		$this->truncate(['page_visits']);
 		$this->database->exec(
 			"INSERT INTO page_visits (page_url, visited_at) VALUES
@@ -77,10 +69,7 @@ final class FrugalPage extends \Tester\TestCase {
 	}
 
 	public function testOutdatedPageWithMultipleVisitation() {
-		$this->database->exec(
-			"INSERT INTO pages (url, content) VALUES
-			('www.google.com', 'google')"
-		);
+		(new Misc\SamplePage($this->database, ['url' => 'www.google.com']))->try();
 		$this->truncate(['page_visits']);
 		$this->database->exec(
 			"INSERT INTO page_visits (page_url, visited_at) VALUES

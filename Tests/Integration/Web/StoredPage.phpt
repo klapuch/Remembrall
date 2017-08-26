@@ -18,11 +18,8 @@ final class StoredPage extends \Tester\TestCase {
 	use TestCase\Database;
 
 	public function testHtmlContent() {
-		$this->database->exec(
-			"INSERT INTO pages (url, content) VALUES
-			('www.facedown.cz', 'facedown content'),
-			('www.google.com', 'google content')"
-		);
+		(new Misc\SamplePage($this->database, ['url' => 'www.facedown.cz', 'content' => 'facedown content']))->try();
+		(new Misc\SamplePage($this->database))->try();
 		Assert::contains(
 			'facedown content',
 			(new Web\StoredPage(
@@ -34,12 +31,9 @@ final class StoredPage extends \Tester\TestCase {
 	}
 
 	public function testRefreshingToNewContent() {
-		$this->database->exec(
-			"INSERT INTO pages (url, content) VALUES
-			('www.facedown.cz', 'facedown content'),
-			('www.google.com', 'google content')"
-		);
 		$url = 'www.facedown.cz';
+		(new Misc\SamplePage($this->database, ['url' => $url]))->try();
+		(new Misc\SamplePage($this->database))->try();
 		$content = new \DOMDocument();
 		$content->loadHTML('NEW_CONTENT');
 		(new Web\StoredPage(
@@ -56,11 +50,8 @@ final class StoredPage extends \Tester\TestCase {
 	}
 
 	public function testRefreshingWithoutAffectingOthers() {
-		$this->database->exec(
-			"INSERT INTO pages (url, content) VALUES
-			('www.facedown.cz', 'facedown content'),
-			('www.google.com', 'google content')"
-		);
+		(new Misc\SamplePage($this->database, ['url' => 'www.facedown.cz']))->try();
+		(new Misc\SamplePage($this->database, ['content' => 'google content']))->try();
 		$content = new \DOMDocument();
 		$content->loadHTML('NEW_CONTENT');
 		(new Web\StoredPage(
@@ -78,11 +69,8 @@ final class StoredPage extends \Tester\TestCase {
 	}
 
 	public function testRecordingVisitation() {
-		$this->database->exec(
-			"INSERT INTO pages (url, content) VALUES
-			('www.facedown.cz', 'facedown content'),
-			('www.google.com', 'google content')"
-		);
+		(new Misc\SamplePage($this->database, ['url' => 'www.facedown.cz']))->try();
+		(new Misc\SamplePage($this->database))->try();
 		$this->truncate(['page_visits']);
 		$content = new \DOMDocument();
 		$content->loadHTML('NEW_CONTENT');
