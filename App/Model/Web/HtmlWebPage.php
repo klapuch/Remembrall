@@ -8,7 +8,6 @@ use Klapuch\Http;
  * HTML web page downloaded from the internet
  */
 final class HtmlWebPage implements Page {
-	private const CONTENT_TYPE = 'text/html';
 	private $request;
 
 	public function __construct(Http\Request $request) {
@@ -16,21 +15,21 @@ final class HtmlWebPage implements Page {
 	}
 
 	public function content(): \DOMDocument {
-		try {
-			$response = new Http\StrictResponse(
-				['Content-Type' => self::CONTENT_TYPE],
-				new Http\AvailableResponse($this->request->send())
-			);
-			$dom = new DOM();
-			$dom->loadHTML($response->body());
-			return $dom;
-		} catch (\Throwable $ex) {
-			throw new \UnexpectedValueException(
-				'Page is unreachable. Does the URL exist?',
-				$ex->getCode(),
-				$ex
-			);
-		}
+		$response = new Http\ExplainedResponse(
+			new Http\StrictResponse(
+				['Content-Type' => 'text/html'],
+				new Http\AvailableResponse(
+					(new Http\ExplainedRequest(
+						$this->request,
+						'Error during requesting the page.'
+					))->send()
+				)
+			),
+			'Page must be available HTML page.'
+		);
+		$dom = new DOM();
+		$dom->loadHTML($response->body());
+		return $dom;
 	}
 
 	public function refresh(): Page {

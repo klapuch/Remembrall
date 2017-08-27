@@ -44,42 +44,34 @@ final class HtmlWebPage extends Tester\TestCase {
 		);
 	}
 
+	/**
+	 * @throws \UnexpectedValueException Page must be available HTML page.
+	 */
 	public function testThrowingOnNonHtmlMediaType() {
-		$ex = Assert::exception(
-			function() {
-				(new Web\HtmlWebPage(
-					new Http\FakeRequest(
-						new Http\FakeResponse(
-							'body{}',
-							['Content-Type' => 'text/css'],
-							200
-						)
-					)
-				))->content();
-			},
-			\UnexpectedValueException::class,
-			'Page is unreachable. Does the URL exist?'
-		);
-		Assert::type(\Throwable::class, $ex->getPrevious());
+		(new Web\HtmlWebPage(
+			new Http\FakeRequest(
+				new Http\FakeResponse(
+					'body{}',
+					['Content-Type' => 'text/css'],
+					200
+				)
+			)
+		))->content();
 	}
 
+	/**
+	 * @throws \UnexpectedValueException Page must be available HTML page.
+	 */
 	public function testThrowingOnHttpError() {
-		$ex = Assert::exception(
-			function() {
-				(new Web\HtmlWebPage(
-					new Http\FakeRequest(
-						new Http\FakeResponse(
-							'Hi, there!',
-							['Content-Type' => 'text/html'],
-							404
-						)
-					)
-				))->content();
-			},
-			\UnexpectedValueException::class,
-			'Page is unreachable. Does the URL exist?'
-		);
-		Assert::type(\Throwable::class, $ex->getPrevious());
+		(new Web\HtmlWebPage(
+			new Http\FakeRequest(
+				new Http\FakeResponse(
+					'Hi, there!',
+					['Content-Type' => 'text/html'],
+					404
+				)
+			)
+		))->content();
 	}
 
 	public function testRefreshingGivingSamePage() {
