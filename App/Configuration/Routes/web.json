@@ -4,7 +4,6 @@
 	"sign/out [GET]": "Remembrall\\Page\\Sign\\OutPage",
 	"sign/up [GET]": "Remembrall\\Page\\Sign\\UpPage",
 	"sign/up [POST]": "Remembrall\\Page\\Sign\\UpInteraction",
-	"v1/tokens [POST]": "Remembrall\\V1\\Tokens\\Post",
 
 	"subscriptions [GET]": "Remembrall\\Page\\Subscriptions\\DefaultPage",
 
@@ -18,7 +17,6 @@
 
 	"parts/popular [GET]": "Remembrall\\Page\\Parts\\PopularPage",
 	"parts/unreliable [GET]": "Remembrall\\Page\\Parts\\UnreliablePage",
-	"v1/parts [GET]": "Remembrall\\V1\\Parts\\Get",
 
 	"error [GET]": "Remembrall\\Page\\Error\\DefaultPage",
 
@@ -26,12 +24,12 @@
 	"verification/request [GET]": "Remembrall\\Page\\Verification\\RequestPage",
 	"verification/request [POST]": "Remembrall\\Page\\Verification\\RequestInteraction",
 
-	"password/remind [GET]": "Remembrall\\Page\\Password\\RemindInteraction",
-	"password/remind [POST]": "Remembrall\\Page\\Password\\RemindPage",
+	"password/remind [GET]": "Remembrall\\Page\\Password\\RemindPage",
+	"password/remind [POST]": "Remembrall\\Page\\Password\\RemindInteraction",
 	"password/reset/{reminder [a-f0-9]+:[a-f0-9]+} [GET]": "Remembrall\\Page\\Password\\ResetPage",
 
 	"invitation/accept/{code [a-f0-9]+} [GET]": "Remembrall\\Page\\Invitation\\AcceptPage",
-	"invitation/decline/{code [a-f0-9]+} [GET]": "Remembrall\\Page\\Invitation\\DenyPage",
+	"invitation/decline/{code [a-f0-9]+} [GET]": "Remembrall\\Page\\Invitation\\DeclinePage",
 
 	"participants/invite [POST]": "Remembrall\\Page\\Invitation\\InviteInteraction",
 	"participants/kick [POST]": "Remembrall\\Page\\Invitation\\KickInteraction",
