@@ -3,7 +3,7 @@
 
 	<resolvepath propertyName="base_path" file="."/>
 
-	<target name="check" depends="lint, phpcpd, phpstan, phpcs, snapshots, start-server, tests, cgi-tests"/>
+	<target name="check" depends="lint, phpcpd, phpstan, phpcs, snapshots, web-tests, tests, cgi-tests"/>
 	<target name="ci" depends="check, tester-coverage, phpunit-coverage"/>
 	<target name="init" depends="lint, migrations, assets"/>
 
@@ -76,7 +76,6 @@
 			<arg path="Tests/Postgres"/>
 			<arg path="Tests/Functional"/>
 			<arg path="Tests/Integration"/>
-			<arg path="Tests/Pings.phpt"/>
 		</exec>
 	</target>
 
@@ -94,7 +93,6 @@
 			<arg path="Tests/Postgres"/>
 			<arg path="Tests/Functional"/>
 			<arg path="Tests/Integration"/>
-			<arg path="Tests/Pings.phpt"/>
 		</exec>
 	</target>
 
@@ -148,7 +146,6 @@
 			<arg path="Tests/Postgres"/>
 			<arg path="Tests/Functional"/>
 			<arg path="Tests/Integration"/>
-			<arg path="Tests/Pings.phpt"/>
 			<arg value="--coverage"/>
 			<arg value="tester-coverage.xml"/>
 			<arg value="--coverage-src"/>
@@ -185,6 +182,17 @@
 
 	<target name="start-server">
 		<exec command="nohup php -S localhost:8888 -t www www/index.php > phpd.log 2>&amp;1 &amp;" logoutput="true" passthru="true" checkreturn="true"/>
+	</target>
+
+	<target name="web-tests" depends="start-server">
+		<exec executable="vendor/bin/tester" logoutput="true" passthru="true" checkreturn="true">
+			<arg value="-o"/>
+			<arg value="console"/>
+			<arg value="-s"/>
+			<arg value="-p"/>
+			<arg value="php"/>
+			<arg path="Tests/Pings.phpt"/>
+		</exec>
 	</target>
 
 </project>
