@@ -48,7 +48,8 @@
 		<exclude-pattern>Tests/Integration</exclude-pattern>
 		<exclude-pattern>Tests/UI</exclude-pattern>
 		<exclude-pattern>Tests/Functional</exclude-pattern>
-        <exclude-pattern>Tests/Postgres</exclude-pattern>
+		<exclude-pattern>Tests/Postgres</exclude-pattern>
+		<exclude-pattern>Tests/Pings.phpt</exclude-pattern>
 	</rule>
 
 	<rule ref="Squiz.Strings.DoubleQuoteUsage.ContainsVar">
