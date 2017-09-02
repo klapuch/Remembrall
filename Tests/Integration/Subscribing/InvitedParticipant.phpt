@@ -83,14 +83,14 @@ final class InvitedParticipant extends \Tester\TestCase {
 				'decided_at' => 'NULL',
 			]
 		))->try();
-		Assert::same(
-			'|id|1||email|me@participant.cz||subscription_id|2||harassed|||invited_at|2017-09-02 11:16:06+00||accepted|||decided_at||',
-			(new Subscribing\InvitedParticipant(
-				$this->database,
-				$subscription,
-				$participant
-			))->print(new Output\FakeFormat())->serialization()
-		);
+		$print = (new Subscribing\InvitedParticipant(
+			$this->database,
+			$subscription,
+			$participant
+		))->print(new Output\FakeFormat())->serialization();
+		Assert::contains('|id|1||email|me@participant.cz||subscription_id|2||harassed||', $print);
+		Assert::contains('|accepted|||decided_at||', $print);
+		Assert::match('~invited_at|2017-09-02 11:16:06[+-]\d+|~', $print);
 	}
 }
 

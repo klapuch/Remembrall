@@ -23,7 +23,6 @@ build_script:
     - redis-64\tools\redis-server.exe --service-install
     - redis-64\tools\redis-server.exe --service-start
     - copy Tests\TestCase\.config.appveyor.ini Tests\TestCase\.config.local.ini
-    - copy docker\postgres\postgresql.conf %POSTGRES_PATH%\data\postgresql.conf
     - createdb remembrall_test
     - psql remembrall_test < .\Tests\TestCase\schema.sql
 
