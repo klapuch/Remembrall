@@ -106,12 +106,12 @@ final class NonViolentParticipants extends \Tester\TestCase {
 			$this->database
 		))->all();
 		$print = $participants->current()->print(new Output\FakeFormat())->serialization();
-		Assert::contains('|id|1||email|owned@participant.cz||subscription_id|2||harassed|1|', $print);
+		Assert::contains('|id|1||email|owned@participant.cz||subscription_id|2||harassed||', $print);
 		Assert::contains('|invited_at|', $print);
 		Assert::contains('||accepted|||decided_at|', $print);
 		$participants->next();
 		$print = $participants->current()->print(new Output\FakeFormat())->serialization();
-		Assert::contains('|id|3||email|owned2@participant.cz||subscription_id|2||harassed|', $print);
+		Assert::contains('|id|3||email|owned2@participant.cz||subscription_id|2||harassed||', $print);
 		$participants->next();
 		Assert::null($participants->current());
 	}

@@ -9,8 +9,6 @@ use Klapuch\Storage;
  * All the non-violent participants
  */
 final class NonViolentParticipants implements Participants {
-	private const ATTEMPTS = 5,
-		RELEASE = 12; // five attempts in last 12 hours
 	private $author;
 	private $database;
 
@@ -45,20 +43,17 @@ final class NonViolentParticipants implements Participants {
 	public function all(): \Iterator {
 		$participants = (new Storage\ParameterizedQuery(
 			$this->database,
-			"SELECT participants.id, participants.email, subscription_id, (
-				SELECT 1
-				FROM invitation_attempts
-				WHERE participant_id = participants.id
-				AND attempt_at + INTERVAL '1 HOUR' * ? > NOW()
-				HAVING COUNT(*) >= ?
+			'SELECT participants.id, participants.email, subscription_id, is_invitation_harassed(
+				participants.id,
+				participants.email
 			) AS harassed,
 			invited_at, accepted, decided_at
 			FROM participants
 			INNER JOIN subscriptions ON subscriptions.id = participants.subscription_id
 			INNER JOIN users ON users.id = subscriptions.user_id
 			WHERE user_id = ?
-			ORDER BY decided_at DESC",
-			[self::RELEASE, self::ATTEMPTS, $this->author->id()]
+			ORDER BY decided_at DESC',
+			[$this->author->id()]
 		))->execute();
 		foreach ($participants as $participant) {
 			yield new InvitedParticipant(
@@ -76,19 +71,10 @@ final class NonViolentParticipants implements Participants {
 	 * @return bool
 	 */
 	private function harassed(int $subscription, string $email): bool {
-		return (bool) (new Storage\ParameterizedQuery(
+		return (new Storage\ParameterizedQuery(
 			$this->database,
-			"SELECT 1
-			FROM invitation_attempts
-			WHERE participant_id = (
-				SELECT id
-				FROM participants
-				WHERE subscription_id = ?
-				AND email = ?
-			)
-			AND attempt_at + INTERVAL '1 HOUR' * ? > NOW()
-			HAVING COUNT(*) >= ?",
-			[$subscription, $email, self::RELEASE, self::ATTEMPTS]
+			'SELECT is_invitation_harassed(?, ?)',
+			[$subscription, $email]
 		))->field();
 	}
 }
