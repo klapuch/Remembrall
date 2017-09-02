@@ -78,7 +78,7 @@ final class InvitedParticipant extends \Tester\TestCase {
 			[
 				'email' => $participant,
 				'subscription' => $subscription,
-				'invited_at' => '2017-09-02 11:16:06',
+				'invited_at' => '2017-09-02 11:16:06+00',
 				'accepted' => false,
 				'decided_at' => 'NULL',
 			]
