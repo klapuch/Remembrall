@@ -25,6 +25,7 @@ build_script:
     - copy Tests\TestCase\.config.appveyor.ini Tests\TestCase\.config.local.ini
     - createdb remembrall_test
     - psql remembrall_test < .\Tests\TestCase\schema.sql
+    - psql remembrall_test < .\Tests\TestCase\plpgunit.sql
 
 install:
     - IF EXIST c:\php\71 (SET PHP=0) ELSE (SET PHP=1)

@@ -24,6 +24,7 @@ before_script:
   - sudo cp -f ./docker/sendmail /usr/sbin/fake-sendmail && sudo chmod +x /usr/sbin/fake-sendmail
   - psql -c 'CREATE DATABASE remembrall_test;' -U postgres
   - psql -U postgres remembrall_test < Tests/TestCase/schema.sql
+  - psql -U postgres remembrall_test < Tests/TestCase/plpgunit.sql
 
 script:
   - ./vendor/bin/phing ci
