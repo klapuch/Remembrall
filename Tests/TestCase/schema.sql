@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.3
--- Dumped by pg_dump version 9.6.3
+-- Dumped from database version 9.6.4
+-- Dumped by pg_dump version 9.6.4
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -33,28 +33,28 @@ CREATE SCHEMA unit_tests;
 ALTER SCHEMA unit_tests OWNER TO postgres;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner:
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
 --
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner:
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
--- Name: citext; Type: EXTENSION; Schema: -; Owner:
+-- Name: citext; Type: EXTENSION; Schema: -; Owner: 
 --
 
 CREATE EXTENSION IF NOT EXISTS citext WITH SCHEMA public;
 
 
 --
--- Name: EXTENSION citext; Type: COMMENT; Schema: -; Owner:
+-- Name: EXTENSION citext; Type: COMMENT; Schema: -; Owner: 
 --
 
 COMMENT ON EXTENSION citext IS 'data type for case-insensitive character strings';
@@ -663,6 +663,41 @@ $$;
 ALTER FUNCTION public.counted_subscriptions(OUT part_id integer, OUT occurrences bigint) OWNER TO postgres;
 
 --
+-- Name: is_invitation_harassed(integer, citext, integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION is_invitation_harassed(subscription integer, email citext, attempts integer DEFAULT 5, release integer DEFAULT 12) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $_$
+DECLARE harassed BOOLEAN NOT NULL DEFAULT TRUE;
+BEGIN
+ EXECUTE format(
+ $$SELECT EXISTS (
+ SELECT 1
+ FROM invitation_attempts
+ WHERE participant_id = (
+    SELECT id
+    FROM participants
+    WHERE subscription_id = %L
+    AND email = %L
+    )
+    AND attempt_at + INTERVAL '1 HOUR' * %L > NOW()
+    HAVING COUNT(*) >= %L
+    )$$,
+ subscription,
+ email,
+ release,
+ attempts
+ )
+ INTO harassed;
+ RETURN harassed;
+END;
+$_$;
+
+
+ALTER FUNCTION public.is_invitation_harassed(subscription integer, email citext, attempts integer, release integer) OWNER TO postgres;
+
+--
 -- Name: notify_subscriptions(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -691,22 +726,8 @@ SELECT *, extract(epoch from interval)::integer AS interval_seconds
 
 			$$;
 
+
 ALTER FUNCTION public.readable_subscriptions() OWNER TO postgres;
-
-
---
--- Name: to_ISO8601(); Type: FUNCTION; Schema: public; Owner: postgres
---
-CREATE FUNCTION to_ISO8601(timestamptz) RETURNS text
-LANGUAGE plpgsql IMMUTABLE STRICT
-AS $$
-BEGIN
-	RETURN to_char ($1, 'YYYY-MM-DD"T"HH24:MI:SS"Z"');
-END
-$$;
-
-ALTER FUNCTION public.to_ISO8601() OWNER TO postgres;
-
 
 --
 -- Name: record_invitation(); Type: FUNCTION; Schema: public; Owner: postgres
@@ -778,6 +799,21 @@ $$;
 
 
 ALTER FUNCTION public.restart_sequences() OWNER TO postgres;
+
+--
+-- Name: to_iso8601(timestamp with time zone); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION to_iso8601(timestamp with time zone) RETURNS text
+    LANGUAGE plpgsql IMMUTABLE STRICT
+    AS $_$
+BEGIN
+	RETURN to_char ($1, 'YYYY-MM-DD"T"HH24:MI:SS"Z"');
+END
+$_$;
+
+
+ALTER FUNCTION public.to_iso8601(timestamp with time zone) OWNER TO postgres;
 
 --
 -- Name: truncate_tables(character varying); Type: FUNCTION; Schema: public; Owner: postgres

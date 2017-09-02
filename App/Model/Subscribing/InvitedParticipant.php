@@ -22,11 +22,17 @@ final class InvitedParticipant implements Participant {
 	public function print(Output\Format $format): Output\Format {
 		$participant = (new Storage\ParameterizedQuery(
 			$this->database,
-			'SELECT id, email, subscription_id, FALSE AS harassed,
+			'SELECT id, email, subscription_id, is_invitation_harassed(
+				:subscription,
+				:email
+			) AS harassed,
 			invited_at, accepted, decided_at
 			FROM participants
-			WHERE subscription_id = ? AND email = ?',
-			[$this->subscription, $this->email]
+			WHERE subscription_id = :subscription AND email = :email',
+			[
+				'subscription' => $this->subscription,
+				'email' => $this->email,
+			]
 		))->row();
 		return new Output\FilledFormat($format, $participant);
 	}
