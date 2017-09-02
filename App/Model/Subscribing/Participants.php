@@ -12,14 +12,6 @@ interface Participants {
 	public function invite(int $subscription, string $email): Invitation;
 
 	/**
-	 * Remove a participant from the given subscription
-	 * @param int $subscription
-	 * @param string $email
-	 * @return void
-	 */
-	public function kick(int $subscription, string $email): void;
-
-	/**
 	 * Go thorough all the participants
 	 * @return \Iterator
 	 */

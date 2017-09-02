@@ -16,35 +16,6 @@ require __DIR__ . '/../../bootstrap.php';
 final class InvitedParticipants extends \Tester\TestCase {
 	use TestCase\Database;
 
-	/**
-	 * @throws \UnexpectedValueException Email "me@participant.cz" is not your participant
-	 */
-	public function testThrowingOnKickingUnknownParticipant() {
-		$participant = 'me@participant.cz';
-		(new Misc\SampleParticipant($this->database, ['email' => $participant]))->try();
-		(new Subscribing\InvitedParticipants(
-			new Subscribing\FakeParticipants(),
-			$this->database
-		))->kick(2, $participant);
-	}
-
-	public function testThrowingOnKickingUnknownCaseInsensitiveParticipant() {
-		[$participant, $subscription] = ['me@participant.cz', 2];
-		(new Misc\SampleParticipant($this->database, ['email' => $participant, 'subscription' => $subscription]))->try();
-		$participants = new Subscribing\InvitedParticipants(
-			new Subscribing\FakeParticipants(new Subscribing\FakeInvitation()),
-			$this->database
-		);
-		Assert::noError(function() use ($participant, $participants, $subscription) {
-			$participants->kick($subscription, strtoupper($participant));
-		});
-		$this->truncate(['participants']);
-		(new Misc\SampleParticipant($this->database, ['email' => $participant, 'subscription' => $subscription]))->try();
-		Assert::noError(function() use ($participant, $participants, $subscription) {
-			$participants->kick($subscription, $participant);
-		});
-	}
-
 	public function testThrowingOnInvitingAcceptedParticipant() {
 		[$participant, $subscription] = ['me@participant.cz', 1];
 		(new Misc\SampleParticipant(

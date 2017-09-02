@@ -33,13 +33,11 @@ final class KickInteraction extends Page\Layout {
 					$participant['email'],
 					$this->database
 				))->print(new Output\Xml([], 'invitation'));
-				(new Subscribing\NonViolentParticipants(
-					$this->user,
-					$this->database
-				))->kick(
+				(new Subscribing\InvitedParticipant(
+					$this->database,
 					(int) $participant['subscription'],
 					$participant['email']
-				);
+				))->kick();
 				(new Mail\SendmailMailer())->send(
 					(new Mail\Message())
 						->setFrom(self::SENDER)
