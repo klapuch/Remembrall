@@ -9,18 +9,11 @@ namespace Remembrall;
 use Klapuch\Http;
 use Klapuch\Uri;
 use Tester\Assert;
-use Tester\Environment;
 
 require __DIR__ . '/bootstrap.php';
 
 final class Pings extends \Tester\TestCase {
 	private const BASE_URL = 'http://localhost:8888';
-
-	protected function setUp() {
-		parent::setUp();
-		if (!getenv('PHP_SERVER'))
-			Environment::skip('PHP server is not started.');
-	}
 
 	/**
 	 * @dataProvider guestNonInteractiveUrls
