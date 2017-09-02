@@ -16,9 +16,6 @@ final class FakeParticipants implements Participants {
 		return $this->invitation;
 	}
 
-	public function kick(int $subscription, string $email): void {
-	}
-
 	public function all(): \Iterator {
 	}
 }

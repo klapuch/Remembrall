@@ -14,6 +14,9 @@ final class FakeParticipant implements Participant {
 		$this->print = $print;
 	}
 
+	public function kick(): void {
+	}
+
 	public function print(Output\Format $format): Output\Format {
 		return $this->print;
 	}

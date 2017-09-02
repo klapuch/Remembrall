@@ -3,7 +3,6 @@ declare(strict_types = 1);
 namespace Remembrall\Model\Subscribing;
 
 use Klapuch\Access;
-use Klapuch\Output;
 use Klapuch\Storage;
 
 /**
@@ -43,16 +42,6 @@ final class NonViolentParticipants implements Participants {
 		);
 	}
 
-	public function kick(int $subscription, string $email): void {
-		(new Storage\ParameterizedQuery(
-			$this->database,
-			'DELETE FROM participants
-			WHERE email = ?
-			AND subscription_id = ?',
-			[$email, $subscription]
-		))->execute();
-	}
-
 	public function all(): \Iterator {
 		$participants = (new Storage\ParameterizedQuery(
 			$this->database,
@@ -72,17 +61,11 @@ final class NonViolentParticipants implements Participants {
 			[self::RELEASE, self::ATTEMPTS, $this->author->id()]
 		))->execute();
 		foreach ($participants as $participant) {
-			yield new class($participant) implements Participant {
-				private $participant;
-
-				public function __construct(array $participant) {
-					$this->participant = $participant;
-				}
-
-				public function print(Output\Format $format): Output\Format {
-					return new Output\FilledFormat($format, $this->participant);
-				}
-			};
+			yield new InvitedParticipant(
+				new Storage\MemoryPDO($this->database, $participant),
+				$participant['subscription_id'],
+				$participant['email']
+			);
 		}
 	}
 

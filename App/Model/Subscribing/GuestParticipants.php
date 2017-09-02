@@ -28,10 +28,6 @@ final class GuestParticipants implements Participants {
 		return $this->origin->invite($subscription, $email);
 	}
 
-	public function kick(int $subscription, string $email): void {
-		$this->origin->kick($subscription, $email);
-	}
-
 	public function all(): \Iterator {
 		return $this->origin->all();
 	}

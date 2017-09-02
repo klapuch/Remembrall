@@ -67,17 +67,6 @@ final class NonViolentParticipants extends \Tester\TestCase {
 		});
 	}
 
-	public function testKickingWithRemovingAllProofs() {
-		$participant = 'me@participant.cz';
-		$participants = new Subscribing\NonViolentParticipants(new Access\FakeUser(), $this->database);
-		$participants->invite(2, $participant);
-		$participants->kick(2, $participant);
-		$participants->invite(3, $participant);
-		(new Misc\TableCount($this->database, 'participants', 1))->assert();
-		(new Misc\TableCount($this->database, 'invitation_attempts', 2))->assert();
-		Assert::same(3, $this->database->query('SELECT subscription_id FROM participants')->fetchColumn());
-	}
-
 	public function testInvitationWithCreatedCode() {
 		$participant = 'me@participant.cz';
 		$participants = new Subscribing\NonViolentParticipants(new Access\FakeUser(), $this->database);
@@ -89,17 +78,6 @@ final class NonViolentParticipants extends \Tester\TestCase {
 			),
 			$invitation
 		);
-	}
-
-	public function testKickingByCaseInsensitiveEmail() {
-		$participant = 'me@participant.cz';
-		$participants = new Subscribing\NonViolentParticipants(new Access\FakeUser(), $this->database);
-		$participants->invite(2, $participant);
-		$participants->kick(2, strtoupper($participant));
-		(new Misc\TableCount($this->database, 'participants', 0))->assert();
-		$participants->invite(2, strtoupper($participant));
-		$participants->kick(2, $participant);
-		(new Misc\TableCount($this->database, 'participants', 0))->assert();
 	}
 
 	public function testPrintingAuthorsParticipants() {

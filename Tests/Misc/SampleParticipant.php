@@ -15,7 +15,7 @@ final class SampleParticipant implements Sample {
 		$stmt = $this->database->prepare(
 			sprintf(
 				"INSERT INTO participants (email, subscription_id, code, invited_at, accepted, decided_at) 
-				VALUES (?, ?, ?, %s, '%s', %s)",
+				VALUES (?, ?, ?, '%s', '%s', %s)",
 				$this->participant['invited_at'] ?? 'NOW()',
 				($this->participant['accepted'] ?? mt_rand(0, 1)) ? 't' : 'f',
 				$this->participant['decided_at'] ?? 'NOW()'

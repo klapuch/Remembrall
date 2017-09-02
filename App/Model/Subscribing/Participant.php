@@ -11,4 +11,10 @@ interface Participant {
 	 * @return \Iterator
 	 */
 	public function print(Output\Format $format): Output\Format;
+
+	/**
+	 * Kick the participant
+	 * @return void
+	 */
+	public function kick(): void;
 }
