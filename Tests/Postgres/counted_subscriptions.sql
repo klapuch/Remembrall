@@ -1,8 +1,6 @@
 CREATE OR REPLACE FUNCTION unit_tests.counted_subscriptions() RETURNS TEST_RESULT AS $$
 DECLARE
-	message TEST_RESULT;
-	count INTEGER;
-	expected_count CONSTANT INTEGER := 3;
+	actual INTEGER;
 BEGIN
 	PERFORM truncate_tables('postgres');
 	PERFORM restart_sequences();
@@ -22,16 +20,9 @@ BEGIN
 
 	SELECT occurrences
 	FROM public.counted_subscriptions()
-	INTO count;
-	IF count IS NOT DISTINCT FROM expected_count
-	THEN
-		SELECT assert.ok('Counted subscriptions are matching.')
-		INTO message;
-	ELSE
-		SELECT assert.fail(format('Expected count of subscription was %s, actual %s', expected_count, count))
-		INTO message;
-	END IF;
-	RETURN message;
+	INTO actual;
+
+	RETURN (SELECT message FROM assert.is_equal(actual, 3));
 END
 $$
 LANGUAGE plpgsql;
