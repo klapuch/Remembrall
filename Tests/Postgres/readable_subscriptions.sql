@@ -1,8 +1,7 @@
 CREATE OR REPLACE FUNCTION unit_tests.readable_subscriptions() RETURNS TEST_RESULT AS $$
 DECLARE
-	message TEST_RESULT;
-	second_intervals INTEGER[];
-	iso_intervals VARCHAR[];
+	actual_second_intervals INTEGER[];
+	actual_iso_intervals VARCHAR[];
 	expected_second_intervals CONSTANT INTEGER[] := ARRAY[1, 20, 0, 555, 123];
 	expected_iso_intervals CONSTANT VARCHAR[] := ARRAY['PT1S', 'PT20S', 'PT0S', 'PT9M15S', 'PT2M3S'];
 BEGIN
@@ -18,24 +17,12 @@ BEGIN
 
 	SELECT array_agg(interval_seconds), array_agg(interval)
 	FROM readable_subscriptions()
-	INTO second_intervals, iso_intervals;
-	IF second_intervals IS NOT DISTINCT FROM expected_second_intervals
-	THEN
-		SELECT assert.ok('Second intervals are matching.')
-		INTO message;
-	ELSE
-		SELECT assert.fail(format('Expected intervals in seconds were %s, actual %s', expected_second_intervals, second_intervals))
-		INTO message;
-	END IF;
-	IF iso_intervals IS NOT DISTINCT FROM expected_iso_intervals
-	THEN
-		SELECT assert.ok('ISO intervals are matching.')
-		INTO message;
-	ELSE
-		SELECT assert.fail(format('Expected ISO intervals were %s, actual %s', expected_iso_intervals, iso_intervals))
-		INTO message;
-	END IF;
-	RETURN message;
+	INTO actual_second_intervals, actual_iso_intervals;
+
+	RETURN CONCAT(
+		(SELECT message FROM assert.is_equal(actual_second_intervals, expected_second_intervals)),
+		(SELECT message FROM assert.is_equal(actual_iso_intervals, expected_iso_intervals))
+	);
 END
 $$
 LANGUAGE plpgsql;
