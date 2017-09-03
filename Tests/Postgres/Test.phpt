@@ -13,7 +13,7 @@ final class Test extends \Tester\TestCase {
 	use TestCase\Database;
 
 	public function testPostgres() {
-		$output = (new class (new \SplFileInfo(__DIR__), $this->database) {
+		(new class(new \SplFileInfo(__DIR__), $this->database) {
 			private const PATTERN = '~\.sql$~i';
 			private $source;
 			private $database;
@@ -23,33 +23,34 @@ final class Test extends \Tester\TestCase {
 				$this->database = $database;
 			}
 
-			public function result(): array {
-				$this->import($this->tests($this->source), $this->database);
+			public function assert(): void {
+				foreach ($this->tests($this->source) as $test) {
+					$output = $this->output($test);
+					Assert::same('Y', $output['result'], $output['message']);
+				}
+			}
+
+			private function tests(\SplFileInfo $source): iterable {
+				return new \RegexIterator(
+					new \RecursiveIteratorIterator(
+						new \RecursiveDirectoryIterator(
+							$source->getPathname()
+						)
+					),
+					self::PATTERN
+				);
+			}
+
+			private function output(\SplFileInfo $test): array {
 				$this->database->beginTransaction();
+				$this->database->exec(file_get_contents($test->getPathname()));
 				try {
 					return $this->database->query('SELECT * FROM unit_tests.begin()')->fetch();
 				} finally {
 					$this->database->rollBack();
 				}
 			}
-
-			private function import(\Iterator $tests, \PDO $database): void {
-				foreach ($tests as $test)
-					$database->exec(file_get_contents($test->getPathname()));
-			}
-
-			private function tests(\SplFileInfo $source): \Iterator {
-				return new \RegexIterator(
-					new \DirectoryIterator($source->getPathname()),
-					self::PATTERN
-				);
-			}
-		})->result();
-		try {
-			Assert::same('Y', $output['result']);
-		} finally {
-			echo $output['message'];
-		}
+		})->assert();
 	}
 }
 (new Test)->run();
