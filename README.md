@@ -35,6 +35,12 @@ Import schema to production database:
 
 `cat fixtures/schema.sql | docker exec -i remembrall-postgres psql -U postgres -d remembrall`
 
+Import dump to production database:
+
+`cat fixtures/dump.sql | docker exec -i remembrall-postgres psql -U postgres -d remembrall`
+
+For signing in, password is **heslo**
+
 Import schema to test database:
 
 `cat Tests/TestCase/schema.sql | docker exec -i remembrall-postgres psql -U postgres -d remembrall_test`
