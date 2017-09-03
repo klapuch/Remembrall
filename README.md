@@ -45,6 +45,10 @@ Import schema to test database:
 
 `cat Tests/TestCase/schema.sql | docker exec -i remembrall-postgres psql -U postgres -d remembrall_test`
 
+Import PlPgUnit schema to test database:
+
+`cat Tests/TestCase/plpgunit.sql | docker exec -i remembrall-postgres psql -U postgres -d remembrall_test`
+
 #### Installation
 Install all dependencies:
 
