@@ -5,6 +5,7 @@ declare(strict_types = 1);
  */
 namespace Remembrall\Postgres;
 
+use Remembrall\Misc;
 use Remembrall\TestCase;
 use Tester\Assert;
 
@@ -13,7 +14,7 @@ final class Test extends \Tester\TestCase {
 	use TestCase\Database;
 
 	public function testPostgres() {
-		(new class(new \SplFileInfo(__DIR__), $this->database) {
+		(new class(new \SplFileInfo(__DIR__), $this->database) implements Misc\Assertion {
 			private const PATTERN = '~\.sql$~i';
 			private $source;
 			private $database;
