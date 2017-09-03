@@ -8,7 +8,7 @@ use Klapuch\Time;
 interface Subscription {
 	/**
 	 * Cancel the subscription
-	 * @throws \Remembrall\Exception\NotFoundException
+	 * @throws \UnexpectedValueException
 	 * @return void
 	 */
 	public function cancel(): void;
@@ -17,14 +17,14 @@ interface Subscription {
 	 * Edit the subscription
 	 * Editing must not cause transformation to another part
 	 * @param \Klapuch\Time\Interval $interval
-	 * @throws \Remembrall\Exception\NotFoundException
+	 * @throws \UnexpectedValueException
 	 * @return void
 	 */
 	public function edit(Time\Interval $interval): void;
 
 	/**
 	 * Send notification about changes on the current subscription
-	 * @throws \Remembrall\Exception\NotFoundException
+	 * @throws \UnexpectedValueException
 	 * @return void
 	 */
 	public function notify(): void;

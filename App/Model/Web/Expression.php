@@ -5,7 +5,7 @@ namespace Remembrall\Model\Web;
 interface Expression {
 	/**
 	 * Match found by the expression
-	 * @throws \Remembrall\Exception\NotFoundException
+	 * @throws \UnexpectedValueException
 	 * @return \DOMNodeList
 	 */
 	public function matches(): \DOMNodeList;
