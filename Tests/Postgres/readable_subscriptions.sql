@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION unit_tests.readable_subscriptions() RETURNS TEST_RESULT AS $$
+CREATE OR REPLACE FUNCTION unit_tests.intervals_in_iso8601() RETURNS TEST_RESULT AS $$
 DECLARE
 	actual_second_intervals INTEGER[];
 	actual_iso_intervals VARCHAR[];
