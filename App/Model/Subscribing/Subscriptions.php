@@ -13,7 +13,7 @@ interface Subscriptions {
 	 * @param string $expression
 	 * @param string $language
 	 * @param \Klapuch\Time\Interval $interval
-	 * @throws \Remembrall\Exception\DuplicateException
+	 * @throws \UnexpectedValueException
 	 * @return void
 	 */
 	public function subscribe(

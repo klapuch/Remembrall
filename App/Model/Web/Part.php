@@ -7,7 +7,7 @@ use Klapuch\Output;
 interface Part {
 	/**
 	 * Content of the part
-	 * @throws \Remembrall\Exception\NotFoundException
+	 * @throws \UnexpectedValueException
 	 * @return string
 	 */
 	public function content(): string;

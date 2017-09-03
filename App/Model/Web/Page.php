@@ -5,7 +5,7 @@ namespace Remembrall\Model\Web;
 interface Page {
 	/**
 	 * Content of the page
-	 * @throws \Remembrall\Exception\NotFoundException
+	 * @throws \UnexpectedValueException
 	 * @return \DOMDocument
 	 */
 	public function content(): \DOMDocument;
