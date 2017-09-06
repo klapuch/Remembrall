@@ -32,7 +32,7 @@ script:
   - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.3" ]]; then vendor/bin/phing; fi # Without code coverage
 
 after_script:
-    - wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar && php coveralls.phar --verbose --config Tests/.coveralls.yml
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar && php coveralls.phar --verbose --config Tests/.coveralls.yml; fi
 
 after_failure:
   - for i in $(find Tests -name \*.actual); do echo "--- $i"; cat $i; echo; echo; done
