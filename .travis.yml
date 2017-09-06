@@ -28,7 +28,8 @@ before_script:
   - psql -U postgres remembrall_test < Tests/TestCase/plpgunit.sql
 
 script:
-  - ./vendor/bin/phing ci
+  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then vendor/bin/phing ci; fi
+  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.3" ]]; then vendor/bin/phing; fi # Without code coverage
 
 after_script:
     - >
