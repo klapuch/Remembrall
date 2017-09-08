@@ -33,18 +33,9 @@ final class Direction extends \Tester\TestCase {
 		$this->assertXml((string) new DirectionCase(['sort' => null, 'current' => null]));
 	}
 
-	/**
-	 * @dataProvider withoutSpans
-	 */
-	public function testNotMatchingCurrentWithoutSpan(array $input) {
-		$this->assertXml((string) new DirectionCase($input));
-	}
-
-	protected function withoutSpans(): array {
-		return [
-			[['sort' => 'url', 'current' => 'foo']],
-			[['sort' => 'url', 'current' => 'foo']],
-		];
+	public function testNotMatchingCurrentWithoutSpan() {
+		$this->assertXml((string) new DirectionCase(['sort' => 'url', 'current' => 'foo']));
+		$this->assertXml((string) new DirectionCase(['sort' => 'foo', 'current' => 'url']));
 	}
 }
 // @codingStandardsIgnoreStart
