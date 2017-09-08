@@ -1,19 +1,25 @@
 <?php
 declare(strict_types = 1);
+/**
+ * @testCase
+ * @phpVersion > 7.1
+ */
 namespace Remembrall\UI\Form\Sign;
 
 use Klapuch\Csrf;
 use Klapuch\Form;
+use Klapuch\Snappie;
 use Klapuch\Uri;
 use Remembrall\Form\Sign;
-use Spatie\Snapshots;
 
-final class InFormTest extends \PHPUnit\Framework\TestCase {
-	use Snapshots\MatchesSnapshots;
+require __DIR__ . '/../../../bootstrap.php';
+
+final class UpForm extends \Tester\TestCase {
+	use Snappie\Assertions;
 
 	public function testOutput() {
-		$this->assertMatchesXmlSnapshot(
-			(new Sign\InForm(
+		$this->assertXml(
+			(new Sign\UpForm(
 				new Uri\FakeUri(''),
 				new Csrf\FakeProtection('pr073ct10n'),
 				new Form\EmptyStorage()
@@ -21,3 +27,5 @@ final class InFormTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 }
+
+(new UpForm())->run();

@@ -1,15 +1,21 @@
 <?php
 declare(strict_types = 1);
+/**
+ * @testCase
+ * @phpVersion > 7.1
+ */
 namespace Remembrall\UI\Components;
 
-use Spatie\Snapshots;
+use Klapuch\Snappie;
 
-final class PagerTest extends \PHPUnit\Framework\TestCase {
-	use Snapshots\MatchesSnapshots;
+require __DIR__ . '/../../bootstrap.php';
+
+final class Pager extends \Tester\TestCase {
+	use Snappie\Assertions;
 
 	public function testNoPagerForSameFirstAndLast() {
-		$this->assertMatchesXmlSnapshot(
-			(string) new Pager(
+		$this->assertXml(
+			(string) new PagerCase(
 				'<pagination>
 					<first>1</first>
 					<last>1</last>
@@ -19,8 +25,8 @@ final class PagerTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testNoPagerForSameFirstAndCurrent() {
-		$this->assertMatchesXmlSnapshot(
-			(string) new Pager(
+		$this->assertXml(
+			(string) new PagerCase(
 				'<pagination>
 					<first>1</first>
 					<current>1</current>
@@ -30,8 +36,8 @@ final class PagerTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testNoPagerForSameLastAndCurrent() {
-		$this->assertMatchesXmlSnapshot(
-			(string) new Pager(
+		$this->assertXml(
+			(string) new PagerCase(
 				'<pagination>
 					<last>5</last>
 					<current>5</current>
@@ -41,8 +47,8 @@ final class PagerTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testLinkToPrevious() {
-		$this->assertMatchesXmlSnapshot(
-			(string) new Pager(
+		$this->assertXml(
+			(string) new PagerCase(
 				'<pagination>
 					<first>1</first>
 					<previous>2</previous>
@@ -54,8 +60,8 @@ final class PagerTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testLinkToNext() {
-		$this->assertMatchesXmlSnapshot(
-			(string) new Pager(
+		$this->assertXml(
+			(string) new PagerCase(
 				'<pagination>
 					<first>1</first>
 					<last>3</last>
@@ -67,8 +73,8 @@ final class PagerTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testNoNextBecauseOfLastPosition() {
-		$this->assertMatchesXmlSnapshot(
-			(string) new Pager(
+		$this->assertXml(
+			(string) new PagerCase(
 				'<pagination>
 					<first>1</first>
 					<last>3</last>
@@ -80,7 +86,7 @@ final class PagerTest extends \PHPUnit\Framework\TestCase {
 	}
 }
 // @codingStandardsIgnoreStart
-final class Pager {
+final class PagerCase {
 	private $input;
 
 	public function __construct(string $input) {
@@ -101,3 +107,5 @@ final class Pager {
 	}
 }
 // @codingStandardsIgnoreEnd
+
+(new Pager())->run();

@@ -1,20 +1,26 @@
 <?php
 declare(strict_types = 1);
+/**
+ * @testCase
+ * @phpVersion > 7.1
+ */
 namespace Remembrall\UI\Form\Subscription;
 
 use Klapuch\Csrf;
 use Klapuch\Form;
 use Klapuch\Output;
+use Klapuch\Snappie;
 use Klapuch\Uri;
 use Remembrall\Form\Subscription;
 use Remembrall\Model\Subscribing;
-use Spatie\Snapshots;
 
-final class EditFormTest extends \PHPUnit\Framework\TestCase {
-	use Snapshots\MatchesSnapshots;
+require __DIR__ . '/../../../bootstrap.php';
+
+final class EditForm extends \Tester\TestCase {
+	use Snappie\Assertions;
 
 	public function testOutput() {
-		$this->assertMatchesXmlSnapshot(
+		$this->assertXml(
 			(new Subscription\EditForm(
 				new Subscribing\FakeSubscription(
 					null,
@@ -35,3 +41,5 @@ final class EditFormTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 }
+
+(new EditForm())->run();

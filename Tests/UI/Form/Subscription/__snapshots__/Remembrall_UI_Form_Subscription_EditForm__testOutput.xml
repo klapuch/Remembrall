@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <form method="POST" role="form" class="form-horizontal" name="edit" action="/">
   <input type="hidden" name="_csrf_token" value="pr073ct10n"/>
-  <input name="id" type="hidden" value="2"/>
+  <input type="hidden" name="id" value="2"/>
   <div class="form-group">
     <div class="col-sm-5">
       <label for="url">Url</label>

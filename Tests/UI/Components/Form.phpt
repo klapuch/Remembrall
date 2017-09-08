@@ -1,15 +1,21 @@
 <?php
 declare(strict_types = 1);
+/**
+ * @testCase
+ * @phpVersion > 7.1
+ */
 namespace Remembrall\UI\Components;
 
-use Spatie\Snapshots;
+use Klapuch\Snappie;
 
-final class FormTest extends \PHPUnit\Framework\TestCase {
-	use Snapshots\MatchesSnapshots;
+require __DIR__ . '/../../bootstrap.php';
+
+final class Form extends \Tester\TestCase {
+	use Snappie\Assertions;
 
 	public function testCreatingFullForm() {
-		$this->assertMatchesXmlSnapshot(
-			(string) new Form(
+		$this->assertXml(
+			(string) new FormCase(
 				'<form role="form" action="test.php">
 					<input type="text" name="test"/>
 					<button type="submit" name="submit"/>
@@ -19,7 +25,7 @@ final class FormTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testApplyingRulesToButton() {
-		$this->assertMatchesXmlSnapshot(
+		$this->assertXml(
 			(string) new ButtonForm(
 				'<form role="form" action="test.php">
 					<input type="text" name="test"/>
@@ -37,7 +43,7 @@ final class FormTest extends \PHPUnit\Framework\TestCase {
 	}
 }
 // @codingStandardsIgnoreStart
-final class Form {
+final class FormCase {
 	private $input;
 
 	public function __construct(string $input) {
@@ -86,3 +92,5 @@ final class ButtonForm {
 	}
 }
 // @codingStandardsIgnoreEnd
+
+(new Form())->run();

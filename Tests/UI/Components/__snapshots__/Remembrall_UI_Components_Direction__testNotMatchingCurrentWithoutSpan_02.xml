@@ -1,4 +1,4 @@
 <?xml version="1.0"?>
-<a href="?sort=foo">
+<a href="?sort=url">
   <p>FIELD</p>
 </a>

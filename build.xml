@@ -3,8 +3,8 @@
 
 	<resolvepath propertyName="base_path" file="."/>
 
-	<target name="check" depends="lint, phpcpd, phpstan, phpcs, snapshots, web-tests, tests, cgi-tests"/>
-	<target name="ci" depends="check, tester-coverage, phpunit-coverage"/>
+	<target name="check" depends="lint, phpcpd, phpstan, phpcs, web-tests, tests, cgi-tests"/>
+	<target name="ci" depends="check, tester-coverage"/>
 	<target name="init" depends="lint, migrations, assets"/>
 
 	<target name="lint">
@@ -76,6 +76,7 @@
 			<arg path="Tests/Postgres"/>
 			<arg path="Tests/Functional"/>
 			<arg path="Tests/Integration"/>
+			<arg path="Tests/UI"/>
 		</exec>
 	</target>
 
@@ -93,6 +94,7 @@
 			<arg path="Tests/Postgres"/>
 			<arg path="Tests/Functional"/>
 			<arg path="Tests/Integration"/>
+			<arg path="Tests/UI"/>
 		</exec>
 	</target>
 
@@ -110,6 +112,7 @@
 			<arg path="Tests/Postgres"/>
 			<arg path="Tests/Functional"/>
 			<arg path="Tests/Integration"/>
+			<arg path="Tests/UI"/>
 		</exec>
 	</target>
 
@@ -127,6 +130,7 @@
 			<arg path="Tests/Postgres"/>
 			<arg path="Tests/Functional"/>
 			<arg path="Tests/Integration"/>
+			<arg path="Tests/UI"/>
 		</exec>
 	</target>
 
@@ -146,24 +150,12 @@
 			<arg path="Tests/Postgres"/>
 			<arg path="Tests/Functional"/>
 			<arg path="Tests/Integration"/>
+			<arg path="Tests/UI"/>
 			<arg value="--coverage"/>
 			<arg value="tester-coverage.xml"/>
 			<arg value="--coverage-src"/>
 			<arg path="App/"/>
 		</exec>
-	</target>
-
-	<target name="phpunit-coverage">
-		<exec executable="phpdbg" logoutput="true" passthru="true" checkreturn="true">
-			<arg value="-qrr"/>
-			<arg value="vendor/bin/phpunit"/>
-			<arg value="--coverage-clover"/>
-			<arg value="phpunit-coverage.xml"/>
-		</exec>
-	</target>
-
-	<target name="snapshots">
-		<exec executable="vendor/bin/phpunit" logoutput="true" passthru="true" checkreturn="true"/>
 	</target>
 
 	<target name="assets">

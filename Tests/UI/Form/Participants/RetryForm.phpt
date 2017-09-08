@@ -1,19 +1,25 @@
 <?php
 declare(strict_types = 1);
+/**
+ * @testCase
+ * @phpVersion > 7.1
+ */
 namespace Remembrall\UI\Form\Participants;
 
 use Klapuch\Csrf;
 use Klapuch\Output;
+use Klapuch\Snappie;
 use Klapuch\Uri;
 use Remembrall\Form\Participants;
 use Remembrall\Model\Subscribing;
-use Spatie\Snapshots;
 
-final class RetryFormTest extends \PHPUnit\Framework\TestCase {
-	use Snapshots\MatchesSnapshots;
+require __DIR__ . '/../../../bootstrap.php';
+
+final class RetryForm extends \Tester\TestCase {
+	use Snappie\Assertions;
 
 	public function testOutputWithSubmitType() {
-		$this->assertMatchesXmlSnapshot(
+		$this->assertXml(
 			(new Participants\RetryForm(
 				new Subscribing\FakeParticipant(
 					new Output\Xml(
@@ -32,7 +38,7 @@ final class RetryFormTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testOutputWithButton() {
-		$this->assertMatchesXmlSnapshot(
+		$this->assertXml(
 			(new Participants\RetryForm(
 				new Subscribing\FakeParticipant(
 					new Output\Xml(
@@ -51,3 +57,5 @@ final class RetryFormTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 }
+
+(new RetryForm())->run();

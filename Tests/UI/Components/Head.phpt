@@ -1,34 +1,40 @@
 <?php
 declare(strict_types = 1);
+/**
+ * @testCase
+ * @phpVersion > 7.1
+ */
 namespace Remembrall\UI\Components;
 
-use Spatie\Snapshots;
+use Klapuch\Snappie;
 
-final class HeadTest extends \PHPUnit\Framework\TestCase {
-	use Snapshots\MatchesSnapshots;
+require __DIR__ . '/../../bootstrap.php';
+
+final class Head extends \Tester\TestCase {
+	use Snappie\Assertions;
 
 	public function testPassingTitleAsItIs() {
-		$this->assertMatchesXmlSnapshot((string) new Head('<title>FOO</title>'));
+		$this->assertXml((string) new HeadCase('<title>FOO</title>'));
 	}
 
 	public function testRemovingTrailingSpaces() {
-		$this->assertMatchesXmlSnapshot((string) new Head('<title> FOO </title>'));
+		$this->assertXml((string) new HeadCase('<title> FOO </title>'));
 	}
 
 	public function testMetaWithAttributes() {
-		$this->assertMatchesXmlSnapshot((string) new Head('<meta name="keywords" content="foo"/>'));
+		$this->assertXml((string) new HeadCase('<meta name="keywords" content="foo"/>'));
 	}
 
 	public function testPassingWithMetaUnknownAttributes() {
-		$this->assertMatchesXmlSnapshot((string) new Head('<meta foo="keywords" bar="foo"/>'));
+		$this->assertXml((string) new HeadCase('<meta foo="keywords" bar="foo"/>'));
 	}
 
 	public function testRemovingSpacesFromAttributes() {
-		$this->assertMatchesXmlSnapshot((string) new Head('<meta name=" keywords " content=" foo "/>'));
+		$this->assertXml((string) new HeadCase('<meta name=" keywords " content=" foo "/>'));
 	}
 }
 // @codingStandardsIgnoreStart
-final class Head {
+final class HeadCase {
 	private $input;
 
 	public function __construct(string $input) {
@@ -48,3 +54,5 @@ final class Head {
 	}
 }
 // @codingStandardsIgnoreEnd
+
+(new Head())->run();

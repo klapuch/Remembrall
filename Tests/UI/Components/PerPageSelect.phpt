@@ -1,15 +1,21 @@
 <?php
 declare(strict_types = 1);
+/**
+ * @testCase
+ * @phpVersion > 7.1
+ */
 namespace Remembrall\UI\Components;
 
-use Spatie\Snapshots;
+use Klapuch\Snappie;
 
-final class PerPageSelectTest extends \PHPUnit\Framework\TestCase {
-	use Snapshots\MatchesSnapshots;
+require __DIR__ . '/../../bootstrap.php';
+
+final class PerPageSelect extends \Tester\TestCase {
+	use Snappie\Assertions;
 
 	public function testLabelAsElementContent() {
-		$this->assertMatchesXmlSnapshot(
-			(string) new PerPageSelect(
+		$this->assertXml(
+			(string) new PerPageSelectCase(
 				'<select>
 					<option label="1">1</option>
 					<option label="2">2</option>
@@ -19,8 +25,8 @@ final class PerPageSelectTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testAllowingStringLabelAsElementContent() {
-		$this->assertMatchesXmlSnapshot(
-			(string) new PerPageSelect(
+		$this->assertXml(
+			(string) new PerPageSelectCase(
 				'<select>
 					<option label="Prompt">1</option>
 					<option label="2">2</option>
@@ -30,8 +36,8 @@ final class PerPageSelectTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testSelectedAttributeForCurrentSelection() {
-		$this->assertMatchesXmlSnapshot(
-			(string) new PerPageSelect(
+		$this->assertXml(
+			(string) new PerPageSelectCase(
 				'<select>
 					<option label="Prompt">20</option>
 					<option label="2">30</option>
@@ -42,7 +48,7 @@ final class PerPageSelectTest extends \PHPUnit\Framework\TestCase {
 	}
 }
 // @codingStandardsIgnoreStart
-final class PerPageSelect {
+final class PerPageSelectCase {
 	private $input;
 	private $perPage;
 
@@ -66,3 +72,5 @@ final class PerPageSelect {
 	}
 }
 // @codingStandardsIgnoreEnd
+
+(new PerPageSelect())->run();

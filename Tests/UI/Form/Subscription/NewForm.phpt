@@ -1,19 +1,25 @@
 <?php
 declare(strict_types = 1);
+/**
+ * @testCase
+ * @phpVersion > 7.1
+ */
 namespace Remembrall\UI\Form\Subscription;
 
 use Klapuch\Csrf;
 use Klapuch\Form;
+use Klapuch\Snappie;
 use Klapuch\Uri;
 use Remembrall\Form\Subscription;
-use Spatie\Snapshots;
 
-final class PreviewFormTest extends \PHPUnit\Framework\TestCase {
-	use Snapshots\MatchesSnapshots;
+require __DIR__ . '/../../../bootstrap.php';
+
+final class NewForm extends \Tester\TestCase {
+	use Snappie\Assertions;
 
 	public function testOutput() {
-		$this->assertMatchesXmlSnapshot(
-			(new Subscription\PreviewForm(
+		$this->assertXml(
+			(new Subscription\NewForm(
 				new Uri\FakeUri(''),
 				new Csrf\FakeProtection('pr073ct10n'),
 				new Form\EmptyStorage()
@@ -21,3 +27,5 @@ final class PreviewFormTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 }
+
+(new NewForm())->run();

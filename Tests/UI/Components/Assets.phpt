@@ -1,46 +1,52 @@
 <?php
 declare(strict_types = 1);
+/**
+ * @testCase
+ * @phpVersion > 7.1
+ */
 namespace Remembrall\UI\Components;
 
-use Spatie\Snapshots;
+use Klapuch\Snappie;
 
-final class AssetsTest extends \PHPUnit\Framework\TestCase {
-	use Snapshots\MatchesSnapshots;
+require __DIR__ . '/../../bootstrap.php';
+
+final class Assets extends \Tester\TestCase {
+	use Snappie\Assertions;
 
 	public function testWorkingWithStylesAsLinks() {
-		$this->assertMatchesXmlSnapshot((string) new Assets('<style href="http://foo.cz"/>'));
+		$this->assertXml((string) new AssetsCase('<style href="http://foo.cz"/>'));
 	}
 
 	public function testWorkingWithScripts() {
-		$this->assertMatchesXmlSnapshot((string) new Assets('<script href="http://foo.cz"/>'));
+		$this->assertXml((string) new AssetsCase('<script href="http://foo.cz"/>'));
 	}
 
 	public function testRemovingTrailingSpacesFromStyles() {
-		$this->assertMatchesXmlSnapshot((string) new Assets('<style href=" http://foo.cz "/>'));
+		$this->assertXml((string) new AssetsCase('<style href=" http://foo.cz "/>'));
 	}
 
 	public function testRemovingTrailingSpacesFromScripts() {
-		$this->assertMatchesXmlSnapshot((string) new Assets('<script href=" http://foo.cz "/>'));
+		$this->assertXml((string) new AssetsCase('<script href=" http://foo.cz "/>'));
 	}
 
 	public function testPassingWithUnknownAttributeToStyle() {
-		$this->assertMatchesXmlSnapshot((string) new Assets('<style foo="http://foo.cz"/>'));
+		$this->assertXml((string) new AssetsCase('<style foo="http://foo.cz"/>'));
 	}
 
 	public function testPassingWithUnknownAttributeToScript() {
-		$this->assertMatchesXmlSnapshot((string) new Assets('<script foo="http://foo.cz"/>'));
+		$this->assertXml((string) new AssetsCase('<script foo="http://foo.cz"/>'));
 	}
 
 	public function testRelativeScriptHrefTransformedToAbsolute() {
-		$this->assertMatchesXmlSnapshot((string) new Assets('<script href="foo.js"/>'));
+		$this->assertXml((string) new AssetsCase('<script href="foo.js"/>'));
 	}
 
 	public function testRelativeStyleHrefTransformedToAbsolute() {
-		$this->assertMatchesXmlSnapshot((string) new Assets('<script href="bar.css"/>'));
+		$this->assertXml((string) new AssetsCase('<script href="bar.css"/>'));
 	}
 }
 // @codingStandardsIgnoreStart
-final class Assets {
+final class AssetsCase {
 	private $input;
 
 	public function __construct(string $input) {
@@ -62,3 +68,5 @@ final class Assets {
 	}
 }
 // @codingStandardsIgnoreEnd
+
+(new Assets())->run();
