@@ -14,9 +14,10 @@
     "php": ">=7.1",
     "ext-mbstring": "*",
     "ext-dom": "*",
+    "gajus/dindent": "^2.0",
     "klapuch/access": "^2.17.1",
-    "klapuch/authorization": "^3.0.0",
     "klapuch/application": "@dev",
+    "klapuch/authorization": "^3.0.0",
     "klapuch/csrf": "^2.0.0",
     "klapuch/dataset": "@dev",
     "klapuch/form": "@dev",
@@ -31,24 +32,23 @@
     "klapuch/ui": "^0.0.2",
     "klapuch/uri": "^2.0.0",
     "klapuch/validation": "^2.0.0",
-    "gajus/dindent": "^2.0",
     "nette/mail": "^2.4.0",
-    "texy/texy": "^2.9",
+    "predis/predis": "^1.1",
     "symfony/css-selector": "^3.3",
-    "predis/predis": "^1.1"
+    "texy/texy": "^2.9"
   },
   "require-dev": {
-    "nette/tester": "^2.0",
-    "mockery/mockery": "@dev",
-    "jakub-onderka/php-parallel-lint": "^0.9.2",
-    "slevomat/coding-standard": "^3.1.1",
-    "sebastian/phpcpd": "^3.0.0",
-    "phing/phing": "^2.16",
     "consistence/coding-standard": "^2.0",
-    "robmorgan/phinx": "^0.8.0",
-    "phpstan/phpstan": "^0.8.0",
     "deployer/deployer": "^5.0",
-    "klapuch/snappie": "@dev"
+    "jakub-onderka/php-parallel-lint": "^0.9.2",
+    "klapuch/snappie": "@dev",
+    "mockery/mockery": "@dev",
+    "nette/tester": "^2.0",
+    "phing/phing": "^2.16",
+    "phpstan/phpstan": "^0.8.0",
+    "robmorgan/phinx": "^0.8.0",
+    "sebastian/phpcpd": "^3.0.0",
+    "slevomat/coding-standard": "^3.1.1"
   },
   "autoload": {
     "psr-4": {
