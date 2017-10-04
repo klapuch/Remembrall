@@ -2,7 +2,7 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/klapuch/Remembrall/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/klapuch/Remembrall/?branch=master) [![Build Status](https://travis-ci.org/klapuch/Remembrall.svg?branch=master)](https://travis-ci.org/klapuch/Remembrall) [![Build status](https://ci.appveyor.com/api/projects/status/jea6op0tyx3w9atm/branch/master?svg=true)](https://ci.appveyor.com/project/facedown/remembrall/branch/master) [![Coverage Status](https://coveralls.io/repos/github/klapuch/Remembrall/badge.svg?branch=master)](https://coveralls.io/github/klapuch/Remembrall?branch=master)
 
 ## What is it?
-This is a simple project, which is built on my own created [libraries](https://packagist.org/packages/klapuch/), to prove myself, there is a different approach how to create applications.
+This is a simple project, which is built on my own created [libraries](https://packagist.org/packages/klapuch/), to prove myself, there is a different approach how to create applications. To better undestand the rules behind my libraries/applications, see [my blog post](https://medium.com/@klareek/my-rules-to-writing-clean-code-at-least-in-php-1597b27c5f39)
 
 ## What it does?
 Sends emails about changes on your subscribed pages. You type URL, CSS or XPath expression to observed part and interval for checks. In case of change, you are notified by email. 
